@@ -6,7 +6,9 @@
 
 #list2 li
 {
-  binding-source: [1,2,3,4,5];
+  binding-source: [1,2,3];
   binding-path: @:text;
+  binding-format: "{{{0}}}";
+  binding-source-default: 5;
 }
 

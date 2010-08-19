@@ -10,7 +10,7 @@ public class Beginning : HtmlHandlerAdapter
 {
   
   //是的，这里是全部的真相。
-  
+                                                                                                           
   //Jumony是一个基于HTML文档分析的引擎，当进入到Process方法的时候，引擎和框架已经将HTML模板文件加载分析完毕
   //只需要一些简单的Bind方法，您就可以随意的修改HTML文档了，您的这些修改，都会在应用到模板，并输出。
   protected override void Process()
@@ -29,6 +29,11 @@ public class Beginning : HtmlHandlerAdapter
     //任何时候都不应该直接访问ashx文件。
     
     //对于这个引擎而言，我们始终觉得，用它，是最好的学习方法。
+    
+    
+    //Jumony 2010/07/27 增加绑定样式表支持。
+    //Jumony 2010/07/28 增加Trace支持。
+    //Jumony 2010/07/28 增强绑定样式表支持。
 
   }
 }

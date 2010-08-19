@@ -37,13 +37,13 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     HtmlBindingContext.EnterContext( Document, "Context2" );
 
     //有时候我们会希望把数据附着到一个元素上，以便后面的绑定使用，这里就要借助HtmlBindingContext，当然，我们也有现成的扩展方法：
-    Find( "#list1" ).Single().DataContext( "列表一" );
-    Find( "#list2" ).Single().DataContext( "列表二" );
+    Find( "#list1" ).Single().Data( "列表一" );
+    Find( "#list2" ).Single().Data( "列表二" );
 
 
     //使用DataContext方法可以附着任何数据到元素上，然后我们可以在附着了数据的子元素中直接取得这些数据：
     Find( "li" ).ForAll( element =>
-      element.Bind( "@onclick", element.DataContext(), "window.alert( '{0}' );" )
+      element.Bind( "@onclick", element.Data(), "window.alert( '{0}' );" )
     );
     //不带参数的DataContext方法用于获取附着的数据，如果当前元素找不到，则会自动上溯。
 

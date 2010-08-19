@@ -326,7 +326,7 @@ namespace Ivony.Web.Html
 
         attributeSelectors = _attributeSelectors.ToArray();
 
-        pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => new PseudoClassSelector( c.Value ) ).ToArray();
+        pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => PseudoClassFactory.Create( c.Value ) ).ToArray();
 
       }
 
@@ -335,7 +335,7 @@ namespace Ivony.Web.Html
 
       private readonly AttributeSelector[] attributeSelectors;
 
-      private readonly PseudoClassSelector[] pseudoClassSelectors;
+      private readonly IPseudoClassSelector[] pseudoClassSelectors;
 
       public bool Allows( IHtmlElement element )
       {
@@ -354,7 +354,7 @@ namespace Ivony.Web.Html
 
         foreach ( var selector in pseudoClassSelectors )
         {
-          if ( !selector.Allows( element ) )
+          if ( !selector.Allows( this, element ) )
             return false;
         }
 
@@ -364,7 +364,7 @@ namespace Ivony.Web.Html
 
       public override string ToString()
       {
-        return string.Format( "{0}{1}", tagName.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ) );
+        return string.Format( "{0}{1}{2}", tagName.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
       }
 
     }
@@ -454,94 +454,121 @@ namespace Ivony.Web.Html
 
 
 
-    private class PseudoClassSelector
+    private interface IPseudoClassSelector
     {
-
-      private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled );
-
-      private readonly string exp;
-
-      private readonly string name;
-
-      private readonly string args;
-
-      private Func<IHtmlElement, bool> validator;
-
-
-      public PseudoClassSelector( string expression )
-      {
-
-        var match = pseudoClassRegex.Match( expression );
-
-        if ( !match.Success )
-          throw new FormatException();
-
-        name = match.Groups["name"].Value;
-
-        args = match.Groups["args"].Value;
-
-        exp = expression;
-      }
-
-
-      public bool Allows( IHtmlElement element )
-      {
-        return validator( element );
-      }
-
+      bool Allows( ElementSelector elementSelector, IHtmlElement element );
     }
 
 
     private class PseudoClassFactory
     {
+      private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled );
 
-      public Func<IHtmlElement, bool> GetPseudoClassValidator( string name, string args )
+      public static IPseudoClassSelector Create( string expression )
+      {
+        var match = pseudoClassRegex.Match( expression );
+
+        if ( !match.Success )
+          throw new FormatException();
+
+        string name = match.Groups["name"].Value;
+
+        string args = match.Groups["args"].Value;
+
+        return Create( name, args, expression );
+
+      }
+
+      public static IPseudoClassSelector Create( string name, string args, string expression )
       {
         switch ( name )
         {
-          case "nth-node":
-            return new nthNodePseudoClass( args ).Allows;
+          case "nth-child":
+            return new nthNodePseudoClass( args );
 
           default:
             throw new NotSupportedException();
         }
-
-        throw new NotSupportedException();
       }
 
-      private class nthNodePseudoClass
+      private class nthNodePseudoClass : IPseudoClassSelector
       {
 
-        private static readonly string expressionPattern = @"(#interger)|((?<multiplier>#interger)\p{Zs}*n\p{Zs}*(?<augend>(\+\-)#interger))".Replace( "#interger", Regulars.intergerPattern );
-        private static readonly Regex expressionRegex = new Regex( "^" + expressionPattern + "$", RegexOptions.Compiled );
+        private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>#interger)n\p{Zs}*(?<augend>(\+\-)#interger)?)".Replace( "#interger", Regulars.intergerPattern );
+        private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled );
 
-        private string exp;
+        private string _args;
 
-        private int multiplier;
+        private int? multiplier;
         private int augend;
 
 
         public nthNodePseudoClass( string args )
         {
+          _args = args;
+
+
+          if ( args.Equals( "odd", StringComparison.InvariantCultureIgnoreCase ) )
+            args = "2n";
+
+          if ( args.Equals( "even", StringComparison.InvariantCultureIgnoreCase ) )
+            args = "2n+1";
+
           var match = expressionRegex.Match( args );
 
           if ( !match.Success )
             throw new FormatException();
 
-          multiplier = int.Parse( match.Groups["multiplier"].Value );
-          augend = int.Parse( match.Groups["augend"].Value );
 
-          exp = args;
+          multiplier = null;
+          augend = 0;
+
+          if ( match.Groups["multiplier"].Success )
+            multiplier = int.Parse( match.Groups["multiplier"].Value );
+
+          if ( match.Groups["augend"].Success )
+            augend = int.Parse( match.Groups["augend"].Value );
         }
 
-        public bool Allows( IHtmlElement element )
+        public bool Allows( ElementSelector elementSelector, IHtmlElement element )
         {
-          return Check( element.NodeInedx() );
+          return Check( element.ElementIndex() );
         }
 
         public bool Check( int index )
         {
-          throw new NotImplementedException();
+          index = index - augend;
+
+          if ( index < 0 )
+            return false;
+
+          if ( index % multiplier != 0 )
+            return false;
+
+          return true;
+        }
+
+
+        public override string ToString()
+        {
+
+          string argsExp = null;
+          if ( multiplier != null )
+            argsExp = multiplier + "n";
+
+          if ( argsExp != null )
+          {
+            if ( augend < 0 )
+              argsExp += "-";
+            else
+              argsExp += "+";
+
+            argsExp += Math.Abs( augend ).ToString();
+          }
+          else
+            argsExp = augend.ToString();
+
+          return string.Format( ":nth-child({1})", argsExp );
         }
 
       }

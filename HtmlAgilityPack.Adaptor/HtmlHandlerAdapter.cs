@@ -20,7 +20,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
       ApplyBindingSheets();
 
-      using ( var bindingContext = HtmlBindingContext.EnterContext( Document, "global" ) )
+      using ( var bindingContext = HtmlBindingContext.Enter( Document, "global" ) )
       {
         Process();
 
@@ -57,14 +57,12 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
         .Select( href => MapPath( href.Value ) )
         .Select( physicalPath => HtmlBindingSheet.Load( physicalPath ) );
 
-      HtmlBindingContext.EnterContext( Document, "ApplyBindingSheet" );
+      HtmlBindingContext.Enter( Document, "ApplyBindingSheet" );
 
       bindingSheets
         .ForAll( sheet => sheet.Apply() );
 
-      HtmlBindingContext.ExitContext();
-
-
+      HtmlBindingContext.Exit();
     }
 
 

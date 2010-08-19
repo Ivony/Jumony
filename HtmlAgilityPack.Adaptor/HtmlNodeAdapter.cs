@@ -48,14 +48,17 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       if ( obj == null )
         return false;
 
-      var element = obj as IHtmlElement;
-      if ( element != null )
-        return NodeObject.Equals( element.NodeObject );
+      {
+        var node = obj as IHtmlNode;
+        if ( node != null )
+          return NodeObject.Equals( node.NodeObject );
+      }
 
-
-      var node = obj as AP.HtmlNode;
-      if ( node != null )
-        return NodeObject.Equals( node );
+      {
+        var node = obj as AP.HtmlNode;
+        if ( node != null )
+          return NodeObject.Equals( node );
+      }
 
 
       return base.Equals( obj );

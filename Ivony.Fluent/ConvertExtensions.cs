@@ -45,6 +45,14 @@ namespace Ivony.Fluent
       public static Func<object, T> castMethod;
     }
 
+    public static T IfNull<T>( this T value, T defaultValue )
+    {
+      if ( value == null || Convert.IsDBNull( value ) )
+        return defaultValue;
+      else
+        return value;
+    }
+
 
   }
 }

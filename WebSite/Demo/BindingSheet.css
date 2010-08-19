@@ -1,0 +1,12 @@
+﻿#list1 li
+{
+  binding-source: [张三,李四,王五,4,5,6,7,8,9,11];
+  binding-path: @:text;
+}
+
+#list2 li
+{
+  binding-source: [1,2,3,4,5];
+  binding-path: @:text;
+}
+

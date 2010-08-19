@@ -342,6 +342,12 @@ namespace Ivony.Web.Html
 
       private readonly IPseudoClassSelector[] pseudoClassSelectors;
 
+
+      public IEnumerable<IHtmlElement> Filter( IEnumerable<IHtmlElement> source )
+      {
+        return source.Where( item => Allows( item ) );
+      }
+
       public bool Allows( IHtmlElement element )
       {
         if ( element == null )
@@ -486,7 +492,7 @@ namespace Ivony.Web.Html
 
         string name = match.Groups["name"].Value;
 
-        string args =null;
+        string args = null;
         if ( match.Groups["args"].Success )
           args = match.Groups["args"].Value;
 
@@ -584,7 +590,7 @@ namespace Ivony.Web.Html
 
           if ( match.Groups["multiplier"].Success )
           {
-            string _multiplier =match.Groups["multiplier"].Value;
+            string _multiplier = match.Groups["multiplier"].Value;
             if ( _multiplier == "-" )//如果只有一个负号
               multiplier = -1;//那意味着负1
             else

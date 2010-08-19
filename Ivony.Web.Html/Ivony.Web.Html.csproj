@@ -54,6 +54,8 @@
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
     <Compile Include="HtmlCssSelector.cs" />
+    <Compile Include="HtmlDocumentWrapper.cs" />
+    <Compile Include="HtmlElementWrapper.cs" />
     <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="IHtmlAttribute.cs" />

@@ -15,8 +15,16 @@ namespace Ivony.Web.Html
       get;
     }
 
+    /// <summary>
+    /// 派生类重写此方法处理文档
+    /// </summary>
     protected abstract void ProcessDocument();
 
+    /// <summary>
+    /// 派生类重写此方法分析字符串为 IHtmlDocument 对象
+    /// </summary>
+    /// <param name="documentContent"></param>
+    /// <returns></returns>
     protected abstract IHtmlDocument LoadDocument( string documentContent );
 
 

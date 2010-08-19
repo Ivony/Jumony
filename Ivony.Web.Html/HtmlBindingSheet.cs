@@ -13,8 +13,7 @@ namespace Ivony.Web.Html
   {
 
 
-    public static readonly string styleSheetPattern = string.Format( @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", HtmlBindingRule.styleRulePattern );
-    private static readonly Regex styleSheetRegex = new Regex( styleSheetPattern, RegexOptions.Compiled );
+    private static readonly Regex styleSheetRegex = new Regex( Regulars.styleSheetPattern, RegexOptions.Compiled );
 
 
 
@@ -89,11 +88,9 @@ namespace Ivony.Web.Html
   {
     private Dictionary<string, string> settings = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
-    public static readonly string styleSettingPattern = string.Format( @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", Regulars.quoteTextPattern );
-    public static readonly string styleRulePattern = string.Format( @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", Regulars.cssSelectorPatternNoGroup, styleSettingPattern );
 
-    private static readonly Regex styleRulesRegex = new Regex( styleRulePattern, RegexOptions.Compiled );
-    private static readonly Regex styleSettingRegex = new Regex( "^" + styleSettingPattern + "$", RegexOptions.Compiled );
+    private static readonly Regex styleRulesRegex = new Regex( Regulars.styleRulePattern, RegexOptions.Compiled );
+    private static readonly Regex styleSettingRegex = new Regex( "^" + Regulars.styleSettingPattern + "$", RegexOptions.Compiled );
 
 
     private static readonly Regex intergerRegex = new Regex( "^(\\-|\\+)?" + Regulars.intergerPattern + "$", RegexOptions.Compiled );

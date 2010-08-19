@@ -14,6 +14,12 @@ namespace Ivony.Web.Html
   public static class BindingExtensions
   {
 
+    /// <summary>
+    /// 将一个绑定操作放到绑定上下文
+    /// </summary>
+    /// <param name="element">要执行绑定操作的元素</param>
+    /// <param name="action">要对元素执行的绑定操作</param>
+    /// <returns>被执行绑定操作的元素</returns>
     public static IHtmlElement BindAction( this IHtmlElement element, Action<IHtmlElement> action )
     {
       var instance = new HtmlBindingAction<IHtmlElement>()
@@ -28,6 +34,12 @@ namespace Ivony.Web.Html
     }
 
 
+    /// <summary>
+    /// 将绑定操作放到绑定上下文
+    /// </summary>
+    /// <param name="element">要执行绑定操作的元素列表</param>
+    /// <param name="action">要对元素执行的绑定操作</param>
+    /// <returns>被执行绑定操作的元素列表</returns>
     public static IEnumerable<IHtmlElement> BindAction( this IEnumerable<IHtmlElement> elements, Action<IHtmlElement> action )
     {
       return elements.ForAll( e => BindAction( e, action ) );

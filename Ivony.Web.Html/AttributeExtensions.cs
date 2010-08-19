@@ -142,14 +142,33 @@ namespace Ivony.Web.Html
 
 
 
-
-    public static ValueSetter SetAttribute( this IHtmlElement element, string attributeName )
+    public static string AttributeValue( this IHtmlElement element, string name )
     {
-      return new ValueSetter( element, attributeName );
+      var attribute = element.Attribute( name );
+      if ( attribute == null )
+        return null;
+
+      return attribute.Value;
     }
 
 
-    public class ValueSetter
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <returns>属性设置器</returns>
+    public static AttributeValueSetter SetAttribute( this IHtmlElement element, string attributeName )
+    {
+      return new AttributeValueSetter( element, attributeName );
+    }
+
+
+    /// <summary>
+    /// 属性设置器，提供Value和Replace方法方便的设置属性值
+    /// </summary>
+    public class AttributeValueSetter
     {
       private IHtmlElement _element;
       private string _attributeName;
@@ -157,7 +176,7 @@ namespace Ivony.Web.Html
       private IHtmlAttribute attribute;
 
 
-      internal ValueSetter( IHtmlElement element, string attributeName )
+      internal AttributeValueSetter( IHtmlElement element, string attributeName )
       {
         if ( attributeName == null )
           throw new ArgumentNullException( "attributeName" );

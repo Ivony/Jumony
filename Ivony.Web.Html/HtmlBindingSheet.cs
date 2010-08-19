@@ -92,11 +92,15 @@ namespace Ivony.Web.Html
     public static readonly string styleSettingPattern = string.Format( @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", Regulars.quoteTextPattern );
     public static readonly string styleRulePattern = string.Format( @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", Regulars.cssSelectorPatternNoGroup, styleSettingPattern );
 
-    private Regex styleRulesRegex = new Regex( styleRulePattern, RegexOptions.Compiled );
-    private Regex styleSettingRegex = new Regex( styleSettingPattern, RegexOptions.Compiled );
+    private static readonly Regex styleRulesRegex = new Regex( styleRulePattern, RegexOptions.Compiled );
+    private static readonly Regex styleSettingRegex = new Regex( "^" + styleSettingPattern + "$", RegexOptions.Compiled );
 
 
-    private static readonly Regex quoteTextRegex = new Regex( Regulars.quoteTextPattern, RegexOptions.Compiled );
+    private static readonly Regex intergerRegex = new Regex( "^(\\-|\\+)?" + Regulars.intergerPattern + "$", RegexOptions.Compiled );
+    private static readonly Regex decimalRegex = new Regex( "^(\\-|\\+)?" + Regulars.decimalPattern + "$", RegexOptions.Compiled );
+
+
+    private static readonly Regex quoteTextRegex = new Regex( "^" + Regulars.quoteTextPattern + "$", RegexOptions.Compiled );
 
 
     public HtmlBindingRule( string rule )
@@ -105,7 +109,7 @@ namespace Ivony.Web.Html
       if ( !ruleMatch.Success )
         throw new FormatException();
 
-      Selector = new HtmlCssSelector( ruleMatch.Groups["selector"].Value );
+      Selector = HtmlCssSelector.Create( ruleMatch.Groups["selector"].Value );
 
       foreach ( Capture settingCapture in ruleMatch.Groups["styleSetting"].Captures )
       {
@@ -151,16 +155,18 @@ namespace Ivony.Web.Html
       //binding-source-default
       string defaultValueExpression;
       if ( settings.TryGetValue( "binding-source-default", out defaultValueExpression ) )
-      {
+        DataSourceDefault = ParseExpression( defaultValueExpression );
+      else
+        DataSourceDefault = ValueNotSet.Instance;
 
-      }
 
-
+      //binding-path
       string path = null;
       if ( settings.TryGetValue( "binding-path", out path ) )
         TargetPath = path.Trim();
 
 
+      //binding-format
       string format = null;
       if ( settings.TryGetValue( "binding-format", out format ) )
       {
@@ -168,7 +174,7 @@ namespace Ivony.Web.Html
         var quoteMatch = quoteTextRegex.Match( format );
 
         if ( quoteMatch.Success )
-          format = quoteMatch.Groups["quoteText"].Value;
+          format = Regulars.ReplaceEscape( quoteMatch.Groups["quoteText"].Value );
 
         FormatString = format;
       }
@@ -176,6 +182,51 @@ namespace Ivony.Web.Html
       NullBehavior = BindingNullBehavior.Ignore;
 
 
+    }
+
+
+    private static readonly Regex specialValueRegex = new Regex( @"^\<(?<name>\w+)\>$", RegexOptions.Compiled );
+
+    private object ParseExpression( string expression )
+    {
+
+      expression = expression.Trim();
+
+      var quoteMatch = quoteTextRegex.Match( expression );
+      if ( quoteMatch.Success )
+        return Regulars.ReplaceEscape( quoteMatch.Groups["quoteText"].Value );
+
+      var intergerMatch = intergerRegex.Match( expression );
+      var decimalMatch = decimalRegex.Match( expression );
+
+      if ( intergerMatch.Success || decimalMatch.Success )
+      {
+        var d = decimal.Parse( expression );
+
+        if ( intergerMatch.Success )
+        {
+
+          if ( d > int.MinValue && d < int.MaxValue )
+            return (int) d;
+
+          else if ( d > long.MinValue && d < long.MaxValue )
+            return (long) d;
+        }
+
+        return d;
+      }
+
+      var specialValueMatch = specialValueRegex.Match( expression );
+      if ( specialValueMatch.Success )
+      {
+        switch ( specialValueMatch.Groups["name"].Value )
+        {
+          case "null":
+            return null;
+        }
+      }
+
+      return expression;
     }
 
 
@@ -192,6 +243,12 @@ namespace Ivony.Web.Html
     }
 
     protected DataSourceType SourceType
+    {
+      get;
+      private set;
+    }
+
+    protected object DataSourceDefault
     {
       get;
       private set;
@@ -233,7 +290,7 @@ namespace Ivony.Web.Html
 
       var listMatch = dataSourceListRegex.Match( dataSourceExpression );
       if ( listMatch.Success )
-        return listMatch.Groups["item"].Captures.Cast<Capture>().Select( c => c.ToString() );
+        return listMatch.Groups["item"].Captures.Cast<Capture>().Select( c => ParseExpression( c.Value ) );
 
       throw new NotSupportedException();
     }
@@ -267,10 +324,16 @@ namespace Ivony.Web.Html
     {
       var list = DataSource as IEnumerable;
 
-      list.OfType<object>().BindTo( elements, ( item, e ) =>
+
+      Action<object, IHtmlElement> binder = ( item, e ) =>
       {
         e.Bind( TargetPath, item, FormatString, BindingNullBehavior.Ignore );
-      } );
+      };
+
+      if ( DataSourceDefault == ValueNotSet.Instance )
+        list.OfType<object>().BindTo( elements, binder );
+      else
+        list.OfType<object>().BindTo( elements, DataSourceDefault, binder );
     }
 
 

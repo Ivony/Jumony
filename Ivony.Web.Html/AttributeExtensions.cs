@@ -182,31 +182,31 @@ namespace Ivony.Web.Html
         return _element;
       }
 
-      public IHtmlElement Value( string oldValue, string newValue )
+      public IHtmlElement Replace( string oldValue, string newValue )
       {
         attribute.Value = attribute.Value.Replace( oldValue, newValue );
         return _element;
       }
 
-      public IHtmlElement Value( Regex pattern, string replacement )
+      public IHtmlElement Replace( Regex pattern, string replacement )
       {
         attribute.Value = pattern.Replace( attribute.Value, replacement );
         return _element;
       }
 
-      public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
+      public IHtmlElement Replace( Regex pattern, MatchEvaluator evaluator )
       {
         attribute.Value = pattern.Replace( attribute.Value, evaluator );
         return _element;
       }
 
-      public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
+      public IHtmlElement Replace( string pattern, MatchEvaluator evaluator )
       {
         attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
         return _element;
       }
 
-      public IHtmlElement Value( Func<string, string> evaluator )
+      public IHtmlElement Replace( Func<string, string> evaluator )
       {
         attribute.Value = evaluator( attribute.Value );
         return _element;

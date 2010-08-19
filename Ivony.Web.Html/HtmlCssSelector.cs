@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Collections;
 
 namespace Ivony.Web.Html
 {
@@ -17,23 +18,44 @@ namespace Ivony.Web.Html
 
 
 
-    private string _expression;
+    private readonly string _expression;
+
+
+
+    private static readonly Hashtable selectorCache = Hashtable.Synchronized( new Hashtable() );
+
+
+    public static HtmlCssSelector Create( string expression )
+    {
+      var selector = (HtmlCssSelector) selectorCache[expression];
+      if ( selector != null )
+        return selector;
+
+      selector = new HtmlCssSelector( expression );
+
+      selectorCache[expression] = selector;
+
+      return selector;
+    }
 
 
     /// <summary>
     /// 创建一个CSS选择器实例
     /// </summary>
     /// <param name="expression"></param>
-    public HtmlCssSelector( string expression )
+    private HtmlCssSelector( string expression )
     {
       _expression = expression;
+
+      if ( HttpContext.Current.Trace.IsEnabled )
+        HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Analyze Search \"{0}\"", expression ) );
 
       var match = cssSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
 
 
-      _selector = new PartSelector() { ElementSelector = new ElementSelector( match.Groups["elementSelector"].Value ) };
+      _selector = new PartSelector( new ElementSelector( match.Groups["elementSelector"].Value ) );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -45,10 +67,15 @@ namespace Ivony.Web.Html
         var relative = extraMatch.Groups["relative"].Value.Trim();
         var elementSelector = extraMatch.Groups["elementSelector"].Value.Trim();
 
-        var newPartSelector = new PartSelector() { ElementSelector = new ElementSelector( elementSelector ), Relative = relative, ParentSelector = _selector };
+        var newPartSelector = new PartSelector( new ElementSelector( elementSelector ), relative, _selector );
         _selector = newPartSelector;
 
       }
+
+
+      if ( HttpContext.Current.Trace.IsEnabled )
+        HttpContext.Current.Trace.Write( "Selector", string.Format( "End Analyze Search \"{0}\"", expression ) );
+
     }
 
     public override string ToString()
@@ -57,15 +84,43 @@ namespace Ivony.Web.Html
     }
 
 
-    private PartSelector _selector;
+    private readonly PartSelector _selector;
 
 
     private class PartSelector
     {
-      public string Relative { get; set; }
-      public ElementSelector ElementSelector { get; set; }
 
-      public PartSelector ParentSelector { get; set; }
+      private readonly string _relative;
+      public string Relative
+      {
+        get { return _relative; }
+      }
+
+      private readonly ElementSelector _selector;
+      public ElementSelector ElementSelector
+      {
+        get { return _selector; }
+      }
+
+      private readonly PartSelector _parent;
+      public PartSelector ParentSelector
+      {
+        get { return _parent; }
+      }
+
+
+      public PartSelector( ElementSelector selector )
+        : this( selector, null, null )
+      {
+
+      }
+
+      public PartSelector( ElementSelector selector, string relative, PartSelector parent )
+      {
+        _selector = selector;
+        _relative = relative;
+        _parent = parent;
+      }
 
 
       public bool Allows( IHtmlElement element, IHtmlContainer scope )
@@ -273,7 +328,7 @@ namespace Ivony.Web.Html
 
       private string tagName;
 
-      private IList<AttributeSelector> attributeSelectors;
+      private readonly IList<AttributeSelector> attributeSelectors;
 
 
       public bool Allows( IHtmlElement element )
@@ -308,11 +363,11 @@ namespace Ivony.Web.Html
     {
 
 
-      private string name;
-      private string separator;
-      private string value;
+      private readonly string name;
+      private readonly string separator;
+      private readonly string value;
 
-      private string exp;
+      private readonly string exp;
 
 
       private static readonly Regex regex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled );
@@ -320,7 +375,7 @@ namespace Ivony.Web.Html
 
       private delegate bool ValueMatcher( string exp, string value );
 
-      private Dictionary<string, ValueMatcher> matchers = new Dictionary<string, ValueMatcher>()
+      private static readonly Dictionary<string, ValueMatcher> matchers = new Dictionary<string, ValueMatcher>()
       {
         { "^=", ( exp, value ) => value != null && value.StartsWith( exp ) },
         { "$=", ( exp, value ) => value != null && value.EndsWith( exp ) },

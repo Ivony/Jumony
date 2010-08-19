@@ -11,8 +11,6 @@ public class BindingSheet : HtmlHandlerAdapter
 {
   protected override void Process()
   {
-    var bindingSheet = HtmlBindingSheet.Load( MapPath( "BindingSheet.css" ) );
-
-    bindingSheet.Apply();
+    
   }
 }

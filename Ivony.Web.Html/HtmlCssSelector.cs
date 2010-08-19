@@ -38,6 +38,11 @@ namespace Ivony.Web.Html
       return selector;
     }
 
+    internal static ElementSelector CreateElementSelector( string expression )
+    {
+      return new ElementSelector( expression );
+    }
+
 
     /// <summary>
     /// 创建一个CSS选择器实例
@@ -142,7 +147,7 @@ namespace Ivony.Web.Html
           return ParentSelector.Allows( element.PreviousElement(), scope );
 
         else if ( Relative == "~" )
-          return element.ElementsBeforeSelf().Any( e => ParentSelector.Allows( e, scope ) );
+          return element.SiblingsBeforeSelf().Any( e => ParentSelector.Allows( e, scope ) );
 
         else
           throw new FormatException();
@@ -169,7 +174,7 @@ namespace Ivony.Web.Html
     /// <param name="container">容器，其所有子代元素被列入搜索范围</param>
     /// <param name="asScope">指定选择器在计算父元素时，是否不超出指定容器的范畴</param>
     /// <remarks>
-    /// 选择器的工作原理是从最里层的元素选择器开始搜索，逐步验证其父元素是否满足父选择器的规则。如果asScope参数为true，则选择器在验证父元素时，将不超出container的。考虑下面的文档结构：
+    /// 选择器的工作原理是从最里层的元素选择器开始搜索，逐步验证其父元素是否满足父选择器的规则。如果asScope参数为true，则选择器在上溯验证父元素时，将不超出container的范畴，换言之只有container的子代才会被考虑。考虑下面的文档结构：
     /// <![CDATA[
     /// <html>
     ///   <body>
@@ -194,7 +199,7 @@ namespace Ivony.Web.Html
     public IEnumerable<IHtmlElement> Search( IHtmlContainer container, bool asScope )
     {
 
-      var elements = container.Descendant();
+      var elements = container.Descendants();
 
       elements =  elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
       if ( HttpContext.Current.Trace.IsEnabled )
@@ -295,7 +300,7 @@ namespace Ivony.Web.Html
 
 
 
-    private class ElementSelector
+    internal class ElementSelector
     {
 
       private static readonly Regex regex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled );
@@ -359,6 +364,12 @@ namespace Ivony.Web.Html
         }
 
         return true;
+      }
+
+
+      public IEnumerable<IHtmlElement> Search( IEnumerable<IHtmlElement> elements )
+      {
+        return elements.Where( e => Allows( e ) );
       }
 
 
@@ -484,29 +495,51 @@ namespace Ivony.Web.Html
         switch ( name )
         {
           case "nth-child":
-            return new nthNodePseudoClass( args );
+          case "nth-last-child":
+          case "nth-of-type":
+          case "nth-last-of-type":
+          case "first-child":
+          case "last-child":
+          case "first-of-type":
+          case "last-of-type":
+            return new nthPseudoClass( name, args, expression );
 
           default:
             throw new NotSupportedException();
         }
       }
 
-      private class nthNodePseudoClass : IPseudoClassSelector
+      private class nthPseudoClass : IPseudoClassSelector
       {
 
         private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>#interger)n\p{Zs}*(?<augend>(\+\-)#interger)?)".Replace( "#interger", Regulars.intergerPattern );
         private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled );
 
         private string _args;
+        private string exp;
 
         private int? multiplier;
         private int augend;
 
 
-        public nthNodePseudoClass( string args )
+        private bool ofType;
+        private bool last;
+        private bool nth;
+
+
+        public nthPseudoClass( string name, string args, string expression )
         {
           _args = args;
+          exp = expression;
 
+          var correctNames = new[] { "nth-child", "nth-last-child", "nth-of-type", "nth-last-of-type", "first-child", "last-child", "first-of-type", "last-of-type" };
+
+          if ( !correctNames.Contains( name, StringComparer.InvariantCultureIgnoreCase ) )
+            throw new InvalidOperationException();
+
+          nth = name.StartsWith( "nth-" );
+          last = name.Contains( "last-" );
+          ofType = name.Contains( "-of-type" );
 
           if ( args.Equals( "odd", StringComparison.InvariantCultureIgnoreCase ) )
             args = "2n";
@@ -532,11 +565,16 @@ namespace Ivony.Web.Html
 
         public bool Allows( ElementSelector elementSelector, IHtmlElement element )
         {
-          return Check( element.ElementIndex() );
+
+          if ( last )
+            return Check( element.LastIndexOfSelf() );
+          else
+            return Check( element.IndexOfSelf() );
         }
 
         public bool Check( int index )
         {
+          index += 1;
           index = index - augend;
 
           if ( index < 0 )

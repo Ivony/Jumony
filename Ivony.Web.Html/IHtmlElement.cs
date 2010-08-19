@@ -22,7 +22,7 @@ namespace Ivony.Web.Html
     /// <param name="context">绑定上下文</param>
     /// <param name="path">绑定路径</param>
     /// <param name="value">绑定值</param>
-    /// <param name="nullMode">为空时执行的操作</param>
+    /// <param name="nullBehavior">为空时执行的操作</param>
     [EditorBrowsable( EditorBrowsableState.Never )]
     void BindCore( HtmlBindingContext context, string path, string value, BindingNullBehavior nullBehavior );
 

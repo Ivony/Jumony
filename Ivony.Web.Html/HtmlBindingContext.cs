@@ -217,6 +217,7 @@ namespace Ivony.Web.Html
     /// 创建并进入一个绑定上下文
     /// </summary>
     /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
+    /// <param name="name">上下文友好的名称，用于Trace识别</param>
     /// <returns></returns>
     public static HtmlBindingContext EnterContext( IHtmlContainer scope, string name )
     {

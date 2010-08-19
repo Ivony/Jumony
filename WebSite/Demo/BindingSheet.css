@@ -6,9 +6,10 @@
 
 #list2 li
 {
-  binding-source: [1,2,3];
+  binding-source: [1,2,5,<null>,6];
   binding-path: @:text;
-  binding-format: "{{{0}}}";
-  binding-source-default: 5;
+  binding-format: "lesson {0}";
+  binding-source-default: <null>;
+  binding-null-behavior: hidden;
 }
 

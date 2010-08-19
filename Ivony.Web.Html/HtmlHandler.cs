@@ -9,7 +9,6 @@ namespace Ivony.Web.Html
 {
   public abstract class HtmlHandler : IHttpHandler
   {
-    #region IHttpHandler 成员
 
     public abstract bool IsReusable
     {
@@ -103,15 +102,17 @@ namespace Ivony.Web.Html
       get { return Context.ApplicationInstance; }
     }
 
+    protected string MapPath( string virtualPath )
+    {
+      return Request.MapPath( virtualPath );
+    }
 
-
-    #endregion
 
     #region IDisposable 成员
 
     public void Dispose()
     {
-      throw new NotImplementedException();
+      
     }
 
     #endregion

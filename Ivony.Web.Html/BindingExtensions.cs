@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Web.Html
 {
@@ -142,7 +143,7 @@ namespace Ivony.Web.Html
     /// <param name="elements">需要绑定数据的元素列表</param>
     /// <param name="dataSource">数据源</param>
     /// <returns>绑定后的元素列表</returns>
-    public static IEnumerable<IHtmlElement> BindContextFrom<T>( this IEnumerable<IHtmlElement> elements, IEnumerable<T> dataSource )
+    public static IEnumerable<IHtmlElement> DataContextFrom<T>( this IEnumerable<IHtmlElement> elements, IEnumerable<T> dataSource )
     {
 
       using ( var sourceIterator = dataSource.GetEnumerator() )
@@ -150,7 +151,7 @@ namespace Ivony.Web.Html
         using ( var targetIterator = elements.GetEnumerator() )
         {
           while ( sourceIterator.MoveNext() && targetIterator.MoveNext() )
-            HtmlBindingContext.Current.DataContext( targetIterator.Current, sourceIterator.Current );
+            HtmlBindingContext.Current.SetDataContext( targetIterator.Current, sourceIterator.Current );
         }
       }
 
@@ -165,7 +166,7 @@ namespace Ivony.Web.Html
     /// <param name="dataSource">数据源</param>
     /// <param name="defaultValue">当数据源中的数据不足时，应采用的默认值</param>
     /// <returns></returns>
-    public static IEnumerable<IHtmlElement> BindContextFrom<T>( this IEnumerable<IHtmlElement> elements, IEnumerable<T> dataSource, T defaultValue )
+    public static IEnumerable<IHtmlElement> DataContextFrom<T>( this IEnumerable<IHtmlElement> elements, IEnumerable<T> dataSource, T defaultValue )
     {
 
       using ( var sourceIterator = dataSource.GetEnumerator() )
@@ -184,7 +185,7 @@ namespace Ivony.Web.Html
             var dataItem = sourceEnded ? defaultValue : sourceIterator.Current;
             var targetItem = targetIterator.Current;
 
-            HtmlBindingContext.Current.DataContext( targetItem, dataItem );
+            HtmlBindingContext.Current.SetDataContext( targetItem, dataItem );
 
           }
 
@@ -195,6 +196,13 @@ namespace Ivony.Web.Html
     }
 
 
+    /// <summary>
+    /// 从DataContext绑定数据
+    /// </summary>
+    /// <param name="element">绑定数据的对象</param>
+    /// <param name="bindPath">绑定路径</param>
+    /// <param name="sourcePath">数据源路径</param>
+    /// <returns></returns>
     public static IHtmlElement ContextBind( this IHtmlElement element, string bindPath, string sourcePath )
     {
       return Bind( element, bindPath, Eval( element.DataContext(), sourcePath ), "{0}" );
@@ -202,20 +210,31 @@ namespace Ivony.Web.Html
 
     public static IHtmlElement ContextBind( this IHtmlElement element, string bindPath, string sourcePath, string format )
     {
-      Bind( element, bindPath, Eval( HtmlBindingContext.Current.DataContext( element ), sourcePath ), format );
+      Bind( element, bindPath, Eval( HtmlBindingContext.Current.GetDataContext( element ), sourcePath ), format );
 
       return element;
     }
 
 
+    /// <summary>
+    /// 获取 DataContext
+    /// </summary>
+    /// <param name="container">要获取 DataContext 的节点</param>
+    /// <returns></returns>
     public static object DataContext( this IHtmlContainer container )
     {
-      return HtmlBindingContext.Current.DataContext( container );
+      return HtmlBindingContext.Current.GetDataContext( container );
     }
 
+    /// <summary>
+    /// 设置 DataContext
+    /// </summary>
+    /// <param name="container">要设置 DataContext 的节点</param>
+    /// <param name="dataContext">要设置的数据</param>
+    /// <returns></returns>
     public static IHtmlContainer DataContext( this IHtmlContainer container, object dataContext )
     {
-      HtmlBindingContext.Current.DataContext( container, dataContext );
+      HtmlBindingContext.Current.SetDataContext( container, dataContext );
       return container;
     }
 

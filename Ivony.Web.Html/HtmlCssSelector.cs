@@ -13,8 +13,8 @@ namespace Ivony.Web.Html
     public const string squoteTextPattern = @"('(?<quoteText>(\\.|[^'\\])*)')";
     public const string quoteTextPattern = "(" + dquoteTextPattern + "|" + squoteTextPattern + ")";
 
-    public const string relativeExpressionPattern = @"(?<relative>(\s+~\s+)|(\s+\+\s+)|(\s+\>\s+)|\s+)";
-    public const string relativeExpressionPatternNoGroup = @"((\s+~\s+)|(\s+\+\s+)|(\s+\>\s+)|\s+)";
+    public const string relativeExpressionPattern = @"(?<relative>(\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
+    public const string relativeExpressionPatternNoGroup = @"((\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
 
     public static readonly string attributeExpressionPattern = string.Format( @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^]]*))?\]", quoteTextPattern );
     public static readonly string attributeExpressionPatternNoGroup = string.Format( @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^]]*))?\]", quoteTextPattern );
@@ -22,13 +22,16 @@ namespace Ivony.Web.Html
     public static readonly string elementExpressionPattern = string.Format( @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+)))?(?<attributeSelector>{0})*)", attributeExpressionPatternNoGroup );
     public static readonly string elementExpressionPatternNoGroup = string.Format( @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*)", attributeExpressionPatternNoGroup );
 
+    public static readonly string extraExpressionPattern =string.Format( "{0}{1}", relativeExpressionPattern, elementExpressionPattern );
+    public static readonly string extraExpressionPatternNoGroup = string.Format( "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
 
-    public static readonly string extraExpressionPattern = string.Format( "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
+    public static readonly string cssSelectorPattern = string.Format( "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
+    public static readonly string cssSelectorPatternNoGroup = string.Format( "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 
 
-    public static readonly Regex cssSelectorRegex = new Regex( string.Format( "^{0}{1}*$", elementExpressionPattern, extraExpressionPattern ), RegexOptions.Compiled );
+    public static readonly Regex cssSelectorRegex = new Regex( "^" + cssSelectorPattern + "$", RegexOptions.Compiled );
 
-    public static readonly Regex extraRegex = new Regex( string.Format( "^{0}{1}$", relativeExpressionPattern, elementExpressionPattern ), RegexOptions.Compiled );
+    public static readonly Regex extraRegex = new Regex( "^" + extraExpressionPattern + "$", RegexOptions.Compiled );
 
 
 

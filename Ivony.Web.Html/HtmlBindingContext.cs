@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Ivony.Web.Html
 {
@@ -17,6 +18,10 @@ namespace Ivony.Web.Html
 
     private HtmlBindingActionCollection _actionList = new HtmlBindingActionCollection();
 
+
+    /// <summary>
+    /// 保存的所有绑定操作
+    /// </summary>
     public IEnumerable<IHtmlBindingAction> Actions
     {
       get { return _actionList.GetActions(); }
@@ -57,7 +62,7 @@ namespace Ivony.Web.Html
     /// </summary>
     /// <param name="container">要设置数据上下文的容器对象</param>
     /// <param name="dataContext">数据上下文</param>
-    public void DataContext( IHtmlContainer container, object dataContext )
+    internal void SetDataContext( IHtmlContainer container, object dataContext )
     {
       _dataContexts[container] = dataContext;
     }
@@ -65,18 +70,20 @@ namespace Ivony.Web.Html
     /// <summary>
     /// 获取指定节点或元素最近的数据上下文
     /// </summary>
-    /// <returns>最近的数据上下文，如果没找到则返回null</returns>
-    public object DataContext( IHtmlNode node )
+    /// <returns>最近的数据上下文，将递归查找父级和父级上下文，如果都没找到则返回null</returns>
+    internal object GetDataContext( IHtmlNode node )
     {
 
-      if ( _dataContexts.ContainsKey( node ) )
-        return _dataContexts[node];
+      object data = GetDataContextCore( node );
+      if ( data != null )
+        return data;
 
       IHtmlContainer container;
       while ( (container = node.Parent) != null )
       {
-        if ( _dataContexts.ContainsKey( container ) )
-          return _dataContexts[container];
+        data = GetDataContextCore( container );
+        if ( data != null )
+          return data;
 
         node = container;
       }
@@ -85,15 +92,31 @@ namespace Ivony.Web.Html
     }
 
 
+    /// <summary>
+    /// 查找指定节点的数据上下文，将递归向父级BindingContext查询
+    /// </summary>
+    /// <param name="node">指定节点</param>
+    /// <returns>查找到的数据上下文，如果没有找到则返回null</returns>
+    private object GetDataContextCore( IHtmlNode node )
+    {
+      object data = _dataContexts[node];
+
+      if ( data == null && ParentContext != null )
+        return ParentContext.GetDataContextCore( node );
+
+      return data;
+    }
+
+
 
     /// <summary>
-    /// 执行数据绑定操作
+    /// 执行数据绑定操作，此操作将导致递归提交
     /// </summary>
     public void Commit()
     {
 
       if ( Current != this )
-        throw new InvalidOperationException();
+        Current.Commit();
 
       foreach ( var element in PostOrderTraverse( Scope ) )
       {
@@ -103,6 +126,22 @@ namespace Ivony.Web.Html
           a.Bind();
 
       }
+    }
+
+    private static void Commit( HtmlBindingContext target )
+    {
+      var context = Current;
+
+      while ( context != target ) ;
+      {
+        context.Commit();
+        context = context.ParentContext;
+      }
+
+      context.Commit();
+
+      return;
+
     }
 
 
@@ -176,45 +215,33 @@ namespace Ivony.Web.Html
     {
       get
       {
-        var contextStack = GetContextStack();
-        if ( contextStack == null )
-          throw new InvalidOperationException();
-
-        if ( contextStack.Count == 0 )
-          return null;
-
-        return contextStack.Peek();
+        return System.Runtime.Remoting.Messaging.CallContext.GetData( contextName ) as HtmlBindingContext;
       }
+      private set
+      {
+        System.Runtime.Remoting.Messaging.CallContext.SetData( contextName, value );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 父级绑定上下文
+    /// </summary>
+    public HtmlBindingContext ParentContext
+    {
+      get;
+      private set;
     }
 
 
     private const string contextName = "HtmlBindingContexts";
 
 
-    private bool _entered = false;
-
     private void Enter()
     {
-      if ( _entered )
-        throw new InvalidOperationException();
-
-      var contextStack = GetContextStack();
-
-      if ( contextStack == null )
-      {
-        contextStack = new Stack<HtmlBindingContext>();
-        System.Runtime.Remoting.Messaging.CallContext.SetData( contextName, contextStack );
-      }
-
-      if ( contextStack.Contains( this ) )
-        throw new InvalidOperationException();
-
-      contextStack.Push( this );
-    }
-
-    private static Stack<HtmlBindingContext> GetContextStack()
-    {
-      return System.Runtime.Remoting.Messaging.CallContext.GetData( contextName ) as Stack<HtmlBindingContext>;
+      ParentContext = Current;
+      System.Runtime.Remoting.Messaging.CallContext.SetData( contextName, this );
     }
 
 
@@ -226,7 +253,9 @@ namespace Ivony.Web.Html
       _actionList.Clear();
     }
 
-
+    /// <summary>
+    /// 退出绑定上下文，同时也会递归退出其上所有没有退出的绑定上下文
+    /// </summary>
     public void Exit()
     {
       Exit( false );
@@ -238,28 +267,38 @@ namespace Ivony.Web.Html
     /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
     public void Exit( bool discard )
     {
+      Exit( discard, this );
+    }
 
-      var contextStack = GetContextStack();
-      if ( contextStack == null )
-        throw new InvalidOperationException();
+    /// <summary>
+    /// 退出上下文
+    /// </summary>
+    /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
+    /// <param name="target">递归退出的目标</param>
+    private static void Exit( bool discard, HtmlBindingContext target )
+    {
 
-      if ( !contextStack.Contains( this ) )
-        throw new InvalidOperationException();
+      var context = Current;
 
-      while ( true )
-      {
-        var context = contextStack.Pop();
+      if ( discard )
+        context.Discard();
+      else
+        context.Commit();
 
-        if ( discard )
-          context.Discard();
-        else
-          context.Commit();
+      Current = Current.ParentContext;
 
-        if ( context == this )
-          break;
-      }
+      if ( context ==  target )
+        return;
 
-      _entered = false;
+      Exit( discard, target );
+    }
+
+    /// <summary>
+    /// 退出当前上下文
+    /// </summary>
+    public static void ExitContext()
+    {
+      Current.Exit();
     }
 
 

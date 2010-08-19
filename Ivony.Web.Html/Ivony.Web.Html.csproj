@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Ivony.Web.Html.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -48,9 +49,8 @@
   <ItemGroup>
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="BindingExtensions.cs" />
-    <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="ElementExtensions.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
     <Compile Include="HtmlCssSelector.cs" />
     <Compile Include="HtmlHandler.cs" />
@@ -63,7 +63,12 @@
     <Compile Include="jQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ivony\Ivony.Fluent\Ivony.Fluent.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Fluent</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>DEL "$(TargetDir)Code.RAR"

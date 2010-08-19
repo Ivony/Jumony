@@ -25,7 +25,7 @@ public class SelectorAndBind_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHa
 
     Find( "ul li" )
       .Where( e => e.Nodes().Count() == 0 )//现阶段还是不支持伪类，所以需要用LINQ的方法来帮助筛选一下，这里其实就是:empty伪类干的事儿，匹配空的li元素。
-      .Bind( "@:text", "abc" );
+      .Bind( "@:text", 123 );
 
     //">"表示直接子代匹配，只有li直属的div才会被匹配，请注意CSS选择器现在有严格的格式规范，在关系运算符之间必须留有空白，即li>div不是合法的CSS选择器。
     Find( "li > div[style]" ).Bind( "@:text", "style" );//仅当style存在时匹配
@@ -34,15 +34,21 @@ public class SelectorAndBind_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHa
     //Find( "li > div[abc='a]]']]" ).Bind( "@:text", "123" );//选择器的正则分析会认为这是错误的格式
     Find( "li > div[style^=font][class]" ).Bind( "@:text", "style^=font" );//当属性style以font开头，且存在class属性时匹配
 
+
+    //现在支持的CSS选择器包括：*、E、E E、E + E、E > E、E ~ E、#identity、.class-name
+    //[attr]、[attr=value]、[attr!=value]、[attr^=value]、[attr$=value]、[attr*=value]、[attr~=value]
+    //暂不支持的选择器包括：所有的伪类选择器、伪对象选择器、[attr|=value]、E , E
+
+
     //Bind方法会延迟执行，如果去掉下面这行注释，看看会发生什么：
     //HtmlBindingContext.Current.Discard();
 
 
     //Bind方法延迟执行的原因在于，在执行Bind时，有可能会对文档对象树造成破坏性修改（例如设置InnerHTML或是移除节点），而枚举器不能在遍历的时候修改集合。
     //Bind提供了一个简单的方式让你可以延迟安全的执行你想要做的操作，如果你需要延迟安全的执行自定义的操作，可以用BindAction扩展方法，例如下面这行代码删掉我们自己加在页面上的诡异元素<special>
-    Find( "special" ).ForEach( element => element.BindAction( e => e.NodeObject.Cast<HtmlNode>().Remove() ) );
-    //如果将上面那一行注释，直接执行下面的代码，则会报错：
-    //Find( "special" ).ForEach( element => element.NodeObject.Cast<HtmlNode>().Remove() );
+    Find( "special" ).ForAll( element => element.BindAction( e => e.NodeObject.Cast<HtmlNode>().Remove() ) );
+    //如果直接执行下面的代码，则会报错：
+    //Find( "special" ).ForAll( element => element.NodeObject.Cast<HtmlNode>().Remove() );
 
 
 

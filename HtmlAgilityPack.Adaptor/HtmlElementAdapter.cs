@@ -75,8 +75,15 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       }
 
       if ( path == "@:text" )
-        context.Action( this, element => element.Node.InnerHtml = HttpUtility.HtmlEncode( value ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" ) );
+      {
+        var html = value;
+        var notRequireDecodeElements = new[] { "pre", "textarea", "code" };
 
+        if ( !notRequireDecodeElements.Contains( Name, StringComparer.InvariantCultureIgnoreCase ) )
+          html = HttpUtility.HtmlEncode( value ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" );
+
+        context.Action( this, element => element.Node.InnerHtml = html );
+      }
       if ( path == "@:html" )
         context.Action( this, element => element.Node.InnerHtml = value );
 

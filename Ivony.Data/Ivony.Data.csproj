@@ -53,8 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingExtension.cs" />
-    <Compile Include="DataExtension.cs" />
+    <Compile Include="BindingExtensions.cs" />
     <Compile Include="Db.cs" />
     <Compile Include="DbExpressionParser.cs" />
     <Compile Include="DbTemplateParser.cs" />

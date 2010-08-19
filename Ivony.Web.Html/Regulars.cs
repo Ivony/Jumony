@@ -10,11 +10,11 @@ namespace Ivony.Web.Html
     public const string relativeExpressionPattern = @"(?<relative>(\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
     public const string relativeExpressionPatternNoGroup = @"((\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
 
-    public static readonly string attributeExpressionPattern = string.Format( @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^'""]]*))?\]", quoteTextPattern );
-    public static readonly string attributeExpressionPatternNoGroup = string.Format( @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^'""]]*))?\]", quoteTextPattern );
+    public static readonly string attributeExpressionPattern = string.Format( @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^'""\]]*))?\]", quoteTextPattern );
+    public static readonly string attributeExpressionPatternNoGroup = string.Format( @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^'""\]]*))?\]", quoteTextPattern );
 
-    public static readonly string pseudoClassPattern = string.Format( @":(?<name>[\w-]+)(\((?<args>{0}|[^'"")]*)\))?", quoteTextPattern );
-    public static readonly string pseudoClassPatternNoGroup = string.Format( @":([\w-]+)(\(({0}|[^'"")]*)\))?", quoteTextPattern );
+    public static readonly string pseudoClassPattern = string.Format( @":(?<name>[\w-]+)(\((?<args>{0}|[^'""\)]*)\))?", quoteTextPattern );
+    public static readonly string pseudoClassPatternNoGroup = string.Format( @":([\w-]+)(\(({0}|[^'""\)]*)\))?", quoteTextPattern );
 
     public static readonly string elementExpressionPattern = string.Format( @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+)))?(?<attributeSelector>{0})*(?<pseudoClassSelector>{1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
     public static readonly string elementExpressionPatternNoGroup = string.Format( @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*({1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );

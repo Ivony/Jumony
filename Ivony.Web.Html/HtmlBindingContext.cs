@@ -23,9 +23,9 @@ namespace Ivony.Web.Html
     /// <summary>
     /// 保存的所有绑定操作
     /// </summary>
-    public IEnumerable<IHtmlBindingAction> Actions
+    protected HtmlBindingActionCollection Actions
     {
-      get { return _actionList.GetActions(); }
+      get { return _actionList; }
     }
 
 
@@ -102,56 +102,13 @@ namespace Ivony.Web.Html
     {
       object data = _dataContexts[node];
 
-      if ( data == null && ParentContext != null )
-        return ParentContext.GetDataContextCore( node );
+      if ( data == null && AboveContext != null )
+        return AboveContext.GetDataContextCore( node );
 
       return data;
     }
 
 
-
-    /// <summary>
-    /// 执行数据绑定操作，此操作将导致递归提交
-    /// </summary>
-    public void Commit()
-    {
-      var commitContexts = new List<HtmlBindingContext>();
-
-      var context = Current;
-
-      while ( context != this )//递归找出所有之下的上下文
-      {
-        commitContexts.Add( context );
-        context = context.ParentContext;
-
-        if ( context == null )
-          throw new InvalidOperationException();
-      }
-
-
-      foreach ( var c in commitContexts )
-        c.CommitCore();
-
-      CommitCore();
-    }
-
-
-    private void CommitCore()
-    {
-      HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
-
-      foreach ( var element in PostOrderTraverse( Scope ) )
-      {
-        var actions = _actionList.GetActions( element );
-
-        foreach ( var a in actions )
-          a.Bind();
-      }
-
-      _actionList.Clear();
-
-      HttpContext.Current.Trace.Write( "Binding", string.Format( "End Commit BindingContext \"{0}\"", Name ) );
-    }
 
     /// <summary>
     /// 后序遍历所有元素用于绑定
@@ -213,19 +170,6 @@ namespace Ivony.Web.Html
     }
 
     /// <summary>
-    /// 创建并进入一个绑定上下文
-    /// </summary>
-    /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
-    /// <param name="name">上下文友好的名称，用于Trace识别</param>
-    /// <returns></returns>
-    public static HtmlBindingContext EnterContext( IHtmlContainer scope, string name )
-    {
-      var context = new HtmlBindingContext( scope, name );
-      context.Enter();
-      return context;
-    }
-
-    /// <summary>
     /// 获取当前的绑定上下文
     /// </summary>
     public static HtmlBindingContext Current
@@ -243,9 +187,19 @@ namespace Ivony.Web.Html
 
 
     /// <summary>
-    /// 父级绑定上下文
+    /// 上一级绑定上下文
     /// </summary>
-    public HtmlBindingContext ParentContext
+    public HtmlBindingContext AboveContext
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 下一级绑定上下文
+    /// </summary>
+    public HtmlBindingContext FollowContext
     {
       get;
       private set;
@@ -255,12 +209,112 @@ namespace Ivony.Web.Html
     private const string contextName = "HtmlBindingContexts";
 
 
-    private void Enter()
+
+
+    /// <summary>
+    /// 创建并进入一个绑定上下文
+    /// </summary>
+    /// <param name="name">上下文友好的名称，用于Trace识别</param>
+    /// <returns></returns>
+    public static HtmlBindingContext Enter( string name )
     {
-      ParentContext = Current;
-      System.Runtime.Remoting.Messaging.CallContext.SetData( contextName, this );
+      var currentContext = Current;
+      if ( currentContext == null )
+        throw new InvalidOperationException();
+
+      return Enter( currentContext.Scope, name );
+    }
+
+    /// <summary>
+    /// 创建并进入一个绑定上下文
+    /// </summary>
+    /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
+    /// <param name="name">上下文友好的名称，用于Trace识别</param>
+    /// <returns></returns>
+    public static HtmlBindingContext Enter( IHtmlContainer scope, string name )
+    {
+
+      var currentContext = Current;
+
+      if ( currentContext != null
+           && !currentContext.Scope.Equals( scope )
+           && !currentContext.Scope.DescendantNodes().Contains( scope )
+        )
+        throw new InvalidOperationException();
+
+      var context = new HtmlBindingContext( scope, name );
+      context.EnterCore();
+      return context;
+    }
+
+
+    /// <summary>
+    /// 进入上下文
+    /// </summary>
+    protected void EnterCore()
+    {
+      var currentContext = Current;
+      if ( currentContext != null )
+      {
+        this.AboveContext = currentContext;
+        currentContext.FollowContext = this;
+      }
+
+      Current = this;
 
       HttpContext.Current.Trace.Write( "Binding", string.Format( "Enter BindingContext \"{0}\"", Name ) );
+    }
+
+
+
+
+    /// <summary>
+    /// 退出当前上下文
+    /// </summary>
+    public static void Exit()
+    {
+      Exit( false );
+    }
+
+
+    /// <summary>
+    /// 退出当前上下文
+    /// </summary>
+    /// <param name="discard">是否放弃所有操作</param>
+    public static void Exit( bool discard )
+    {
+      Current.ExitCore( discard );
+    }
+
+
+    /// <summary>
+    /// 退出上下文
+    /// </summary>
+    /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
+    protected void ExitCore( bool discard )
+    {
+      if ( FollowContext != null )
+        FollowContext.ExitCore( discard );
+
+      if ( discard )
+        Discard();
+      else
+        Commit();
+
+      if ( AboveContext != null )
+      {
+        if ( AboveContext.FollowContext != this )
+          throw new Exception( "未知错误" );
+
+        AboveContext.FollowContext = null;
+        Current = AboveContext;
+      }
+      else
+
+        Current = null;
+
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Exit BindingContext \"{0}\"", Name ) );
     }
 
 
@@ -269,58 +323,64 @@ namespace Ivony.Web.Html
     /// </summary>
     public void Discard()
     {
-      _actionList.Clear();
+      Actions.Clear();
     }
 
-    /// <summary>
-    /// 退出绑定上下文，同时也会递归退出其上所有没有退出的绑定上下文
-    /// </summary>
-    public void Exit()
-    {
-      Exit( false );
-    }
 
     /// <summary>
-    /// 退出上下文
+    /// 提交上下文
     /// </summary>
-    /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
-    public void Exit( bool discard )
+    public void Commit()
     {
-      Exit( discard, this );
-
-    }
-
-    /// <summary>
-    /// 退出上下文
-    /// </summary>
-    /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
-    /// <param name="target">递归退出的目标</param>
-    private static void Exit( bool discard, HtmlBindingContext target )
-    {
-
-      var context = Current;
-
-      if ( discard )
-        context.Discard();
+      if ( AboveContext == null )//如果是顶层上下文，则应该直接提交
+        CommitImmediate();
       else
-        context.Commit();
+        CommitToAbove();
+    }
 
-      Current = context.ParentContext;
 
-      HttpContext.Current.Trace.Write( "Binding", string.Format( "Exit BindingContext \"{0}\"", context.Name ) );
+    /// <summary>
+    /// 提交所有绑定操作到上级
+    /// </summary>
+    protected void CommitToAbove()
+    {
 
-      if ( context ==  target )
-        return;
+      if ( AboveContext == null )
+        throw new InvalidOperationException();
 
-      Exit( discard, target );
+      if ( FollowContext != null )
+        FollowContext.CommitToAbove();
+
+
+      AboveContext.Actions.AddRange( Actions );
+
+      Actions.Clear();
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Commit to above, \"{0}\"", Name ) );
     }
 
     /// <summary>
-    /// 退出当前上下文
+    /// 立即执行所有绑定操作
     /// </summary>
-    public static void ExitContext()
+    protected void CommitImmediate()
     {
-      Current.Exit();
+
+      if ( FollowContext != null )
+        FollowContext.CommitToAbove();
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
+
+      foreach ( var element in PostOrderTraverse( Scope ) )
+      {
+        var actions = Actions.GetActions( element );
+
+        foreach ( var a in actions )
+          a.Bind();
+      }
+
+      Actions.Clear();
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "End Commit BindingContext \"{0}\"", Name ) );
     }
 
 
@@ -328,15 +388,17 @@ namespace Ivony.Web.Html
 
     public void Dispose()
     {
-      Exit( true );
+      ExitCore( true );
     }
 
     #endregion
 
 
 
-
-    private class HtmlBindingActionCollection
+    /// <summary>
+    /// 保存绑定操作的容器
+    /// </summary>
+    protected class HtmlBindingActionCollection
     {
 
       private Dictionary<object, List<IHtmlBindingAction>> _targetSet = new Dictionary<object, List<IHtmlBindingAction>>();
@@ -379,6 +441,12 @@ namespace Ivony.Web.Html
       internal void Remove( IHtmlBindingAction a )
       {
         throw new NotImplementedException();
+      }
+
+      internal void AddRange( HtmlBindingActionCollection actions )
+      {
+        foreach ( var a in actions.GetActions() )
+          Add( a );
       }
     }
 

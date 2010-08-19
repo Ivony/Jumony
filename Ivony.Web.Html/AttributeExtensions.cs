@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Ivony.Fluent;
+using System.ComponentModel;
 
 namespace Ivony.Web.Html
 {
@@ -82,7 +83,7 @@ namespace Ivony.Web.Html
     /// <param name="oldValue">要被替换的字符串</param>
     /// <param name="newValue">用于替换的字符串</param>
     /// <returns>被设置的属性对象</returns>
-    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, string oldValue, string newValue )
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string oldValue, string newValue )
     {
       attribute.Value = attribute.Value.Replace( oldValue, newValue );
       return attribute;
@@ -95,7 +96,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Regex pattern, string replacement )
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, string replacement )
     {
       attribute.Value = pattern.Replace( attribute.Value, replacement );
       return attribute;
@@ -108,7 +109,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">用于每一步替换的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
     {
       attribute.Value = pattern.Replace( attribute.Value, evaluator );
       return attribute;
@@ -121,7 +122,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
     /// <param name="evaluator">用于每一步替换的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
     {
       attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
       return attribute;
@@ -133,23 +134,11 @@ namespace Ivony.Web.Html
     /// <param name="attribute">属性对象</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Func<string, string> evaluator )
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Func<string, string> evaluator )
     {
       attribute.Value = evaluator( attribute.Value );
       return attribute;
     }
-
-
-
-    public static string AttributeValue( this IHtmlElement element, string name )
-    {
-      var attribute = element.Attribute( name );
-      if ( attribute == null )
-        return null;
-
-      return attribute.Value;
-    }
-
 
 
     /// <summary>
@@ -165,7 +154,7 @@ namespace Ivony.Web.Html
 
 
     /// <summary>
-    /// 属性设置器，提供Value和Replace方法方便的设置属性值
+    /// 属性设置器，提供Value方法方便的设置属性值
     /// </summary>
     public class AttributeValueSetter
     {
@@ -210,33 +199,39 @@ namespace Ivony.Web.Html
         return _element;
       }
 
-      public IHtmlElement Replace( string oldValue, string newValue )
+      public IHtmlElement Value( string oldValue, string newValue )
       {
         attribute.Value = attribute.Value.Replace( oldValue, newValue );
         return _element;
       }
 
-      public IHtmlElement Replace( Regex pattern, string replacement )
+      public IHtmlElement Value( Regex pattern, string replacement )
       {
         attribute.Value = pattern.Replace( attribute.Value, replacement );
         return _element;
       }
 
-      public IHtmlElement Replace( Regex pattern, MatchEvaluator evaluator )
+      public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
       {
         attribute.Value = pattern.Replace( attribute.Value, evaluator );
         return _element;
       }
 
-      public IHtmlElement Replace( string pattern, MatchEvaluator evaluator )
+      public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
       {
         attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
         return _element;
       }
 
-      public IHtmlElement Replace( Func<string, string> evaluator )
+      public IHtmlElement Value( Func<string, string> evaluator )
       {
         attribute.Value = evaluator( attribute.Value );
+        return _element;
+      }
+
+      public IHtmlElement Value( Func<IHtmlElement, string, string> evaluator )
+      {
+        attribute.Value = evaluator( _element, attribute.Value );
         return _element;
       }
 

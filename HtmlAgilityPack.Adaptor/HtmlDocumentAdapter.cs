@@ -6,18 +6,17 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 {
-  internal class HtmlDocumentAdapter : HtmlContainerAdapter
+  internal class HtmlDocumentAdapter : HtmlContainerAdapter, IHtmlDocument
   {
 
-    private AP.HtmlNode _node;
-
-    public HtmlDocumentAdapter( AP.HtmlNode node )
-      : base( node )
+    public HtmlDocumentAdapter( AP.HtmlDocument document )
+      : base( document.DocumentNode )
     {
-      if ( node.NodeType != AP.HtmlNodeType.Document )
-        throw new ArgumentException( "只能从NodeType为Document的HtmlNode转换为HtmlDocumentAdapter", "node" );
+    }
 
-      _node = node;
+    public string DocumentDeclaration
+    {
+      get { return null; }
     }
   }
 }

@@ -15,16 +15,12 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       get { return false; }
     }
 
-    public override void ProcessRequest()
+    protected override void ProcessDocument()
     {
-      HtmlDocument document = new HtmlDocument();
-
-      document.LoadHtml( GetTemplateContent() );
-      Document = document;
 
       ApplyBindingSheets();
 
-      using ( var bindingContext = HtmlBindingContext.EnterContext( DocumentNode ) )
+      using ( var bindingContext = HtmlBindingContext.EnterContext( Document, "global" ) )
       {
         Process();
 
@@ -32,14 +28,26 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       }
 
 
-      var meta = Document.CreateElement( "meta" );
+      var meta = HtmlDocument.CreateElement( "meta" );
       meta.SetAttributeValue( "name", "generator" );
-      meta.SetAttributeValue( "content", "Jumony" );
+      meta.SetAttributeValue( "content", "Jumony; HtmlAgilityPack" );
 
-      Document.Find( "html head" ).First().AppendChild( meta );
+      var header = HtmlDocument.Find( "html head" ).FirstOrDefault();
 
-      document.Save( Response.Output );
+      if ( header != null )
+      {
+        if ( header.HasChildNodes )
+          header.InsertBefore( meta, header.ChildNodes[0] );
+        else
+          header.AppendChild( meta );
+      }
+
+
+      Trace.Write( "Core", "Begin Write Response" );
+      HtmlDocument.Save( Response.Output );
+      Trace.Write( "Core", "End Write Response" );
     }
+
 
     private void ApplyBindingSheets()
     {
@@ -49,7 +57,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
         .Select( href => MapPath( href.Value ) )
         .Select( physicalPath => HtmlBindingSheet.Load( physicalPath ) );
 
-      HtmlBindingContext.EnterContext( DocumentNode );
+      HtmlBindingContext.EnterContext( Document, "ApplyBindingSheet" );
 
       bindingSheets
         .ForAll( sheet => sheet.Apply() );
@@ -59,20 +67,20 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
     }
 
-    protected IEnumerable<IHtmlElement> Find( string selector )
+
+    protected override IHtmlDocument LoadDocument( string documentContent )
     {
-      return DocumentNode.Find( selector );
+      HtmlDocument = new HtmlDocument();
+
+      HtmlDocument.LoadHtml( documentContent );
+
+      return HtmlDocument.AsDocument();
     }
 
-    protected HtmlDocument Document
+    protected HtmlDocument HtmlDocument
     {
       get;
       private set;
-    }
-
-    protected IHtmlContainer DocumentNode
-    {
-      get { return Document.AsContainer(); }
     }
 
     protected abstract void Process();

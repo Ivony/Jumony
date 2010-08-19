@@ -15,7 +15,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       switch ( node.NodeType )
       {
         case AP.HtmlNodeType.Document:
-          return new HtmlDocumentAdapter( node );
+          return new HtmlDocumentAdapter( node.OwnerDocument );
         case AP.HtmlNodeType.Element:
           return new HtmlElementAdapter( node );
 
@@ -25,9 +25,9 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public static IHtmlContainer AsContainer( this AP.HtmlDocument document )
+    public static IHtmlDocument AsDocument( this AP.HtmlDocument document )
     {
-      return document.DocumentNode.AsContainer();
+      return new HtmlDocumentAdapter( document );
     }
 
 

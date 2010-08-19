@@ -66,5 +66,15 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       return NodeObject.GetHashCode();
     }
 
+
+    public void Remove()
+    {
+      Node.Remove();
+    }
+
+    public IHtmlDocument Document
+    {
+      get { return Node.OwnerDocument.AsDocument(); }
+    }
   }
 }

@@ -26,7 +26,13 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
     public IHtmlContainer Parent
     {
-      get { return _node.ParentNode.AsContainer(); }
+      get
+      {
+        if ( _node.ParentNode == null )
+          return null;
+
+        return _node.ParentNode.AsContainer();
+      }
     }
 
 

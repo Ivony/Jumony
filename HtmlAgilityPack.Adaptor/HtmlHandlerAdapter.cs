@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
 using System.Web;
+using Ivony.Fluent;
 
 namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 {
@@ -27,6 +28,13 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
         bindingContext.Commit();
       }
+
+
+      var meta = Document.CreateElement( "meta" );
+      meta.SetAttributeValue( "name", "generator" );
+      meta.SetAttributeValue( "content", "Jumony" );
+
+      Document.Find( "html head" ).First().AppendChild( meta );
 
       document.Save( Response.Output );
     }

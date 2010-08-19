@@ -216,17 +216,5 @@ namespace Ivony.Web.Html
       return siblings.ToList().IndexOf( element );
     }
 
-
-    public static int NodesLastIndexOfSelf( this IHtmlNode node )
-    {
-      var siblings = node.SiblingNodes();
-      return siblings.ToList().LastIndexOf( node );
-    }
-
-    public static int LastIndexOfSelf( this IHtmlElement element )
-    {
-      var siblings = element.Siblings();
-      return siblings.ToList().LastIndexOf( element );
-    }
   }
 }

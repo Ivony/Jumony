@@ -14,9 +14,9 @@ namespace Ivony.Web.Html
   public static class BindingExtensions
   {
 
-    public static T BindAction<T>( this T element, Action<T> action ) where T : IHtmlElement
+    public static IHtmlElement BindAction( this IHtmlElement element, Action<IHtmlElement> action )
     {
-      var instance = new HtmlBindingAction<T>()
+      var instance = new HtmlBindingAction<IHtmlElement>()
       {
         Target = element,
         Action = action
@@ -25,6 +25,12 @@ namespace Ivony.Web.Html
       HtmlBindingContext.Current.Action( instance );
 
       return element;
+    }
+
+
+    public static IEnumerable<IHtmlElement> BindAction( this IEnumerable<IHtmlElement> elements, Action<IHtmlElement> action )
+    {
+      return elements.ForAll( e => BindAction( e, action ) );
     }
 
 

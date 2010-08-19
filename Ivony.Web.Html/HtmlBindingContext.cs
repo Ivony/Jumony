@@ -138,7 +138,6 @@ namespace Ivony.Web.Html
 
     private void CommitCore()
     {
-
       HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
 
       foreach ( var element in PostOrderTraverse( Scope ) )

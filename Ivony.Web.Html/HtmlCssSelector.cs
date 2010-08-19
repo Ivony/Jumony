@@ -138,7 +138,7 @@ namespace Ivony.Web.Html
           return true;
 
         else if ( Relative == ">" )
-          return element.Parent.Equals( scope )? false : ParentSelector.Allows( element.Parent as IHtmlElement, scope );
+          return element.Parent.Equals( scope ) ? false : ParentSelector.Allows( element.Parent as IHtmlElement, scope );
 
         else if ( Relative == "" )
           return element.Ancestors().TakeWhile( e => !e.Equals( scope ) ).Any( e => ParentSelector.Allows( e, scope ) );
@@ -201,7 +201,7 @@ namespace Ivony.Web.Html
 
       var elements = container.Descendants();
 
-      elements =  elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
+      elements = elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
       if ( HttpContext.Current.Trace.IsEnabled )
         elements = new TraceEnumerable<IHtmlElement>( this, elements );
 
@@ -317,9 +317,9 @@ namespace Ivony.Web.Html
 
 
         if ( match.Groups["name"].Success )
-          tagName = match.Groups["name"].Value;
+          _tagName = match.Groups["name"].Value;
         else
-          tagName = "*";
+          _tagName = "*";
 
         var _attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new AttributeSelector( c.Value ) ).ToList();
 
@@ -336,7 +336,7 @@ namespace Ivony.Web.Html
       }
 
 
-      private string tagName;
+      private string _tagName;
 
       private readonly AttributeSelector[] attributeSelectors;
 
@@ -348,7 +348,7 @@ namespace Ivony.Web.Html
           return false;
 
 
-        if ( tagName != "*" && !string.Equals( element.Name, tagName, StringComparison.InvariantCultureIgnoreCase ) )
+        if ( _tagName != "*" && !string.Equals( element.Name, _tagName, StringComparison.InvariantCultureIgnoreCase ) )
           return false;
 
         foreach ( var selector in attributeSelectors )
@@ -375,9 +375,11 @@ namespace Ivony.Web.Html
 
       public override string ToString()
       {
-        return string.Format( "{0}{1}{2}", tagName.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
+        return string.Format( "{0}{1}{2}", _tagName.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
       }
 
+
+      public string TagName { get { return _tagName; } }
     }
 
 
@@ -484,7 +486,9 @@ namespace Ivony.Web.Html
 
         string name = match.Groups["name"].Value;
 
-        string args = match.Groups["args"].Value;
+        string args =null;
+        if ( match.Groups["args"].Success )
+          args = match.Groups["args"].Value;
 
         return Create( name, args, expression );
 
@@ -502,23 +506,24 @@ namespace Ivony.Web.Html
           case "last-child":
           case "first-of-type":
           case "last-of-type":
-            return new nthPseudoClass( name, args, expression );
+            return new NthPseudoClass( name, args, expression );
 
           default:
             throw new NotSupportedException();
         }
       }
 
-      private class nthPseudoClass : IPseudoClassSelector
+      private class NthPseudoClass : IPseudoClassSelector
       {
 
-        private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>#interger)n\p{Zs}*(?<augend>(\+\-)#interger)?)".Replace( "#interger", Regulars.intergerPattern );
+        private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>((\+|\-)?#interger)|\-)n\p{Zs}*(?<augend>(\+|\-)\p{Zs}*#interger)?)".Replace( "#interger", Regulars.intergerPattern );
         private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled );
 
+        private string _name;
         private string _args;
         private string exp;
 
-        private int? multiplier;
+        private int multiplier;
         private int augend;
 
 
@@ -527,63 +532,121 @@ namespace Ivony.Web.Html
         private bool nth;
 
 
-        public nthPseudoClass( string name, string args, string expression )
+        public NthPseudoClass( string name, string args, string expression )
         {
-          _args = args;
-          exp = expression;
+
+          _name = name.ToLowerInvariant();
 
           var correctNames = new[] { "nth-child", "nth-last-child", "nth-of-type", "nth-last-of-type", "first-child", "last-child", "first-of-type", "last-of-type" };
 
-          if ( !correctNames.Contains( name, StringComparer.InvariantCultureIgnoreCase ) )
+          if ( !correctNames.Contains( _name ) )
             throw new InvalidOperationException();
 
-          nth = name.StartsWith( "nth-" );
-          last = name.Contains( "last-" );
-          ofType = name.Contains( "-of-type" );
 
-          if ( args.Equals( "odd", StringComparison.InvariantCultureIgnoreCase ) )
-            args = "2n";
+          nth = _name.StartsWith( "nth-" );
+          last = _name.Contains( "last-" );
+          ofType = _name.Contains( "-of-type" );
 
-          if ( args.Equals( "even", StringComparison.InvariantCultureIgnoreCase ) )
-            args = "2n+1";
 
-          var match = expressionRegex.Match( args );
+
+          _args = null;
+
+          if ( args != null )
+            _args = args.Trim().ToLowerInvariant();
+
+          exp = expression;
+
+          if ( !nth )//没有 nth 前缀说明获取第一个
+          {
+            if ( !string.IsNullOrEmpty( args ) )//没有nth前缀的不能有参数
+              throw new FormatException();
+
+            _args = "1";
+          }
+
+
+
+          if ( _args == "odd" )
+            _args = "2n+1";
+
+          if ( args == "even" )
+            _args = "2n";
+
+
+          var match = expressionRegex.Match( _args );
 
           if ( !match.Success )
             throw new FormatException();
 
 
-          multiplier = null;
+          multiplier = 0;//默认值是0，表示没有倍数选择
           augend = 0;
 
           if ( match.Groups["multiplier"].Success )
-            multiplier = int.Parse( match.Groups["multiplier"].Value );
+          {
+            string _multiplier =match.Groups["multiplier"].Value;
+            if ( _multiplier == "-" )//如果只有一个负号
+              multiplier = -1;//那意味着负1
+            else
+              multiplier = int.Parse( match.Groups["multiplier"].Value );
+          }
 
           if ( match.Groups["augend"].Success )
-            augend = int.Parse( match.Groups["augend"].Value );
+            augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ) );//这里的正则用于去掉符号与数字之间的空白
         }
 
         public bool Allows( ElementSelector elementSelector, IHtmlElement element )
         {
 
-          if ( last )
-            return Check( element.LastIndexOfSelf() );
+          List<IHtmlElement> siblings;
+
+          if ( ofType )
+            siblings = element.Siblings( elementSelector.TagName ).ToList();
           else
-            return Check( element.IndexOfSelf() );
+            siblings = element.Siblings().ToList();
+
+          if ( last )
+            siblings.Reverse();
+
+          return Check( siblings.IndexOf( element ) );
         }
 
         public bool Check( int index )
         {
           index += 1;
-          index = index - augend;
+          index = index - augend;//计算从 augend 开始的偏移量
 
-          if ( index < 0 )
-            return false;
+          if ( multiplier == 0 )//如果没有倍数选择，那么判断元素是否恰好在 augend 的位置。
+            return index == 0;
 
-          if ( index % multiplier != 0 )
-            return false;
+          if ( multiplier > 0 )//如果倍数大于0
+          {
+            if ( index < 0 )//在 augend 之前的元素被忽略
+              return false;
 
-          return true;
+            if ( index % multiplier != 0 )//看位置是否符合倍数
+              return false;
+
+            return true;
+          }
+
+
+          if ( multiplier < 0 )//如果倍数小于0
+          {
+            index = -index;//反转索引位置，换算成从 augend 往前的偏移量
+
+            if ( index < 0 )//在 augend 之后的元素忽略
+              return false;
+
+            if ( index % Math.Abs( multiplier ) != 0 )//看位置是否符合倍数
+              return false;
+
+            return true;
+          }
+
+
+          throw new Exception( "分析nth伪类时出现了一个其他未知情况" );
+
         }
 
 
@@ -591,7 +654,7 @@ namespace Ivony.Web.Html
         {
 
           string argsExp = null;
-          if ( multiplier != null )
+          if ( multiplier == 0 )
             argsExp = multiplier + "n";
 
           if ( argsExp != null )

@@ -22,6 +22,8 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       document.LoadHtml( GetTemplateContent() );
       Document = document;
 
+      ApplyBindingSheets();
+
       using ( var bindingContext = HtmlBindingContext.EnterContext( DocumentNode ) )
       {
         Process();
@@ -37,6 +39,24 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       Document.Find( "html head" ).First().AppendChild( meta );
 
       document.Save( Response.Output );
+    }
+
+    private void ApplyBindingSheets()
+    {
+      var bindingSheets = Find( "link[rel=Bindingsheet]" )
+        .Select( link => link.Attribute( "href" ) )
+        .Where( href => href != null )
+        .Select( href => MapPath( href.Value ) )
+        .Select( physicalPath => HtmlBindingSheet.Load( physicalPath ) );
+
+      HtmlBindingContext.EnterContext( DocumentNode );
+
+      bindingSheets
+        .ForAll( sheet => sheet.Apply() );
+
+      HtmlBindingContext.ExitContext();
+
+
     }
 
     protected IEnumerable<IHtmlElement> Find( string selector )

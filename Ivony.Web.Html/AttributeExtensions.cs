@@ -14,11 +14,6 @@ namespace Ivony.Web.Html
   public static class AttributeExtensions
   {
 
-
-
-
-
-
     /// <summary>
     /// 获取指定名称的属性对象
     /// </summary>
@@ -27,7 +22,7 @@ namespace Ivony.Web.Html
     /// <returns>属性对象，如果没找到，则返回null</returns>
     public static IHtmlAttribute Attribute( this IHtmlElement element, string name )
     {
-      return Attribute( element, name, false );
+      return element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).FirstOrDefault();
     }
 
 
@@ -37,30 +32,33 @@ namespace Ivony.Web.Html
     /// </summary>
     /// <param name="element">元素</param>
     /// <param name="name">属性名</param>
-    /// <param name="create">指示如果没有找到，是否创建属性对象</param>
+    /// <param name="defaultValue">如果属性没找到，则为属性设置默认值</param>
     /// <returns>属性对象</returns>
-    public static IHtmlAttribute Attribute( this IHtmlElement element, string name, bool create )
+    public static IHtmlAttribute Attribute( this IHtmlElement element, string name, string defaultValue )
     {
       var attribute = element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).FirstOrDefault();
-      if ( attribute == null && create )
-        return element.AddAttribute( name );
+      if ( attribute == null )
+      {
+        attribute = element.AddAttribute( name );
+        attribute.Value = defaultValue;
+      }
+
 
       return attribute;
     }
 
 
     /// <summary>
-    /// 获取指定名称的所有属性对象
+    /// 获取属性值，与Value属性不同，Value方法在属性对象为null时不会抛出异常
     /// </summary>
-    /// <param name="elements">要获取属性的元素列表</param>
-    /// <param name="name">属性名</param>
-    /// <returns>存在的属性对象列表</returns>
-    public static IEnumerable<IHtmlAttribute> Attribute( this IEnumerable<IHtmlElement> elements, string name )
+    /// <param name="attribute">属性对象</param>
+    /// <returns>属性值，如果属性对象为null，则返回null</returns>
+    public static string Value( this IHtmlAttribute attribute )
     {
-      return from e in elements
-             select e.Attribute( name ) into a
-             where a != null
-             select a;
+      if ( attribute == null )
+        return null;
+
+      return attribute.Value;
     }
 
 
@@ -75,6 +73,7 @@ namespace Ivony.Web.Html
       attribute.Value = value;
       return attribute;
     }
+
 
     /// <summary>
     /// 设置属性值
@@ -190,11 +189,21 @@ namespace Ivony.Web.Html
           attribute = _element.AddAttribute( attributeName );
       }
 
+      /// <summary>
+      /// 将属性值设置为空
+      /// </summary>
+      /// <returns>设置属性值的元素</returns>
       public IHtmlElement Value()
       {
+        attribute.Value = null;
         return _element;
       }
 
+      /// <summary>
+      /// 将属性值设置为指定字符串
+      /// </summary>
+      /// <param name="value">要设置的属性值</param>
+      /// <returns>设置属性值的元素</returns>
       public IHtmlElement Value( string value )
       {
         attribute.Value = value;
@@ -232,12 +241,5 @@ namespace Ivony.Web.Html
       }
 
     }
-
-    public class ValueGetter
-    {
-
-    }
-
-
   }
 }

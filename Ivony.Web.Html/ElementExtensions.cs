@@ -202,8 +202,6 @@ namespace Ivony.Web.Html
 
 
 
-
-
     public static int NodesIndexOfSelf( this IHtmlNode node )
     {
       var siblings = node.SiblingNodes();

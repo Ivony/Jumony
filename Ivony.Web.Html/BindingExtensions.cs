@@ -62,6 +62,14 @@ namespace Ivony.Web.Html
       return Bind( element, path, value, null );
     }
 
+
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <returns>被绑定的元素</returns>
     public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, object value )
     {
       if ( value == null )
@@ -86,6 +94,14 @@ namespace Ivony.Web.Html
       return Bind( element, path, value, format, BindingNullBehavior.Ignore );
     }
 
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <param name="format">用于绑定值的格式化字符串</param>
+    /// <returns>被绑定的元素</returns>
     public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, object value, string format )
     {
       if ( value == null )
@@ -107,6 +123,14 @@ namespace Ivony.Web.Html
       return Bind( element, path, value, null, nullBehavior );
     }
 
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <param name="nullBehavior">定义当绑定值为空的行为</param>
+    /// <returns>被绑定的元素</returns>
     public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, object value, BindingNullBehavior nullBehavior )
     {
       return elements.ForAll( e => e.Bind( path, value, null, nullBehavior ) );
@@ -126,6 +150,17 @@ namespace Ivony.Web.Html
       return Bind( element, HtmlBindingContext.Current, path, value, format, nullBehavior );
     }
 
+
+
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <param name="format">用于绑定值的格式化字符串</param>
+    /// <param name="nullBehavior">定义当绑定值为空的行为</param>
+    /// <returns>被绑定的元素</returns>
     public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, object value, string format, BindingNullBehavior nullBehavior )
     {
       return elements.ForAll( e => e.Bind( path, value, format, nullBehavior ) );

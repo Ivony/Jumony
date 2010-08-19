@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="Ivony.Data.SqlDom.LogicalExpression" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\LogicalExpression.cs</FileName>
+      <HashCode>AAAAAABAAAAAAAAgCAAAAAAAAAAEAAAAAIAAAAAAIAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.ComparisionExpression" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\ComparisionExpression.cs</FileName>
+      <HashCode>AAAAAABAAAAAAAAgCAAAAAAAAAAEAAAAAIAAAAAAIAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.FieldReferenceExpression" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\FieldReferenceExpression.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAQAAAAACAAAAEAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.LikeExpression" Collapsed="true">
+    <Position X="14" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\LikeExpression.cs</FileName>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAABAAAAAAAAAAIAAAAAAAAEA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.BooleanExpression" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\BooleanExpression.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.ParameterExpression" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\ParameterExpression.cs</FileName>
+      <HashCode>ABACIAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.TableReferenceExpression" Collapsed="true">
+    <Position X="20.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\TableReferenceExpression.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABAMA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.Expression" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\Expression.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.TemplateExpression" Collapsed="true">
+    <Position X="18.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\TemplateExpression.cs</FileName>
+      <HashCode>AAAEAAIAAEAEAACAAAAAAAAAAAAAAAAAAIAAEAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ivony.Data.SqlDom.InExpression" Collapsed="true">
+    <Position X="16.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\InExpression.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Ivony.Data.SqlDom.LogicalOperator" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\BooleanExpression.cs</FileName>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Ivony.Data.SqlDom.ComparisionOperator" Collapsed="true">
+    <Position X="23.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Data\SqlDom\BooleanExpression.cs</FileName>
+      <HashCode>ACAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAAQBAACA=</HashCode>
+    </TypeIdentifier>
+  </Enum>
+</ClassDiagram>

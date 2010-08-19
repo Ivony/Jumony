@@ -356,7 +356,7 @@ namespace Ivony.Web.Html
 
       Actions.Clear();
 
-      HttpContext.Current.Trace.Write( "Binding", string.Format( "Commit to above, \"{0}\"", Name ) );
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Commit to above, BindingContext: \"{0}\"", Name ) );
     }
 
     /// <summary>

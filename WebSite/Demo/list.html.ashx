@@ -22,6 +22,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
       .BindTo( Find( "#list1 li" ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );
     //BindTo方法会返回数据源支持连写，将一份数据绑定到多个目标
 
+    HtmlBindingContext.EnterContext( Document, "Context1" );
 
     //下面来看看数据不够的情况：
     Enumerable.Range( 1, 5 )
@@ -33,6 +34,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
 
     //用代码来指定这些东西，会觉得有些别扭，因为BindingNullBehavior主要是为绑定样式表设置而准备的。
 
+    HtmlBindingContext.EnterContext( Document, "Context2" );
 
     //有时候我们会希望把数据附着到一个元素上，以便后面的绑定使用，这里就要借助HtmlBindingContext，当然，我们也有现成的扩展方法：
     Find( "#list1" ).Single().DataContext( "列表一" );

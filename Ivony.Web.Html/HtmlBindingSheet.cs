@@ -147,6 +147,11 @@ namespace Ivony.Web.Html
 
 
       //binding-source-type
+      string dataSourceTypeExpression = null;
+      if ( settings.TryGetValue( "binding-source-type", out dataSourceTypeExpression ) )
+      {
+
+      }
       if ( DataSource is IEnumerable )
         SourceType = DataSourceType.Enumerable;
       else
@@ -179,8 +184,13 @@ namespace Ivony.Web.Html
         FormatString = format;
       }
 
-      NullBehavior = BindingNullBehavior.Ignore;
 
+      //binding-null-behavior
+      string nullBehaviorExpression = null;
+      if ( settings.TryGetValue( "binding-null-behavior", out nullBehaviorExpression ) )
+        NullBehavior = Enum.Parse( typeof( BindingNullBehavior ), nullBehaviorExpression, true ).Cast<BindingNullBehavior>();
+      else
+        NullBehavior = BindingNullBehavior.Ignore;
 
     }
 
@@ -290,7 +300,7 @@ namespace Ivony.Web.Html
 
       var listMatch = dataSourceListRegex.Match( dataSourceExpression );
       if ( listMatch.Success )
-        return listMatch.Groups["item"].Captures.Cast<Capture>().Select( c => ParseExpression( c.Value ) );
+        return listMatch.Groups["item"].Captures.Cast<Capture>().Select( c => ParseExpression( c.Value ) ).ToArray();
 
       throw new NotSupportedException();
     }
@@ -327,13 +337,13 @@ namespace Ivony.Web.Html
 
       Action<object, IHtmlElement> binder = ( item, e ) =>
       {
-        e.Bind( TargetPath, item, FormatString, BindingNullBehavior.Ignore );
+        e.Bind( TargetPath, item, FormatString, NullBehavior );
       };
 
       if ( DataSourceDefault == ValueNotSet.Instance )
-        list.OfType<object>().BindTo( elements, binder );
+        list.Cast<object>().BindTo( elements, binder );
       else
-        list.OfType<object>().BindTo( elements, DataSourceDefault, binder );
+        list.Cast<object>().BindTo( elements, DataSourceDefault, binder );
     }
 
 

@@ -27,7 +27,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     //下面来看看数据不够的情况：
     Enumerable.Range( 1, 5 )
       .Select( i => i.ToString() )
-      .BindTo( Find( "#list2 li" ), null,//null代表缺少数据源时用来替代的默认值
+      .BindTo( Find( "#list2 li:nth-child(odd)" ), null,//null代表缺少数据源时用来替代的默认值
         ( dataItem, target ) => target.Bind( "@:text", dataItem, BindingNullBehavior.Remove )
       //最后一个参数指定如果数据对象是null作何处理，这里指示删除元素。
       );

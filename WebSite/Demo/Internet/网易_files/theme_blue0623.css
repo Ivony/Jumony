@@ -1,0 +1,150 @@
+.ui_colLine {
+	BACKGROUND-COLOR: #b1c8d7
+}
+.txt120 .con {
+	BORDER-BOTTOM: #ededed 1px solid; BORDER-LEFT: #ededed 1px solid; BACKGROUND: #f5f8fc; BORDER-TOP: #ededed 1px solid; BORDER-RIGHT: #ededed 1px solid
+}
+.ui_pro .tr1 {
+	BACKGROUND-COLOR: #fff
+}
+.aboutNetease {
+	BORDER-BOTTOM: #b1c8d7 1px solid; BORDER-LEFT: #b1c8d7 1px solid; BACKGROUND: #f5f8fc; BORDER-TOP: #b1c8d7 1px solid; BORDER-RIGHT: #b1c8d7 1px solid
+}
+.nw_dl DT {
+	BACKGROUND: #e6eef7
+}
+.tab_gg_l LI {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tab_gg_l LI.current {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tab_gg_r LI {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tab_gg_r LI.current {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.ui_tit38 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.ui_tit26 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.ui_txt {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG5_c .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG4_c .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG3_c .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG5_l .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG4_l .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG3_l .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG5_r .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG4_r .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.tabG3_r .con {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.frm_money .ipt {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.frm_money .btn {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/skin_blue1117.png) no-repeat
+}
+.ui_bg001 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_bg101 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_bg000 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_bg100 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_c110 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_c001 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_c111 {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+.ui_conR {
+	BACKGROUND: url(http://img3.cache.netease.com/img09/index/bg.gif) #fff repeat-y
+}
+#ydSkin {
+	BACKGROUND-IMAGE: url(http://img3.126.net/yodaoimages/skins/20100302/sprites_2.jpg); COLOR: #1f3a87
+}
+#ydSkin #ydAreas {
+	BORDER-BOTTOM-COLOR: #6583b2; BORDER-TOP-COLOR: #96afd5; BACKGROUND: #edf4fc; BORDER-RIGHT-COLOR: #6583b2; BORDER-LEFT-COLOR: #96afd5
+}
+#ydSkin .yda-title {
+	BACKGROUND: #dae8fa
+}
+.yditemnormal {
+	BACKGROUND: #fff; COLOR: #1f3a87
+}
+.yditemover {
+	BACKGROUND: #1f3a87; COLOR: #fff
+}
+.aa_highlight {
+	BACKGROUND: #1f3a87; COLOR: #fff
+}
+.ydsep {
+	BORDER-BOTTOM-COLOR: #1f3a87; BORDER-TOP-COLOR: #1f3a87; BACKGROUND: #fff; BORDER-RIGHT-COLOR: #1f3a87; BORDER-LEFT-COLOR: #1f3a87
+}
+.popupMenu {
+	BORDER-BOTTOM-COLOR: #6583b2; BORDER-TOP-COLOR: #96afd5; BACKGROUND: #1f3a87; BORDER-RIGHT-COLOR: #6583b2; BORDER-LEFT-COLOR: #96afd5
+}
+.jstxhuitiaoyou {
+	BACKGROUND-COLOR: #f5f5f5; PADDING-RIGHT: 5px; FONT-SIZE: 100%
+}
+.jstxlan {
+	COLOR: #1f3a87; FONT-SIZE: 100%; CURSOR: pointer
+}
+.jstxlan:hover {
+	COLOR: #1f3a87; TEXT-DECORATION: underline
+}
+.titleBar {
+	COLOR: #1e50a2
+}
+.titleBar A {
+	COLOR: #1e50a2
+}
+.titleBar A:visited {
+	COLOR: #1e50a2
+}
+#ydSkin A {
+	COLOR: #1f3a87
+}
+#ydSkin .sl {
+	COLOR: #1f3a87
+}
+.cTab {
+	COLOR: #1f3a87
+}
+#ydSkin .yda-close {
+	BACKGROUND-IMAGE: url(http://img3.126.net/yodaoimages/skins/20100302/sprites_2.jpg)
+}
+#ydaSubmit {
+	BACKGROUND-IMAGE: url(http://img3.126.net/yodaoimages/skins/20100302/sprites_2.jpg)
+}

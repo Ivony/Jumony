@@ -83,15 +83,36 @@ namespace Ivony.Fluent
     }
 
 
-    public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> dataSource, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget> binder )
+    /// <summary>
+    /// 将集合的每一项按顺序绑定到另一个集合
+    /// </summary>
+    /// <typeparam name="TSource">源集合元素类型</typeparam>
+    /// <typeparam name="TTarget">目标集合元素类型</typeparam>
+    /// <param name="source">源集合</param>
+    /// <param name="targets">目标集合</param>
+    /// <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+    /// <param name="binder">绑定方法</param>
+    /// <returns>源集合</returns>
+    public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget> binder )
     {
-      return BindTo( dataSource, targets, defaultValue, ( d, t, i ) => binder( d, t ) );
+      return BindTo( source, targets, defaultValue, ( d, t, i ) => binder( d, t ) );
     }
 
-    public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> dataSource, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget, int> binder )
+
+    /// <summary>
+    /// 将集合的每一项按顺序绑定到另一个集合
+    /// </summary>
+    /// <typeparam name="TSource">源集合元素类型</typeparam>
+    /// <typeparam name="TTarget">目标集合元素类型</typeparam>
+    /// <param name="source">源集合</param>
+    /// <param name="targets">目标集合</param>
+    /// <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+    /// <param name="binder">绑定方法</param>
+    /// <returns>源集合</returns>
+    public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget, int> binder )
     {
 
-      using ( var sourceIterator = dataSource.GetEnumerator() )
+      using ( var sourceIterator = source.GetEnumerator() )
       {
         using ( var targetIterator = targets.GetEnumerator() )
         {
@@ -116,7 +137,7 @@ namespace Ivony.Fluent
         }
       }
 
-      return dataSource;
+      return source;
     }
 
   }

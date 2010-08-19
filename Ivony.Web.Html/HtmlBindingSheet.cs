@@ -14,10 +14,15 @@ namespace Ivony.Web.Html
 
 
     public static readonly string styleSheetPattern = string.Format( @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", HtmlBindingRule.styleRulePattern );
-    private static readonly Regex styleSheetRegex= new Regex( styleSheetPattern, RegexOptions.Compiled );
+    private static readonly Regex styleSheetRegex = new Regex( styleSheetPattern, RegexOptions.Compiled );
 
 
 
+    /// <summary>
+    /// 加载样式表
+    /// </summary>
+    /// <param name="filepath">样式表文件路径</param>
+    /// <returns>加载完毕的样式表文档</returns>
     public static HtmlBindingSheet Load( string filepath )
     {
       using ( var stream = File.OpenRead( filepath ) )
@@ -26,6 +31,11 @@ namespace Ivony.Web.Html
       }
     }
 
+    /// <summary>
+    /// 加载样式表
+    /// </summary>
+    /// <param name="stream">要从中加载样式表的流</param>
+    /// <returns>加载的样式表</returns>
     public static HtmlBindingSheet Load( Stream stream )
     {
       using ( var reader = new StreamReader( stream ) )
@@ -34,6 +44,11 @@ namespace Ivony.Web.Html
       }
     }
 
+    /// <summary>
+    /// 加载样式表
+    /// </summary>
+    /// <param name="reader">要从中加载样式表的文本读取器</param>
+    /// <returns></returns>
     public static HtmlBindingSheet Load( TextReader reader )
     {
       string content = reader.ReadToEnd();
@@ -81,6 +96,9 @@ namespace Ivony.Web.Html
     private Regex styleSettingRegex = new Regex( styleSettingPattern, RegexOptions.Compiled );
 
 
+    private static readonly Regex quoteTextRegex = new Regex( HtmlCssSelector.quoteTextPattern, RegexOptions.Compiled );
+
+
     public HtmlBindingRule( string rule )
     {
       var ruleMatch = styleRulesRegex.Match( rule );
@@ -117,19 +135,47 @@ namespace Ivony.Web.Html
 
     protected void Analyze()
     {
-      string dataSourceExpression = null;
 
+      //binding-source
+      string dataSourceExpression = null;
       if ( settings.TryGetValue( "binding-source", out dataSourceExpression ) )
         DataSource = ParseDataSource( dataSourceExpression );
 
+
+      //binding-source-type
       if ( DataSource is IEnumerable )
         SourceType = DataSourceType.Enumerable;
       else
         SourceType = DataSourceType.Object;
 
+      //binding-source-default
+      string defaultValueExpression;
+      if ( settings.TryGetValue( "binding-source-default", out defaultValueExpression ) )
+      {
+
+      }
+
+
       string path = null;
       if ( settings.TryGetValue( "binding-path", out path ) )
         TargetPath = path.Trim();
+
+
+      string format = null;
+      if ( settings.TryGetValue( "binding-format", out format ) )
+      {
+        format = format.Trim();
+        var quoteMatch = quoteTextRegex.Match( format );
+
+        if ( quoteMatch.Success )
+          format = quoteMatch.Groups["quoteText"].Value;
+
+        FormatString = format;
+      }
+
+      NullBehavior = BindingNullBehavior.Ignore;
+
+
     }
 
 
@@ -151,6 +197,26 @@ namespace Ivony.Web.Html
       private set;
     }
 
+    protected string FormatString
+    {
+      get;
+      private set;
+    }
+
+    public BindingNullBehavior NullBehavior
+    {
+      get;
+      private set;
+    }
+
+
+
+
+
+    private class ValueNotSet
+    {
+      public static readonly ValueNotSet Instance = new ValueNotSet();
+    }
 
 
     protected enum DataSourceType
@@ -203,7 +269,7 @@ namespace Ivony.Web.Html
 
       list.OfType<object>().BindTo( elements, ( item, e ) =>
         {
-          e.Bind( TargetPath, item );
+          e.Bind( TargetPath, item, FormatString, BindingNullBehavior.Ignore );
         } );
     }
 

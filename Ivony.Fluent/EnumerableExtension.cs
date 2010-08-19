@@ -41,6 +41,9 @@ namespace Ivony.Fluent
 
 
 
+
+
+
     /// <summary>
     /// 将集合的每一项按顺序绑定到另一个集合
     /// </summary>

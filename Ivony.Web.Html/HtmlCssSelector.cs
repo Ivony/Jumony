@@ -295,7 +295,7 @@ namespace Ivony.Web.Html
 
 
 
-    public class ElementSelector
+    private class ElementSelector
     {
 
       private static readonly Regex regex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled );
@@ -316,20 +316,26 @@ namespace Ivony.Web.Html
         else
           tagName = "*";
 
-        attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new AttributeSelector( c.Value ) ).ToList();
+        var _attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new AttributeSelector( c.Value ) ).ToList();
 
         if ( match.Groups["identity"].Success )
-          attributeSelectors.Add( new AttributeSelector( string.Format( "[id={0}]", match.Groups["identity"].Value ) ) );
+          _attributeSelectors.Add( new AttributeSelector( string.Format( "[id={0}]", match.Groups["identity"].Value ) ) );
 
         if ( match.Groups["class"].Success )
-          attributeSelectors.Add( new AttributeSelector( string.Format( "[class*={0}]", match.Groups["class"].Value ) ) );
+          _attributeSelectors.Add( new AttributeSelector( string.Format( "[class*={0}]", match.Groups["class"].Value ) ) );
+
+        attributeSelectors = _attributeSelectors.ToArray();
+
+        pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => new PseudoClassSelector( c.Value ) ).ToArray();
+
       }
 
 
       private string tagName;
 
-      private readonly IList<AttributeSelector> attributeSelectors;
+      private readonly AttributeSelector[] attributeSelectors;
 
+      private readonly PseudoClassSelector[] pseudoClassSelectors;
 
       public bool Allows( IHtmlElement element )
       {
@@ -341,6 +347,12 @@ namespace Ivony.Web.Html
           return false;
 
         foreach ( var selector in attributeSelectors )
+        {
+          if ( !selector.Allows( element ) )
+            return false;
+        }
+
+        foreach ( var selector in pseudoClassSelectors )
         {
           if ( !selector.Allows( element ) )
             return false;
@@ -359,7 +371,7 @@ namespace Ivony.Web.Html
 
 
 
-    public class AttributeSelector
+    private class AttributeSelector
     {
 
 
@@ -442,10 +454,100 @@ namespace Ivony.Web.Html
 
 
 
-    public class PseudoClassSelector
+    private class PseudoClassSelector
     {
 
+      private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled );
+
+      private readonly string exp;
+
+      private readonly string name;
+
+      private readonly string args;
+
+      private Func<IHtmlElement, bool> validator;
+
+
+      public PseudoClassSelector( string expression )
+      {
+
+        var match = pseudoClassRegex.Match( expression );
+
+        if ( !match.Success )
+          throw new FormatException();
+
+        name = match.Groups["name"].Value;
+
+        args = match.Groups["args"].Value;
+
+        exp = expression;
+      }
+
+
+      public bool Allows( IHtmlElement element )
+      {
+        return validator( element );
+      }
+
     }
+
+
+    private class PseudoClassFactory
+    {
+
+      public Func<IHtmlElement, bool> GetPseudoClassValidator( string name, string args )
+      {
+        switch ( name )
+        {
+          case "nth-node":
+            return new nthNodePseudoClass( args ).Allows;
+
+          default:
+            throw new NotSupportedException();
+        }
+
+        throw new NotSupportedException();
+      }
+
+      private class nthNodePseudoClass
+      {
+
+        private static readonly string expressionPattern = @"(#interger)|((?<multiplier>#interger)\p{Zs}*n\p{Zs}*(?<augend>(\+\-)#interger))".Replace( "#interger", Regulars.intergerPattern );
+        private static readonly Regex expressionRegex = new Regex( "^" + expressionPattern + "$", RegexOptions.Compiled );
+
+        private string exp;
+
+        private int multiplier;
+        private int augend;
+
+
+        public nthNodePseudoClass( string args )
+        {
+          var match = expressionRegex.Match( args );
+
+          if ( !match.Success )
+            throw new FormatException();
+
+          multiplier = int.Parse( match.Groups["multiplier"].Value );
+          augend = int.Parse( match.Groups["augend"].Value );
+
+          exp = args;
+        }
+
+        public bool Allows( IHtmlElement element )
+        {
+          return Check( element.NodeInedx() );
+        }
+
+        public bool Check( int index )
+        {
+          throw new NotImplementedException();
+        }
+
+      }
+
+    }
+
 
   }
 }

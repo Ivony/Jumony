@@ -3,17 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Ivony.Fluent;
 
 namespace Ivony.Web.Html
 {
   public static class ElementExtensions
   {
 
+    /// <summary>
+    /// 获取容器所有子元素
+    /// </summary>
+    /// <param name="node">要获取子元素的容器</param>
+    /// <returns>容器的所有子元素</returns>
     public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node )
     {
       return node.Nodes().OfType<IHtmlElement>();
     }
 
+    /// <summary>
+    /// 获取节点的所有父代元素集合
+    /// </summary>
+    /// <param name="node">要获取父代元素集合的节点</param>
+    /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node )
     {
       while ( true )
@@ -30,6 +41,11 @@ namespace Ivony.Web.Html
       }
     }
 
+    /// <summary>
+    /// 获取元素所有的父代元素以及元素自身
+    /// </summary>
+    /// <param name="element">要获取父代元素及自身的元素</param>
+    /// <returns>元素的所有父代元素和自身的集合</returns>
     public static IEnumerable<IHtmlElement> AncestorsAndSelf( this IHtmlElement element )
     {
       while ( true )
@@ -114,5 +130,20 @@ namespace Ivony.Web.Html
       return selector.Search( container, true );
     }
 
+
+
+
+
+    public static int NodeInedx( this IHtmlNode node )
+    {
+      var siblings = node.SiblingNodes();
+      return siblings.ToList().IndexOf( node );
+    }
+
+    public static int ElementIndex( this IHtmlElement element )
+    {
+      var siblings = element.SiblingElements();
+      return siblings.ToList().IndexOf( element );
+    }
   }
 }

@@ -148,14 +148,15 @@ namespace Ivony.Web.Html
 
       //binding-source-type
       string dataSourceTypeExpression = null;
-      if ( settings.TryGetValue( "binding-source-type", out dataSourceTypeExpression ) )
+      if ( !settings.TryGetValue( "binding-source-type", out dataSourceTypeExpression ) )
       {
-
+        if ( DataSource is IEnumerable )
+          SourceType = DataSourceType.Enumerable;
+        else
+          SourceType = DataSourceType.Object;
       }
-      if ( DataSource is IEnumerable )
-        SourceType = DataSourceType.Enumerable;
       else
-        SourceType = DataSourceType.Object;
+        SourceType = (DataSourceType) Enum.Parse( typeof( DataSourceType ), dataSourceTypeExpression, true );
 
       //binding-source-default
       string defaultValueExpression;

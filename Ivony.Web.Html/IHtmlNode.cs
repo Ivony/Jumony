@@ -7,21 +7,31 @@ namespace Ivony.Web.Html
 {
   public interface IHtmlNode
   {
+    /// <summary>
+    /// 获取节点的父级
+    /// </summary>
     IHtmlContainer Parent
     {
       get;
     }
 
+    /// <summary>
+    /// 获取节点在原始文档对象树上的对象
+    /// </summary>
     object NodeObject
     {
       get;
     }
 
     /// <summary>
-    /// 移除节点
+    /// 移除从文档对象树上移除此节点
     /// </summary>
     void Remove();
 
+    
+    /// <summary>
+    /// 获取节点所属的文档
+    /// </summary>
     IHtmlDocument Document
     {
       get;

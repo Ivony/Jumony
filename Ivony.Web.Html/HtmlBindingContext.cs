@@ -362,7 +362,7 @@ namespace Ivony.Web.Html
         if ( _targetSet.TryGetValue( target, out actions ) )
           return actions;
         else
-          return new IHtmlBindingAction[0];
+          return Enumerable.Empty<IHtmlBindingAction>();
       }
 
 

@@ -36,7 +36,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
 
 
     Find( "#large li:nth-child(odd)" ).Bind( "@:text", "odd" );//现在也已经支持所有的nth系列的结构伪类
-    Find( "#large li:nth-child(even)" ).Bind( "@:text", "even" );//现在也已经支持所有的nth系列的结构伪类
+    Find( "#large li:nth-child(even)" ).Bind( "@:text", "even" );
     Find( "#large li:nth-child ( 7n - 3 )" ).Bind( "@:text", "7n - 3" );
 
     Find( "#large li:first-child" ).Bind( "@:text", "first" );

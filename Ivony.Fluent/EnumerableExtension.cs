@@ -20,6 +20,20 @@ namespace Ivony.Fluent
     }
 
 
+    public static IEnumerable<T> ForAll<T>( this IEnumerable<T> source, Action<T, int> action )
+    {
+
+      int i = 0;
+
+      foreach ( T item in source )
+      {
+        action( item, i++ );
+      }
+
+      return source;
+    }
+
+
     public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source )
     {
       return source.Where( item => item != null );

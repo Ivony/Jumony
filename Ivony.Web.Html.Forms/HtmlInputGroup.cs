@@ -90,12 +90,12 @@ namespace Ivony.Web.Html.Forms
 
         if ( element.Name.Equals( "input", StringComparison.InvariantCultureIgnoreCase ) )
         {
-          var type = element.AttributeValue( "name" );
+          var type = element.Attribute( "name" ).Value();
 
           if ( !type.Equals( "radio", StringComparison.InvariantCultureIgnoreCase ) && !type.Equals( "checkbox", StringComparison.InvariantCultureIgnoreCase ) )
             throw new InvalidOperationException();
 
-          if ( string.IsNullOrEmpty( element.AttributeValue( "name" ) ) )
+          if ( string.IsNullOrEmpty( element.Attribute( "name" ).Value() ) )
             throw new InvalidOperationException();
 
           selectedAttributeName = "checked";
@@ -112,11 +112,11 @@ namespace Ivony.Web.Html.Forms
 
       public bool Selected
       {
-        get 
+        get
         {
-          if ( _element.Name.Equals( "option", StringComparison.InvariantCultureIgnoreCase            )
+          if ( _element.Name.Equals( "option", StringComparison.InvariantCultureIgnoreCase ) )
             return _element.Attribute( "selected" ) != null;
-          else if ( _element.Name.Equals( "input", StringComparison.InvariantCultureIgnoreCase )
+          else if ( _element.Name.Equals( "input", StringComparison.InvariantCultureIgnoreCase ) )
             return _element.Attribute( "checked" ) != null;
           else
             throw new InvalidOperationException();

@@ -23,8 +23,7 @@ public class SelectorAndBind_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHa
     //稍微解释一下Bind扩展方法，Bind方法的第一个参数是绑定路径，你可以用@attributeName来对属性执行绑定。
     //以:开头的是伪属性:text表示绑定到元素的innerText上，:html则表示绑定到元素的innerHTML上。
 
-    Find( "ul li" )
-      .Where( e => e.Nodes().Count() == 0 )//现阶段还是不支持伪类，所以需要用LINQ的方法来帮助筛选一下，这里其实就是:empty伪类干的事儿，匹配空的li元素。
+    Find( "ul li:empty" )
       .Bind( "@:text", 123 );
 
     //">"表示直接子代匹配，只有li直属的div才会被匹配，请注意CSS选择器现在有严格的格式规范，在关系运算符之间必须留有空白，即li>div不是合法的CSS选择器。

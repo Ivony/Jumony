@@ -89,14 +89,14 @@ namespace Ivony.Web.Html
   {
     private Dictionary<string, string> settings = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
-    public static readonly string styleSettingPattern = string.Format( @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", HtmlCssSelector.quoteTextPattern );
-    public static readonly string styleRulePattern = string.Format( @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", HtmlCssSelector.cssSelectorPatternNoGroup, styleSettingPattern );
+    public static readonly string styleSettingPattern = string.Format( @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", Regulars.quoteTextPattern );
+    public static readonly string styleRulePattern = string.Format( @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", Regulars.cssSelectorPatternNoGroup, styleSettingPattern );
 
     private Regex styleRulesRegex = new Regex( styleRulePattern, RegexOptions.Compiled );
     private Regex styleSettingRegex = new Regex( styleSettingPattern, RegexOptions.Compiled );
 
 
-    private static readonly Regex quoteTextRegex = new Regex( HtmlCssSelector.quoteTextPattern, RegexOptions.Compiled );
+    private static readonly Regex quoteTextRegex = new Regex( Regulars.quoteTextPattern, RegexOptions.Compiled );
 
 
     public HtmlBindingRule( string rule )
@@ -225,7 +225,7 @@ namespace Ivony.Web.Html
       Enumerable
     }
 
-    private static readonly string dataSourceListPattern = string.Format( @"\[((?<item>{0}|[^\\'"",]*)(,(?<item>{0}|[^\\'"",]*))*)?\]", HtmlCssSelector.quoteTextPattern );
+    private static readonly string dataSourceListPattern = string.Format( @"\[((?<item>{0}|[^\\'"",]*)(,(?<item>{0}|[^\\'"",]*))*)?\]", Regulars.quoteTextPattern );
     private static readonly Regex dataSourceListRegex = new Regex( dataSourceListPattern, RegexOptions.Compiled );
 
     private object ParseDataSource( string dataSourceExpression )
@@ -243,7 +243,7 @@ namespace Ivony.Web.Html
     public void Apply( HtmlBindingContext context )
     {
 
-      var elements = Selector.Find( context.Scope, true );
+      var elements = Selector.Search( context.Scope, true );
 
       switch ( SourceType )
       {
@@ -268,9 +268,9 @@ namespace Ivony.Web.Html
       var list = DataSource as IEnumerable;
 
       list.OfType<object>().BindTo( elements, ( item, e ) =>
-        {
-          e.Bind( TargetPath, item, FormatString, BindingNullBehavior.Ignore );
-        } );
+      {
+        e.Bind( TargetPath, item, FormatString, BindingNullBehavior.Ignore );
+      } );
     }
 
 

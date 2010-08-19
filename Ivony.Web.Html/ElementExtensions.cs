@@ -111,7 +111,7 @@ namespace Ivony.Web.Html
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
       var selector = new HtmlCssSelector( expression );
-      return selector.Find( container, true );
+      return selector.Search( container, true );
     }
 
   }

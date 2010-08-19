@@ -57,11 +57,13 @@
     <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="IHtmlAttribute.cs" />
     <Compile Include="IHtmlBindable.cs" />
+    <Compile Include="IHtmlDocument.cs" />
     <Compile Include="IHtmlElement.cs" />
     <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlNode.cs" />
     <Compile Include="jQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ivony\Ivony.Fluent\Ivony.Fluent.csproj">

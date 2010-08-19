@@ -17,5 +17,15 @@ namespace Ivony.Web.Html
       get;
     }
 
+    /// <summary>
+    /// 移除节点
+    /// </summary>
+    void Remove();
+
+    IHtmlDocument Document
+    {
+      get;
+    }
+
   }
 }

@@ -3,35 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Ivony.Web.Html
 {
   public class HtmlCssSelector
   {
 
-    public const string dquoteTextPattern = @"(""(?<quoteText>(\\.|[^""\\])*)"")";
-    public const string squoteTextPattern = @"('(?<quoteText>(\\.|[^'\\])*)')";
-    public const string quoteTextPattern = "(" + dquoteTextPattern + "|" + squoteTextPattern + ")";
 
-    public const string relativeExpressionPattern = @"(?<relative>(\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
-    public const string relativeExpressionPatternNoGroup = @"((\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
+    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled );
 
-    public static readonly string attributeExpressionPattern = string.Format( @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^]]*))?\]", quoteTextPattern );
-    public static readonly string attributeExpressionPatternNoGroup = string.Format( @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^]]*))?\]", quoteTextPattern );
-
-    public static readonly string elementExpressionPattern = string.Format( @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+)))?(?<attributeSelector>{0})*)", attributeExpressionPatternNoGroup );
-    public static readonly string elementExpressionPatternNoGroup = string.Format( @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*)", attributeExpressionPatternNoGroup );
-
-    public static readonly string extraExpressionPattern =string.Format( "{0}{1}", relativeExpressionPattern, elementExpressionPattern );
-    public static readonly string extraExpressionPatternNoGroup = string.Format( "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
-
-    public static readonly string cssSelectorPattern = string.Format( "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
-    public static readonly string cssSelectorPatternNoGroup = string.Format( "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
-
-
-    public static readonly Regex cssSelectorRegex = new Regex( "^" + cssSelectorPattern + "$", RegexOptions.Compiled );
-
-    public static readonly Regex extraRegex = new Regex( "^" + extraExpressionPattern + "$", RegexOptions.Compiled );
+    public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled );
 
 
 
@@ -154,16 +136,106 @@ namespace Ivony.Web.Html
     /// 但如果我们将#item元素当作上下文且asScope参数为false来选择"ul li"元素时，可能会不能得到预期的结果，会发现abc元素也被选择了。这是因为选择器在查找父级元素限定时，会查找到id为outter的ul元素。为了解决此问题，请将asScope参数设置为true。
     /// </remarks>
     /// <returns>搜索到的所有元素</returns>
-    public IEnumerable<IHtmlElement> Find( IHtmlContainer container, bool asScope )
+    public IEnumerable<IHtmlElement> Search( IHtmlContainer container, bool asScope )
     {
 
       var elements = container.Descendant();
 
-      return elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
+      elements =  elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
+      if ( HttpContext.Current.Trace.IsEnabled )
+        elements = new TraceEnumerable<IHtmlElement>( this, elements );
 
+      return elements;
     }
 
 
+    private class TraceEnumerable<T> : IEnumerable<T>
+    {
+
+      private HtmlCssSelector _selector;
+      private IEnumerable<T> _enumerable;
+
+      public TraceEnumerable( HtmlCssSelector selector, IEnumerable<T> enumerable )
+      {
+        _selector = selector;
+        _enumerable = enumerable;
+      }
+
+      private class Enumerator : IEnumerator<T>
+      {
+
+        private HtmlCssSelector coreSelector;
+        private IEnumerator<T> coreEnumerator;
+
+        public Enumerator( HtmlCssSelector selector, IEnumerator<T> enumerator )
+        {
+          coreSelector = selector;
+          coreEnumerator = enumerator;
+
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector._expression ) );
+        }
+
+
+        #region IEnumerator<T> 成员
+
+        T IEnumerator<T>.Current
+        {
+          get { return coreEnumerator.Current; }
+        }
+
+        #endregion
+
+        #region IDisposable 成员
+
+        void IDisposable.Dispose()
+        {
+          coreEnumerator.Dispose();
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "End Enumerate Search \"{0}\"", coreSelector._expression ) );
+        }
+
+        #endregion
+
+        #region IEnumerator 成员
+
+        object System.Collections.IEnumerator.Current
+        {
+          get { return coreEnumerator.Current; }
+        }
+
+        bool System.Collections.IEnumerator.MoveNext()
+        {
+          return coreEnumerator.MoveNext();
+        }
+
+        void System.Collections.IEnumerator.Reset()
+        {
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector._expression ) );
+          coreEnumerator.Reset();
+        }
+
+        #endregion
+      }
+
+
+
+      #region IEnumerable<T> 成员
+
+      IEnumerator<T> IEnumerable<T>.GetEnumerator()
+      {
+        return new Enumerator( _selector, _enumerable.GetEnumerator() );
+      }
+
+      #endregion
+
+      #region IEnumerable 成员
+
+      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+      {
+        throw new NotImplementedException();
+      }
+
+      #endregion
+    }
 
 
 
@@ -171,7 +243,7 @@ namespace Ivony.Web.Html
     public class ElementSelector
     {
 
-      private static readonly Regex regex = new Regex( elementExpressionPattern, RegexOptions.Compiled );
+      private static readonly Regex regex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled );
 
       public ElementSelector( string expression )
       {
@@ -243,7 +315,7 @@ namespace Ivony.Web.Html
       private string exp;
 
 
-      private static readonly Regex regex = new Regex( attributeExpressionPattern, RegexOptions.Compiled );
+      private static readonly Regex regex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled );
 
 
       private delegate bool ValueMatcher( string exp, string value );

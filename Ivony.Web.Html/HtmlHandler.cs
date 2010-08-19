@@ -15,15 +15,21 @@ namespace Ivony.Web.Html
       get;
     }
 
-    public abstract void ProcessRequest();
+    protected abstract void ProcessDocument();
+
+    protected abstract IHtmlDocument LoadDocument( string documentContent );
+
 
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
       Context = context;
+
       OriginUrl = Context.Items["HtmlRewriteModule_OriginUrl"] as Uri;
 
       if ( OriginUrl == null )
       {
+        Trace.Warn( "Core", "origin url is not found." );
+
         var builder = new UriBuilder( Request.Url );
         var path = builder.Path;
 
@@ -32,28 +38,56 @@ namespace Ivony.Web.Html
 
         builder.Path = path.Remove( path.Length - 5 );
 
+        Trace.Warn( "Core", "redirect to template vitual path." );
         Response.Redirect( builder.Uri.AbsoluteUri );
       }
 
-      ProcessRequest();
+      Trace.Write( "Core", "Begin Parse Document" );
+      Document = LoadDocument( GetTemplateContent() );
+      Trace.Write( "Core", "End Parse Document" );
+
+      Trace.Write( "Core", "Begin Process Document" );
+      ProcessDocument();
+      Trace.Write( "Core", "End Process Document" );
     }
 
-    protected string GetTemplateContent()
+    protected IHtmlDocument Document
+    {
+      get;
+      private set;
+    }
+
+
+    protected IEnumerable<IHtmlElement> Find( string selector )
+    {
+      return Document.Find( selector );
+    }
+
+    protected virtual string GetTemplateContent()
     {
       var physicalPath = GetTemplateFilePath();
       if ( !File.Exists( physicalPath ) )
-        throw new HttpException( 404, "未找到模板文件，这可能是直接访问.html.ashx文件所造成的。" );
-
+      {
+        var exception = new HttpException( 404, "未找到模板文件，这可能是直接访问.html.ashx文件所造成的。" );
+        Trace.Warn( "Core", "template not found!", exception );
+        throw exception;
+      }
 
       var cacheKey = string.Format( "HtmlHandler_TemplateContentCache_{0}", physicalPath );
-      var templateContent = Context.Cache[cacheKey] as string;
+      var templateContent = Cache[cacheKey] as string;
 
       if ( templateContent == null )
       {
+        Trace.Warn( "Core", "template file cache miss." );
+        Trace.Write( "Core", "Begin Load Template" );
         using ( var reader = File.OpenText( physicalPath ) )
         {
           templateContent = reader.ReadToEnd();
         }
+
+        Cache.Insert( cacheKey, templateContent, new System.Web.Caching.CacheDependency( physicalPath ) );
+
+        Trace.Write( "Core", "End Load Template" );
       }
 
       return templateContent;
@@ -102,6 +136,16 @@ namespace Ivony.Web.Html
       get { return Context.ApplicationInstance; }
     }
 
+    protected TraceContext Trace
+    {
+      get { return Context.Trace; }
+    }
+
+    protected System.Web.Caching.Cache Cache
+    {
+      get { return Context.Cache; }
+    }
+
     protected string MapPath( string virtualPath )
     {
       return Request.MapPath( virtualPath );
@@ -112,7 +156,7 @@ namespace Ivony.Web.Html
 
     public void Dispose()
     {
-      
+
     }
 
     #endregion

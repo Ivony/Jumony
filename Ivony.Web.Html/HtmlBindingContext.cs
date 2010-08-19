@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Collections;
 using System.ComponentModel;
+using System.Web;
 
 namespace Ivony.Web.Html
 {
@@ -114,9 +115,31 @@ namespace Ivony.Web.Html
     /// </summary>
     public void Commit()
     {
+      var commitContexts = new List<HtmlBindingContext>();
 
-      if ( Current != this )
-        Current.Commit();
+      var context = Current;
+
+      while ( context != this )//递归找出所有之下的上下文
+      {
+        commitContexts.Add( context );
+        context = context.ParentContext;
+
+        if ( context == null )
+          throw new InvalidOperationException();
+      }
+
+
+      foreach ( var c in commitContexts )
+        c.CommitCore();
+
+      CommitCore();
+    }
+
+
+    private void CommitCore()
+    {
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
 
       foreach ( var element in PostOrderTraverse( Scope ) )
       {
@@ -124,26 +147,12 @@ namespace Ivony.Web.Html
 
         foreach ( var a in actions )
           a.Bind();
-
-      }
-    }
-
-    private static void Commit( HtmlBindingContext target )
-    {
-      var context = Current;
-
-      while ( context != target ) ;
-      {
-        context.Commit();
-        context = context.ParentContext;
       }
 
-      context.Commit();
+      _actionList.Clear();
 
-      return;
-
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "End Commit BindingContext \"{0}\"", Name ) );
     }
-
 
     /// <summary>
     /// 后序遍历所有元素用于绑定
@@ -179,21 +188,29 @@ namespace Ivony.Web.Html
 
 
 
-    private IHtmlContainer _scope;
-
     /// <summary>
     /// 绑定的范围
     /// </summary>
     public IHtmlContainer Scope
     {
-      get { return _scope; }
+      get;
+      private set;
     }
 
 
-
-    private HtmlBindingContext( IHtmlContainer scope )
+    /// <summary>
+    /// 绑定上下文的友好名称
+    /// </summary>
+    public string Name
     {
-      _scope = scope;
+      get;
+      private set;
+    }
+
+    private HtmlBindingContext( IHtmlContainer scope, string name )
+    {
+      Scope = scope;
+      Name = name;
     }
 
     /// <summary>
@@ -201,9 +218,9 @@ namespace Ivony.Web.Html
     /// </summary>
     /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
     /// <returns></returns>
-    public static HtmlBindingContext EnterContext( IHtmlContainer scope )
+    public static HtmlBindingContext EnterContext( IHtmlContainer scope, string name )
     {
-      var context = new HtmlBindingContext( scope );
+      var context = new HtmlBindingContext( scope, name );
       context.Enter();
       return context;
     }
@@ -242,6 +259,8 @@ namespace Ivony.Web.Html
     {
       ParentContext = Current;
       System.Runtime.Remoting.Messaging.CallContext.SetData( contextName, this );
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Enter BindingContext \"{0}\"", Name ) );
     }
 
 
@@ -268,6 +287,7 @@ namespace Ivony.Web.Html
     public void Exit( bool discard )
     {
       Exit( discard, this );
+
     }
 
     /// <summary>
@@ -285,7 +305,9 @@ namespace Ivony.Web.Html
       else
         context.Commit();
 
-      Current = Current.ParentContext;
+      Current = context.ParentContext;
+
+      HttpContext.Current.Trace.Write( "Binding", string.Format( "Exit BindingContext \"{0}\"", context.Name ) );
 
       if ( context ==  target )
         return;
@@ -352,6 +374,11 @@ namespace Ivony.Web.Html
       public void Clear()
       {
         _targetSet.Clear();
+      }
+
+      internal void Remove( IHtmlBindingAction a )
+      {
+        throw new NotImplementedException();
       }
     }
 

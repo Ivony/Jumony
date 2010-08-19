@@ -83,7 +83,7 @@ namespace Ivony.Web.Html
     /// <param name="oldValue">要被替换的字符串</param>
     /// <param name="newValue">用于替换的字符串</param>
     /// <returns>被设置的属性对象</returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string oldValue, string newValue )
+    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, string oldValue, string newValue )
     {
       attribute.Value = attribute.Value.Replace( oldValue, newValue );
       return attribute;
@@ -96,7 +96,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, string replacement )
+    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Regex pattern, string replacement )
     {
       attribute.Value = pattern.Replace( attribute.Value, replacement );
       return attribute;
@@ -109,7 +109,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">用于每一步替换的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
+    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
     {
       attribute.Value = pattern.Replace( attribute.Value, evaluator );
       return attribute;
@@ -122,7 +122,7 @@ namespace Ivony.Web.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
     /// <param name="evaluator">用于每一步替换的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
+    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
     {
       attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
       return attribute;
@@ -134,53 +134,16 @@ namespace Ivony.Web.Html
     /// <param name="attribute">属性对象</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Func<string, string> evaluator )
+    public static IHtmlAttribute Replace( this IHtmlAttribute attribute, Func<string, string> evaluator )
     {
       attribute.Value = evaluator( attribute.Value );
       return attribute;
     }
 
 
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, string value )
-    {
-      return attributes.ForAll( a => a.Value( value ) );
-    }
-
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, string oldValue, string newValue )
-    {
-      return attributes.NotNull().ForAll( a => a.Value( oldValue, newValue ) );
-    }
-
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, Regex pattern, string replacement )
-    {
-      return attributes.NotNull().ForAll( a => a.Value( pattern, replacement ) );
-    }
-
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, Regex pattern, MatchEvaluator evaluator )
-    {
-      return attributes.NotNull().ForAll( a => a.Value( pattern, evaluator ) );
-    }
-
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, string pattern, MatchEvaluator evaluator )
-    {
-      return attributes.NotNull().ForAll( a => a.Value( pattern, evaluator ) );
-    }
-
-    public static IEnumerable<IHtmlAttribute> Value( this IEnumerable<IHtmlAttribute> attributes, Func<string, string> evaluator )
-    {
-      return attributes.ForAll( a => a.Value( evaluator ) );
-    }
 
 
-    public static IEnumerable<IHtmlElement> Element( this IEnumerable<IHtmlAttribute> attributes )
-    {
-      return attributes.Select( a => (IHtmlElement) a.Element );
-    }
-
-
-    /*
-
-    public static ValueSetter Set( this IHtmlElement element, string attributeName )
+    public static ValueSetter SetAttribute( this IHtmlElement element, string attributeName )
     {
       return new ValueSetter( element, attributeName );
     }
@@ -194,7 +157,7 @@ namespace Ivony.Web.Html
       private IHtmlAttribute attribute;
 
 
-      public ValueSetter( IHtmlElement element, string attributeName )
+      internal ValueSetter( IHtmlElement element, string attributeName )
       {
         if ( attributeName == null )
           throw new ArgumentNullException( "attributeName" );
@@ -255,7 +218,6 @@ namespace Ivony.Web.Html
     {
 
     }
-    */
 
 
   }

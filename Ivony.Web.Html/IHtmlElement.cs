@@ -26,7 +26,11 @@ namespace Ivony.Web.Html
     [EditorBrowsable( EditorBrowsableState.Never )]
     void BindCore( HtmlBindingContext context, string path, string value, BindingNullBehavior nullBehavior );
 
-
+    /// <summary>
+    /// 添加一个属性
+    /// </summary>
+    /// <param name="attributeName">属性名</param>
+    /// <returns>添加的属性</returns>
     IHtmlAttribute AddAttribute( string attributeName );
   }
 }

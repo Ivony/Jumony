@@ -90,12 +90,6 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       return;
     }
 
-    public override string ToString()
-    {
-      return Node.OuterHtml;
-    }
-
-
     #region IEquatable<IHtmlElement> 成员
 
     bool IEquatable<IHtmlElement>.Equals( IHtmlElement other )

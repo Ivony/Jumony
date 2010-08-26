@@ -17,5 +17,6 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       : base( node )
     {
     }
+
   }
 }

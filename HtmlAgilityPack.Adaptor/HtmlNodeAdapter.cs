@@ -85,5 +85,11 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       get { return Node.OuterHtml; }
     }
 
+
+    public override string ToString()
+    {
+      return Node.OuterHtml;
+    }
+
   }
 }

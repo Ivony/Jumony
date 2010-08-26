@@ -66,16 +66,21 @@ namespace Ivony.Web.Html.Forms
 
       labels = Element.Find( "label" ).Select( element => new HtmlLabel( this, element ) ).ToArray();
 
-      foreach ( var item in labels )
-      {
-        if ( labelsTable[item.BindElement] == null )
-        {
-          labelsTable[item.BindElement] = new List<HtmlLabel>();
-        }
-
-        ((List<HtmlLabel>) labelsTable[item.BindElement]).Add( item );
-      }
+      labels.GroupBy( l => l.BindElement ).ForAll( grouping =>
+        labelsTable.Add( grouping.Key, grouping.ToArray() ) );
 
     }
+
+
+    /// <summary>
+    /// 检索指定控件的 Label
+    /// </summary>
+    /// <param name="element">要检索 Label 的控件</param>
+    /// <returns></returns>
+    public HtmlLabel[] FindLabels( IHtmlElement element )
+    {
+      return (HtmlLabel[]) labelsTable[element];
+    }
+
   }
 }

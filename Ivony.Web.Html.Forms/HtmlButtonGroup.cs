@@ -144,7 +144,11 @@ namespace Ivony.Web.Html.Forms
 
       public string Text
       {
-        get { throw new NotImplementedException(); }
+        get
+        {
+          var label = Group.Form.FindLabels( Element ).FirstOrDefault();
+          return label.Text;
+        }
       }
 
     }

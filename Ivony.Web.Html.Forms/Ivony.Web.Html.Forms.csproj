@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="FormExtensions.cs" />
     <Compile Include="HtmlForm.cs" />
-    <Compile Include="HtmlInputGroup.cs" />
+    <Compile Include="HtmlButtonGroup.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />

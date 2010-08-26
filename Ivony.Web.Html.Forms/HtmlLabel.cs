@@ -42,5 +42,10 @@ namespace Ivony.Web.Html.Forms
       private set;
     }
 
+
+    public string Text
+    {
+      get { return Element.Text(); }
+    }
   }
 }

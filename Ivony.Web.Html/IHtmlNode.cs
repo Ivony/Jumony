@@ -28,11 +28,20 @@ namespace Ivony.Web.Html
     /// </summary>
     void Remove();
 
-    
+
     /// <summary>
     /// 获取节点所属的文档
     /// </summary>
     IHtmlDocument Document
+    {
+      get;
+    }
+
+
+    /// <summary>
+    /// 获取节点的原始 HTML，如果不支持，请返回null
+    /// </summary>
+    string RawHtml
     {
       get;
     }

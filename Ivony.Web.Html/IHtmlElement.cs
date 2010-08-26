@@ -9,11 +9,19 @@ namespace Ivony.Web.Html
   public interface IHtmlElement : IHtmlContainer
   {
 
+    /// <summary>
+    /// 元素名
+    /// </summary>
     string Name
     {
       get;
     }
 
+
+    /// <summary>
+    /// 获取元素的所有属性
+    /// </summary>
+    /// <returns>元素的所有属性</returns>
     IEnumerable<IHtmlAttribute> Attributes();
 
     /// <summary>

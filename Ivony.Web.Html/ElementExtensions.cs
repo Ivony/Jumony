@@ -214,5 +214,21 @@ namespace Ivony.Web.Html
       return siblings.ToList().IndexOf( element );
     }
 
+
+
+
+
+    public static string InnerHtml( this IHtmlContainer container )
+    {
+      StringBuilder builder = new StringBuilder();
+
+      foreach ( var node in container.Nodes() )
+      {
+        builder.Append( node.RawHtml );
+      }
+
+      return builder.ToString();
+    }
+
   }
 }

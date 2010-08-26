@@ -65,9 +65,27 @@ namespace Ivony.Web.Html
 
     IHtmlDocument IHtmlNode.Document
     {
-      get { return Document.Document; }
+      get { return Document; }
+    }
+
+    string IHtmlNode.RawHtml
+    {
+      get { return Document.RawHtml; }
     }
 
     #endregion
+
+
+
+    public override int GetHashCode()
+    {
+      return Document.GetHashCode();
+    }
+
+    public override bool Equals( object obj )
+    {
+      return Document.Equals( obj );
+    }
+
   }
 }

@@ -1822,8 +1822,8 @@ namespace HtmlAgilityPack
                         return true;
                     }
 
-                    if ((HtmlNode.IsClosedElement(_currentnode.Name)) ||
-                        (HtmlNode.IsEmptyElement(_currentnode.Name)))
+                    if ((HtmlNode.IsClosedElement(_currentnode.Name))/* ||
+                        (HtmlNode.IsEmptyElement(_currentnode.Name))*/)
                     {
                         close = true;
                     }

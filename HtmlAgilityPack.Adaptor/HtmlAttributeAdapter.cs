@@ -27,7 +27,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       get { return _attribute.Name; }
     }
 
-    public string Value
+    public string AttributeValue
     {
       get { return _attribute.Value; }
       set { _attribute.Value = value; }
@@ -39,11 +39,19 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       get { return _attribute; }
     }
 
-    public override string ToString()
+
+    public void Remove()
     {
-      return Value;
+      _attribute.Remove();
     }
 
+
+
+
+    public override string ToString()
+    {
+      return AttributeValue;
+    }
 
     #region IEquatable<IHtmlAttribute> 成员
 

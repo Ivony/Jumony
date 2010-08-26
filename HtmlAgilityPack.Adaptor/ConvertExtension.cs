@@ -18,9 +18,12 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
           return new HtmlDocumentAdapter( node.OwnerDocument );
         case AP.HtmlNodeType.Element:
           return new HtmlElementAdapter( node );
-
+        case AP.HtmlNodeType.Text:
+          return new HtmlTextNodeAdapter( node );
+        case AP.HtmlNodeType.Comment:
+          return new HtmlCommentNodeAdapter( node );
         default:
-          return new HtmlNodeAdapter( node );
+          throw new NotSupportedException();
       }
     }
 

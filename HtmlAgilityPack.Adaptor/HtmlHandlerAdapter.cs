@@ -49,7 +49,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     }
 
 
-    protected override IHtmlDocument LoadDocument( string documentContent )
+    protected override IHtmlDocument ParseDocument( string documentContent )
     {
       RawDocument = new HtmlDocument();
 

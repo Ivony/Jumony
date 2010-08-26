@@ -8,7 +8,7 @@
     <ProjectGuid>{2C8536C3-F648-46A9-90FC-F0673B58B730}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ivony.Web.Html.Adaptors.HtmlAgilityPack</RootNamespace>
+    <RootNamespace>Ivony.Web.Html.HtmlAgilityPackAdaptor</RootNamespace>
     <AssemblyName>HtmlAgilityPack.Adaptor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,11 +46,13 @@
     <Compile Include="AdapterExtension.cs" />
     <Compile Include="ConvertExtension.cs" />
     <Compile Include="HtmlAttributeAdapter.cs" />
+    <Compile Include="HtmlCommentNodeAdapter.cs" />
     <Compile Include="HtmlContainerAdapter.cs" />
     <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlDocumentAdapter.cs" />
     <Compile Include="HtmlHandlerAdapter.cs" />
     <Compile Include="HtmlNodeAdapter.cs" />
+    <Compile Include="HtmlTextNodeAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

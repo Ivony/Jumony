@@ -49,23 +49,6 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     }
 
 
-    private void ApplyBindingSheets()
-    {
-      var bindingSheets = Find( "link[rel=Bindingsheet]" )
-        .Select( link => link.Attribute( "href" ) )
-        .Where( href => href != null )
-        .Select( href => MapPath( href.Value ) )
-        .Select( physicalPath => HtmlBindingSheet.Load( physicalPath ) );
-
-      HtmlBindingContext.Enter( Document, "ApplyBindingSheet" );
-
-      bindingSheets
-        .ForAll( sheet => sheet.Apply() );
-
-      HtmlBindingContext.Exit();
-    }
-
-
     protected override IHtmlDocument LoadDocument( string documentContent )
     {
       HtmlDocument = new HtmlDocument();

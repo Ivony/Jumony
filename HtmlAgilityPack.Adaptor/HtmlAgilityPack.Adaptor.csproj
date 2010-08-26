@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ivony\Ivony.Fluent\Ivony.Fluent.csproj">
+    <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
-      <Name>Ivony.Fluent</Name>
+      <Name>Ivony.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\HtmlAgilityPack\HtmlAgilityPack.csproj">
       <Project>{193BB801-054F-4729-9D5D-FCE1E32594BF}</Project>

@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ivony.Web.Html.Forms</RootNamespace>
     <AssemblyName>Ivony.Web.Html.Forms</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,11 +43,12 @@
   <ItemGroup>
     <Compile Include="FormExtensions.cs" />
     <Compile Include="HtmlForm.cs" />
-    <Compile Include="HtmlInputControl.cs" />
     <Compile Include="HtmlInputGroup.cs" />
     <Compile Include="HtmlInputText.cs" />
+    <Compile Include="HtmlSelect.cs" />
     <Compile Include="IHtmlForm.cs" />
-    <Compile Include="IHtmlInputControl.cs" />
+    <Compile Include="IHtmlInput.cs" />
+    <Compile Include="IHtmlInputGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

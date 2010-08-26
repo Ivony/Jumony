@@ -7,7 +7,7 @@ namespace Ivony.Web.Html.Forms
 {
   public static class FormExtensions
   {
-    public static IHtmlForm AsForm( this IHtmlElement element )
+    public static HtmlForm AsForm( this IHtmlElement element )
     {
       return new HtmlForm( element );
     }

@@ -23,17 +23,41 @@ namespace Ivony.Web.Html.Forms
 
     }
 
+
+    private HtmlInputText[] inputTexts;
+    private IHtmlInputGroup[] inputGroups;
+
+    public IEnumerable<IHtmlInput> InputControls
+    {
+      get { return inputTexts.Cast<IHtmlInput>().Union( inputGroups.Cast<IHtmlInput>() ); }
+    }
+
+
+    /// <summary>
+    /// 所有文本输入控件
+    /// </summary>
+    public HtmlInputText[] TextInputs
+    {
+      get { return inputTexts; }
+    }
+
+    /// <summary>
+    /// 所有输入控件组
+    /// </summary>
+    public IHtmlInputGroup[] GroupInputs
+    {
+      get { return inputGroups; }
+    }
+
+
     private void Initialize()
     {
-      var textInputs =
-        Element.Find( "input[type=text]" )
-          .Union( Element.Find( "input[type=password]" ) )
-          .Union( Element.Find( "input[type=hidden]" ) )
-          .Union( Element.Find( "textarea" ) )
-          .Select( element => new HtmlInputText( element ) );
+      inputTexts = Element.Find( "input[type=text]", "input[type=password]", "input[type=hidden]", "textarea" )
+          .Select( element => new HtmlInputText( element ) ).ToArray(); ;
 
 
-      var groupInputs = HtmlInputGroup.CaptureInputGroups( this );
+      inputGroups = Element.Find( "select" ).Select( select => new HtmlSelect( select ) ).Cast<IHtmlInputGroup>()
+        .Union( HtmlInputGroup.CaptureInputGroups( this ).Cast<IHtmlInputGroup>() ).ToArray();
     }
   }
 }

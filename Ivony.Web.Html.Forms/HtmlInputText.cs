@@ -36,10 +36,23 @@ namespace Ivony.Web.Html.Forms
 
     public string Name
     {
-      get { return _element.Attribute( "name" ).Value; }
+      get { return _element.Attribute( "name" ).AttributeValue; }
     }
 
     public string Value
+    {
+      get
+      {
+        throw new NotImplementedException();
+      }
+      set
+      {
+        throw new NotImplementedException();
+      }
+    }
+
+
+    public bool Enable
     {
       get
       {

@@ -3,6 +3,18 @@ namespace Ivony.Web.Html.Forms
 {
   public interface IHtmlInputGroup : IHtmlInput
   {
+
+    bool AllowMultipleSelections
+    {
+      get;
+    }
+
+
+    IHtmlInputGroupItem[] Items
+    {
+      get;
+    }
+
     string[] Values
     {
       get;
@@ -11,6 +23,12 @@ namespace Ivony.Web.Html.Forms
 
   public interface IHtmlInputGroupItem
   {
+
+    IHtmlElement Element
+    {
+      get;
+    }
+
     IHtmlInputGroup Group
     {
       get;
@@ -21,5 +39,14 @@ namespace Ivony.Web.Html.Forms
       get;
     }
 
+    string Value
+    {
+      get;
+    }
+
+    string Text
+    {
+      get;
+    }
   }
 }

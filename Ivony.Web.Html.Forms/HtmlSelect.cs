@@ -8,42 +8,81 @@ namespace Ivony.Web.Html.Forms
   public class HtmlSelect : IHtmlInputGroup
   {
 
-    private readonly IHtmlElement select;
-
-    private readonly HtmlOption[] options;
-
-    private string name;
-
-
-
-    public HtmlSelect( IHtmlElement element )
+    public HtmlSelect( HtmlForm form, IHtmlElement element )
     {
       if ( !element.Name.Equals( "select", StringComparison.InvariantCultureIgnoreCase ) )
         throw new InvalidOperationException();
+
+      Form = Form;
 
       select = element;
 
       options = element.Find( "option" ).Select( e => new HtmlOption( this, e ) ).ToArray();
 
-      name = element.Attribute( "name" ).AttributeValue;
+      Name = element.Attribute( "name" ).AttributeValue;
 
     }
+
+
+    private readonly IHtmlElement select;
+
+    private readonly HtmlOption[] options;
+
+
+    public HtmlForm Form
+    {
+      get;
+      private set;
+    }
+
+
+    public string Name
+    {
+      get;
+      private set;
+    }
+
+    public string[] Values
+    {
+      get { return (from item in options where item.Selected select item.Value).ToArray(); }
+    }
+
+
+    public bool AllowMultipleSelections
+    {
+      get { return select.Attribute( "multiple" ) != null; }
+    }
+
+
+    public IHtmlInputGroupItem[] Items
+    {
+      get { return options; }
+    }
+
+
+    string IHtmlInput.Value
+    {
+      get { return string.Join( ",", Values ); }
+    }
+
 
 
 
     public class HtmlOption : IHtmlInputGroupItem
     {
 
-      private IHtmlElement _element;
-
-
       public HtmlOption( HtmlSelect select, IHtmlElement element )
       {
         Group = select;
-        _element = element;
+        Element = element;
       }
 
 
+      public IHtmlElement Element
+      {
+        get;
+        private set;
+      }
 
       public IHtmlInputGroup Group
       {
@@ -55,14 +94,14 @@ namespace Ivony.Web.Html.Forms
       {
         get
         {
-          return _element.Attribute( "selected" ) != null;
+          return Element.Attribute( "selected" ) != null;
         }
         set
         {
           if ( value )
-            _element.SetAttribute( "selected" ).Value( "selected" );
+            Element.SetAttribute( "selected" ).Value( "selected" );
           else
-            _element.Attribute( "selected" ).Remove();
+            Element.Attribute( "selected" ).Remove();
         }
       }
 
@@ -70,38 +109,20 @@ namespace Ivony.Web.Html.Forms
       {
         get
         {
-          var value = _element.Attribute( "value" ).Value();
+          var value = Element.Attribute( "value" ).Value();
 
           if ( value == null )
-            return _element.Text();
+            return Element.Text();
           else
             return value;
         }
       }
 
-    }
-
-
-
-    public string Name
-    {
-      get { return name; }
-    }
-
-    public string[] Values
-    {
-      get { return (from item in options where item.Selected select item.Value).ToArray(); }
-    }
-
-
-
-    string IHtmlInput.Value
-    {
-      get
+      public string Text
       {
-        return string.Join( ",", Values );
+        get { return Element.Text(); }
       }
-    }
 
+    }
   }
 }

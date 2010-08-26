@@ -24,9 +24,6 @@ namespace Ivony.Web.Html.Forms
     }
 
 
-    private HtmlInputText[] inputTexts;
-    private IHtmlInputGroup[] inputGroups;
-
     public IEnumerable<IHtmlInput> InputControls
     {
       get { return inputTexts.Cast<IHtmlInput>().Union( inputGroups.Cast<IHtmlInput>() ); }
@@ -50,14 +47,23 @@ namespace Ivony.Web.Html.Forms
     }
 
 
+    private HtmlInputText[] inputTexts;
+    private IHtmlInputGroup[] inputGroups;
+    private HtmlLabel[] labels;
+
+
+
+
     private void Initialize()
     {
       inputTexts = Element.Find( "input[type=text]", "input[type=password]", "input[type=hidden]", "textarea" )
           .Select( element => new HtmlInputText( element ) ).ToArray(); ;
 
 
-      inputGroups = Element.Find( "select" ).Select( select => new HtmlSelect( select ) ).Cast<IHtmlInputGroup>()
-        .Union( HtmlInputGroup.CaptureInputGroups( this ).Cast<IHtmlInputGroup>() ).ToArray();
+      inputGroups = Element.Find( "select" ).Select( select => new HtmlSelect( this, select ) ).Cast<IHtmlInputGroup>()
+        .Union( HtmlButtonGroup.CaptureInputGroups( this ).Cast<IHtmlInputGroup>() ).ToArray();
+
+      labels = Element.Find( "label" ).Select( element => new HtmlLabel( this, element ) ).ToArray();
     }
   }
 }

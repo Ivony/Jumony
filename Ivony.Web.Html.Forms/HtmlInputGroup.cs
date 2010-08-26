@@ -9,7 +9,7 @@ namespace Ivony.Web.Html.Forms
   /// <summary>
   /// 输入项组，是input type="checkbox"及input type="radio"的抽象。
   /// </summary>
-  public class HtmlInputGroup : IHtmlInputGroup
+  public class HtmlButtonGroup : IHtmlInputGroup
   {
 
 
@@ -18,7 +18,7 @@ namespace Ivony.Web.Html.Forms
     private string name;
 
 
-    private HtmlInputGroup( IGrouping<string, IHtmlElement> inputGroup )
+    private HtmlButtonGroup( IGrouping<string, IHtmlElement> inputGroup )
     {
       name = inputGroup.Key;
 
@@ -26,13 +26,13 @@ namespace Ivony.Web.Html.Forms
     }
 
 
-    public static IEnumerable<HtmlInputGroup> CaptureInputGroups( HtmlForm form )
+    public static IEnumerable<HtmlButtonGroup> CaptureInputGroups( HtmlForm form )
     {
 
       var inputItems = form.Element.Find( "input[type=radio][name]", "input[type=checkbox][name]" );
 
       var groups = inputItems.GroupBy( item => item.Attribute( "name" ).Value() )
-          .Select( item => new HtmlInputGroup( item ) );
+          .Select( item => new HtmlButtonGroup( item ) );
 
       return groups;
 
@@ -49,25 +49,33 @@ namespace Ivony.Web.Html.Forms
       get { return (from item in items where item.Selected select item.Value).ToArray(); }
     }
 
-
-
-
-    private enum GroupType
+    public bool AllowMultipleSelections
     {
-      Unknow,
-      Select,
-      Checkbox,
-      Radio
+      get
+      {
+        if ( items.Length < 2 )
+          return false;
+
+        //如果有任何一个复选框
+        if ( items.Select( i => i.Element ).Any( e => e.Attribute( "type" ).Value().Equals( "checkbox", StringComparison.InvariantCultureIgnoreCase ) ) )
+          return true;
+
+        return false;
+      }
     }
+
+
+    public IHtmlInputGroupItem[] Items
+    {
+      get { return items; }
+    }
+
 
 
     public class HtmlInputItem : IHtmlInputGroupItem
     {
 
-
-      private IHtmlElement _element;
-
-      public HtmlInputItem( HtmlInputGroup group, IHtmlElement element )
+      public HtmlInputItem( HtmlButtonGroup group, IHtmlElement element )
       {
         Group = group;
 
@@ -82,7 +90,15 @@ namespace Ivony.Web.Html.Forms
             throw new InvalidOperationException();
         }
 
-        _element = element;
+        Element = element;
+      }
+
+
+
+      public IHtmlElement Element
+      {
+        get;
+        private set;
       }
 
 
@@ -97,11 +113,11 @@ namespace Ivony.Web.Html.Forms
       {
         get
         {
-          return _element.Attribute( "value" ).Value();
+          return Element.Attribute( "value" ).Value();
         }
         set
         {
-          _element.SetAttribute( "value" ).Value( value );
+          Element.SetAttribute( "value" ).Value( value );
         }
       }
 
@@ -109,15 +125,20 @@ namespace Ivony.Web.Html.Forms
       {
         get
         {
-          return _element.Attribute( "checked" ) != null;
+          return Element.Attribute( "checked" ) != null;
         }
         set
         {
           if ( value )
-            _element.SetAttribute( "checked" ).Value( "checked" );
+            Element.SetAttribute( "checked" ).Value( "checked" );
           else
-            _element.Attribute( "checked" ).Remove();
+            Element.Attribute( "checked" ).Remove();
         }
+      }
+
+      public string Text
+      {
+        get { throw new NotImplementedException(); }
       }
 
     }

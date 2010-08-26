@@ -1,0 +1,370 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Collections;
+
+
+namespace Ivony.Data
+{
+  public static class PagingExtension
+  {
+
+    /// <summary>
+    /// 从序列的指定位置返回指定数量的连续元素
+    /// </summary>
+    /// <typeparam name="TSource">list 中的元素的类型</typeparam>
+    /// <param name="list">要从其返回元素的序列</param>
+    /// <param name="start">要返回的元素在序列的开始位置</param>
+    /// <param name="count">要返回的元素数量</param>
+    /// <returns></returns>
+    public static IEnumerable<TSource> Take<TSource>( this IList<TSource> list, int start, int count )
+    {
+      for ( int index = start; index < Math.Min( start + count, list.Count ); index++ )
+      {
+        yield return list[index];
+      }
+    }
+
+    /// <summary>
+    /// 从数组中拷贝出一个片段
+    /// </summary>
+    /// <typeparam name="T">数组元素类型</typeparam>
+    /// <param name="source">要从其拷贝的源数组</param>
+    /// <param name="start">片段的开始位置</param>
+    /// <param name="size">片段的大小</param>
+    /// <returns></returns>
+    public static T[] CopySegment<T>( this T[] source, int start, int size )
+    {
+      T[] result = new T[size];
+      Array.Copy( source, start, result, 0, size );
+
+      return result;
+    }
+
+
+    /// <summary>
+    /// 获取分页器的最大页数
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="pagingData"></param>
+    /// <returns></returns>
+    public static int GetMaxPage<T>( this IPagingData<T> pagingData )
+    {
+      int count = pagingData.Count();
+      int pageSize = pagingData.PageSize;
+
+      return count / pageSize + ((count % pageSize) == 0 ? 0 : 1);
+    }
+
+
+    /// <summary>
+    /// 从IList&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
+    /// </summary>
+    /// <typeparam name="T">source 中的元素的类型</typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static IPagingDataSource<T> ToPagingSource<T>( this IList<T> source )
+    {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+
+      var pagingSource = source as PagingSourceWrapper<T>;
+
+      if ( pagingSource != null )
+        return pagingSource;
+      else
+        return new PagingSourceWrapper<T>( source );
+    }
+
+
+    /// <summary>
+    /// 从IEnumerable&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
+    /// </summary>
+    /// <typeparam name="T">source 中的元素的类型</typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static IPagingDataSource<T> ToPagingSource<T>( this IEnumerable<T> source )
+    {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+
+      var pagingSource = source as PagingSourceWrapper<T>;
+
+      if ( pagingSource != null )
+        return pagingSource;
+      else
+        return new PagingSourceWrapper<T>( source );
+
+    }
+
+
+
+    public static IPagingData<TResult> Select<TSource, TResult>( this IPagingData<TSource> source, Func<TSource, TResult> selector )
+    {
+      return new PagingSelector<TSource, TResult>( source, selector );
+    }
+
+    public static IPagingData<TResult> PageSelect<TSource, TResult>( this IPagingData<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageSelector )
+    {
+      return new PagingSelector<TSource, TResult>( source, pageSelector );
+    }
+
+
+
+    public static IPagingDataSource<TResult> Select<TSource, TResult>( this IPagingDataSource<TSource> source, Func<TSource, TResult> selector )
+    {
+      return new PagingSourceSelector<TSource, TResult>( source, selector );
+    }
+
+    public static IPagingDataSource<TResult> PageSelect<TSource, TResult>( this IPagingDataSource<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageSelector )
+    {
+      return new PagingSourceSelector<TSource, TResult>( source, pageSelector );
+    }
+
+
+
+
+    private class PagingSelector<TSource, TResult> : IPagingData<TResult>
+    {
+
+      private Func<IEnumerable<TSource>, IEnumerable<TResult>> _pageSelector;
+      private Func<TSource, TResult> _selector;
+
+      IPagingData<TSource> _dataSource;
+
+      public PagingSelector( IPagingData<TSource> source, Func<TSource, TResult> selector )
+      {
+        _dataSource = source;
+        _selector = selector;
+      }
+
+      public PagingSelector( IPagingData<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageConverter )
+      {
+        _dataSource = source;
+        _pageSelector = pageConverter;
+      }
+
+
+      #region IPagingData<TResult> 成员
+
+      public IEnumerable<TResult> GetPage( int pageIndex )
+      {
+        if ( _pageSelector != null )
+          return _pageSelector( _dataSource.GetPage( pageIndex ) );
+        else if ( _selector != null )
+          return _dataSource.GetPage( pageIndex ).Select( _selector );
+        else
+          throw new InvalidOperationException();
+      }
+
+      public int Count()
+      {
+        return _dataSource.Count();
+      }
+
+      public int PageSize
+      {
+        get { return _dataSource.PageSize; }
+      }
+
+      #endregion
+    }
+
+    private class PagingSourceSelector<TSource, TResult> : IPagingDataSource<TResult>
+    {
+
+      private Func<IEnumerable<TSource>, IEnumerable<TResult>> _pageSelector;
+      private Func<TSource, TResult> _selector;
+
+      IPagingDataSource<TSource> _dataSource;
+
+      public PagingSourceSelector( IPagingDataSource<TSource> source, Func<TSource, TResult> selector )
+      {
+        if ( source == null )
+          throw new ArgumentNullException( "source" );
+
+        if ( selector == null )
+          throw new ArgumentNullException( "selector" );
+
+
+        _dataSource = source;
+        _selector = selector;
+      }
+
+      public PagingSourceSelector( IPagingDataSource<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageSelector )
+      {
+        if ( source == null )
+          throw new ArgumentNullException( "source" );
+
+        if ( pageSelector == null )
+          throw new ArgumentNullException( "pageSelector" );
+
+
+        _dataSource = source;
+        _pageSelector = pageSelector;
+      }
+
+
+      #region IPagingDataSource<TResult> 成员
+
+      public IPagingData<TResult> CreatePaging( int pageSize )
+      {
+        if ( _pageSelector != null )
+          return _dataSource.CreatePaging( pageSize ).PageSelect( _pageSelector );
+        else if ( _selector != null )
+          return _dataSource.CreatePaging( pageSize ).Select( _selector );
+        else
+          throw new InvalidOperationException();
+      }
+
+      #endregion
+    }
+
+  }
+
+
+  public class PagingSourceWrapper<T> : EnumerableWrapper<T>, IPagingDataSource<T>
+  {
+    private IList<T> _listSource;
+
+    private IEnumerable<T> _enumerableSource;
+
+    public PagingSourceWrapper( IList<T> source )
+      : base( source )
+    {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      _listSource = source;
+    }
+
+    public PagingSourceWrapper( IEnumerable<T> source )
+      : base( source )
+    {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      _enumerableSource = source;
+      _listSource = source as IList<T>;
+    }
+
+    #region IPagingDataSource<T> 成员
+
+    public IPagingData<T> CreatePaging( int pageSize )
+    {
+
+      if ( _listSource != null )
+        return new ListPaging<T>( _listSource, pageSize );
+      else
+        return new EnumerablePaging<T>( _enumerableSource, pageSize );
+    }
+
+    #endregion
+
+
+    private class ListPaging<Q> : IPagingData<Q>
+    {
+
+      private IList<Q> _dataSource;
+      private int _pageSize;
+
+
+      public ListPaging( IList<Q> source, int pageSize )
+      {
+        if ( source == null )
+          throw new ArgumentNullException( "source" );
+
+        _dataSource = source;
+        _pageSize = pageSize;
+      }
+
+      public IEnumerable<Q> GetPage( int pageIndex )
+      {
+        return _dataSource.Take( (pageIndex - 1) * PageSize, PageSize );
+      }
+
+      public int Count()
+      {
+        return _dataSource.Count;
+      }
+
+      public int PageSize
+      {
+        get { return _pageSize; }
+      }
+    }
+
+
+    private class EnumerablePaging<Q> : IPagingData<Q>
+    {
+
+      private IEnumerable<Q> _dataSource;
+      private int _pageSize;
+
+
+      public EnumerablePaging( IEnumerable<Q> source, int pageSize )
+      {
+        if ( source == null )
+          throw new ArgumentNullException( "source" );
+
+        _dataSource = source;
+        _pageSize = pageSize;
+      }
+
+      public IEnumerable<Q> GetPage( int pageIndex )
+      {
+        return _dataSource.Take( pageIndex * PageSize ).Skip( (pageIndex - 1) * PageSize );
+      }
+
+      public int Count()
+      {
+        return _dataSource.Count();
+      }
+
+      public int PageSize
+      {
+        get { return _pageSize; }
+      }
+    }
+
+
+  }
+
+
+
+  public abstract class EnumerableWrapper<T> : IEnumerable<T>
+  {
+
+    private IEnumerable<T> _enumerable;
+
+
+    protected EnumerableWrapper( IEnumerable<T> enumerable )
+    {
+      _enumerable = enumerable;
+    }
+
+
+    #region IEnumerable<T> 成员
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+      return _enumerable.GetEnumerator();
+    }
+
+    #endregion
+
+    #region IEnumerable 成员
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return _enumerable.GetEnumerator();
+    }
+
+    #endregion
+  }
+
+
+}

@@ -17,13 +17,13 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     //暂时我只认可一种数据列表类型，也就是IEnumerable或IEnumerable<T>，不过几乎所有的列表都是从这个继承。
 
     //Ivony.Fluent命名空间下提供了一个BindTo方法来辅助我们将数据源绑定到某个东西的列表。
-    //我们尝试用BindTo在列表1上绑定从1到10的自然数：
-    Enumerable.Range( 1, 10 )
-      .BindTo( Find( "#list1 li" ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );
+    //我们尝试用BindFrom在列表1上绑定从1到10的自然数：
+    Find( "#list1 li" )
+      .BindFrom( Enumerable.Range( 1, 10 ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );
     //BindTo方法会返回数据源支持连写，将一份数据绑定到多个目标
 
 
-    //下面来看看数据不够的情况：
+    //下面来看看数据不够的情况，BindTo就是BindFrom的颠倒版本：
     Enumerable.Range( 1, 5 )
       .Select( i => i.ToString() )
       .BindTo( Find( "#list2 li" ), null,//null代表缺少数据源时用来替代的默认值
@@ -36,6 +36,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     Find( "#large li:nth-child(odd)" ).Bind( "@:text", "odd" );//现在也已经支持所有的nth系列的结构伪类
     Find( "#large li:nth-child(even)" ).Bind( "@:text", "even" );
     Find( "#large li:nth-child( 7n - 3 )" ).Bind( "@:text", "7n - 3" );
+    //Find( "#large li:nth-child (7n-3)" ).Bind( "@:text", "7n-3" );//注意括号与伪类之间是不能有空格的。
 
     Find( "#large li:first-child" ).Bind( "@:text", "first" );
     Find( "#large li:last-child" ).Bind( "@:text", "last" );

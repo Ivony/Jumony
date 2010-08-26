@@ -16,7 +16,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     //这个范例文件主要来讲述列表的绑定
     //暂时我只认可一种数据列表类型，也就是IEnumerable或IEnumerable<T>，不过几乎所有的列表都是从这个继承。
 
-    //Ivony.Fluent命名空间下提供了一个BindTo方法来辅助我们将数据源绑定到某个东西的列表。
+    //Ivony.Fluent命名空间下提供了一个BindFrom方法来辅助我们将数据源绑定到某个东西的列表。
     //我们尝试用BindFrom在列表1上绑定从1到10的自然数：
     Find( "#list1 li" )
       .BindFrom( Enumerable.Range( 1, 10 ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );

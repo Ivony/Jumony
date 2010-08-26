@@ -21,9 +21,12 @@ namespace Ivony.Web.Html
     /// <param name="element">元素</param>
     /// <param name="name">属性名</param>
     /// <returns>属性对象，如果没找到，则返回null</returns>
+    /// <remarks>
+    /// 如果有多个同名的属性，此方法会抛出异常
+    /// </remarks>
     public static IHtmlAttribute Attribute( this IHtmlElement element, string name )
     {
-      return element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).FirstOrDefault();
+      return element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).SingleOrDefault();
     }
 
 
@@ -35,13 +38,16 @@ namespace Ivony.Web.Html
     /// <param name="name">属性名</param>
     /// <param name="defaultValue">如果属性没找到，则为属性设置默认值</param>
     /// <returns>属性对象</returns>
+    /// <remarks>
+    /// 如果有多个同名的属性，此方法会抛出异常
+    /// </remarks>
     public static IHtmlAttribute Attribute( this IHtmlElement element, string name, string defaultValue )
     {
-      var attribute = element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).FirstOrDefault();
+      var attribute = element.Attributes().Where( a => string.Equals( a.Name, name, StringComparison.InvariantCultureIgnoreCase ) ).SingleOrDefault();
       if ( attribute == null )
       {
         attribute = element.AddAttribute( name );
-        attribute.Value = defaultValue;
+        attribute.AttributeValue = defaultValue;
       }
 
 
@@ -50,7 +56,7 @@ namespace Ivony.Web.Html
 
 
     /// <summary>
-    /// 获取属性值，与Value属性不同，Value方法在属性对象为null时不会抛出异常
+    /// 获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
     /// </summary>
     /// <param name="attribute">属性对象</param>
     /// <returns>属性值，如果属性对象为null，则返回null</returns>
@@ -59,7 +65,7 @@ namespace Ivony.Web.Html
       if ( attribute == null )
         return null;
 
-      return attribute.Value;
+      return attribute.AttributeValue;
     }
 
 
@@ -71,7 +77,7 @@ namespace Ivony.Web.Html
     /// <returns>被设置的属性对象</returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string value )
     {
-      attribute.Value = value;
+      attribute.AttributeValue = value;
       return attribute;
     }
 
@@ -85,7 +91,7 @@ namespace Ivony.Web.Html
     /// <returns>被设置的属性对象</returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string oldValue, string newValue )
     {
-      attribute.Value = attribute.Value.Replace( oldValue, newValue );
+      attribute.AttributeValue = attribute.AttributeValue.Replace( oldValue, newValue );
       return attribute;
     }
 
@@ -98,7 +104,7 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, string replacement )
     {
-      attribute.Value = pattern.Replace( attribute.Value, replacement );
+      attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, replacement );
       return attribute;
     }
 
@@ -111,7 +117,7 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
     {
-      attribute.Value = pattern.Replace( attribute.Value, evaluator );
+      attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, evaluator );
       return attribute;
     }
 
@@ -124,7 +130,7 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
     {
-      attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
+      attribute.AttributeValue = Regex.Replace( attribute.AttributeValue, pattern, evaluator );
       return attribute;
     }
 
@@ -136,7 +142,7 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Func<string, string> evaluator )
     {
-      attribute.Value = evaluator( attribute.Value );
+      attribute.AttributeValue = evaluator( attribute.AttributeValue );
       return attribute;
     }
 
@@ -182,9 +188,9 @@ namespace Ivony.Web.Html
       /// 将属性值设置为空
       /// </summary>
       /// <returns>设置属性值的元素</returns>
-      public IHtmlElement Value()
+      public IHtmlElement Null()
       {
-        attribute.Value = null;
+        attribute.AttributeValue = null;
         return _element;
       }
 
@@ -195,43 +201,43 @@ namespace Ivony.Web.Html
       /// <returns>设置属性值的元素</returns>
       public IHtmlElement Value( string value )
       {
-        attribute.Value = value;
+        attribute.AttributeValue = value;
         return _element;
       }
 
       public IHtmlElement Value( string oldValue, string newValue )
       {
-        attribute.Value = attribute.Value.Replace( oldValue, newValue );
+        attribute.AttributeValue = attribute.AttributeValue.Replace( oldValue, newValue );
         return _element;
       }
 
       public IHtmlElement Value( Regex pattern, string replacement )
       {
-        attribute.Value = pattern.Replace( attribute.Value, replacement );
+        attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, replacement );
         return _element;
       }
 
       public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
       {
-        attribute.Value = pattern.Replace( attribute.Value, evaluator );
+        attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, evaluator );
         return _element;
       }
 
       public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
       {
-        attribute.Value = Regex.Replace( attribute.Value, pattern, evaluator );
+        attribute.AttributeValue = Regex.Replace( attribute.AttributeValue, pattern, evaluator );
         return _element;
       }
 
       public IHtmlElement Value( Func<string, string> evaluator )
       {
-        attribute.Value = evaluator( attribute.Value );
+        attribute.AttributeValue = evaluator( attribute.AttributeValue );
         return _element;
       }
 
       public IHtmlElement Value( Func<IHtmlElement, string, string> evaluator )
       {
-        attribute.Value = evaluator( _element, attribute.Value );
+        attribute.AttributeValue = evaluator( _element, attribute.AttributeValue );
         return _element;
       }
 

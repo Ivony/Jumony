@@ -19,6 +19,7 @@ namespace Ivony.Web.Html
     public void Init( HttpApplication context )
     {
       context.BeginRequest += new EventHandler( BeginRequest );
+
     }
 
     void BeginRequest( object sender, EventArgs e )

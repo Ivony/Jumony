@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Ivony.Fluent;
+using System.Web;
 
 namespace Ivony.Web.Html
 {
@@ -177,11 +178,21 @@ namespace Ivony.Web.Html
     }
 
 
+    /// <summary>
+    /// 获取紧邻之前的元素
+    /// </summary>
+    /// <param name="node">要获取紧邻之前的元素的节点</param>
+    /// <returns>紧邻当前节点的前一个元素</returns>
     public static IHtmlElement PreviousElement( this IHtmlNode node )
     {
       return node.SiblingsBeforeSelf().LastOrDefault();
     }
 
+    /// <summary>
+    /// 获取紧邻之后的元素
+    /// </summary>
+    /// <param name="node">要获取紧邻之后的元素的节点</param>
+    /// <returns>紧邻当前节点的后一个元素</returns>
     public static IHtmlElement NextElement( this IHtmlNode node )
     {
       return node.SiblingsAfterSelf().FirstOrDefault();
@@ -192,7 +203,7 @@ namespace Ivony.Web.Html
     /// 从当前容器按照CSS3选择器搜索符合要求的元素
     /// </summary>
     /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expression">CSS3选择器</param>
+    /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
@@ -201,13 +212,36 @@ namespace Ivony.Web.Html
     }
 
 
+    /// <summary>
+    /// 从当前容器按照CSS3选择器搜索符合要求的元素
+    /// </summary>
+    /// <param name="container">要搜索子代元素的容器</param>
+    /// <param name="expressions">多个CSS选择器，结果会合并</param>
+    /// <returns>搜索到的符合要求的元素</returns>
+    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, params string[] expressions )
+    {
+      var selector = HtmlCssSelector.Create( expressions );
+      return selector.Search( container, true );
+    }
 
+
+    /// <summary>
+    /// 获取在兄弟节点中，自己的顺序位置
+    /// </summary>
+    /// <param name="node">要获取序号的节点</param>
+    /// <returns>顺序位置</returns>
     public static int NodesIndexOfSelf( this IHtmlNode node )
     {
       var siblings = node.SiblingNodes();
       return siblings.ToList().IndexOf( node );
     }
 
+
+    /// <summary>
+    /// 获取在兄弟元素中，自己的顺序位置
+    /// </summary>
+    /// <param name="node">要获取序号的元素</param>
+    /// <returns>顺序位置</returns>
     public static int IndexOfSelf( this IHtmlElement element )
     {
       var siblings = element.Siblings();
@@ -217,18 +251,71 @@ namespace Ivony.Web.Html
 
 
 
-
+    /// <summary>
+    /// 尝试获取元素子节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+    /// </summary>
+    /// <param name="container">要生成InnerHTML的容器</param>
+    /// <returns>容器所有子节点的HTML表现形式</returns>
     public static string InnerHtml( this IHtmlContainer container )
     {
       StringBuilder builder = new StringBuilder();
 
       foreach ( var node in container.Nodes() )
       {
-        builder.Append( node.RawHtml );
+        builder.Append( node.OuterHtml() );
       }
 
       return builder.ToString();
     }
 
+    /// <summary>
+    /// 尝试获取整个节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+    /// </summary>
+    /// <param name="node">要获取HTML表现形式的节点</param>
+    /// <returns></returns>
+    public static string OuterHtml( this IHtmlNode node )
+    {
+      var raw = node.RawHtml;
+      if ( raw == null )
+        throw new NotSupportedException();
+
+      return raw;
+    }
+
+
+
+
+    private static readonly string[] noTextElements = new[] { "table", "tr", "input", "style", "head", "meta", "script", "br", "frame" };
+
+    private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
+
+    /// <summary>
+    /// 尝试获取节点的文本表现形式，对于某些不支持文本表现形式的元素，将直接返回null
+    /// </summary>
+    /// <param name="node">要获取文本表现形式的节点</param>
+    /// <returns></returns>
+    public static string Text( this IHtmlNode node )
+    {
+      var textNode = node as IHtmlTextNode;
+      if ( textNode != null )
+        return HttpUtility.HtmlDecode( whitespaceRegex.Replace( textNode.Text, " " ) );
+
+      var commentNode = node as IHtmlCommentNode;
+      if ( commentNode != null )
+        return null;
+
+      var element = node as IHtmlElement;
+      if ( element != null )
+      {
+        if ( element.Name.Equals( "br", StringComparison.InvariantCultureIgnoreCase ) )
+          return "\n";
+        else if ( noTextElements.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+          return null;
+      }
+
+      var container = node as IHtmlContainer;
+
+      return string.Join( "", container.Nodes().Select( n => Text( n ) ).ToArray() );
+    }
   }
 }

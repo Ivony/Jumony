@@ -18,11 +18,18 @@ namespace Ivony.Web.Html
       get;
     }
 
-    string Value
+    string AttributeValue
     {
       get;
       set;
     }
+
+
+
+    /// <summary>
+    /// 移除此属性
+    /// </summary>
+    void Remove();
 
   }
 }

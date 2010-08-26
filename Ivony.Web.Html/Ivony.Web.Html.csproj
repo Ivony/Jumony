@@ -53,6 +53,7 @@
     <Compile Include="ElementExtensions.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
+    <Compile Include="HtmlConfiguration.cs" />
     <Compile Include="HtmlCssSelector.cs" />
     <Compile Include="HtmlDocumentWrapper.cs" />
     <Compile Include="HtmlElementWrapper.cs" />
@@ -60,10 +61,13 @@
     <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="IHtmlAttribute.cs" />
     <Compile Include="IHtmlBindable.cs" />
+    <Compile Include="IHtmlBindingSheet.cs" />
+    <Compile Include="IHtmlCommentNode.cs" />
     <Compile Include="IHtmlDocument.cs" />
     <Compile Include="IHtmlElement.cs" />
     <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlNode.cs" />
+    <Compile Include="IHtmlTextNode.cs" />
     <Compile Include="jQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
@@ -73,6 +77,9 @@
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -7,12 +7,6 @@ namespace Ivony.Web.Html
 {
 
 
-  public enum BindingElementContentMode
-  {
-    InnerHtml,
-    OutterHtml,
-    InnerText
-  }
 
   public enum BindingNullBehavior
   {

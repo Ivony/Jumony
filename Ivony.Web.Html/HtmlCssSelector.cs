@@ -16,28 +16,37 @@ namespace Ivony.Web.Html
 
     public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled );
 
-
-
-    private readonly string _expression;
+    private readonly string[] _expressions;
 
 
 
-    private static readonly Hashtable selectorCache = Hashtable.Synchronized( new Hashtable() );
-
-
+    /// <summary>
+    /// 创建CSS选择器实例
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <returns>CSS选择器</returns>
     public static HtmlCssSelector Create( string expression )
     {
-      var selector = (HtmlCssSelector) selectorCache[expression];
-      if ( selector != null )
-        return selector;
+      return Create( new[] { expression } );
+    }
 
-      selector = new HtmlCssSelector( expression );
-
-      selectorCache[expression] = selector;
+    /// <summary>
+    /// 创建CSS选择器实例
+    /// </summary>
+    /// <param name="expressions">多个选择器表达式，结果会自动合并</param>
+    /// <returns>CSS选择器</returns>
+    public static HtmlCssSelector Create( params string[] expressions )
+    {
+      var selector = new HtmlCssSelector( expressions );
 
       return selector;
     }
 
+    /// <summary>
+    /// 创建一个元素选择器实例
+    /// </summary>
+    /// <param name="expression">元素选择器表达式</param>
+    /// <returns>CSS元素选择器</returns>
     internal static ElementSelector CreateElementSelector( string expression )
     {
       return new ElementSelector( expression );
@@ -47,23 +56,25 @@ namespace Ivony.Web.Html
     /// <summary>
     /// 创建一个CSS选择器实例
     /// </summary>
-    /// <param name="expression"></param>
-    private HtmlCssSelector( string expression )
+    /// <param name="expressions"></param>
+    private HtmlCssSelector( string[] expressions )
     {
-      _expression = expression;
+      _expressions = expressions;
 
-      if ( HttpContext.Current.Trace.IsEnabled )
-        HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Analyze Search \"{0}\"", expression ) );
 
-      _selector = CreateSelector( expression );
-
-      if ( HttpContext.Current.Trace.IsEnabled )
-        HttpContext.Current.Trace.Write( "Selector", string.Format( "End Analyze Search \"{0}\"", expression ) );
+      _selectors = expressions.Select( e => CreateSelector( e ) ).ToArray();
 
     }
 
+
+    /// <summary>
+    /// 创建选择器，这是核心函数
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <returns></returns>
     private PartSelector CreateSelector( string expression )
     {
+
       var match = cssSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
@@ -90,13 +101,180 @@ namespace Ivony.Web.Html
       return selector;
     }
 
-    public override string ToString()
+
+    internal string ExpressionString
     {
-      return _selector.ToString();
+      get { return string.Join( " , ", _expressions ); }
     }
 
 
-    private readonly PartSelector _selector;
+
+    /// <summary>
+    /// 获取选择器的表达式
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+      return string.Join( " , ", _selectors.Select( s => s.ToString() ).ToArray() );
+    }
+
+
+    private readonly PartSelector[] _selectors;
+
+
+
+
+    /// <summary>
+    /// 检查元素是否符合选择器要求
+    /// </summary>
+    /// <param name="element">元素</param>
+    /// <param name="scope">上溯范畴</param>
+    /// <returns>是否符合选择器要求</returns>
+    private bool Allows( IHtmlElement element, IHtmlContainer scope )
+    {
+      return _selectors.Any( s => s.Allows( element, scope ) );
+    }
+
+
+
+
+    /// <summary>
+    /// 在指定容器子代元素和指定范畴下搜索满足选择器的所有元素
+    /// </summary>
+    /// <param name="container">容器，其所有子代元素被列入搜索范围</param>
+    /// <param name="asScope">指定选择器在计算父元素时，是否不超出指定容器的范畴</param>
+    /// <remarks>
+    /// 选择器的工作原理是从最里层的元素选择器开始搜索，逐步验证其父元素是否满足父选择器的规则。如果asScope参数为true，则选择器在上溯验证父元素时，将不超出container的范畴，换言之只有container的子代才会被考虑。考虑下面的文档结构：
+    /// <![CDATA[
+    /// <html>
+    ///   <body>
+    ///     <ul id="outer">
+    ///       <li id="item">
+    ///         <ul "inner">
+    ///           <li>123</li>
+    ///           <li>456</li>
+    ///         </ul>
+    ///         <ol>
+    ///           <li>abc</li>
+    ///         </ol>
+    ///       </li>
+    ///     </ul>
+    ///   </body>
+    /// </html>
+    /// ]]>
+    /// 当使用选择器"#item ul li"来选择元素时，我们将得到正确的结果，即123和456两个节点。
+    /// 但如果我们将#item元素当作上下文且asScope参数为false来选择"ul li"元素时，可能会不能得到预期的结果，会发现abc元素也被选择了。这是因为选择器在查找父级元素限定时，会查找到id为outter的ul元素。为了解决此问题，请将asScope参数设置为true。
+    /// </remarks>
+    /// <returns>搜索到的所有元素</returns>
+    public IEnumerable<IHtmlElement> Search( IHtmlContainer container, bool asScope )
+    {
+
+      var elements = container.Descendants();
+
+      elements = elements.Where( element => Allows( element, asScope ? container : null ) );
+
+
+      if ( HttpContext.Current.Trace.IsEnabled )
+        elements = new TraceEnumerable<IHtmlElement>( this, elements );
+
+      return elements;
+    }
+
+
+    private class TraceEnumerable<T> : IEnumerable<T>
+    {
+
+      private HtmlCssSelector _selector;
+      private IEnumerable<T> _enumerable;
+
+      public TraceEnumerable( HtmlCssSelector selector, IEnumerable<T> enumerable )
+      {
+        _selector = selector;
+        _enumerable = enumerable;
+      }
+
+      private class Enumerator : IEnumerator<T>
+      {
+
+        private HtmlCssSelector coreSelector;
+        private IEnumerator<T> coreEnumerator;
+
+        public Enumerator( HtmlCssSelector selector, IEnumerator<T> enumerator )
+        {
+          coreSelector = selector;
+          coreEnumerator = enumerator;
+
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+        }
+
+
+        #region IEnumerator<T> 成员
+
+        T IEnumerator<T>.Current
+        {
+          get { return coreEnumerator.Current; }
+        }
+
+        #endregion
+
+        #region IDisposable 成员
+
+        void IDisposable.Dispose()
+        {
+          coreEnumerator.Dispose();
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "End Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+        }
+
+        #endregion
+
+        #region IEnumerator 成员
+
+        object System.Collections.IEnumerator.Current
+        {
+          get { return coreEnumerator.Current; }
+        }
+
+        bool System.Collections.IEnumerator.MoveNext()
+        {
+          return coreEnumerator.MoveNext();
+        }
+
+        void System.Collections.IEnumerator.Reset()
+        {
+          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+          coreEnumerator.Reset();
+        }
+
+        #endregion
+      }
+
+
+
+      #region IEnumerable<T> 成员
+
+      IEnumerator<T> IEnumerable<T>.GetEnumerator()
+      {
+        return new Enumerator( _selector, _enumerable.GetEnumerator() );
+      }
+
+      #endregion
+
+      #region IEnumerable 成员
+
+      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+      {
+        throw new NotImplementedException();
+      }
+
+      #endregion
+    }
+
+
+
+
+
+
+
 
 
     private class PartSelector
@@ -173,138 +351,6 @@ namespace Ivony.Web.Html
       }
 
     }
-
-
-    /// <summary>
-    /// 在指定容器子代元素和指定范畴下搜索满足选择器的所有元素
-    /// </summary>
-    /// <param name="container">容器，其所有子代元素被列入搜索范围</param>
-    /// <param name="asScope">指定选择器在计算父元素时，是否不超出指定容器的范畴</param>
-    /// <remarks>
-    /// 选择器的工作原理是从最里层的元素选择器开始搜索，逐步验证其父元素是否满足父选择器的规则。如果asScope参数为true，则选择器在上溯验证父元素时，将不超出container的范畴，换言之只有container的子代才会被考虑。考虑下面的文档结构：
-    /// <![CDATA[
-    /// <html>
-    ///   <body>
-    ///     <ul id="outer">
-    ///       <li id="item">
-    ///         <ul "inner">
-    ///           <li>123</li>
-    ///           <li>456</li>
-    ///         </ul>
-    ///         <ol>
-    ///           <li>abc</li>
-    ///         </ol>
-    ///       </li>
-    ///     </ul>
-    ///   </body>
-    /// </html>
-    /// ]]>
-    /// 当使用选择器"#item ul li"来选择元素时，我们将得到正确的结果，即123和456两个节点。
-    /// 但如果我们将#item元素当作上下文且asScope参数为false来选择"ul li"元素时，可能会不能得到预期的结果，会发现abc元素也被选择了。这是因为选择器在查找父级元素限定时，会查找到id为outter的ul元素。为了解决此问题，请将asScope参数设置为true。
-    /// </remarks>
-    /// <returns>搜索到的所有元素</returns>
-    public IEnumerable<IHtmlElement> Search( IHtmlContainer container, bool asScope )
-    {
-
-      var elements = container.Descendants();
-
-      elements = elements.Where( element => _selector.Allows( element, asScope ? container : null ) );
-      if ( HttpContext.Current.Trace.IsEnabled )
-        elements = new TraceEnumerable<IHtmlElement>( this, elements );
-
-      return elements;
-    }
-
-
-    private class TraceEnumerable<T> : IEnumerable<T>
-    {
-
-      private HtmlCssSelector _selector;
-      private IEnumerable<T> _enumerable;
-
-      public TraceEnumerable( HtmlCssSelector selector, IEnumerable<T> enumerable )
-      {
-        _selector = selector;
-        _enumerable = enumerable;
-      }
-
-      private class Enumerator : IEnumerator<T>
-      {
-
-        private HtmlCssSelector coreSelector;
-        private IEnumerator<T> coreEnumerator;
-
-        public Enumerator( HtmlCssSelector selector, IEnumerator<T> enumerator )
-        {
-          coreSelector = selector;
-          coreEnumerator = enumerator;
-
-          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector._expression ) );
-        }
-
-
-        #region IEnumerator<T> 成员
-
-        T IEnumerator<T>.Current
-        {
-          get { return coreEnumerator.Current; }
-        }
-
-        #endregion
-
-        #region IDisposable 成员
-
-        void IDisposable.Dispose()
-        {
-          coreEnumerator.Dispose();
-          HttpContext.Current.Trace.Write( "Selector", string.Format( "End Enumerate Search \"{0}\"", coreSelector._expression ) );
-        }
-
-        #endregion
-
-        #region IEnumerator 成员
-
-        object System.Collections.IEnumerator.Current
-        {
-          get { return coreEnumerator.Current; }
-        }
-
-        bool System.Collections.IEnumerator.MoveNext()
-        {
-          return coreEnumerator.MoveNext();
-        }
-
-        void System.Collections.IEnumerator.Reset()
-        {
-          HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector._expression ) );
-          coreEnumerator.Reset();
-        }
-
-        #endregion
-      }
-
-
-
-      #region IEnumerable<T> 成员
-
-      IEnumerator<T> IEnumerable<T>.GetEnumerator()
-      {
-        return new Enumerator( _selector, _enumerable.GetEnumerator() );
-      }
-
-      #endregion
-
-      #region IEnumerable 成员
-
-      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-      {
-        throw new NotImplementedException();
-      }
-
-      #endregion
-    }
-
-
 
 
     internal class ElementSelector
@@ -396,7 +442,6 @@ namespace Ivony.Web.Html
     }
 
 
-
     private class AttributeSelector
     {
 
@@ -462,7 +507,7 @@ namespace Ivony.Web.Html
           return attribute != null;
 
         if ( attribute != null )
-          _value = attribute.Value;
+          _value = attribute.AttributeValue;
 
         return matchers[separator]( value, _value );
       }
@@ -477,7 +522,6 @@ namespace Ivony.Web.Html
       }
 
     }
-
 
 
     private interface IPseudoClassSelector
@@ -688,7 +732,6 @@ namespace Ivony.Web.Html
       }
 
     }
-
 
   }
 }

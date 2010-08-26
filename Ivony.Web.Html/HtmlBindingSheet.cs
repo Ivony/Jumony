@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace Ivony.Web.Html
 {
-  public class HtmlBindingSheet
+  public class HtmlBindingSheet : Ivony.Web.Html.IHtmlBindingSheet
   {
 
 
@@ -76,9 +76,9 @@ namespace Ivony.Web.Html
     }
 
 
-    public void Apply()
+    public void Apply( HtmlBindingContext context )
     {
-      _rules.ForAll( r => r.Apply( HtmlBindingContext.Current ) );
+      _rules.ForAll( r => r.Apply( context ) );
     }
 
 

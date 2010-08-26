@@ -55,12 +55,21 @@ namespace Ivony.Web.Html
       if ( HttpContext.Current.Trace.IsEnabled )
         HttpContext.Current.Trace.Write( "Selector", string.Format( "Begin Analyze Search \"{0}\"", expression ) );
 
+      _selector = CreateSelector( expression );
+
+      if ( HttpContext.Current.Trace.IsEnabled )
+        HttpContext.Current.Trace.Write( "Selector", string.Format( "End Analyze Search \"{0}\"", expression ) );
+
+    }
+
+    private PartSelector CreateSelector( string expression )
+    {
       var match = cssSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
 
 
-      _selector = new PartSelector( new ElementSelector( match.Groups["elementSelector"].Value ) );
+      var selector = new PartSelector( new ElementSelector( match.Groups["elementSelector"].Value ) );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -72,15 +81,13 @@ namespace Ivony.Web.Html
         var relative = extraMatch.Groups["relative"].Value.Trim();
         var elementSelector = extraMatch.Groups["elementSelector"].Value.Trim();
 
-        var newPartSelector = new PartSelector( new ElementSelector( elementSelector ), relative, _selector );
-        _selector = newPartSelector;
+        var newPartSelector = new PartSelector( new ElementSelector( elementSelector ), relative, selector );
+        selector = newPartSelector;
 
       }
 
 
-      if ( HttpContext.Current.Trace.IsEnabled )
-        HttpContext.Current.Trace.Write( "Selector", string.Format( "End Analyze Search \"{0}\"", expression ) );
-
+      return selector;
     }
 
     public override string ToString()

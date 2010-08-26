@@ -163,10 +163,11 @@ namespace Ivony.Web.Html
       private set;
     }
 
-    private HtmlBindingContext( IHtmlContainer scope, string name )
+    private HtmlBindingContext( IHtmlContainer scope, string name, BindingContextExitBehavior exitBehavior )
     {
       Scope = scope;
       Name = name;
+      _exitBehavior = exitBehavior;
     }
 
     /// <summary>
@@ -209,6 +210,7 @@ namespace Ivony.Web.Html
     private const string contextName = "HtmlBindingContexts";
 
 
+    private readonly BindingContextExitBehavior _exitBehavior;
 
 
     /// <summary>
@@ -218,11 +220,23 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static HtmlBindingContext Enter( string name )
     {
+      return Enter( name, BindingContextExitBehavior.Default );
+    }
+
+
+    /// <summary>
+    /// 创建并进入一个绑定上下文
+    /// </summary>
+    /// <param name="name">上下文友好的名称，用于Trace识别</param>
+    /// <param name="exitBehavior">退出上下文时的行为</param>
+    /// <returns></returns>
+    public static HtmlBindingContext Enter( string name, BindingContextExitBehavior exitBehavior )
+    {
       var currentContext = Current;
       if ( currentContext == null )
         throw new InvalidOperationException();
 
-      return Enter( currentContext.Scope, name );
+      return Enter( currentContext.Scope, name, exitBehavior );
     }
 
     /// <summary>
@@ -233,6 +247,18 @@ namespace Ivony.Web.Html
     /// <returns></returns>
     public static HtmlBindingContext Enter( IHtmlContainer scope, string name )
     {
+      return Enter( scope, name, BindingContextExitBehavior.Default );
+    }
+
+    /// <summary>
+    /// 创建并进入一个绑定上下文
+    /// </summary>
+    /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
+    /// <param name="name">上下文友好的名称，用于Trace识别</param>
+    /// <param name="exitBehavior">退出上下文时的行为</param>
+    /// <returns></returns>
+    public static HtmlBindingContext Enter( IHtmlContainer scope, string name, BindingContextExitBehavior exitBehavior )
+    {
 
       var currentContext = Current;
 
@@ -242,8 +268,8 @@ namespace Ivony.Web.Html
         )
         throw new InvalidOperationException();
 
-      var context = new HtmlBindingContext( scope, name );
-      context.EnterCore();
+      var context = new HtmlBindingContext( scope, name, exitBehavior );
+      context.EnterCore( exitBehavior );
       return context;
     }
 
@@ -251,8 +277,9 @@ namespace Ivony.Web.Html
     /// <summary>
     /// 进入上下文
     /// </summary>
-    protected void EnterCore()
+    protected void EnterCore( BindingContextExitBehavior behavior )
     {
+
       var currentContext = Current;
       if ( currentContext != null )
       {
@@ -273,7 +300,7 @@ namespace Ivony.Web.Html
     /// </summary>
     public static void Exit()
     {
-      Exit( false );
+      Current.ExitCore();
     }
 
 
@@ -284,6 +311,40 @@ namespace Ivony.Web.Html
     public static void Exit( bool discard )
     {
       Current.ExitCore( discard );
+    }
+
+
+
+    /// <summary>
+    /// 退出上下文
+    /// </summary>
+    private void ExitCore()
+    {
+      if ( FollowContext != null )
+        FollowContext.ExitCore();
+
+      switch ( _exitBehavior )
+      {
+        case BindingContextExitBehavior.Default:
+        case BindingContextExitBehavior.Commit:
+          Commit();
+          ExitPrivate();
+          return;
+
+        case BindingContextExitBehavior.Discard:
+          Discard();
+          ExitPrivate();
+          return;
+
+        case BindingContextExitBehavior.CommitImmediate:
+          CommitImmediate();
+          ExitPrivate();
+          return;
+
+
+        default:
+          throw new InvalidOperationException();
+      }
     }
 
 
@@ -301,6 +362,11 @@ namespace Ivony.Web.Html
       else
         Commit();
 
+      ExitPrivate();
+    }
+
+    private void ExitPrivate()
+    {
       if ( AboveContext != null )
       {
         if ( AboveContext.FollowContext != this )
@@ -323,6 +389,11 @@ namespace Ivony.Web.Html
     /// </summary>
     public void Discard()
     {
+      CommitFollow();
+
+      if ( Actions.Any() )
+        HttpContext.Current.Trace.Warn( "Binding", string.Format( "Discard BindingContext \"{0}\"", Name ) );
+
       Actions.Clear();
     }
 
@@ -335,21 +406,21 @@ namespace Ivony.Web.Html
       if ( AboveContext == null )//如果是顶层上下文，则应该直接提交
         CommitImmediate();
       else
-        CommitToAbove();
+        CommitAbove();
     }
 
 
     /// <summary>
     /// 提交所有绑定操作到上级
     /// </summary>
-    protected void CommitToAbove()
+    protected void CommitAbove()
     {
 
       if ( AboveContext == null )
         throw new InvalidOperationException();
 
       if ( FollowContext != null )
-        FollowContext.CommitToAbove();
+        FollowContext.CommitAbove();
 
 
       AboveContext.Actions.AddRange( Actions );
@@ -365,8 +436,7 @@ namespace Ivony.Web.Html
     protected void CommitImmediate()
     {
 
-      if ( FollowContext != null )
-        FollowContext.CommitToAbove();
+      CommitFollow();
 
       HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
 
@@ -384,14 +454,43 @@ namespace Ivony.Web.Html
     }
 
 
-    #region IDisposable 成员
+    private void CommitFollow()
+    {
+      if ( FollowContext != null )
+        FollowContext.CommitAbove();
+    }
+
+
 
     public void Dispose()
     {
-      ExitCore( true );
+      if ( FollowContext != null )
+        FollowContext.Dispose();
+
+      switch ( _exitBehavior )
+      {
+        case BindingContextExitBehavior.Default:
+        case BindingContextExitBehavior.Discard:
+          Discard();
+          ExitPrivate();
+          return;
+
+        case BindingContextExitBehavior.Commit:
+          Commit();
+          ExitPrivate();
+          return;
+
+        case BindingContextExitBehavior.CommitImmediate:
+          CommitImmediate();
+          ExitPrivate();
+          return;
+
+
+        default:
+          throw new InvalidOperationException();
+      }
     }
 
-    #endregion
 
 
 
@@ -448,8 +547,29 @@ namespace Ivony.Web.Html
         foreach ( var a in actions.GetActions() )
           Add( a );
       }
+
+      internal bool Any()
+      {
+        return _targetSet.Any();
+      }
     }
 
+  }
+
+
+  /// <summary>
+  /// 定义绑定上下文调用Exit或Dispose方法的时候的行为
+  /// </summary>
+  public enum BindingContextExitBehavior
+  {
+    /// <summary>默认行为，对于Exit而言，会尝试Commit，对于Dispose而言，则会Discard</summary>
+    Default,
+    /// <summary>放弃所有绑定操作</summary>
+    Discard,
+    /// <summary>尝试提交到上一级上下文，如果上下文是顶层，则立即应用所有修改</summary>
+    Commit,
+    /// <summary>立即应用所有更改</summary>
+    CommitImmediate
   }
 
 

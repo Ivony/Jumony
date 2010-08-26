@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.IO;
+using Ivony.Fluent;
 
 namespace Ivony.Web.Html
 {
@@ -58,6 +59,23 @@ namespace Ivony.Web.Html
       ProcessDocument();
       Trace.Write( "Core", "End Process Document" );
     }
+
+    protected void ApplyBindingSheets()
+    {
+      var bindingSheets = Find( "link[rel=Bindingsheet]" )
+        .Select( link => link.Attribute( "href" ) )
+        .Where( href => href != null )
+        .Select( href => MapPath( href.Value ) )
+        .Select( physicalPath => HtmlBindingSheet.Load( physicalPath ) );
+
+      HtmlBindingContext.Enter( Document, "ApplyBindingSheet" );
+
+      bindingSheets
+        .ForAll( sheet => sheet.Apply() );
+
+      HtmlBindingContext.Exit();
+    }
+
 
     protected IHtmlDocument Document
     {

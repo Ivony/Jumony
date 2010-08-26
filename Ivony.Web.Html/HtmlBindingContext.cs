@@ -25,7 +25,12 @@ namespace Ivony.Web.Html
     /// </summary>
     protected HtmlBindingActionCollection Actions
     {
-      get { return _actionList; }
+      get
+      {
+        VerifyAccess();
+
+        return _actionList;
+      }
     }
 
 
@@ -37,6 +42,8 @@ namespace Ivony.Web.Html
     /// <param name="action">绑定操作方法</param>
     public void Action<T>( T target, Action<T> action ) where T : IHtmlElement
     {
+      VerifyAccess();
+
       _actionList.Add( new HtmlBindingAction<T>()
       {
         Target = target,
@@ -51,6 +58,8 @@ namespace Ivony.Web.Html
     /// <param name="action">一个 BindAction 类型的对象，他保存了执行绑定操作所需的数据</param>
     public void Action<T>( HtmlBindingAction<T> action ) where T : IHtmlElement
     {
+      VerifyAccess();
+
       _actionList.Add( action );
     }
 
@@ -65,6 +74,8 @@ namespace Ivony.Web.Html
     /// <param name="dataContext">数据上下文</param>
     internal void SetDataContext( IHtmlContainer container, object dataContext )
     {
+      VerifyAccess();
+
       _dataContexts[container] = dataContext;
     }
 
@@ -74,6 +85,7 @@ namespace Ivony.Web.Html
     /// <returns>最近的数据上下文，将递归查找父级和父级上下文，如果都没找到则返回null</returns>
     internal object GetDataContext( IHtmlNode node )
     {
+      VerifyAccess();
 
       object data = GetDataContextCore( node );
       if ( data != null )
@@ -162,6 +174,16 @@ namespace Ivony.Web.Html
       get;
       private set;
     }
+
+
+    private Thread _thread = Thread.CurrentThread;
+
+    protected void VerifyAccess()
+    {
+      if ( _thread != Thread.CurrentThread )
+        throw new InvalidOperationException();
+    }
+
 
     private HtmlBindingContext( IHtmlContainer scope, string name, BindingContextExitBehavior exitBehavior )
     {
@@ -354,6 +376,9 @@ namespace Ivony.Web.Html
     /// <param name="discard">是否放弃上下文中存在的绑定操作</param>
     protected void ExitCore( bool discard )
     {
+      VerifyAccess();
+
+
       if ( FollowContext != null )
         FollowContext.ExitCore( discard );
 
@@ -389,12 +414,15 @@ namespace Ivony.Web.Html
     /// </summary>
     public void Discard()
     {
-      CommitFollow();
+      VerifyAccess();
+
+      FollowContext.Discard();
 
       if ( Actions.Any() )
+      {
         HttpContext.Current.Trace.Warn( "Binding", string.Format( "Discard BindingContext \"{0}\"", Name ) );
-
-      Actions.Clear();
+        Actions.Clear();
+      }
     }
 
 
@@ -403,6 +431,8 @@ namespace Ivony.Web.Html
     /// </summary>
     public void Commit()
     {
+      VerifyAccess();
+
       if ( AboveContext == null )//如果是顶层上下文，则应该直接提交
         CommitImmediate();
       else
@@ -415,6 +445,7 @@ namespace Ivony.Web.Html
     /// </summary>
     protected void CommitAbove()
     {
+      VerifyAccess();
 
       if ( AboveContext == null )
         throw new InvalidOperationException();
@@ -435,6 +466,8 @@ namespace Ivony.Web.Html
     /// </summary>
     protected void CommitImmediate()
     {
+      VerifyAccess();
+
 
       CommitFollow();
 

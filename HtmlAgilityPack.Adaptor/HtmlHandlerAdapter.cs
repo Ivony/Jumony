@@ -28,11 +28,11 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       }
 
 
-      var meta = HtmlDocument.CreateElement( "meta" );
+      var meta = RawDocument.CreateElement( "meta" );
       meta.SetAttributeValue( "name", "generator" );
       meta.SetAttributeValue( "content", "Jumony; HtmlAgilityPack" );
 
-      var header = HtmlDocument.Find( "html head" ).FirstOrDefault();
+      var header = RawDocument.Find( "html head" ).FirstOrDefault();
 
       if ( header != null )
       {
@@ -44,21 +44,21 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
 
       Trace.Write( "Core", "Begin Write Response" );
-      HtmlDocument.Save( Response.Output );
+      RawDocument.Save( Response.Output );
       Trace.Write( "Core", "End Write Response" );
     }
 
 
     protected override IHtmlDocument LoadDocument( string documentContent )
     {
-      HtmlDocument = new HtmlDocument();
+      RawDocument = new HtmlDocument();
 
-      HtmlDocument.LoadHtml( documentContent );
+      RawDocument.LoadHtml( documentContent );
 
-      return HtmlDocument.AsDocument();
+      return RawDocument.AsDocument();
     }
 
-    protected HtmlDocument HtmlDocument
+    protected HtmlDocument RawDocument
     {
       get;
       private set;

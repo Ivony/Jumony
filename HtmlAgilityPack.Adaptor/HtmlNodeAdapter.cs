@@ -79,5 +79,11 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     {
       get { return Node.OwnerDocument.AsDocument(); }
     }
+
+    public string RawHtml
+    {
+      get { return Node.OuterHtml; }
+    }
+
   }
 }

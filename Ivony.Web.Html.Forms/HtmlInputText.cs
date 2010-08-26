@@ -8,11 +8,13 @@ namespace Ivony.Web.Html.Forms
   public class HtmlInputText : IHtmlInput
   {
 
-    private IHtmlElement _element;
-    private string _valueAttributeName;
+    private readonly IHtmlElement _element;
+    private readonly string _valueAttributeName;
 
-    public HtmlInputText( IHtmlElement element )
+    public HtmlInputText( HtmlForm form, IHtmlElement element )
     {
+
+      Form = form;
 
       if ( string.Equals( element.Name, "input", StringComparison.InvariantCultureIgnoreCase ) )
       {
@@ -29,9 +31,15 @@ namespace Ivony.Web.Html.Forms
         _element = element;
         _valueAttributeName = ":text";
       }
-
-      if ( _element == null )
+      else
         throw new InvalidOperationException( "只有input或textarea元素才能转换为HtmlTextInput对象" );
+    }
+
+
+    public HtmlForm Form
+    {
+      get;
+      private set;
     }
 
     public string Name

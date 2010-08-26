@@ -13,13 +13,15 @@ namespace Ivony.Web.Html.Forms
   {
 
 
-    private HtmlInputItem[] items;
+    private readonly HtmlInputItem[] items;
 
-    private string name;
+    private readonly string name;
 
 
-    private HtmlButtonGroup( IGrouping<string, IHtmlElement> inputGroup )
+    private HtmlButtonGroup( HtmlForm form, IGrouping<string, IHtmlElement> inputGroup )
     {
+      Form = form;
+
       name = inputGroup.Key;
 
       items = inputGroup.Select( e => new HtmlInputItem( this, e ) ).ToArray();
@@ -32,7 +34,7 @@ namespace Ivony.Web.Html.Forms
       var inputItems = form.Element.Find( "input[type=radio][name]", "input[type=checkbox][name]" );
 
       var groups = inputItems.GroupBy( item => item.Attribute( "name" ).Value() )
-          .Select( item => new HtmlButtonGroup( item ) );
+          .Select( item => new HtmlButtonGroup( form, item ) );
 
       return groups;
 
@@ -53,9 +55,6 @@ namespace Ivony.Web.Html.Forms
     {
       get
       {
-        if ( items.Length < 2 )
-          return false;
-
         //如果有任何一个复选框
         if ( items.Select( i => i.Element ).Any( e => e.Attribute( "type" ).Value().Equals( "checkbox", StringComparison.InvariantCultureIgnoreCase ) ) )
           return true;
@@ -68,6 +67,13 @@ namespace Ivony.Web.Html.Forms
     public IHtmlInputGroupItem[] Items
     {
       get { return items; }
+    }
+
+
+    public HtmlForm Form
+    {
+      get;
+      private set;
     }
 
 

@@ -7,6 +7,7 @@ namespace Ivony.Web.Html.Forms
 {
   public interface IHtmlInput
   {
+    HtmlForm Form { get; }
 
     string Name { get; }
 

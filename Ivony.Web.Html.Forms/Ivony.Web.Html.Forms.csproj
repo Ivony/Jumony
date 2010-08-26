@@ -47,7 +47,6 @@
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />
-    <Compile Include="IHtmlForm.cs" />
     <Compile Include="IHtmlInput.cs" />
     <Compile Include="IHtmlInputGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

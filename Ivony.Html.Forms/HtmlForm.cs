@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Ivony.Fluent;
@@ -61,9 +62,20 @@ namespace Ivony.Html.Forms
 
 
 
-    public NameValueCollection RequestData
+    public void Submit( NameValueCollection data )
     {
-      get { return HttpContext.Current.Request.Form; }
+      if ( !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
+        throw new InvalidOperationException();
+
+
+      SubmittedValues = data;
+    }
+
+
+    public NameValueCollection SubmittedValues
+    {
+      get;
+      private set;
     }
 
 

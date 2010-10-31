@@ -49,9 +49,9 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="inputer">输入控件</param>
     /// <returns></returns>
-    public static string ClientValue( this IHtmlInputControl inputer )
+    public static string SubmittedValue( this IHtmlInputControl inputer )
     {
-      var data = inputer.Form.RequestData;
+      var data = inputer.Form.SubmittedValues;
       if ( data == null )
         return null;
 
@@ -64,16 +64,16 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="group">输入组</param>
     /// <returns></returns>
-    public static string[] ClientValues( this IHtmlGroupControl group )
+    public static string[] SubmittedValues( this IHtmlGroupControl group )
     {
-      var data = group.Form.RequestData;
+      var data = group.Form.SubmittedValues;
       if ( data == null )
         return null;
 
       if ( !data.AllKeys.Contains( group.Name ) )
         return new string[0];
 
-      return RequestData.GetValues( group.Name );
+      return data.GetValues( group.Name );
     }
 
 
@@ -81,9 +81,9 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">表单</param>
-    public static void ApplyClientValue( this HtmlForm form )
+    public static void ApplySubmittedValue( this HtmlForm form )
     {
-      form.InputControls.ForAll( control => ApplyClientValue( control ) );
+      form.InputControls.ForAll( control => ApplySubmittedValue( control ) );
     }
 
 
@@ -91,15 +91,15 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplyClientValue( this IHtmlInputControl control )
+    public static void ApplySubmittedValue( this IHtmlInputControl control )
     {
       var textControl = control as IHtmlTextControl;
       if ( textControl != null )
-        ApplyClientValue( textControl );
+        ApplySubmittedValue( textControl );
 
       var groupControl = control as IHtmlGroupControl;
       if ( groupControl != null )
-        ApplyClientValue( groupControl );
+        ApplySubmittedValue( groupControl );
     }
 
 
@@ -107,9 +107,9 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplyClientValue( this IHtmlTextControl control )
+    public static void ApplySubmittedValue( this IHtmlTextControl control )
     {
-      var value = ClientValue( control );
+      var value = SubmittedValue( control );
       if ( value == null )
         return;
 
@@ -121,10 +121,10 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplyClientValue( this IHtmlGroupControl group )
+    public static void ApplySubmittedValue( this IHtmlGroupControl group )
     {
 
-      var values = ClientValues( group );
+      var values = SubmittedValues( group );
       if ( values == null )
         return;
 
@@ -267,19 +267,5 @@ namespace Ivony.Html.Forms
       return label.Text;
     }
 
-
-
-
-
-
-    private static HttpRequest Request
-    {
-      get { return HttpContext.Current.Request; }
-    }
-
-    private static System.Collections.Specialized.NameValueCollection RequestData
-    {
-      get { return HttpContext.Current.Request.Form; }
-    }
   }
 }

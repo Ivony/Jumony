@@ -1,0 +1,517 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Ivony.Html
+{
+
+
+  /// <summary>
+  /// 提供修改文档对象模型（DOM）的扩展方法
+  /// </summary>
+  public static class DomExtensions
+  {
+
+
+    /// <summary>
+    /// 在末尾添加节点
+    /// </summary>
+    /// <param name="container">要添加节点的容器</param>
+    /// <param name="node">要添加的节点</param>
+    /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+    public static TContainer Append<TContainer>( this TContainer container, IFreeNode node ) where TContainer : IHtmlContainer
+    {
+      return Insert( container, container.Nodes().Count(), node );
+    }
+
+
+    /// <summary>
+    /// 在指定位置添加节点
+    /// </summary>
+    /// <param name="container">要添加节点的容器</param>
+    /// <param name="index">要插入节点的位置</param>
+    /// <param name="node">要添加的节点</param>
+    /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+    public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlContainer
+    {
+      lock ( container.SyncRoot )
+      {
+        if ( !container.Document.Equals( node.Document ) )
+          throw new InvalidOperationException();
+
+        node.InsertTo( container, index );
+
+        return container;
+      }
+    }
+
+
+    /// <summary>
+    /// 替换指定节点
+    /// </summary>
+    /// <param name="oldNode">被替换的节点</param>
+    /// <param name="newNode">用于替换的节点</param>
+    /// <exception cref="System.InvalidOperationException">被替换的节点与用于替换的节点不属于同一个文档</exception>
+    public static IHtmlNode Replace( this IHtmlNode oldNode, IFreeNode newNode )
+    {
+      var container = oldNode.Parent;
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container )
+      {
+        var result = newNode.InsertTo( container, oldNode.NodesIndexOfSelf() );
+        oldNode.Remove();
+
+        return result;
+      }
+    }
+
+
+
+    /// <summary>
+    /// 在末尾添加节点的副本，此方法总是创建节点的副本
+    /// </summary>
+    /// <param name="container">要添加节点的容器</param>
+    /// <param name="node">要添加的节点</param>
+    /// <remarks>
+    /// 此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+    /// 使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+    /// </remarks>
+    /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+    public static TContainer AppendCopy<TContainer>( this TContainer container, IHtmlNode node ) where TContainer : IHtmlContainer
+    {
+      lock ( container.SyncRoot )
+      {
+        return InsertCopy( container, container.Nodes().Count(), node );
+      }
+    }
+
+
+    /// <summary>
+    /// 在指定位置添加节点的副本，此方法总是创建节点的副本
+    /// </summary>
+    /// <param name="container">要添加节点的容器</param>
+    /// <param name="index">要插入节点的位置</param>
+    /// <param name="node">要添加的节点</param>
+    /// <remarks>
+    /// 此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+    /// 使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+    /// </remarks>
+    /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+    public static TContainer InsertCopy<TContainer>( this TContainer container, int index, IHtmlNode node ) where TContainer : IHtmlContainer
+    {
+      lock ( container.SyncRoot )
+      {
+
+        var factory = container.Document.GetNodeFactory();
+        if ( factory == null )
+          throw new NotSupportedException();
+
+        var nodeCopy = factory.MakeCopy( node );
+
+        nodeCopy.InsertTo( container, index );
+
+        return container;
+      }
+    }
+
+
+    /// <summary>
+    /// 替换指定节点
+    /// </summary>
+    /// <param name="oldNode">被替换的节点</param>
+    /// <param name="newNode">用于替换的节点</param>
+    /// <remarks>
+    /// 此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+    /// 使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+    /// </remarks>
+    /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+    public static IHtmlNode ReplaceCopy( this IHtmlNode oldNode, IHtmlNode newNode )
+    {
+      var container = oldNode.Parent;
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container )
+      {
+        var factory = container.Document.GetNodeFactory();
+        if ( factory == null )
+          throw new NotSupportedException();
+
+        var nodeCopy = factory.MakeCopy( newNode );
+
+        var result = nodeCopy.InsertTo( container, oldNode.NodesIndexOfSelf() );
+        oldNode.Remove();
+
+        return result;
+      }
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// 创建副本
+    /// </summary>
+    /// <param name="node">要创建副本的节点</param>
+    /// <returns>节点的副本</returns>
+    public static IFreeNode MakeCopy( this IFreeNode node )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      return MakeCopy( node.Factory, node );
+    }
+
+    /// <summary>
+    /// 创建副本
+    /// </summary>
+    /// <param name="element">要创建副本的元素</param>
+    /// <returns>元素的副本</returns>
+    public static IFreeElement MakeCopy( this IFreeElement element )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      return MakeCopy( element.Factory, element );
+    }
+
+    /// <summary>
+    /// 创建副本
+    /// </summary>
+    /// <param name="comment">要创建副本的注释</param>
+    /// <returns>注释的副本</returns>
+    public static IFreeComment MakeCopy( this IFreeComment comment )
+    {
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      return MakeCopy( comment.Factory, comment );
+    }
+
+    /// <summary>
+    /// 创建副本
+    /// </summary>
+    /// <param name="textNode">要创建副本的文本节点</param>
+    /// <returns>文本节点的副本</returns>
+    public static IFreeTextNode MakeCopy( this IFreeTextNode textNode )
+    {
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
+
+      return MakeCopy( textNode.Factory, textNode );
+    }
+
+
+    /// <summary>
+    /// 创建节点的副本
+    /// </summary>
+    /// <param name="factory">用于创建节点的构建器</param>
+    /// <param name="node">需要被创建副本的节点</param>
+    /// <returns>节点的未分配副本</returns>
+    /// <exception cref="System.NotSupportedException">试图创建不被支持的节点的副本，例如IHtmlDocument</exception>
+    public static IFreeNode MakeCopy( this IHtmlNodeFactory factory, IHtmlNode node )
+    {
+
+      if ( factory == null )
+        throw new ArgumentNullException( "factory" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
+      var element = node as IHtmlElement;
+      if ( element != null )
+        return MakeCopy( factory, element );
+
+      var comment = node as IHtmlComment;
+      if ( comment != null )
+        return MakeCopy( factory, comment );
+
+      var textNode = node as IHtmlTextNode;
+      if ( textNode != null )
+        return MakeCopy( factory, textNode );
+
+      throw new NotSupportedException();
+    }
+
+
+    /// <summary>
+    /// 创建元素的副本
+    /// </summary>
+    /// <param name="factory">用于创建元素的构建器</param>
+    /// <param name="element">需要被创建副本的元素</param>
+    /// <returns>元素的未分配副本</returns>
+    public static IFreeElement MakeCopy( IHtmlNodeFactory factory, IHtmlElement element )
+    {
+
+      if ( factory == null )
+        throw new ArgumentNullException( "factory" );
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+
+      var free = factory.CreateElement( element.Name );
+      foreach ( var attribute in element.Attributes() )
+        free.AddAttribute( attribute.Name ).Value( attribute.Value() );
+
+      CopyChildNodes( element, free );
+
+      return free;
+    }
+
+    private static void CopyChildNodes( IHtmlElement element, IFreeElement freeElement )
+    {
+
+      foreach ( var node in element.Nodes().Reverse() )
+      {
+        var freeNode = freeElement.Factory.MakeCopy( node );
+
+        freeNode.InsertTo( freeElement, 0 );
+      }
+
+    }
+
+
+    /// <summary>
+    /// 创建注释的副本
+    /// </summary>
+    /// <param name="factory">用于创建注释的构建器</param>
+    /// <param name="comment">需要被创建副本的注释</param>
+    /// <returns>注释的未分配副本</returns>
+    public static IFreeComment MakeCopy( IHtmlNodeFactory factory, IHtmlComment comment )
+    {
+
+      if ( factory == null )
+        throw new ArgumentNullException( "factory" );
+
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      return factory.CreateComment( comment.Comment );
+    }
+
+
+    /// <summary>
+    /// 创建文本节点的副本
+    /// </summary>
+    /// <param name="factory">用于创建文本节点的构建器</param>
+    /// <param name="textNode">需要被创建副本的文本节点</param>
+    /// <returns>文本节点的未分配副本</returns>
+    public static IFreeTextNode MakeCopy( IHtmlNodeFactory factory, IHtmlTextNode textNode )
+    {
+      return factory.CreateTextNode( textNode.HtmlText );
+    }
+
+
+
+
+    /// <summary>
+    /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
+    /// </summary>
+    /// <param name="element">要替换内容的元素</param>
+    /// <param name="text">文本内容</param>
+    public static void ReplaceChildsWithText( this IHtmlElement element, string text )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      var factory = element.Document.GetNodeFactory();
+      if ( factory == null )
+        throw new NotSupportedException();
+
+      lock ( element.SyncRoot )
+      {
+        ClearNodes( element );
+
+        if ( !HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+          text = HtmlEncode( text );
+
+        var textNode = factory.CreateTextNode( text );
+        textNode.InsertTo( element, 0 );
+      }
+
+    }
+
+
+    /// <summary>
+    /// 使用指定的HTML文本替换元素内容（警告，此方法会清除元素所有内容）
+    /// </summary>
+    /// <param name="element">要替换内容的元素</param>
+    /// <param name="html">要替换的HTML代码</param>
+    public static void ReplaceChildsWithHtml( this IHtmlElement element, string html )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      var factory = element.Document.GetNodeFactory();
+      if ( factory == null )
+        throw new NotSupportedException();
+
+      lock ( element.SyncRoot )
+      {
+        ClearNodes( element );
+
+        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        {
+          var textNode = factory.CreateTextNode( html );
+          textNode.InsertTo( element, 0 );
+        }
+        else
+        {
+          var fragment = factory.ParseHtml( html );
+          fragment.InsertTo( element, 0 );
+        }
+      }
+    }
+
+
+    /// <summary>
+    /// 清除所有子节点
+    /// </summary>
+    /// <param name="element">要清除所有子节点的元素</param>
+    public static void ClearNodes( this IHtmlElement element )
+    {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      var childs = element.Nodes().ToArray();//清除所有的子节点
+      foreach ( var node in childs )
+        node.Remove();
+    }
+
+
+
+    private static string HtmlEncode( string s )
+    {
+      return HtmlEncoding.HtmlEncode( s ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" );
+    }
+
+
+
+    /// <summary>
+    /// 设置元素的InnerHTML
+    /// </summary>
+    /// <param name="element">要设置InnerHTML的元素</param>
+    /// <param name="html">要设置的HTML文本</param>
+    /// <exception cref="System.InvalidOperationException">如果元素不能被安全的修改内容</exception>
+    public static void InnerHtml( this IHtmlElement element, string html )
+    {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      lock ( element.SyncRoot )
+      {
+        if ( !IsSafeBindable( element ) )
+          throw new InvalidOperationException( "不能对元素设置InnerHTML，因为该元素不能被安全的修改内容。如果确信要改变HTML文档结构，请使用ReplaceChildsWithHtml扩展方法。" );
+
+        ReplaceChildsWithHtml( element, html );
+      }
+    }
+
+
+    /// <summary>
+    /// 将元素内容替换为指定文本
+    /// </summary>
+    /// <param name="element">要替换的文本</param>
+    /// <param name="text">要设置的文本</param>
+    /// <exception cref="System.InvalidOperationException">如果元素不能被安全的修改内容</exception>
+    public static void InnerText( this IHtmlElement element, string text )
+    {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      lock ( element.SyncRoot )
+      {
+        if ( !IsSafeBindable( element ) )
+          throw new InvalidOperationException( "不能对元素设置InnerText，因为该元素不能被安全的修改内容。如果确信要改变HTML文档结构，请使用ReplaceChildsWithText扩展方法。" );
+
+        ReplaceChildsWithText( element, text );
+      }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 内部方法，用于确定一个元素的内容是否可以安全数据绑定（不破坏文档结构）。
+    /// </summary>
+    /// <param name="element">要判断的元素</param>
+    /// <returns></returns>
+    internal static bool IsSafeBindable( this IHtmlElement element )
+    {
+      lock ( element.SyncRoot )
+      {
+
+        if ( element.Nodes().All( n => n is IHtmlTextNode || n is IHtmlComment ) )//只有文本和注释的元素是可以被安全数据绑定的。
+          return true;
+
+        if ( !element.Nodes().All( n => n is IHtmlTextNode || n is IHtmlComment || n is IHtmlElement ) )//内容只能由文本、注释和元素三者组成
+          return false;
+
+
+        var childs = element.Elements();
+
+
+        //如果有任何一个子元素有ID属性，那么它是不安全的
+        if ( childs.Any( e => e.Attribute( "id" ).Value() != null ) )
+          return false;
+
+        //如果有任何一个子元素是不安全的，那么它是不安全的
+        if ( childs.Any( e => e.IsSafeBindable() == false ) )
+          return false;
+
+        //如果元素内部只有设置文本样式的子元素，那么它是安全的。
+        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.pharsElements ).Contains( e.Name, StringComparer.InvariantCultureIgnoreCase ) ) )
+          return true;
+
+        return false;
+
+      }
+    }
+
+
+
+
+
+    public static string PathOf( this IHtmlElement element )
+    {
+
+      if ( element is IFreeNode )
+        throw new InvalidOperationException();
+
+      return PathOf( element, element.Document );
+
+    }
+
+    public static string PathOf( this IHtmlElement element, IHtmlContainer container )
+    {
+
+      if ( element is IFreeNode )
+        throw new InvalidOperationException();
+
+      StringBuilder builder = new StringBuilder();
+      do
+      {
+        builder.Insert( 0, "/" + element.Name );
+        element = element.Parent as IHtmlElement;
+        if ( element == null )
+          return null;
+      }
+      while ( element.Equals( container ) );
+
+      return builder.ToString();
+    }
+  }
+}

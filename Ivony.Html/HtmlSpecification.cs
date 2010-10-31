@@ -1,0 +1,346 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+
+namespace Ivony.Html
+{
+
+  /// <summary>
+  /// 定义 HTML 规范
+  /// </summary>
+  public static class HtmlSpecification
+  {
+
+    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "pre", "code", "style", "textarea" } );
+    public static readonly ICollection<string> selfCloseTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
+
+    public static readonly ICollection<string> optionalCloseTags = new ReadOnlyCollection<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" } );
+
+
+
+
+    public static readonly ICollection<string> fontstyleElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
+    public static readonly ICollection<string> pharsElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
+    public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
+    public static readonly ICollection<string> formcontrolElements = new ReadOnlyCollection<string>( new[] { "input", "select", "textarea", "label", "button" } );
+
+    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( pharsElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
+
+
+    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
+    public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol" } );
+    public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
+
+    public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "dl", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
+
+    public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
+
+    public static bool ImmediatelyClose( string openTag, string nextTag )
+    {
+      openTag = openTag.ToLowerInvariant();
+      nextTag = nextTag.ToLowerInvariant();
+
+
+      switch ( openTag )
+      {
+        case "colgroup":
+          return nextTag != "col";
+
+        case "dd":
+        case "dt":
+          return nextTag == "dd" || nextTag == "dt";
+
+        case "li":
+          return nextTag == "li";
+
+        case "option":
+          return nextTag == "option";
+
+        case "p":
+          return blockElements.Contains( nextTag );//因为上面已经转换为小写形式，所以这里不必执行不区分大小写的比较。
+
+        case "thead":
+        case "tbody":
+        case "tfoot":
+          return new[] { "thead", "tbody", "tfoot" }.Contains( nextTag );
+
+        case "tr":
+          return new[] { "tr", "thead", "tbody", "tfoot" }.Contains( nextTag );
+
+        case "td":
+        case "th":
+          return new[] { "tr", "td", "th", "thead", "tbody", "tfoot" }.Contains( nextTag );
+
+        case "head":
+          return nextTag == "body";
+
+        default:
+          return false;
+      }
+    }
+
+
+    internal static readonly IDictionary<string, char> entities = new Dictionary<string, char> 
+    {
+      { "quot",'\"' },
+      { "amp",'&' },
+      { "apos",'\'' },
+      { "lt",'<' },
+      { "gt",'>' },
+      { "nbsp", '\x00a0' },
+      { "iexcl", '\x00a1' },
+      { "cent", '\x00a2' },
+      { "pound", '\x00a3' },
+      { "curren", '\x00a4' },
+      { "yen", '\x00a5' },
+      { "brvbar", '\x00a6' },
+      { "sect", '\x00a7' },
+      { "uml", '\x00a8' },
+      { "copy", '\x00a9' },
+      { "ordf", '\x00aa' },
+      { "laquo", '\x00ab' },
+      { "not", '\x00ac' },
+      { "shy", '\x00ad' },
+      { "reg", '\x00ae' },
+      { "macr", '\x00af' },
+      { "deg", '\x00b0' },
+      { "plusmn", '\x00b1' },
+      { "sup2", '\x00b2' },
+      { "sup3", '\x00b3' },
+      { "acute", '\x00b4' },
+      { "micro", '\x00b5' },
+      { "para", '\x00b6' },
+      { "middot", '\x00b7' },
+      { "cedil", '\x00b8' },
+      { "sup1", '\x00b9' },
+      { "ordm", '\x00ba' },
+      { "raquo", '\x00bb' },
+      { "frac14", '\x00bc' },
+      { "frac12", '\x00bd' },
+      { "frac34", '\x00be' },
+      { "iquest", '\x00bf' },
+      { "Agrave", '\x00c0' },
+      { "Aacute", '\x00c1' },
+      { "Acirc", '\x00c2' },
+      { "Atilde", '\x00c3' },
+      { "Auml", '\x00c4' },
+      { "Aring", '\x00c5' },
+      { "AElig", '\x00c6' },
+      { "Ccedil", '\x00c7' },
+      { "Egrave", '\x00c8' },
+      { "Eacute", '\x00c9' },
+      { "Ecirc", '\x00ca' },
+      { "Euml", '\x00cb' },
+      { "Igrave", '\x00cc' },
+      { "Iacute", '\x00cd' },
+      { "Icirc", '\x00ce' },
+      { "Iuml", '\x00cf' },
+      { "ETH", '\x00d0' },
+      { "Ntilde", '\x00d1' },
+      { "Ograve", '\x00d2' },
+      { "Oacute", '\x00d3' },
+      { "Ocirc", '\x00d4' },
+      { "Otilde", '\x00d5' },
+      { "Ouml", '\x00d6' },
+      { "times", '\x00d7' },
+      { "Oslash", '\x00d8' },
+      { "Ugrave", '\x00d9' },
+      { "Uacute", '\x00da' },
+      { "Ucirc", '\x00db' },
+      { "Uuml", '\x00dc' },
+      { "Yacute", '\x00dd' },
+      { "THORN", '\x00de' },
+      { "szlig", '\x00df' },
+      { "agrave", '\x00e0' },
+      { "aacute", '\x00e1' },
+      { "acirc", '\x00e2' },
+      { "atilde", '\x00e3' },
+      { "auml", '\x00e4' },
+      { "aring", '\x00e5' },
+      { "aelig", '\x00e6' },
+      { "ccedil", '\x00e7' },
+      { "egrave", '\x00e8' },
+      { "eacute", '\x00e9' },
+      { "ecirc", '\x00ea' },
+      { "euml", '\x00eb' },
+      { "igrave", '\x00ec' },
+      { "iacute", '\x00ed' },
+      { "icirc", '\x00ee' },
+      { "iuml", '\x00ef' },
+      { "eth", '\x00f0' },
+      { "ntilde", '\x00f1' },
+      { "ograve", '\x00f2' },
+      { "oacute", '\x00f3' },
+      { "ocirc", '\x00f4' },
+      { "otilde", '\x00f5' },
+      { "ouml", '\x00f6' },
+      { "divide", '\x00f7' },
+      { "oslash", '\x00f8' },
+      { "ugrave", '\x00f9' },
+      { "uacute", '\x00fa' },
+      { "ucirc", '\x00fb' },
+      { "uuml", '\x00fc' },
+      { "yacute", '\x00fd' },
+      { "thorn", '\x00fe' },
+      { "yuml", '\x00ff' },
+      { "OElig", 'Œ' },
+      { "oelig", 'œ' },
+      { "Scaron", 'Š' },
+      { "scaron", 'š' },
+      { "Yuml", 'Ÿ' },
+      { "fnof", 'ƒ' },
+      { "circ", 'ˆ' },
+      { "tilde", '˜' },
+      { "Alpha", 'Α' },
+      { "Beta", 'Β' },
+      { "Gamma", 'Γ' },
+      { "Delta", 'Δ' },
+      { "Epsilon", 'Ε' },
+      { "Zeta", 'Ζ' },
+      { "Eta", 'Η' },
+      { "Theta", 'Θ' },
+      { "Iota", 'Ι' },
+      { "Kappa", 'Κ' },
+      { "Lambda", 'Λ' },
+      { "Mu", 'Μ' },
+      { "Nu", 'Ν' },
+      { "Xi", 'Ξ' },
+      { "Omicron", 'Ο' },
+      { "Pi", 'Π' },
+      { "Rho", 'Ρ' },
+      { "Sigma", 'Σ' },
+      { "Tau", 'Τ' },
+      { "Upsilon", 'Υ' },
+      { "Phi", 'Φ' },
+      { "Chi", 'Χ' },
+      { "Psi", 'Ψ' },
+      { "Omega", 'Ω' },
+      { "alpha", 'α' },
+      { "beta", 'β' },
+      { "gamma", 'γ' },
+      { "delta", 'δ' },
+      { "epsilon", 'ε' },
+      { "zeta", 'ζ' },
+      { "eta", 'η' },
+      { "theta", 'θ' },
+      { "iota", 'ι' },
+      { "kappa", 'κ' },
+      { "lambda", 'λ' },
+      { "mu", 'μ' },
+      { "nu", 'ν' },
+      { "xi", 'ξ' },
+      { "omicron", 'ο' },
+      { "pi", 'π' },
+      { "rho", 'ρ' },
+      { "sigmaf", 'ς' },
+      { "sigma", 'σ' },
+      { "tau", 'τ' },
+      { "upsilon", 'υ' },
+      { "phi", 'φ' },
+      { "chi", 'χ' },
+      { "psi", 'ψ' },
+      { "omega", 'ω' },
+      { "thetasym", 'ϑ' },
+      { "upsih", 'ϒ' },
+      { "piv", 'ϖ' },
+      { "ensp", ' ' },
+      { "emsp", ' ' },
+      { "thinsp", ' ' },
+      { "zwnj", '‌' },
+      { "zwj", '‍' },
+      { "lrm", '‎' },
+      { "rlm", '‏' },
+      { "ndash", '–' },
+      { "mdash", '—' },
+      { "lsquo", '‘' },
+      { "rsquo", '’' },
+      { "sbquo", '‚' },
+      { "ldquo", '“' },
+      { "rdquo", '”' },
+      { "bdquo", '„' },
+      { "dagger", '†' },
+      { "Dagger", '‡' },
+      { "bull", '•' },
+      { "hellip", '…' },
+      { "permil", '‰' },
+      { "prime", '′' },
+      { "Prime", '″' },
+      { "lsaquo", '‹' },
+      { "rsaquo", '›' },
+      { "oline", '‾' },
+      { "frasl", '⁄' },
+      { "euro", '€' },
+      { "image", 'ℑ' },
+      { "weierp", '℘' },
+      { "real", 'ℜ' },
+      { "trade", '™' },
+      { "alefsym", 'ℵ' },
+      { "larr", '←' },
+      { "uarr", '↑' },
+      { "rarr", '→' },
+      { "darr", '↓' },
+      { "harr", '↔' },
+      { "crarr", '↵' },
+      { "lArr", '⇐' },
+      { "uArr", '⇑' },
+      { "rArr", '⇒' },
+      { "dArr", '⇓' },
+      { "hArr", '⇔' },
+      { "forall", '∀' },
+      { "part", '∂' },
+      { "exist", '∃' },
+      { "empty", '∅' },
+      { "nabla", '∇' },
+      { "isin", '∈' },
+      { "notin", '∉' },
+      { "ni", '∋' },
+      { "prod", '∏' },
+      { "sum", '∑' },
+      { "minus", '−' },
+      { "lowast", '∗' },
+      { "radic", '√' },
+      { "prop", '∝' },
+      { "infin", '∞' },
+      { "ang", '∠' },
+      { "and", '∧' },
+      { "or", '∨' },
+      { "cap", '∩' },
+      { "cup", '∪' },
+      { "int", '∫' },
+      { "there4", '∴' },
+      { "sim", '∼' },
+      { "cong", '≅' },
+      { "asymp", '≈' },
+      { "ne", '≠' },
+      { "equiv", '≡' },
+      { "le", '≤' },
+      { "ge", '≥' },
+      { "sub", '⊂' },
+      { "sup", '⊃' },
+      { "nsub", '⊄' },
+      { "sube", '⊆' },
+      { "supe", '⊇' },
+      { "oplus", '⊕' },
+      { "otimes", '⊗' },
+      { "perp", '⊥' },
+      { "sdot", '⋅' },
+      { "lceil", '⌈' },
+      { "rceil", '⌉' },
+      { "lfloor", '⌊' },
+      { "rfloor", '⌋' },
+      { "lang", '〈' },
+      { "rang", '〉' },
+      { "loz", '◊' },
+      { "spades", '♠' },
+      { "clubs", '♣' },
+      { "hearts", '♥' },
+      { "diams", '♦' } 
+    };
+
+    internal static readonly ICollection<char> _htmlEntityEndingChars = new ReadOnlyCollection<char>( new char[] { ';', '&' } );
+  }
+
+}

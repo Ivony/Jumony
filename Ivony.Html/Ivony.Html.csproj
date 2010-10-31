@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E775B408-605F-4B66-87B6-98596069B703}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ivony.Web.Html</RootNamespace>
+    <AssemblyName>Ivony.Web.Html</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Ivony.Web.Html.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Ivony.Web.Html.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttributeExtensions.cs" />
+    <Compile Include="ContentExtensions.cs" />
+    <Compile Include="HtmlEncoding.cs" />
+    <Compile Include="IHtmlParser.cs" />
+    <Compile Include="DomExtensions.cs" />
+    <Compile Include="ElementExtensions.cs" />
+    <Compile Include="EnumerableWrapper.cs" />
+    <Compile Include="HtmlCssSelector.cs" />
+    <Compile Include="HtmlDocumentWrapper.cs" />
+    <Compile Include="HtmlElementWrapper.cs" />
+    <Compile Include="HtmlFragment.cs" />
+    <Compile Include="HtmlNodeWrapper.cs" />
+    <Compile Include="HtmlSpecification.cs" />
+    <Compile Include="IFreeNode.cs" />
+    <Compile Include="IHtmlAttribute.cs" />
+    <Compile Include="BindingNullBehavior.cs" />
+    <Compile Include="IHtmlComment.cs" />
+    <Compile Include="IHtmlDocument.cs" />
+    <Compile Include="IHtmlElement.cs" />
+    <Compile Include="IHtmlContainer.cs" />
+    <Compile Include="IHtmlNode.cs" />
+    <Compile Include="IHtmlNodeFactory.cs" />
+    <Compile Include="IHtmlSpecial.cs" />
+    <Compile Include="IHtmlTextNode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regulars.cs" />
+    <Compile Include="Styles\CssStyle.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(ProjectDir)
+"c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
+
+DEL "$(TargetDir)Code.RAR"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe -x.svn "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx -x.svn C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
+DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

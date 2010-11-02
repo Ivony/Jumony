@@ -106,7 +106,7 @@ namespace Ivony.Html.Parser
 
       public override int GetHashCode()
       {
-        return Element.GetHashCode() ^ Name.GetHashCode() ^ AttributeValue.GetHashCode();
+        return Element.GetHashCode() ^ Name.ToLowerInvariant().GetHashCode() ^ AttributeValue.GetHashCode();
       }
 
       #region IHtmlAttribute 成员

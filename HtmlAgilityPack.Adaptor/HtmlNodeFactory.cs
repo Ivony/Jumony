@@ -1,0 +1,201 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using AP = HtmlAgilityPack;
+
+namespace Ivony.Html.HtmlAgilityPackAdaptor
+{
+  public class FreeNodeFactory : IHtmlNodeFactory
+  {
+    private AP.HtmlDocument _document;
+
+    internal FreeNodeFactory( AP.HtmlDocument document )
+    {
+      _document = document;
+    }
+
+
+
+    #region IHtmlNodeFactory 成员
+
+    public IFreeElement CreateElement( string name )
+    {
+      return new FreeElementAdaptor( this, _document.CreateElement( name ) );
+    }
+
+    public IFreeTextNode CreateTextNode( string htmlText )
+    {
+      return new FreeTextNodeAdaptor( this, _document.CreateTextNode( htmlText ) );
+    }
+
+    public IFreeComment CreateComment( string comment )
+    {
+      return new FreeCommentAdaptor( this, _document.CreateComment( comment ) );
+    }
+
+
+
+    public HtmlFragment ParseHtml( string html )
+    {
+      var document = new AP.HtmlDocument();
+
+      document.LoadHtml( html );
+
+      var fragment = new HtmlFragment();
+      fragment.AddNodes( document.AsDocument().Nodes(), this );
+
+      return fragment;
+    }
+
+    #endregion
+
+
+    private class FreeElementAdaptor : HtmlElementAdapter, IFreeElement
+    {
+
+      private FreeNodeFactory _factory;
+
+      public FreeElementAdaptor( FreeNodeFactory factory, AP.HtmlNode node )
+        : base( node )
+      {
+        if ( node.ParentNode != null )
+          throw new InvalidOperationException();
+
+        _factory = factory;
+      }
+
+
+      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      {
+        if ( container == null )
+          throw new ArgumentNullException( "container" );
+
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
+          throw new InvalidOperationException();
+
+
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
+
+        return Node.AsNode();
+      }
+
+
+      public IHtmlNodeFactory Factory
+      {
+        get { return _factory; }
+      }
+
+
+      IHtmlContainer IHtmlNode.Parent
+      {
+        get { return null; }
+      }
+
+      IHtmlDocument IHtmlNode.Document
+      {
+        get { return _factory._document.AsDocument(); }
+      }
+    }
+
+
+    private class FreeTextNodeAdaptor : HtmlTextNodeAdapter, IFreeTextNode
+    {
+      private FreeNodeFactory _factory;
+
+      public FreeTextNodeAdaptor( FreeNodeFactory factory, AP.HtmlTextNode node )
+        : base( node )
+      {
+        if ( node.ParentNode != null )
+          throw new InvalidOperationException();
+
+        _factory = factory;
+      }
+
+
+
+      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      {
+        if ( container == null )
+          throw new ArgumentNullException( "container" );
+
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
+          throw new InvalidOperationException();
+
+
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
+
+        return Node.AsNode();
+      }
+
+
+      public IHtmlNodeFactory Factory
+      {
+        get { return _factory; }
+      }
+
+
+      IHtmlContainer IHtmlNode.Parent
+      {
+        get { return null; }
+      }
+
+      IHtmlDocument IHtmlNode.Document
+      {
+        get { return _factory._document.AsDocument(); }
+      }
+    }
+
+
+    private class FreeCommentAdaptor : HtmlCommentNodeAdapter, IFreeComment
+    {
+      private FreeNodeFactory _factory;
+
+      public FreeCommentAdaptor( FreeNodeFactory factory, AP.HtmlCommentNode node )
+        : base( node )
+      {
+        if ( node.ParentNode != null )
+          throw new InvalidOperationException();
+
+        _factory = factory;
+      }
+
+
+
+      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      {
+        if ( container == null )
+          throw new ArgumentNullException( "container" );
+
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
+          throw new InvalidOperationException();
+
+
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
+
+        return Node.AsNode();
+      }
+
+
+      public IHtmlNodeFactory Factory
+      {
+        get { return _factory; }
+      }
+
+
+      IHtmlContainer IHtmlNode.Parent
+      {
+        get { return null; }
+      }
+
+      IHtmlDocument IHtmlNode.Document
+      {
+        get { return _factory._document.AsDocument(); }
+      }
+    }
+
+  }
+}

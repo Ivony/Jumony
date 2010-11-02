@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +55,7 @@
     <Compile Include="HtmlDocumentAdapter.cs" />
     <Compile Include="HtmlHandlerAdapter.cs" />
     <Compile Include="HtmlNodeAdapter.cs" />
+    <Compile Include="HtmlNodeFactory.cs" />
     <Compile Include="HtmlTextNodeAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,16 +68,23 @@
       <Project>{193BB801-054F-4729-9D5D-FCE1E32594BF}</Project>
       <Name>HtmlAgilityPack</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Web.Html\Ivony.Web.Html.csproj">
+    <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
+      <Project>{6CE7336E-D881-40B2-9495-C06CF9A61AC6}</Project>
+      <Name>Ivony.Html.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
-      <Name>Ivony.Web.Html</Name>
+      <Name>Ivony.Html</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>DEL "$(TargetDir)Code.RAR"
-"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
-"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
+    <PostBuildEvent>cd $(ProjectDir)
+"c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
+
+DEL "$(TargetDir)Code.RAR"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe -x.svn "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx -x.svn C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
 DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

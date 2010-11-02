@@ -5,7 +5,7 @@ using System.Text;
 using AP = HtmlAgilityPack;
 
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   public abstract class HtmlNodeAdapter : IHtmlNode
   {
@@ -77,12 +77,18 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
     public IHtmlDocument Document
     {
-      get { return Node.OwnerDocument.AsDocument(); }
+      get { return Parent.Document; }
     }
 
     public string RawHtml
     {
       get { return Node.OuterHtml; }
+    }
+
+
+    public object SyncRoot
+    {
+      get { return Node; }
     }
 
 

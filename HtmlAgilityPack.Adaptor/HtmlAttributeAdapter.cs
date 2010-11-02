@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 using AP = HtmlAgilityPack;
 
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   internal class HtmlAttributeAdapter : IHtmlAttribute, IEquatable<IHtmlAttribute>
   {
@@ -71,25 +72,23 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     public override bool Equals( object obj )
     {
 
-      if ( obj == null )
+      var attribute = obj as IHtmlAttribute;
+
+      if ( attribute == null )
         return false;
 
-      var element = obj as IHtmlElement;
-      if ( element != null )
-        return NodeObject.Equals( element.NodeObject );
+      if ( !attribute.Element.Equals( this.Element ) )
+        return false;
 
-
-      var node = obj as AP.HtmlNode;
-      if ( node != null )
-        return NodeObject.Equals( node );
-
+      if ( attribute.Name.EqualsIgnoreCase( this.Name ) && attribute.AttributeValue == this.AttributeValue )
+        return true;
 
       return base.Equals( obj );
     }
 
     public override int GetHashCode()
     {
-      return NodeObject.GetHashCode();
+      return Element.GetHashCode() ^ Name.ToLowerInvariant().GetHashCode() ^ AttributeValue.GetHashCode();
     }
 
   }

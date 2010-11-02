@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 using AP = HtmlAgilityPack;
 
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   internal abstract class HtmlContainerAdapter : HtmlNodeAdapter, IHtmlContainer
   {
@@ -24,6 +25,5 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
     {
       return _node.ChildNodes.Select( node => node.AsNode() );
     }
-
   }
 }

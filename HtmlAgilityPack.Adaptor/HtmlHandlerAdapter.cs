@@ -6,46 +6,16 @@ using HtmlAgilityPack;
 using System.Web;
 using Ivony.Fluent;
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   public abstract class HtmlHandlerAdapter : HtmlHandler
   {
-    public override bool IsReusable
-    {
-      get { return false; }
-    }
 
     protected override void ProcessDocument()
     {
 
-      ApplyBindingSheets();
+      Process();
 
-      using ( var bindingContext = HtmlBindingContext.Enter( Document, "global" ) )
-      {
-        Process();
-
-        bindingContext.Commit();
-      }
-
-
-      var meta = RawDocument.CreateElement( "meta" );
-      meta.SetAttributeValue( "name", "generator" );
-      meta.SetAttributeValue( "content", "Jumony; HtmlAgilityPack" );
-
-      var header = RawDocument.Find( "html head" ).FirstOrDefault();
-
-      if ( header != null )
-      {
-        if ( header.HasChildNodes )
-          header.InsertBefore( meta, header.ChildNodes[0] );
-        else
-          header.AppendChild( meta );
-      }
-
-
-      Trace.Write( "Core", "Begin Write Response" );
-      RawDocument.Save( Response.Output );
-      Trace.Write( "Core", "End Write Response" );
     }
 
 

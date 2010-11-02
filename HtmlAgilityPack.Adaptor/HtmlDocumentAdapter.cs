@@ -6,10 +6,14 @@ using AP = HtmlAgilityPack;
 using Ivony.Fluent;
 using System.Text.RegularExpressions;
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   internal class HtmlDocumentAdapter : HtmlContainerAdapter, IHtmlDocument
   {
+
+
+
+    private AP.HtmlDocument _document;
 
     public HtmlDocumentAdapter( AP.HtmlDocument document )
       : base( document.DocumentNode )
@@ -24,6 +28,8 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
             _declaration = node.InnerHtml;
         }
       }
+
+      _document = document;
     }
 
     string _declaration;
@@ -36,7 +42,7 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
 
     public string Handle( IHtmlNode node )
     {
-      var htmlNode = node.NodeObject.Cast<AP.HtmlNode>();
+      var htmlNode = node.NodeObject.CastTo<AP.HtmlNode>();
       return string.Format( "{0}:{1}", htmlNode.Line, htmlNode.LinePosition );
     }
 
@@ -59,5 +65,24 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       return htmlNode.AsNode();
 
     }
+
+    public IHtmlNodeFactory GetNodeFactory()
+    {
+      return new FreeNodeFactory( this._document );
+    }
+
+
+
+
+    void IHtmlNode.Remove()
+    {
+      throw new InvalidOperationException();
+    }
+
+    IHtmlDocument IHtmlNode.Document
+    {
+      get { return this; }
+    }
+
   }
 }

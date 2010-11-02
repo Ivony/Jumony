@@ -5,7 +5,7 @@ using System.Text;
 using AP = HtmlAgilityPack;
 
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   public static class ConvertExtension
   {

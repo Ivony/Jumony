@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using HtmlAgilityPack;
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   internal class HtmlElementAdapter : HtmlContainerAdapter, IHtmlElement, IEquatable<IHtmlElement>
   {
@@ -38,57 +38,6 @@ namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
       return this.Attribute( attributeName );
     }
 
-
-
-    private static readonly Regex attributePathRegex = new Regex( @"@(?<name>\w+)" );
-
-    void IHtmlElement.BindCore( HtmlBindingContext context, string path, string value, BindingNullBehavior nullBehavior )
-    {
-
-      if ( value == null )
-      {
-        switch ( nullBehavior )
-        {
-          case BindingNullBehavior.Ignore:
-            break;
-          case BindingNullBehavior.Hidden:
-            context.Action( this, element => element.Node.SetAttributeValue( "style", element.Node.GetAttributeValue( "style", "" ) + " visibility: hidden;" ) );
-            break;
-          case BindingNullBehavior.Remove:
-            context.Action( this, element => element.Node.Remove() );
-            break;
-          case BindingNullBehavior.DisplayNone:
-            context.Action( this, element => element.Node.SetAttributeValue( "style", element.Node.GetAttributeValue( "style", "" ) + " display: none;" ) );
-            break;
-          default:
-            throw new NotSupportedException();
-        }
-
-        return;
-      }
-
-      var attributeMatch = attributePathRegex.Match( path );
-      if ( attributeMatch.Success )
-      {
-        string attributeName = attributeMatch.Groups["name"].Value;
-        context.Action( this, element => element.Node.SetAttributeValue( attributeName, value ) );
-      }
-
-      if ( path == "@:text" )
-      {
-        var html = value;
-        var notRequireDecodeElements = new[] { "pre", "textarea", "code" };
-
-        if ( !notRequireDecodeElements.Contains( Name, StringComparer.InvariantCultureIgnoreCase ) )
-          html = HttpUtility.HtmlEncode( value ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" );
-
-        context.Action( this, element => element.Node.InnerHtml = html );
-      }
-      if ( path == "@:html" )
-        context.Action( this, element => element.Node.InnerHtml = value );
-
-      return;
-    }
 
     #region IEquatable<IHtmlElement> 成员
 

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using AP = HtmlAgilityPack;
 
-namespace Ivony.Web.Html.HtmlAgilityPackAdaptor
+namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   public class HtmlTextNodeAdapter : HtmlNodeAdapter, IHtmlTextNode
   {
-    public string Text
+    public string HtmlText
     {
       get { return Node.InnerText; }
     }

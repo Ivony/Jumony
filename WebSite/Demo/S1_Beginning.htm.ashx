@@ -3,14 +3,15 @@
 using System;
 using System.Web;
 using Ivony.Fluent;
-using Ivony.Web.Html;
-using Ivony.Web.Html.HtmlAgilityPackAdaptor;
+using Ivony.Html;
+using Ivony.Html.Binding;
+using Ivony.Html.HtmlAgilityPackAdaptor;
 
 public class Beginning : HtmlHandlerAdapter
 {
-  
+
   //是的，这里是全部的真相。
-                                                                                                           
+
   //Jumony是一个基于HTML文档分析的引擎，当进入到Process方法的时候，引擎和框架已经将HTML模板文件加载分析完毕
   //只需要一些简单的Bind方法，您就可以随意的修改HTML文档了，您的这些修改，都会在应用到模板，并输出。
   protected override void Process()
@@ -23,14 +24,14 @@ public class Beginning : HtmlHandlerAdapter
 
     //那么您在HTML原文件里面看到的文字，则是在这里被删除的。
     Find( "p#invisible" ).Bind( "@:html", null, BindingNullBehavior.Remove );
-    
+
     //如果您想了解更多关于选择器和Bind方法的使用，可以打开SelectorAndBind.htm文件继续Jumony的探索旅程。
     //记住，Jumony引擎的模板必须是html文件，而同名的ashx文件，就是模板的处理程序，这个映射关系是由HtmlRewriteModule自动维护的。
     //任何时候都不应该直接访问ashx文件。
-    
+
     //对于这个引擎而言，我们始终觉得，用它，是最好的学习方法。
-    
-    
+
+
     //Jumony 2010/07/27 增加绑定样式表支持。
     //Jumony 2010/07/28 增加Trace支持。
     //Jumony 2010/07/28 增强绑定样式表支持。

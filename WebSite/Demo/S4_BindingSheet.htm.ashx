@@ -4,8 +4,8 @@ using System;
 using System.Web;
 using System.Linq;
 using Ivony.Fluent;
-using Ivony.Web.Html;
-using Ivony.Web.Html.HtmlAgilityPackAdaptor;
+using Ivony.Html;
+using Ivony.Html.HtmlAgilityPackAdaptor;
 
 public class BindingSheet : HtmlHandlerAdapter
 {

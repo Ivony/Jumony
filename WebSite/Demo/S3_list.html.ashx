@@ -3,12 +3,13 @@
 using System;
 using System.Web;
 using Ivony.Fluent;
-using Ivony.Web.Html;
-using Ivony.Web.Html.HtmlAgilityPackAdaptor;
+using Ivony.Html;
+using Ivony.Html.HtmlAgilityPackAdaptor;
+using Ivony.Html.Binding;
 using System.Linq;
 using HtmlAgilityPack;
 
-public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapter
+public class list_html : Ivony.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapter
 {
 
   protected override void Process()
@@ -22,7 +23,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
       .BindFrom( Enumerable.Range( 1, 10 ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );
     //BindTo方法会返回数据源支持连写，将一份数据绑定到多个目标
 
-    HtmlBindingContext.Enter( "1st" );
+    BindingContext.Enter( "1st" );
 
     //下面来看看数据不够的情况，BindTo就是BindFrom的颠倒版本：
     Enumerable.Range( 1, 5 )
@@ -35,7 +36,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     //用代码来指定这些东西，会觉得有些别扭，因为BindingNullBehavior主要是为绑定样式表设置而准备的。
 
 
-    HtmlBindingContext.Enter( "2nd" );
+    BindingContext.Enter( "2nd" );
 
     Find( "#large li:nth-child(odd)" ).Bind( "@:text", "odd" );//现在也已经支持所有的nth系列的结构伪类
     Find( "#large li:nth-child(even)" ).Bind( "@:text", "even" );
@@ -43,7 +44,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     //Find( "#large li:nth-child (7n-3)" ).Bind( "@:text", "7n-3" );//注意括号与伪类之间是不能有空格的。
 
 
-    HtmlBindingContext.Enter( "3rd" );
+    BindingContext.Enter( "3rd" );
 
     Find( "#large li:first-child" ).Bind( "@:text", "first" );
     Find( "#large li:last-child" ).Bind( "@:text", "last" );
@@ -52,7 +53,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
     Find( "#list1 li:nth-child( -n + 3)" ).Bind( "@:text", "c" );//现在在第一个列表置换前3项
     Find( "#list1 li:nth-last-child( 2 )" ).Bind( "@:text", "d" );//现在在第一个列表置换倒数第二项
 
-    HtmlBindingContext.Exit();
+    BindingContext.Current.Exit();
 
 
     //有时候我们会希望把数据附着到一个元素上，以便后面的绑定使用，这里就要借助HtmlBindingContext，当然，我们也有现成的扩展方法：
@@ -62,7 +63,7 @@ public class list_html : Ivony.Web.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapte
 
 
 
-    HtmlBindingContext.Enter( "4th" );
+    BindingContext.Enter( "4th" );
 
     //使用 Data 方法可以附着任何数据到元素上，然后我们可以在附着了数据的子元素中直接取得这些数据：
     Find( "li" ).ForAll( element =>

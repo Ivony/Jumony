@@ -4,15 +4,22 @@ using System;
 using System.Web;
 using System.Linq;
 using Ivony.Fluent;
-using Ivony.Web;
-using Ivony.Web.Html;
-using Ivony.Web.Html.Forms;
-using Ivony.Web.Html.HtmlAgilityPackAdaptor;
+using Ivony;
+using Ivony.Html;
+using Ivony.Html.Forms;
+using Ivony.Html.HtmlAgilityPackAdaptor;
 
-public class Test1 : HtmlHandlerAdapter
+public class Test1 : HtmlHandler
 {
 
-  protected override void Process()
+
+  protected override void ProcessDocument()
   {
+    throw new NotImplementedException();
+  }
+
+  protected override IHtmlDocument ParseDocument( string documentContent )
+  {
+    throw new NotImplementedException();
   }
 }

@@ -8,16 +8,24 @@ namespace Ivony.Html
   {
     public static string HtmlEncode( string text )
     {
+
+#if dotnet4
+      return System.Net.WebUtility.HtmlEncode( text );
+#else
       using ( StringWriter writer = new StringWriter() )
       {
         HtmlEncode( text, writer );
 
         return writer.ToString();
       }
+#endif
     }
 
     public static void HtmlEncode( string text, TextWriter writer )
     {
+#if dotnet4
+      System.Net.WebUtility.HtmlEncode( text, writer );
+#else
 
       if ( text == null )
         return;
@@ -57,22 +65,31 @@ namespace Ivony.Html
           writer.Write( ch );
 
       }
+#endif
     }
 
 
 
     public static string HtmlDecode( string htmlText )
     {
+#if dotnet4
+      return System.Net.WebUtility.HtmlDecode( htmlText );
+#else
       using ( StringWriter writer = new StringWriter() )
       {
         HtmlDecode( htmlText, writer );
 
         return writer.ToString();
       }
+#endif
     }
 
     public static void HtmlDecode( string htmlText, TextWriter writer )
     {
+
+#if dotnet4
+      System.Net.WebUtility.HtmlDecode( htmlText, writer );
+#else
 
       if ( htmlText.IndexOf( '&' ) < 0 )
       {
@@ -130,10 +147,11 @@ namespace Ivony.Html
         {
         }
       }
+#endif
     }
 
 
-    internal static string HtmlAttributeEncode( string text )
+    public static string HtmlAttributeEncode( string text )
     {
       using ( StringWriter writer = new StringWriter() )
       {

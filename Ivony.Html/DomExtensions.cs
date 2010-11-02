@@ -502,16 +502,23 @@ namespace Ivony.Html
         throw new InvalidOperationException();
 
       StringBuilder builder = new StringBuilder();
-      do
+
+      while ( true )
       {
         builder.Insert( 0, "/" + element.Name );
-        element = element.Parent as IHtmlElement;
+
+
+        var parent = element.Parent;
+
+        if ( parent.Equals( container ) )
+          return builder.ToString();
+
+
+        element = parent as IHtmlElement;
+
         if ( element == null )
           return null;
       }
-      while ( element.Equals( container ) );
-
-      return builder.ToString();
     }
   }
 }

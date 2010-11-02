@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="ContentExtensions.cs" />
+    <Compile Include="DocumentExtensions.cs" />
     <Compile Include="HtmlEncoding.cs" />
     <Compile Include="HtmlFragment.cs" />
     <Compile Include="IHtmlParser.cs" />

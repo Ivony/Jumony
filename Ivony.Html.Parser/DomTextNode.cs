@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
-using HttpUtility = System.Web.HttpUtility;
 
 namespace Ivony.Html.Parser
 {
@@ -37,7 +36,7 @@ namespace Ivony.Html.Parser
             return raw;
 
           else
-            return HtmlEncoding.HtmlEncode( HttpUtility.HtmlDecode( raw ) );
+            return HtmlEncoding.HtmlEncode( HtmlEncoding.HtmlDecode( raw ) );
         }
 
         return raw;

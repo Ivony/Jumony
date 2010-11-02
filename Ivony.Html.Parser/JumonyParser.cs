@@ -100,6 +100,9 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理文本节点
     /// </summary>
+    /// <param name="html">正在分析的HTML文本</param>
+    /// <param name="index">文本节点开始位置</param>
+    /// <param name="match">下一个匹配（非文本节点）</param>
     private int ProcessText( string html, int index, Match match )
     {
       var text = html.Substring( index, match.Index - index );

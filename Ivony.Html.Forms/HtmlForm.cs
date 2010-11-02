@@ -54,7 +54,7 @@ namespace Ivony.Html.Forms
 
       labels = Element.Find( "label" ).Select( e => new HtmlLabel( this, e ) ).ToArray();
 
-      labels.GroupBy( l => l.BindElement ).ForAll( grouping =>
+      labels.GroupBy( l => l.ForElement ).ForAll( grouping =>
         labelsTable.Add( grouping.Key, grouping.ToArray() ) );
 
     }

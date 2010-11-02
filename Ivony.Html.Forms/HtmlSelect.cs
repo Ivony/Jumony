@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
-  public class HtmlSelect : IHtmlGroupControl
+  public class HtmlSelect : IHtmlGroupControl, IHtmlFocusableControl
   {
 
     public HtmlSelect( HtmlForm form, IHtmlElement element )

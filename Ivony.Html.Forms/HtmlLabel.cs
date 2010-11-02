@@ -13,7 +13,7 @@ namespace Ivony.Html.Forms
 
     private readonly HtmlForm _form;
     private readonly IHtmlElement _element;
-    private readonly IHtmlElement _bindElement;
+    private readonly string _forId;
 
 
     public HtmlLabel( HtmlForm form, IHtmlElement element )
@@ -24,11 +24,7 @@ namespace Ivony.Html.Forms
       _form = form;
       _element = element;
 
-      var forId = Element.Attribute( "for" ).Value();
-      if ( forId != null )
-      {
-        _bindElement = Form.Element.Find( "#" + forId ).SingleOrDefault();
-      }
+      _forId = Element.Attribute( "for" ).Value();
     }
 
     public HtmlForm Form
@@ -41,9 +37,20 @@ namespace Ivony.Html.Forms
       get { return _element; }
     }
 
-    public IHtmlElement BindElement
+    public IHtmlElement ForElement
     {
-      get { return _bindElement; }
+      get
+      {
+        if ( string.IsNullOrEmpty( ForElementId ) )
+          return null;
+
+        return Form.Element.Find( "#" + ForElementId ).SingleOrDefault();
+      }
+    }
+
+    public string ForElementId
+    {
+      get { return _forId; }
     }
 
     public string Text

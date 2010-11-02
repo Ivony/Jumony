@@ -71,6 +71,7 @@ public class list_html : Ivony.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapter
     );
     //不带参数的 Data 方法用于获取附着的数据，如果当前元素找不到，则会自动上溯。
 
+    Document.Descendants().ForAll( element => element.SetAttribute( "path" ).Value( element.PathOf() ) );
 
   }
 

@@ -9,7 +9,7 @@ using HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  internal class HtmlElementAdapter : HtmlContainerAdapter, IHtmlElement, IEquatable<IHtmlElement>
+  internal class HtmlElementAdapter : HtmlContainerAdapter, IHtmlElement
   {
     private AP.HtmlNode _node;
 
@@ -37,20 +37,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       _node.Attributes.Add( attributeName, null );
       return this.Attribute( attributeName );
     }
-
-
-    #region IEquatable<IHtmlElement> 成员
-
-    bool IEquatable<IHtmlElement>.Equals( IHtmlElement other )
-    {
-      if ( other == null )
-        return false;
-
-      return NodeObject == other.NodeObject;
-    }
-
-    #endregion
-
 
   }
 }

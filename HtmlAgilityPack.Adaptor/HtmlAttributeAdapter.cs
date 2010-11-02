@@ -8,7 +8,7 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  internal class HtmlAttributeAdapter : IHtmlAttribute, IEquatable<IHtmlAttribute>
+  internal class HtmlAttributeAdapter : IHtmlAttribute
   {
 
     private AP.HtmlAttribute _attribute;
@@ -54,20 +54,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return AttributeValue;
     }
 
-    #region IEquatable<IHtmlAttribute> 成员
-
-    bool IEquatable<IHtmlAttribute>.Equals( IHtmlAttribute other )
-    {
-      var attribute = other as HtmlAttributeAdapter;
-
-      if ( attribute == null )
-        return false;
-
-      return NodeObject == attribute.NodeObject;
-    }
-
-    #endregion
-
 
     public override bool Equals( object obj )
     {
@@ -93,3 +79,4 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
   }
 }
+

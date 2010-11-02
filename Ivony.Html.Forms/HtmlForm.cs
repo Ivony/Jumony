@@ -67,7 +67,6 @@ namespace Ivony.Html.Forms
       if ( !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
         throw new InvalidOperationException();
 
-
       SubmittedValues = data;
     }
 

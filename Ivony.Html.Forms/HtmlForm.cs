@@ -64,6 +64,10 @@ namespace Ivony.Html.Forms
 
     public void Submit( NameValueCollection data )
     {
+
+      if ( SubmittedValues != null )
+        throw new InvalidOperationException("表单已经被提交过一次了");
+
       if ( !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
         throw new InvalidOperationException();
 

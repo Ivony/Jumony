@@ -74,7 +74,7 @@ namespace Ivony.Html.Forms
 
 
 
-    private class HtmlInputItem : IHtmlInputGroupItem
+    private class HtmlInputItem : IHtmlInputGroupItem, IHtmlFocusableControl
     {
 
       public HtmlInputItem( HtmlButtonGroup group, IHtmlElement element )

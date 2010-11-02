@@ -50,6 +50,7 @@
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
+    <Compile Include="IHtmlButton.cs" />
     <Compile Include="IHtmlFormElement.cs" />
     <Compile Include="IHtmlGroupControl.cs" />
     <Compile Include="IHtmlInputControl.cs" />

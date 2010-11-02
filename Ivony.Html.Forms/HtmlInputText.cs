@@ -16,7 +16,7 @@ namespace Ivony.Html.Forms
     private string[] allowTypes = new[] { "text", "password", "hidden" };
 
 
-    public HtmlInputText( HtmlForm form, IHtmlElement element )
+    internal HtmlInputText( HtmlForm form, IHtmlElement element )
     {
       if ( !element.Name.EqualsIgnoreCase( "input" ) )
         throw new InvalidOperationException( "只有input元素才能转换为HtmlTextInput对象" );

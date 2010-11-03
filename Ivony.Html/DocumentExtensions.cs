@@ -9,16 +9,29 @@ namespace Ivony.Html
   public static class DocumentExtensions
   {
 
+    /// <summary>
+    /// 在文档中通过ID来查找元素
+    /// </summary>
+    /// <param name="document">要查找元素的文档</param>
+    /// <param name="id">元素ID</param>
+    /// <returns>找到的元素，没有符合要求的则返回null</returns>
+    /// <exception cref="System.InvalidOperationException">找到多个ID相同的元素</exception>
     public static IHtmlElement GetElementById( this IHtmlDocument document, string id )
     {
       return document.Descendants().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
     }
 
+
+    /// <summary>
+    /// 标识一个元素，如果这个元素有唯一ID属性，则返回，否则便为其创建
+    /// </summary>
+    /// <param name="element">要标识的元素</param>
+    /// <returns>元素的唯一ID。</returns>
     public static string Identify( this IHtmlElement element )
     {
       EnsureAllocated( element );
 
-      var id = Identity( element );
+      var id = ID( element );
 
       if ( id == null )
         element.SetAttribute( "id" ).Value( id = CreateIdentity( element ) );
@@ -26,7 +39,7 @@ namespace Ivony.Html
       return id;
     }
 
-    private static string Identity( IHtmlElement element )
+    public static string ID( this IHtmlElement element )
     {
       var id = element.Attribute( "id" ).Value();
 
@@ -45,7 +58,7 @@ namespace Ivony.Html
       var parentElement = element.Parent as IHtmlElement;
       if ( parentElement != null )
       {
-        parentId = Identity( parentElement );
+        parentId = ID( parentElement );
         if ( parentId == null )
           parentId = CreateIdentity( parentElement );
       }

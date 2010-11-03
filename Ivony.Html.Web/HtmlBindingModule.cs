@@ -22,6 +22,31 @@ namespace Ivony.Html.Binding
     public void Init( HttpApplication context )
     {
       context.PreRequestHandlerExecute += OnPreRequestHandlerExecute;
+
+
+
+      EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
+      EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
+      EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
+      EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
+      EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
+      EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
+
+
+      EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
+    }
+
+    private class CookiesProvider : IEnvironmentVariableProvider
+    {
+      public string Name { get { return "Cookies"; } }
+      public object Evaluate( string expression )
+      {
+        var cookie = HttpContext.Current.Request.Cookies[expression];
+        if ( cookie != null )
+          return cookie.Value;
+        else
+          return null;
+      }
     }
 
 

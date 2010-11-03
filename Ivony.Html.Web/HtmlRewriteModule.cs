@@ -19,7 +19,9 @@ namespace Ivony.Html
     {
       context.BeginRequest += new EventHandler( BeginRequest );
 
+
     }
+
 
 
     private static string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };

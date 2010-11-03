@@ -28,7 +28,7 @@ namespace Ivony.Html
     public static readonly string cssSelectorPatternNoGroup = string.Format( "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 
     public static readonly string intergerPattern = "([1-9][0-9]*|0)";
-    public static readonly string decimalPattern = string.Format( @"{0}(\.[0-9]*[1-9])", intergerPattern );
+    public static readonly string decimalPattern = string.Format( @"({0}(\.[0-9]*[1-9]))", intergerPattern );
 
 
     public static readonly string styleSettingPattern = string.Format( @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", quoteTextPattern );

@@ -75,6 +75,7 @@ namespace Ivony.Html
 #if dotnet4
       return System.Net.WebUtility.HtmlDecode( htmlText );
 #else
+
       using ( StringWriter writer = new StringWriter() )
       {
         HtmlDecode( htmlText, writer );
@@ -82,6 +83,7 @@ namespace Ivony.Html
         return writer.ToString();
       }
 #endif
+
     }
 
     public static void HtmlDecode( string htmlText, TextWriter writer )
@@ -90,6 +92,16 @@ namespace Ivony.Html
 #if dotnet4
       System.Net.WebUtility.HtmlDecode( htmlText, writer );
 #else
+
+
+      if ( htmlText == null )
+        return;
+
+      if ( writer == null )
+        throw new ArgumentNullException( "writer" );
+
+
+
 
       if ( htmlText.IndexOf( '&' ) < 0 )
       {
@@ -163,6 +175,14 @@ namespace Ivony.Html
 
     public static void HtmlAttributeEncode( string text, TextWriter writer )
     {
+
+      if ( text == null )
+        return;
+
+      if ( writer == null )
+        throw new ArgumentNullException( "writer" );
+
+
       foreach ( char ch in text )
       {
         switch ( ch )

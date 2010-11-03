@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections;
 using System.ComponentModel;
 using System.Web;
+using System.Diagnostics;
 
 namespace Ivony.Html.Binding
 {
@@ -349,8 +350,7 @@ namespace Ivony.Html.Binding
 
       Current = this;
 
-      if ( HttpContext.Current != null )
-        HttpContext.Current.Trace.Write( "Binding", string.Format( "Enter BindingContext \"{0}\"", Name ) );
+      Trace.Write( "Binding", string.Format( "Enter BindingContext \"{0}\"", Name ) );
     }
 
 
@@ -420,8 +420,7 @@ namespace Ivony.Html.Binding
 
         Current = null;
 
-      if ( HttpContext.Current != null )
-        HttpContext.Current.Trace.Write( "Binding", string.Format( "Exit BindingContext \"{0}\"", Name ) );
+      Trace.Write( "Binding", string.Format( "Exit BindingContext \"{0}\"", Name ) );
     }
 
 
@@ -437,8 +436,8 @@ namespace Ivony.Html.Binding
 
       if ( Actions.Any() )
       {
-        if ( HttpContext.Current != null )
-          HttpContext.Current.Trace.Warn( "Binding", string.Format( "Discard BindingContext \"{0}\"", Name ) );
+        Trace.TraceWarning( "Binding", string.Format( "Discard BindingContext \"{0}\"", Name ) );
+
         Actions.Clear();
       }
     }
@@ -461,8 +460,7 @@ namespace Ivony.Html.Binding
     {
       VerifyAccess();
 
-      if ( HttpContext.Current != null )
-        HttpContext.Current.Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
+      Trace.Write( "Binding", string.Format( "Begin Commit BindingContext \"{0}\"", Name ) );
 
       foreach ( var element in PostOrderTraverse( Scope ) )
       {
@@ -475,8 +473,7 @@ namespace Ivony.Html.Binding
 
       Actions.Clear();
 
-      if ( HttpContext.Current != null )
-        HttpContext.Current.Trace.Write( "Binding", string.Format( "End Commit BindingContext \"{0}\"", Name ) );
+      Trace.Write( "Binding", string.Format( "End Commit BindingContext \"{0}\"", Name ) );
     }
 
 

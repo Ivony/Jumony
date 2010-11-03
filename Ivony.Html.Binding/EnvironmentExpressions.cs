@@ -54,25 +54,12 @@ namespace Ivony.Html.Binding
     }
 
 
-
-    private static HttpContext Context
-    {
-      get { return HttpContext.Current; }
-    }
-
     static EnvironmentExpressions()
     {
       _providers = new ExpressionProviderCollection();
 
-      RegisterProvider( "Application", name => Context.Application[name] );
-      RegisterProvider( "Session", name => Context.Session[name] );
-      RegisterProvider( "Get", name => Context.Request.QueryString[name] );
-      RegisterProvider( "Post", name => Context.Request.Form[name] );
-      RegisterProvider( "Server", name => Context.Request.ServerVariables[name] );
       RegisterProvider( "AppSetting", name => ConfigurationManager.AppSettings[name] );
-      RegisterProvider( "Context", name => Context.Items[name] );
       RegisterProvider( "ConnectionString", name => ConfigurationManager.ConnectionStrings[name] == null ? null : ConfigurationManager.ConnectionStrings[name].ConnectionString );
-      RegisterProvider( new CookiesProvider() );
     }
 
 
@@ -120,21 +107,6 @@ namespace Ivony.Html.Binding
       }
 
       #endregion
-    }
-
-
-
-    private class CookiesProvider : IEnvironmentVariableProvider
-    {
-      public string Name { get { return "Cookies"; } }
-      public object Evaluate( string expression )
-      {
-        var cookie = HttpContext.Current.Request.Cookies[expression];
-        if ( cookie != null )
-          return cookie.Value;
-        else
-          return null;
-      }
     }
 
   }

@@ -233,7 +233,7 @@ namespace Ivony.Html.Forms
     /// <returns>与元素绑定的 Label 集合</returns>
     public static HtmlLabel[] Labels( this IHtmlFocusableControl control )
     {
-      return control.Form.FindLabels( control.Element );
+      return control.Form.FindLabels( control.ElementId );
     }
 
 

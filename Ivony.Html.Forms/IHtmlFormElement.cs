@@ -35,7 +35,7 @@ namespace Ivony.Html.Forms
   /// </summary>
   public interface IHtmlFocusableControl : IHtmlFormElement
   {
-    IHtmlElement Element
+    string ElementId
     {
       get;
     }

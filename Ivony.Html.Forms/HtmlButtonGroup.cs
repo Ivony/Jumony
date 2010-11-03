@@ -166,12 +166,26 @@ namespace Ivony.Html.Forms
       {
         get
         {
-          var label = Group.Form.FindLabels( Element ).FirstOrDefault();
+          var label = Group.Labels().FirstOrDefault();
+          
+          if ( label == null )
+            return null;
+
           return label.Text;
         }
       }
 
-    }
 
+
+      #region IHtmlFocusableControl 成员
+
+      string IHtmlFocusableControl.ElementId
+      {
+        get { return Element.ID(); }
+      }
+
+      #endregion
+
+    }
   }
 }

@@ -47,5 +47,14 @@ namespace Ivony.Html.Forms
       get { return _form; }
     }
 
+
+    #region IHtmlFocusableControl 成员
+
+    string IHtmlFocusableControl.ElementId
+    {
+      get { return Element.ID(); }
+    }
+
+    #endregion
   }
 }

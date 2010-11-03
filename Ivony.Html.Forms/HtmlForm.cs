@@ -54,7 +54,7 @@ namespace Ivony.Html.Forms
 
       labels = Element.Find( "label" ).Select( e => new HtmlLabel( this, e ) ).ToArray();
 
-      labels.GroupBy( l => l.ForElement ).ForAll( grouping =>
+      labels.GroupBy( l => l.ForElementId ).ForAll( grouping =>
         labelsTable.Add( grouping.Key, grouping.ToArray() ) );
 
     }
@@ -66,7 +66,7 @@ namespace Ivony.Html.Forms
     {
 
       if ( SubmittedValues != null )
-        throw new InvalidOperationException("表单已经被提交过一次了");
+        throw new InvalidOperationException( "表单已经被提交过一次了" );
 
       if ( !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
         throw new InvalidOperationException();
@@ -117,9 +117,9 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="element">要检索 Label 的元素</param>
     /// <returns></returns>
-    internal HtmlLabel[] FindLabels( IHtmlElement element )
+    internal HtmlLabel[] FindLabels( string elementId )
     {
-      return (HtmlLabel[]) labelsTable[element];
+      return (HtmlLabel[]) labelsTable[elementId];
     }
 
   }

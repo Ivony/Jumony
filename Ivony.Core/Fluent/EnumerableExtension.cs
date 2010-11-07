@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Ivony.Fluent
 {
@@ -39,6 +40,23 @@ namespace Ivony.Fluent
       return source.Where( item => item != null );
     }
 
+
+    public static bool OnlyOne<T>( this IEnumerable<T> source )
+    {
+
+      var onlyone = false;
+
+      foreach ( var item in source )
+      {
+        if ( onlyone )
+          return false;
+
+        onlyone = true;
+      }
+
+      return onlyone;
+
+    }
 
 
 
@@ -233,6 +251,27 @@ namespace Ivony.Fluent
         }
       }
     }
+
+
+
+
+    /// <summary>
+    /// 创建只读枚举封装，避免集合类型强制类型转换后被修改
+    /// </summary>
+    /// <typeparam name="T">枚举元素类型</typeparam>
+    /// <param name="enumerable">要创建只读枚举封装的集合</param>
+    /// <returns>只读枚举封装</returns>
+    public static IEnumerable<T> AsReadOnly<T>( this IEnumerable<T> enumerable )
+    {
+      return new ReadOnlyEnumerable<T>( enumerable );
+    }
+
+
+    public static IList<T> AsReadOnly<T>( this IList<T> list )
+    {
+      return new ReadOnlyCollection<T>( list );
+    }
+
 
   }
 }

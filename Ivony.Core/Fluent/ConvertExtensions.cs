@@ -8,7 +8,7 @@ namespace Ivony.Fluent
   public static class ConvertExtensions
   {
 
-    public static T Cast<T>( this object obj )
+    public static T CastTo<T>( this object obj )
     {
       return (T) obj;
     }

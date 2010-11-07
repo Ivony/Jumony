@@ -160,6 +160,12 @@ namespace Ivony.Data
           throw new InvalidOperationException();
       }
 
+      IEnumerable IPagingData.GetPage( int pageIndex )
+      {
+        return GetPage( pageIndex );
+      }
+
+
       public int Count()
       {
         return _dataSource.Count();
@@ -220,6 +226,11 @@ namespace Ivony.Data
           throw new InvalidOperationException();
       }
 
+      IPagingData IPagingDataSource.CreatePaging( int pageSize )
+      {
+        return CreatePaging( pageSize );
+      }
+
       #endregion
     }
 
@@ -262,6 +273,13 @@ namespace Ivony.Data
         return new EnumerablePaging<T>( _enumerableSource, pageSize );
     }
 
+    IPagingData IPagingDataSource.CreatePaging( int pageSize )
+    {
+      return CreatePaging( pageSize );
+    }
+
+
+
     #endregion
 
 
@@ -285,6 +303,12 @@ namespace Ivony.Data
       {
         return _dataSource.Take( (pageIndex - 1) * PageSize, PageSize );
       }
+
+      IEnumerable IPagingData.GetPage( int pageIndex )
+      {
+        return GetPage( pageIndex );
+      }
+
 
       public int Count()
       {
@@ -318,6 +342,12 @@ namespace Ivony.Data
       {
         return _dataSource.Take( pageIndex * PageSize ).Skip( (pageIndex - 1) * PageSize );
       }
+
+      IEnumerable IPagingData.GetPage( int pageIndex )
+      {
+        return GetPage( pageIndex );
+      }
+
 
       public int Count()
       {

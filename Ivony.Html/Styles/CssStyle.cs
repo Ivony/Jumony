@@ -16,7 +16,14 @@ namespace Ivony.Html.Styles
     {
       return new CssStyle( element );
     }
+
+    public static CssStyle Style( this IEnumerable<IHtmlElement> elements )
+    {
+      return new CssStyleSetSetter( elements );
+    }
   }
+
+
 
   public class CssStyle
   {
@@ -26,16 +33,49 @@ namespace Ivony.Html.Styles
 
     private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.InvariantCultureIgnoreCase ) );
 
-    private IHtmlAttribute _attribute;
+    private IHtmlElement _element;
+
+    internal CssStyle()
+    {
+    }
 
     internal CssStyle( IHtmlElement element )
     {
-      element.SetAttribute( "style" );
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
 
-      _attribute = element.Attribute( "style" );
-      string styleValue = _attribute.Value().IfNull( "" );
+      _element = element;
 
-      var match = styleSettingsRegex.Match( styleValue );
+      lock ( element )
+      {
+        settings = GetStyleSettings( element.Attribute( "style" ).Value() );
+      }
+    }
+
+    public virtual string Get( string name )
+    {
+      return (string) settings[name];
+    }
+
+    public virtual CssStyle Set( string name, string value )
+    {
+      settings[name] = value;
+
+      _element.SetAttribute( "style" ).Value( GetStyleExpression( settings ) );
+
+      return this;
+    }
+
+
+
+
+    protected Hashtable GetStyleSettings( string styleExpression )
+    {
+
+      if ( string.IsNullOrEmpty( styleExpression ) )
+        return new Hashtable();
+
+      var match = styleSettingsRegex.Match( styleExpression );
 
       if ( !match.Success )
         throw new FormatException();
@@ -47,31 +87,47 @@ namespace Ivony.Html.Styles
 
         settings.Add( name, value );
       }
+
+      return settings;
     }
 
-    public string Get( string name )
-    {
-      return (string) settings[name];
-    }
 
-    public CssStyle Set( string name, string value )
-    {
-      settings[name] = value;
 
-      RefreshAttribute();
 
-      return this;
-    }
-
-    private void RefreshAttribute()
+    private string GetStyleExpression( Hashtable styleSettings )
     {
       var builder = new StringBuilder();
 
-      foreach ( DictionaryEntry entry in settings )
+      foreach ( DictionaryEntry entry in styleSettings )
         builder.AppendFormat( "{0}: {1}; ", entry.Key, entry.Value );
 
-      _attribute.Value( builder.ToString().Trim() );
+      return builder.ToString().Trim();
     }
 
+  }
+
+
+
+  internal class CssStyleSetSetter : CssStyle
+  {
+
+    private IEnumerable<IHtmlElement>  _elements;
+
+    public CssStyleSetSetter( IEnumerable<IHtmlElement> elements )
+    {
+      _elements = elements;
+    }
+
+    public override string Get( string name )
+    {
+      throw new NotSupportedException( "CssStyle 对象在表示元素集的时候，不支持 Get 方法。" );
+    }
+
+    public override CssStyle Set( string name, string value )
+    {
+      _elements.ForAll( e => e.Style().Set( name, value ) );
+
+      return this;
+    }
   }
 }

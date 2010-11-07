@@ -38,7 +38,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取节点的所有父代元素集合
+    /// 获取节点的所有父代元素
     /// </summary>
     /// <param name="node">要获取父代元素集合的节点</param>
     /// <returns>节点的所有父代元素集合</returns>
@@ -56,6 +56,17 @@ namespace Ivony.Html
         yield return element;
 
       }
+    }
+
+    /// <summary>
+    /// 获取节点符合条件的父代元素
+    /// </summary>
+    /// <param name="node">要获取父代元素集合的节点</param>
+    /// <param name="selector">用来筛选父代元素的元素选择器</param>
+    /// <returns>节点的所有父代元素集合</returns>
+    public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node, string selector )
+    {
+      return HtmlCssSelector.CreateElementSelector( selector ).Search( Ancestors( node ) );
     }
 
     /// <summary>

@@ -23,44 +23,64 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 标识一个元素，如果这个元素有唯一ID属性，则返回，否则便为其创建
+    /// 返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
     /// </summary>
     /// <param name="element">要标识的元素</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identify( this IHtmlElement element )
+    public static string Identity( this IHtmlElement element )
+    {
+      return Identity( element, false );
+    }
+
+    /// <summary>
+    /// 返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+    /// </summary>
+    /// <param name="element">要标识的元素</param>
+    /// <param name="create">指示当没有唯一ID时是否创建一个</param>
+    /// <returns>元素的唯一ID。</returns>
+    public static string Identity( this IHtmlElement element, bool create )
+    {
+      return Identity( element, create, false );
+    }
+
+    /// <summary>
+    /// 返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+    /// </summary>
+    /// <param name="element">要标识的元素</param>
+    /// <param name="create">指示当没有唯一ID时是否创建一个</param>
+    /// <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
+    /// <returns>元素的唯一ID。</returns>
+    public static string Identity( this IHtmlElement element, bool create, bool ancestorsCreate )
     {
       EnsureAllocated( element );
 
-      var id = ID( element );
-
-      if ( id == null )
-        element.SetAttribute( "id" ).Value( id = CreateIdentity( element ) );
-
-      return id;
-    }
-
-    public static string ID( this IHtmlElement element )
-    {
       var id = element.Attribute( "id" ).Value();
 
-      if ( string.IsNullOrEmpty( id ) || element.Document.Descendants().Count( e => e.Attribute( "id" ).Value() == id ) > 1 )
-        return null;
+      if ( string.IsNullOrEmpty( id ) || !element.Document.Descendants().Where( e => e.Attribute( "id" ).Value() == id ).OnlyOne() )
+        id = null;
+
+      if ( create && id == null )
+        element.SetAttribute( "id" ).Value( id = CreateIdentity( element, ancestorsCreate ) );
+
 
       return id;
     }
 
-    private static string CreateIdentity( IHtmlElement element )
+    private static string CreateIdentity( IHtmlElement element, bool ancestorsCreate )
     {
-      EnsureAllocated( element );
-
       string parentId;
 
       var parentElement = element.Parent as IHtmlElement;
       if ( parentElement != null )
       {
-        parentId = ID( parentElement );
+        parentId = Identity( parentElement );
         if ( parentId == null )
-          parentId = CreateIdentity( parentElement );
+        {
+          if ( ancestorsCreate )
+            parentId = Identity( parentElement, true, true );
+          else
+            parentId = CreateIdentity( parentElement, false );
+        }
       }
       else
       {
@@ -71,15 +91,24 @@ namespace Ivony.Html
       }
 
       var name = GetElementName( element );
-      var index = element.SiblingsBeforeSelf().Count( e => GetElementName( e ) == GetElementName( element ) );
 
-      index += 1;
+      var builder = new StringBuilder();
 
-      if ( parentId == null )
-        return string.Format( "{0}{1}", name, index );
-      else
-        return string.Format( "{0}_{1}{2}", parentId, name, index );
+      if ( parentId != null )
+        builder.AppendFormat( "{0}_", parentId );
 
+      builder.Append( name );
+
+      if ( element.Siblings().Where( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) ).OnlyOne() )
+        return builder.ToString();
+
+
+
+      var index = element.SiblingsBeforeSelf().Count( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) );
+
+      builder.Append( index + 1 );
+
+      return builder.ToString();
     }
 
 

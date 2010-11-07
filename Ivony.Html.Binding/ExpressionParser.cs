@@ -13,7 +13,7 @@ namespace Ivony.Html.Binding
   {
 
 
-    public static readonly Regex intergerRegex = new Regex( "^(\\-|\\+)?" + Regulars.intergerPattern + "$", RegexOptions.Compiled );
+    public static readonly Regex intergerRegex = new Regex( "^(\\-|\\+)?" + Regulars.integerPattern + "$", RegexOptions.Compiled );
     public static readonly Regex decimalRegex = new Regex( "^(\\-|\\+)?" + Regulars.decimalPattern + "$", RegexOptions.Compiled );
 
 

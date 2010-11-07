@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using Ivony.Fluent;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ivony.Html.Binding
 {
@@ -108,7 +109,7 @@ namespace Ivony.Html.Binding
 
       if ( !File.Exists( physicalPath ) )
       {
-        HttpContext.Current.Trace.Warn( "Core", string.Format( "在 \"{0}\" 找不到样式表文件", physicalPath ) );
+        Trace.TraceWarning( "Core", string.Format( "在 \"{0}\" 找不到样式表文件", physicalPath ) );
         return null;
       }
 

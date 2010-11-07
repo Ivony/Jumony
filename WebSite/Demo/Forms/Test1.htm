@@ -2,22 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title></title>
+  <style>
+    body
+    {
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
 
   <form action="Test1.htm" method="post" id="registerForm">
-  
-    <table>
+    <table border="0" cellpadding="3" cellspacing="0">
       <tr>
-        <td>用户名</td>
+        <td>用户ID:</td>
+        <td><input type="text" name="userID" /></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>用户名:</td>
         <td><input type="text" name="username" /></td>
+        <td></td>
       </tr>
       <tr>
-        <td>密码</td>
-        <td><input type="text" name="password" /></td>
+        <td>密码:</td>
+        <td><input type="password" name="password" /></td>
+        <td></td>
       </tr>
       <tr>
-        <td>省市</td>
+        <td>省市:</td>
         <td>
           <select name="area">
             <option>北京</option>
@@ -25,12 +37,12 @@
             <option>广州</option>
           </select>
         </td>
+        <td></td>
       </tr>
       <tr>
-        <td colspan="2"><input type="submit" value="提交" /></td>
+        <td colspan="3" style="text-align: center;"><input type="submit" value="提交" /></td>
       </tr>
     </table>
-  
   </form>
 
 </body>

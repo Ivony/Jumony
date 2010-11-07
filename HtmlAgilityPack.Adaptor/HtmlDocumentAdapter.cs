@@ -47,7 +47,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    Regex handleRegex = new Regex( string.Format( "^{0}:{1}$", Regulars.intergerPattern, Regulars.intergerPattern ), RegexOptions.Compiled );
+    Regex handleRegex = new Regex( string.Format( "^{0}:{1}$", Regulars.integerPattern, Regulars.integerPattern ), RegexOptions.Compiled );
 
     public IHtmlNode Handle( string handler )
     {

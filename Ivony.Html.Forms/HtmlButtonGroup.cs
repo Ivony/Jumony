@@ -8,7 +8,7 @@ namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// 输入项组，是input type="checkbox"及input type="radio"的抽象。
+  /// 按钮组，是input type="checkbox"及input type="radio"组的抽象。
   /// </summary>
   public class HtmlButtonGroup : IHtmlGroupControl
   {
@@ -167,7 +167,7 @@ namespace Ivony.Html.Forms
         get
         {
           var label = Group.Labels().FirstOrDefault();
-          
+
           if ( label == null )
             return null;
 
@@ -181,7 +181,7 @@ namespace Ivony.Html.Forms
 
       string IHtmlFocusableControl.ElementId
       {
-        get { return Element.ID(); }
+        get { return Element.Identity(); }
       }
 
       #endregion

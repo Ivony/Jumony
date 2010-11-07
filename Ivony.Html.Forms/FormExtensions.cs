@@ -18,6 +18,11 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     public static HtmlForm AsForm( this IHtmlElement element )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+
       return new HtmlForm( element );
     }
 
@@ -31,6 +36,12 @@ namespace Ivony.Html.Forms
     /// <returns>输入元素</returns>
     public static IHtmlInputControl InputElement( this HtmlForm form, string name )
     {
+      if ( form == null )
+        throw new ArgumentNullException( "form" );
+
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
       return form.InputControls.Where( control => control.Name == name ).SingleOrDefault();
     }
 
@@ -41,6 +52,9 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     public static IEnumerable<string> CurrentValues( this IHtmlGroupControl group )
     {
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
+
       return group.Items.Where( item => item.Selected ).Select( item => item.Value );
     }
 
@@ -51,6 +65,11 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     public static string SubmittedValue( this IHtmlInputControl inputer )
     {
+
+      if ( inputer == null )
+        throw new ArgumentNullException( "inputer" );
+
+
       var data = inputer.Form.SubmittedValues;
       if ( data == null )
         return null;
@@ -66,6 +85,10 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     public static string[] SubmittedValues( this IHtmlGroupControl group )
     {
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
+
+
       var data = group.Form.SubmittedValues;
       if ( data == null )
         return null;
@@ -83,6 +106,9 @@ namespace Ivony.Html.Forms
     /// <param name="control">表单</param>
     public static void ApplySubmittedValue( this HtmlForm form )
     {
+      if ( form == null )
+        throw new ArgumentNullException( "form" );
+
       form.InputControls.ForAll( control => ApplySubmittedValue( control ) );
     }
 
@@ -93,6 +119,9 @@ namespace Ivony.Html.Forms
     /// <param name="control">输入控件</param>
     public static void ApplySubmittedValue( this IHtmlInputControl control )
     {
+      if ( control == null )
+        throw new ArgumentNullException( "control" );
+
       var textControl = control as IHtmlTextControl;
       if ( textControl != null )
         ApplySubmittedValue( textControl );
@@ -109,6 +138,9 @@ namespace Ivony.Html.Forms
     /// <param name="control">输入控件</param>
     public static void ApplySubmittedValue( this IHtmlTextControl control )
     {
+      if ( control == null )
+        throw new ArgumentNullException( "control" );
+
       var value = SubmittedValue( control );
       if ( value == null )
         return;
@@ -123,6 +155,9 @@ namespace Ivony.Html.Forms
     /// <param name="control">输入控件</param>
     public static void ApplySubmittedValue( this IHtmlGroupControl group )
     {
+
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
 
       var values = SubmittedValues( group );
       if ( values == null )
@@ -147,6 +182,10 @@ namespace Ivony.Html.Forms
     /// <param name="group">输入组</param>
     public static void ClearValues( this IHtmlGroupControl group )
     {
+
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
+
       group.Items.ForAll( item => item.Selected = false );
     }
 
@@ -159,6 +198,10 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     public static IEnumerable<string> PossibleValues( this IHtmlGroupControl group )
     {
+
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
+
       return group.Items.Select( item => item.Value );
     }
 
@@ -170,6 +213,13 @@ namespace Ivony.Html.Forms
     /// <returns>输入组项，如果没有找到则返回 false</returns>
     public static IHtmlInputGroupItem Item( this IHtmlGroupControl group, string value )
     {
+
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
+
+      if ( value == null )
+        throw new ArgumentNullException( "value" );
+
       return group.Items.Where( item => item.Value == value ).SingleOrDefault();
     }
 

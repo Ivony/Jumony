@@ -22,7 +22,6 @@ namespace Ivony.Html.Forms
   /// </summary>
   public interface IHtmlInputControl : IHtmlFormElement
   {
-
     string Name
     {
       get;

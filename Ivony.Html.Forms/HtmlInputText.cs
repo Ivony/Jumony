@@ -61,7 +61,7 @@ namespace Ivony.Html.Forms
 
     string IHtmlFocusableControl.ElementId
     {
-      get { return Element.ID(); }
+      get { return Element.Identity(); }
     }
 
     #endregion

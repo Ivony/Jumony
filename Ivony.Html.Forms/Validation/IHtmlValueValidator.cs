@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Forms.Validation
 {
@@ -16,5 +17,12 @@ namespace Ivony.Html.Forms.Validation
 
     string RuleDescription { get; }
 
+    string[] ValidExamples { get; }
+    string[] InvalidExamples { get; }
+
   }
+
+
+
+
 }

@@ -137,7 +137,6 @@ namespace Ivony.Html.Forms.Validation
       var summaryContainer = FailedSummaryContainer();
       if ( summaryContainer != null )
       {
-        summaryContainer.Nodes().ForAll( node => node.Remove() );
         IHtmlElement list;
 
 

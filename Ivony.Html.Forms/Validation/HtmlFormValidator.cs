@@ -184,17 +184,22 @@ namespace Ivony.Html.Forms.Validation
     {
       foreach ( var field in _validators )
       {
-        var rules = field.RuleDescription();
-
         var container = FieldDescrptionContainer( field.InputControl );
 
-        IHtmlNodeFactory factory;
-        var list = EnsureList( container, out factory );
-
-        foreach ( var r in rules )
+        if ( container != null )
         {
-          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
-          item.InnerText( r );
+
+          var rules = field.RuleDescription();
+
+
+          IHtmlNodeFactory factory;
+          var list = EnsureList( container, out factory );
+
+          foreach ( var r in rules )
+          {
+            var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+            item.InnerText( r );
+          }
         }
 
       }

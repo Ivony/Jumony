@@ -24,7 +24,7 @@ namespace Ivony.Html.Forms.Validation
 
     public string ErrorMessage
     {
-      get { return "<fieldname>必须填写。"; }
+      get { return "<field>不能为空。"; }
     }
 
     public string RuleDescription

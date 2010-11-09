@@ -8,26 +8,39 @@ using Ivony.Fluent;
 namespace Ivony.Html.Forms.Validation
 {
   /// <summary>
-  /// HTML 表单验证器，承担一个表单的验证。
+  /// HTML 表单验证器，承担一个表单的验证。这是一个抽象类，具体的表单验证类型应从此类型继承。
   /// </summary>
   public abstract class HtmlFormValidator
   {
 
+    /// <summary>
+    /// 构造表单验证器
+    /// </summary>
+    /// <param name="form">要被验证的表单</param>
     protected HtmlFormValidator( HtmlForm form )
     {
       Form = form;
     }
 
+
+    /// <summary>
+    /// 获取验证器验证的表单
+    /// </summary>
     public HtmlForm Form
     {
       get;
       private set;
     }
 
-    public void Init()
+
+    /// <summary>
+    /// 初始化验证器
+    /// </summary>
+    public virtual void Initialize()
     {
-      throw new NotImplementedException();
     }
+
+
 
 
     private bool valid;
@@ -65,7 +78,7 @@ namespace Ivony.Html.Forms.Validation
       get
       {
 
-        if ( validated == null )
+        if ( !validated )
           Validate();
 
         return (bool) valid;
@@ -74,15 +87,20 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-    private List<HtmlFieldValidator> _validators = new List<HtmlFieldValidator>();
+    private List<GenericFieldValidator> _validators = new List<GenericFieldValidator>();
 
 
-    protected virtual IHtmlElement GetMessageContainer( IHtmlInputControl input )
+    protected virtual IHtmlElement FailedMessageContainer( IHtmlInputControl input )
     {
       return null;
     }
 
-    protected virtual IHtmlElement GetSummaryContainer()
+    protected virtual IHtmlElement FailedSummaryContainer()
+    {
+      return null;
+    }
+
+    protected virtual IHtmlElement FieldDescrptionContainer( IHtmlInputControl input )
     {
       return null;
     }
@@ -92,9 +110,7 @@ namespace Ivony.Html.Forms.Validation
 
     protected virtual void OnFailed()
     {
-
       ShowFailedMessage();
-
 
 
       if ( Failed != null )
@@ -105,14 +121,97 @@ namespace Ivony.Html.Forms.Validation
 
     protected virtual void ShowFailedMessage()
     {
-      var validators = _validators.Where( v => !v.IsValid );
+      var failedDalidators = _validators.Where( v => !v.IsValid );
 
-      foreach ( var v in validators )
+      foreach ( var v in failedDalidators )
       {
-        var messageContainer = GetMessageContainer( v.InputControl );
+        var messageContainer = FailedMessageContainer( v.InputControl );
         if ( messageContainer != null )
-          v.ShowFailedMessage( messageContainer );
+        {
+          var messages = v.FailedMessage();
+
+          RenderMessages( messageContainer, messages );
+        }
       }
+
+      var summaryContainer = FailedSummaryContainer();
+      if ( summaryContainer != null )
+      {
+        summaryContainer.Nodes().ForAll( node => node.Remove() );
+        IHtmlElement list;
+
+
+        IHtmlNodeFactory factory;
+
+        list = EnsureList( summaryContainer, out factory );
+
+        foreach ( var v in failedDalidators )
+        {
+          var messages = v.FailedMessage();
+
+          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( summaryContainer );
+
+          RenderMessages( item, messages );
+        }
+      }
+    }
+
+
+    protected virtual void RenderMessages( IHtmlElement container, string[] messages )
+    {
+
+      if ( messages.Length == 0 )
+        return;
+
+      else if ( messages.Length == 1 )
+        container.InnerText( messages[0] );
+
+      else
+      {
+        IHtmlNodeFactory factory;
+        var list = EnsureList( container, out factory );
+        foreach ( var m in messages )
+        {
+          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+          item.InnerText( m );
+        }
+      }
+
+      container.InnerText( string.Join( "\n", messages ) );
+    }
+
+    protected virtual void ShowFieldDescription()
+    {
+      foreach ( var field in _validators )
+      {
+        var rules = field.RuleDescription();
+
+        var container = FieldDescrptionContainer( field.InputControl );
+
+        IHtmlNodeFactory factory;
+        var list = EnsureList( container, out factory );
+
+        foreach ( var r in rules )
+        {
+          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+          item.InnerText( r );
+        }
+
+      }
+    }
+
+
+
+
+    protected IHtmlElement EnsureList( IHtmlElement container, out IHtmlNodeFactory factory )
+    {
+      factory = container.Document.GetNodeFactory();
+
+      if ( HtmlSpecification.listElements.Contains( container.Name.ToLowerInvariant() ) )
+        return container;
+
+
+      return factory.CreateElement( "ul" ).InsertTo( container, 0 );
     }
 
     public EventHandler Failed;
@@ -176,9 +275,50 @@ namespace Ivony.Html.Forms.Validation
       if ( fieldName == null )
         fieldName = GetFieldName( input );
 
-      var fieldValidator = new HtmlFieldValidator( input, fieldName, validators );
+      var fieldValidator = new GenericFieldValidator( input, fieldName, validators );
       _validators.Add( fieldValidator );
     }
+
+
+
+    protected class GenericFieldValidator : HtmlFieldValidator
+    {
+
+      private readonly IHtmlValueValidator[] _validators;
+
+
+      public GenericFieldValidator( IHtmlInputControl inputControl, string fieldName, params IHtmlValueValidator[] validators )
+        : base( inputControl, fieldName )
+      {
+        _validators = validators;
+      }
+
+
+      private IHtmlValueValidator failedValidator;
+
+      protected override bool ExecuteValidate( string value )
+      {
+
+        failedValidator = _validators.FirstOrDefault( v => v.Validate( value ) == false );
+
+        return failedValidator == null;
+      }
+
+
+      public override string[] FailedMessage()
+      {
+        if ( IsValid )
+          return null;
+
+        return new string[] { failedValidator.ErrorMessage.Replace( "<field>", FieldName ) };
+      }
+
+      public override string[] RuleDescription()
+      {
+        return _validators.Select( v => v.RuleDescription ).ToArray();
+      }
+    }
+
 
   }
 }

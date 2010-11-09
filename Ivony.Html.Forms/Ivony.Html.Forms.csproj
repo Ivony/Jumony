@@ -60,6 +60,7 @@
     <Compile Include="Validation\HtmlFieldValidator.cs" />
     <Compile Include="Validation\IntegerValidator.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
+    <Compile Include="Validation\ValidationRegulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">

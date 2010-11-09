@@ -21,8 +21,4 @@ namespace Ivony.Html.Forms.Validation
     string[] InvalidExamples { get; }
 
   }
-
-
-
-
 }

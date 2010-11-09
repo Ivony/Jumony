@@ -25,7 +25,7 @@ namespace Ivony.Html.Forms.Validation
 
     public string ErrorMessage
     {
-      get { return "<fieldname>无法被识别为有效的整数"; }
+      get { return "<field>无法被识别为有效的整数"; }
     }
 
     public string RuleDescription

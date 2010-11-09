@@ -6,16 +6,12 @@ using System.Text;
 namespace Ivony.Html
 {
 
-  public class ParserAttribute : Attribute
-  {
-
-
-  }
-
   public interface IHtmlParser
   {
 
-    IHtmlDocument ParseHtml( string html );
+    IHtmlDocument Parse( string html );
+
+    HtmlFragment ParseFragment( string html );
 
   }
 }

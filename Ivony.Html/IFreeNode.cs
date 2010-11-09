@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 
 namespace Ivony.Html
 {
   public interface IFreeNode : IHtmlNode
   {
-
-    IHtmlNode InsertTo( IHtmlContainer container, int index );
+    [EditorBrowsable( EditorBrowsableState.Never )]
+    IHtmlNode Into( IHtmlContainer container, int index );
     IHtmlNodeFactory Factory { get; }
 
     //bool CanInsertTo( IHtmlContainer container );

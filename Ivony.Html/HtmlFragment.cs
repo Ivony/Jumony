@@ -37,13 +37,21 @@ namespace Ivony.Html
     }
 
 
-
-    public void AddNodes( IEnumerable<IHtmlNode> nodes, IHtmlNodeFactory factory )
+    /// <summary>
+    /// 向文档碎片中添加节点副本
+    /// </summary>
+    /// <param name="nodes">要添加的节点</param>
+    /// <param name="factory">用于创建游离节点副本的节点工厂</param>
+    public void AddNodesCopy( IEnumerable<IHtmlNode> nodes, IHtmlNodeFactory factory )
     {
       AddNodes( nodes.Select( n => factory.MakeCopy( n ) ) );
     }
 
 
+    /// <summary>
+    /// 向文档碎片中添加游离节点
+    /// </summary>
+    /// <param name="nodes">要添加的游离节点</param>
     public void AddNodes( IEnumerable<IFreeNode> nodes )
     {
       lock ( SyncRoot )
@@ -80,7 +88,7 @@ namespace Ivony.Html
       {
         foreach ( var node in _nodes.Reverse().ToArray() )
         {
-          node.InsertTo( container, index );
+          node.Into( container, index );
           _nodes.Remove( node );
         }
       }

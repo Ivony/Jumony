@@ -40,11 +40,46 @@ namespace Ivony.Html
         if ( !container.Document.Equals( node.Document ) )
           throw new InvalidOperationException();
 
-        node.InsertTo( container, index );
+        node.Into( container, index );
 
         return container;
       }
     }
+
+
+    public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
+    {
+      return (IHtmlElement) element.Into( container, index );
+    }
+
+    public static IHtmlElement AppendTo( this IFreeElement element, IHtmlContainer container )
+    {
+      return element.InsertTo( container, container.Nodes().Count() );
+    }
+
+
+    public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
+    {
+      return (IHtmlTextNode) textNode.Into( container, index );
+    }
+
+    public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlContainer container )
+    {
+      return textNode.InsertTo( container, container.Nodes().Count() );
+    }
+
+
+    public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
+    {
+      return (IHtmlComment) comment.Into( container, index );
+    }
+
+    public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )
+    {
+      return comment.InsertTo( container, container.Nodes().Count() );
+    }
+
+
 
 
     /// <summary>
@@ -62,7 +97,7 @@ namespace Ivony.Html
 
       lock ( container )
       {
-        var result = newNode.InsertTo( container, oldNode.NodesIndexOfSelf() );
+        var result = newNode.Into( container, oldNode.NodesIndexOfSelf() );
         oldNode.Remove();
 
         return result;
@@ -112,7 +147,7 @@ namespace Ivony.Html
 
         var nodeCopy = factory.MakeCopy( node );
 
-        nodeCopy.InsertTo( container, index );
+        nodeCopy.Into( container, index );
 
         return container;
       }
@@ -144,7 +179,7 @@ namespace Ivony.Html
 
         var nodeCopy = factory.MakeCopy( newNode );
 
-        var result = nodeCopy.InsertTo( container, oldNode.NodesIndexOfSelf() );
+        var result = nodeCopy.Into( container, oldNode.NodesIndexOfSelf() );
         oldNode.Remove();
 
         return result;
@@ -274,7 +309,7 @@ namespace Ivony.Html
       {
         var freeNode = freeElement.Factory.MakeCopy( node );
 
-        freeNode.InsertTo( freeElement, 0 );
+        freeNode.Into( freeElement, 0 );
       }
 
     }
@@ -335,7 +370,7 @@ namespace Ivony.Html
           text = HtmlEncode( text );
 
         var textNode = factory.CreateTextNode( text );
-        textNode.InsertTo( element, 0 );
+        textNode.Into( element, 0 );
       }
 
     }
@@ -362,7 +397,7 @@ namespace Ivony.Html
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
         {
           var textNode = factory.CreateTextNode( html );
-          textNode.InsertTo( element, 0 );
+          textNode.Into( element, 0 );
         }
         else
         {

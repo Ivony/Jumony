@@ -199,5 +199,20 @@ namespace Ivony.Html
       return string.Join( "", container.Nodes().Select( n => InnerText( n ) ).ToArray() );
     }
 
+
+    /// <summary>
+    /// 判断一个文本节点是不是全部由空白字符组成
+    /// </summary>
+    /// <param name="textNode">要判断的文本节点</param>
+    /// <returns>是否全部是空白字符</returns>
+    public static bool IsWhiteSpace( this IHtmlTextNode textNode )
+    {
+      if ( whitespaceRegex.Match( textNode.HtmlText ).Length == textNode.HtmlText.Length )
+        return true;
+
+      else
+        return false;
+    }
+
   }
 }

@@ -16,11 +16,12 @@ namespace Ivony.Html.Styles
     {
       return new CssStyle( element );
     }
-
+    /*
     public static CssStyle Style( this IEnumerable<IHtmlElement> elements )
     {
       return new CssStyleSetSetter( elements );
     }
+    */
   }
 
 

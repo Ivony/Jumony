@@ -130,6 +130,13 @@ namespace Ivony.Html
 
       switch ( element.Name.ToLowerInvariant() )
       {
+        /*
+        case "html":
+        case "head":
+        case "body":
+          return null;
+        */
+
         case "a":
           if ( element.Attribute( "name" ) != null )
             return "link";
@@ -141,7 +148,6 @@ namespace Ivony.Html
 
         case "ul":
         case "ol":
-        case "dl":
           return "list";
 
         case "h1":

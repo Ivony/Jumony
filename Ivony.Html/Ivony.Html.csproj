@@ -79,7 +79,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
     <Compile Include="Styles\CssStyle.cs" />
-    <Compile Include="Styles\ICssStyle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">

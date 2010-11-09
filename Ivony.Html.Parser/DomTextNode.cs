@@ -107,7 +107,7 @@ namespace Ivony.Html.Parser
 
     #region IFreeNode 成员
 
-    public IHtmlNode InsertTo( IHtmlContainer container, int index )
+    public IHtmlNode Into( IHtmlContainer container, int index )
     {
       CheckDisposed();
 

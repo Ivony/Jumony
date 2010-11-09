@@ -39,7 +39,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -47,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExtensions.cs" />
+    <Compile Include="DataBinder.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="BindingContext.cs" />
     <Compile Include="ExpressionParser.cs" />

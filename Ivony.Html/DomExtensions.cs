@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -12,6 +13,7 @@ namespace Ivony.Html
   /// </summary>
   public static class DomExtensions
   {
+
 
 
     /// <summary>
@@ -49,7 +51,14 @@ namespace Ivony.Html
 
     public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
     {
-      return (IHtmlElement) element.Into( container, index );
+
+      lock ( container )
+      {
+        if ( !container.Document.Equals( element.Document ) )
+          throw new InvalidOperationException();
+
+        return (IHtmlElement) element.Into( container, index );
+      }
     }
 
     public static IHtmlElement AppendTo( this IFreeElement element, IHtmlContainer container )
@@ -60,7 +69,13 @@ namespace Ivony.Html
 
     public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
     {
-      return (IHtmlTextNode) textNode.Into( container, index );
+      lock ( container )
+      {
+        if ( !container.Document.Equals( textNode.Document ) )
+          throw new InvalidOperationException();
+
+        return (IHtmlTextNode) textNode.Into( container, index );
+      }
     }
 
     public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlContainer container )
@@ -71,7 +86,13 @@ namespace Ivony.Html
 
     public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
     {
-      return (IHtmlComment) comment.Into( container, index );
+      lock ( container )
+      {
+        if ( !container.Document.Equals( comment.Document ) )
+          throw new InvalidOperationException();
+
+        return (IHtmlComment) comment.Into( container, index );
+      }
     }
 
     public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )
@@ -412,21 +433,30 @@ namespace Ivony.Html
     /// 清除所有子节点
     /// </summary>
     /// <param name="element">要清除所有子节点的元素</param>
-    public static void ClearNodes( this IHtmlElement element )
+    public static IHtmlElement ClearNodes( this IHtmlElement element )
     {
 
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      var childs = element.Nodes().ToArray();//清除所有的子节点
-      foreach ( var node in childs )
-        node.Remove();
+      lock ( element.SyncRoot )
+      {
+        var childs = element.Nodes().ToArray();//清除所有的子节点
+        foreach ( var node in childs )
+          node.Remove();
+      }
+
+      return element;
     }
 
 
 
     private static string HtmlEncode( string s )
     {
+
+      if ( s == null )
+        throw new ArgumentNullException( "s" );
+
       return HtmlEncoding.HtmlEncode( s ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" );
     }
 

@@ -215,7 +215,7 @@ namespace Ivony.Html.Forms.Validation
         return container;
 
 
-      return factory.CreateElement( "ul" ).InsertTo( container, 0 );
+      return factory.CreateElement( "ul" ).AppendTo( container );
     }
 
     public EventHandler Failed;

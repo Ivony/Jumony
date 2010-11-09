@@ -148,7 +148,7 @@ namespace Ivony.Html.Forms.Validation
         {
           var messages = v.FailedMessage();
 
-          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( summaryContainer );
+          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
 
           RenderMessages( item, messages );
         }

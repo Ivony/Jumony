@@ -48,7 +48,13 @@ namespace Ivony.Html
       }
     }
 
-
+    /// <summary>
+    /// 将元素插入到指定位置
+    /// </summary>
+    /// <param name="element">要插入的游离元素</param>
+    /// <param name="container">要被插入的容器</param>
+    /// <param name="index">插入位置</param>
+    /// <returns>插入后的元素</returns>
     public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
     {
 
@@ -61,6 +67,12 @@ namespace Ivony.Html
       }
     }
 
+    /// <summary>
+    /// 将元素添加到容器末尾
+    /// </summary>
+    /// <param name="element">要插入的游离元素</param>
+    /// <param name="container">要被插入的容器</param>
+    /// <returns>添加后的元素</returns>
     public static IHtmlElement AppendTo( this IFreeElement element, IHtmlContainer container )
     {
       return element.InsertTo( container, container.Nodes().Count() );

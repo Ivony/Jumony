@@ -6,11 +6,11 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  public class FreeNodeFactory : IHtmlNodeFactory
+  public class HtmlNodeFactory : IHtmlNodeFactory
   {
     private AP.HtmlDocument _document;
 
-    internal FreeNodeFactory( AP.HtmlDocument document )
+    internal HtmlNodeFactory( AP.HtmlDocument document )
     {
       _document = document;
     }
@@ -43,7 +43,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       document.LoadHtml( html );
 
       var fragment = new HtmlFragment();
-      fragment.AddNodes( document.AsDocument().Nodes(), this );
+      fragment.AddNodesCopy( document.AsDocument().Nodes(), this );
 
       return fragment;
     }
@@ -54,9 +54,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     private class FreeElementAdaptor : HtmlElementAdapter, IFreeElement
     {
 
-      private FreeNodeFactory _factory;
+      private HtmlNodeFactory _factory;
 
-      public FreeElementAdaptor( FreeNodeFactory factory, AP.HtmlNode node )
+      public FreeElementAdaptor( HtmlNodeFactory factory, AP.HtmlNode node )
         : base( node )
       {
         if ( node.ParentNode != null )
@@ -66,7 +66,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );
@@ -102,9 +102,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     private class FreeTextNodeAdaptor : HtmlTextNodeAdapter, IFreeTextNode
     {
-      private FreeNodeFactory _factory;
+      private HtmlNodeFactory _factory;
 
-      public FreeTextNodeAdaptor( FreeNodeFactory factory, AP.HtmlTextNode node )
+      public FreeTextNodeAdaptor( HtmlNodeFactory factory, AP.HtmlTextNode node )
         : base( node )
       {
         if ( node.ParentNode != null )
@@ -115,7 +115,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );
@@ -151,9 +151,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     private class FreeCommentAdaptor : HtmlCommentNodeAdapter, IFreeComment
     {
-      private FreeNodeFactory _factory;
+      private HtmlNodeFactory _factory;
 
-      public FreeCommentAdaptor( FreeNodeFactory factory, AP.HtmlCommentNode node )
+      public FreeCommentAdaptor( HtmlNodeFactory factory, AP.HtmlCommentNode node )
         : base( node )
       {
         if ( node.ParentNode != null )
@@ -164,7 +164,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-      public IHtmlNode InsertTo( IHtmlContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );

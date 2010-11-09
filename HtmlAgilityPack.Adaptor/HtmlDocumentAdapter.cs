@@ -68,7 +68,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IHtmlNodeFactory GetNodeFactory()
     {
-      return new FreeNodeFactory( this._document );
+      return new HtmlNodeFactory( this._document );
     }
 
 

@@ -426,7 +426,6 @@ namespace Ivony.Html
 
     }
 
-
     /// <summary>
     /// 使用指定的HTML文本替换元素内容（警告，此方法会清除元素所有内容）
     /// </summary>
@@ -487,7 +486,7 @@ namespace Ivony.Html
       if ( s == null )
         throw new ArgumentNullException( "s" );
 
-      return HtmlEncoding.HtmlEncode( s ).Replace( "\r\n", "\n" ).Replace( "\n", "<br />" );
+      return HtmlEncoding.HtmlEncode( s ).Replace( "\r\n", "\n" ).Replace( "\r", "\n" ).Replace( "\n", "<br />" );
     }
 
 

@@ -31,9 +31,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,9 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
-    <Compile Include="HtmlHandler.cs" />
-    <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="JumonyHandler.cs" />
+    <Compile Include="HtmlProviderResult.cs" />
+    <Compile Include="HtmlProviders.cs" />
+    <Compile Include="HtmlRewriteModule.cs" />
+    <Compile Include="IHtmlHandler.cs" />
+    <Compile Include="IHtmlProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +73,15 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd $(ProjectDir)
+"c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
+
+DEL "$(TargetDir)Code.RAR"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe -x.svn "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
+"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx -x.svn C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
+DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

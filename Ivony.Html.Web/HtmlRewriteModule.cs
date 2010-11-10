@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using System.IO;
 
-namespace Ivony.Html
+namespace Ivony.Html.Web
 {
   public class HtmlRewriteModule : IHttpModule
   {
@@ -29,24 +29,28 @@ namespace Ivony.Html
     void BeginRequest( object sender, EventArgs e )
     {
 
+
+
       var request = HttpContext.Current.Request;
 
-      var physicalPath = request.PhysicalPath;
-      var virtualPath = request.Path;
+      var result = HtmlProviders.Provide( request );
 
-      if ( !allowsExtensions.Contains( Path.GetExtension( physicalPath ), StringComparer.InvariantCultureIgnoreCase ) )
+      if ( result == null )
         return;
 
-      if ( !File.Exists( physicalPath ) )
+      if ( result.Handler != null )
+        throw new NotImplementedException();
+
+
+      else if ( result.RewritePath != null )
+      {
+        HttpContext.Current.Items.Add( "HtmlRewriteModule_OriginUrl", request.Url );
+        HttpContext.Current.Items.Add( "HtmlRewriteModule_ProviderResult", result );
+
+        HttpContext.Current.RewritePath( result.RewritePath );
         return;
+      }
 
-      var handlerPath = virtualPath + ".ashx";
-      if ( !File.Exists( request.MapPath( handlerPath ) ) )
-        return;
-
-      HttpContext.Current.Items.Add( "HtmlRewriteModule_OriginUrl", request.Url );
-
-      HttpContext.Current.RewritePath( handlerPath );
     }
 
   }

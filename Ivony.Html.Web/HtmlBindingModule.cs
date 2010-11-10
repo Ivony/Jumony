@@ -6,6 +6,7 @@ using System.Web;
 using Ivony.Fluent;
 using System.IO;
 using System.Diagnostics;
+using Ivony.Html.Web;
 
 namespace Ivony.Html.Binding
 {
@@ -13,6 +14,8 @@ namespace Ivony.Html.Binding
   {
 
 
+
+    private const string inited_token = "Jumony_Binding_ExvironmentExpression_Inited";
 
     #region IHttpModule 成员
 
@@ -25,16 +28,20 @@ namespace Ivony.Html.Binding
       context.PreRequestHandlerExecute += OnPreRequestHandlerExecute;
 
 
+      if ( context.Application[inited_token] == null )
+      {
+        EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
+        EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
+        EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
+        EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
+        EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
+        EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
 
-      EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
-      EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
-      EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
-      EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
-      EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
-      EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
+        EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
 
+        context.Application[inited_token] = new object();
+      }
 
-      EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
     }
 
     private class CookiesProvider : IEnvironmentVariableProvider
@@ -51,9 +58,9 @@ namespace Ivony.Html.Binding
     }
 
 
-    public HtmlHandler Handler
+    public JumonyHandler Handler
     {
-      get { return HttpContext.Current.CurrentHandler as HtmlHandler; }
+      get { return HttpContext.Current.CurrentHandler as JumonyHandler; }
     }
 
 
@@ -80,7 +87,7 @@ namespace Ivony.Html.Binding
       globalBinding.Exit();
     }
 
-    private void ProcessBindingSheets( HtmlHandler handler )
+    private void ProcessBindingSheets( JumonyHandler handler )
     {
       var bindingSheets = handler.Document.Find( "link[rel=Bindingsheet]" )
         .Select( link => link.Attribute( "href" ).Value() )

@@ -53,7 +53,6 @@
     <Compile Include="HtmlContainerAdapter.cs" />
     <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlDocumentAdapter.cs" />
-    <Compile Include="HtmlHandlerAdapter.cs" />
     <Compile Include="HtmlNodeAdapter.cs" />
     <Compile Include="HtmlNodeFactory.cs" />
     <Compile Include="HtmlParser.cs" />

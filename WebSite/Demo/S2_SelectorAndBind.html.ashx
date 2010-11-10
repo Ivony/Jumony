@@ -10,11 +10,11 @@ using Ivony.Fluent;
 
 
 //这个示例文件简单的描述了CSS选择器支持和数据绑定支持。
-public class SelectorAndBind_html : Ivony.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapter
+public class SelectorAndBind_html : Ivony.Html.Web.JumonyHandler
 {
   //ashx文件除了扩展名部分的ashx，其余的要与模板html文件保持完全一致，这样请求就会自动转发到ashx文件。
 
-  protected override void Process()
+  protected override void ProcessDocument()
   {
     //基本的选择器，都是完全支持的。
     Find( "html title" ).Bind( "@:text", "测试页面" );

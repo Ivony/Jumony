@@ -10,24 +10,29 @@ using Ivony.Html.Forms;
 using Ivony.Html.Forms.Validation;
 using Ivony.Html.HtmlAgilityPackAdaptor;
 using Ivony.Html.Parser;
+using Ivony.Html.Web;
 
 public class Test1 : JumonyHandler
 {
-  protected override void Process()
+  protected override void ProcessDocument()
   {
 
-    Find( "table tr td:nth-child(1)" ).Where( e => e.Attribute( "style" ) == null ).Style().Set( "text-align", "right" );
+    Find( "table tr td:nth-child(1)" ).Where( e => e.Attribute( "style" ) == null ).ForAll( e => e.Style().Set( "text-align", "right" ) );
 
 
     var form = new HtmlForm( Document.FindSingle( "form" ) );
+    var validator = new MyValidator( form );
 
     if ( Request.Form.Count > 0 )
     {
       form.Submit( Request.Form );
 
-      new MyValidator( form ).Validate();
+      validator.Validate();
 
-      form.ApplySubmittedValue();
+      if ( !validator.IsValid )
+        form.Element.Remove();
+
+      //form.ApplySubmittedValue();
     }
 
   }
@@ -40,9 +45,11 @@ public class Test1 : JumonyHandler
       AddFieldValidation( "userID", "用户ID", new RequiredValidator(), new IntegerValidator() );
       AddFieldValidation( "username", "用户名", new RequiredValidator() );
       AddFieldValidation( "password", "密码", new RequiredValidator() );
+
+      ShowFieldDescription();
     }
 
-    protected override IHtmlElement GetMessageContainer( IHtmlInputControl input )
+    protected override IHtmlElement FailedMessageContainer( IHtmlInputControl input )
     {
 
       IHtmlElement inputElement = null;
@@ -53,11 +60,17 @@ public class Test1 : JumonyHandler
 
 
       if ( inputElement != null )
-        return inputElement.Ancestors( "tr" ).First().Elements( "td" ).Last();
+        return inputElement.Ancestors( "tr" ).First().Elements( "td" ).Last().ClearNodes();
 
       else
         return null;
     }
+
+    protected override IHtmlElement FailedSummaryContainer()
+    {
+      return Form.Element.Document.GetElementById( "validateMessage" ).ClearNodes();
+    }
+
   }
 
 }

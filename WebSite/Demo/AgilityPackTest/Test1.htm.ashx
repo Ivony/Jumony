@@ -9,7 +9,7 @@ using Ivony.Html;
 using Ivony.Html.Forms;
 using Ivony.Html.HtmlAgilityPackAdaptor;
 
-public class Test1 : HtmlHandler
+public class Test1 : Ivony.Html.Web.JumonyHandler
 {
 
 

@@ -6,11 +6,12 @@ using System.Linq;
 using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.HtmlAgilityPackAdaptor;
+using Ivony.Html.Web;
 
-public class BindingSheet : HtmlHandlerAdapter
+public class BindingSheet : JumonyHandler
 {
-  protected override void Process()
+  protected override void ProcessDocument()
   {
-    
+
   }
 }

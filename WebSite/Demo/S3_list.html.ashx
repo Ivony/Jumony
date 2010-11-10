@@ -9,10 +9,10 @@ using Ivony.Html.Binding;
 using System.Linq;
 using HtmlAgilityPack;
 
-public class list_html : Ivony.Html.HtmlAgilityPackAdaptor.HtmlHandlerAdapter
+public class list_html : Ivony.Html.Web.JumonyHandler
 {
 
-  protected override void Process()
+  protected override void ProcessDocument()
   {
     //这个范例文件主要来讲述列表的绑定
     //暂时我只认可一种数据列表类型，也就是IEnumerable或IEnumerable<T>，不过几乎所有的列表都是从这个继承。

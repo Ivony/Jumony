@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Ivony.Html.Parser
 {
-  public class JumonyParser
+  public class JumonyParser : IHtmlParser
   {
 
     private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
@@ -204,6 +204,15 @@ namespace Ivony.Html.Parser
     }
 
 
+    IHtmlDocument IHtmlParser.Parse( string html )
+    {
+      return Parse( html );
+    }
+
+    public HtmlFragment ParseFragment( string html )
+    {
+      throw new NotImplementedException();
+    }
 
   }
 }

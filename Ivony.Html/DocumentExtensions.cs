@@ -94,7 +94,7 @@ namespace Ivony.Html
 
       var builder = new StringBuilder();
 
-      if ( parentId != null )
+      if ( !string.IsNullOrEmpty( parentId ) )
         builder.AppendFormat( "{0}_", parentId );
 
       builder.Append( name );
@@ -108,7 +108,22 @@ namespace Ivony.Html
 
       builder.Append( index + 1 );
 
-      return builder.ToString();
+      var identity = builder.ToString();
+
+      return EnsureUniqueness( identity, element.Document );
+    }
+
+    private static string EnsureUniqueness( string identity, IHtmlDocument document )
+    {
+
+      var id = identity;
+      var postfix = 0;
+
+
+      while ( document.Descendants().Any( e => e.Attribute( "id" ).Value() == identity ) )
+        id = identity + "_" + postfix++;
+
+      return id;
     }
 
 
@@ -130,12 +145,11 @@ namespace Ivony.Html
 
       switch ( element.Name.ToLowerInvariant() )
       {
-        /*
+
         case "html":
         case "head":
         case "body":
           return null;
-        */
 
         case "a":
           if ( element.Attribute( "name" ) != null )

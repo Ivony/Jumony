@@ -380,6 +380,24 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 将容器所有内容创建为文档碎片
+    /// </summary>
+    /// <param name="factory">用于创建节点的创造器</param>
+    /// <param name="container">包含内容的容器</param>
+    /// <returns>文档碎片</returns>
+    public static HtmlFragment MakeFragement( IHtmlNodeFactory factory, IHtmlContainer container )
+    {
+      var fragment = new HtmlFragment();
+
+      fragment.AddNodesCopy( container.Nodes(), factory );
+
+      return fragment;
+    }
+
+
+
+
 
     /// <summary>
     /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）

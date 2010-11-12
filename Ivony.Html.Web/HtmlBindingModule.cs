@@ -23,25 +23,30 @@ namespace Ivony.Html.Binding
     {
     }
 
+
+    private static readonly object _sync = new object();
+
     public void Init( HttpApplication context )
     {
       context.PreRequestHandlerExecute += OnPreRequestHandlerExecute;
 
 
-      if ( context.Application[inited_token] == null )
+      lock ( _sync )
       {
-        EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
-        EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
-        EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
-        EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
-        EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
-        EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
+        if ( context.Application[inited_token] == null )
+        {
+          EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
+          EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
+          EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
+          EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
+          EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
+          EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
 
-        EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
+          EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
 
-        context.Application[inited_token] = new object();
+          context.Application[inited_token] = new object();
+        }
       }
-
     }
 
     private class CookiesProvider : IEnvironmentVariableProvider

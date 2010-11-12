@@ -36,8 +36,8 @@ namespace Ivony.Html.Web
     {
       Context = context;
 
-      OriginUrl = Context.Items["HtmlRewriteModule_OriginUrl"] as Uri;
-      RequestData = Context.Items["HtmlRewriteModule_ProviderResult"] as RequestData;
+      OriginUrl = Context.GetOriginUri();
+      RequestData = Context.GetRequestData();
 
       if ( OriginUrl == null )
       {
@@ -277,5 +277,6 @@ namespace Ivony.Html.Web
     }
 
     #endregion
+
   }
 }

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
+    <Compile Include="HttpHelper.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="RequestData.cs" />
     <Compile Include="HtmlProviders.cs" />

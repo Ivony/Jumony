@@ -13,7 +13,6 @@ namespace Ivony.Html.Web
 
     RequestData GetRequestData( HttpRequest request );
 
-
   }
 
 

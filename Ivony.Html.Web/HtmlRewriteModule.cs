@@ -38,16 +38,22 @@ namespace Ivony.Html.Web
       if ( result == null )
         return;
 
+
+      HttpContext.Current.SetRequestData( result );
+
+
+
+
       if ( result.Handler != null )
         throw new NotImplementedException();
 
 
       else if ( result.RewritePath != null )
       {
-        HttpContext.Current.Items.Add( "HtmlRewriteModule_OriginUrl", request.Url );
-        HttpContext.Current.Items.Add( "HtmlRewriteModule_ProviderResult", result );
 
+        HttpContext.Current.SetOriginUrl();
         HttpContext.Current.RewritePath( result.RewritePath );
+
         return;
       }
 

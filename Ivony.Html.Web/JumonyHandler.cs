@@ -19,7 +19,7 @@ namespace Ivony.Html.Web
 
 
 
-    protected HtmlProviderResult ProviderResult
+    protected RequestData RequestData
     {
       get;
       private set;
@@ -32,23 +32,12 @@ namespace Ivony.Html.Web
     protected abstract void ProcessDocument();
 
 
-    /// <summary>
-    /// 派生类重写此方法分析HTML文本为 IHtmlDocument 对象
-    /// </summary>
-    /// <param name="documentContent">HTML文本</param>
-    /// <returns>IHtmlDocument 对象</returns>
-    protected virtual IHtmlDocument ParseDocument( string documentContent )
-    {
-      return ProviderResult.Parser.Parse( documentContent );
-    }
-
-
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
       Context = context;
 
       OriginUrl = Context.Items["HtmlRewriteModule_OriginUrl"] as Uri;
-      ProviderResult = Context.Items["HtmlRewriteModule_ProviderResult"] as HtmlProviderResult;
+      RequestData = Context.Items["HtmlRewriteModule_ProviderResult"] as RequestData;
 
       if ( OriginUrl == null )
       {
@@ -69,7 +58,7 @@ namespace Ivony.Html.Web
       OnPreParseDocument();
 
       Trace.Write( "Core", "Begin Parse Document" );
-      Document = ParseDocument( LoadTemplateContent() );
+      Document = LoadTemplate();
       Trace.Write( "Core", "End Parse Document" );
 
       OnPostParseDocument();
@@ -102,13 +91,11 @@ namespace Ivony.Html.Web
       }
 
 
-
-
       Trace.Write( "Core", "Begin Render Document" );
       RenderDocument();
       Trace.Write( "Core", "End Render Document" );
-
     }
+
 
     protected virtual void RenderDocument()
     {
@@ -147,55 +134,21 @@ namespace Ivony.Html.Web
     }
 
 
-    private static readonly string[] executionExtensions = new[] { ".aspx" };
 
     /// <summary>
     /// 获取页面模板（即HTML静态页）
     /// </summary>
     /// <returns></returns>
-    protected virtual string LoadTemplateContent()
+    protected virtual IHtmlDocument LoadTemplate()
     {
 
       OnDocumentLoading();
 
-      var physicalPath = MapPath( OriginUrl.AbsolutePath );
-      if ( !File.Exists( physicalPath ) )
-      {
-        var exception = new HttpException( 404, "未找到模板文件，这可能是直接访问.html.ashx文件所造成的。" );
-        Trace.Warn( "Core", "template not found!", exception );
-        throw exception;
-      }
-
-      var extension = Path.GetExtension( physicalPath );
-      if ( executionExtensions.Contains( extension, StringComparer.InvariantCultureIgnoreCase ) )
-      {
-        var writer = new StringWriter();
-        Server.Execute( OriginUrl.AbsolutePath, writer );
-        return writer.ToString();
-      }
-
-
-
-      var cacheKey = string.Format( "HtmlHandler_TemplateContentCache_{0}", physicalPath );
-      var templateContent = Cache[cacheKey] as string;
-
-      if ( templateContent == null )
-      {
-        Trace.Warn( "Core", "template file cache miss." );
-        Trace.Write( "Core", "Begin Load Template" );
-        using ( var reader = File.OpenText( physicalPath ) )
-        {
-          templateContent = reader.ReadToEnd();
-        }
-
-        Cache.Insert( cacheKey, templateContent, new System.Web.Caching.CacheDependency( physicalPath ) );
-
-        Trace.Write( "Core", "End Load Template" );
-      }
+      var document = RequestData.LoadTemplate();
 
       OnDocumentLoaded();
 
-      return templateContent;
+      return document;
     }
 
 

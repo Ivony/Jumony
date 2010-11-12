@@ -33,7 +33,7 @@ namespace Ivony.Html.Web
 
       var request = HttpContext.Current.Request;
 
-      var result = HtmlProviders.Provide( request );
+      var result = HtmlProviders.GetRequestData( request );
 
       if ( result == null )
         return;

@@ -21,11 +21,11 @@ namespace Ivony.Html.Web
     }
 
 
-    public static HtmlProviderResult Provide( HttpRequest request )
+    public static RequestData GetRequestData( HttpRequest request )
     {
       foreach ( var provider in _providers )
       {
-        var result = provider.Provide( request );
+        var result = provider.GetRequestData( request );
         if ( result != null )
           return result;
       }
@@ -35,30 +35,6 @@ namespace Ivony.Html.Web
 
 
 
-    public class RewriteToAshxProvider : IHtmlProvider
-    {
-
-      private static string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
-
-      public HtmlProviderResult Provide( HttpRequest request )
-      {
-        var physicalPath = request.PhysicalPath;
-        var virtualPath = request.Path;
-
-        if ( !allowsExtensions.Contains( Path.GetExtension( physicalPath ), StringComparer.InvariantCultureIgnoreCase ) )
-          return null;
-
-        if ( !File.Exists( physicalPath ) )
-          return null;
-
-        var handlerPath = virtualPath + ".ashx";
-        if ( !File.Exists( request.MapPath( handlerPath ) ) )
-          return null;
-
-        return new HtmlProviderResult( handlerPath, new JumonyParser() );
-      }
-
-    }
 
 
   }

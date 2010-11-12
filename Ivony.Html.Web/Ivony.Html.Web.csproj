@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="JumonyHandler.cs" />
-    <Compile Include="HtmlProviderResult.cs" />
+    <Compile Include="RequestData.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="IHtmlHandler.cs" />

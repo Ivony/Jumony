@@ -47,7 +47,7 @@ namespace Ivony.Html.Styles
 
       _element = element;
 
-      lock ( element )
+      lock ( element.SyncRoot )
       {
         settings = GetStyleSettings( element.Attribute( "style" ).Value() );
       }

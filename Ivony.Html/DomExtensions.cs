@@ -58,7 +58,7 @@ namespace Ivony.Html
     public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
     {
 
-      lock ( container )
+      lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( element.Document ) )
           throw new InvalidOperationException();
@@ -81,7 +81,7 @@ namespace Ivony.Html
 
     public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
     {
-      lock ( container )
+      lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( textNode.Document ) )
           throw new InvalidOperationException();
@@ -98,7 +98,7 @@ namespace Ivony.Html
 
     public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
     {
-      lock ( container )
+      lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( comment.Document ) )
           throw new InvalidOperationException();
@@ -128,7 +128,7 @@ namespace Ivony.Html
       if ( container == null )
         throw new InvalidOperationException();
 
-      lock ( container )
+      lock ( container.SyncRoot )
       {
         var result = newNode.Into( container, oldNode.NodesIndexOfSelf() );
         oldNode.Remove();
@@ -204,7 +204,7 @@ namespace Ivony.Html
       if ( container == null )
         throw new InvalidOperationException();
 
-      lock ( container )
+      lock ( container.SyncRoot )
       {
         var factory = container.Document.GetNodeFactory();
         if ( factory == null )

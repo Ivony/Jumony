@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Ivony.Html.Web
 {
-  public class HtmlRewriteModule : IHttpModule
+  public class JumonyModule : IHttpModule
   {
 
 
@@ -33,13 +33,15 @@ namespace Ivony.Html.Web
 
       var request = HttpContext.Current.Request;
 
-      var result = HtmlProviders.GetRequestData( request );
+      var result = RequestMappers.MapRequest( request );
 
       if ( result == null )
         return;
 
 
-      HttpContext.Current.SetRequestData( result );
+      result.OriginUrl = request.Url;
+
+      HttpContext.Current.SetMapResult( result );
 
 
 

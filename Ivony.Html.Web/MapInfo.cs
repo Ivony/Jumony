@@ -8,10 +8,12 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public class RequestData
+
+
+  public class MapInfo : Ivony.Html.Web.IMapInfo
   {
 
-    public RequestData( string rewritePath, IHtmlParser parser, string templatePath )
+    public MapInfo( string rewritePath, IHtmlParser parser, string templatePath )
     {
       RewritePath = rewritePath;
       _parser = parser;
@@ -22,6 +24,20 @@ namespace Ivony.Html.Web
     private IHtmlParser _parser;
     private string _templatePath;
 
+
+
+    public Uri OriginUrl
+    {
+      get;
+      internal set;
+    }
+
+
+    public IRequestMapper Mapper
+    {
+      get;
+      internal set;
+    }
 
 
     protected virtual IHtmlParser Parser
@@ -61,7 +77,7 @@ namespace Ivony.Html.Web
     {
       if ( !File.Exists( _templatePath ) )
       {
-        var exception = new HttpException( 404, "未找到模板文件，这可能是直接访问.html.ashx文件所造成的。" );
+        var exception = new HttpException( 404, "未找到模板文件。" );
 
         Context.Trace.Warn( "Core", "template not found!", exception );
         throw exception;

@@ -19,7 +19,7 @@ namespace Ivony.Html.Web
 
 
 
-    protected RequestData RequestData
+    protected MapInfo MapperResult
     {
       get;
       private set;
@@ -36,8 +36,7 @@ namespace Ivony.Html.Web
     {
       Context = context;
 
-      OriginUrl = Context.GetOriginUri();
-      RequestData = Context.GetRequestData();
+      MapperResult = Context.GetMapperResult();
 
       if ( OriginUrl == null )
       {
@@ -144,7 +143,7 @@ namespace Ivony.Html.Web
 
       OnDocumentLoading();
 
-      var document = RequestData.LoadTemplate();
+      var document = MapperResult.LoadTemplate();
 
       OnDocumentLoaded();
 
@@ -167,8 +166,7 @@ namespace Ivony.Html.Web
     /// </summary>
     public Uri OriginUrl
     {
-      get;
-      private set;
+      get { return MapperResult.OriginUrl; }
     }
 
 

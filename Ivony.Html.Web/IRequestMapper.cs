@@ -8,20 +8,20 @@ using Ivony.Html.Parser;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlProvider
+  public interface IRequestMapper
   {
 
-    RequestData GetRequestData( HttpRequest request );
+    MapInfo MapRequest( HttpRequest request );
 
   }
 
 
-  public class RewriteToAshxProvider : IHtmlProvider
+  public class RewriteToAshxProvider : IRequestMapper
   {
 
     private static string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
 
-    public RequestData GetRequestData( HttpRequest request )
+    public MapInfo MapRequest( HttpRequest request )
     {
       var physicalPath = request.PhysicalPath;
       var virtualPath = request.Path;
@@ -36,7 +36,7 @@ namespace Ivony.Html.Web
       if ( !File.Exists( request.MapPath( handlerPath ) ) )
         return null;
 
-      return new RequestData( handlerPath, new JumonyParser(), physicalPath );
+      return new MapInfo( handlerPath, new JumonyParser(), physicalPath );
     }
 
   }

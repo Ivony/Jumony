@@ -25,14 +25,14 @@ namespace Ivony.Html.Web
 
 
 
-    private const string requestDataToken = "Jumony_HttpContext_RequestData";
+    private const string requestDataToken = "Jumony_HttpContext_RequestMapResult";
 
-    public static RequestData GetRequestData( this HttpContext context )
+    public static MapInfo GetMapperResult( this HttpContext context )
     {
-      return (RequestData) context.Items[requestDataToken];
+      return (MapInfo) context.Items[requestDataToken];
     }
 
-    internal static void SetRequestData( this HttpContext context, RequestData data )
+    internal static void SetMapResult( this HttpContext context, MapInfo data )
     {
       context.Items[requestDataToken] = data;
     }

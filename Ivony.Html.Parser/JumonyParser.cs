@@ -91,7 +91,7 @@ namespace Ivony.Html.Parser
       }
 
       if ( index != html.Length )
-        new DomTextNode( containerStack.Peek(), html.Substring( index ) );
+        CreateTextNode( html.Substring( index ) );
 
       return document;
     }
@@ -107,12 +107,11 @@ namespace Ivony.Html.Parser
     {
       var text = html.Substring( index, match.Index - index );
       if ( text.Length > 0 )
-        new DomTextNode( containerStack.Peek(), text );
+        CreateTextNode( text );
 
       index = match.Index + match.Length;
       return index;
     }
-
 
 
     private void ProcessBeginTag( Match match )
@@ -155,14 +154,14 @@ namespace Ivony.Html.Parser
 
       //加入容器堆栈。
       {
-        var element = new DomElement( containerStack.Peek(), tagName, attributes );
-        CompleteNode( element );
+        var element = CreateElement( tagName, attributes );
 
 
         if ( !selfClosed )
           containerStack.Push( element );
       }
     }
+
 
 
     private void ProcessEndTag( Match match )
@@ -182,20 +181,55 @@ namespace Ivony.Html.Parser
       }
       else//如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
       {
-        CompleteNode( new DomTextNode( containerStack.Peek(), match.Value ) );
+        CreateTextNode( match.Value );
       }
     }
 
     private void ProcessComment( Match match )
     {
-      CompleteNode( new DomComment( containerStack.Peek(), match.Groups["commentText"].Value ) );
+      CreateCommet( match.Groups["commentText"].Value );
     }
 
 
     private void ProcessSpecial( Match match )
     {
-      CompleteNode( new DomSpecial( containerStack.Peek(), match.Value ) );
+      CreateSpecial( match.Value );
     }
+
+
+
+
+
+    private DomElement CreateElement( string tagName, Dictionary<string, string> attributes )
+    {
+      var element = new DomElement( containerStack.Peek(), tagName, attributes );
+      CompleteNode( element );
+      return element;
+    }
+
+    private DomTextNode CreateTextNode( string text )
+    {
+      var node = new DomTextNode( containerStack.Peek(), text );
+      CompleteNode( node );
+      return node;
+    }
+
+    private DomComment CreateCommet( string comment )
+    {
+      var node = new DomComment( containerStack.Peek(), comment );
+      CompleteNode( node );
+      return node;
+    }
+
+
+    private DomSpecial CreateSpecial( string html )
+    {
+      var special = new DomSpecial( containerStack.Peek(), html );
+      CompleteNode( special );
+      return special;
+    }
+
+
 
 
     private void CompleteNode( DomNode node )

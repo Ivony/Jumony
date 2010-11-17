@@ -386,7 +386,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建节点的创造器</param>
     /// <param name="container">包含内容的容器</param>
     /// <returns>文档碎片</returns>
-    public static HtmlFragment MakeFragement( IHtmlNodeFactory factory, IHtmlContainer container )
+    public static HtmlFragment AsFragement( IHtmlNodeFactory factory, IHtmlContainer container )
     {
       var fragment = new HtmlFragment();
 

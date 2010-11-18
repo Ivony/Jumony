@@ -11,6 +11,7 @@ namespace Ivony.Html
 
     IHtmlDocument Parse( string html );
 
+    IHtmlDocument CreateBlank();
 
   }
 }

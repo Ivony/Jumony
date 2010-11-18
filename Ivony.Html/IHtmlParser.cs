@@ -11,7 +11,6 @@ namespace Ivony.Html
 
     IHtmlDocument Parse( string html );
 
-    HtmlFragment ParseFragment( string html );
 
   }
 }

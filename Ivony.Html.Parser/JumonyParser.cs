@@ -35,8 +35,13 @@ namespace Ivony.Html.Parser
     public DomDocument Parse( string html )
     {
 
-
       var document = new DomDocument();
+
+      if ( string.IsNullOrEmpty( html ) )
+        return document;
+      
+      
+      
       containerStack.Push( document );
 
 

@@ -316,7 +316,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建元素的构建器</param>
     /// <param name="element">需要被创建副本的元素</param>
     /// <returns>元素的未分配副本</returns>
-    public static IFreeElement MakeCopy( IHtmlNodeFactory factory, IHtmlElement element )
+    public static IFreeElement MakeCopy( this IHtmlNodeFactory factory, IHtmlElement element )
     {
 
       if ( factory == null )
@@ -354,7 +354,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建注释的构建器</param>
     /// <param name="comment">需要被创建副本的注释</param>
     /// <returns>注释的未分配副本</returns>
-    public static IFreeComment MakeCopy( IHtmlNodeFactory factory, IHtmlComment comment )
+    public static IFreeComment MakeCopy( this IHtmlNodeFactory factory, IHtmlComment comment )
     {
 
       if ( factory == null )
@@ -373,7 +373,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建文本节点的构建器</param>
     /// <param name="textNode">需要被创建副本的文本节点</param>
     /// <returns>文本节点的未分配副本</returns>
-    public static IFreeTextNode MakeCopy( IHtmlNodeFactory factory, IHtmlTextNode textNode )
+    public static IFreeTextNode MakeCopy( this IHtmlNodeFactory factory, IHtmlTextNode textNode )
     {
       return factory.CreateTextNode( textNode.HtmlText );
     }
@@ -386,7 +386,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建节点的创造器</param>
     /// <param name="container">包含内容的容器</param>
     /// <returns>文档碎片</returns>
-    public static HtmlFragment AsFragement( IHtmlNodeFactory factory, IHtmlContainer container )
+    public static HtmlFragment MakeFragment( this IHtmlNodeFactory factory, IHtmlContainer container )
     {
       var fragment = new HtmlFragment( factory );
 
@@ -394,7 +394,6 @@ namespace Ivony.Html
 
       return fragment;
     }
-
 
 
 

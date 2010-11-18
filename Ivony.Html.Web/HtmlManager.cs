@@ -30,18 +30,25 @@ namespace Ivony.Html.Web
 
       string key = CreateCacheKey( virtualPath );
 
-      var document = Cache.Get( key ) as IHtmlDocument;
+      string htmlContent = Cache.Get( key ) as string;
 
-      if ( document == null )
+      if ( htmlContent == null )
       {
-        string htmlContent = LoadFile( virtualPath );
-        document = ParseDocument( virtualPath, htmlContent );
+        htmlContent = LoadFile( virtualPath );
+
+        var dependency = VirtualPathProvider.GetCacheDependency( virtualPath, null, DateTime.UtcNow );
+
+        Cache.Insert( key, htmlContent, dependency );
       }
 
+      return ParseDocument( virtualPath, htmlContent );
+
+    }
 
 
-      return document;
-
+    protected IHtmlParser GetParser( string virtualPath, string htmlContent )
+    {
+      return new JumonyParser();
     }
 
     private string CreateCacheKey( string virtualPath )
@@ -68,4 +75,22 @@ namespace Ivony.Html.Web
 
 
   }
+
+
+  internal static class Extensions
+  {
+    public static IHtmlDocument MakeCopy( this IHtmlParser parser, IHtmlDocument document )
+    {
+      var copy = parser.Parse( null );
+      var factory = copy.GetNodeFactory();
+      var fragment = factory.MakeFragment( document );
+      fragment.InsertTo( copy, 0 );
+
+      return copy;
+    }
+
+  }
+
+
+
 }

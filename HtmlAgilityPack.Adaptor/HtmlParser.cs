@@ -15,7 +15,8 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     {
       var rawDocument = new HtmlDocument();
 
-      rawDocument.LoadHtml( html );
+      if ( !string.IsNullOrEmpty( html ) )
+        rawDocument.LoadHtml( html );
 
       return rawDocument.AsDocument();
 

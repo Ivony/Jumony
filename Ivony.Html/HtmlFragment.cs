@@ -19,12 +19,14 @@ namespace Ivony.Html
 
     private IList<IFreeNode> _nodes;
 
+    private IHtmlNodeFactory _factory;
+    
     private IHtmlDocument _document = null;
-    private IHtmlNodeFactory _factory = null;
 
 
-    public HtmlFragment()
+    public HtmlFragment( IHtmlNodeFactory factory )
     {
+      _factory = factory;
       _nodes = new SynchronizedCollection<IFreeNode>( SyncRoot );
     }
 
@@ -95,6 +97,13 @@ namespace Ivony.Html
     }
 
 
+    public IHtmlDocument Document
+    {
+      get { return _document; }
+    }
+
+
+
     #region IHtmlNode 成员
 
     IHtmlContainer IHtmlNode.Parent
@@ -110,11 +119,6 @@ namespace Ivony.Html
     void IHtmlNode.Remove()
     {
       throw new InvalidOperationException();
-    }
-
-    IHtmlDocument IHtmlNode.Document
-    {
-      get { return _document; }
     }
 
     string IHtmlNode.RawHtml

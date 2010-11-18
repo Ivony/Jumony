@@ -388,7 +388,7 @@ namespace Ivony.Html
     /// <returns>文档碎片</returns>
     public static HtmlFragment AsFragement( IHtmlNodeFactory factory, IHtmlContainer container )
     {
-      var fragment = new HtmlFragment();
+      var fragment = new HtmlFragment( factory );
 
       fragment.AddNodesCopy( container.Nodes(), factory );
 

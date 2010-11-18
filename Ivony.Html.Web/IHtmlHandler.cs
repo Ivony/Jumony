@@ -8,6 +8,6 @@ namespace Ivony.Html.Web
 {
   public interface IHtmlHandler
   {
-    void ProcessDocument( HttpContext context, MapInfo mapInfo );
+    IHtmlDocument ProcessDocument( HttpContext context, MapInfo mapInfo );
   }
 }

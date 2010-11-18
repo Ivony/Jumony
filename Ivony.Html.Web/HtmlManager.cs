@@ -34,11 +34,11 @@ namespace Ivony.Html.Web
 
       if ( document == null )
       {
-
         string htmlContent = LoadFile( virtualPath );
         document = ParseDocument( virtualPath, htmlContent );
-
       }
+
+
 
       return document;
 

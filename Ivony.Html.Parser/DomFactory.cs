@@ -41,7 +41,7 @@ namespace Ivony.Html.Parser
 
     public HtmlFragment ParseHtml( string html )
     {
-      return null;
+      return this.MakeFragment( new JumonyParser().Parse( html ) );
     }
 
     #endregion

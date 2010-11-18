@@ -96,6 +96,12 @@ namespace Ivony.Html
       }
     }
 
+    public IHtmlNodeFactory Factory
+    {
+      get { return _factory; }
+    }
+
+
 
     #region IHtmlNode 成员
 

@@ -198,15 +198,10 @@ namespace Ivony.Html.Parser
     private bool disposed = false;
 
     public DomFreeElement( DomFactory factory, string name )
-      : this( factory, name, null ) { }
-
-
-    public DomFreeElement( DomFactory factory, string name, IDictionary<string, string> attributes )
     {
-      _element = new DomElement( null, name, attributes );
+      _element = new DomElement( null, name, null );
       _factory = factory;
     }
-
 
 
     private void CheckDisposed()

@@ -243,5 +243,10 @@ namespace Ivony.Html.Parser
       return Parse( html );
     }
 
+    public HtmlFragment ParseFragment( string html )
+    {
+      throw new NotImplementedException();
+    }
+
   }
 }

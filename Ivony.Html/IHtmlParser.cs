@@ -9,7 +9,7 @@ namespace Ivony.Html
   public interface IHtmlParser
   {
 
-    IHtmlDocument ParseDocument( string html );
+    IHtmlDocument Parse( string html );
 
     HtmlFragment ParseFragment( string html );
 

@@ -10,12 +10,11 @@ namespace Ivony.Html.Web
 {
 
 
-  public class MapInfo : Ivony.Html.Web.IMapInfo
+  public class MapInfo
   {
 
     public MapInfo( string rewritePath, IHtmlParser parser, string templatePath )
     {
-      RewritePath = rewritePath;
       _parser = parser;
       _templatePath = templatePath;
     }
@@ -113,12 +112,6 @@ namespace Ivony.Html.Web
       return templateContent;
     }
 
-
-    public string RewritePath
-    {
-      get;
-      private set;
-    }
 
     public IHtmlHandler Handler
     {

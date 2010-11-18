@@ -45,7 +45,7 @@ namespace Ivony.Html.Web
 
 
 
-
+/*
       if ( result.Handler != null )
         throw new NotImplementedException();
 
@@ -58,7 +58,7 @@ namespace Ivony.Html.Web
 
         return;
       }
-
+*/
     }
 
   }

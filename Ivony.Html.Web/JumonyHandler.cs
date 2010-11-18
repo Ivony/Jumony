@@ -9,7 +9,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
-  public abstract class JumonyHandler : IHttpHandler, IRequiresSessionState
+  public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
     public bool IsReusable
@@ -32,28 +32,9 @@ namespace Ivony.Html.Web
     protected abstract void ProcessDocument();
 
 
-    void IHttpHandler.ProcessRequest( HttpContext context )
+
+    public virtual void ProcessDocument( HttpContext context, MapInfo mapInfo )
     {
-      Context = context;
-
-      MapperResult = Context.GetMapperResult();
-
-      if ( OriginUrl == null )
-      {
-        Trace.Warn( "Core", "origin url is not found." );
-
-        var builder = new UriBuilder( Request.Url );
-        var path = builder.Path;
-
-        if ( !path.EndsWith( ".ashx" ) )
-          throw new InvalidOperationException();
-
-        builder.Path = path.Remove( path.Length - 5 );
-
-        Trace.Warn( "Core", "redirect to template vitual path." );
-        Response.Redirect( builder.Uri.AbsoluteUri );
-      }
-
       OnPreParseDocument();
 
       Trace.Write( "Core", "Begin Parse Document" );
@@ -73,8 +54,6 @@ namespace Ivony.Html.Web
       OnPostProcessDocument();
 
 
-
-
       var factory = Document.GetNodeFactory();
       if ( factory != null )
       {
@@ -89,11 +68,28 @@ namespace Ivony.Html.Web
 
       }
 
+      OnPreRender();
 
       Trace.Write( "Core", "Begin Render Document" );
       RenderDocument();
       Trace.Write( "Core", "End Render Document" );
     }
+
+
+
+    void IHttpHandler.ProcessRequest( HttpContext context )
+    {
+      Context = context;
+
+      var mapInfo = Context.GetMapperResult();
+
+      if ( mapInfo == null )
+        throw new InvalidOperationException( "丢失了请求映射信息" );
+
+      ProcessDocument( context, mapInfo );
+
+    }
+
 
 
     protected virtual void RenderDocument()
@@ -275,6 +271,7 @@ namespace Ivony.Html.Web
     }
 
     #endregion
+
 
   }
 }

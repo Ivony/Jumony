@@ -42,7 +42,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
       document.LoadHtml( html );
 
-      var fragment = new HtmlFragment();
+      var fragment =  new HtmlFragment( this );
       fragment.AddNodesCopy( document.AsDocument().Nodes(), this );
 
       return fragment;

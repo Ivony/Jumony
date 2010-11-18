@@ -21,20 +21,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     }
 
-    public HtmlFragment ParseFragment( string html )
-    {
-      var rawDocument = new HtmlDocument();
-
-      rawDocument.LoadHtml( html );
-
-      var fragment = new HtmlFragment();
-      var document = rawDocument.AsDocument();
-      
-      fragment.AddNodesCopy( document.Nodes(), document.GetNodeFactory() );
-
-      return fragment;
-    }
-
     #endregion
   }
 }

@@ -20,7 +20,7 @@ namespace Ivony.Html
     private IList<IFreeNode> _nodes;
 
     private IHtmlNodeFactory _factory;
-    
+
     private IHtmlDocument _document = null;
 
 
@@ -97,13 +97,6 @@ namespace Ivony.Html
     }
 
 
-    public IHtmlDocument Document
-    {
-      get { return _document; }
-    }
-
-
-
     #region IHtmlNode 成员
 
     IHtmlContainer IHtmlNode.Parent
@@ -115,6 +108,12 @@ namespace Ivony.Html
     {
       get { return this; }
     }
+
+    IHtmlDocument IHtmlNode.Document
+    {
+      get { return _document; }
+    }
+
 
     void IHtmlNode.Remove()
     {

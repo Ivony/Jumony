@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Ivony.Html
 {
-  public interface IHtmlElement : IHtmlContainer
+  public interface IHtmlElement : IHtmlNode, IHtmlNodeContainer
   {
 
     /// <summary>

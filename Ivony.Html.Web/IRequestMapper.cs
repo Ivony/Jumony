@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.IO;
 using Ivony.Html.Parser;
+using System.Web.Compilation;
 
 namespace Ivony.Html.Web
 {
@@ -16,10 +17,10 @@ namespace Ivony.Html.Web
   }
 
 
-  public class RewriteToAshxProvider : IRequestMapper
+  public class DefaultRequestMapper : IRequestMapper
   {
 
-    private static string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
+    private static readonly string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
 
     public MapInfo MapRequest( HttpRequest request )
     {
@@ -36,7 +37,7 @@ namespace Ivony.Html.Web
       if ( !File.Exists( request.MapPath( handlerPath ) ) )
         return null;
 
-      return new MapInfo( handlerPath, new JumonyParser(), physicalPath );
+      return new MapInfo( new JumonyParser(), physicalPath, (IHttpHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( IHttpHandler ) ) );
     }
 
   }

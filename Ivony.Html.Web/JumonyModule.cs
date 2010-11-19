@@ -17,21 +17,15 @@ namespace Ivony.Html.Web
 
     public void Init( HttpApplication context )
     {
-      context.BeginRequest += new EventHandler( BeginRequest );
-
-
+      context.PostResolveRequestCache += new EventHandler( OnPreMapRequestHandler );
     }
 
-
-
-    private static string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
-
-    void BeginRequest( object sender, EventArgs e )
+    void OnPreMapRequestHandler( object sender, EventArgs e )
     {
+      var context = HttpContext.Current;
 
 
-
-      var request = HttpContext.Current.Request;
+      var request = context.Request;
 
       var result = RequestMappers.MapRequest( request );
 
@@ -41,23 +35,9 @@ namespace Ivony.Html.Web
 
       result.OriginUrl = request.Url;
 
-      HttpContext.Current.SetMapResult( result );
+      context.SetMapResult( result );
 
-
-
-
-      if ( result.Handler != null )
-        throw new NotImplementedException();
-
-
-      else if ( result.RewritePath != null )
-      {
-
-        HttpContext.Current.SetOriginUrl();
-        HttpContext.Current.RewritePath( result.RewritePath );
-
-        return;
-      }
+      context.RemapHandler( result.Handler );
 
     }
 

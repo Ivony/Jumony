@@ -46,13 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
+    <Compile Include="HtmlManager.cs" />
     <Compile Include="HttpHelper.cs" />
-    <Compile Include="IMapInfo.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="MapInfo.cs" />
     <Compile Include="RequestMappers.cs" />
     <Compile Include="JumonyModule.cs" />
-    <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IRequestMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

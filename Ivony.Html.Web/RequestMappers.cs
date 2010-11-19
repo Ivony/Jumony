@@ -17,7 +17,7 @@ namespace Ivony.Html.Web
 
     static RequestMappers()
     {
-      _mappers.Add( new RewriteToAshxProvider() );
+      _mappers.Add( new DefaultRequestMapper() );
     }
 
 

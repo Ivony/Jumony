@@ -110,12 +110,12 @@ namespace Ivony.Html
       get { return null; }
     }
 
-    object IHtmlNode.NodeObject
+    object IHtmlObject.NodeObject
     {
       get { return this; }
     }
 
-    IHtmlDocument IHtmlNode.Document
+    IHtmlDocument IHtmlObject.Document
     {
       get { return _document; }
     }
@@ -148,7 +148,7 @@ namespace Ivony.Html
 
     #region IHtmlContainer 成员
 
-    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
+    IEnumerable<IHtmlNode> IHtmlNodeContainer.Nodes()
     {
       return _nodes.Cast<IHtmlNode>();
     }

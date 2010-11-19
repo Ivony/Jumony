@@ -116,14 +116,14 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要获取子代元素的容器对象</param>
     /// <returns>容器所有的子代节点</returns>
-    public static IEnumerable<IHtmlNode> DescendantNodes( this IHtmlContainer container )
+    public static IEnumerable<IHtmlNode> DescendantNodes( this IHtmlNodeContainer container )
     {
 
       foreach ( var node in container.Nodes() )
       {
         yield return node;
 
-        var childContainer = node as IHtmlContainer;
+        var childContainer = node as IHtmlNodeContainer;
         if ( childContainer != null )
         {
           foreach ( var descendantNode in DescendantNodes( childContainer ) )

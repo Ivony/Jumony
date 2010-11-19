@@ -23,7 +23,7 @@ namespace Ivony.Html
       get { return Node.Parent; }
     }
 
-    object IHtmlNode.NodeObject
+    object IHtmlObject.NodeObject
     {
       get { return Node.NodeObject; }
     }
@@ -33,7 +33,7 @@ namespace Ivony.Html
       Node.Remove();
     }
 
-    IHtmlDocument IHtmlNode.Document
+    IHtmlDocument IHtmlObject.Document
     {
       get { return Node.Document; }
     }
@@ -43,7 +43,7 @@ namespace Ivony.Html
       get { return Node.RawHtml; }
     }
 
-    object IHtmlNode.SyncRoot
+    object IHtmlObject.SyncRoot
     {
       get { return Node.SyncRoot; }
     }

@@ -37,7 +37,7 @@ namespace Ivony.Html
 
     #region IHtmlContainer 成员
 
-    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
+    IEnumerable<IHtmlNode> IHtmlNodeContainer.Nodes()
     {
       return Element.Nodes();
     }

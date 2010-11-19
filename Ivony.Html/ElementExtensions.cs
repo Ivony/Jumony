@@ -23,7 +23,7 @@ namespace Ivony.Html
     /// <returns>父元素</returns>
     public static IHtmlElement ParentElement( this IHtmlNode node )
     {
-      return node.Parent as IHtmlElement;
+      return node.Container as IHtmlElement;
     }
 
 
@@ -58,7 +58,7 @@ namespace Ivony.Html
     {
       while ( true )
       {
-        node = node.Parent;
+        node = node.Container;
 
         var element = node as IHtmlElement;
 
@@ -95,7 +95,7 @@ namespace Ivony.Html
 
         yield return element;
 
-        element = element.Parent as IHtmlElement;
+        element = element.Container as IHtmlElement;
       }
     }
 
@@ -154,7 +154,7 @@ namespace Ivony.Html
     /// <returns>所有的兄弟节点</returns>
     public static IEnumerable<IHtmlNode> SiblingNodes( this IHtmlNode node )
     {
-      var parent = node.Parent;
+      var parent = node.Container;
 
       if ( parent == null )
         return new IHtmlNode[] { node };

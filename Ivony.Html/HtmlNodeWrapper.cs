@@ -18,9 +18,9 @@ namespace Ivony.Html
 
     #region IHtmlNode 成员
 
-    IHtmlContainer IHtmlNode.Parent
+    IHtmlContainer IHtmlNode.Container
     {
-      get { return Node.Parent; }
+      get { return Node.Container; }
     }
 
     object IHtmlObject.NodeObject

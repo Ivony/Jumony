@@ -70,7 +70,7 @@ namespace Ivony.Html
     {
       string parentId;
 
-      var parentElement = element.Parent as IHtmlElement;
+      var parentElement = element.Container as IHtmlElement;
       if ( parentElement != null )
       {
         parentId = Identity( parentElement );
@@ -84,7 +84,7 @@ namespace Ivony.Html
       }
       else
       {
-        if ( element.Parent is IHtmlDocument )
+        if ( element.Container is IHtmlDocument )
           parentId = null;
         else
           throw new InvalidOperationException();
@@ -134,7 +134,7 @@ namespace Ivony.Html
         if ( node is IFreeNode || node is HtmlFragment )
           throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
 
-        node = node.Parent;
+        node = node.Container;
         if ( node == null )
           break;
       }

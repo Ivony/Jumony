@@ -326,7 +326,7 @@ namespace Ivony.Html
           return true;
 
         else if ( Relative == ">" )
-          return element.Parent.Equals( scope ) ? false : ParentSelector.Allows( element.Parent as IHtmlElement, scope );
+          return element.Container.Equals( scope ) ? false : ParentSelector.Allows( element.Container as IHtmlElement, scope );
 
         else if ( Relative == "" )
           return element.Ancestors().TakeWhile( e => !e.Equals( scope ) ).Any( e => ParentSelector.Allows( e, scope ) );

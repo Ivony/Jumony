@@ -123,7 +123,7 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">被替换的节点与用于替换的节点不属于同一个文档</exception>
     public static IHtmlNode Replace( this IHtmlNode oldNode, IFreeNode newNode )
     {
-      var container = oldNode.Parent;
+      var container = oldNode.Container;
 
       if ( container == null )
         throw new InvalidOperationException();
@@ -199,7 +199,7 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
     public static IHtmlNode ReplaceCopy( this IHtmlNode oldNode, IHtmlNode newNode )
     {
-      var container = oldNode.Parent;
+      var container = oldNode.Container;
 
       if ( container == null )
         throw new InvalidOperationException();
@@ -601,7 +601,7 @@ namespace Ivony.Html
         builder.Insert( 0, "/" + element.Name );
 
 
-        var parent = element.Parent;
+        var parent = element.Container;
 
         if ( parent.Equals( container ) )
           return builder.ToString();

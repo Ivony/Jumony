@@ -9,9 +9,9 @@ namespace Ivony.Html
   public interface IHtmlNode : IHtmlObject
   {
     /// <summary>
-    /// 获取节点的父级
+    /// 获取节点的容器
     /// </summary>
-    IHtmlContainer Parent
+    IHtmlContainer Container
     {
       get;
     }

@@ -9,13 +9,14 @@ namespace Ivony.Html
   /// <summary>
   /// IHtmlDocument 的包裹类
   /// </summary>
-  public abstract class HtmlDocumentWrapper : HtmlNodeWrapper, IHtmlDocument
+  public abstract class HtmlDocumentWrapper : IHtmlDocument
   {
 
     protected abstract IHtmlDocument Document
     {
       get;
     }
+
 
 
     #region IHtmlDocument 成员
@@ -30,10 +31,9 @@ namespace Ivony.Html
       return Document.GetNodeFactory();
     }
 
-
     #endregion
 
-    #region IHtmlContainer 成员
+    #region IHtmlNodeContainer 成员
 
     IEnumerable<IHtmlNode> IHtmlNodeContainer.Nodes()
     {
@@ -42,12 +42,23 @@ namespace Ivony.Html
 
     #endregion
 
+    #region IHtmlObject 成员
 
-
-
-    protected override sealed IHtmlNode Node
+    object IHtmlObject.NodeObject
     {
-      get { return Document; }
+      get { return Document.NodeObject; }
     }
+
+    IHtmlDocument IHtmlObject.Document
+    {
+      get { return this; }
+    }
+
+    object IHtmlObject.SyncRoot
+    {
+      get { return Document.SyncRoot; }
+    }
+
+    #endregion
   }
 }

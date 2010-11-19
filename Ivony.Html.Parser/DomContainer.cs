@@ -8,7 +8,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  public abstract class DomContainer : DomNode, IHtmlContainer
+  public abstract class DomContainer : DomNode, IHtmlNodeContainer
   {
 
     protected DomContainer( DomContainer parent )

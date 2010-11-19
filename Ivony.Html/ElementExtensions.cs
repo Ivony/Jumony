@@ -15,6 +15,18 @@ namespace Ivony.Html
   public static class ElementExtensions
   {
 
+
+    /// <summary>
+    /// 获取父元素
+    /// </summary>
+    /// <param name="node">要获取父元素的节点</param>
+    /// <returns>父元素</returns>
+    public static IHtmlElement ParentElement( this IHtmlNode node )
+    {
+      return node.Parent as IHtmlElement;
+    }
+
+
     /// <summary>
     /// 获取容器所有子元素
     /// </summary>

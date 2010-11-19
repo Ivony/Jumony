@@ -93,7 +93,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         get { return null; }
       }
 
-      IHtmlDocument IHtmlObject.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -142,7 +142,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         get { return null; }
       }
 
-      IHtmlDocument IHtmlObject.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -191,7 +191,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         get { return null; }
       }
 
-      IHtmlDocument IHtmlObject.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }

@@ -45,7 +45,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    IHtmlDocument IHtmlObject.Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get { return this; }
     }

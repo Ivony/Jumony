@@ -73,7 +73,6 @@
     <Compile Include="IHtmlComment.cs" />
     <Compile Include="IHtmlDocument.cs" />
     <Compile Include="IHtmlElement.cs" />
-    <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlNode.cs" />
     <Compile Include="IHtmlNodeFactory.cs" />
     <Compile Include="IHtmlSpecial.cs" />

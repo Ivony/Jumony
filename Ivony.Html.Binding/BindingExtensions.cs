@@ -394,7 +394,7 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="container">要获取 DataContext 的节点</param>
     /// <returns></returns>
-    public static object Data( this IHtmlContainer container )
+    public static object Data( this IHtmlNode container )
     {
       return BindingContext.Current.GetDataContext( container );
     }
@@ -405,7 +405,7 @@ namespace Ivony.Html.Binding
     /// <param name="container">要设置 DataContext 的节点</param>
     /// <param name="dataContext">要设置的数据</param>
     /// <returns></returns>
-    public static IHtmlContainer Data( this IHtmlContainer container, object dataContext )
+    public static TContainer Data<TContainer>( this TContainer container, object dataContext ) where TContainer : IHtmlNodeContainer
     {
       BindingContext.Current.SetDataContext( container, dataContext );
       return container;

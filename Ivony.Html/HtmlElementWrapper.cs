@@ -8,7 +8,7 @@ namespace Ivony.Html
   /// <summary>
   /// IHtmlElement 的包裹类
   /// </summary>
-  public abstract class HtmlElementWrapper : HtmlNodeWrapper, IHtmlElement, IHtmlContainer, IHtmlNode
+  public abstract class HtmlElementWrapper : HtmlNodeWrapper, IHtmlElement, IHtmlNode
   {
 
     protected abstract IHtmlElement Element

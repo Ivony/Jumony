@@ -149,7 +149,7 @@ namespace Ivony.Html
     /// 使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
     /// </remarks>
     /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
-    public static TContainer AppendCopy<TContainer>( this TContainer container, IHtmlNode node ) where TContainer : IHtmlContainer
+    public static TContainer AppendCopy<TContainer>( this TContainer container, IHtmlNode node ) where TContainer : IHtmlNodeContainer
     {
       lock ( container.SyncRoot )
       {
@@ -169,7 +169,7 @@ namespace Ivony.Html
     /// 使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
     /// </remarks>
     /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
-    public static TContainer InsertCopy<TContainer>( this TContainer container, int index, IHtmlNode node ) where TContainer : IHtmlContainer
+    public static TContainer InsertCopy<TContainer>( this TContainer container, int index, IHtmlNode node ) where TContainer : IHtmlNodeContainer
     {
       lock ( container.SyncRoot )
       {
@@ -386,7 +386,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建节点的创造器</param>
     /// <param name="container">包含内容的容器</param>
     /// <returns>文档碎片</returns>
-    public static HtmlFragment MakeFragment( this IHtmlNodeFactory factory, IHtmlContainer container )
+    public static HtmlFragment MakeFragment( this IHtmlNodeFactory factory, IHtmlNodeContainer container )
     {
       var fragment = new HtmlFragment( factory );
 
@@ -588,7 +588,7 @@ namespace Ivony.Html
 
     }
 
-    public static string PathOf( this IHtmlElement element, IHtmlContainer container )
+    public static string PathOf( this IHtmlElement element, IHtmlNodeContainer container )
     {
 
       if ( element is IFreeNode )

@@ -129,15 +129,22 @@ namespace Ivony.Html
 
     private static void EnsureAllocated( IHtmlNode node )
     {
-      while ( true )
-      {
-        if ( node is IFreeNode || node is HtmlFragment )
-          throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
 
-        node = node.Container;
-        if ( node == null )
-          break;
-      }
+      if ( node is IFreeNode )
+        throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
+
+      var container = node.Container;
+
+      if ( container is HtmlFragment )
+        throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
+
+      node = container as IHtmlNode;
+      if ( node == null )
+        return;
+
+      else
+        EnsureAllocated( node );
+
     }
 
     private static string GetElementName( IHtmlElement element )

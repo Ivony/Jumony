@@ -56,16 +56,19 @@ namespace Ivony.Html
     /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node )
     {
+
       while ( true )
       {
-        node = node.Container;
+        var element = node.ParentElement();
 
-        var element = node as IHtmlElement;
 
         if ( element == null )
           yield break;
 
         yield return element;
+
+        
+        node = element;
 
       }
     }

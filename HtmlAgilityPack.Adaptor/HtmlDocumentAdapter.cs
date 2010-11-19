@@ -79,7 +79,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       throw new InvalidOperationException();
     }
 
-    IHtmlDocument IHtmlNode.Document
+    IHtmlDocument IHtmlObject.Document
     {
       get { return this; }
     }

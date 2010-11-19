@@ -120,7 +120,7 @@ namespace Ivony.Html.Binding
         return data;
 
       IHtmlElement container;
-      while ( (container = node.ParentElement()) != null )
+      while ( (container = node.Parent()) != null )
       {
         data = GetDataContextCore( container );
         if ( data != null )
@@ -155,7 +155,7 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="container">根元素</param>
     /// <returns></returns>
-    private static IEnumerable<IHtmlElement> PostOrderTraverse( IHtmlNodeContainer container )
+    private static IEnumerable<IHtmlElement> PostOrderTraverse( IHtmlContainer container )
     {
       var elementList = new List<IHtmlElement>();
 
@@ -170,9 +170,9 @@ namespace Ivony.Html.Binding
     /// <param name="container">根元素</param>
     /// <param name="elementList">存放元素的集合</param>
     /// <returns></returns>
-    private static void PostOrderTraverse( IHtmlNodeContainer container, IList<IHtmlElement> elementList )
+    private static void PostOrderTraverse( IHtmlContainer container, IList<IHtmlElement> elementList )
     {
-      foreach ( var node in container.Nodes().OfType<IHtmlNodeContainer>() )
+      foreach ( var node in container.Nodes().OfType<IHtmlContainer>() )
       {
         PostOrderTraverse( node, elementList );
 
@@ -187,7 +187,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 绑定的范围
     /// </summary>
-    public IHtmlNodeContainer Scope
+    public IHtmlContainer Scope
     {
       get { return _scope; }
 
@@ -206,7 +206,7 @@ namespace Ivony.Html.Binding
 
     private readonly Thread _thread;
     private readonly string _name;
-    private readonly IHtmlNodeContainer _scope;
+    private readonly IHtmlContainer _scope;
 
     protected void VerifyAccess()
     {
@@ -215,7 +215,7 @@ namespace Ivony.Html.Binding
     }
 
 
-    private BindingContext( IHtmlNodeContainer scope, string name, BindingContextExitBehavior exitBehavior )
+    private BindingContext( IHtmlContainer scope, string name, BindingContextExitBehavior exitBehavior )
     {
       _scope = scope;
       _name = name;
@@ -300,7 +300,7 @@ namespace Ivony.Html.Binding
     /// <param name="scope">绑定范围，超出此范围的绑定都不会被提交</param>
     /// <param name="name">上下文友好的名称，用于Trace识别</param>
     /// <returns></returns>
-    public static BindingContext Enter( IHtmlNodeContainer scope, string name )
+    public static BindingContext Enter( IHtmlContainer scope, string name )
     {
       return Enter( scope, name, BindingContextExitBehavior.Default );
     }
@@ -312,7 +312,7 @@ namespace Ivony.Html.Binding
     /// <param name="name">上下文友好的名称，用于Trace识别</param>
     /// <param name="exitBehavior">退出上下文时的行为</param>
     /// <returns></returns>
-    public static BindingContext Enter( IHtmlNodeContainer scope, string name, BindingContextExitBehavior exitBehavior )
+    public static BindingContext Enter( IHtmlContainer scope, string name, BindingContextExitBehavior exitBehavior )
     {
       var currentContext = Current;
 
@@ -321,7 +321,7 @@ namespace Ivony.Html.Binding
 
       if ( currentContext != null
            && !currentContext.Scope.Equals( scope )
-           && !currentContext.Scope.DescendantNodes().OfType<IHtmlNodeContainer>().Contains( scope )
+           && !currentContext.Scope.DescendantNodes().OfType<IHtmlContainer>().Contains( scope )
         )
         throw new InvalidOperationException();
 

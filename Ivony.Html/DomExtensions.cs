@@ -22,7 +22,7 @@ namespace Ivony.Html
     /// <param name="container">要添加节点的容器</param>
     /// <param name="node">要添加的节点</param>
     /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
-    public static TContainer Append<TContainer>( this TContainer container, IFreeNode node ) where TContainer : IHtmlContainer
+    public static TContainer Append<TContainer>( this TContainer container, IFreeNode node ) where TContainer : IHtmlNodeContainer
     {
       return Insert( container, container.Nodes().Count(), node );
     }
@@ -35,7 +35,7 @@ namespace Ivony.Html
     /// <param name="index">要插入节点的位置</param>
     /// <param name="node">要添加的节点</param>
     /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
-    public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlContainer
+    public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlNodeContainer
     {
       lock ( container.SyncRoot )
       {
@@ -55,7 +55,7 @@ namespace Ivony.Html
     /// <param name="container">要被插入的容器</param>
     /// <param name="index">插入位置</param>
     /// <returns>插入后的元素</returns>
-    public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
+    public static IHtmlElement InsertTo( this IFreeElement element, IHtmlNodeContainer container, int index )
     {
 
       lock ( container.SyncRoot )
@@ -73,13 +73,13 @@ namespace Ivony.Html
     /// <param name="element">要插入的游离元素</param>
     /// <param name="container">要被插入的容器</param>
     /// <returns>添加后的元素</returns>
-    public static IHtmlElement AppendTo( this IFreeElement element, IHtmlContainer container )
+    public static IHtmlElement AppendTo( this IFreeElement element, IHtmlNodeContainer container )
     {
       return element.InsertTo( container, container.Nodes().Count() );
     }
 
 
-    public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
+    public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlNodeContainer container, int index )
     {
       lock ( container.SyncRoot )
       {
@@ -90,13 +90,13 @@ namespace Ivony.Html
       }
     }
 
-    public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlContainer container )
+    public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlNodeContainer container )
     {
       return textNode.InsertTo( container, container.Nodes().Count() );
     }
 
 
-    public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
+    public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlNodeContainer container, int index )
     {
       lock ( container.SyncRoot )
       {
@@ -107,7 +107,7 @@ namespace Ivony.Html
       }
     }
 
-    public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )
+    public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlNodeContainer container )
     {
       return comment.InsertTo( container, container.Nodes().Count() );
     }

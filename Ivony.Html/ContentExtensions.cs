@@ -194,7 +194,7 @@ namespace Ivony.Html
           return null;
       }
 
-      var container = node as IHtmlContainer;
+      var container = node as IHtmlNodeContainer;
 
       return string.Join( "", container.Nodes().Select( n => InnerText( n ) ).ToArray() );
     }

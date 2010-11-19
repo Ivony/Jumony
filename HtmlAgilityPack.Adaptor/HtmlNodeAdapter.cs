@@ -24,7 +24,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-    public IHtmlContainer Parent
+    public IHtmlContainer Container
     {
       get
       {
@@ -77,7 +77,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IHtmlDocument Document
     {
-      get { return Parent.Document; }
+      get { return Container.Document; }
     }
 
     public string RawHtml

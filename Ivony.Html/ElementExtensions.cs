@@ -20,7 +20,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要获取子元素的容器</param>
     /// <returns>容器的所有子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlNodeContainer node )
     {
       return node.Nodes().OfType<IHtmlElement>();
     }
@@ -32,7 +32,7 @@ namespace Ivony.Html
     /// <param name="node">要获取子元素的容器</param>
     /// <param name="selector">用来筛选子元素的元素选择器</param>
     /// <returns>符合条件的子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node, string selector )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlNodeContainer node, string selector )
     {
       return HtmlCssSelector.CreateElementSelector( selector ).Search( Elements( node ) );
     }
@@ -265,7 +265,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
+    public static IEnumerable<IHtmlElement> Find( this IHtmlNodeContainer container, string expression )
     {
       var selector = HtmlCssSelector.Create( expression );
       return selector.Search( container, true );
@@ -278,7 +278,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的唯一元素</returns>
-    public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
+    public static IHtmlElement FindSingle( this IHtmlNodeContainer container, string expression )
     {
       return Find( container, expression ).Single();
     }

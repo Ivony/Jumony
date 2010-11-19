@@ -15,15 +15,15 @@ namespace Ivony.Html.Parser
     }
 
 
-    IHtmlContainer IHtmlNode.Container
+    public IHtmlNodeContainer Container
     {
-      get { return Container; }
+      get { return DomContainer; }
 
     }
 
 
     private DomContainer _parent;
-    internal DomContainer Container
+    internal DomContainer DomContainer
     {
       get
       {
@@ -63,7 +63,7 @@ namespace Ivony.Html.Parser
       if ( removed )
         return;
 
-      if ( Container == null )
+      if ( DomContainer == null )
         throw new InvalidOperationException();
 
       lock ( SyncRoot )
@@ -81,7 +81,7 @@ namespace Ivony.Html.Parser
       {
         CheckDisposed();
 
-        return Container.Document;
+        return DomContainer.Document;
       }
     }
 

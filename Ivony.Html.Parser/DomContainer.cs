@@ -27,12 +27,12 @@ namespace Ivony.Html.Parser
       lock ( node.SyncRoot )
       {
 
-        if ( node.Container != null )
+        if ( node.DomContainer != null )
           throw new InvalidOperationException();
 
 
         nodes.Insert( index, node );
-        node.Container = this;
+        node.DomContainer = this;
 
       }
     }
@@ -42,13 +42,13 @@ namespace Ivony.Html.Parser
       lock ( domNode.SyncRoot )
       {
 
-        if ( domNode.Container != null )
+        if ( domNode.DomContainer != null )
           throw new InvalidOperationException();
 
         lock ( SyncRoot )
         {
           nodes.Add( domNode );
-          domNode.Container = this;
+          domNode.DomContainer = this;
         }
       }
     }

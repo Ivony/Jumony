@@ -15,7 +15,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlNodeContainer Container
+    public IHtmlContainer Container
     {
       get { return DomContainer; }
 
@@ -46,7 +46,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public object NodeObject
+    public object RawObject
     {
       get
       {

@@ -56,7 +56,7 @@ namespace Ivony.Html.Parser
 
 
 
-    IHtmlDocument IHtmlObject.Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get
       {
@@ -83,7 +83,7 @@ namespace Ivony.Html.Parser
 
     #region IFreeNode 成员
 
-    public IHtmlNode Into( IHtmlNodeContainer container, int index )
+    public IHtmlNode Into( IHtmlContainer container, int index )
     {
       CheckDisposed();
 

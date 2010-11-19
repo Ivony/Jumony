@@ -84,7 +84,7 @@ namespace Ivony.Html
       }
     }
 
-    public void InsertTo( IHtmlContainer container, int index )
+    public void InsertTo( IHtmlNodeContainer container, int index )
     {
       lock ( SyncRoot )
       {

@@ -39,9 +39,9 @@ namespace Ivony.Html.Parser
 
       if ( string.IsNullOrEmpty( html ) )
         return document;
-      
-      
-      
+
+
+
       containerStack.Push( document );
 
 
@@ -237,7 +237,7 @@ namespace Ivony.Html.Parser
 
 
 
-    private void CompleteNode( DomNode node )
+    protected virtual void CompleteNode( DomNode node )
     {
 
     }
@@ -246,11 +246,6 @@ namespace Ivony.Html.Parser
     IHtmlDocument IHtmlParser.Parse( string html )
     {
       return Parse( html );
-    }
-
-    public HtmlFragment ParseFragment( string html )
-    {
-      throw new NotImplementedException();
     }
 
   }

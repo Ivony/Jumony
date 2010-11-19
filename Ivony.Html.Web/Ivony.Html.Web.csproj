@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlManager.cs" />
+    <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="MapInfo.cs" />

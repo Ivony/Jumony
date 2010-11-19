@@ -38,29 +38,14 @@ namespace Ivony.Html.Web
 
       MapperResult = Context.GetMapperResult();
 
-      if ( OriginUrl == null )
-      {
-        Trace.Warn( "Core", "origin url is not found." );
 
-        var builder = new UriBuilder( Request.Url );
-        var path = builder.Path;
+      OnPreLoadDocument();
 
-        if ( !path.EndsWith( ".ashx" ) )
-          throw new InvalidOperationException();
+      Trace.Write( "Core", "Begin Load Document" );
+      Document = MapperResult.LoadTemplate();
+      Trace.Write( "Core", "End Load Document" );
 
-        builder.Path = path.Remove( path.Length - 5 );
-
-        Trace.Warn( "Core", "redirect to template vitual path." );
-        Response.Redirect( builder.Uri.AbsoluteUri );
-      }
-
-      OnPreParseDocument();
-
-      Trace.Write( "Core", "Begin Parse Document" );
-      Document = LoadTemplate();
-      Trace.Write( "Core", "End Parse Document" );
-
-      OnPostParseDocument();
+      OnPostLoadDocument();
 
 
 
@@ -72,9 +57,20 @@ namespace Ivony.Html.Web
 
       OnPostProcessDocument();
 
+      AddGeneratorMetaData();
+
+      OnPreRender();
+
+      Trace.Write( "Core", "Begin Render Document" );
+      RenderDocument();
+      Trace.Write( "Core", "End Render Document" );
+
+      OnPostReander();
+    }
 
 
-
+    private void AddGeneratorMetaData()
+    {
       var factory = Document.GetNodeFactory();
       if ( factory != null )
       {
@@ -88,11 +84,6 @@ namespace Ivony.Html.Web
           meta.InsertTo( header, 0 );
 
       }
-
-
-      Trace.Write( "Core", "Begin Render Document" );
-      RenderDocument();
-      Trace.Write( "Core", "End Render Document" );
     }
 
 
@@ -141,11 +132,9 @@ namespace Ivony.Html.Web
     protected virtual IHtmlDocument LoadTemplate()
     {
 
-      OnDocumentLoading();
 
       var document = MapperResult.LoadTemplate();
 
-      OnDocumentLoaded();
 
       return document;
     }
@@ -236,11 +225,11 @@ namespace Ivony.Html.Web
 
 
 
-    public event EventHandler DocumentLoading;
-    public event EventHandler DocumentLoaded;
+    public event EventHandler PreLoadDocument;
+    public event EventHandler PostLoadDocument;
 
-    protected virtual void OnDocumentLoading() { if ( DocumentLoading != null ) DocumentLoading( this, EventArgs.Empty ); }
-    protected virtual void OnDocumentLoaded() { if ( DocumentLoaded != null ) DocumentLoaded( this, EventArgs.Empty ); }
+    protected virtual void OnPreLoadDocument() { if ( PreLoadDocument != null ) PreLoadDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPostLoadDocument() { if ( PostLoadDocument != null ) PostLoadDocument( this, EventArgs.Empty ); }
 
 
     public event EventHandler PreParseDocument;

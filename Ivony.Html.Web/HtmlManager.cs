@@ -10,15 +10,15 @@ using System.Web.Caching;
 
 namespace Ivony.Html.Web
 {
-  public class HtmlManager
+  public static class HtmlManager
   {
 
-    public static VirtualPathProvider VirtualPathProvider
+    private static VirtualPathProvider VirtualPathProvider
     {
       get { return HostingEnvironment.VirtualPathProvider; }
     }
 
-    public static Cache Cache
+    private static Cache Cache
     {
       get { return HostingEnvironment.Cache; }
     }

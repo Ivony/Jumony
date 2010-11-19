@@ -29,7 +29,7 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        var element = Parent as IHtmlElement;
+        var element = Container as IHtmlElement;
         if ( element != null )
         {
           if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )

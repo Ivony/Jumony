@@ -15,7 +15,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlContainer Parent
+    IHtmlContainer IHtmlNode.Container
     {
       get { return Container; }
 
@@ -63,7 +63,7 @@ namespace Ivony.Html.Parser
       if ( removed )
         return;
 
-      if ( Parent == null )
+      if ( Container == null )
         throw new InvalidOperationException();
 
       lock ( SyncRoot )
@@ -81,7 +81,7 @@ namespace Ivony.Html.Parser
       {
         CheckDisposed();
 
-        return Parent.Document;
+        return Container.Document;
       }
     }
 

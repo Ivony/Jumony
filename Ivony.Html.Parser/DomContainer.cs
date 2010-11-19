@@ -27,7 +27,7 @@ namespace Ivony.Html.Parser
       lock ( node.SyncRoot )
       {
 
-        if ( node.Parent != null )
+        if ( node.Container != null )
           throw new InvalidOperationException();
 
 
@@ -42,7 +42,7 @@ namespace Ivony.Html.Parser
       lock ( domNode.SyncRoot )
       {
 
-        if ( domNode.Parent != null )
+        if ( domNode.Container != null )
           throw new InvalidOperationException();
 
         lock ( SyncRoot )

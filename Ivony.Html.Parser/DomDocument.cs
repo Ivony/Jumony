@@ -8,7 +8,7 @@ namespace Ivony.Html.Parser
   public class DomDocument : DomContainer, IHtmlDocument
   {
 
-    public DomDocument() : base( null ) { }
+    public DomDocument()  { }
 
 
     protected override string ObjectName

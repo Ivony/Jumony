@@ -10,8 +10,7 @@ namespace Ivony.Html.Parser
 
     private readonly string _comment;
 
-    public DomComment( DomContainer parent, string comment )
-      : base( parent )
+    public DomComment( string comment )
     {
       _comment = comment;
     }
@@ -51,7 +50,7 @@ namespace Ivony.Html.Parser
     public DomFreeComment( DomFactory factory, string comment )
     {
       _factory = factory;
-      _node = new DomComment( null, comment );
+      _node = new DomComment(  comment );
     }
 
 
@@ -90,7 +89,7 @@ namespace Ivony.Html.Parser
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      var domContainer = container as DomContainer;
+      var domContainer = container as IDomContainer;
       if ( domContainer == null )
         throw new InvalidOperationException();
 

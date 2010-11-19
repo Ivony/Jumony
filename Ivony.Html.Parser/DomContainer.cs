@@ -8,63 +8,32 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  public abstract class DomContainer : DomNode, IHtmlContainer
+  public abstract class DomContainer : DomNode, IDomContainer
   {
 
-    protected DomContainer( DomContainer parent )
-      : base( parent )
+    protected DomContainer()
     {
-      nodes = new SynchronizedCollection<DomNode>( SyncRoot );
+      _nodes = new DomNodeCollection( this );
     }
 
 
-    private readonly IList<DomNode> nodes;
 
+    private readonly DomNodeCollection _nodes;
 
-    internal void InsertNode( int index, DomNode node )
+    #region IDomContainer 成员
+
+    DomNodeCollection IDomContainer.NodeCollection
     {
-
-      lock ( node.SyncRoot )
-      {
-
-        if ( node.DomContainer != null )
-          throw new InvalidOperationException();
-
-
-        nodes.Insert( index, node );
-        node.DomContainer = this;
-
-      }
+      get { return _nodes; }
     }
 
-    internal void AddNode( DomNode domNode )
-    {
-      lock ( domNode.SyncRoot )
-      {
-
-        if ( domNode.DomContainer != null )
-          throw new InvalidOperationException();
-
-        lock ( SyncRoot )
-        {
-          nodes.Add( domNode );
-          domNode.DomContainer = this;
-        }
-      }
-    }
-
-
-    internal void RemoveNode( DomNode node )
-    {
-      nodes.Remove( node );
-    }
-
+    #endregion
 
     #region IHtmlContainer 成员
 
-    public IEnumerable<IHtmlNode> Nodes()
+    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
-      return nodes.Cast<IHtmlNode>();
+      return _nodes.Cast<IHtmlNode>();
     }
 
     #endregion

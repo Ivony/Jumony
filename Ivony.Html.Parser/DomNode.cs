@@ -8,43 +8,42 @@ namespace Ivony.Html.Parser
   public abstract class DomNode : IHtmlNode
   {
 
-    protected DomNode( DomContainer parent )
+    protected DomNode()
     {
-      if ( parent != null )
-        parent.AddNode( this );
     }
 
+
+    private IDomContainer _container;
 
     public IHtmlContainer Container
-    {
-      get { return DomContainer; }
-
-    }
-
-
-    private DomContainer _parent;
-    internal DomContainer DomContainer
     {
       get
       {
         CheckDisposed();
-
-        return _parent;
+        return _container;
       }
-      set
-      {
-        CheckDisposed();
 
+      internal set
+      {
         lock ( SyncRoot )
         {
-          if ( _parent != null )
+          CheckDisposed();
+
+          if ( _container != null )
             throw new InvalidOperationException();
 
-          _parent = value;
+
+          var domContainer = _container as IDomContainer;
+
+          if ( domContainer == null )
+            throw new InvalidOperationException();
+
+          _container = domContainer;
+
         }
       }
-    }
 
+    }
 
     public object RawObject
     {
@@ -63,14 +62,13 @@ namespace Ivony.Html.Parser
       if ( removed )
         return;
 
-      if ( DomContainer == null )
+      if ( Container == null )
         throw new InvalidOperationException();
 
       lock ( SyncRoot )
       {
-        _parent.RemoveNode( this );
-        _parent = null;
-
+        _container.NodeCollection.Remove( this );
+        _container = null;
         removed = true;
       }
     }
@@ -81,7 +79,7 @@ namespace Ivony.Html.Parser
       {
         CheckDisposed();
 
-        return DomContainer.Document;
+        return Container.Document;
       }
     }
 

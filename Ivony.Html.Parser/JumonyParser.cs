@@ -28,7 +28,7 @@ namespace Ivony.Html.Parser
 
 
 
-    private Stack<DomContainer> containerStack = new Stack<DomContainer>();
+    private Stack<IDomContainer> containerStack = new Stack<IDomContainer>();
 
 
 
@@ -207,21 +207,21 @@ namespace Ivony.Html.Parser
 
     private DomElement CreateElement( string tagName, Dictionary<string, string> attributes )
     {
-      var element = new DomElement( containerStack.Peek(), tagName, attributes );
+      var element = new DomElement( tagName, attributes );
       CompleteNode( element );
       return element;
     }
 
     private DomTextNode CreateTextNode( string text )
     {
-      var node = new DomTextNode( containerStack.Peek(), text );
+      var node = new DomTextNode( text );
       CompleteNode( node );
       return node;
     }
 
     private DomComment CreateCommet( string comment )
     {
-      var node = new DomComment( containerStack.Peek(), comment );
+      var node = new DomComment( comment );
       CompleteNode( node );
       return node;
     }
@@ -229,7 +229,7 @@ namespace Ivony.Html.Parser
 
     private DomSpecial CreateSpecial( string html )
     {
-      var special = new DomSpecial( containerStack.Peek(), html );
+      var special = new DomSpecial( html );
       CompleteNode( special );
       return special;
     }
@@ -239,7 +239,8 @@ namespace Ivony.Html.Parser
 
     protected virtual void CompleteNode( DomNode node )
     {
-
+      var container = containerStack.Peek();
+      container.NodeCollection.Add( node );
     }
 
 

@@ -15,9 +15,9 @@ namespace Ivony.Html.Parser
 
 
 
-    internal DomElement( DomContainer parent, string name, IDictionary<string, string> attributes )
-      : base( parent )
+    internal DomElement( string name, IDictionary<string, string> attributes )
     {
+
 
       if ( name == null )
         throw new ArgumentNullException( "name" );
@@ -186,6 +186,8 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+
   }
 
 
@@ -199,7 +201,7 @@ namespace Ivony.Html.Parser
 
     public DomFreeElement( DomFactory factory, string name )
     {
-      _element = new DomElement( null, name, null );
+      _element = new DomElement(  name, null );
       _factory = factory;
     }
 

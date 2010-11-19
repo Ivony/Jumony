@@ -10,8 +10,7 @@ namespace Ivony.Html.Parser
 
     private string raw;
 
-    public DomSpecial( DomContainer container, string rawHtml )
-      : base( container )
+    public DomSpecial(  string rawHtml )
     {
       raw = rawHtml;
     }

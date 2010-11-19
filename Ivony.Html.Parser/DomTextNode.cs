@@ -11,8 +11,7 @@ namespace Ivony.Html.Parser
 
     private readonly string raw;
 
-    public DomTextNode( DomContainer parent, string rawHtml )
-      : base( parent )
+    public DomTextNode(  string rawHtml )
     {
       raw = rawHtml;
     }
@@ -29,7 +28,7 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        var element = DomContainer as IHtmlElement;
+        var element =  this.Parent();
         if ( element != null )
         {
           if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
@@ -75,7 +74,7 @@ namespace Ivony.Html.Parser
     public DomFreeTextNode( DomFactory factory, string html )
     {
       _factory = factory;
-      textNode = new DomTextNode( null, html );
+      textNode = new DomTextNode(  html );
     }
 
 
@@ -114,7 +113,7 @@ namespace Ivony.Html.Parser
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      var domContainer = container as DomContainer;
+      var domContainer = container as IDomContainer;
       if ( domContainer == null )
         throw new InvalidOperationException();
 

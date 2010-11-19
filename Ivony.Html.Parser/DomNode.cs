@@ -5,13 +5,8 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  public abstract class DomNode : IHtmlNode
+  public abstract class DomNode : DomObject, IHtmlNode
   {
-
-    protected DomNode()
-    {
-    }
-
 
     private IDomContainer _container;
 
@@ -42,18 +37,8 @@ namespace Ivony.Html.Parser
 
         }
       }
-
     }
 
-    public object RawObject
-    {
-      get
-      {
-        CheckDisposed();
-
-        return this;
-      }
-    }
 
     public void Remove()
     {
@@ -73,7 +58,7 @@ namespace Ivony.Html.Parser
       }
     }
 
-    public virtual IHtmlDocument Document
+    public override IHtmlDocument Document
     {
       get
       {
@@ -92,18 +77,6 @@ namespace Ivony.Html.Parser
         return null;
       }
     }
-
-    private readonly object _sync = new object();
-    public object SyncRoot
-    {
-      get
-      {
-        CheckDisposed();
-
-        return _sync;
-      }
-    }
-
 
 
     protected bool removed = false;

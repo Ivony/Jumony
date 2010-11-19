@@ -7,7 +7,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  internal class DomElement : DomContainer, IHtmlElement
+  internal class DomElement : DomNode, IHtmlElement, IDomContainer
   {
 
     private readonly string _name;
@@ -17,7 +17,7 @@ namespace Ivony.Html.Parser
 
     internal DomElement( string name, IDictionary<string, string> attributes )
     {
-
+      nodeCollection = new DomNodeCollection( this );
 
       if ( name == null )
         throw new ArgumentNullException( "name" );
@@ -45,6 +45,26 @@ namespace Ivony.Html.Parser
         return _name;
       }
     }
+
+
+    #region IDomContianer Implements
+
+    private readonly DomNodeCollection nodeCollection;
+
+    DomNodeCollection IDomContainer.NodeCollection
+    {
+      get { return nodeCollection; }
+    }
+
+    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
+    {
+      return nodeCollection.Cast<IHtmlNode>();
+    }
+
+    #endregion
+
+
+
 
     public IEnumerable<IHtmlAttribute> Attributes()
     {
@@ -201,7 +221,7 @@ namespace Ivony.Html.Parser
 
     public DomFreeElement( DomFactory factory, string name )
     {
-      _element = new DomElement(  name, null );
+      _element = new DomElement( name, null );
       _factory = factory;
     }
 
@@ -244,7 +264,7 @@ namespace Ivony.Html.Parser
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      var domContainer = container as DomContainer;
+      var domContainer = container as IDomContainer;
       if ( domContainer == null )
         throw new InvalidOperationException();
 

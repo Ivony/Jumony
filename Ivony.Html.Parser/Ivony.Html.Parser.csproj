@@ -45,12 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomComment.cs" />
-    <Compile Include="DomContainer.cs" />
     <Compile Include="DomDocument.cs" />
     <Compile Include="DomFactory.cs" />
     <Compile Include="DomNode.cs" />
     <Compile Include="DomElement.cs" />
     <Compile Include="DomNodeCollection.cs" />
+    <Compile Include="DomObject.cs" />
     <Compile Include="DomSpecial.cs" />
     <Compile Include="DomTextNode.cs" />
     <Compile Include="IDomContainer.cs" />

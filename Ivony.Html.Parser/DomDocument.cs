@@ -5,17 +5,13 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  public class DomDocument : DomContainer, IHtmlDocument
+  public class DomDocument : DomObject, IHtmlDocument, IDomContainer
   {
 
-    public DomDocument()  { }
-
-
-    protected override string ObjectName
+    public DomDocument()
     {
-      get { return "Document"; }
+      nodeCollection = new DomNodeCollection( this );
     }
-
 
     public override IHtmlDocument Document
     {
@@ -31,5 +27,24 @@ namespace Ivony.Html.Parser
     {
       return new DomFactory( this );
     }
+
+
+
+    #region IDomContianer Implements
+
+    private readonly DomNodeCollection nodeCollection;
+
+    DomNodeCollection IDomContainer.NodeCollection
+    {
+      get { return nodeCollection; }
+    }
+
+    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
+    {
+      return nodeCollection.Cast<IHtmlNode>();
+    }
+
+    #endregion
+
   }
 }

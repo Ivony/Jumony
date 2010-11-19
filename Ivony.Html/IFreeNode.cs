@@ -9,7 +9,7 @@ namespace Ivony.Html
   public interface IFreeNode : IHtmlNode
   {
     [EditorBrowsable( EditorBrowsableState.Never )]
-    IHtmlNode Into( IHtmlContainer container, int index );
+    IHtmlNode Into( IHtmlNodeContainer container, int index );
     IHtmlNodeFactory Factory { get; }
 
     //bool CanInsertTo( IHtmlContainer container );

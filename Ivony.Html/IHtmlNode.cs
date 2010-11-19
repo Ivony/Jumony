@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Ivony.Html
 {
-  public interface IHtmlNode : IHtmlObject
+  public interface IHtmlNode : IHtmlDomObject
   {
     /// <summary>
     /// 获取节点的容器

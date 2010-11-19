@@ -44,17 +44,17 @@ namespace Ivony.Html
 
     #region IHtmlObject 成员
 
-    object IHtmlObject.RawObject
+    object IHtmlDomObject.RawObject
     {
       get { return Document.RawObject; }
     }
 
-    IHtmlDocument IHtmlObject.Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get { return this; }
     }
 
-    object IHtmlObject.SyncRoot
+    object IHtmlDomObject.SyncRoot
     {
       get { return Document.SyncRoot; }
     }

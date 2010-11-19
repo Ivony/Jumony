@@ -105,12 +105,12 @@ namespace Ivony.Html
 
     #region IHtmlNode 成员
 
-    object IHtmlObject.RawObject
+    object IHtmlDomObject.RawObject
     {
       get { return this; }
     }
 
-    IHtmlDocument IHtmlObject.Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get { return _document; }
     }

@@ -6,7 +6,7 @@ namespace Ivony.Html
   /// <summary>
   /// 表示一个 HTML 对象
   /// </summary>
-  public interface IHtmlObject
+  public interface IHtmlDomObject
   {
 
 

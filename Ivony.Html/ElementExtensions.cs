@@ -290,7 +290,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expressions">多个CSS选择器，结果会合并</param>
     /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, params string[] expressions )
+    public static IEnumerable<IHtmlElement> Find( this IHtmlNodeContainer container, params string[] expressions )
     {
       var selector = HtmlCssSelector.Create( expressions );
       return selector.Search( container, true );

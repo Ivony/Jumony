@@ -71,7 +71,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as HtmlContainerAdapter;
+        var containerAdapter = container as IHtmlContainerNode;
         if ( containerAdapter == null )
           throw new InvalidOperationException();
 
@@ -120,7 +120,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as HtmlContainerAdapter;
+        var containerAdapter = container as IHtmlContainerNode;
         if ( containerAdapter == null )
           throw new InvalidOperationException();
 
@@ -169,7 +169,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as HtmlContainerAdapter;
+        var containerAdapter = container as IHtmlContainerNode;
         if ( containerAdapter == null )
           throw new InvalidOperationException();
 

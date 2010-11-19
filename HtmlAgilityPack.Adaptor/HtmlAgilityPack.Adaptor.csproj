@@ -50,13 +50,13 @@
     <Compile Include="ConvertExtension.cs" />
     <Compile Include="HtmlAttributeAdapter.cs" />
     <Compile Include="HtmlCommentNodeAdapter.cs" />
-    <Compile Include="HtmlContainerAdapter.cs" />
     <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlDocumentAdapter.cs" />
     <Compile Include="HtmlNodeAdapter.cs" />
     <Compile Include="HtmlNodeFactory.cs" />
     <Compile Include="HtmlParser.cs" />
     <Compile Include="HtmlTextNodeAdapter.cs" />
+    <Compile Include="IHtmlContainerNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

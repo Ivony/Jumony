@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  internal class HtmlDocumentAdapter : HtmlContainerAdapter, IHtmlDocument
+  internal class HtmlDocumentAdapter : IHtmlDocument, IHtmlContainerNode
   {
 
 
@@ -16,7 +16,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     private AP.HtmlDocument _document;
 
     public HtmlDocumentAdapter( AP.HtmlDocument document )
-      : base( document.DocumentNode )
     {
       if ( document.DocumentNode.ChildNodes.Any() )
       {
@@ -40,32 +39,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public string Handle( IHtmlNode node )
-    {
-      var htmlNode = node.NodeObject.CastTo<AP.HtmlNode>();
-      return string.Format( "{0}:{1}", htmlNode.Line, htmlNode.LinePosition );
-    }
-
-
-    Regex handleRegex = new Regex( string.Format( "^{0}:{1}$", Regulars.integerPattern, Regulars.integerPattern ), RegexOptions.Compiled );
-
-    public IHtmlNode Handle( string handler )
-    {
-      if ( handleRegex.IsMatch( handler ) )
-        throw new FormatException();
-
-      string[] values = handler.Split( ':' );
-      int line = int.Parse( values[0] );
-      int linePosition = int.Parse( values[1] );
-
-      var htmlNode = Node.DescendantNodesAndSelf().FirstOrDefault( node => node.Line == line && node.LinePosition == linePosition );
-      if ( htmlNode == null )
-        return null;
-
-      return htmlNode.AsNode();
-
-    }
-
     public IHtmlNodeFactory GetNodeFactory()
     {
       return new HtmlNodeFactory( this._document );
@@ -77,5 +50,26 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       get { return this; }
     }
 
+
+    public IEnumerable<IHtmlNode> Nodes()
+    {
+      return Node.ChildNodes.Select( node => node.AsNode() );
+    }
+
+    public AP.HtmlNode Node
+    {
+      get { return _document.DocumentNode; }
+    }
+
+
+    public object NodeObject
+    {
+      get { return Node; }
+    }
+
+    public object SyncRoot
+    {
+      get { return Node; }
+    }
   }
 }

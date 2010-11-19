@@ -41,7 +41,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
           return (IHtmlNodeContainer) node.OwnerDocument.AsDocument();
 
         case AP.HtmlNodeType.Element:
-          return (IHtmlNodeContainer) node.AsNode();
+          return (IHtmlNodeContainer) node.AsElement();
 
         default:
           throw new ArgumentException( "只能从NodeType为Element或Document的HtmlNode转换", "node" );

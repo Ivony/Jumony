@@ -13,7 +13,7 @@ namespace Ivony.Html
   /// <summary>
   /// HTML 文档碎片，游离节点的容器
   /// </summary>
-  public class HtmlFragment : IHtmlContainer
+  public class HtmlFragment : IHtmlNodeContainer
   {
 
 
@@ -105,11 +105,6 @@ namespace Ivony.Html
 
     #region IHtmlNode 成员
 
-    IHtmlNodeContainer IHtmlNode.Container
-    {
-      get { return null; }
-    }
-
     object IHtmlObject.NodeObject
     {
       get { return this; }
@@ -120,29 +115,6 @@ namespace Ivony.Html
       get { return _document; }
     }
 
-
-    void IHtmlNode.Remove()
-    {
-      throw new InvalidOperationException();
-    }
-
-    string IHtmlNode.RawHtml
-    {
-      get
-      {
-        var builder = new StringBuilder();
-
-        foreach ( IHtmlNode node in _nodes )
-        {
-          if ( node.RawHtml == null )
-            return null;
-
-          builder.Append( node.RawHtml );
-        }
-
-        return builder.ToString();
-      }
-    }
 
     #endregion
 

@@ -20,7 +20,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要生成InnerHTML的容器</param>
     /// <returns>容器所有子节点的HTML表现形式</returns>
-    public static string InnerHtml( this IHtmlContainer container )
+    public static string InnerHtml( this IHtmlNodeContainer container )
     {
       return InnerHtml( container, false );
     }
@@ -31,7 +31,7 @@ namespace Ivony.Html
     /// <param name="container">要生成InnerHTML的容器</param>
     /// <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
     /// <returns>容器所有子节点的HTML表现形式</returns>
-    public static string InnerHtml( this IHtmlContainer container, bool normalization )
+    public static string InnerHtml( this IHtmlNodeContainer container, bool normalization )
     {
       StringBuilder builder = new StringBuilder();
 

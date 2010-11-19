@@ -11,7 +11,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取节点的容器
     /// </summary>
-    IHtmlNodeContainer Container
+    IHtmlContainer Container
     {
       get;
     }

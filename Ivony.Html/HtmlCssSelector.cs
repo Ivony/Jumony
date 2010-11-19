@@ -134,7 +134,7 @@ namespace Ivony.Html
     /// <param name="element">元素</param>
     /// <param name="scope">上溯范畴</param>
     /// <returns>是否符合选择器要求</returns>
-    private bool Allows( IHtmlElement element, IHtmlNodeContainer scope )
+    private bool Allows( IHtmlElement element, IHtmlContainer scope )
     {
       return _selectors.Any( s => s.Allows( element, scope ) );
     }
@@ -170,7 +170,7 @@ namespace Ivony.Html
     /// 但如果我们将#item元素当作上下文且asScope参数为false来选择"ul li"元素时，可能会不能得到预期的结果，会发现abc元素也被选择了。这是因为选择器在查找父级元素限定时，会查找到id为outter的ul元素。为了解决此问题，请将asScope参数设置为true。
     /// </remarks>
     /// <returns>搜索到的所有元素</returns>
-    public IEnumerable<IHtmlElement> Search( IHtmlNodeContainer container, bool asScope )
+    public IEnumerable<IHtmlElement> Search( IHtmlContainer container, bool asScope )
     {
 
       var elements = container.Descendants();
@@ -316,7 +316,7 @@ namespace Ivony.Html
       }
 
 
-      public bool Allows( IHtmlElement element, IHtmlNodeContainer scope )
+      public bool Allows( IHtmlElement element, IHtmlContainer scope )
       {
 
         if ( !ElementSelector.Allows( element ) )

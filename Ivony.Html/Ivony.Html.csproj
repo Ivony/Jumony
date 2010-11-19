@@ -56,7 +56,7 @@
     <Compile Include="DocumentExtensions.cs" />
     <Compile Include="HtmlEncoding.cs" />
     <Compile Include="HtmlFragment.cs" />
-    <Compile Include="IHtmlNodeContainer.cs" />
+    <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlObject.cs" />
     <Compile Include="IHtmlParser.cs" />
     <Compile Include="DomExtensions.cs" />

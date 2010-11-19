@@ -18,14 +18,14 @@ namespace Ivony.Html
 
     #region IHtmlNode 成员
 
-    IHtmlNodeContainer IHtmlNode.Container
+    IHtmlContainer IHtmlNode.Container
     {
       get { return Node.Container; }
     }
 
-    object IHtmlObject.NodeObject
+    object IHtmlObject.RawObject
     {
-      get { return Node.NodeObject; }
+      get { return Node.RawObject; }
     }
 
     void IHtmlNode.Remove()

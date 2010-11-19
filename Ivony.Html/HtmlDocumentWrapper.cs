@@ -35,7 +35,7 @@ namespace Ivony.Html
 
     #region IHtmlNodeContainer 成员
 
-    IEnumerable<IHtmlNode> IHtmlNodeContainer.Nodes()
+    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
       return Document.Nodes();
     }
@@ -44,9 +44,9 @@ namespace Ivony.Html
 
     #region IHtmlObject 成员
 
-    object IHtmlObject.NodeObject
+    object IHtmlObject.RawObject
     {
-      get { return Document.NodeObject; }
+      get { return Document.RawObject; }
     }
 
     IHtmlDocument IHtmlObject.Document

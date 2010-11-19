@@ -13,7 +13,7 @@ namespace Ivony.Html
   /// <summary>
   /// HTML 文档碎片，游离节点的容器
   /// </summary>
-  public class HtmlFragment : IHtmlNodeContainer
+  public class HtmlFragment : IHtmlContainer
   {
 
 
@@ -84,7 +84,7 @@ namespace Ivony.Html
       }
     }
 
-    public void InsertTo( IHtmlNodeContainer container, int index )
+    public void InsertTo( IHtmlContainer container, int index )
     {
       lock ( SyncRoot )
       {
@@ -105,7 +105,7 @@ namespace Ivony.Html
 
     #region IHtmlNode 成员
 
-    object IHtmlObject.NodeObject
+    object IHtmlObject.RawObject
     {
       get { return this; }
     }
@@ -120,7 +120,7 @@ namespace Ivony.Html
 
     #region IHtmlContainer 成员
 
-    IEnumerable<IHtmlNode> IHtmlNodeContainer.Nodes()
+    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
       return _nodes.Cast<IHtmlNode>();
     }

@@ -21,7 +21,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要获取父元素的节点</param>
     /// <returns>父元素</returns>
-    public static IHtmlElement ParentElement( this IHtmlNode node )
+    public static IHtmlElement Parent( this IHtmlNode node )
     {
       return node.Container as IHtmlElement;
     }
@@ -32,7 +32,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要获取子元素的容器</param>
     /// <returns>容器的所有子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlNodeContainer node )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node )
     {
       return node.Nodes().OfType<IHtmlElement>();
     }
@@ -44,7 +44,7 @@ namespace Ivony.Html
     /// <param name="node">要获取子元素的容器</param>
     /// <param name="selector">用来筛选子元素的元素选择器</param>
     /// <returns>符合条件的子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlNodeContainer node, string selector )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node, string selector )
     {
       return HtmlCssSelector.CreateElementSelector( selector ).Search( Elements( node ) );
     }
@@ -59,7 +59,7 @@ namespace Ivony.Html
 
       while ( true )
       {
-        var element = node.ParentElement();
+        var element = node.Parent();
 
 
         if ( element == null )
@@ -109,7 +109,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要获取子代元素的容器对象</param>
     /// <returns>容器所有的子代元素</returns>
-    public static IEnumerable<IHtmlElement> Descendants( this IHtmlNodeContainer container )
+    public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container )
     {
       return container.DescendantNodes().OfType<IHtmlElement>();
     }
@@ -121,7 +121,7 @@ namespace Ivony.Html
     /// <param name="selector">用于筛选子代元素的选择器</param>
     /// <returns>符合选择器的容器的所有子代元素</returns>
     /// <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
-    public static IEnumerable<IHtmlElement> Descendants( this IHtmlNodeContainer container, string selector )
+    public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container, string selector )
     {
       return HtmlCssSelector.Create( selector ).Search( container, false );
     }
@@ -131,14 +131,14 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要获取子代元素的容器对象</param>
     /// <returns>容器所有的子代节点</returns>
-    public static IEnumerable<IHtmlNode> DescendantNodes( this IHtmlNodeContainer container )
+    public static IEnumerable<IHtmlNode> DescendantNodes( this IHtmlContainer container )
     {
 
       foreach ( var node in container.Nodes() )
       {
         yield return node;
 
-        var childContainer = node as IHtmlNodeContainer;
+        var childContainer = node as IHtmlContainer;
         if ( childContainer != null )
         {
           foreach ( var descendantNode in DescendantNodes( childContainer ) )
@@ -194,7 +194,7 @@ namespace Ivony.Html
     /// <returns>在这之后的所有兄弟（同级）节点</returns>
     public static IEnumerable<IHtmlNode> SiblingNodesBeforeSelf( this IHtmlNode node )
     {
-      return node.SiblingNodes().TakeWhile( n => !n.NodeObject.Equals( node.NodeObject ) );
+      return node.SiblingNodes().TakeWhile( n => !n.RawObject.Equals( node.RawObject ) );
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ namespace Ivony.Html
     /// <returns>之后的所有兄弟（同级）节点</returns>
     public static IEnumerable<IHtmlNode> SiblingNodesAfterSelf( this IHtmlNode node )
     {
-      return node.SiblingNodes().SkipWhile( n => !n.NodeObject.Equals( node.NodeObject ) ).Skip( 1 );
+      return node.SiblingNodes().SkipWhile( n => !n.RawObject.Equals( node.RawObject ) ).Skip( 1 );
     }
 
 
@@ -280,7 +280,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlNodeContainer container, string expression )
+    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
       var selector = HtmlCssSelector.Create( expression );
       return selector.Search( container, true );
@@ -293,7 +293,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的唯一元素</returns>
-    public static IHtmlElement FindSingle( this IHtmlNodeContainer container, string expression )
+    public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
     {
       return Find( container, expression ).Single();
     }
@@ -305,7 +305,7 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expressions">多个CSS选择器，结果会合并</param>
     /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlNodeContainer container, params string[] expressions )
+    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, params string[] expressions )
     {
       var selector = HtmlCssSelector.Create( expressions );
       return selector.Search( container, true );

@@ -53,14 +53,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      return Node.ChildNodes.Select( node => node.AsNode() );
+      return ChildNodes.Select( node => node.AsNode() );
     }
 
     public AP.HtmlNode Node
     {
       get { return _document.DocumentNode; }
     }
-
 
     public object NodeObject
     {
@@ -71,5 +70,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     {
       get { return Node; }
     }
+
+
+    public AP.HtmlNodeCollection ChildNodes
+    {
+      get { return Node.ChildNodes; }
+    }
+
+
   }
 }

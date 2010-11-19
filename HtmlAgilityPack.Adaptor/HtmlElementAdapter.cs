@@ -41,9 +41,14 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      return _node.ChildNodes.Select( node => node.AsNode() );
+      return ChildNodes.Select( node => node.AsNode() );
     }
 
+
+    public AP.HtmlNodeCollection ChildNodes
+    {
+      get { return Node.ChildNodes; }
+    }
 
   }
 }

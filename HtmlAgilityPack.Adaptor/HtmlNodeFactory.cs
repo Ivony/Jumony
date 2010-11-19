@@ -71,12 +71,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as IHtmlContainerNode;
-        if ( containerAdapter == null )
+        var containerNode = container as IHtmlContainerNode;
+        if ( containerNode == null )
           throw new InvalidOperationException();
 
 
-        containerAdapter.Node.ChildNodes.Insert( index, Node );
+        containerNode.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }
@@ -120,12 +120,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as IHtmlContainerNode;
-        if ( containerAdapter == null )
+        var containerNode = container as IHtmlContainerNode;
+        if ( containerNode == null )
           throw new InvalidOperationException();
 
 
-        containerAdapter.Node.ChildNodes.Insert( index, Node );
+        containerNode.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }
@@ -169,12 +169,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerAdapter = container as IHtmlContainerNode;
-        if ( containerAdapter == null )
+        var containerNode = container as IHtmlContainerNode;
+        if ( containerNode == null )
           throw new InvalidOperationException();
 
 
-        containerAdapter.Node.ChildNodes.Insert( index, Node );
+        containerNode.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }

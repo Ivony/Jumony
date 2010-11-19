@@ -9,7 +9,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
   internal interface IHtmlContainerNode
   {
 
-    HtmlNode Node
+    HtmlNodeCollection ChildNodes
     {
       get;
     }

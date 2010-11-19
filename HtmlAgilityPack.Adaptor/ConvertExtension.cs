@@ -32,16 +32,16 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public static IHtmlNodeContainer AsContainer( this AP.HtmlNode node )
+    public static IHtmlContainer AsContainer( this AP.HtmlNode node )
     {
 
       switch ( node.NodeType )
       {
         case AP.HtmlNodeType.Document:
-          return (IHtmlNodeContainer) node.OwnerDocument.AsDocument();
+          return (IHtmlContainer) node.OwnerDocument.AsDocument();
 
         case AP.HtmlNodeType.Element:
-          return (IHtmlNodeContainer) node.AsElement();
+          return (IHtmlContainer) node.AsElement();
 
         default:
           throw new ArgumentException( "只能从NodeType为Element或Document的HtmlNode转换", "node" );

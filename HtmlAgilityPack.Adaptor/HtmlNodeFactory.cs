@@ -66,7 +66,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      public IHtmlNode Into( IHtmlNodeContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );
@@ -88,7 +88,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlNodeContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }
@@ -115,7 +115,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-      public IHtmlNode Into( IHtmlNodeContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );
@@ -137,7 +137,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlNodeContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }
@@ -164,7 +164,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-      public IHtmlNode Into( IHtmlNodeContainer container, int index )
+      public IHtmlNode Into( IHtmlContainer container, int index )
       {
         if ( container == null )
           throw new ArgumentNullException( "container" );
@@ -186,7 +186,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlNodeContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }

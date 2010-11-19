@@ -61,7 +61,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       get { return _document.DocumentNode; }
     }
 
-    public object NodeObject
+    public object RawObject
     {
       get { return Node; }
     }

@@ -89,7 +89,7 @@ namespace Ivony.Html.Web
 
     protected virtual void RenderDocument()
     {
-      Response.Write( Document.OuterHtml( false ) );
+      Response.Write( Document.InnerHtml( false ) );
     }
 
 

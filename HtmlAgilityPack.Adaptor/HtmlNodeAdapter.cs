@@ -24,7 +24,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-    public IHtmlContainer Container
+    public IHtmlNodeContainer Container
     {
       get
       {

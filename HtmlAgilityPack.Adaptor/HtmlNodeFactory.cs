@@ -88,7 +88,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlNodeContainer IHtmlNode.Container
       {
         get { return null; }
       }
@@ -137,7 +137,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlNodeContainer IHtmlNode.Container
       {
         get { return null; }
       }
@@ -186,7 +186,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlNodeContainer IHtmlNode.Container
       {
         get { return null; }
       }

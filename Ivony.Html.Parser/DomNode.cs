@@ -28,7 +28,7 @@ namespace Ivony.Html.Parser
             throw new InvalidOperationException();
 
 
-          var domContainer = _container as IDomContainer;
+          var domContainer = value as IDomContainer;
 
           if ( domContainer == null )
             throw new InvalidOperationException();

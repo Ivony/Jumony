@@ -95,7 +95,7 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="container">要设置数据上下文的容器对象</param>
     /// <param name="dataContext">数据上下文</param>
-    internal void SetDataContext( IHtmlNodeContainer container, object dataContext )
+    internal void SetDataContext( IHtmlElement container, object dataContext )
     {
       VerifyAccess();
 
@@ -119,8 +119,8 @@ namespace Ivony.Html.Binding
       if ( data != null )
         return data;
 
-      IHtmlContainer container;
-      while ( (container = node.Parent) != null )
+      IHtmlElement container;
+      while ( (container = node.ParentElement()) != null )
       {
         data = GetDataContextCore( container );
         if ( data != null )

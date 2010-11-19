@@ -94,7 +94,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要获取子代元素的容器对象</param>
     /// <returns>容器所有的子代元素</returns>
-    public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container )
+    public static IEnumerable<IHtmlElement> Descendants( this IHtmlNodeContainer container )
     {
       return container.DescendantNodes().OfType<IHtmlElement>();
     }
@@ -106,7 +106,7 @@ namespace Ivony.Html
     /// <param name="selector">用于筛选子代元素的选择器</param>
     /// <returns>符合选择器的容器的所有子代元素</returns>
     /// <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
-    public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container, string selector )
+    public static IEnumerable<IHtmlElement> Descendants( this IHtmlNodeContainer container, string selector )
     {
       return HtmlCssSelector.Create( selector ).Search( container, false );
     }

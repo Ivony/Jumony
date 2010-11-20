@@ -8,7 +8,6 @@ namespace Ivony.Html.Parser
   internal class DomNodeCollection : SynchronizedCollection<DomNode>
   {
 
-
     public IHtmlContainer Container
     {
       get;

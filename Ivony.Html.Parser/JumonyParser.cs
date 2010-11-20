@@ -32,7 +32,7 @@ namespace Ivony.Html.Parser
 
 
 
-    public DomDocument Parse( string html )
+    public virtual DomDocument Parse( string html )
     {
 
       var document = new DomDocument();
@@ -40,11 +40,15 @@ namespace Ivony.Html.Parser
       if ( string.IsNullOrEmpty( html ) )
         return document;
 
-
-
       containerStack.Push( document );
 
+      ParseInternal( html );
 
+      return document;
+    }
+
+    protected void ParseInternal( string html )
+    {
       int index = 0;
 
 
@@ -97,8 +101,6 @@ namespace Ivony.Html.Parser
 
       if ( index != html.Length )
         CreateTextNode( html.Substring( index ) );
-
-      return document;
     }
 
 

@@ -70,7 +70,7 @@ namespace Ivony.Html
     {
       string parentId;
 
-      var parentElement = element.Container as IHtmlElement;
+      var parentElement = element.Parent();
       if ( parentElement != null )
       {
         parentId = Identity( parentElement );

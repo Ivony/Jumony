@@ -67,7 +67,7 @@ namespace Ivony.Html
 
         yield return element;
 
-        
+
         node = element;
 
       }
@@ -98,7 +98,7 @@ namespace Ivony.Html
 
         yield return element;
 
-        element = element.Container as IHtmlElement;
+        element = element.Parent();
       }
     }
 

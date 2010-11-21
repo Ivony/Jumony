@@ -250,8 +250,9 @@ namespace Ivony.Html
 
       if ( element != null )
       {
-        var elementId = "_element_" + CreateIdentity( element, false );
+        var elementId = "element_" + CreateIdentity( element, false );
 
+        statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
         statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( factoryVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
 
         var elementVariable = new CodeVariableReferenceExpression( elementId );

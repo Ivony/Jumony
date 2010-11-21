@@ -143,7 +143,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要生成HTML的元素</param>
     /// <returns></returns>
-    private static string GenerateTagHtml( IHtmlElement element )
+    internal static string GenerateTagHtml( IHtmlElement element )
     {
       var builder = new StringBuilder();
 

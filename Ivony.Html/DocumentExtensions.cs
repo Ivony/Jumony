@@ -255,7 +255,21 @@ namespace Ivony.Html
         statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
         statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( factoryVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
 
+
         var elementVariable = new CodeVariableReferenceExpression( elementId );
+
+
+        foreach ( var attribute in element.Attributes() )
+        {
+          var attributeExpression = new CodeMethodInvokeExpression( elementVariable, "AddAttribute", new CodePrimitiveExpression( attribute.Name ) );
+
+          if ( attribute.AttributeValue != null )
+            statements.Add( new CodeMethodInvokeExpression( attributeExpression, "Value", new CodePrimitiveExpression( attribute.AttributeValue ) ) );
+          else
+            statements.Add( attributeExpression );
+        }
+
+
 
         BuildChildNodesStatement( element, elementVariable, statements );
 

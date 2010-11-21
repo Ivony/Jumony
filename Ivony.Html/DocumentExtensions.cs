@@ -261,12 +261,12 @@ namespace Ivony.Html
 
         foreach ( var attribute in element.Attributes() )
         {
-          var attributeExpression = new CodeMethodInvokeExpression( elementVariable, "AddAttribute", new CodePrimitiveExpression( attribute.Name ) );
+          var addAttribute = new CodeMethodInvokeExpression( elementVariable, "AddAttribute", new CodePrimitiveExpression( attribute.Name ) );
 
           if ( attribute.AttributeValue != null )
-            statements.Add( new CodeMethodInvokeExpression( attributeExpression, "Value", new CodePrimitiveExpression( attribute.AttributeValue ) ) );
+            statements.Add( new CodeMethodInvokeExpression( addAttribute, "Value", new CodePrimitiveExpression( attribute.AttributeValue ) ) );
           else
-            statements.Add( attributeExpression );
+            statements.Add( addAttribute );
         }
 
 

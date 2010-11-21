@@ -156,7 +156,7 @@ namespace Ivony.Html
       {
 
         case "html":
-        case "head":
+        //case "head":
         case "body":
           return null;
 
@@ -203,8 +203,11 @@ namespace Ivony.Html
 
       constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "_node" ) );// var node;
 
-      BuildChildNodesStatement( document, new CodeVariableReferenceExpression( "_document" ), constructor.Statements );//build document
+      var documentVariable = new CodeVariableReferenceExpression( "_document" );
 
+      BuildChildNodesStatement( document, documentVariable, constructor.Statements );//build document
+
+      constructor.Statements.Add( new CodeMethodReturnStatement( documentVariable ) );
 
       return constructor;
     }

@@ -211,7 +211,7 @@ namespace Ivony.Html.Parser
   }
 
 
-  internal class DomFreeElement : HtmlElementWrapper, IFreeElement
+  internal class DomFreeElement : HtmlElementWrapper, IFreeElement, IDomContainer
   {
 
     private DomElement _element;
@@ -287,6 +287,14 @@ namespace Ivony.Html.Parser
     }
 
     #endregion
-  }
 
+    #region IDomContainer 成员
+
+    DomNodeCollection IDomContainer.NodeCollection
+    {
+      get { return ((IDomContainer) Element).NodeCollection; }
+    }
+
+    #endregion
+  }
 }

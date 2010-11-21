@@ -32,6 +32,14 @@ namespace Ivony.Html
     /// <returns></returns>
     IFreeComment CreateComment( string comment );
 
+
+    /// <summary>
+    /// 创建一个空白文档
+    /// </summary>
+    /// <returns>空白文档</returns>
+    IHtmlDocument CreateDocument();
+
+
     /// <summary>
     /// 分析一小段HTML文本并创建一个HTML碎片
     /// </summary>

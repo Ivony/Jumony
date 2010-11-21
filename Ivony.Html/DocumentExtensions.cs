@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Fluent;
+using System.CodeDom;
+
 
 namespace Ivony.Html
 {
@@ -184,5 +186,85 @@ namespace Ivony.Html
 
       }
     }
+
+
+
+
+    public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
+    {
+      var constructor = new CodeMemberMethod();
+      constructor.Name = methodName;
+
+      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlNodeFactory ), "_factory" ) );
+      constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
+
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( new CodeVariableReferenceExpression( "factory" ), "CreateDocument" ) ) );//var document = factory.CreateDocument();
+
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "_node" ) );// var node;
+
+      BuildChildNodesStatement( document, new CodeVariableReferenceExpression( "_document" ), constructor.Statements );//build document
+
+
+      return constructor;
+    }
+
+    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements )
+    {
+
+      int index = 0;
+
+      foreach ( var node in container.Nodes() )
+      {
+        var nodeVariable = BuildCreateNodeStatement( node, statements );
+
+        statements.Add( new CodeMethodInvokeExpression( nodeVariable, "Into", contaienrVariable, new CodePrimitiveExpression( index ) ) );
+
+        index++;
+      }
+    }
+
+    private static CodeVariableReferenceExpression BuildCreateNodeStatement( IHtmlNode node, CodeStatementCollection statements )
+    {
+
+      var factoryVariable = new CodeVariableReferenceExpression( "_factory" );
+      var nodeVariable = new CodeVariableReferenceExpression( "_node" );
+
+      var textNode = node as IHtmlTextNode;
+      if ( textNode != null )
+      {
+        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( factoryVariable, "CreateTextNode", new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+        return nodeVariable;
+      }
+
+
+      var comment = node as IHtmlComment;
+      if ( comment != null )
+      {
+        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( factoryVariable, "CreateComment", new CodePrimitiveExpression( comment.Comment ) ) ) );
+        return nodeVariable;
+      }
+
+
+      var element = node as IHtmlElement;
+
+      if ( element != null )
+      {
+        var elementId = CreateIdentity( element, false );
+
+        statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( factoryVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
+
+        var elementVariable = new CodeVariableReferenceExpression( elementId );
+
+        BuildChildNodesStatement( element, elementVariable, statements );
+
+        return elementVariable;
+
+      }
+
+      throw new NotSupportedException();
+
+    }
+
+
   }
 }

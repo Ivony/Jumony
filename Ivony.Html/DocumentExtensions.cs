@@ -125,7 +125,7 @@ namespace Ivony.Html
       var id = identity;
       var postfix = 0;
 
-      while ( ExistsIdentities.Any( _id => _id == identity ) )
+      while ( ExistsIdentities.Any( _id => _id == id ) )
         id = identity + "_" + postfix++;
 
       return id;
@@ -258,7 +258,7 @@ namespace Ivony.Html
       if ( element != null )
       {
         var elementId = CreateIdentity( element, false );
-        
+
         elementId = EnsureUniqueness( elementId, existsElements );
         existsElements.Add( elementId );
 

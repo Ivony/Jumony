@@ -194,6 +194,7 @@ namespace Ivony.Html
     {
       var constructor = new CodeMemberMethod();
       constructor.Name = methodName;
+      constructor.Attributes = MemberAttributes.Public | MemberAttributes.Static;
 
       constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlNodeFactory ), "_factory" ) );
       constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );

@@ -117,16 +117,20 @@ namespace Ivony.Html
 
     private static string EnsureUniqueness( string identity, IHtmlDocument document )
     {
+      return EnsureUniqueness( identity, document.Descendants().Select( element => element.Attribute( "id" ).Value() ).NotNull() );
+    }
 
+    private static string EnsureUniqueness( string identity, IEnumerable<string> ExistsIdentities )
+    {
       var id = identity;
       var postfix = 0;
 
-
-      while ( document.Descendants().Any( e => e.Attribute( "id" ).Value() == identity ) )
+      while ( ExistsIdentities.Any( _id => _id == identity ) )
         id = identity + "_" + postfix++;
 
       return id;
     }
+
 
 
     private static void EnsureAllocated( IHtmlNode node )
@@ -205,21 +209,21 @@ namespace Ivony.Html
 
       var documentVariable = new CodeVariableReferenceExpression( "_document" );
 
-      BuildChildNodesStatement( document, documentVariable, constructor.Statements );//build document
+      BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
 
       constructor.Statements.Add( new CodeMethodReturnStatement( documentVariable ) );
 
       return constructor;
     }
 
-    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements )
+    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements )
     {
 
       int index = 0;
 
       foreach ( var node in container.Nodes() )
       {
-        var nodeVariable = BuildCreateNodeStatement( node, statements );
+        var nodeVariable = BuildCreateNodeStatement( node, statements, existsElements );
 
         statements.Add( new CodeMethodInvokeExpression( nodeVariable, "Into", contaienrVariable, new CodePrimitiveExpression( index ) ) );
 
@@ -227,7 +231,7 @@ namespace Ivony.Html
       }
     }
 
-    private static CodeVariableReferenceExpression BuildCreateNodeStatement( IHtmlNode node, CodeStatementCollection statements )
+    private static CodeVariableReferenceExpression BuildCreateNodeStatement( IHtmlNode node, CodeStatementCollection statements, IList<string> existsElements )
     {
 
       var factoryVariable = new CodeVariableReferenceExpression( "_factory" );
@@ -253,7 +257,12 @@ namespace Ivony.Html
 
       if ( element != null )
       {
-        var elementId = "element_" + CreateIdentity( element, false );
+        var elementId = CreateIdentity( element, false );
+        
+        elementId = EnsureUniqueness( elementId, existsElements );
+        existsElements.Add( elementId );
+
+        elementId = "element_" + elementId;
 
         statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
         statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( factoryVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
@@ -267,14 +276,14 @@ namespace Ivony.Html
           var addAttribute = new CodeMethodInvokeExpression( elementVariable, "AddAttribute", new CodePrimitiveExpression( attribute.Name ) );
 
           if ( attribute.AttributeValue != null )
-            statements.Add( new CodeMethodInvokeExpression( addAttribute, "Value", new CodePrimitiveExpression( attribute.AttributeValue ) ) );
+            statements.Add( new CodeAssignStatement( new CodePropertyReferenceExpression( addAttribute, "AttributeValue" ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
           else
             statements.Add( addAttribute );
         }
 
 
 
-        BuildChildNodesStatement( element, elementVariable, statements );
+        BuildChildNodesStatement( element, elementVariable, statements, existsElements );
 
         return elementVariable;
 

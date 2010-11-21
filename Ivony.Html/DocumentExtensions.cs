@@ -199,7 +199,7 @@ namespace Ivony.Html
       constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlNodeFactory ), "_factory" ) );
       constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( new CodeVariableReferenceExpression( "factory" ), "CreateDocument" ) ) );//var document = factory.CreateDocument();
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( new CodeVariableReferenceExpression( "_factory" ), "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
       constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "_node" ) );// var node;
 

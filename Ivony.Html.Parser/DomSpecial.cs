@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Parser
 {
-  public class DomSpecial : DomNode, IHtmlSpecial, IHtmlComment
+  public class DomSpecial : DomNode, IHtmlSpecial, IHtmlTextNode
   {
 
     private string raw;
@@ -44,9 +44,9 @@ namespace Ivony.Html.Parser
 
     #region IHtmlComment 成员
 
-    string IHtmlComment.Comment
+    string IHtmlTextNode.HtmlText
     {
-      get { return specialTagRegex.Match( raw ).Groups["specialText"].Value; }
+      get { return raw; }
     }
 
     #endregion

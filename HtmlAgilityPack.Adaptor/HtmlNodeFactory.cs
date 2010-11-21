@@ -34,6 +34,11 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return new FreeCommentAdaptor( this, _document.CreateComment( comment ) );
     }
 
+    public IHtmlDocument CreateDocument()
+    {
+      return new AP.HtmlDocument().AsDocument();
+    }
+
 
 
     public HtmlFragment ParseHtml( string html )

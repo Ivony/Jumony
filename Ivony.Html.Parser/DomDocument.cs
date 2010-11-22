@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
@@ -41,7 +42,7 @@ namespace Ivony.Html.Parser
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
-      return nodeCollection.Cast<IHtmlNode>();
+      return nodeCollection.Cast<IHtmlNode>().AsReadOnly();
     }
 
     #endregion

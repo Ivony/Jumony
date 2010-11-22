@@ -58,7 +58,7 @@ namespace Ivony.Html.Parser
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
-      return nodeCollection.Cast<IHtmlNode>();
+      return nodeCollection.Cast<IHtmlNode>().AsReadOnly();
     }
 
     #endregion
@@ -70,7 +70,7 @@ namespace Ivony.Html.Parser
     {
       CheckDisposed();
 
-      return _attributes.Cast<IHtmlAttribute>();
+      return _attributes.Cast<IHtmlAttribute>().AsReadOnly();
     }
 
 

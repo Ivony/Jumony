@@ -186,10 +186,20 @@ namespace Ivony.Html.Parser
             break;
         }
       }
-      else//如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
+      else
       {
-        CreateTextNode( match.Value );
+        ProcessEndTagMissingBeginTag( match );
       }
+    }
+
+    /// <summary>
+    /// 处理丢失了开始标签的结束标签
+    /// </summary>
+    /// <param name="match"></param>
+    protected virtual void ProcessEndTagMissingBeginTag( Match match )
+    {
+      //如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
+      CreateTextNode( match.Value );
     }
 
     private void ProcessComment( Match match )

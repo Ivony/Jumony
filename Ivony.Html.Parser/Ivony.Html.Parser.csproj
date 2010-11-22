@@ -51,8 +51,10 @@
     <Compile Include="DomElement.cs" />
     <Compile Include="DomNodeCollection.cs" />
     <Compile Include="DomObject.cs" />
+    <Compile Include="DomProvider.cs" />
     <Compile Include="DomSpecial.cs" />
     <Compile Include="DomTextNode.cs" />
+    <Compile Include="HtmlParserBase.cs" />
     <Compile Include="IDomContainer.cs" />
     <Compile Include="JumonyParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

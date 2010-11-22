@@ -75,6 +75,7 @@
     <Compile Include="IHtmlElement.cs" />
     <Compile Include="IHtmlNode.cs" />
     <Compile Include="IHtmlNodeFactory.cs" />
+    <Compile Include="IHtmlProvider.cs" />
     <Compile Include="IHtmlSpecial.cs" />
     <Compile Include="IHtmlTextNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

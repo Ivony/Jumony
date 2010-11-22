@@ -38,6 +38,12 @@ namespace Ivony.Html
 
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
 
+    /// <summary>
+    /// 检查可选结束标签在当前位置是否需要立即关闭
+    /// </summary>
+    /// <param name="openTag">当前开放的可选结束标签</param>
+    /// <param name="nextTag">HTML 分析器遇到的下一个标签</param>
+    /// <returns>是否需要立即关闭</returns>
     public static bool ImmediatelyClose( string openTag, string nextTag )
     {
       openTag = openTag.ToLowerInvariant();

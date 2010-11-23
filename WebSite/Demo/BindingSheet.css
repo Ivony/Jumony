@@ -4,6 +4,12 @@
   binding-path: @:text;
 }
 
+#username
+{
+  binding-source: $Model;
+  binding-path: Username;
+}
+
 #list2 li
 {
   binding-source: [1,2,5,<null>,6];

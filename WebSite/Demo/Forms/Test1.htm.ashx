@@ -29,10 +29,7 @@ public class Test1 : JumonyHandler
 
       validator.Validate();
 
-      if ( !validator.IsValid )
-        form.Element.Remove();
-
-      //form.ApplySubmittedValue();
+      form.ApplySubmittedValue();
     }
 
   }
@@ -43,7 +40,7 @@ public class Test1 : JumonyHandler
       : base( form )
     {
       AddFieldValidation( "userID", "用户ID", new RequiredValidator(), new IntegerValidator() );
-      AddFieldValidation( "username", "用户名", new RequiredValidator() );
+      AddFieldValidation( "username", "用户名", new RequiredValidator(), new EmailValidator() );
       AddFieldValidation( "password", "密码", new RequiredValidator() );
 
       ShowFieldDescription();

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  public class DomProvider : IHtmlProvider
+  public class DomProvider : IHtmlDomProvider
   {
     #region IHtmlProvider 成员
 

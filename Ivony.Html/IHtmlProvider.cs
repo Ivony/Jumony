@@ -9,7 +9,7 @@ namespace Ivony.Html
   /// <summary>
   /// 用于创建 HTML DOM 的提供程序
   /// </summary>
-  public interface IHtmlProvider
+  public interface IHtmlDomProvider
   {
     /// <summary>
     /// 创建一个空白文档

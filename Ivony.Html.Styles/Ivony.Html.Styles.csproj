@@ -55,7 +55,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>

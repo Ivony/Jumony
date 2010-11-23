@@ -78,5 +78,39 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
+    public override bool Equals( object obj )
+    {
+
+      if ( obj == null )
+        return false;
+
+      {
+        var document = obj as IHtmlDocument;
+        if ( document != null )
+          return RawObject.Equals( document.RawObject );
+      }
+
+      {
+        var document = obj as AP.HtmlDocument;
+        if ( document != null )
+          return _document.Equals( document );
+      }
+
+      {
+        var node = obj as AP.HtmlNode;
+        if ( node != null )
+          return RawObject.Equals( node );
+      }
+
+
+      return base.Equals( obj );
+    }
+
+    public override int GetHashCode()
+    {
+      return RawObject.GetHashCode();
+    }
+
+
   }
 }

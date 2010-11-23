@@ -47,7 +47,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 派生类提供 Provider 用于创建 DOM 结构
     /// </summary>
-    protected abstract IHtmlProvider Provider
+    protected abstract IHtmlDomProvider Provider
     {
       get;
     }

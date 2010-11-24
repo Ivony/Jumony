@@ -7,8 +7,6 @@ namespace Ivony.Html.Parser
 {
   public class DomProvider : IHtmlDomProvider
   {
-    #region IHtmlProvider 成员
-
     public IHtmlDocument CreateDocument()
     {
       return new DomDocument();
@@ -48,7 +46,5 @@ namespace Ivony.Html.Parser
     {
       return AddNode( index, EnsureDomContainer( container ), new DomComment( comment ) );
     }
-
-    #endregion
   }
 }

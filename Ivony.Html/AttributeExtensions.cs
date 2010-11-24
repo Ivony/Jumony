@@ -31,29 +31,6 @@ namespace Ivony.Html
 
 
 
-    /// <summary>
-    /// 获取指定名称的属性对象
-    /// </summary>
-    /// <param name="element">元素</param>
-    /// <param name="name">属性名</param>
-    /// <param name="defaultValue">如果属性没找到，则为属性设置默认值</param>
-    /// <returns>属性对象</returns>
-    /// <remarks>
-    /// 如果有多个同名的属性，此方法会抛出异常
-    /// </remarks>
-    public static IHtmlAttribute Attribute( this IHtmlElement element, string name, string defaultValue )
-    {
-      var attribute = element.Attributes().Where( a => a.Name.EqualsIgnoreCase( name ) ).SingleOrDefault();
-      if ( attribute == null )
-      {
-        attribute = element.AddAttribute( name );
-        attribute.AttributeValue = defaultValue;
-      }
-
-
-      return attribute;
-    }
-
 
     /// <summary>
     /// 获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
@@ -297,6 +274,20 @@ namespace Ivony.Html
         return _element;
       }
 
+
+      /// <summary>
+      /// 删除这个属性
+      /// </summary>
+      /// <returns></returns>
+      public IHtmlElement Remove()
+      {
+        _attribute.Remove();
+        return _element;
+      }
+
+
+
+
       /// <summary>
       /// 复制属性值
       /// </summary>
@@ -445,6 +436,17 @@ namespace Ivony.Html
       public IEnumerable<IHtmlElement> Value( Func<int, string, string> evaluator )
       {
         _setters.ForAll( ( s, i ) => s.Value( evaluator( i, s.AttributeValue ) ) );
+        return _elements;
+      }
+
+
+      /// <summary>
+      /// 删除这个属性
+      /// </summary>
+      /// <returns></returns>
+      public IEnumerable<IHtmlElement> Remove()
+      {
+        _setters.ForAll( ( s, i ) => s.Remove() );
         return _elements;
       }
 

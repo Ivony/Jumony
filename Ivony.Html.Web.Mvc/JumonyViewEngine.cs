@@ -109,7 +109,5 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
-
-
   }
 }

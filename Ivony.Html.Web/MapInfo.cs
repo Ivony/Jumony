@@ -20,12 +20,6 @@ namespace Ivony.Html.Web
     }
 
 
-    private IHtmlParser _parser;
-    private string _templatePath;
-
-
-
-
     public IRequestMapper Mapper
     {
       get;

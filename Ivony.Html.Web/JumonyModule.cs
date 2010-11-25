@@ -27,13 +27,13 @@ namespace Ivony.Html.Web
 
       var request = context.Request;
 
-      var result = RequestMappers.MapRequest( request );
+      var result = HtmlProviders.MapRequest( request );
 
       if ( result == null )
         return;
 
 
-      result.OriginUrl = request.Url;
+//      result.OriginUrl = request.Url;
 
       context.SetMapResult( result );
 

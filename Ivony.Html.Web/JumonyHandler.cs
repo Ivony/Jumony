@@ -151,15 +151,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取原始请求的Url
-    /// </summary>
-    public Uri OriginUrl
-    {
-      get { return MapperResult.OriginUrl; }
-    }
-
-
-    /// <summary>
     /// 获取请求的页的 HttpRequest 对象
     /// </summary>
     protected HttpRequest Request
@@ -220,7 +211,7 @@ namespace Ivony.Html.Web
     /// <returns>与 path 相对应的物理文件路径</returns>
     public string MapPath( string virtualPath )
     {
-      return Server.MapPath( VirtualPathUtility.Combine( OriginUrl.AbsolutePath, virtualPath ) );
+      return Server.MapPath( virtualPath );
     }
 
 

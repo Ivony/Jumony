@@ -37,7 +37,7 @@ namespace Ivony.Html.Web
       if ( !File.Exists( request.MapPath( handlerPath ) ) )
         return null;
 
-      return new MapInfo( new JumonyParser(), physicalPath, (IHttpHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( IHttpHandler ) ) );
+      return new MapInfo( physicalPath, (IHttpHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( IHttpHandler ) ) );
     }
 
   }

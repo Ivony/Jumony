@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Html.Parser;
+using System.Web.Hosting;
+using System.Web;
+using System.IO;
 
 namespace Ivony.Html.Web
 {
-
 
 
   public static class HtmlProviders
@@ -15,7 +17,8 @@ namespace Ivony.Html.Web
     static HtmlProviders()
     {
       ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
-      HtmlContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
+      Loaders = new SynchronizedCollection<IHtmlLoader>( _loadersSync );
+      Mappers = new SynchronizedCollection<IRequestMapper>( _mapperSync );
     }
 
 
@@ -27,13 +30,45 @@ namespace Ivony.Html.Web
       private set;
     }
 
-    private static readonly object _contentProvidersSync = new object();
 
-    public static ICollection<IHtmlContentProvider> HtmlContentProviders
+    private static readonly object _loadersSync = new object();
+
+    public static ICollection<IHtmlLoader> Loaders
     {
       get;
       private set;
     }
+
+
+    private static readonly object _mapperSync = new object();
+
+    public static ICollection<IRequestMapper> Mappers
+    {
+      get;
+      private set;
+    }
+
+
+    public static MapInfo MapRequest( HttpRequest request )
+    {
+
+      lock ( _mapperSync )
+      {
+        foreach ( var mapper in Mappers )
+        {
+          var result = mapper.MapRequest( request );
+          if ( result != null )
+          {
+            result.Mapper = mapper;
+            return result;
+          }
+        }
+      }
+
+
+      return null;
+    }
+
 
 
     /// <summary>
@@ -42,13 +77,17 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">HTML 文档内容</param>
     /// <returns>分析后的 HTML 文档</returns>
-    public static IHtmlParser GetParser( string virtualPath, string htmlContent )
+    public static IHtmlParser GetParser( HttpContextBase context, string virtualPath, string htmlContent )
     {
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
       lock ( _parserProvidersSync )
       {
         foreach ( var provider in ParserProviders )
         {
-          var parser = provider.GetParser( virtualPath, htmlContent );
+          var parser = provider.GetParser( context, virtualPath, htmlContent );
 
           if ( parser != null )
             return parser;
@@ -58,19 +97,24 @@ namespace Ivony.Html.Web
       return new JumonyHtmlParser();
     }
 
-  
+
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档内容</returns>
-    public static string LoadHtmlContent( string virtualPath )
+    public static string LoadContent( HttpContextBase context, string virtualPath )
     {
-      lock ( _contentProvidersSync )
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+
+      lock ( _loadersSync )
       {
-        foreach ( var provider in HtmlContentProviders )
+        foreach ( var provider in Loaders )
         {
-          var content = provider.LoadContent( virtualPath );
+          var content = provider.Load( context, virtualPath );
 
           if ( content != null )
             return content;
@@ -85,35 +129,21 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( string virtualPath )
+    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
-      var content = LoadHtmlContent( virtualPath );
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+
+      var content = LoadContent( context, virtualPath );
       if ( content == null )
         return null;
 
-      var parser = GetParser( virtualPath, content );
-      
+      var parser = GetParser( context, virtualPath, content );
+
       return parser.Parse( content );
     }
-
-
-
   }
-
-  public interface IHtmlContentProvider
-  {
-
-    string LoadContent( string virtualPath );
-
-  }
-
-
-  public interface IHtmlParserProvider
-  {
-
-    IHtmlParser GetParser( string virtualPath, string htmlContent );
-
-  }
-
 
 }

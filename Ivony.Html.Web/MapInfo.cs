@@ -13,11 +13,9 @@ namespace Ivony.Html.Web
   public class MapInfo
   {
 
-    public MapInfo( IHtmlParser parser, string templatePath, IHttpHandler handler )
+    public MapInfo( string templatePath, IHttpHandler handler )
     {
-      _parser = parser;
-      _templatePath = templatePath;
-
+      TemplatePath = templatePath;
       Handler = handler;
     }
 
@@ -27,12 +25,6 @@ namespace Ivony.Html.Web
 
 
 
-    public Uri OriginUrl
-    {
-      get;
-      internal set;
-    }
-
 
     public IRequestMapper Mapper
     {
@@ -40,15 +32,16 @@ namespace Ivony.Html.Web
       internal set;
     }
 
-
-    protected virtual IHtmlParser Parser
-    {
-      get { return _parser; }
-    }
-
     protected virtual string TemplatePath
     {
-      get { return _templatePath; }
+      get;
+      private set;
+    }
+
+    public IHttpHandler Handler
+    {
+      get;
+      private set;
     }
 
 
@@ -56,69 +49,13 @@ namespace Ivony.Html.Web
 
     public virtual IHtmlDocument LoadTemplate()
     {
-      return ParseDocument( LoadTemplateContent( _templatePath ) );
-    }
+      var document = HtmlProviders.LoadDocument( new HttpContextWrapper( HttpContext.Current ), TemplatePath );
 
-    protected virtual IHtmlDocument ParseDocument( string content )
-    {
-      return _parser.Parse( content );
-    }
+      if ( document == null )
+        throw new InvalidOperationException();
 
+      return null;
 
-
-    protected HttpContext Context
-    {
-      get { return HttpContext.Current; }
-    }
-
-
-    private static readonly string[] executionExtensions = new[] { ".aspx" };
-
-    protected virtual string LoadTemplateContent( string path )
-    {
-      if ( !File.Exists( _templatePath ) )
-      {
-        var exception = new HttpException( 404, "未找到模板文件。" );
-
-        Context.Trace.Warn( "Core", "template not found!", exception );
-        throw exception;
-      }
-
-      var extension = Path.GetExtension( _templatePath );
-      if ( executionExtensions.Contains( extension, StringComparer.InvariantCultureIgnoreCase ) )
-      {
-        var writer = new StringWriter();
-        Context.Server.Execute( _templatePath, writer );
-        return writer.ToString();
-      }
-
-
-
-      var cacheKey = string.Format( "HtmlHandler_TemplateContentCache_{0}", path );
-      var templateContent = Context.Cache[cacheKey] as string;
-
-      if ( templateContent == null )
-      {
-        Context.Trace.Warn( "Core", "template file cache miss." );
-        Context.Trace.Write( "Core", "Begin Load Template" );
-        using ( var reader = File.OpenText( path ) )
-        {
-          templateContent = reader.ReadToEnd();
-        }
-
-        Context.Cache.Insert( cacheKey, templateContent, new System.Web.Caching.CacheDependency( path ) );
-
-        Context.Trace.Write( "Core", "End Load Template" );
-      }
-
-      return templateContent;
-    }
-
-
-    public IHttpHandler Handler
-    {
-      get;
-      private set;
     }
 
   }

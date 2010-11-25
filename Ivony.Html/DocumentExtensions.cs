@@ -18,7 +18,7 @@ namespace Ivony.Html
     /// <param name="id">元素ID</param>
     /// <returns>找到的元素，没有符合要求的则返回null</returns>
     /// <exception cref="System.InvalidOperationException">找到多个ID相同的元素</exception>
-    public static IHtmlElement GetElementById( this IHtmlDocument document, string id )
+    public static IHtmlElement GetElementById(this IHtmlDocument document, string id)
     {
       return document.Descendants().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
     }
@@ -29,7 +29,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要标识的元素</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity( this IHtmlElement element )
+    public static string Identity(this IHtmlElement element)
     {
       return Identity( element, false );
     }
@@ -40,7 +40,7 @@ namespace Ivony.Html
     /// <param name="element">要标识的元素</param>
     /// <param name="create">指示当没有唯一ID时是否创建一个</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity( this IHtmlElement element, bool create )
+    public static string Identity(this IHtmlElement element, bool create)
     {
       return Identity( element, create, false );
     }
@@ -52,7 +52,7 @@ namespace Ivony.Html
     /// <param name="create">指示当没有唯一ID时是否创建一个</param>
     /// <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity( this IHtmlElement element, bool create, bool ancestorsCreate )
+    public static string Identity(this IHtmlElement element, bool create, bool ancestorsCreate)
     {
       EnsureAllocated( element );
 
@@ -68,7 +68,7 @@ namespace Ivony.Html
       return id;
     }
 
-    private static string CreateIdentity( IHtmlElement element, bool ancestorsCreate )
+    private static string CreateIdentity(IHtmlElement element, bool ancestorsCreate)
     {
       string parentId;
 
@@ -115,12 +115,12 @@ namespace Ivony.Html
       return EnsureUniqueness( identity, element.Document );
     }
 
-    private static string EnsureUniqueness( string identity, IHtmlDocument document )
+    private static string EnsureUniqueness(string identity, IHtmlDocument document)
     {
       return EnsureUniqueness( identity, document.Descendants().Select( element => element.Attribute( "id" ).Value() ).NotNull() );
     }
 
-    private static string EnsureUniqueness( string identity, IEnumerable<string> ExistsIdentities )
+    private static string EnsureUniqueness(string identity, IEnumerable<string> ExistsIdentities)
     {
       var id = identity;
       var postfix = 0;
@@ -133,7 +133,7 @@ namespace Ivony.Html
 
 
 
-    private static void EnsureAllocated( IHtmlNode node )
+    public static void EnsureAllocated(this IHtmlNode node)
     {
 
       if ( node is IFreeNode )
@@ -153,7 +153,7 @@ namespace Ivony.Html
 
     }
 
-    private static string GetElementName( IHtmlElement element )
+    private static string GetElementName(IHtmlElement element)
     {
 
       switch ( element.Name.ToLowerInvariant() )
@@ -194,16 +194,18 @@ namespace Ivony.Html
 
 
 
-    public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
+    public static CodeMemberMethod GenerateCodeMethod(this IHtmlDocument document, string methodName)
     {
       var constructor = new CodeMemberMethod();
       constructor.Name = methodName;
       constructor.Attributes = MemberAttributes.Public | MemberAttributes.Static;
 
-      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlNodeFactory ), "_factory" ) );
+      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "_provider" ) );
       constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( new CodeVariableReferenceExpression( "_factory" ), "CreateDocument" ) ) );//var document = factory.CreateDocument();
+      var providerVariable =  new CodeVariableReferenceExpression( "_provider" );
+
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
       constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "_node" ) );// var node;
 
@@ -216,14 +218,14 @@ namespace Ivony.Html
       return constructor;
     }
 
-    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements )
+    private static void BuildChildNodesStatement(IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements)
     {
 
       int index = 0;
 
       foreach ( var node in container.Nodes() )
       {
-        var nodeVariable = BuildCreateNodeStatement( node, statements, existsElements );
+        var nodeVariable = BuildCreateNodeStatement( node, contaienrVariable, index, statements, existsElements );
 
         statements.Add( new CodeMethodInvokeExpression( nodeVariable, "Into", contaienrVariable, new CodePrimitiveExpression( index ) ) );
 
@@ -231,16 +233,16 @@ namespace Ivony.Html
       }
     }
 
-    private static CodeVariableReferenceExpression BuildCreateNodeStatement( IHtmlNode node, CodeStatementCollection statements, IList<string> existsElements )
+    private static CodeVariableReferenceExpression BuildCreateNodeStatement(IHtmlNode node, CodeVariableReferenceExpression contaienrVariable, int index, CodeStatementCollection statements, IList<string> existsElements)
     {
 
-      var factoryVariable = new CodeVariableReferenceExpression( "_factory" );
+      var providerVariable = new CodeVariableReferenceExpression( "_provider" );
       var nodeVariable = new CodeVariableReferenceExpression( "_node" );
 
       var textNode = node as IHtmlTextNode;
       if ( textNode != null )
       {
-        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( factoryVariable, "CreateTextNode", new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
         return nodeVariable;
       }
 
@@ -248,7 +250,7 @@ namespace Ivony.Html
       var comment = node as IHtmlComment;
       if ( comment != null )
       {
-        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( factoryVariable, "CreateComment", new CodePrimitiveExpression( comment.Comment ) ) ) );
+        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
         return nodeVariable;
       }
 
@@ -265,7 +267,7 @@ namespace Ivony.Html
         elementId = "element_" + elementId;
 
         statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
-        statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( factoryVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
+        statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
 
 
         var elementVariable = new CodeVariableReferenceExpression( elementId );

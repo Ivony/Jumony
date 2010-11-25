@@ -119,78 +119,15 @@
             <param name="index">所处的索引位置</param>
             <returns></returns>
         </member>
-        <member name="T:Ivony.Html.IHtmlDomProvider">
+        <member name="T:Ivony.Html.HtmlElementWrapper">
             <summary>
-            用于创建 HTML DOM 的提供程序
+            IHtmlElement 的包裹类
             </summary>
         </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.CreateDocument">
+        <member name="T:Ivony.Html.HtmlNodeWrapper">
             <summary>
-            创建一个空白文档
+            IHtmlNode 的包裹类
             </summary>
-            <returns>空白文档</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            向指定容器中添加一个元素
-            </summary>
-            <param name="container">要添加元素的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="name">元素名</param>
-            <param name="attributes">元素属性</param>
-            <returns>添加好的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个文本节点
-            </summary>
-            <param name="container">要添加节点的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="htmlText">HTML 文本</param>
-            <returns>添加好的文本节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个注释
-            </summary>
-            <param name="container">要添加注释的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="comment">HTML 注释</param>
-            <returns>添加好的注释节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.CreateDocument">
-            <summary>
-            创建一个空白文档
-            </summary>
-            <returns>空白文档</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddElement(`4,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            向指定容器中添加一个元素
-            </summary>
-            <param name="container">要添加元素的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="name">元素名</param>
-            <param name="attributes">元素属性</param>
-            <returns>添加好的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddTextNode(`4,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个文本节点
-            </summary>
-            <param name="container">要添加节点的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="htmlText">HTML 文本</param>
-            <returns>添加好的文本节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddComment(`4,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个注释
-            </summary>
-            <param name="container">要添加注释的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="comment">HTML 注释</param>
-            <returns>添加好的注释节点</returns>
         </member>
         <member name="M:Ivony.Html.IHtmlElement.Attributes">
             <summary>
@@ -208,96 +145,6 @@
         <member name="P:Ivony.Html.IHtmlElement.Name">
             <summary>
             元素名
-            </summary>
-        </member>
-        <member name="T:Ivony.Html.IHtmlNodeFactory">
-            <summary>
-            定义创建HTML文档对象的工厂
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.IHtmlNodeFactory.CreateElement(System.String)">
-            <summary>
-            创建元素对象
-            </summary>
-            <param name="name">元素名</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlNodeFactory.CreateTextNode(System.String)">
-            <summary>
-            创建文本节点
-            </summary>
-            <param name="htmlText">HTML文本</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlNodeFactory.CreateComment(System.String)">
-            <summary>
-            创建注释节点
-            </summary>
-            <param name="comment">注释文本</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlNodeFactory.ParseHtml(System.String)">
-            <summary>
-            分析一小段HTML文本并创建一个HTML碎片
-            </summary>
-            <param name="html">要分析的HTML文本</param>
-            <returns></returns>
-        </member>
-        <member name="T:Ivony.Html.HtmlDocumentWrapper">
-            <summary>
-            IHtmlDocument 的包裹类
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDocument.GetNodeFactory">
-            <summary>
-            获取文档节点构造器，如果不支持，则返回null
-            </summary>
-            <returns>文档节点构造器</returns>
-        </member>
-        <member name="P:Ivony.Html.IHtmlDocument.DocumentDeclaration">
-            <summary>
-            获取文档的声明信息，可以是xml声明，也可以是DTD。如果不被支持，则返回null。
-            </summary>
-        </member>
-        <member name="T:Ivony.Html.HtmlSpecification">
-            <summary>
-            定义 HTML 规范
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.HtmlSpecification.ImmediatelyClose(System.String,System.String)">
-            <summary>
-            检查可选结束标签在当前位置是否需要立即关闭
-            </summary>
-            <param name="openTag">当前开放的可选结束标签</param>
-            <param name="nextTag">HTML 分析器遇到的下一个标签</param>
-            <returns>是否需要立即关闭</returns>
-        </member>
-        <member name="T:Ivony.Html.HtmlNodeWrapper">
-            <summary>
-            IHtmlNode 的包裹类
-            </summary>
-        </member>
-        <member name="T:Ivony.Html.HtmlFragment">
-            <summary>
-            HTML 文档碎片，游离节点的容器
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.HtmlFragment.AddNodesCopy(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlNode},Ivony.Html.IHtmlNodeFactory)">
-            <summary>
-            向文档碎片中添加节点副本
-            </summary>
-            <param name="nodes">要添加的节点</param>
-            <param name="factory">用于创建游离节点副本的节点工厂</param>
-        </member>
-        <member name="M:Ivony.Html.HtmlFragment.AddNodes(System.Collections.Generic.IEnumerable{Ivony.Html.IFreeNode})">
-            <summary>
-            向文档碎片中添加游离节点
-            </summary>
-            <param name="nodes">要添加的游离节点</param>
-        </member>
-        <member name="T:Ivony.Html.HtmlElementWrapper">
-            <summary>
-            IHtmlElement 的包裹类
             </summary>
         </member>
         <member name="T:Ivony.Html.ContentExtensions">
@@ -369,6 +216,258 @@
             </summary>
             <param name="textNode">要判断的文本节点</param>
             <returns>是否全部是空白字符</returns>
+        </member>
+        <member name="T:Ivony.Html.AttributeExtensions">
+            <summary>
+            提供协助操作Attribute的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Attribute(Ivony.Html.IHtmlElement,System.String)">
+            <summary>
+            获取指定名称的属性对象
+            </summary>
+            <param name="element">元素</param>
+            <param name="name">属性名</param>
+            <returns>属性对象，如果没找到，则返回null</returns>
+            <remarks>
+            如果有多个同名的属性，此方法会抛出异常
+            </remarks>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute)">
+            <summary>
+            获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
+            </summary>
+            <param name="attribute">属性对象</param>
+            <returns>属性值，如果属性对象为null，则返回null</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="value">要设置的属性值</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(Ivony.Html.IHtmlElement,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="element">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <returns>属性设置器</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlElement},System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="elements">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <returns>属性设置器</returns>
+        </member>
+        <member name="T:Ivony.Html.AttributeExtensions.AttributeValueSetter">
+            <summary>
+            属性设置器，提供Value等方法方便的设置属性值
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Null">
+            <summary>
+            将属性值设置为空
+            </summary>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String)">
+            <summary>
+            将属性值设置为指定字符串
+            </summary>
+            <param name="value">要设置的属性值</param>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{Ivony.Html.IHtmlElement,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Remove">
+            <summary>
+            删除这个属性
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.From(Ivony.Html.IHtmlElement)">
+            <summary>
+            复制属性值
+            </summary>
+            <param name="element">要复制属性值的元素</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Html.AttributeExtensions.AttributeSetValueSetter">
+            <summary>
+            批量属性设置器，提供Value方法方便的批量设置属性值
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Null">
+            <summary>
+            将属性值设置为空
+            </summary>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String)">
+            <summary>
+            将属性值设置为指定字符串
+            </summary>
+            <param name="value">要设置的属性值</param>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{Ivony.Html.IHtmlElement,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.Int32,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Remove">
+            <summary>
+            删除这个属性
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.From(Ivony.Html.IHtmlElement)">
+            <summary>
+            复制属性值
+            </summary>
+            <param name="element">要复制属性值的元素</param>
+            <returns></returns>
         </member>
         <member name="T:Ivony.Html.ElementExtensions">
             <summary>
@@ -558,7 +657,6 @@
             <param name="element">要获取序号的元素</param>
             <returns>顺序位置</returns>
         </member>
-<<<<<<< .mine
         <member name="T:Ivony.Html.IHtmlNodeFactory">
             <summary>
             定义创建HTML文档对象的工厂
@@ -663,8 +761,6 @@
             移除此属性
             </summary>
         </member>
-=======
->>>>>>> .r64200
         <member name="T:Ivony.Html.DomExtensions">
             <summary>
             提供修改文档对象模型（DOM）的扩展方法
@@ -861,38 +957,29 @@
             <param name="element">要判断的元素</param>
             <returns></returns>
         </member>
-        <member name="T:Ivony.Html.IHtmlAttribute">
+        <member name="T:Ivony.Html.HtmlFragment">
             <summary>
-            HTML 元素属性
-            </summary>
-            <remarks>
-            与XML和HTML标准DOM模型不同，在Jumony里面，Attribute不被认为是一个节点（不从IHtmlNode继承）。
-            这是因为IHtmlNode被定义为位置敏感的DOM对象，而Attribute是非位置敏感的（在元素中定义的顺序无关紧要）。
-            这与LINQ to XML的模型是一致的。
-            </remarks>
-        </member>
-        <member name="M:Ivony.Html.IHtmlAttribute.Remove">
-            <summary>
-            移除此属性
+            HTML 文档碎片，游离节点的容器
             </summary>
         </member>
-        <member name="M:Ivony.Html.DocumentExtensions.GetElementById(Ivony.Html.IHtmlDocument,System.String)">
+        <member name="M:Ivony.Html.HtmlFragment.AddNodesCopy(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlNode},Ivony.Html.IHtmlNodeFactory)">
             <summary>
-            在文档中通过ID来查找元素
+            向文档碎片中添加节点副本
             </summary>
-            <param name="document">要查找元素的文档</param>
-            <param name="id">元素ID</param>
-            <returns>找到的元素，没有符合要求的则返回null</returns>
-            <exception cref="T:System.InvalidOperationException">找到多个ID相同的元素</exception>
+            <param name="nodes">要添加的节点</param>
+            <param name="factory">用于创建游离节点副本的节点工厂</param>
         </member>
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement)">
+        <member name="M:Ivony.Html.HtmlFragment.AddNodes(System.Collections.Generic.IEnumerable{Ivony.Html.IFreeNode})">
             <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+            向文档碎片中添加游离节点
             </summary>
-            <param name="element">要标识的元素</param>
-            <returns>元素的唯一ID。</returns>
+            <param name="nodes">要添加的游离节点</param>
         </member>
-<<<<<<< .mine
+        <member name="T:Ivony.Html.HtmlSpecification">
+            <summary>
+            定义 HTML 规范
+            </summary>
+        </member>
         <member name="M:Ivony.Html.HtmlSpecification.ImmediatelyClose(System.String,System.String)">
             <summary>
             检查可选结束标签在当前位置是否需要立即关闭
@@ -901,18 +988,18 @@
             <param name="nextTag">HTML 分析器遇到的下一个标签</param>
             <returns>是否需要立即关闭</returns>
         </member>
-        <member name="T:Ivony.Html.IHtmlProvider">
+        <member name="T:Ivony.Html.IHtmlDomProvider">
             <summary>
             用于创建 HTML DOM 的提供程序
             </summary>
         </member>
-        <member name="M:Ivony.Html.IHtmlProvider.CreateDocument">
+        <member name="M:Ivony.Html.IHtmlDomProvider.CreateDocument">
             <summary>
             创建一个空白文档
             </summary>
             <returns>空白文档</returns>
         </member>
-        <member name="M:Ivony.Html.IHtmlProvider.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
             向指定容器中添加一个元素
             </summary>
@@ -922,7 +1009,7 @@
             <param name="attributes">元素属性</param>
             <returns>添加好的元素</returns>
         </member>
-        <member name="M:Ivony.Html.IHtmlProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
             <summary>
             向指定容器中添加一个文本节点
             </summary>
@@ -931,7 +1018,7 @@
             <param name="htmlText">HTML 文本</param>
             <returns>添加好的文本节点</returns>
         </member>
-        <member name="M:Ivony.Html.IHtmlProvider.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
             <summary>
             向指定容器中添加一个注释
             </summary>
@@ -974,283 +1061,5 @@
             <param name="comment">HTML 注释</param>
             <returns>添加好的注释节点</returns>
         </member>
-=======
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean)">
-            <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
-            </summary>
-            <param name="element">要标识的元素</param>
-            <param name="create">指示当没有唯一ID时是否创建一个</param>
-            <returns>元素的唯一ID。</returns>
-        </member>
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean,System.Boolean)">
-            <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
-            </summary>
-            <param name="element">要标识的元素</param>
-            <param name="create">指示当没有唯一ID时是否创建一个</param>
-            <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
-            <returns>元素的唯一ID。</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlParser.Parse(System.String)">
-            <summary>
-            分析 HTML 创建一个文档
-            </summary>
-            <param name="html">HTML文本</param>
-            <returns></returns>
-        </member>
-        <member name="T:Ivony.Html.AttributeExtensions">
-            <summary>
-            提供协助操作Attribute的扩展方法
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Attribute(Ivony.Html.IHtmlElement,System.String)">
-            <summary>
-            获取指定名称的属性对象
-            </summary>
-            <param name="element">元素</param>
-            <param name="name">属性名</param>
-            <returns>属性对象，如果没找到，则返回null</returns>
-            <remarks>
-            如果有多个同名的属性，此方法会抛出异常
-            </remarks>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Attribute(Ivony.Html.IHtmlElement,System.String,System.String)">
-            <summary>
-            获取指定名称的属性对象
-            </summary>
-            <param name="element">元素</param>
-            <param name="name">属性名</param>
-            <param name="defaultValue">如果属性没找到，则为属性设置默认值</param>
-            <returns>属性对象</returns>
-            <remarks>
-            如果有多个同名的属性，此方法会抛出异常
-            </remarks>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute)">
-            <summary>
-            获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
-            </summary>
-            <param name="attribute">属性对象</param>
-            <returns>属性值，如果属性对象为null，则返回null</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="value">要设置的属性值</param>
-            <returns>被设置的属性对象</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="oldValue">要被替换的字符串</param>
-            <param name="newValue">用于替换的字符串</param>
-            <returns>被设置的属性对象</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="replacement">替换字符串</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.String,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.Value(Ivony.Html.IHtmlAttribute,System.Func{System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="attribute">属性对象</param>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(Ivony.Html.IHtmlElement,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="element">要设置属性值的元素</param>
-            <param name="attributeName">属性名</param>
-            <returns>属性设置器</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlElement},System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="elements">要设置属性值的元素</param>
-            <param name="attributeName">属性名</param>
-            <returns>属性设置器</returns>
-        </member>
-        <member name="T:Ivony.Html.AttributeExtensions.AttributeValueSetter">
-            <summary>
-            属性设置器，提供Value等方法方便的设置属性值
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Null">
-            <summary>
-            将属性值设置为空
-            </summary>
-            <returns>设置属性值的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String)">
-            <summary>
-            将属性值设置为指定字符串
-            </summary>
-            <param name="value">要设置的属性值</param>
-            <returns>设置属性值的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="oldValue">要被替换的字符串</param>
-            <param name="newValue">用于替换的字符串</param>
-            <returns>被设置的属性对象</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="replacement">替换字符串</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{Ivony.Html.IHtmlElement,System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeValueSetter.From(Ivony.Html.IHtmlElement)">
-            <summary>
-            复制属性值
-            </summary>
-            <param name="element">要复制属性值的元素</param>
-            <returns></returns>
-        </member>
-        <member name="T:Ivony.Html.AttributeExtensions.AttributeSetValueSetter">
-            <summary>
-            批量属性设置器，提供Value方法方便的批量设置属性值
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Null">
-            <summary>
-            将属性值设置为空
-            </summary>
-            <returns>设置属性值的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String)">
-            <summary>
-            将属性值设置为指定字符串
-            </summary>
-            <param name="value">要设置的属性值</param>
-            <returns>设置属性值的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="oldValue">要被替换的字符串</param>
-            <param name="newValue">用于替换的字符串</param>
-            <returns>被设置的属性对象</returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="replacement">替换字符串</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-            <param name="evaluator">用于每一步替换的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{Ivony.Html.IHtmlElement,System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.Int32,System.String,System.String})">
-            <summary>
-            设置属性值
-            </summary>
-            <param name="evaluator">用于替换属性值的计算函数</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.AttributeExtensions.AttributeSetValueSetter.From(Ivony.Html.IHtmlElement)">
-            <summary>
-            复制属性值
-            </summary>
-            <param name="element">要复制属性值的元素</param>
-            <returns></returns>
-        </member>
->>>>>>> .r64200
     </members>
 </doc>

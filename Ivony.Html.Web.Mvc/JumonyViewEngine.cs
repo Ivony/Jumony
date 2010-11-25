@@ -68,7 +68,7 @@ namespace Ivony.Html.Web.Mvc
       if ( !string.IsNullOrEmpty( masterPath ) )
         throw new NotSupportedException();
 
-      return new JumonyView( viewPath, LoadDocument( viewPath ) );
+      return CreateView( viewPath, LoadDocument( viewPath ) );
     }
 
     protected virtual IHtmlDocument LoadDocument( string virtualPath )
@@ -84,7 +84,7 @@ namespace Ivony.Html.Web.Mvc
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
     }
 
-    public static JumonyView FindView( string virtualPath, IHtmlDocument document )
+    public static JumonyView CreateView( string virtualPath, IHtmlDocument document )
     {
       lock ( _providersSync )
       {

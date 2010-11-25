@@ -40,7 +40,7 @@ namespace Ivony.Html.Web
 
       if ( MapperResult == null )
       {
-        Trace.Warn( "Web", "origin url is not found." );
+        Trace.Warn( "Core", "origin url is not found." );
 
         var builder = new UriBuilder( Request.Url );
         var path = builder.Path;
@@ -50,7 +50,7 @@ namespace Ivony.Html.Web
 
         builder.Path = path.Remove( path.Length - 5 );
 
-        Trace.Warn( "Web", "redirect to template vitual path." );
+        Trace.Warn( "Core", "redirect to template vitual path." );
         Response.Redirect( builder.Uri.AbsoluteUri );
       }
 

@@ -39,16 +39,19 @@ namespace Ivony.Html.Parser
       return new DomFreeComment( this, comment );
     }
 
-    public IHtmlDocument CreateDocument()
-    {
-      return new DomDocument();
-    }
-
 
     public HtmlFragment ParseHtml( string html )
     {
       return this.MakeFragment( new JumonyParser().Parse( html ) );
     }
+
+
+    IHtmlDocument IHtmlNodeFactory.Document
+    {
+      get { return Document; }
+    }
+
+
 
     #endregion
   }

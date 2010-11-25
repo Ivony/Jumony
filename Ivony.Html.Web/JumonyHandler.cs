@@ -38,6 +38,22 @@ namespace Ivony.Html.Web
 
       MapperResult = Context.GetMapperResult();
 
+      if ( MapperResult == null )
+      {
+        Trace.Warn( "Web", "origin url is not found." );
+
+        var builder = new UriBuilder( Request.Url );
+        var path = builder.Path;
+
+        if ( !path.EndsWith( ".ashx" ) )
+          throw new InvalidOperationException();
+
+        builder.Path = path.Remove( path.Length - 5 );
+
+        Trace.Warn( "Web", "redirect to template vitual path." );
+        Response.Redirect( builder.Uri.AbsoluteUri );
+      }
+
 
       OnPreLoadDocument();
 

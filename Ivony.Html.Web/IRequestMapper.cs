@@ -6,6 +6,7 @@ using System.Web;
 using System.IO;
 using Ivony.Html.Parser;
 using System.Web.Compilation;
+using System.Web.Hosting;
 
 namespace Ivony.Html.Web
 {
@@ -24,22 +25,33 @@ namespace Ivony.Html.Web
 
     public MapInfo MapRequest( HttpRequest request )
     {
-      var physicalPath = request.PhysicalPath;
-      var virtualPath = request.Path;
+      var virtualPath = request.FilePath;
 
-      if ( !allowsExtensions.Contains( Path.GetExtension( physicalPath ), StringComparer.InvariantCultureIgnoreCase ) )
+      if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ), StringComparer.InvariantCultureIgnoreCase ) )
         return null;
 
-      if ( !File.Exists( physicalPath ) )
+      if ( FileExists( virtualPath ) )
         return null;
 
       var handlerPath = virtualPath + ".ashx";
-      if ( !File.Exists( request.MapPath( handlerPath ) ) )
+      if ( !FileExists( handlerPath ) )
         return null;
 
-      return new MapInfo( physicalPath, (IHttpHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( IHttpHandler ) ) );
+      var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( JumonyHandler ) ) as JumonyHandler;
+      if ( handler == null )
+        return null;
+
+      return new MapInfo( virtualPath, handler );
+    }
+
+
+    private static bool FileExists( string virtualPath )
+    {
+      return HostingEnvironment.VirtualPathProvider.FileExists( virtualPath );
     }
 
   }
+
+
 
 }

@@ -200,16 +200,17 @@ namespace Ivony.Html
       constructor.Name = methodName;
       constructor.Attributes = MemberAttributes.Public | MemberAttributes.Static;
 
-      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "_provider" ) );
+      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "provider" ) );
       constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
-      var providerVariable =  new CodeVariableReferenceExpression( "_provider" );
+      var providerVariable =  new CodeVariableReferenceExpression( "provider" );
 
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "_document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "_node" ) );// var node;
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "node" ) );// var node;
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
-      var documentVariable = new CodeVariableReferenceExpression( "_document" );
+      var documentVariable = new CodeVariableReferenceExpression( "document" );
 
       BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
 
@@ -221,80 +222,57 @@ namespace Ivony.Html
     private static void BuildChildNodesStatement(IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements)
     {
 
+
+      var providerVariable = new CodeVariableReferenceExpression( "provider" );
+      var nodeVariable = new CodeVariableReferenceExpression( "node" );
+      var attributesVariable = new CodeVariableReferenceExpression( "attributes" );
+
       int index = 0;
 
       foreach ( var node in container.Nodes() )
       {
-        var nodeVariable = BuildCreateNodeStatement( node, contaienrVariable, index, statements, existsElements );
 
-        statements.Add( new CodeMethodInvokeExpression( nodeVariable, "Into", contaienrVariable, new CodePrimitiveExpression( index ) ) );
+        var textNode = node as IHtmlTextNode;
+        if ( textNode != null )
+          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+
+
+        var comment = node as IHtmlComment;
+        if ( comment != null )
+          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+
+
+        var element = node as IHtmlElement;
+
+        if ( element != null )
+        {
+          var elementId = CreateIdentity( element, false );
+
+          elementId = EnsureUniqueness( elementId, existsElements );
+          existsElements.Add( elementId );
+
+          elementId = "element_" + elementId;
+
+
+          statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
+
+          statements.Add( new CodeAssignStatement( attributesVariable, new CodeObjectCreateExpression( typeof( Dictionary<string, string> ) ) ) );
+
+          foreach ( var attribute in element.Attributes() )
+            statements.Add( new CodeMethodInvokeExpression( attributesVariable, "Add", new CodePrimitiveExpression( attribute.Name ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
+
+          statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
+
+          var elementVariable = new CodeVariableReferenceExpression( elementId );
+
+
+          BuildChildNodesStatement( element, elementVariable, statements, existsElements );
+
+        }
 
         index++;
       }
     }
-
-    private static CodeVariableReferenceExpression BuildCreateNodeStatement(IHtmlNode node, CodeVariableReferenceExpression contaienrVariable, int index, CodeStatementCollection statements, IList<string> existsElements)
-    {
-
-      var providerVariable = new CodeVariableReferenceExpression( "_provider" );
-      var nodeVariable = new CodeVariableReferenceExpression( "_node" );
-
-      var textNode = node as IHtmlTextNode;
-      if ( textNode != null )
-      {
-        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
-        return nodeVariable;
-      }
-
-
-      var comment = node as IHtmlComment;
-      if ( comment != null )
-      {
-        statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
-        return nodeVariable;
-      }
-
-
-      var element = node as IHtmlElement;
-
-      if ( element != null )
-      {
-        var elementId = CreateIdentity( element, false );
-
-        elementId = EnsureUniqueness( elementId, existsElements );
-        existsElements.Add( elementId );
-
-        elementId = "element_" + elementId;
-
-        statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
-        statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "CreateElement", new CodePrimitiveExpression( element.Name ) ) ) );
-
-
-        var elementVariable = new CodeVariableReferenceExpression( elementId );
-
-
-        foreach ( var attribute in element.Attributes() )
-        {
-          var addAttribute = new CodeMethodInvokeExpression( elementVariable, "AddAttribute", new CodePrimitiveExpression( attribute.Name ) );
-
-          if ( attribute.AttributeValue != null )
-            statements.Add( new CodeAssignStatement( new CodePropertyReferenceExpression( addAttribute, "AttributeValue" ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
-          else
-            statements.Add( addAttribute );
-        }
-
-
-
-        BuildChildNodesStatement( element, elementVariable, statements, existsElements );
-
-        return elementVariable;
-
-      }
-
-      throw new NotSupportedException();
-
-    }
-
 
   }
 }

@@ -657,6 +657,79 @@
             <param name="element">要获取序号的元素</param>
             <returns>顺序位置</returns>
         </member>
+        <member name="T:Ivony.Html.IHtmlDomProvider">
+            <summary>
+            用于创建 HTML DOM 的提供程序
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.IHtmlDomProvider.CreateDocument">
+            <summary>
+            创建一个空白文档
+            </summary>
+            <returns>空白文档</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            向指定容器中添加一个元素
+            </summary>
+            <param name="container">要添加元素的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="name">元素名</param>
+            <param name="attributes">元素属性</param>
+            <returns>添加好的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            向指定容器中添加一个文本节点
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="htmlText">HTML 文本</param>
+            <returns>添加好的文本节点</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            向指定容器中添加一个注释
+            </summary>
+            <param name="container">要添加注释的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="comment">HTML 注释</param>
+            <returns>添加好的注释节点</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlProvider`5.CreateDocument">
+            <summary>
+            创建一个空白文档
+            </summary>
+            <returns>空白文档</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlProvider`5.AddElement(`4,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            向指定容器中添加一个元素
+            </summary>
+            <param name="container">要添加元素的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="name">元素名</param>
+            <param name="attributes">元素属性</param>
+            <returns>添加好的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlProvider`5.AddTextNode(`4,System.Int32,System.String)">
+            <summary>
+            向指定容器中添加一个文本节点
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="htmlText">HTML 文本</param>
+            <returns>添加好的文本节点</returns>
+        </member>
+        <member name="M:Ivony.Html.IHtmlProvider`5.AddComment(`4,System.Int32,System.String)">
+            <summary>
+            向指定容器中添加一个注释
+            </summary>
+            <param name="container">要添加注释的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="comment">HTML 注释</param>
+            <returns>添加好的注释节点</returns>
+        </member>
         <member name="T:Ivony.Html.IHtmlNodeFactory">
             <summary>
             定义创建HTML文档对象的工厂
@@ -689,6 +762,11 @@
             </summary>
             <param name="html">要分析的HTML文本</param>
             <returns></returns>
+        </member>
+        <member name="P:Ivony.Html.IHtmlNodeFactory.Document">
+            <summary>
+            所属的文档
+            </summary>
         </member>
         <member name="M:Ivony.Html.DocumentExtensions.GetElementById(Ivony.Html.IHtmlDocument,System.String)">
             <summary>
@@ -987,79 +1065,6 @@
             <param name="openTag">当前开放的可选结束标签</param>
             <param name="nextTag">HTML 分析器遇到的下一个标签</param>
             <returns>是否需要立即关闭</returns>
-        </member>
-        <member name="T:Ivony.Html.IHtmlDomProvider">
-            <summary>
-            用于创建 HTML DOM 的提供程序
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.CreateDocument">
-            <summary>
-            创建一个空白文档
-            </summary>
-            <returns>空白文档</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            向指定容器中添加一个元素
-            </summary>
-            <param name="container">要添加元素的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="name">元素名</param>
-            <param name="attributes">元素属性</param>
-            <returns>添加好的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个文本节点
-            </summary>
-            <param name="container">要添加节点的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="htmlText">HTML 文本</param>
-            <returns>添加好的文本节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlDomProvider.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个注释
-            </summary>
-            <param name="container">要添加注释的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="comment">HTML 注释</param>
-            <returns>添加好的注释节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.CreateDocument">
-            <summary>
-            创建一个空白文档
-            </summary>
-            <returns>空白文档</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddElement(`4,System.Int32,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            向指定容器中添加一个元素
-            </summary>
-            <param name="container">要添加元素的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="name">元素名</param>
-            <param name="attributes">元素属性</param>
-            <returns>添加好的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddTextNode(`4,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个文本节点
-            </summary>
-            <param name="container">要添加节点的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="htmlText">HTML 文本</param>
-            <returns>添加好的文本节点</returns>
-        </member>
-        <member name="M:Ivony.Html.IHtmlProvider`5.AddComment(`4,System.Int32,System.String)">
-            <summary>
-            向指定容器中添加一个注释
-            </summary>
-            <param name="container">要添加注释的容器</param>
-            <param name="index">添加的位置</param>
-            <param name="comment">HTML 注释</param>
-            <returns>添加好的注释节点</returns>
         </member>
     </members>
 </doc>

@@ -77,5 +77,39 @@ namespace Ivony.Html.Web.Mvc
       return HtmlManager.LoadDocument( file );
     }
 
+
+
+    static JumonyViewEngine()
+    {
+      ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
+    }
+
+    public static JumonyView FindView( string virtualPath, IHtmlDocument document )
+    {
+      lock ( _providersSync )
+      {
+        foreach ( var provider in ViewProviders )
+        {
+          var view = provider.TryCreateView( virtualPath, document );
+          if ( view != null )
+            return view;
+        }
+
+        return new JumonyView( virtualPath, document );
+
+      }
+    }
+
+
+    private static object _providersSync = new object();
+
+    public static ICollection<IViewProvider> ViewProviders
+    {
+      get;
+      private set;
+    }
+
+
+
   }
 }

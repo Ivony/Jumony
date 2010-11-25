@@ -8,7 +8,7 @@ namespace Ivony.Html.Web.Mvc
   public interface IViewProvider
   {
 
-    JumonyView CreateView( string virtualPath, IHtmlDocument document );
+    JumonyView TryCreateView( string virtualPath, IHtmlDocument document );
 
   }
 }

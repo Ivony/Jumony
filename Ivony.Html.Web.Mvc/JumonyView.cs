@@ -54,6 +54,10 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessActionLinks();
 
+
+
+      AddGeneratorMetaData();
+
       output.Write( Document.InnerHtml( true ) );
     }
 
@@ -98,6 +102,24 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+
+    private void AddGeneratorMetaData()
+    {
+      var factory = Document.GetNodeFactory();
+      if ( factory != null )
+      {
+        var meta = factory.CreateElement( "meta" );
+        meta.SetAttribute( "name" ).Value( "generator" );
+        meta.SetAttribute( "content" ).Value( "Jumony" );
+
+        var header = Document.Find( "html head" ).FirstOrDefault();
+
+        if ( header != null )
+          meta.InsertTo( header, 0 );
+
+      }
+    }
 
 
   }

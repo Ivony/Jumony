@@ -34,9 +34,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return new FreeCommentAdaptor( this, _document.CreateComment( comment ) );
     }
 
-    public IHtmlDocument CreateDocument()
+    public IHtmlDocument Document
     {
-      return new AP.HtmlDocument().AsDocument();
+      get { return _document.AsDocument(); }
     }
 
 

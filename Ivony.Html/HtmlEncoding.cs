@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 
 namespace Ivony.Html
 {
   public class HtmlEncoding
   {
-    public static string HtmlEncode( string text )
+    public static string HtmlEncode(string text)
     {
 
 #if dotnet4
@@ -21,7 +22,7 @@ namespace Ivony.Html
 #endif
     }
 
-    public static void HtmlEncode( string text, TextWriter writer )
+    public static void HtmlEncode(string text, TextWriter writer)
     {
 #if dotnet4
       System.Net.WebUtility.HtmlEncode( text, writer );
@@ -55,10 +56,10 @@ namespace Ivony.Html
             continue;
         }
 
-        if ( (ch >= '\x00a0') && (ch < '\x0100') )
+        if ( ( ch >= '\x00a0' ) && ( ch < '\x0100' ) )
         {
           writer.Write( "&#" );
-          writer.Write( ((int) ch).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
+          writer.Write( ( (int) ch ).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
           writer.Write( ';' );
         }
         else
@@ -70,7 +71,7 @@ namespace Ivony.Html
 
 
 
-    public static string HtmlDecode( string htmlText )
+    public static string HtmlDecode(string htmlText)
     {
 #if dotnet4
       return System.Net.WebUtility.HtmlDecode( htmlText );
@@ -86,7 +87,7 @@ namespace Ivony.Html
 
     }
 
-    public static void HtmlDecode( string htmlText, TextWriter writer )
+    public static void HtmlDecode(string htmlText, TextWriter writer)
     {
 
 #if dotnet4
@@ -116,14 +117,14 @@ namespace Ivony.Html
         {
           int entityEnds = htmlText.IndexOfAny( new[] { ';', '&' }, i + 1 );
 
-          if ( (entityEnds > 0) && (htmlText[entityEnds] == ';') )
+          if ( ( entityEnds > 0 ) && ( htmlText[entityEnds] == ';' ) )
           {
             string entity = htmlText.Substring( i + 1, entityEnds - i - 1 );
 
             if ( entity.StartsWith( "#" ) )//以#开头
             {
               ushort charCode;
-              if ( (entity[1] == 'x') || (entity[1] == 'X') )
+              if ( ( entity[1] == 'x' ) || ( entity[1] == 'X' ) )
                 ushort.TryParse( entity.Substring( 2 ), NumberStyles.AllowHexSpecifier, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
               else
                 ushort.TryParse( entity.Substring( 1 ), NumberStyles.Integer, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
@@ -163,7 +164,7 @@ namespace Ivony.Html
     }
 
 
-    public static string HtmlAttributeEncode( string text )
+    public static string HtmlAttributeEncode(string text)
     {
       using ( StringWriter writer = new StringWriter() )
       {
@@ -173,7 +174,7 @@ namespace Ivony.Html
       }
     }
 
-    public static void HtmlAttributeEncode( string text, TextWriter writer )
+    public static void HtmlAttributeEncode(string text, TextWriter writer)
     {
 
       if ( text == null )

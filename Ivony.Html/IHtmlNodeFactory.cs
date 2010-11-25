@@ -12,6 +12,15 @@ namespace Ivony.Html
   {
 
     /// <summary>
+    /// 所属的文档
+    /// </summary>
+    IHtmlDocument Document
+    {
+      get;
+    }
+
+
+    /// <summary>
     /// 创建元素对象
     /// </summary>
     /// <param name="name">元素名</param>

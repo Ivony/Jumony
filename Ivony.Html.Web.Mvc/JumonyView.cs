@@ -37,6 +37,10 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewContext = viewContext;
       Render( writer );
+
+      var strings = new string[0];
+      object[] objects = strings;
+
     }
 
 

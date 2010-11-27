@@ -207,7 +207,7 @@ namespace Ivony.Html
 
       constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeNode ), "node" ) );// var node;
+      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlNode ), "node" ) );// var node;
       constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
       var documentVariable = new CodeVariableReferenceExpression( "document" );
@@ -261,7 +261,7 @@ namespace Ivony.Html
           foreach ( var attribute in element.Attributes() )
             statements.Add( new CodeMethodInvokeExpression( attributesVariable, "Add", new CodePrimitiveExpression( attribute.Name ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
 
-          statements.Add( new CodeVariableDeclarationStatement( typeof( IFreeElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
+          statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
 
           var elementVariable = new CodeVariableReferenceExpression( elementId );
 

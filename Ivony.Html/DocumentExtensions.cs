@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 using System.CodeDom;
+using System.Reflection.Emit;
 
 
 namespace Ivony.Html
@@ -18,7 +19,7 @@ namespace Ivony.Html
     /// <param name="id">元素ID</param>
     /// <returns>找到的元素，没有符合要求的则返回null</returns>
     /// <exception cref="System.InvalidOperationException">找到多个ID相同的元素</exception>
-    public static IHtmlElement GetElementById(this IHtmlDocument document, string id)
+    public static IHtmlElement GetElementById( this IHtmlDocument document, string id )
     {
       return document.Descendants().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
     }
@@ -29,7 +30,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要标识的元素</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity(this IHtmlElement element)
+    public static string Identity( this IHtmlElement element )
     {
       return Identity( element, false );
     }
@@ -40,7 +41,7 @@ namespace Ivony.Html
     /// <param name="element">要标识的元素</param>
     /// <param name="create">指示当没有唯一ID时是否创建一个</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity(this IHtmlElement element, bool create)
+    public static string Identity( this IHtmlElement element, bool create )
     {
       return Identity( element, create, false );
     }
@@ -52,7 +53,7 @@ namespace Ivony.Html
     /// <param name="create">指示当没有唯一ID时是否创建一个</param>
     /// <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
     /// <returns>元素的唯一ID。</returns>
-    public static string Identity(this IHtmlElement element, bool create, bool ancestorsCreate)
+    public static string Identity( this IHtmlElement element, bool create, bool ancestorsCreate )
     {
       EnsureAllocated( element );
 
@@ -68,7 +69,7 @@ namespace Ivony.Html
       return id;
     }
 
-    private static string CreateIdentity(IHtmlElement element, bool ancestorsCreate)
+    private static string CreateIdentity( IHtmlElement element, bool ancestorsCreate )
     {
       string parentId;
 
@@ -115,12 +116,12 @@ namespace Ivony.Html
       return EnsureUniqueness( identity, element.Document );
     }
 
-    private static string EnsureUniqueness(string identity, IHtmlDocument document)
+    private static string EnsureUniqueness( string identity, IHtmlDocument document )
     {
       return EnsureUniqueness( identity, document.Descendants().Select( element => element.Attribute( "id" ).Value() ).NotNull() );
     }
 
-    private static string EnsureUniqueness(string identity, IEnumerable<string> ExistsIdentities)
+    private static string EnsureUniqueness( string identity, IEnumerable<string> ExistsIdentities )
     {
       var id = identity;
       var postfix = 0;
@@ -133,7 +134,7 @@ namespace Ivony.Html
 
 
 
-    public static void EnsureAllocated(this IHtmlNode node)
+    public static void EnsureAllocated( this IHtmlNode node )
     {
 
       if ( node is IFreeNode )
@@ -153,7 +154,7 @@ namespace Ivony.Html
 
     }
 
-    private static string GetElementName(IHtmlElement element)
+    private static string GetElementName( IHtmlElement element )
     {
 
       switch ( element.Name.ToLowerInvariant() )
@@ -194,7 +195,7 @@ namespace Ivony.Html
 
 
 
-    public static CodeMemberMethod GenerateCodeMethod(this IHtmlDocument document, string methodName)
+    public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
     {
       var constructor = new CodeMemberMethod();
       constructor.Name = methodName;
@@ -219,7 +220,7 @@ namespace Ivony.Html
       return constructor;
     }
 
-    private static void BuildChildNodesStatement(IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements)
+    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements )
     {
 
 
@@ -272,6 +273,12 @@ namespace Ivony.Html
 
         index++;
       }
+    }
+
+
+    public static Func<IHtmlDomProvider, IHtmlDocument> Compile( this IHtmlDocument document )
+    {
+      throw new NotImplementedException();
     }
 
   }

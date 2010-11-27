@@ -239,7 +239,7 @@ namespace Ivony.Html
 
         var comment = node as IHtmlComment;
         if ( comment != null )
-          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( comment.Comment ) ) ) );
 
 
         var element = node as IHtmlElement;

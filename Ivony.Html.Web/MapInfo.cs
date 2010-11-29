@@ -48,7 +48,7 @@ namespace Ivony.Html.Web
       if ( document == null )
         throw new InvalidOperationException();
 
-      return null;
+      return document;
 
     }
 

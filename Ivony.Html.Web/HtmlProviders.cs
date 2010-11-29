@@ -127,9 +127,6 @@ namespace Ivony.Html.Web
       {
         return reader.ReadToEnd();
       }
-
-
-      return null;
     }
 
     /// <summary>

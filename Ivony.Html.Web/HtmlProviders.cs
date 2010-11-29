@@ -123,6 +123,12 @@ namespace Ivony.Html.Web
         }
       }
 
+      using ( var reader = new StreamReader( HostingEnvironment.VirtualPathProvider.GetFile( virtualPath ).Open() ) )
+      {
+        return reader.ReadToEnd();
+      }
+
+
       return null;
     }
 

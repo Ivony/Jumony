@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
       if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ), StringComparer.InvariantCultureIgnoreCase ) )
         return null;
 
-      if ( FileExists( virtualPath ) )
+      if ( !FileExists( virtualPath ) )
         return null;
 
       var handlerPath = virtualPath + ".ashx";

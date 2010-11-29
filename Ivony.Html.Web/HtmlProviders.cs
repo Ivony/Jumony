@@ -19,6 +19,8 @@ namespace Ivony.Html.Web
       ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
       Loaders = new SynchronizedCollection<IHtmlLoader>( _loadersSync );
       Mappers = new SynchronizedCollection<IRequestMapper>( _mapperSync );
+
+      Mappers.Add( new DefaultRequestMapper() );
     }
 
 

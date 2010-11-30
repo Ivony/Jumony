@@ -34,6 +34,9 @@ namespace Ivony.Html
 
 
 
+
+
+
     public string attr( string name )
     {
       var element = _elements.FirstOrDefault();
@@ -155,7 +158,7 @@ namespace Ivony.Html
 
     public jQuery addClass( Func<int, string, string> classEvaluator )
     {
-      return addClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes ) ).Split( ' ' ) );
+      return addClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes.ToArray() ) ).Split( ' ' ) );
     }
 
     public jQuery addClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
@@ -173,7 +176,7 @@ namespace Ivony.Html
 
     public jQuery removeClass( Func<int, string, string> classEvaluator )
     {
-      return removeClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes ) ).Split( ' ' ) );
+      return removeClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes.ToArray() ) ).Split( ' ' ) );
     }
 
     public jQuery removeClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
@@ -210,11 +213,20 @@ namespace Ivony.Html
 
     public string val()
     {
-      var element = _elements.FirstOrDefault();
-      if ( element == null )
-        return null;
 
-      return element.Attribute( "value" ).Value();
+      return attr( "value" );
+
+    }
+
+
+    public jQuery val( string value )
+    {
+      return attr( "value", value );
+    }
+
+    public jQuery val( Func<int, string, string> valueEvaluator )
+    {
+      return attr( "value", valueEvaluator );
     }
 
 

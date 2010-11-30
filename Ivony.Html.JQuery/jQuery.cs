@@ -308,9 +308,9 @@ namespace Ivony.Html
   }
 
 
-  internal static class Extensions
+  public static class Extensions
   {
-    public static IDictionary<string, string> ToPropertyDictionary( this object properties )
+    internal static IDictionary<string, string> ToPropertyDictionary( this object properties )
     {
       var dictionary = new Dictionary<string, string>();
 

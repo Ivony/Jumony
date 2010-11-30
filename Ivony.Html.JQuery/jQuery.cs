@@ -84,7 +84,7 @@ namespace Ivony.Html
 
     public jQuery removeAttr( string name )
     {
-      _elements.Select( element => element.Attribute( name ) ).NotNull().ForAll( attribute => attribute.Remove() );
+      ForAll( e => e.SetAttribute( name ).Remove() );
       return this;
     }
 
@@ -213,11 +213,8 @@ namespace Ivony.Html
 
     public string val()
     {
-
       return attr( "value" );
-
     }
-
 
     public jQuery val( string value )
     {
@@ -227,6 +224,49 @@ namespace Ivony.Html
     public jQuery val( Func<int, string, string> valueEvaluator )
     {
       return attr( "value", valueEvaluator );
+    }
+
+
+
+
+    public string css( string propertyName )
+    {
+      var element = First;
+      if ( element == null )
+        return null;
+
+      return element.Style().Get( propertyName );
+    }
+
+    public jQuery css( string propertyName, string value )
+    {
+      return ForAll( e => e.Style().Set( propertyName, value ) );
+    }
+
+    public jQuery css( string propertyName, Func<int, string, string> evaluator )
+    {
+      return ForAll( ( e, i ) => e.Style().Set( propertyName, evaluator( i, e.Style().Get( propertyName ) ) ) );
+    }
+
+    public jQuery css( object map )
+    {
+      return css( map.ToPropertyDictionary() );
+    }
+
+    public jQuery css( IDictionary<string, string> map )
+    {
+      foreach ( var e in _elements.ToArray() )
+      {
+        lock ( e.SyncRoot )
+        {
+          foreach ( var pair in map )
+          {
+            e.Style().Set( pair.Key, pair.Value );
+          }
+        }
+      }
+
+      return this;
     }
 
 

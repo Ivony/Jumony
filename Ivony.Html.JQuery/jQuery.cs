@@ -153,11 +153,32 @@ namespace Ivony.Html
       return ForAll( element => element.Style().AddClass( className ) );
     }
 
+    public jQuery addClass( Func<int, string, string> classEvaluator )
+    {
+      return addClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes ) ).Split( ' ' ) );
+    }
+
+    public jQuery addClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
+    {
+      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().AddClass( c ) ) );
+    }
+
+
 
 
     public jQuery removeClass( string className )
     {
       return ForAll( element => element.Style().RemoveClass( className ) );
+    }
+
+    public jQuery removeClass( Func<int, string, string> classEvaluator )
+    {
+      return removeClass( ( i, classes ) => classEvaluator( i, string.Join( " ", classes ) ).Split( ' ' ) );
+    }
+
+    public jQuery removeClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
+    {
+      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().RemoveClass( c ) ) );
     }
 
 
@@ -182,7 +203,7 @@ namespace Ivony.Html
 
     public bool hasClass( string className )
     {
-      return _elements.All( element => element.Style().Classes().Contains( className ) );
+      return _elements.Any( element => element.Style().Classes().Contains( className ) );
     }
 
 

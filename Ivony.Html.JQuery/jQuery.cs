@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using Ivony.Fluent;
 using System.ComponentModel;
+using Ivony.Html.Styles;
 
 
 namespace Ivony.Html
@@ -60,7 +61,7 @@ namespace Ivony.Html
       return this;
     }
 
-    
+
     public jQuery attr( object properties )
     {
       return attr( properties.ToPropertyDictionary() );
@@ -99,19 +100,19 @@ namespace Ivony.Html
 
     public jQuery text( string text )
     {
-      _elements.ForAll( element => element.InnerText( text ) );
+      ForAll( element => element.InnerText( text ) );
       return this;
     }
 
     public jQuery text( Func<string, string> evaluator )
     {
-      _elements.ForAll( element => element.InnerText( evaluator( element.InnerText() ) ) );
+      ForAll( element => element.InnerText( evaluator( element.InnerText() ) ) );
       return this;
     }
 
     public jQuery text( Func<int, string, string> evaluator )
     {
-      _elements.ForAll( ( element, i ) => element.InnerText( evaluator( i, element.InnerText() ) ) );
+      ForAll( ( element, i ) => element.InnerText( evaluator( i, element.InnerText() ) ) );
       return this;
     }
 
@@ -129,25 +130,105 @@ namespace Ivony.Html
 
     public jQuery html( string html )
     {
-      _elements.ForAll( element => element.InnerHtml( html ) );
+      ForAll( element => element.InnerHtml( html ) );
       return this;
     }
 
     public jQuery html( Func<string, string> evaluator )
     {
-      _elements.ForAll( element => element.InnerHtml( evaluator( element.InnerHtml() ) ) );
+      ForAll( element => element.InnerHtml( evaluator( element.InnerHtml() ) ) );
       return this;
     }
 
     public jQuery html( Func<int, string, string> evaluator )
     {
-      _elements.ForAll( ( element, i ) => element.InnerHtml( evaluator( i, element.InnerHtml() ) ) );
+      ForAll( ( element, i ) => element.InnerHtml( evaluator( i, element.InnerHtml() ) ) );
       return this;
     }
 
 
 
+    public jQuery addClass( string className )
+    {
+      return ForAll( element => element.Style().AddClass( className ) );
+    }
 
+
+
+    public jQuery removeClass( string className )
+    {
+      return ForAll( element => element.Style().RemoveClass( className ) );
+    }
+
+
+
+    public jQuery toogleClass( string className )
+    {
+      return ForAll( element =>
+        {
+
+          lock ( element.SyncRoot )
+          {
+            if ( element.Style().Classes().Contains( className ) )
+              element.Style().RemoveClass( className );
+            else
+              element.Style().AddClass( className );
+          }
+
+        } );
+    }
+
+
+
+    public bool hasClass( string className )
+    {
+      return _elements.All( element => element.Style().Classes().Contains( className ) );
+    }
+
+
+
+    public string val()
+    {
+      var element = _elements.FirstOrDefault();
+      if ( element == null )
+        return null;
+
+      return element.Attribute( "value" ).Value();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    protected jQuery ForAll( Action<IHtmlElement> action )
+    {
+      _elements.ForAll( action );
+      return this;
+    }
+
+
+    protected jQuery ForAll( Action<IHtmlElement, int> action )
+    {
+      _elements.ForAll( action );
+      return this;
+    }
+
+
+    protected IHtmlElement First
+    {
+      get { return _elements.FirstOrDefault(); }
+    }
 
 
 

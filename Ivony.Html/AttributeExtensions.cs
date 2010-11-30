@@ -137,6 +137,18 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <returns>属性设置器</returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
+    {
+      return new AttributeValueSetter( element, attributeName ).Value( value );
+    }
+
+
+    /// <summary>
     /// 属性设置器，提供Value等方法方便的设置属性值
     /// </summary>
     public class AttributeValueSetter

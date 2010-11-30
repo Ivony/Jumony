@@ -141,7 +141,8 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要设置属性值的元素</param>
     /// <param name="attributeName">属性名</param>
-    /// <returns>属性设置器</returns>
+    /// <param name="value">属性值</param>
+    /// <returns>设置了属性的元素</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
     {
       return new AttributeValueSetter( element, attributeName ).Value( value );
@@ -317,7 +318,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 设置属性值
+    /// 批量设置属性值
     /// </summary>
     /// <param name="elements">要设置属性值的元素</param>
     /// <param name="attributeName">属性名</param>
@@ -325,6 +326,21 @@ namespace Ivony.Html
     public static AttributeSetValueSetter SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName )
     {
       return new AttributeSetValueSetter( elements, attributeName );
+    }
+
+
+    /// <summary>
+    /// 批量设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="value">属性值</param>
+    /// <returns>设置了属性的元素</returns>
+    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
+    {
+      elements.ForAll( e => e.SetAttribute( attributeName, value ) );
+
+      return elements;
     }
 
 

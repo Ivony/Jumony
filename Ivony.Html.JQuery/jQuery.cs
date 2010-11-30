@@ -39,11 +39,7 @@ namespace Ivony.Html
 
     public string attr( string name )
     {
-      var element = _elements.FirstOrDefault();
-      if ( element == null )
-        return null;
-
-      return element.Attribute( name ).Value();
+      return ForFirstOrNull( e => e.Attribute( name ).Value() );
     }
 
     public jQuery attr( string name, string value )
@@ -94,11 +90,7 @@ namespace Ivony.Html
 
     public string text()
     {
-      var element = _elements.FirstOrDefault();
-      if ( element == null )
-        return null;
-
-      return element.InnerText();
+      return ForFirstOrNull( e => e.InnerText() );
     }
 
     public jQuery text( string text )
@@ -124,11 +116,7 @@ namespace Ivony.Html
 
     public string html()
     {
-      var element = _elements.FirstOrDefault();
-      if ( element == null )
-        return null;
-
-      return element.InnerHtml();
+      return ForFirstOrNull( e => e.InnerHtml() );
     }
 
     public jQuery html( string html )
@@ -231,11 +219,7 @@ namespace Ivony.Html
 
     public string css( string propertyName )
     {
-      var element = First;
-      if ( element == null )
-        return null;
-
-      return element.Style().Get( propertyName );
+      return ForFirstOrNull( e => e.Style().Get( propertyName ) );
     }
 
     public jQuery css( string propertyName, string value )
@@ -284,25 +268,29 @@ namespace Ivony.Html
 
 
 
-    protected jQuery ForAll( Action<IHtmlElement> action )
+    public jQuery ForAll( Action<IHtmlElement> action )
     {
       _elements.ForAll( action );
       return this;
     }
 
 
-    protected jQuery ForAll( Action<IHtmlElement, int> action )
+    public jQuery ForAll( Action<IHtmlElement, int> action )
     {
       _elements.ForAll( action );
       return this;
     }
 
 
-    protected IHtmlElement First
+    protected T ForFirstOrNull<T>( Func<IHtmlElement, T> evaluator ) where T : class
     {
-      get { return _elements.FirstOrDefault(); }
-    }
+      var first = _elements.FirstOrDefault();
 
+      if ( first == null )
+        return null;
+
+      return evaluator( first );
+    }
 
 
   }
@@ -327,5 +315,9 @@ namespace Ivony.Html
 
       return dictionary;
     }
+
+
+
+
   }
 }

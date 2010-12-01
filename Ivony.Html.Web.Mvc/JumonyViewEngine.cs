@@ -74,7 +74,7 @@ namespace Ivony.Html.Web.Mvc
     protected virtual IHtmlDocument LoadDocument( string virtualPath )
     {
       var file = VirtualPathProvider.GetFile( virtualPath );
-      return HtmlManager.LoadDocument( file );
+      var content = StaticFileLoader.LoadContent( file );
     }
 
 

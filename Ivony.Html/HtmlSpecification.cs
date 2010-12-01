@@ -9,7 +9,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 定义 HTML 规范
+  /// 定义 HTML 规范（依据 HTML 4.01规范）
   /// </summary>
   public static class HtmlSpecification
   {

@@ -6,6 +6,11 @@ using Ivony.Fluent;
 
 namespace Ivony.Html
 {
+
+
+  /// <summary>
+  /// 定义 HTML5 草案规范
+  /// </summary>
   public class Html5DraftSpecial
   {
 

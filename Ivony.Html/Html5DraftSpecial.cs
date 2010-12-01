@@ -16,6 +16,8 @@ namespace Ivony.Html
 
 
 
+    public static readonly IContentKind MetadataContent = new MetadataContentKind();
+
     private class MetadataContentKind : IContentKind
     {
       public bool IsBelong( IHtmlNode node )

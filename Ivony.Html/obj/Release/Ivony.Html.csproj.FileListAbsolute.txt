@@ -1,9 +1,0 @@
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Html.xml
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Html.dll
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Html.pdb
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Core.dll
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Core.pdb
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\bin\Release\Ivony.Core.xml
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\obj\Release\ResolveAssemblyReference.cache
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\obj\Release\Ivony.Html.dll
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html\obj\Release\Ivony.Html.pdb

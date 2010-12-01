@@ -1,5 +1,0 @@
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\HtmlSelector\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\HtmlSelector\bin\Debug\HtmlSelector.dll
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\HtmlSelector\bin\Debug\HtmlSelector.pdb
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\HtmlSelector\obj\Debug\HtmlSelector.dll
-C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\HtmlSelector\obj\Debug\HtmlSelector.pdb

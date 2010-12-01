@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -142,13 +143,18 @@ namespace Ivony.Html
           case "video":
           case "wbr":
           case "text":
-
+            return true;
 
           case "area":
-          //(if it is a descendant of a map element)
+
+            //(if it is a descendant of a map element)
+            return element.Ancestors().Any( e => e.Name.EqualsIgnoreCase( "area" ) );
+
 
           case "style":
-          //(if the scoped attribute is present)
+
+            //(if the scoped attribute is present)
+            return !string.IsNullOrEmpty( element.Attribute( "scoped" ).Value() );
 
 
           default:

@@ -1,0 +1,963 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ivony.Web.Html</name>
+    </assembly>
+    <members>
+        <member name="T:Ivony.Web.Html.IHtmlNodeFactory">
+            <summary>
+            定义创建HTML文档对象的工厂
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlNodeFactory.CreateElement(System.String)">
+            <summary>
+            创建元素对象
+            </summary>
+            <param name="name">元素名</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlNodeFactory.CreateTextNode(System.String)">
+            <summary>
+            创建文本节点
+            </summary>
+            <param name="htmlText">HTML文本</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlNodeFactory.CreateComment(System.String)">
+            <summary>
+            创建注释节点
+            </summary>
+            <param name="comment">注释文本</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlNodeFactory.ParseHtml(System.String)">
+            <summary>
+            分析一小段HTML文本并创建一个HTML碎片
+            </summary>
+            <param name="html">要分析的HTML文本</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlNode.Remove">
+            <summary>
+            从文档对象树上移除此节点
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlNode.Parent">
+            <summary>
+            获取节点的父级
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlNode.NodeObject">
+            <summary>
+            获取节点在原始文档对象树上的对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlNode.Document">
+            <summary>
+            获取节点所属的文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlNode.RawHtml">
+            <summary>
+            获取节点的原始 HTML，如果不支持，请返回null
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.Create(System.String)">
+            <summary>
+            创建CSS选择器实例
+            </summary>
+            <param name="expression">选择器表达式</param>
+            <returns>CSS选择器</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.Create(System.String[])">
+            <summary>
+            创建CSS选择器实例
+            </summary>
+            <param name="expressions">多个选择器表达式，结果会自动合并</param>
+            <returns>CSS选择器</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.CreateElementSelector(System.String)">
+            <summary>
+            创建一个元素选择器实例
+            </summary>
+            <param name="expression">元素选择器表达式</param>
+            <returns>CSS元素选择器</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.#ctor(System.String[])">
+            <summary>
+            创建一个CSS选择器实例
+            </summary>
+            <param name="expressions"></param>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.CreateSelector(System.String)">
+            <summary>
+            创建选择器，这是核心函数
+            </summary>
+            <param name="expression">选择器表达式</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.ToString">
+            <summary>
+            获取选择器的表达式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.Allows(Ivony.Web.Html.IHtmlElement,Ivony.Web.Html.IHtmlContainer)">
+            <summary>
+            检查元素是否符合选择器要求
+            </summary>
+            <param name="element">元素</param>
+            <param name="scope">上溯范畴</param>
+            <returns>是否符合选择器要求</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.Search(Ivony.Web.Html.IHtmlContainer,System.Boolean)">
+            <summary>
+            在指定容器子代元素和指定范畴下搜索满足选择器的所有元素
+            </summary>
+            <param name="container">容器，其所有子代元素被列入搜索范围</param>
+            <param name="asScope">指定选择器在计算父元素时，是否不超出指定容器的范畴</param>
+            <remarks>
+            选择器的工作原理是从最里层的元素选择器开始搜索，逐步验证其父元素是否满足父选择器的规则。如果asScope参数为true，则选择器在上溯验证父元素时，将不超出container的范畴，换言之只有container的子代才会被考虑。考虑下面的文档结构：
+            <![CDATA[
+            <html>
+              <body>
+                <ul id="outer">
+                  <li id="item">
+                    <ul "inner">
+                      <li>123</li>
+                      <li>456</li>
+                    </ul>
+                    <ol>
+                      <li>abc</li>
+                    </ol>
+                  </li>
+                </ul>
+              </body>
+            </html>
+            ]]>
+            当使用选择器"#item ul li"来选择元素时，我们将得到正确的结果，即123和456两个节点。
+            但如果我们将#item元素当作上下文且asScope参数为false来选择"ul li"元素时，可能会不能得到预期的结果，会发现abc元素也被选择了。这是因为选择器在查找父级元素限定时，会查找到id为outter的ul元素。为了解决此问题，请将asScope参数设置为true。
+            </remarks>
+            <returns>搜索到的所有元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlCssSelector.PseudoClassFactory.NthPseudoClass.Check(System.Int32)">
+            <summary>
+            检查元素所处的索引位置是否符合参数表达式要求。
+            </summary>
+            <param name="index">所处的索引位置</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Web.Html.AttributeExtensions">
+            <summary>
+            提供协助操作Attribute的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Attribute(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            获取指定名称的属性对象
+            </summary>
+            <param name="element">元素</param>
+            <param name="name">属性名</param>
+            <returns>属性对象，如果没找到，则返回null</returns>
+            <remarks>
+            如果有多个同名的属性，此方法会抛出异常
+            </remarks>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Attribute(Ivony.Web.Html.IHtmlElement,System.String,System.String)">
+            <summary>
+            获取指定名称的属性对象
+            </summary>
+            <param name="element">元素</param>
+            <param name="name">属性名</param>
+            <param name="defaultValue">如果属性没找到，则为属性设置默认值</param>
+            <returns>属性对象</returns>
+            <remarks>
+            如果有多个同名的属性，此方法会抛出异常
+            </remarks>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute)">
+            <summary>
+            获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
+            </summary>
+            <param name="attribute">属性对象</param>
+            <returns>属性值，如果属性对象为null，则返回null</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="value">要设置的属性值</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.Value(Ivony.Web.Html.IHtmlAttribute,System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="attribute">属性对象</param>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.SetAttribute(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="element">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <returns>属性设置器</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Web.Html.IHtmlElement},System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="elements">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <returns>属性设置器</returns>
+        </member>
+        <member name="T:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter">
+            <summary>
+            属性设置器，提供Value等方法方便的设置属性值
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Null">
+            <summary>
+            将属性值设置为空
+            </summary>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.String)">
+            <summary>
+            将属性值设置为指定字符串
+            </summary>
+            <param name="value">要设置的属性值</param>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.Value(System.Func{Ivony.Web.Html.IHtmlElement,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeValueSetter.From(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            复制属性值
+            </summary>
+            <param name="evaluator">要复制属性值的元素</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter">
+            <summary>
+            批量属性设置器，提供Value方法方便的批量设置属性值
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Null">
+            <summary>
+            将属性值设置为空
+            </summary>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String)">
+            <summary>
+            将属性值设置为指定字符串
+            </summary>
+            <param name="value">要设置的属性值</param>
+            <returns>设置属性值的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="oldValue">要被替换的字符串</param>
+            <param name="newValue">用于替换的字符串</param>
+            <returns>被设置的属性对象</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="replacement">替换字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Text.RegularExpressions.Regex,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.String,System.Text.RegularExpressions.MatchEvaluator)">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
+            <param name="evaluator">用于每一步替换的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{Ivony.Web.Html.IHtmlElement,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.Value(System.Func{System.Int32,System.String,System.String})">
+            <summary>
+            设置属性值
+            </summary>
+            <param name="evaluator">用于替换属性值的计算函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.AttributeExtensions.AttributeSetValueSetter.From(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            复制属性值
+            </summary>
+            <param name="element">要复制属性值的元素</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Web.Html.HtmlSpecification">
+            <summary>
+            定义 HTML 规范
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.DomExtensions">
+            <summary>
+            提供修改文档对象模型（DOM）的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.Append``1(``0,Ivony.Web.Html.IFreeNode)">
+            <summary>
+            在末尾添加节点
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="node">要添加的节点</param>
+            <exception cref="T:System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.Insert``1(``0,System.Int32,Ivony.Web.Html.IFreeNode)">
+            <summary>
+            在指定位置添加节点
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="index">要插入节点的位置</param>
+            <param name="node">要添加的节点</param>
+            <exception cref="T:System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.Replace(Ivony.Web.Html.IHtmlNode,Ivony.Web.Html.IFreeNode)">
+            <summary>
+            替换指定节点
+            </summary>
+            <param name="oldNode">被替换的节点</param>
+            <param name="newNode">用于替换的节点</param>
+            <exception cref="T:System.InvalidOperationException">被替换的节点与用于替换的节点不属于同一个文档</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.AppendCopy``1(``0,Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            在末尾添加节点的副本，此方法总是创建节点的副本
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="node">要添加的节点</param>
+            <remarks>
+            此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+            使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+            </remarks>
+            <exception cref="T:System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.InsertCopy``1(``0,System.Int32,Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            在指定位置添加节点的副本，此方法总是创建节点的副本
+            </summary>
+            <param name="container">要添加节点的容器</param>
+            <param name="index">要插入节点的位置</param>
+            <param name="node">要添加的节点</param>
+            <remarks>
+            此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+            使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+            </remarks>
+            <exception cref="T:System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.ReplaceCopy(Ivony.Web.Html.IHtmlNode,Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            替换指定节点
+            </summary>
+            <param name="oldNode">被替换的节点</param>
+            <param name="newNode">用于替换的节点</param>
+            <remarks>
+            此方法要求容器所在的文档支持创建节点，即GetNodeFactory方法不能返回null，否则将抛出NotSupportedException。
+            使用此方法可以轻易地将元素或者其他节点从一个文档复制到另一个文档。
+            </remarks>
+            <exception cref="T:System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IFreeNode)">
+            <summary>
+            创建副本
+            </summary>
+            <param name="node">要创建副本的节点</param>
+            <returns>节点的副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IFreeElement)">
+            <summary>
+            创建副本
+            </summary>
+            <param name="element">要创建副本的元素</param>
+            <returns>元素的副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IFreeComment)">
+            <summary>
+            创建副本
+            </summary>
+            <param name="comment">要创建副本的注释</param>
+            <returns>注释的副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IFreeTextNode)">
+            <summary>
+            创建副本
+            </summary>
+            <param name="textNode">要创建副本的文本节点</param>
+            <returns>文本节点的副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IHtmlNodeFactory,Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            创建节点的副本
+            </summary>
+            <param name="factory">用于创建节点的构建器</param>
+            <param name="node">需要被创建副本的节点</param>
+            <returns>节点的未分配副本</returns>
+            <exception cref="T:System.NotSupportedException">试图创建不被支持的节点的副本，例如IHtmlDocument</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IHtmlNodeFactory,Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            创建元素的副本
+            </summary>
+            <param name="factory">用于创建元素的构建器</param>
+            <param name="element">需要被创建副本的元素</param>
+            <returns>元素的未分配副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IHtmlNodeFactory,Ivony.Web.Html.IHtmlComment)">
+            <summary>
+            创建注释的副本
+            </summary>
+            <param name="factory">用于创建注释的构建器</param>
+            <param name="comment">需要被创建副本的注释</param>
+            <returns>注释的未分配副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.MakeCopy(Ivony.Web.Html.IHtmlNodeFactory,Ivony.Web.Html.IHtmlTextNode)">
+            <summary>
+            创建文本节点的副本
+            </summary>
+            <param name="factory">用于创建文本节点的构建器</param>
+            <param name="textNode">需要被创建副本的文本节点</param>
+            <returns>文本节点的未分配副本</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.ReplaceChildsWithText(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
+            </summary>
+            <param name="element">要替换内容的元素</param>
+            <param name="text">文本内容</param>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.ReplaceChildsWithHtml(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            使用指定的HTML文本替换元素内容（警告，此方法会清除元素所有内容）
+            </summary>
+            <param name="element">要替换内容的元素</param>
+            <param name="html">要替换的HTML代码</param>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.ClearNodes(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            清除所有子节点
+            </summary>
+            <param name="element">要清除所有子节点的元素</param>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.InnerHtml(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            设置元素的InnerHTML
+            </summary>
+            <param name="element">要设置InnerHTML的元素</param>
+            <param name="html">要设置的HTML文本</param>
+            <exception cref="T:System.InvalidOperationException">如果元素不能被安全的修改内容</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.InnerText(Ivony.Web.Html.IHtmlElement,System.String)">
+            <summary>
+            将元素内容替换为指定文本
+            </summary>
+            <param name="element">要替换的文本</param>
+            <param name="text">要设置的文本</param>
+            <exception cref="T:System.InvalidOperationException">如果元素不能被安全的修改内容</exception>
+        </member>
+        <member name="M:Ivony.Web.Html.DomExtensions.IsSafeBindable(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            内部方法，用于确定一个元素的内容是否可以安全数据绑定（不破坏文档结构）。
+            </summary>
+            <param name="element">要判断的元素</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlDocument.GetNodeFactory">
+            <summary>
+            获取文档节点构造器，如果不支持，则返回null
+            </summary>
+            <returns>文档节点构造器</returns>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlDocument.DocumentDeclaration">
+            <summary>
+            获取文档的声明信息，可以是xml声明，也可以是DTD。如果不被支持，则返回null。
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.HtmlNodeWrapper">
+            <summary>
+            IHtmlNode 的包裹类
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.ContentExtensions">
+            <summary>
+            提供内容分析呈现的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.InnerHtml(Ivony.Web.Html.IHtmlContainer)">
+            <summary>
+            尝试获取元素子节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+            </summary>
+            <param name="container">要生成InnerHTML的容器</param>
+            <returns>容器所有子节点的HTML表现形式</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.InnerHtml(Ivony.Web.Html.IHtmlContainer,System.Boolean)">
+            <summary>
+            尝试获取元素子节点的HTML表现形式
+            </summary>
+            <param name="container">要生成InnerHTML的容器</param>
+            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
+            <returns>容器所有子节点的HTML表现形式</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.OuterHtml(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            尝试获取整个节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+            </summary>
+            <param name="node">要获取HTML表现形式的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.OuterHtml(Ivony.Web.Html.IHtmlNode,System.Boolean)">
+            <summary>
+            尝试获取整个节点的HTML表现形式
+            </summary>
+            <param name="node">要获取HTML表现形式的节点</param>
+            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.GenerateHtml(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            尝试生成节点的HTML表现形式
+            </summary>
+            <param name="node">要生成HTML的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.GenerateElementHtml(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            尝试生成元素的HTML表现形式
+            </summary>
+            <param name="element">要生成HTML的元素</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.GenerateTagHtml(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            尝试生成元素开始标签的HTML形式
+            </summary>
+            <param name="element">要生成HTML的元素</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ContentExtensions.InnerText(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            尝试获取节点的文本表现形式，对于某些不支持文本表现形式的元素，将直接返回null
+            </summary>
+            <param name="node">要获取文本表现形式的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlElement.Attributes">
+            <summary>
+            获取元素的所有属性
+            </summary>
+            <returns>元素的所有属性</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlElement.AddAttribute(System.String)">
+            <summary>
+            添加一个属性
+            </summary>
+            <param name="attributeName">属性名</param>
+            <returns>添加的属性</returns>
+        </member>
+        <member name="P:Ivony.Web.Html.IHtmlElement.Name">
+            <summary>
+            元素名
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.ElementExtensions">
+            <summary>
+            提供元素导航查询的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Elements(Ivony.Web.Html.IHtmlContainer)">
+            <summary>
+            获取容器所有子元素
+            </summary>
+            <param name="node">要获取子元素的容器</param>
+            <returns>容器的所有子元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Elements(Ivony.Web.Html.IHtmlContainer,System.String)">
+            <summary>
+            获取容器符合条件的子元素
+            </summary>
+            <param name="node">要获取子元素的容器</param>
+            <param name="selector">用来筛选子元素的元素选择器</param>
+            <returns>符合条件的子元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Ancestors(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取节点的所有父代元素集合
+            </summary>
+            <param name="node">要获取父代元素集合的节点</param>
+            <returns>节点的所有父代元素集合</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.AncestorsAndSelf(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            获取元素所有的父代元素以及元素自身
+            </summary>
+            <param name="element">要获取父代元素及自身的元素</param>
+            <returns>元素的所有父代元素和自身的集合</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Descendants(Ivony.Web.Html.IHtmlContainer)">
+            <summary>
+            获取所有的子代元素
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <returns>容器所有的子代元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Descendants(Ivony.Web.Html.IHtmlContainer,System.String)">
+            <summary>
+            获取所有的子代元素
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <param name="selector">用于筛选子代元素的选择器</param>
+            <returns>符合选择器的容器的所有子代元素</returns>
+            <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.DescendantNodes(Ivony.Web.Html.IHtmlContainer)">
+            <summary>
+            获取所有的子代节点
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <returns>容器所有的子代节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.SiblingNodes(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取所有的兄弟（同级）节点
+            </summary>
+            <param name="node">要获取兄弟节点的节点</param>
+            <returns>所有的兄弟节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Siblings(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取所有的兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取兄弟（同级）元素节点的节点</param>
+            <returns>所有的兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Siblings(Ivony.Web.Html.IHtmlNode,System.String)">
+            <summary>
+            获取所有的兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取兄弟（同级）元素节点的节点</param>
+            <param name="selector">用于筛选元素的元素选择器</param>
+            <returns>所有的兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.SiblingNodesBeforeSelf(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取在自身之前的所有兄弟（同级）节点
+            </summary>
+            <param name="node">要获取之前的兄弟（同级）节点的节点</param>
+            <returns>在这之后的所有兄弟（同级）节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.SiblingNodesAfterSelf(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取在之后的所有兄弟（同级）节点
+            </summary>
+            <param name="node">要获取之后的兄弟（同级）节点的节点</param>
+            <returns>之后的所有兄弟（同级）节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.SiblingsBeforeSelf(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取在自身之前的所有兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取之前的兄弟（同级）元素节点的节点</param>
+            <returns>在这之后的所有兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.SiblingsAfterSelf(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取在之后的所有兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取之后的兄弟（同级）元素节点的节点</param>
+            <returns>之后的所有兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.PreviousElement(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之前的元素
+            </summary>
+            <param name="node">要获取紧邻之前的元素的节点</param>
+            <returns>紧邻当前节点的前一个元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.NextElement(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之后的元素
+            </summary>
+            <param name="node">要获取紧邻之后的元素的节点</param>
+            <returns>紧邻当前节点的后一个元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.PreviousNode(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之前的节点
+            </summary>
+            <param name="node">要获取紧邻之前的元素的节点</param>
+            <returns>紧邻当前节点的前一个节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.NextNode(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之后的节点
+            </summary>
+            <param name="node">要获取紧邻之后的元素的节点</param>
+            <returns>紧邻当前节点的后一个节点</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Find(Ivony.Web.Html.IHtmlContainer,System.String)">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的元素
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expression">CSS选择器</param>
+            <returns>搜索到的符合要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.FindSingle(Ivony.Web.Html.IHtmlContainer,System.String)">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expression">CSS选择器</param>
+            <returns>搜索到的符合要求的唯一元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.Find(Ivony.Web.Html.IHtmlContainer,System.String[])">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的元素
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expressions">多个CSS选择器，结果会合并</param>
+            <returns>搜索到的符合要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.NodesIndexOfSelf(Ivony.Web.Html.IHtmlNode)">
+            <summary>
+            获取在兄弟节点中，自己的顺序位置
+            </summary>
+            <param name="node">要获取序号的节点</param>
+            <returns>顺序位置</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.ElementExtensions.IndexOfSelf(Ivony.Web.Html.IHtmlElement)">
+            <summary>
+            获取在兄弟元素中，自己的顺序位置
+            </summary>
+            <param name="element">要获取序号的元素</param>
+            <returns>顺序位置</returns>
+        </member>
+        <member name="T:Ivony.Web.Html.HtmlElementWrapper">
+            <summary>
+            IHtmlElement 的包裹类
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.HtmlDocumentWrapper">
+            <summary>
+            IHtmlDocument 的包裹类
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.ProcessDocument">
+            <summary>
+            派生类重写此方法处理文档
+            </summary>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.ParseDocument(System.String)">
+            <summary>
+            派生类重写此方法分析HTML文本为 IHtmlDocument 对象
+            </summary>
+            <param name="documentContent">HTML文本</param>
+            <returns>IHtmlDocument 对象</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.Find(System.String)">
+            <summary>
+            在文档范围类使用选择器查找符合要求的元素
+            </summary>
+            <param name="selector">CSS选择器</param>
+            <returns>符合选择器要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.Find(System.String[])">
+            <summary>
+            在文档范围类使用选择器查找符合要求的元素
+            </summary>
+            <param name="selectors">多个CSS选择器，结果会合并</param>
+            <returns>符合选择器要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.LoadTemplateContent">
+            <summary>
+            获取页面模板（即HTML静态页）
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Web.Html.HtmlHandler.MapPath(System.String)">
+            <summary>
+            返回与 Web 服务器上的指定虚拟路径相对应的物理文件路径
+            </summary>
+            <param name="virtualPath">Web 服务器的虚拟路径</param>
+            <returns>与 path 相对应的物理文件路径</returns>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Document">
+            <summary>
+            获取正在处理的页面文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Context">
+            <summary>
+            获取与该页关联的 HttpContext 对象。
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.OriginUrl">
+            <summary>
+            获取原始请求的Url
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Request">
+            <summary>
+            获取请求的页的 HttpRequest 对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Response">
+            <summary>
+            获取与该 Page 对象关联的 HttpResponse 对象。该对象使您得以将 HTTP 响应数据发送到客户端，并包含有关该响应的信息
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Server">
+            <summary>
+            获取 Server 对象，它是 HttpServerUtility 类的实例
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Application">
+            <summary>
+            为当前 Web 请求获取 HttpApplicationState 对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Trace">
+            <summary>
+            为当前 Web 请求获取 TraceContext 对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Web.Html.HtmlHandler.Cache">
+            <summary>
+            获取与该页驻留的应用程序关联的 Cache 对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.IHtmlAttribute">
+            <summary>
+            HTML 元素属性
+            </summary>
+            <remarks>
+            与XML和HTML标准DOM模型不同，在Jumony里面，Attribute不被认为是一个节点（不从IHtmlNode继承）。
+            这是因为IHtmlNode被定义为位置敏感的DOM对象，而Attribute是非位置敏感的（在元素中定义的顺序无关紧要）。
+            这与LINQ to XML的模型是一致的。
+            </remarks>
+        </member>
+        <member name="M:Ivony.Web.Html.IHtmlAttribute.Remove">
+            <summary>
+            移除此属性
+            </summary>
+        </member>
+        <member name="T:Ivony.Web.Html.HtmlFragment">
+            <summary>
+            HTML 文档碎片，游离节点的容器
+            </summary>
+        </member>
+    </members>
+</doc>

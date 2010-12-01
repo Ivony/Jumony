@@ -36,11 +36,16 @@ namespace Ivony.Html.Web
 
       var file = HostingEnvironment.VirtualPathProvider.GetFile( virtualPath );
 
+      return LoadContent( file );
+    }
+
+
+    public static string LoadContent( VirtualFile file )
+    {
       using ( var reader = new StreamReader( file.Open(), true ) )
       {
         return reader.ReadToEnd();
       }
-
     }
   }
 

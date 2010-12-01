@@ -21,6 +21,7 @@ namespace Ivony.Html
 
 
 
+    public static readonly ICollection<string> metadataElemetns = new ReadOnlyCollection<string>( new[] { "base", "command", "link", "meta", "noscript", "script", "style", "title" } );
 
     public static readonly ICollection<string> fontstyleElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
     public static readonly ICollection<string> pharsElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
@@ -30,13 +31,23 @@ namespace Ivony.Html
     public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( pharsElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
 
 
-    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
+    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6", "hgroup" } );
     public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol" } );
     public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
 
     public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "dl", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
 
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
+
+
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// 检查可选结束标签在当前位置是否需要立即关闭

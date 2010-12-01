@@ -1,0 +1,8 @@
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\bin\Debug\Ivony.Web.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\bin\Debug\Ivony.Web.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\obj\Debug\Ivony.Web.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\obj\Debug\Ivony.Web.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\bin\Debug\Ivony.Core.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\bin\Debug\Ivony.Core.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html\bin\Debug\Ivony.Core.xml

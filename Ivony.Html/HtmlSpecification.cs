@@ -21,8 +21,6 @@ namespace Ivony.Html
 
 
 
-    public static readonly ICollection<string> metadataElemetns = new ReadOnlyCollection<string>( new[] { "base", "command", "link", "meta", "noscript", "script", "style", "title" } );
-
     public static readonly ICollection<string> fontstyleElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
     public static readonly ICollection<string> pharsElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
     public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
@@ -31,7 +29,7 @@ namespace Ivony.Html
     public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( pharsElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
 
 
-    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6", "hgroup" } );
+    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
     public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol" } );
     public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
 

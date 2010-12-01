@@ -20,6 +20,10 @@ namespace Ivony.Html.Web
       Loaders = new SynchronizedCollection<IHtmlLoader>( _loadersSync );
       Mappers = new SynchronizedCollection<IRequestMapper>( _mapperSync );
 
+
+      Loaders.Add( new StaticFileLoader() );
+      Loaders.Add( new AspxFileLoader() );
+
       Mappers.Add( new DefaultRequestMapper() );
     }
 
@@ -123,10 +127,8 @@ namespace Ivony.Html.Web
         }
       }
 
-      using ( var reader = new StreamReader( HostingEnvironment.VirtualPathProvider.GetFile( virtualPath ).Open() ) )
-      {
-        return reader.ReadToEnd();
-      }
+
+      return null;
     }
 
     /// <summary>

@@ -300,13 +300,31 @@
             <param name="attributeName">属性名</param>
             <returns>属性设置器</returns>
         </member>
-        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlElement},System.String)">
+        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(Ivony.Html.IHtmlElement,System.String,System.String)">
             <summary>
             设置属性值
+            </summary>
+            <param name="element">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <param name="value">属性值</param>
+            <returns>设置了属性的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlElement},System.String)">
+            <summary>
+            批量设置属性值
             </summary>
             <param name="elements">要设置属性值的元素</param>
             <param name="attributeName">属性名</param>
             <returns>属性设置器</returns>
+        </member>
+        <member name="M:Ivony.Html.AttributeExtensions.SetAttribute(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlElement},System.String,System.String)">
+            <summary>
+            批量设置属性值
+            </summary>
+            <param name="elements">要设置属性值的元素</param>
+            <param name="attributeName">属性名</param>
+            <param name="value">属性值</param>
+            <returns>设置了属性的元素</returns>
         </member>
         <member name="T:Ivony.Html.AttributeExtensions.AttributeValueSetter">
             <summary>

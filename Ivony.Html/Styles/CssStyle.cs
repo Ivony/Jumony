@@ -5,11 +5,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Ivony.Fluent;
-using Ivony.Html.Styles;
 
 
 namespace Ivony.Html
 {
+  using Ivony.Html.Styles;
 
   public static class StyleExtensions
   {

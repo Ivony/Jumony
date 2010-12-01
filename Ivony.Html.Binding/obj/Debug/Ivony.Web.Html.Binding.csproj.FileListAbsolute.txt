@@ -1,0 +1,11 @@
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Web.Html.Binding.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Web.Html.Binding.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Core.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Web.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Core.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Core.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Web.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\bin\Debug\Ivony.Web.Html.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\obj\Debug\Ivony.Web.Html.Binding.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Binding\obj\Debug\Ivony.Web.Html.Binding.pdb

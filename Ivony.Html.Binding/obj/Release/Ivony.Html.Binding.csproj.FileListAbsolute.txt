@@ -1,0 +1,11 @@
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Html.Binding.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Html.Binding.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Core.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Core.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Core.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\bin\Release\Ivony.Html.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\obj\Release\Ivony.Html.Binding.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Binding\obj\Release\Ivony.Html.Binding.pdb

@@ -11,7 +11,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义 HTML5 草案规范
   /// </summary>
-  public class Html5DraftSpecial
+  public class Html5DraftSpecification
   {
 
     public interface IContentKind

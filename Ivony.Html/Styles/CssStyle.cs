@@ -5,9 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Ivony.Fluent;
+using Ivony.Html.Styles;
 
 
-namespace Ivony.Html.Styles
+namespace Ivony.Html
 {
 
   public static class StyleExtensions
@@ -23,7 +24,11 @@ namespace Ivony.Html.Styles
     }
   }
 
+}
 
+
+namespace Ivony.Html.Styles
+{
 
   public class CssStyle
   {

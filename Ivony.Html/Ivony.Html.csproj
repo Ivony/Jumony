@@ -71,7 +71,7 @@
     <Compile Include="AttributeExtensions.cs" />
     <Compile Include="ContentExtensions.cs" />
     <Compile Include="DocumentExtensions.cs" />
-    <Compile Include="Html5DraftSpecial.cs" />
+    <Compile Include="Html5DraftSpecification.cs" />
     <Compile Include="HtmlEncoding.cs" />
     <Compile Include="HtmlFragment.cs" />
     <Compile Include="IHtmlContainer.cs" />

@@ -14,7 +14,7 @@ namespace Ivony.Html
   public static class HtmlSpecification
   {
 
-    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "pre", "code", "style", "textarea" } );
+    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "pre", "code", "style", "textarea", "title" } );
     public static readonly ICollection<string> selfCloseTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
 
     public static readonly ICollection<string> optionalCloseTags = new ReadOnlyCollection<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" } );

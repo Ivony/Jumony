@@ -166,7 +166,7 @@ namespace Ivony.Html
 
 
 
-    private static readonly string[] noTextElements = new[] { "table", "tr", "input", "style", "head", "meta", "script", "br", "frame" };
+    private static readonly string[] noTextElements = new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" };
 
     private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
 

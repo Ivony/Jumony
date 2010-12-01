@@ -1073,7 +1073,7 @@
         </member>
         <member name="T:Ivony.Html.HtmlSpecification">
             <summary>
-            定义 HTML 规范
+            定义 HTML 规范（依据 HTML 4.01规范）
             </summary>
         </member>
         <member name="M:Ivony.Html.HtmlSpecification.ImmediatelyClose(System.String,System.String)">
@@ -1083,6 +1083,11 @@
             <param name="openTag">当前开放的可选结束标签</param>
             <param name="nextTag">HTML 分析器遇到的下一个标签</param>
             <returns>是否需要立即关闭</returns>
+        </member>
+        <member name="T:Ivony.Html.Html5DraftSpecification">
+            <summary>
+            定义 HTML5 草案规范
+            </summary>
         </member>
     </members>
 </doc>

@@ -80,7 +80,7 @@ namespace Ivony.Html
 
     public jQuery removeAttr( string name )
     {
-      ForAll( e => e.SetAttribute( name ).Remove() );
+      each( e => e.SetAttribute( name ).Remove() );
       return this;
     }
 
@@ -95,19 +95,19 @@ namespace Ivony.Html
 
     public jQuery text( string text )
     {
-      ForAll( element => element.InnerText( text ) );
+      each( element => element.InnerText( text ) );
       return this;
     }
 
     public jQuery text( Func<string, string> evaluator )
     {
-      ForAll( element => element.InnerText( evaluator( element.InnerText() ) ) );
+      each( element => element.InnerText( evaluator( element.InnerText() ) ) );
       return this;
     }
 
     public jQuery text( Func<int, string, string> evaluator )
     {
-      ForAll( ( element, i ) => element.InnerText( evaluator( i, element.InnerText() ) ) );
+      each( ( i, element) => element.InnerText( evaluator( i, element.InnerText() ) ) );
       return this;
     }
 
@@ -121,19 +121,19 @@ namespace Ivony.Html
 
     public jQuery html( string html )
     {
-      ForAll( element => element.InnerHtml( html ) );
+      each( element => element.InnerHtml( html ) );
       return this;
     }
 
     public jQuery html( Func<string, string> evaluator )
     {
-      ForAll( element => element.InnerHtml( evaluator( element.InnerHtml() ) ) );
+      each( element => element.InnerHtml( evaluator( element.InnerHtml() ) ) );
       return this;
     }
 
     public jQuery html( Func<int, string, string> evaluator )
     {
-      ForAll( ( element, i ) => element.InnerHtml( evaluator( i, element.InnerHtml() ) ) );
+      each( ( i, element ) => element.InnerHtml( evaluator( i, element.InnerHtml() ) ) );
       return this;
     }
 
@@ -141,7 +141,7 @@ namespace Ivony.Html
 
     public jQuery addClass( string className )
     {
-      return ForAll( element => element.Style().AddClass( className ) );
+      return each( element => element.Style().AddClass( className ) );
     }
 
     public jQuery addClass( Func<int, string, string> classEvaluator )
@@ -151,7 +151,7 @@ namespace Ivony.Html
 
     public jQuery addClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
     {
-      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().AddClass( c ) ) );
+      return each( ( i, e ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().AddClass( c ) ) );
     }
 
 
@@ -159,7 +159,7 @@ namespace Ivony.Html
 
     public jQuery removeClass( string className )
     {
-      return ForAll( element => element.Style().RemoveClass( className ) );
+      return each( element => element.Style().RemoveClass( className ) );
     }
 
     public jQuery removeClass( Func<int, string, string> classEvaluator )
@@ -169,14 +169,14 @@ namespace Ivony.Html
 
     public jQuery removeClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
     {
-      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().RemoveClass( c ) ) );
+      return each( ( i, e ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().RemoveClass( c ) ) );
     }
 
 
 
     public jQuery toogleClass( string className )
     {
-      return ForAll( element =>
+      return each( element =>
         {
 
           lock ( element.SyncRoot )
@@ -224,12 +224,12 @@ namespace Ivony.Html
 
     public jQuery css( string propertyName, string value )
     {
-      return ForAll( e => e.Style().Set( propertyName, value ) );
+      return each( e => e.Style().Set( propertyName, value ) );
     }
 
     public jQuery css( string propertyName, Func<int, string, string> evaluator )
     {
-      return ForAll( ( e, i ) => e.Style().Set( propertyName, evaluator( i, e.Style().Get( propertyName ) ) ) );
+      return each( ( i, e ) => e.Style().Set( propertyName, evaluator( i, e.Style().Get( propertyName ) ) ) );
     }
 
     public jQuery css( object map )
@@ -268,16 +268,16 @@ namespace Ivony.Html
 
 
 
-    public jQuery ForAll( Action<IHtmlElement> action )
+    public jQuery each( Action<IHtmlElement> action )
     {
       _elements.ForAll( action );
       return this;
     }
 
 
-    public jQuery ForAll( Action<IHtmlElement, int> action )
+    public jQuery each( Action<int, IHtmlElement> action )
     {
-      _elements.ForAll( action );
+      _elements.ForAll( ( element, index ) => action( index, element ) );
       return this;
     }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Compilation;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -59,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
-      return new JumonyView( partialPath, LoadDocument( partialPath ) );
+      return new JumonyView( partialPath, LoadDocument( controllerContext.HttpContext, partialPath ) );
     }
 
 
@@ -68,13 +69,17 @@ namespace Ivony.Html.Web.Mvc
       if ( !string.IsNullOrEmpty( masterPath ) )
         throw new NotSupportedException();
 
-      return CreateView( viewPath, LoadDocument( viewPath ) );
+      return CreateView( viewPath, LoadDocument( controllerContext.HttpContext, viewPath ) );
     }
 
-    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
       var file = VirtualPathProvider.GetFile( virtualPath );
       var content = StaticFileLoader.LoadContent( file );
+
+      var parser = HtmlProviders.GetParser( context, virtualPath, content );
+
+      return parser.Parse( content );
     }
 
 

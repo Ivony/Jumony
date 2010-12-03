@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser.ContentModels
 {
-  public sealed class HtmlCommentObject : HtmlContentFragment
+  public sealed class HtmlCommentContent : HtmlContentFragment
   {
 
-    public HtmlCommentObject( HtmlContentFragment fragment, string comment )
+    public HtmlCommentContent( HtmlContentFragment fragment, string comment )
       : base( fragment )
     {
       Comment = comment;

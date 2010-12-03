@@ -123,7 +123,7 @@ namespace Ivony.Html.Parser
       throw new NotImplementedException();
     }
 
-    private HtmlCommentObject CreateComment( Match match )
+    private HtmlCommentContent CreateComment( Match match )
     {
       throw new NotImplementedException();
     }
@@ -136,9 +136,9 @@ namespace Ivony.Html.Parser
 
 
 
-    protected virtual HtmlTextObject CreateText( int startIndex, int endIndex )
+    protected virtual HtmlTextContent CreateText( int startIndex, int endIndex )
     {
-      return new HtmlTextObject( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
+      return new HtmlTextContent( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
     }
 
     protected virtual HtmlContentFragment CreateFragment( Match match, ref int index )

@@ -528,12 +528,16 @@ namespace Ivony.Html
 
         if ( brIndex == -1 )
         {
-          fragment.AddNode( factory.CreateTextNode( encoded.Substring( index ) ) );
+          if ( index < encoded.Length )
+            fragment.AddNode( factory.CreateTextNode( encoded.Substring( index ) ) );
+
           break;
         }
 
 
-        fragment.AddNode( factory.CreateTextNode( encoded.Substring( index, brIndex ) ) );
+
+        if ( index != brIndex )
+          fragment.AddNode( factory.CreateTextNode( encoded.Substring( index, brIndex - index ) ) );
         fragment.AddNode( factory.CreateElement( "br" ) );
         index = brIndex + 1;
 

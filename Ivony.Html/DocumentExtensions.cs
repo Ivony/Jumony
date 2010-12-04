@@ -360,7 +360,7 @@ namespace Ivony.Html
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
       {
 
-        if ( !(node is IHtmlTextNode) )
+        if ( node is IHtmlElement )
           return;
 
         il.Emit( OpCodes.Ldarg_0 );       //ld provider
@@ -378,7 +378,7 @@ namespace Ivony.Html
 
 
         var comment = node as IHtmlComment;
-        if ( textNode != null )
+        if ( comment != null )
         {
           il.Emit( OpCodes.Ldstr, comment.Comment );
           il.Emit( OpCodes.Callvirt, AddComment );
@@ -388,7 +388,7 @@ namespace Ivony.Html
 
 
         var element = node as IHtmlElement;
-        if ( textNode != null )
+        if ( element != null )
         {
           il.Emit( OpCodes.Ldstr, element.Name );
 

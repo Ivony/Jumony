@@ -350,7 +350,10 @@ namespace Ivony.Html
         il.Emit( OpCodes.Stloc_0 );// set container;
 
         foreach ( var node in document.Nodes() )
+        {
           EmitCreateNode( il, node, index++ );
+          break;
+        }
 
         il.Emit( OpCodes.Ret );
 
@@ -360,9 +363,9 @@ namespace Ivony.Html
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
       {
 
-        il.Emit( OpCodes.Ldarg_0 );
-        il.Emit( OpCodes.Ldloc_0 );
-        il.Emit( OpCodes.Ldc_I4, index );
+        il.Emit( OpCodes.Ldarg_0 );       //ld provider
+        il.Emit( OpCodes.Ldloc_0 );       //ld container
+        il.Emit( OpCodes.Ldc_I4, index ); //ld index
 
         var textNode = node as IHtmlTextNode;
         if ( textNode != null )

@@ -403,7 +403,7 @@ namespace Ivony.Html
             else
               il.Emit( OpCodes.Ldnull );
 
-            il.Emit( OpCodes.Call, DictionaryAdd );
+            il.Emit( OpCodes.Callvirt, DictionaryAdd );
           }
 
           il.Emit( OpCodes.Callvirt, AddElement );
@@ -427,7 +427,7 @@ namespace Ivony.Html
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );
       private static readonly ConstructorInfo NewDictionary = typeof( Dictionary<string, string> ).GetConstructor( new Type[0] );
-      private static readonly MethodInfo DictionaryAdd = typeof( Dictionary<string, string> ).GetMethod( "Add" );
+      private static readonly MethodInfo DictionaryAdd = typeof( IDictionary<string, string> ).GetMethod( "Add" );
     }
   }
 }

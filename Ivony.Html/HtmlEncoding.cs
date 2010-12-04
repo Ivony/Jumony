@@ -150,8 +150,9 @@ namespace Ivony.Html
               }
             }
           }
-          writer.Write( ch );
         }
+
+        writer.Write( ch );
       }
 
       foreach ( char ch in htmlText )

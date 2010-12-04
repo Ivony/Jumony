@@ -60,9 +60,9 @@ namespace Ivony.Html.Parser
 
       lock ( _sync )
       {
-        var regex = endTagRegexes[tagName];
+        Regex regex;
 
-        if ( regex == null )
+        if ( endTagRegexes.TryGetValue( tagName, out regex ) )
           endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled ) );
 
         return regex;

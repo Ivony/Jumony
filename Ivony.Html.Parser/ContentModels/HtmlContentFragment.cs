@@ -55,9 +55,14 @@ namespace Ivony.Html.Parser.ContentModels
       private set;
     }
 
-    public string NodeHtml
+    public string Html
     {
       get { return Reader.HtmlText.Substring( StartIndex, Length ); }
+    }
+
+    public override string ToString()
+    {
+      return Html;
     }
 
   }

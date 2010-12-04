@@ -153,7 +153,7 @@ namespace Ivony.Html.Parser
     /// <param name="text">HTML文本信息</param>
     protected virtual void ProcessText( HtmlTextContent text )
     {
-      CreateTextNode( text.NodeHtml );
+      CreateTextNode( text.Html );
     }
 
     /// <summary>
@@ -314,7 +314,7 @@ namespace Ivony.Html.Parser
     protected virtual void ProcessEndTagMissingBeginTag( HtmlEndTag endTag )
     {
       //如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
-      CreateTextNode( endTag.NodeHtml );
+      CreateTextNode( endTag.Html );
     }
 
 

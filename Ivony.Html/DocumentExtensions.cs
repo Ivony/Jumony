@@ -293,10 +293,25 @@ namespace Ivony.Html
       return DocumentCompiler.Compile( document );
     }
 
+
     private static class DocumentCompiler
     {
 
       public static Func<IHtmlDomProvider, IHtmlDocument> Compile( IHtmlDocument document )
+      {
+        var method = new DynamicMethod( "", typeof( IHtmlDocument ), new[] { typeof( IHtmlDomProvider ) } );
+
+        var il = method.GetILGenerator();
+
+        EmitCreateDocument( il, document );
+
+        il.Emit( OpCodes.Ret );
+
+        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
+      }
+
+
+      private static void EmitCreateDocument( ILGenerator il, IHtmlDocument document )
       {
         //create document
 
@@ -344,21 +359,7 @@ namespace Ivony.Html
 
         //end create document
         //ret
-
-
-        var method = new DynamicMethod( "", typeof( IHtmlDocument ), new[] { typeof( IHtmlDomProvider ) } );
-
-        var il = method.GetILGenerator();
-
-        EmitCreateDocument( il, document );
-
-        il.Emit( OpCodes.Ret );
-
-        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
-      }
-
-      private static void EmitCreateDocument( ILGenerator il, IHtmlDocument document )
-      {
+        
         il.DeclareLocal( typeof( IHtmlContainer ) );
 
         il.Emit( OpCodes.Ldarg_0 );

@@ -373,6 +373,8 @@ namespace Ivony.Html
           return;
         }
 
+        return;
+
         var comment = node as IHtmlComment;
         if ( textNode != null )
         {
@@ -382,7 +384,6 @@ namespace Ivony.Html
           return;
         }
 
-        return;
 
         var element = node as IHtmlElement;
         if ( textNode != null )

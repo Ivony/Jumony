@@ -53,9 +53,11 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要添加的游离节点</param>
     /// <returns>文档碎片自身</returns>
-    public HtmlFragment AddNode( IFreeNode node )
+    public virtual HtmlFragment AddNode( IFreeNode node )
     {
       CheckNode( node );
+
+      Nodes.Add( node );
 
       return this;
     }
@@ -67,8 +69,10 @@ namespace Ivony.Html
     /// <param name="index">要添加的位置</param>
     /// <param name="node">要添加的游离节点</param>
     /// <returns>文档碎片自身</returns>
-    public HtmlFragment AddNode( int index, IFreeNode node )
+    public virtual HtmlFragment AddNode( int index, IFreeNode node )
     {
+      CheckNode( node );
+
       Nodes.Insert( index, node );
 
       return this;
@@ -82,6 +86,7 @@ namespace Ivony.Html
     /// <returns>文档碎片自身</returns>
     public HtmlFragment AddNodes( IEnumerable<IFreeNode> nodes )
     {
+
       lock ( SyncRoot )
       {
         nodes.ForAll( n => AddNode( n ) );

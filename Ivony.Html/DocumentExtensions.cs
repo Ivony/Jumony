@@ -360,7 +360,7 @@ namespace Ivony.Html
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
       {
 
-        if ( node is IHtmlElement )
+        if ( !(node is IHtmlTextNode) )
           return;
 
         il.Emit( OpCodes.Ldarg_0 );       //ld provider

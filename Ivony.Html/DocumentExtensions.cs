@@ -198,83 +198,94 @@ namespace Ivony.Html
 
     public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
     {
-      var constructor = new CodeMemberMethod();
-      constructor.Name = methodName;
-      constructor.Attributes = MemberAttributes.Public | MemberAttributes.Static;
-
-      constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "provider" ) );
-      constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
-
-      var providerVariable =  new CodeVariableReferenceExpression( "provider" );
-
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
-
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlNode ), "node" ) );// var node;
-      constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
-
-      var documentVariable = new CodeVariableReferenceExpression( "document" );
-
-      BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
-
-      constructor.Statements.Add( new CodeMethodReturnStatement( documentVariable ) );
-
-      return constructor;
+      return CodeGenerator.GenerateCodeMethod( document, methodName );
     }
 
-    private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements )
+    private static class CodeGenerator
     {
+      public static CodeMemberMethod GenerateCodeMethod( IHtmlDocument document, string methodName )
+      {
+        var constructor = new CodeMemberMethod();
+        constructor.Name = methodName;
+        constructor.Attributes = MemberAttributes.Public | MemberAttributes.Static;
 
+        constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "provider" ) );
+        constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
-      var providerVariable = new CodeVariableReferenceExpression( "provider" );
-      var nodeVariable = new CodeVariableReferenceExpression( "node" );
-      var attributesVariable = new CodeVariableReferenceExpression( "attributes" );
+        var providerVariable =  new CodeVariableReferenceExpression( "provider" );
 
-      int index = 0;
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
-      foreach ( var node in container.Nodes() )
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlNode ), "node" ) );// var node;
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
+
+        var documentVariable = new CodeVariableReferenceExpression( "document" );
+
+        BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
+
+        constructor.Statements.Add( new CodeMethodReturnStatement( documentVariable ) );
+
+        return constructor;
+      }
+
+      private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression contaienrVariable, CodeStatementCollection statements, IList<string> existsElements )
       {
 
-        var textNode = node as IHtmlTextNode;
-        if ( textNode != null )
-          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
 
+        var providerVariable = new CodeVariableReferenceExpression( "provider" );
+        var nodeVariable = new CodeVariableReferenceExpression( "node" );
+        var attributesVariable = new CodeVariableReferenceExpression( "attributes" );
 
-        var comment = node as IHtmlComment;
-        if ( comment != null )
-          statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( comment.Comment ) ) ) );
+        int index = 0;
 
-
-        var element = node as IHtmlElement;
-
-        if ( element != null )
+        foreach ( var node in container.Nodes() )
         {
-          var elementId = CreateIdentity( element, false );
 
-          elementId = EnsureUniqueness( elementId, existsElements );
-          existsElements.Add( elementId );
-
-          elementId = "element_" + elementId;
+          var textNode = node as IHtmlTextNode;
+          if ( textNode != null )
+            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
 
 
-          statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
-
-          statements.Add( new CodeAssignStatement( attributesVariable, new CodeObjectCreateExpression( typeof( Dictionary<string, string> ) ) ) );
-
-          foreach ( var attribute in element.Attributes() )
-            statements.Add( new CodeMethodInvokeExpression( attributesVariable, "Add", new CodePrimitiveExpression( attribute.Name ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
-
-          statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
-
-          var elementVariable = new CodeVariableReferenceExpression( elementId );
+          var comment = node as IHtmlComment;
+          if ( comment != null )
+            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( comment.Comment ) ) ) );
 
 
-          BuildChildNodesStatement( element, elementVariable, statements, existsElements );
+          var element = node as IHtmlElement;
 
+          if ( element != null )
+          {
+            var elementId = CreateIdentity( element, false );
+
+            elementId = EnsureUniqueness( elementId, existsElements );
+            existsElements.Add( elementId );
+
+            elementId = "element_" + elementId;
+
+
+            statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
+
+            statements.Add( new CodeAssignStatement( attributesVariable, new CodeObjectCreateExpression( typeof( Dictionary<string, string> ) ) ) );
+
+            foreach ( var attribute in element.Attributes() )
+              statements.Add( new CodeMethodInvokeExpression( attributesVariable, "Add", new CodePrimitiveExpression( attribute.Name ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
+
+            statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
+
+            var elementVariable = new CodeVariableReferenceExpression( elementId );
+
+
+            BuildChildNodesStatement( element, elementVariable, statements, existsElements );
+
+          }
+
+          index++;
         }
-
-        index++;
       }
+
     }
+
+
 
 
     public static Func<IHtmlDomProvider, IHtmlDocument> Compile( this IHtmlDocument document )
@@ -339,6 +350,15 @@ namespace Ivony.Html
 
         var il = method.GetILGenerator();
 
+        EmitCreateDocument( il, document );
+
+        il.Emit( OpCodes.Ret );
+
+        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
+      }
+
+      private static void EmitCreateDocument( ILGenerator il, IHtmlDocument document )
+      {
         il.DeclareLocal( typeof( IHtmlContainer ) );
 
         il.Emit( OpCodes.Ldarg_0 );
@@ -351,10 +371,6 @@ namespace Ivony.Html
 
         foreach ( var node in document.Nodes() )
           EmitCreateNode( il, node, index++ );
-
-        il.Emit( OpCodes.Ret );
-
-        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
       }
 
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )

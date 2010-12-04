@@ -47,10 +47,8 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
       document.LoadHtml( html );
 
-      var fragment =  new HtmlFragment( this );
-      fragment.AddCopies( document.AsDocument().Nodes() );
 
-      return fragment;
+      return this.MakeFragment( document.AsDocument() );
     }
 
     #endregion

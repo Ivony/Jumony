@@ -26,11 +26,17 @@ namespace Ivony.Html.Parser
 
     public IFreeElement CreateElement( string name )
     {
+      if ( string.IsNullOrEmpty( name ) )//TODO 检查name的合法性
+        throw new ArgumentNullException( "name" );
+
       return new DomFreeElement( this, name );
     }
 
     public IFreeTextNode CreateTextNode( string htmlText )
     {
+      if ( string.IsNullOrEmpty( htmlText ) )
+        throw new ArgumentNullException( "htmlText" );
+
       return new DomFreeTextNode( this, htmlText );
     }
 
@@ -42,6 +48,9 @@ namespace Ivony.Html.Parser
 
     public HtmlFragment ParseHtml( string html )
     {
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
       return this.MakeFragment( new JumonyParser().Parse( html ) );
     }
 

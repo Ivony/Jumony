@@ -17,16 +17,13 @@ namespace Ivony.Html
   {
 
 
-    private IList<IFreeNode> _nodes;
-
     private IHtmlNodeFactory _factory;
-
-    private IHtmlDocument _document = null;
 
 
     public HtmlFragment( IHtmlNodeFactory factory )
     {
       _factory = factory;
+
       _nodes = new SynchronizedCollection<IFreeNode>( SyncRoot );
     }
 
@@ -39,14 +36,42 @@ namespace Ivony.Html
     }
 
 
-    /// <summary>
-    /// 向文档碎片中添加节点副本
-    /// </summary>
-    /// <param name="nodes">要添加的节点</param>
-    /// <param name="factory">用于创建游离节点副本的节点工厂</param>
-    public void AddNodesCopy( IEnumerable<IHtmlNode> nodes, IHtmlNodeFactory factory )
+
+    private SynchronizedCollection<IFreeNode> _nodes;
+
+    protected SynchronizedCollection<IFreeNode> Nodes
     {
-      AddNodes( nodes.Select( n => factory.MakeCopy( n ) ) );
+      get { return _nodes; }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 向文档碎片中添加游离节点
+    /// </summary>
+    /// <param name="node">要添加的游离节点</param>
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddNode( IFreeNode node )
+    {
+      CheckNode( node );
+
+      return this;
+    }
+
+
+    /// <summary>
+    /// 向文档碎片中添加游离节点
+    /// </summary>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="node">要添加的游离节点</param>
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddNode( int index, IFreeNode node )
+    {
+      Nodes.Insert( index, node );
+
+      return this;
     }
 
 
@@ -54,36 +79,98 @@ namespace Ivony.Html
     /// 向文档碎片中添加游离节点
     /// </summary>
     /// <param name="nodes">要添加的游离节点</param>
-    public void AddNodes( IEnumerable<IFreeNode> nodes )
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddNodes( IEnumerable<IFreeNode> nodes )
     {
       lock ( SyncRoot )
       {
         nodes.ForAll( n => AddNode( n ) );
       }
+
+      return this;
     }
 
-    public void AddNode( IFreeNode node )
-    {
 
+
+
+    /// <summary>
+    /// 向文档碎片中添加节点本地副本
+    /// </summary>
+    /// <param name="nodes">要添加副本的节点</param>
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddCopy( IHtmlNode node )
+    {
+      AddNode( MakeCopy( node ) );
+
+      return this;
+    }
+
+    /// <summary>
+    /// 向文档碎片中添加节点本地副本
+    /// </summary>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="nodes">要添加副本的节点</param>
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddCopy( int index, IHtmlNode node )
+    {
+      AddNode( index, MakeCopy( node ) );
+
+      return this;
+    }
+
+
+    /// <summary>
+    /// 向文档碎片中添加节点本地副本
+    /// </summary>
+    /// <param name="nodes">要添加的节点</param>
+    /// <returns>文档碎片自身</returns>
+    public HtmlFragment AddCopies( IEnumerable<IHtmlNode> nodes )
+    {
+      nodes.ForAll( n => AddCopy( n ) );
+
+      return this;
+    }
+
+
+
+
+    /// <summary>
+    /// 创建指定节点的本地副本
+    /// </summary>
+    /// <param name="node">要创建副本的节点</param>
+    /// <returns>创建的本地副本</returns>
+    protected IFreeNode MakeCopy( IHtmlNode node )
+    {
+      return Factory.MakeCopy( node );
+    }
+
+
+
+
+
+
+
+    /// <summary>
+    /// 检查节点是否可以被加入文档碎片。
+    /// </summary>
+    /// <param name="node">要检查的节点</param>
+    protected void CheckNode( IFreeNode node )
+    {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
-
-      lock ( SyncRoot )
-      {
-
-        if ( _document == null )
-          _document = node.Document;
-
-
-        if ( !_document.Equals( node.Document ) )
-          throw new InvalidOperationException();
-
-        _nodes.Add( node );
-
-      }
+      if ( !node.Factory.Document.Equals( Factory.Document ) )
+        throw new InvalidOperationException( "不能添加另一文档的游离节点" );
     }
 
+
+
+
+    /// <summary>
+    /// 将文档碎片插入到容器的指定位置
+    /// </summary>
+    /// <param name="container">容器</param>
+    /// <param name="index">位置</param>
     public void InsertTo( IHtmlContainer container, int index )
     {
       lock ( SyncRoot )
@@ -95,6 +182,8 @@ namespace Ivony.Html
         }
       }
     }
+
+
 
     public IHtmlNodeFactory Factory
     {
@@ -112,7 +201,7 @@ namespace Ivony.Html
 
     IHtmlDocument IHtmlDomObject.Document
     {
-      get { return _document; }
+      get { return Factory.Document; }
     }
 
 
@@ -122,10 +211,11 @@ namespace Ivony.Html
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
-      return _nodes.Cast<IHtmlNode>();
+      return Nodes.Cast<IHtmlNode>().AsReadOnly();
     }
 
     #endregion
+
 
 
 

@@ -37,6 +37,17 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
     public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlContainer
     {
+
+      var fragment = container as HtmlFragment;
+
+      if ( fragment != null )
+      {
+        fragment.AddNode( index, node );
+        return container;
+      }
+
+
+
       lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( node.Document ) )
@@ -171,6 +182,15 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
     public static TContainer InsertCopy<TContainer>( this TContainer container, int index, IHtmlNode node ) where TContainer : IHtmlContainer
     {
+      var fragment = container as HtmlFragment;
+
+      if ( fragment != null )
+      {
+        fragment.AddCopy( index, node );
+        return container;
+      }
+
+
       lock ( container.SyncRoot )
       {
 
@@ -390,10 +410,11 @@ namespace Ivony.Html
     {
       var fragment = new HtmlFragment( factory );
 
-      fragment.AddNodesCopy( container.Nodes(), factory );
+      fragment.AddCopies( container.Nodes() );
 
       return fragment;
     }
+
 
 
 
@@ -417,10 +438,16 @@ namespace Ivony.Html
         ClearNodes( element );
 
         if ( !HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
-          text = HtmlEncode( text );
+        {
+          var fragment = HtmlEncode( text, factory );
 
-        var textNode = factory.CreateTextNode( text );
-        textNode.Into( element, 0 );
+          fragment.InsertTo( element, 0 );
+        }
+        else
+        {
+          var textNode = factory.CreateTextNode( text );
+          textNode.Into( element, 0 );
+        }
       }
 
     }
@@ -479,13 +506,40 @@ namespace Ivony.Html
 
 
 
-    private static string HtmlEncode( string s )
+    private static HtmlFragment HtmlEncode( string text, IHtmlNodeFactory factory )
     {
 
-      if ( s == null )
-        throw new ArgumentNullException( "s" );
+      if ( text == null )
+        throw new ArgumentNullException( "text" );
 
-      return HtmlEncoding.HtmlEncode( s ).Replace( "\r\n", "\n" ).Replace( "\r", "\n" ).Replace( "\n", "<br />" );
+      if ( factory == null )
+        throw new ArgumentNullException( "factory" );
+
+
+      var fragment = new HtmlFragment( factory );
+      var encoded = HtmlEncoding.HtmlEncode( text );
+
+      encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
+
+      int index = 0, brIndex = 0;
+      while ( true )
+      {
+        brIndex = encoded.IndexOf( '\n', index );
+
+        if ( brIndex == -1 )
+        {
+          fragment.AddNode( factory.CreateTextNode( encoded.Substring( index ) ) );
+          break;
+        }
+
+
+        fragment.AddNode( factory.CreateTextNode( encoded.Substring( index, brIndex ) ) );
+        fragment.AddNode( factory.CreateElement( "br" ) );
+        index = brIndex + 1;
+
+      }
+
+      return fragment;
     }
 
 

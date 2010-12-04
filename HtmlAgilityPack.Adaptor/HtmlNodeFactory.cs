@@ -21,11 +21,17 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IFreeElement CreateElement( string name )
     {
+      if ( string.IsNullOrEmpty( name ) )//TODO 检查name的合法性
+        throw new ArgumentNullException( "name" );
+
       return new FreeElementAdaptor( this, _document.CreateElement( name ) );
     }
 
     public IFreeTextNode CreateTextNode( string htmlText )
     {
+      if ( string.IsNullOrEmpty( htmlText ) )
+        throw new ArgumentNullException( "htmlText" );
+
       return new FreeTextNodeAdaptor( this, _document.CreateTextNode( htmlText ) );
     }
 
@@ -43,6 +49,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public HtmlFragment ParseHtml( string html )
     {
+      if ( html == null )
+        return null;
+
       var document = new AP.HtmlDocument();
 
       document.LoadHtml( html );

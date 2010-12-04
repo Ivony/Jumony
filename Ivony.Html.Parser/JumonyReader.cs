@@ -118,7 +118,7 @@ namespace Ivony.Html.Parser
 
         //处理文本节点
         if ( match.Index > Index )
-          yield return CreateText(  match.Index );
+          yield return CreateText( match.Index );
 
 
         if ( match.Groups["beginTag"].Success )
@@ -164,7 +164,7 @@ namespace Ivony.Html.Parser
         value = HtmlEncoding.HtmlDecode( value );
 
 
-        yield return new HtmlAttributeSetting( CreateFragment( capture ), name, value );
+        yield return new HtmlAttributeSetting( CreateFragment( capture, false ), name, value );
       }
     }
 
@@ -206,9 +206,16 @@ namespace Ivony.Html.Parser
       return text;
     }
 
-    protected virtual HtmlContentFragment CreateFragment( Capture capture )
+    protected HtmlContentFragment CreateFragment( Capture capture )
     {
-      Index = capture.Index + capture.Length;
+      return CreateFragment( capture, true );
+    }
+
+    protected virtual HtmlContentFragment CreateFragment( Capture capture, bool setIndex )
+    {
+      if ( setIndex )
+        Index = capture.Index + capture.Length;
+
       return new HtmlContentFragment( this, capture.Index, capture.Length );
     }
   }

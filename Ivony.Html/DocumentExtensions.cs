@@ -349,10 +349,8 @@ namespace Ivony.Html
         il.Emit( OpCodes.Dup );
         il.Emit( OpCodes.Stloc_0 );// set container;
 
-        /*
         foreach ( var node in document.Nodes() )
           EmitCreateNode( il, node, index++ );
-        */
 
         il.Emit( OpCodes.Ret );
 
@@ -412,9 +410,11 @@ namespace Ivony.Html
           il.Emit( OpCodes.Dup );
           il.Emit( OpCodes.Stloc_0 );// set container;
 
+          /*
           int childIndex = 0;
           foreach ( var childNode in element.Nodes() )
             EmitCreateNode( il, childNode, childIndex++ );
+          */
 
           il.Emit( OpCodes.Pop );    //pop element
           il.Emit( OpCodes.Dup );

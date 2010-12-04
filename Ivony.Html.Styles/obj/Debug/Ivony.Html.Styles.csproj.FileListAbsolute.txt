@@ -1,0 +1,11 @@
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Html.Styles.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Html.Styles.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Core.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Core.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Core.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\bin\Debug\Ivony.Html.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\obj\Debug\Ivony.Html.Styles.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\Jumony\Ivony.Html.Styles\obj\Debug\Ivony.Html.Styles.pdb

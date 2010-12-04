@@ -5,6 +5,7 @@ using System.Text;
 using Ivony.Fluent;
 using System.CodeDom;
 using System.Reflection.Emit;
+using System.Reflection;
 
 
 namespace Ivony.Html
@@ -278,8 +279,155 @@ namespace Ivony.Html
 
     public static Func<IHtmlDomProvider, IHtmlDocument> Compile( this IHtmlDocument document )
     {
-      throw new NotImplementedException();
+      return DocumentCompiler.Compile( document );
     }
 
+    private static class DocumentCompiler
+    {
+
+      public static Func<IHtmlDomProvider, IHtmlDocument> Compile( IHtmlDocument document )
+      {
+        //create document
+
+        //dup            document, document   
+        //st container   document
+
+        //begin create element
+
+        //ld provider    document, provider
+        //ld container   document, provider, document
+        //ld index       document, provider, document, 0
+        //ld ElementName document, provider, document, 0, name
+        //create element document, element
+
+        //dup            document, element, element   
+        //st container   document, element
+
+        //begin create textNode
+
+        //ld provider    document, element, provider
+        //ld container   document, element, provider, element
+        //ld index       document, element, provider, element, 0
+        //ld text        document, element, provider, element, 0, text
+        //create text    document, element, textNode
+        //pop            document, element
+
+        //end create textNode
+
+        //begin create textNode
+
+        //ld provider    document, element, provider
+        //ld container   document, element, provider, element
+        //ld index       document, element, provider, element, 1
+        //ld text        document, element, provider, element, 1, text
+        //create text    document, element, textNode
+        //pop            document, element
+
+        //end create textNode
+
+        //end create element
+        //pop            document
+        //dup            document, document
+        //st container   document
+
+
+        //end create document
+        //ret
+
+
+        var method = new DynamicMethod( "", typeof( IHtmlDocument ), new[] { typeof( IHtmlDomProvider ) } );
+
+        var il = method.GetILGenerator();
+
+        il.DeclareLocal( typeof( IHtmlContainer ) );
+
+        il.Emit( OpCodes.Ldarg_0 );
+        il.EmitCall( OpCodes.Callvirt, AddDocument, null );
+
+        int index = 0;
+
+        il.Emit( OpCodes.Dup );
+        il.Emit( OpCodes.Stloc_0 );// set container;
+
+        foreach ( var node in document.Nodes() )
+          EmitCreateNode( il, node, index++ );
+
+
+        il.Emit( OpCodes.Ret );
+
+        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
+      }
+
+      private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
+      {
+
+        il.Emit( OpCodes.Ldarg_0 );
+        il.Emit( OpCodes.Ldloc_0 );
+        il.Emit( OpCodes.Ldc_I4, index );
+
+        var textNode = node as IHtmlTextNode;
+        if ( textNode != null )
+        {
+          il.Emit( OpCodes.Ldstr, textNode.HtmlText );
+          il.Emit( OpCodes.Callvirt, AddTextNode );
+          il.Emit( OpCodes.Pop );
+          return;
+        }
+
+        var comment = node as IHtmlComment;
+        if ( textNode != null )
+        {
+          il.Emit( OpCodes.Ldstr, comment.Comment );
+          il.Emit( OpCodes.Callvirt, AddComment );
+          il.Emit( OpCodes.Pop );
+          return;
+        }
+
+        var element = node as IHtmlElement;
+        if ( textNode != null )
+        {
+          il.Emit( OpCodes.Ldstr, element.Name );
+
+          il.Emit( OpCodes.Newobj, NewDictionary );
+
+          foreach ( IHtmlAttribute attribute in element.Attributes() )
+          {
+            il.Emit( OpCodes.Dup );
+
+            il.Emit( OpCodes.Ldstr, attribute.Name );
+
+            var value = attribute.AttributeValue;
+
+            if ( value != null )
+              il.Emit( OpCodes.Ldstr, value );
+            else
+              il.Emit( OpCodes.Ldnull );
+
+            il.Emit( OpCodes.Call, DictionaryAdd );
+          }
+
+          il.Emit( OpCodes.Callvirt, AddElement );
+
+          il.Emit( OpCodes.Dup );
+          il.Emit( OpCodes.Stloc_0 );// set container;
+
+          int childIndex = 0;
+          foreach ( var childNode in element.Nodes() )
+            EmitCreateNode( il, childNode, childIndex++ );
+
+          il.Emit( OpCodes.Pop );    //pop element
+          il.Emit( OpCodes.Dup );
+          il.Emit( OpCodes.Stloc_0 );//set container
+          return;
+        }
+      }
+
+      private static readonly MethodInfo AddDocument = typeof( IHtmlDomProvider ).GetMethod( "AddDocument" );
+      private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
+      private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
+      private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );
+      private static readonly ConstructorInfo NewDictionary = typeof( Dictionary<string, string> ).GetConstructor( new Type[0] );
+      private static readonly MethodInfo DictionaryAdd = typeof( Dictionary<string, string> ).GetMethod( "Add" );
+    }
   }
 }

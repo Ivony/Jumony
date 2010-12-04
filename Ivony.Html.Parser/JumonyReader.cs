@@ -22,6 +22,9 @@ namespace Ivony.Html.Parser
         throw new ArgumentNullException( "htmlText" );
 
       HtmlText = htmlText;
+
+      CDataElement = null;
+
     }
 
     public string HtmlText
@@ -39,6 +42,13 @@ namespace Ivony.Html.Parser
 
 
 
+    protected int Index
+    {
+      get;
+      private set;
+    }
+
+
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.InvariantCultureIgnoreCase );
 
     private object _sync = new object();
@@ -46,6 +56,8 @@ namespace Ivony.Html.Parser
 
     protected Regex GetEndTagRegex( string tagName )
     {
+      tagName = tagName.ToLowerInvariant();
+
       lock ( _sync )
       {
         var regex = endTagRegexes[tagName];
@@ -61,7 +73,7 @@ namespace Ivony.Html.Parser
     public IEnumerable<HtmlContentFragment> EnumerateContent()
     {
 
-      int index = 0;
+      Index = 0;
 
       while ( true )
       {
@@ -72,28 +84,28 @@ namespace Ivony.Html.Parser
         {
 
           Regex endTagRegex = GetEndTagRegex( CDataElement );
-          var endTagMatch = endTagRegex.Match( HtmlText, index );
+          var endTagMatch = endTagRegex.Match( HtmlText, Index );
 
 
-          yield return CreateText( index, endTagMatch.Index );
-          yield return new HtmlEndTag( CreateFragment( endTagMatch, ref index ), CDataElement );
+          yield return CreateText( Index, endTagMatch.Index );
+          yield return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
         }
 
 
-        var match = tagRegex.Match( HtmlText, index );
+        var match = tagRegex.Match( HtmlText, Index );
 
         if ( !match.Success )//如果不再有标签的匹配
         {
           //处理末尾的文本
-          if ( index != HtmlText.Length )
-            yield return CreateText( index, HtmlText.Length );
+          if ( Index != HtmlText.Length )
+            yield return CreateText( Index, HtmlText.Length );
 
           yield break;
         }
 
         //处理文本节点
 
-        yield return CreateText( index, match.Index );
+        yield return CreateText( Index, match.Index );
 
 
         if ( match.Groups["beginTag"].Success )
@@ -113,24 +125,61 @@ namespace Ivony.Html.Parser
       }
     }
 
-    private HtmlBeginTag CreateBeginTag( Match match )
+    protected virtual HtmlBeginTag CreateBeginTag( Match match )
     {
-      throw new NotImplementedException();
+      string tagName = match.Groups["tagName"].Value;
+      bool selfClosed = match.Groups["selfClosed"].Success;
+
+
+      //处理所有属性
+      var attributes = CreateAttributes( match );
+
+
+      var fragment = CreateFragment( match );
+
+      return new HtmlBeginTag( fragment, tagName, selfClosed, attributes );
     }
 
-    private HtmlEndTag CreateEndTag( Match match )
+
+    protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( Match match )
     {
-      throw new NotImplementedException();
+      foreach ( Capture capture in match.Groups["attribute"].Captures )
+      {
+        string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
+        string value = capture.FindCaptures( match.Groups["attrValue"] ).Select( c => c.Value ).SingleOrDefault();
+
+        value = HtmlEncoding.HtmlDecode( value );
+
+
+        yield return new HtmlAttributeSetting( CreateFragment( capture ), name, value );
+      }
     }
 
-    private HtmlCommentContent CreateComment( Match match )
+    protected virtual HtmlEndTag CreateEndTag( Match match )
     {
-      throw new NotImplementedException();
+      string tagName = match.Groups["tagName"].Value;
+
+      var fragment = CreateFragment( match );
+      return new HtmlEndTag( fragment, tagName );
     }
 
-    private HtmlSpecialTag CreateSpacial( Match match )
+    protected virtual HtmlCommentContent CreateComment( Match match )
     {
-      throw new NotImplementedException();
+      var commentText = match.Groups["commentText"].Value;
+
+      var fragment = CreateFragment( match );
+      return new HtmlCommentContent( fragment, commentText );
+    }
+
+
+    protected virtual HtmlSpecialTag CreateSpacial( Match match )
+    {
+      var raw = match.ToString();
+      var symbol = raw.Substring( 1, 1 );
+      var content = match.Groups["specialText"].Value;
+
+      var fragment = CreateFragment( match );
+      return new HtmlSpecialTag( fragment, content, symbol );
     }
 
 
@@ -138,13 +187,14 @@ namespace Ivony.Html.Parser
 
     protected virtual HtmlTextContent CreateText( int startIndex, int endIndex )
     {
+      Index = endIndex;
       return new HtmlTextContent( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
     }
 
-    protected virtual HtmlContentFragment CreateFragment( Match match, ref int index )
+    protected virtual HtmlContentFragment CreateFragment( Capture capture )
     {
-      index = match.Index + match.Length;
-      return new HtmlContentFragment( this, match.Index, match.Length );
+      Index = capture.Index + capture.Length;
+      return new HtmlContentFragment( this, capture.Index, capture.Length );
     }
   }
 }

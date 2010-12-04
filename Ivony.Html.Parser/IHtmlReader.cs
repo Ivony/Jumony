@@ -17,6 +17,11 @@ namespace Ivony.Html.Parser
 
     IEnumerable<HtmlContentFragment> EnumerateContent();
 
+    string CDataElement
+    {
+      get;
+      set;
+    }
 
   }
 }

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
   public abstract class HtmlParserBase : IHtmlParser
   {
 
-
-    private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
-
-    protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled );
 
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.InvariantCultureIgnoreCase );
 
@@ -102,64 +99,50 @@ namespace Ivony.Html.Parser
     }
 
 
+
+    protected abstract IHtmlReader CreateReader( string html );
+
+    protected IHtmlReader Reader
+    {
+      get;
+      private set;
+    }
+
+
     /// <summary>
     /// 分析 HTML 文本
     /// </summary>
     /// <param name="html">要分析的 HTML 文本</param>
     protected void ParseInternal( string html )
     {
-      int index = 0;
 
-      while ( true )
+
+      Reader = CreateReader( html );
+
+      foreach ( var fragment in Reader.EnumerateContent() )
       {
 
-        //CData标签处理
-        var element = CurrentContainer as IHtmlElement;
+        var text = fragment as HtmlTextContent;
+        if ( text != null )
+          ProcessText( text );
 
-        if ( element != null && HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )//如果在CData标签内。
-        {
+        var beginTag = fragment as HtmlBeginTag;
+        if ( beginTag != null )
+          ProcessBeginTag( beginTag );
 
-          Regex endTagRegex = endTagRegexes[element.Name];
-          var endTagMatch = endTagRegex.Match( html, index );
+        var endTag = fragment as HtmlEndTag;
+        if ( endTag != null )
+          ProcessEndTag( endTag );
 
+        var comment = fragment as HtmlCommentContent;
+        if ( comment != null )
+          ProcessComment( comment );
 
-          //将所有内容当作文本节点处理
-          index = ProcessText( html, index, endTagMatch );
+        var special = fragment as HtmlSpecialTag;
+        if ( special != null )
+          ProcessSpecial( special );
 
-
-          ContainerStack.Pop();
-          continue;
-
-        }
-
-
-        var match = tagRegex.Match( html, index );
-
-        if ( !match.Success )//如果不再有标签的匹配
-          break;
-
-
-        //处理文本节点
-        index = ProcessText( html, index, match );
-
-
-
-        if ( match.Groups["beginTag"].Success )
-          ProcessBeginTag( match );
-        else if ( match.Groups["endTag"].Success )
-          ProcessEndTag( match );
-        else if ( match.Groups["comment"].Success )
-          ProcessComment( match );
-        else if ( match.Groups["special"].Success )
-          ProcessSpecial( match );
-        else
-          throw new InvalidOperationException();
       }
-
-
-      //处理末尾的文本
-      if ( index != html.Length )
-        CreateTextNode( html.Substring( index ) );
     }
 
 
@@ -167,19 +150,11 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理文本节点
     /// </summary>
-    /// <param name="html">正在分析的 HTML 文本</param>
-    /// <param name="index">文本节点开始位置</param>
-    /// <param name="match">下一个匹配（非文本节点）</param>
-    protected int ProcessText( string html, int index, Match match )
+    /// <param name="text">HTML文本信息</param>
+    protected virtual void ProcessText( HtmlTextContent text )
     {
-      var text = html.Substring( index, match.Index - index );
-      if ( text.Length > 0 )
-        CreateTextNode( text );
-
-      index = match.Index + match.Length;
-      return index;
+      CreateTextNode( text.NodeHtml );
     }
-
 
     /// <summary>
     /// 创建文本节点添加到当前容器
@@ -193,21 +168,27 @@ namespace Ivony.Html.Parser
 
 
 
-
     /// <summary>
     /// 处理元素开始标签
     /// </summary>
-    /// <param name="match">捕获到的开始标签匹配</param>
-    protected void ProcessBeginTag( Match match )
+    /// <param name="beginTag">开始标签信息</param>
+    protected virtual void ProcessBeginTag( HtmlBeginTag beginTag )
     {
-      string tagName = match.Groups["tagName"].Value;
-      bool selfClosed = match.Groups["selfClosed"].Success;
+      string tagName = beginTag.TagName;
+      bool selfClosed = beginTag.SelfClosed;
 
-      if ( HtmlSpecification.selfCloseTags.Contains( tagName, StringComparer.InvariantCultureIgnoreCase ) )
+      //检查是否为自结束标签，并作相应处理
+      if ( IsSelfCloseElement( beginTag ) )
         selfClosed = true;
 
 
-      //检查父标签是否可选结束标记，并相应处理
+      //检查是否为CData标签，并作相应处理
+      if ( IsCDataElement( beginTag ) )
+        Reader.CDataElement = tagName.ToLowerInvariant();
+
+
+
+      //检查父标签是否可选结束标记，并作相应处理
       {
         var element = CurrentContainer as IHtmlElement;
         if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
@@ -219,13 +200,14 @@ namespace Ivony.Html.Parser
 
 
 
+
       //处理所有属性
       var attributes = new Dictionary<string, string>();
 
-      foreach ( Capture capture in match.Groups["attribute"].Captures )
+      foreach ( var a in beginTag.Attributes )
       {
-        string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
-        string value = capture.FindCaptures( match.Groups["attrValue"] ).Select( c => c.Value ).SingleOrDefault();
+        string name = a.Name;
+        string value = a.Value;
 
         value = HtmlEncoding.HtmlDecode( value );
 
@@ -234,6 +216,8 @@ namespace Ivony.Html.Parser
 
         attributes.Add( name, value );
       }
+
+
 
 
       //创建元素
@@ -246,6 +230,28 @@ namespace Ivony.Html.Parser
           ContainerStack.Push( element );
       }
     }
+
+
+    /// <summary>
+    /// 检查元素是否为自结束标签
+    /// </summary>
+    /// <param name="tag">元素开始标签</param>
+    /// <returns>是否为自结束标签</returns>
+    protected virtual bool IsSelfCloseElement( HtmlBeginTag tag )
+    {
+      return HtmlSpecification.selfCloseTags.Contains( tag.TagName, StringComparer.InvariantCultureIgnoreCase );
+    }
+
+    /// <summary>
+    /// 检查元素是否为CDATA标签
+    /// </summary>
+    /// <param name="tag">元素开始标签</param>
+    /// <returns>是否为CDATA标签</returns>
+    protected virtual bool IsCDataElement( HtmlBeginTag tag )
+    {
+      return HtmlSpecification.cdataTags.Contains( tag.TagName, StringComparer.InvariantCultureIgnoreCase );
+    }
+
 
 
     /// <summary>
@@ -273,14 +279,14 @@ namespace Ivony.Html.Parser
 
 
 
+
     /// <summary>
     /// 处理结束标签
     /// </summary>
-    /// <param name="match">结束标签的匹配</param>
-    protected void ProcessEndTag( Match match )
+    /// <param name="match">结束标签信息</param>
+    protected virtual void ProcessEndTag( HtmlEndTag endTag )
     {
-      string tagName = match.Groups["tagName"].Value;
-
+      var tagName = endTag.TagName;
 
 
       if ( ContainerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.InvariantCultureIgnoreCase ) )
@@ -294,18 +300,18 @@ namespace Ivony.Html.Parser
       }
       else
       {
-        ProcessEndTagMissingBeginTag( match );
+        ProcessEndTagMissingBeginTag( endTag );
       }
     }
 
     /// <summary>
     /// 处理丢失了开始标签的结束标签
     /// </summary>
-    /// <param name="match">结束标签的匹配</param>
-    protected virtual void ProcessEndTagMissingBeginTag( Match match )
+    /// <param name="match">结束标签信息</param>
+    protected virtual void ProcessEndTagMissingBeginTag( HtmlEndTag endTag )
     {
       //如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
-      CreateTextNode( match.Value );
+      CreateTextNode( endTag.NodeHtml );
     }
 
 
@@ -315,11 +321,12 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理 HTML 注释
     /// </summary>
-    /// <param name="match">HTML 注释匹配</param>
-    protected void ProcessComment( Match match )
+    /// <param name="match">HTML 注释信息</param>
+    protected virtual void ProcessComment( HtmlCommentContent comment )
     {
-      CreateCommet( match.Groups["commentText"].Value );
+      CreateCommet( comment.Comment );
     }
+
 
     /// <summary>
     /// 创建注释节点并加入当前容器
@@ -337,12 +344,11 @@ namespace Ivony.Html.Parser
     /// 处理特殊节点
     /// </summary>
     /// <param name="match">特殊节点的匹配</param>
-    protected IHtmlSpecial ProcessSpecial( Match match )
+    /// <returns>创建的特殊节点的匹配</returns>
+    protected virtual IHtmlSpecial ProcessSpecial( HtmlSpecialTag special )
     {
-      return null;//不处理该节点（将其从DOM树中抹去）。
+      return null;
     }
-
-
 
   }
 }

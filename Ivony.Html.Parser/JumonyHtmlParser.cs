@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
@@ -13,9 +14,16 @@ namespace Ivony.Html.Parser
       get { return new DomProvider(); }
     }
 
-    protected override void ProcessEndTagMissingBeginTag( System.Text.RegularExpressions.Match match )
+    protected override IHtmlReader CreateReader( string html )
     {
-      //base.ProcessEndTagMissingBeginTag( match );
+      return new JumonyReader( html );
     }
+
+    protected override void ProcessEndTagMissingBeginTag( HtmlEndTag endTag )
+    {
+      //base.ProcessEndTagMissingBeginTag( endTag );
+    }
+
+
   }
 }

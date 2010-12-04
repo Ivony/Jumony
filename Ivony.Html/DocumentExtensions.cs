@@ -360,6 +360,9 @@ namespace Ivony.Html
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
       {
 
+        if ( node is IHtmlElement )
+          return;
+
         il.Emit( OpCodes.Ldarg_0 );       //ld provider
         il.Emit( OpCodes.Ldloc_0 );       //ld container
         il.Emit( OpCodes.Ldc_I4, index ); //ld index
@@ -373,7 +376,6 @@ namespace Ivony.Html
           return;
         }
 
-        return;
 
         var comment = node as IHtmlComment;
         if ( textNode != null )

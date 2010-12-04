@@ -91,14 +91,14 @@ namespace Ivony.Html.Parser
           {
             //处理末尾的文本
             if ( Index != HtmlText.Length )
-              yield return CreateText( Index, HtmlText.Length );
+              yield return CreateText( HtmlText.Length );
 
             yield break;
           }
 
 
           if ( endTagMatch.Index > Index )
-            yield return CreateText( Index, endTagMatch.Index );
+            yield return CreateText( endTagMatch.Index );
 
           yield return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
         }
@@ -110,7 +110,7 @@ namespace Ivony.Html.Parser
         {
           //处理末尾的文本
           if ( Index != HtmlText.Length )
-            yield return CreateText( Index, HtmlText.Length );
+            yield return CreateText( HtmlText.Length );
 
           yield break;
         }
@@ -118,7 +118,7 @@ namespace Ivony.Html.Parser
 
         //处理文本节点
         if ( match.Index > Index )
-          yield return CreateText( Index, match.Index );
+          yield return CreateText(  match.Index );
 
 
         if ( match.Groups["beginTag"].Success )
@@ -198,10 +198,12 @@ namespace Ivony.Html.Parser
 
 
 
-    protected virtual HtmlTextContent CreateText( int startIndex, int endIndex )
+    protected virtual HtmlTextContent CreateText( int endIndex )
     {
+      var text = new HtmlTextContent( new HtmlContentFragment( this, Index, endIndex - Index ) );
       Index = endIndex;
-      return new HtmlTextContent( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
+
+      return text;
     }
 
     protected virtual HtmlContentFragment CreateFragment( Capture capture )

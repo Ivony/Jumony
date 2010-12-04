@@ -302,6 +302,9 @@ namespace Ivony.Html.Parser
       {
         ProcessEndTagMissingBeginTag( endTag );
       }
+
+      //退出CData标签
+      Reader.CDataElement = null;
     }
 
     /// <summary>

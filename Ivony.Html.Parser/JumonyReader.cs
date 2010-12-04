@@ -87,9 +87,19 @@ namespace Ivony.Html.Parser
           var endTagMatch = endTagRegex.Match( HtmlText, Index );
 
 
+          if ( !endTagMatch.Success )
+          {
+            //处理末尾的文本
+            if ( Index != HtmlText.Length )
+              yield return CreateText( Index, HtmlText.Length );
+
+            yield break;
+          }
+
+
           if ( endTagMatch.Index > Index )
             yield return CreateText( Index, endTagMatch.Index );
-          
+
           yield return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
         }
 

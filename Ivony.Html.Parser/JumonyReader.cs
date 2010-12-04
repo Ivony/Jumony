@@ -103,9 +103,10 @@ namespace Ivony.Html.Parser
           yield break;
         }
 
-        //处理文本节点
 
-        yield return CreateText( Index, match.Index );
+        //处理文本节点
+        if ( match.Index > Index )
+          yield return CreateText( Index, match.Index );
 
 
         if ( match.Groups["beginTag"].Success )

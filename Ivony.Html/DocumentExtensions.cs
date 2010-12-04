@@ -342,7 +342,7 @@ namespace Ivony.Html
         il.DeclareLocal( typeof( IHtmlContainer ) );
 
         il.Emit( OpCodes.Ldarg_0 );
-        il.EmitCall( OpCodes.Callvirt, AddDocument, null );
+        il.Emit( OpCodes.Callvirt, CreateDocument );
 
         int index = 0;
 
@@ -422,7 +422,7 @@ namespace Ivony.Html
         }
       }
 
-      private static readonly MethodInfo AddDocument = typeof( IHtmlDomProvider ).GetMethod( "AddDocument" );
+      private static readonly MethodInfo CreateDocument = typeof( IHtmlDomProvider ).GetMethod( "CreateDocument" );
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );

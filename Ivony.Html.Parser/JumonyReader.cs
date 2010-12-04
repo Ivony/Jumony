@@ -62,7 +62,7 @@ namespace Ivony.Html.Parser
       {
         Regex regex;
 
-        if ( endTagRegexes.TryGetValue( tagName, out regex ) )
+        if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
           endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled ) );
 
         return regex;

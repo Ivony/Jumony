@@ -34,10 +34,16 @@ namespace Ivony.Html.Parser
     }
 
 
-    public string CDataElement
+    protected string CDataElement
     {
       get;
-      set;
+      private set;
+    }
+
+    
+    void IHtmlReader.EnterCDataMode( string elementName )
+    {
+      CDataElement = elementName;
     }
 
 
@@ -92,6 +98,10 @@ namespace Ivony.Html.Parser
             //处理末尾的文本
             if ( Index != HtmlText.Length )
               yield return CreateText( HtmlText.Length );
+
+            
+            CDataElement = null;//自动退出 CData 元素读取模式
+
 
             yield break;
           }

@@ -42,6 +42,24 @@ namespace Ivony.Html.Parser
 
 
     /// <summary>
+    /// 派生类提供 HTML 文本读取器
+    /// </summary>
+    /// <param name="html">要读取分析的 HTML 文本</param>
+    /// <returns>文本读取器</returns>
+    protected abstract IHtmlReader CreateReader( string html );
+
+
+    /// <summary>
+    /// 当前在使用的 HTML 文本读取器
+    /// </summary>
+    protected IHtmlReader Reader
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
     /// 派生类提供 Provider 用于创建 DOM 结构
     /// </summary>
     protected abstract IHtmlDomProvider Provider
@@ -97,17 +115,6 @@ namespace Ivony.Html.Parser
 
       }
     }
-
-
-
-    protected abstract IHtmlReader CreateReader( string html );
-
-    protected IHtmlReader Reader
-    {
-      get;
-      private set;
-    }
-
 
     /// <summary>
     /// 分析 HTML 文本
@@ -184,7 +191,7 @@ namespace Ivony.Html.Parser
 
       //检查是否为CData标签，并作相应处理
       if ( IsCDataElement( beginTag ) )
-        Reader.CDataElement = tagName.ToLowerInvariant();
+        Reader.EnterCDataMode( tagName.ToLowerInvariant() );
 
 
 
@@ -202,7 +209,7 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>();
+      var attributes = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
       foreach ( var a in beginTag.Attributes )
       {
@@ -211,7 +218,7 @@ namespace Ivony.Html.Parser
 
         value = HtmlEncoding.HtmlDecode( value );
 
-        if ( attributes.ContainsKey( name ) )
+        if ( attributes.ContainsKey( name ) )//重复的属性名，只取第一个
           continue;
 
         attributes.Add( name, value );
@@ -303,8 +310,7 @@ namespace Ivony.Html.Parser
         ProcessEndTagMissingBeginTag( endTag );
       }
 
-      //退出CData标签
-      Reader.CDataElement = null;
+      //无需退出CData标签，读取器会自动退出
     }
 
     /// <summary>

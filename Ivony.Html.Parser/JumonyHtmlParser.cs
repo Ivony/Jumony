@@ -21,7 +21,7 @@ namespace Ivony.Html.Parser
 
     protected override void ProcessEndTagMissingBeginTag( HtmlEndTag endTag )
     {
-      //base.ProcessEndTagMissingBeginTag( endTag );
+      //忽略多出的结束标签
     }
 
 

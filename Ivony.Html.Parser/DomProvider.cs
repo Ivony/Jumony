@@ -46,5 +46,10 @@ namespace Ivony.Html.Parser
     {
       return AddNode( index, EnsureDomContainer( container ), new DomComment( comment ) );
     }
+
+    public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
+    {
+      throw new NotImplementedException();
+    }
   }
 }

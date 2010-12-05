@@ -143,7 +143,7 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>();
+      var attributes = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
       foreach ( Capture capture in match.Groups["attribute"].Captures )
       {

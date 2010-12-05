@@ -55,6 +55,11 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 映射请求
+    /// </summary>
+    /// <param name="request">当前 HTTP 请求信息</param>
+    /// <returns>请求映射信息</returns>
     public static MapInfo MapRequest( HttpRequest request )
     {
 
@@ -134,6 +139,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
@@ -147,9 +153,22 @@ namespace Ivony.Html.Web
       if ( content == null )
         return null;
 
-      var parser = GetParser( context, virtualPath, content );
+      return ParseDocument( context, virtualPath, content );
+    }
 
-      return parser.Parse( content );
+
+    /// <summary>
+    /// 分析 HTML 文档
+    /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="htmlContent">文档内容</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
+    {
+      var parser = GetParser( context, virtualPath, htmlContent );
+
+      return parser.Parse( htmlContent );
     }
   }
 

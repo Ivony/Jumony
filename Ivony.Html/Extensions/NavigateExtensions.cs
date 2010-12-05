@@ -12,7 +12,7 @@ namespace Ivony.Html
   /// <summary>
   /// 提供元素导航查询的扩展方法
   /// </summary>
-  public static class ElementExtensions
+  public static class NavigateExtensions
   {
 
 

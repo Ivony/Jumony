@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Ivony.Html
 {
-
-
-
-  public enum BindingNullBehavior
+  public interface IHtmlRenderableNode : IHtmlNode
   {
-    Ignore,
-    Hidden,
-    Remove,
-    DisplayNone
-  }
 
+    void Render( TextWriter writer );
+
+  }
 }

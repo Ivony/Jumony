@@ -10,6 +10,9 @@ using System.Reflection;
 
 namespace Ivony.Html
 {
+  /// <summary>
+  /// 提供应用于 Document 特有的扩展方法
+  /// </summary>
   public static class DocumentExtensions
   {
 

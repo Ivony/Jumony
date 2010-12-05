@@ -10,7 +10,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 提供协助操作Attribute的扩展方法
+  /// 提供协助操作 Attribute 的扩展方法
   /// </summary>
   public static class AttributeExtensions
   {

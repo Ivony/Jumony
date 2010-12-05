@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Ivony.Fluent;
+using System.IO;
 
 namespace Ivony.Html
 {
@@ -86,7 +87,7 @@ namespace Ivony.Html
         return textNode.HtmlText;
       }
 
-      var specialNode = node as IHtmlSpecial;//对于特殊节点原样输出。
+      var specialNode = node as IHtmlSpecial;//对于特殊标签原样输出。
       if ( specialNode != null )
         return specialNode.RawHtml;
 
@@ -214,6 +215,53 @@ namespace Ivony.Html
       else
         return false;
     }
+
+
+    public static string Render( this IHtmlDocument document )
+    {
+      var writer = new StringWriter();
+      
+      Render( document, writer );
+      
+      return writer.ToString();
+    }
+
+    public static void Render( this IHtmlDocument document, TextWriter writer )
+    {
+      RenderChilds( document, writer );
+    }
+
+    private static void RenderChilds( IHtmlContainer container, TextWriter writer )
+    {
+      foreach ( var node in container.Nodes() )
+      {
+        Render( node, writer );
+      }
+    }
+
+
+    private static void Render( IHtmlNode node, TextWriter writer )
+    {
+      var renderable = node as IHtmlRenderableNode;
+
+      if ( renderable != null )
+        renderable.Render( writer );
+
+      var element = node as IHtmlElement;
+      if ( element != null )
+        Render( element, writer );
+
+      writer.Write( node.OuterHtml() );
+    }
+
+
+    private static void Render( IHtmlElement element, TextWriter writer )
+    {
+      writer.Write( GenerateTagHtml( element ) );
+      RenderChilds( element, writer );
+      writer.Write( "</{0}>", element.Name );
+    }
+
 
   }
 }

@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExtensions.cs" />
+    <Compile Include="BindingNullBehavior.cs" />
     <Compile Include="DataBinder.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="BindingContext.cs" />

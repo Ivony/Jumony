@@ -30,6 +30,9 @@ namespace Ivony.Html
 
     private readonly object sync = new object();
 
+    /// <summary>
+    /// 获取用于同步操作的对象
+    /// </summary>
     public object SyncRoot
     {
       get { return sync; }
@@ -39,6 +42,9 @@ namespace Ivony.Html
 
     private SynchronizedCollection<IFreeNode> _nodes;
 
+    /// <summary>
+    /// 获取所有游离节点
+    /// </summary>
     protected SynchronizedCollection<IFreeNode> Nodes
     {
       get { return _nodes; }
@@ -55,7 +61,7 @@ namespace Ivony.Html
     /// <returns>文档碎片自身</returns>
     public virtual HtmlFragment AddNode( IFreeNode node )
     {
-      CheckNode( node );
+      CanAdded( node );
 
       Nodes.Add( node );
 
@@ -71,7 +77,7 @@ namespace Ivony.Html
     /// <returns>文档碎片自身</returns>
     public virtual HtmlFragment AddNode( int index, IFreeNode node )
     {
-      CheckNode( node );
+      CanAdded( node );
 
       Nodes.Insert( index, node );
 
@@ -151,15 +157,11 @@ namespace Ivony.Html
 
 
 
-
-
-
-
     /// <summary>
     /// 检查节点是否可以被加入文档碎片。
     /// </summary>
     /// <param name="node">要检查的节点</param>
-    protected void CheckNode( IFreeNode node )
+    public virtual void CanAdded( IFreeNode node )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
@@ -189,7 +191,9 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 用于创建游离节点的创建器
+    /// </summary>
     public IHtmlNodeFactory Factory
     {
       get { return _factory; }
@@ -220,9 +224,6 @@ namespace Ivony.Html
     }
 
     #endregion
-
-
-
 
   }
 }

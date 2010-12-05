@@ -22,11 +22,11 @@ namespace Ivony.Html
 
 
     public static readonly ICollection<string> fontstyleElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
-    public static readonly ICollection<string> pharsElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
+    public static readonly ICollection<string> phrasElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
     public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
     public static readonly ICollection<string> formcontrolElements = new ReadOnlyCollection<string>( new[] { "input", "select", "textarea", "label", "button" } );
 
-    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( pharsElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
+    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( phrasElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
 
 
     public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );

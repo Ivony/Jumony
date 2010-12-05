@@ -624,7 +624,7 @@ namespace Ivony.Html
           return false;
 
         //如果元素内部只有设置文本样式的子元素，那么它是安全的。
-        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.pharsElements ).Contains( e.Name, StringComparer.InvariantCultureIgnoreCase ) ) )
+        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.phrasElements ).Contains( e.Name, StringComparer.InvariantCultureIgnoreCase ) ) )
           return true;
 
         return false;

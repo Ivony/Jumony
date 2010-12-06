@@ -58,7 +58,7 @@ namespace Ivony.Html.Web
       OnPreLoadDocument();
 
       Trace.Write( "Core", "Begin Load Document" );
-      Document = MapperResult.LoadTemplate();
+      var document = MapperResult.LoadTemplate();
       Trace.Write( "Core", "End Load Document" );
 
       OnPostLoadDocument();
@@ -83,6 +83,8 @@ namespace Ivony.Html.Web
 
       OnPostReander();
     }
+
+
 
 
     private void AddGeneratorMetaData()

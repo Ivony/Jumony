@@ -9,7 +9,7 @@ namespace Ivony.Html.Forms.Validation
   public class EmailValidator : IHtmlValueValidator
   {
 
-    private static readonly Regex emailRegex = new Regex( "^" + ValidationRegulars.emailPattern + "$", RegexOptions.Compiled );
+    private static readonly Regex emailRegex = new Regex( "^" + ValidationRegulars.emailPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     #region IHtmlValueValidator 成员
 

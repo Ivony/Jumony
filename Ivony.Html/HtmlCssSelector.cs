@@ -465,8 +465,8 @@ namespace Ivony.Html
 
       private static readonly Dictionary<string, ValueMatcher> matchers = new Dictionary<string, ValueMatcher>()
       {
-        { "^=", ( exp, value ) => value != null && value.StartsWith( exp ) },
-        { "$=", ( exp, value ) => value != null && value.EndsWith( exp ) },
+        { "^=", ( exp, value ) => value != null && value.StartsWith( exp, StringComparison.Ordinal ) },
+        { "$=", ( exp, value ) => value != null && value.EndsWith( exp, StringComparison.Ordinal ) },
         { "*=", ( exp, value ) => value != null && value.Contains( exp ) },
         { "~=", ( exp, value ) => value != null && value.Split( ' ' ).Contains( exp ) },
         { "!=", ( exp, value ) => value != exp },

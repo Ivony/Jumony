@@ -437,7 +437,7 @@ namespace Ivony.Html
       {
         ClearNodes( element );
 
-        if ( !HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        if ( !HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
           var fragment = HtmlEncode( text, factory );
 
@@ -470,7 +470,7 @@ namespace Ivony.Html
       {
         ClearNodes( element );
 
-        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
           var textNode = factory.CreateTextNode( html );
           textNode.Into( element, 0 );
@@ -624,7 +624,7 @@ namespace Ivony.Html
           return false;
 
         //如果元素内部只有设置文本样式的子元素，那么它是安全的。
-        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.phrasElements ).Contains( e.Name, StringComparer.InvariantCultureIgnoreCase ) ) )
+        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.phrasElements ).Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
           return true;
 
         return false;

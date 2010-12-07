@@ -36,7 +36,7 @@ namespace Ivony.Html.Styles
     private static readonly Regex styleSettingsRegex = new Regex( string.Format( @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled );
 
 
-    private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.InvariantCultureIgnoreCase ) );
+    private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.OrdinalIgnoreCase ) );
 
     private IHtmlElement _element;
 

@@ -26,6 +26,9 @@ namespace Ivony.Html
     /// </remarks>
     public static IHtmlAttribute Attribute( this IHtmlElement element, string name )
     {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
       return element.Attributes().Where( a => a.Name.EqualsIgnoreCase( name ) ).SingleOrDefault();
     }
 
@@ -54,6 +57,10 @@ namespace Ivony.Html
     /// <returns>被设置的属性对象</returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string value )
     {
+
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
       attribute.AttributeValue = value;
       return attribute;
     }
@@ -68,6 +75,12 @@ namespace Ivony.Html
     /// <returns>被设置的属性对象</returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string oldValue, string newValue )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( oldValue == null )
+        throw new ArgumentNullException( "oldValue" );
+
       attribute.AttributeValue = attribute.AttributeValue.Replace( oldValue, newValue );
       return attribute;
     }
@@ -81,6 +94,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, string replacement )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
+
       attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, replacement );
       return attribute;
     }
@@ -94,6 +113,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
       attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, evaluator );
       return attribute;
     }
@@ -107,6 +132,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
       attribute.AttributeValue = Regex.Replace( attribute.AttributeValue, pattern, evaluator );
       return attribute;
     }
@@ -119,6 +150,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IHtmlAttribute Value( this IHtmlAttribute attribute, Func<string, string> evaluator )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+      
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
       attribute.AttributeValue = evaluator( attribute.AttributeValue );
       return attribute;
     }
@@ -132,6 +169,10 @@ namespace Ivony.Html
     /// <returns>属性设置器</returns>
     public static AttributeValueSetter SetAttribute( this IHtmlElement element, string attributeName )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
       return new AttributeValueSetter( element, attributeName );
     }
 
@@ -145,6 +186,10 @@ namespace Ivony.Html
     /// <returns>设置了属性的元素</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
       return new AttributeValueSetter( element, attributeName ).Value( value );
     }
 
@@ -178,6 +223,9 @@ namespace Ivony.Html
 
       internal AttributeValueSetter( IHtmlElement element, string attributeName )
       {
+        if ( element == null )
+          throw new ArgumentNullException( "element" );
+
         if ( attributeName == null )
           throw new ArgumentNullException( "attributeName" );
 
@@ -219,7 +267,11 @@ namespace Ivony.Html
       /// <param name="newValue">用于替换的字符串</param>
       /// <returns>被设置的属性对象</returns>
       public IHtmlElement Value( string oldValue, string newValue )
-      {
+      {   
+        if ( oldValue == null )
+          throw new ArgumentNullException( "oldValue" );
+
+
         _attribute.AttributeValue = _attribute.AttributeValue.Replace( oldValue, newValue );
         return _element;
       }
@@ -232,7 +284,11 @@ namespace Ivony.Html
       /// <param name="replacement">替换字符串</param>
       /// <returns></returns>
       public IHtmlElement Value( Regex pattern, string replacement )
-      {
+      {  
+        if ( pattern == null )
+          throw new ArgumentNullException( "pattern" );
+
+
         _attribute.AttributeValue = pattern.Replace( _attribute.AttributeValue, replacement );
         return _element;
       }
@@ -245,7 +301,11 @@ namespace Ivony.Html
       /// <param name="evaluator">用于每一步替换的计算函数</param>
       /// <returns></returns>
       public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
-      {
+      { 
+        if ( pattern == null )
+          throw new ArgumentNullException( "pattern" );
+
+
         _attribute.AttributeValue = pattern.Replace( _attribute.AttributeValue, evaluator );
         return _element;
       }
@@ -258,7 +318,14 @@ namespace Ivony.Html
       /// <param name="evaluator">用于每一步替换的计算函数</param>
       /// <returns></returns>
       public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
-      {
+      { 
+        if ( pattern == null )
+          throw new ArgumentNullException( "pattern" );
+
+        if ( evaluator == null )
+          throw new ArgumentNullException( "evaluator" );
+
+
         _attribute.AttributeValue = Regex.Replace( _attribute.AttributeValue, pattern, evaluator );
         return _element;
       }
@@ -271,6 +338,10 @@ namespace Ivony.Html
       /// <returns></returns>
       public IHtmlElement Value( Func<string, string> evaluator )
       {
+        if ( evaluator == null )
+          throw new ArgumentNullException( "evaluator" );
+
+
         _attribute.AttributeValue = evaluator( _attribute.AttributeValue );
         return _element;
       }
@@ -283,6 +354,9 @@ namespace Ivony.Html
       /// <returns></returns>
       public IHtmlElement Value( Func<IHtmlElement, string, string> evaluator )
       {
+        if ( evaluator == null )
+          throw new ArgumentNullException( "evaluator" );
+
         _attribute.AttributeValue = evaluator( _element, _attribute.AttributeValue );
         return _element;
       }
@@ -308,6 +382,9 @@ namespace Ivony.Html
       /// <returns></returns>
       public IHtmlElement From( IHtmlElement element )
       {
+        if ( element == null )
+          throw new ArgumentNullException( "element" );
+
         _attribute.AttributeValue = element.Attribute( _attributeName ).Value();
         return _element;
       }
@@ -351,7 +428,7 @@ namespace Ivony.Html
     {
       private readonly IEnumerable<IHtmlElement> _elements;
       private readonly AttributeValueSetter[] _setters;
-      private readonly string _attributeName;
+//      private readonly string _attributeName;
 
 
       internal AttributeSetValueSetter( IEnumerable<IHtmlElement> elements, string attributeName )
@@ -360,7 +437,7 @@ namespace Ivony.Html
           throw new ArgumentNullException( "attributeName" );
 
         _elements = elements;
-        _attributeName = attributeName;
+//        _attributeName = attributeName;
 
         _setters = _elements.Select( e => e.SetAttribute( attributeName ) ).ToArray();
       }

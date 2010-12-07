@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Ivony.Fluent;
 using System.IO;
+using System.Globalization;
 
 namespace Ivony.Html
 {
@@ -34,6 +35,10 @@ namespace Ivony.Html
     /// <returns>容器所有子节点的HTML表现形式</returns>
     public static string InnerHtml( this IHtmlContainer container, bool normalization )
     {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
       StringBuilder builder = new StringBuilder();
 
       foreach ( var node in container.Nodes() )
@@ -63,6 +68,10 @@ namespace Ivony.Html
     /// <returns></returns>
     public static string OuterHtml( this IHtmlNode node, bool normalization )
     {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
       var raw = node.RawHtml;
       if ( raw == null || normalization )
         return GenerateHtml( node );
@@ -93,7 +102,7 @@ namespace Ivony.Html
 
       var commentNode = node as IHtmlComment;
       if ( commentNode != null )
-        return string.Format( "<!--{0}-->", commentNode.Comment );
+        return string.Format( CultureInfo.InvariantCulture, "<!--{0}-->", commentNode.Comment );
 
       var element = node as IHtmlElement;
       if ( element != null )
@@ -121,10 +130,10 @@ namespace Ivony.Html
 
       builder.Append( GenerateTagHtml( element ) );
 
-      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
       {
         if ( element.Nodes().Any() )
-          throw new FormatException( string.Format( "HTML元素 {0} 不能有任何内容", element.Name ) );
+          throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
 
         builder.Insert( builder.Length - 1, " /" );//在末尾插入自结束标志“/”。
       }
@@ -192,7 +201,7 @@ namespace Ivony.Html
         if ( element.Name.EqualsIgnoreCase( "br" ) )
           return Environment.NewLine;
 
-        else if ( noTextElements.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        else if ( noTextElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
           return null;
       }
 

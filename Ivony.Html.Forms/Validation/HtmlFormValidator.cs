@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Fluent;
+using System.Globalization;
 
 
 namespace Ivony.Html.Forms.Validation
@@ -261,7 +262,7 @@ namespace Ivony.Html.Forms.Validation
       var input = Form.InputElement( inputName );
 
       if ( input == null )
-        throw new ArgumentException( string.Format( "未能找到 \"name\" 属性为 \"{0}\" 的输入控件", inputName ), "inputName" );
+        throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "未能找到 \"name\" 属性为 \"{0}\" 的输入控件", inputName ), "inputName" );
 
       AddFieldValidation( input, fieldName, validators );
     }

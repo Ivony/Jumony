@@ -53,7 +53,7 @@ namespace Ivony.Html.Forms
       get
       {
         //如果有任何一个复选框
-        if ( items.Select( i => i.Element ).Any( e => e.Attribute( "type" ).Value().Equals( "checkbox", StringComparison.InvariantCultureIgnoreCase ) ) )
+        if ( items.Select( i => i.Element ).Any( e => e.Attribute( "type" ).Value().EqualsIgnoreCase( "checkbox" ) ) )
           return true;
 
         return false;
@@ -81,15 +81,15 @@ namespace Ivony.Html.Forms
       {
         _group = group;
 
-        if ( !element.Name.Equals( "input", StringComparison.InvariantCultureIgnoreCase ) )
+        if ( !element.Name.EqualsIgnoreCase( "input" ) )
           throw new InvalidOperationException();
 
         var type = element.Attribute( "type" ).Value();
 
-        if ( type.Equals( "radio", StringComparison.InvariantCultureIgnoreCase ) )
+        if ( type.EqualsIgnoreCase( "radio" ) )
           radio = true;
 
-        else if ( type.Equals( "checkbox", StringComparison.InvariantCultureIgnoreCase ) )
+        else if ( type.EqualsIgnoreCase( "checkbox" ) )
           radio = false;
 
         else

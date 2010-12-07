@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
@@ -18,7 +19,7 @@ namespace Ivony.Html.Forms
 
     public HtmlLabel( HtmlForm form, IHtmlElement element )
     {
-      if ( !element.Name.Equals( "label", StringComparison.InvariantCultureIgnoreCase ) )
+      if ( !element.Name.EqualsIgnoreCase( "label" ) )
         throw new NotSupportedException( "不能将非 label 元素转换为 HtmlLabel 对象" );
 
       _form = form;

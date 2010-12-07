@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
@@ -10,7 +11,7 @@ namespace Ivony.Html.Forms
 
     public HtmlSelect( HtmlForm form, IHtmlElement element )
     {
-      if ( !element.Name.Equals( "select", StringComparison.InvariantCultureIgnoreCase ) )
+      if ( !element.Name.EqualsIgnoreCase( "select" ) )
         throw new InvalidOperationException();
 
       _form = form;

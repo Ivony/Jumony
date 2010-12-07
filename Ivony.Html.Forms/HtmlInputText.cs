@@ -23,7 +23,7 @@ namespace Ivony.Html.Forms
 
 
       _type = element.Attribute( "type" ).Value();
-      if ( !allowTypes.Contains( _type, StringComparer.InvariantCultureIgnoreCase ) )
+      if ( !allowTypes.Contains( _type, StringComparer.OrdinalIgnoreCase ) )
         throw new InvalidOperationException( "只有type为text、password或hidden的input元素才能转换为HtmlTextInput对象" );
 
       _form = form;
@@ -51,7 +51,7 @@ namespace Ivony.Html.Forms
       get { return _element.Attribute( "value" ).Value(); }
       set
       {
-        if ( !_type.Equals( "password", StringComparison.InvariantCultureIgnoreCase ) )
+        if ( !_type.EqualsIgnoreCase( "password" ) )
           _element.SetAttribute( "value" ).Value( value );
       }
     }

@@ -7,6 +7,7 @@ using System.Web;
 using System.Collections;
 using Ivony.Fluent;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Ivony.Html
 {
@@ -207,7 +208,7 @@ namespace Ivony.Html
           coreSelector = selector;
           coreEnumerator = enumerator;
 
-          Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
         }
 
 
@@ -225,7 +226,7 @@ namespace Ivony.Html
         void IDisposable.Dispose()
         {
           coreEnumerator.Dispose();
-          Trace.Write( "Selector", string.Format( "End Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "End Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
         }
 
         #endregion
@@ -244,7 +245,7 @@ namespace Ivony.Html
 
         void System.Collections.IEnumerator.Reset()
         {
-          Trace.Write( "Selector", string.Format( "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
           coreEnumerator.Reset();
         }
 
@@ -380,10 +381,10 @@ namespace Ivony.Html
         var _attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new AttributeSelector( c.Value ) ).ToList();
 
         if ( match.Groups["identity"].Success )
-          _attributeSelectors.Add( new AttributeSelector( string.Format( "[id={0}]", match.Groups["identity"].Value ) ) );
+          _attributeSelectors.Add( new AttributeSelector( string.Format( CultureInfo.InvariantCulture, "[id={0}]", match.Groups["identity"].Value ) ) );
 
         if ( match.Groups["class"].Success )
-          _attributeSelectors.Add( new AttributeSelector( string.Format( "[class~={0}]", match.Groups["class"].Value ) ) );
+          _attributeSelectors.Add( new AttributeSelector( string.Format( CultureInfo.InvariantCulture, "[class~={0}]", match.Groups["class"].Value ) ) );
 
         attributeSelectors = _attributeSelectors.ToArray();
 
@@ -520,9 +521,9 @@ namespace Ivony.Html
       public override string ToString()
       {
         if ( separator != null )
-          return string.Format( "[{0}{1}'{2}']", name, separator, value.Replace( "'", "\\'" ).Replace( "\"", "\\\"" ) );
+          return string.Format( CultureInfo.InvariantCulture, "[{0}{1}'{2}']", name, separator, value.Replace( "'", "\\'" ).Replace( "\"", "\\\"" ) );
         else
-          return string.Format( "[{0}]", name );
+          return string.Format( CultureInfo.InvariantCulture, "[{0}]", name );
       }
 
     }
@@ -573,7 +574,7 @@ namespace Ivony.Html
           case "only-of-type":
           case "empty":
             if ( args != null )
-              throw new FormatException( string.Format( "{0} 伪类不能有参数", name ) );
+              throw new FormatException( string.Format( CultureInfo.InvariantCulture, "{0} 伪类不能有参数", name ) );
             return new CountPseudoClass( name, args, expression );
 
           default:
@@ -743,7 +744,7 @@ namespace Ivony.Html
           else
             argsExp = augend.ToString();
 
-          return string.Format( ":nth-child({1})", argsExp );
+          return string.Format( CultureInfo.InvariantCulture, ":nth-child({1})", argsExp );
         }
 
       }
@@ -773,7 +774,7 @@ namespace Ivony.Html
 
 
           if ( args != null )
-            throw new InvalidOperationException( string.Format( "{0} 伪类不能有参数", name ) );
+            throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "{0} 伪类不能有参数", name ) );
 
 
 

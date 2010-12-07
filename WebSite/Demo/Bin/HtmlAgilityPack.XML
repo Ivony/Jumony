@@ -136,12 +136,6 @@
             <param name="ownerdocument"></param>
             <param name="index"></param>
         </member>
-        <member name="M:HtmlAgilityPack.HtmlNode.CreateNavigator">
-            <summary>
-            Creates a new XPathNavigator object for navigating this HTML node.
-            </summary>
-            <returns>An XPathNavigator object. The XPathNavigator is positioned on the node from which the method was called. It is not positioned on the root of the document.</returns>
-        </member>
         <member name="M:HtmlAgilityPack.HtmlNode.CanOverlapElement(System.String)">
             <summary>
             Determines if an element node can be kept overlapped.
@@ -270,12 +264,6 @@
             </summary>
             <param name="node">The node to duplicate. May not be <c>null</c>.</param>
             <param name="deep">true to recursively clone the subtree under the specified node, false to clone only the node itself.</param>
-        </member>
-        <member name="M:HtmlAgilityPack.HtmlNode.CreateRootNavigator">
-            <summary>
-            Creates an XPathNavigator using the root of this document.
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:HtmlAgilityPack.HtmlNode.DescendantNodes">
             <summary>
@@ -420,20 +408,6 @@
             <param name="oldChild">The node being replaced in the list.</param>
             <returns>The node replaced.</returns>
         </member>
-        <member name="M:HtmlAgilityPack.HtmlNode.SelectNodes(System.String)">
-            <summary>
-            Selects a list of nodes matching the <see cref="P:HtmlAgilityPack.HtmlNode.XPath"/> expression.
-            </summary>
-            <param name="xpath">The XPath expression.</param>
-            <returns>An <see cref="T:HtmlAgilityPack.HtmlNodeCollection"/> containing a collection of nodes matching the <see cref="P:HtmlAgilityPack.HtmlNode.XPath"/> query, or <c>null</c> if no node matched the XPath expression.</returns>
-        </member>
-        <member name="M:HtmlAgilityPack.HtmlNode.SelectSingleNode(System.String)">
-            <summary>
-            Selects the first XmlNode that matches the XPath expression.
-            </summary>
-            <param name="xpath">The XPath expression. May not be null.</param>
-            <returns>The first <see cref="T:HtmlAgilityPack.HtmlNode"/> that matches the XPath query or a null reference if no matching node was found.</returns>
-        </member>
         <member name="M:HtmlAgilityPack.HtmlNode.SetAttributeValue(System.String,System.String)">
             <summary>
             Helper method to set the value of an attribute of this node. If the attribute is not found, it will be created automatically.
@@ -471,6 +445,32 @@
             Saves the current node to a string.
             </summary>
             <returns>The saved string.</returns>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlNode.CreateNavigator">
+            <summary>
+            Creates a new XPathNavigator object for navigating this HTML node.
+            </summary>
+            <returns>An XPathNavigator object. The XPathNavigator is positioned on the node from which the method was called. It is not positioned on the root of the document.</returns>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlNode.CreateRootNavigator">
+            <summary>
+            Creates an XPathNavigator using the root of this document.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlNode.SelectNodes(System.String)">
+            <summary>
+            Selects a list of nodes matching the <see cref="P:HtmlAgilityPack.HtmlNode.XPath"/> expression.
+            </summary>
+            <param name="xpath">The XPath expression.</param>
+            <returns>An <see cref="T:HtmlAgilityPack.HtmlNodeCollection"/> containing a collection of nodes matching the <see cref="P:HtmlAgilityPack.HtmlNode.XPath"/> query, or <c>null</c> if no node matched the XPath expression.</returns>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlNode.SelectSingleNode(System.String)">
+            <summary>
+            Selects the first XmlNode that matches the XPath expression.
+            </summary>
+            <param name="xpath">The XPath expression. May not be null.</param>
+            <returns>The first <see cref="T:HtmlAgilityPack.HtmlNode"/> that matches the XPath query or a null reference if no matching node was found.</returns>
         </member>
         <member name="P:HtmlAgilityPack.HtmlNode.Attributes">
             <summary>
@@ -893,12 +893,6 @@
             Creates an instance of an HTML document.
             </summary>
         </member>
-        <member name="M:HtmlAgilityPack.HtmlDocument.CreateNavigator">
-            <summary>
-            Creates a new XPathNavigator object for navigating this HTML document.
-            </summary>
-            <returns>An XPathNavigator object. The XPathNavigator is positioned on the root of the document.</returns>
-        </member>
         <member name="M:HtmlAgilityPack.HtmlDocument.GetXmlName(System.String)">
             <summary>
             Gets a valid XML name.
@@ -1146,6 +1140,12 @@
             </summary>
             <param name="writer">The XmlWriter to which you want to save.</param>
         </member>
+        <member name="M:HtmlAgilityPack.HtmlDocument.CreateNavigator">
+            <summary>
+            Creates a new XPathNavigator object for navigating this HTML document.
+            </summary>
+            <returns>An XPathNavigator object. The XPathNavigator is positioned on the root of the document.</returns>
+        </member>
         <member name="P:HtmlAgilityPack.HtmlDocument.CheckSum">
             <summary>
             Gets the document CRC32 checksum if OptionComputeChecksum was set to true before parsing, 0 otherwise.
@@ -1299,27 +1299,6 @@
             <param name="type">The requested type.</param>
             <returns>An newly created instance.</returns>
         </member>
-        <member name="M:HtmlAgilityPack.HtmlWeb.CreateInstance(System.String,System.String,System.Xml.Xsl.XsltArgumentList,System.Type)">
-            <summary>
-            Creates an instance of the given type from the specified Internet resource.
-            </summary>
-            <param name="htmlUrl">The requested URL, such as "http://Myserver/Mypath/Myfile.asp".</param>
-            <param name="xsltUrl">The URL that specifies the XSLT stylesheet to load.</param>
-            <param name="xsltArgs">An <see cref="T:System.Xml.Xsl.XsltArgumentList"/> containing the namespace-qualified arguments used as input to the transform.</param>
-            <param name="type">The requested type.</param>
-            <returns>An newly created instance.</returns>
-        </member>
-        <member name="M:HtmlAgilityPack.HtmlWeb.CreateInstance(System.String,System.String,System.Xml.Xsl.XsltArgumentList,System.Type,System.String)">
-            <summary>
-            Creates an instance of the given type from the specified Internet resource.
-            </summary>
-            <param name="htmlUrl">The requested URL, such as "http://Myserver/Mypath/Myfile.asp".</param>
-            <param name="xsltUrl">The URL that specifies the XSLT stylesheet to load.</param>
-            <param name="xsltArgs">An <see cref="T:System.Xml.Xsl.XsltArgumentList"/> containing the namespace-qualified arguments used as input to the transform.</param>
-            <param name="type">The requested type.</param>
-            <param name="xmlPath">A file path where the temporary XML before transformation will be saved. Mostly used for debugging purposes.</param>
-            <returns>An newly created instance.</returns>
-        </member>
         <member name="M:HtmlAgilityPack.HtmlWeb.Get(System.String,System.String)">
             <summary>
             Gets an HTML document from an Internet resource and saves it to the specified file.
@@ -1402,7 +1381,28 @@
             Loads an HTML document from an Internet resource and saves it to the specified XmlTextWriter.
             </summary>
             <param name="htmlUrl">The requested URL, such as "http://Myserver/Mypath/Myfile.asp".</param>
-            <param name="writer">The XmlTextWriter to which you want to save.</param>
+            <param name="writer">The XmlTextWriter to which you want to save to.</param>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlWeb.CreateInstance(System.String,System.String,System.Xml.Xsl.XsltArgumentList,System.Type)">
+            <summary>
+            Creates an instance of the given type from the specified Internet resource.
+            </summary>
+            <param name="htmlUrl">The requested URL, such as "http://Myserver/Mypath/Myfile.asp".</param>
+            <param name="xsltUrl">The URL that specifies the XSLT stylesheet to load.</param>
+            <param name="xsltArgs">An <see cref="T:System.Xml.Xsl.XsltArgumentList"/> containing the namespace-qualified arguments used as input to the transform.</param>
+            <param name="type">The requested type.</param>
+            <returns>An newly created instance.</returns>
+        </member>
+        <member name="M:HtmlAgilityPack.HtmlWeb.CreateInstance(System.String,System.String,System.Xml.Xsl.XsltArgumentList,System.Type,System.String)">
+            <summary>
+            Creates an instance of the given type from the specified Internet resource.
+            </summary>
+            <param name="htmlUrl">The requested URL, such as "http://Myserver/Mypath/Myfile.asp".</param>
+            <param name="xsltUrl">The URL that specifies the XSLT stylesheet to load.</param>
+            <param name="xsltArgs">An <see cref="T:System.Xml.Xsl.XsltArgumentList"/> containing the namespace-qualified arguments used as input to the transform.</param>
+            <param name="type">The requested type.</param>
+            <param name="xmlPath">A file path where the temporary XML before transformation will be saved. Mostly used for debugging purposes.</param>
+            <returns>An newly created instance.</returns>
         </member>
         <member name="M:HtmlAgilityPack.HtmlWeb.LoadHtmlAsXml(System.String,System.String,System.Xml.Xsl.XsltArgumentList,System.Xml.XmlTextWriter)">
             <summary>
@@ -1426,6 +1426,11 @@
         <member name="P:HtmlAgilityPack.HtmlWeb.AutoDetectEncoding">
             <summary>
             Gets or Sets a value indicating if document encoding must be automatically detected.
+            </summary>
+        </member>
+        <member name="P:HtmlAgilityPack.HtmlWeb.OverrideEncoding">
+            <summary>
+            Gets or sets the Encoding used to override the response stream from any web request
             </summary>
         </member>
         <member name="P:HtmlAgilityPack.HtmlWeb.CacheOnly">

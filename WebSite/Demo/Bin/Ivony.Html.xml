@@ -147,79 +147,9 @@
             元素名
             </summary>
         </member>
-        <member name="T:Ivony.Html.ContentExtensions">
-            <summary>
-            提供内容分析呈现的扩展方法
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.InnerHtml(Ivony.Html.IHtmlContainer)">
-            <summary>
-            尝试获取元素子节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
-            </summary>
-            <param name="container">要生成InnerHTML的容器</param>
-            <returns>容器所有子节点的HTML表现形式</returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.InnerHtml(Ivony.Html.IHtmlContainer,System.Boolean)">
-            <summary>
-            尝试获取元素子节点的HTML表现形式
-            </summary>
-            <param name="container">要生成InnerHTML的容器</param>
-            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
-            <returns>容器所有子节点的HTML表现形式</returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.OuterHtml(Ivony.Html.IHtmlNode)">
-            <summary>
-            尝试获取整个节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
-            </summary>
-            <param name="node">要获取HTML表现形式的节点</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.OuterHtml(Ivony.Html.IHtmlNode,System.Boolean)">
-            <summary>
-            尝试获取整个节点的HTML表现形式
-            </summary>
-            <param name="node">要获取HTML表现形式的节点</param>
-            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.GenerateHtml(Ivony.Html.IHtmlNode)">
-            <summary>
-            尝试生成节点的HTML表现形式
-            </summary>
-            <param name="node">要生成HTML的节点</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.GenerateElementHtml(Ivony.Html.IHtmlElement)">
-            <summary>
-            尝试生成元素的HTML表现形式
-            </summary>
-            <param name="element">要生成HTML的元素</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.GenerateTagHtml(Ivony.Html.IHtmlElement)">
-            <summary>
-            尝试生成元素开始标签的HTML形式
-            </summary>
-            <param name="element">要生成HTML的元素</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.InnerText(Ivony.Html.IHtmlNode)">
-            <summary>
-            尝试获取节点的文本表现形式，对于某些不支持文本表现形式的元素，将直接返回null
-            </summary>
-            <param name="node">要获取文本表现形式的节点</param>
-            <returns></returns>
-        </member>
-        <member name="M:Ivony.Html.ContentExtensions.IsWhiteSpace(Ivony.Html.IHtmlTextNode)">
-            <summary>
-            判断一个文本节点是不是全部由空白字符组成
-            </summary>
-            <param name="textNode">要判断的文本节点</param>
-            <returns>是否全部是空白字符</returns>
-        </member>
         <member name="T:Ivony.Html.AttributeExtensions">
             <summary>
-            提供协助操作Attribute的扩展方法
+            提供协助操作 Attribute 的扩展方法
             </summary>
         </member>
         <member name="M:Ivony.Html.AttributeExtensions.Attribute(Ivony.Html.IHtmlElement,System.String)">
@@ -487,194 +417,6 @@
             <param name="element">要复制属性值的元素</param>
             <returns></returns>
         </member>
-        <member name="T:Ivony.Html.ElementExtensions">
-            <summary>
-            提供元素导航查询的扩展方法
-            </summary>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Parent(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取父元素
-            </summary>
-            <param name="node">要获取父元素的节点</param>
-            <returns>父元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Elements(Ivony.Html.IHtmlContainer)">
-            <summary>
-            获取容器所有子元素
-            </summary>
-            <param name="node">要获取子元素的容器</param>
-            <returns>容器的所有子元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Elements(Ivony.Html.IHtmlContainer,System.String)">
-            <summary>
-            获取容器符合条件的子元素
-            </summary>
-            <param name="node">要获取子元素的容器</param>
-            <param name="selector">用来筛选子元素的元素选择器</param>
-            <returns>符合条件的子元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Ancestors(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取节点的所有父代元素
-            </summary>
-            <param name="node">要获取父代元素集合的节点</param>
-            <returns>节点的所有父代元素集合</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Ancestors(Ivony.Html.IHtmlNode,System.String)">
-            <summary>
-            获取节点符合条件的父代元素
-            </summary>
-            <param name="node">要获取父代元素集合的节点</param>
-            <param name="selector">用来筛选父代元素的元素选择器</param>
-            <returns>节点的所有父代元素集合</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.AncestorsAndSelf(Ivony.Html.IHtmlElement)">
-            <summary>
-            获取元素所有的父代元素以及元素自身
-            </summary>
-            <param name="element">要获取父代元素及自身的元素</param>
-            <returns>元素的所有父代元素和自身的集合</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Descendants(Ivony.Html.IHtmlContainer)">
-            <summary>
-            获取所有的子代元素
-            </summary>
-            <param name="container">要获取子代元素的容器对象</param>
-            <returns>容器所有的子代元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Descendants(Ivony.Html.IHtmlContainer,System.String)">
-            <summary>
-            获取所有的子代元素
-            </summary>
-            <param name="container">要获取子代元素的容器对象</param>
-            <param name="selector">用于筛选子代元素的选择器</param>
-            <returns>符合选择器的容器的所有子代元素</returns>
-            <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.DescendantNodes(Ivony.Html.IHtmlContainer)">
-            <summary>
-            获取所有的子代节点
-            </summary>
-            <param name="container">要获取子代元素的容器对象</param>
-            <returns>容器所有的子代节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.SiblingNodes(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取所有的兄弟（同级）节点
-            </summary>
-            <param name="node">要获取兄弟节点的节点</param>
-            <returns>所有的兄弟节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Siblings(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取所有的兄弟（同级）元素节点
-            </summary>
-            <param name="node">要获取兄弟（同级）元素节点的节点</param>
-            <returns>所有的兄弟（同级）元素节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Siblings(Ivony.Html.IHtmlNode,System.String)">
-            <summary>
-            获取所有的兄弟（同级）元素节点
-            </summary>
-            <param name="node">要获取兄弟（同级）元素节点的节点</param>
-            <param name="selector">用于筛选元素的元素选择器</param>
-            <returns>所有的兄弟（同级）元素节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.SiblingNodesBeforeSelf(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取在自身之前的所有兄弟（同级）节点
-            </summary>
-            <param name="node">要获取之前的兄弟（同级）节点的节点</param>
-            <returns>在这之后的所有兄弟（同级）节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.SiblingNodesAfterSelf(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取在之后的所有兄弟（同级）节点
-            </summary>
-            <param name="node">要获取之后的兄弟（同级）节点的节点</param>
-            <returns>之后的所有兄弟（同级）节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.SiblingsBeforeSelf(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取在自身之前的所有兄弟（同级）元素节点
-            </summary>
-            <param name="node">要获取之前的兄弟（同级）元素节点的节点</param>
-            <returns>在这之后的所有兄弟（同级）元素节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.SiblingsAfterSelf(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取在之后的所有兄弟（同级）元素节点
-            </summary>
-            <param name="node">要获取之后的兄弟（同级）元素节点的节点</param>
-            <returns>之后的所有兄弟（同级）元素节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.PreviousElement(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取紧邻之前的元素
-            </summary>
-            <param name="node">要获取紧邻之前的元素的节点</param>
-            <returns>紧邻当前节点的前一个元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.NextElement(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取紧邻之后的元素
-            </summary>
-            <param name="node">要获取紧邻之后的元素的节点</param>
-            <returns>紧邻当前节点的后一个元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.PreviousNode(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取紧邻之前的节点
-            </summary>
-            <param name="node">要获取紧邻之前的元素的节点</param>
-            <returns>紧邻当前节点的前一个节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.NextNode(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取紧邻之后的节点
-            </summary>
-            <param name="node">要获取紧邻之后的元素的节点</param>
-            <returns>紧邻当前节点的后一个节点</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Find(Ivony.Html.IHtmlContainer,System.String)">
-            <summary>
-            从当前容器按照CSS3选择器搜索符合要求的元素
-            </summary>
-            <param name="container">要搜索子代元素的容器</param>
-            <param name="expression">CSS选择器</param>
-            <returns>搜索到的符合要求的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.FindSingle(Ivony.Html.IHtmlContainer,System.String)">
-            <summary>
-            从当前容器按照CSS3选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
-            </summary>
-            <param name="container">要搜索子代元素的容器</param>
-            <param name="expression">CSS选择器</param>
-            <returns>搜索到的符合要求的唯一元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.Find(Ivony.Html.IHtmlContainer,System.String[])">
-            <summary>
-            从当前容器按照CSS3选择器搜索符合要求的元素
-            </summary>
-            <param name="container">要搜索子代元素的容器</param>
-            <param name="expressions">多个CSS选择器，结果会合并</param>
-            <returns>搜索到的符合要求的元素</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.NodesIndexOfSelf(Ivony.Html.IHtmlNode)">
-            <summary>
-            获取在兄弟节点中，自己的顺序位置
-            </summary>
-            <param name="node">要获取序号的节点</param>
-            <returns>顺序位置</returns>
-        </member>
-        <member name="M:Ivony.Html.ElementExtensions.IndexOfSelf(Ivony.Html.IHtmlElement)">
-            <summary>
-            获取在兄弟元素中，自己的顺序位置
-            </summary>
-            <param name="element">要获取序号的元素</param>
-            <returns>顺序位置</returns>
-        </member>
         <member name="T:Ivony.Html.IHtmlDomProvider">
             <summary>
             用于创建 HTML DOM 的提供程序
@@ -714,6 +456,15 @@
             <param name="comment">HTML 注释</param>
             <returns>添加好的注释节点</returns>
         </member>
+        <member name="M:Ivony.Html.IHtmlDomProvider.AddSpecial(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            向指定容器添加一个特殊标签
+            </summary>
+            <param name="container">要添加特殊标签的容器</param>
+            <param name="index">添加的位置</param>
+            <param name="html">特殊标签的HTML</param>
+            <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
+        </member>
         <member name="M:Ivony.Html.IHtmlProvider`5.CreateDocument">
             <summary>
             创建一个空白文档
@@ -747,6 +498,264 @@
             <param name="index">添加的位置</param>
             <param name="comment">HTML 注释</param>
             <returns>添加好的注释节点</returns>
+        </member>
+        <member name="T:Ivony.Html.NavigateExtensions">
+            <summary>
+            提供元素导航查询的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Parent(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取父元素
+            </summary>
+            <param name="node">要获取父元素的节点</param>
+            <returns>父元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Elements(Ivony.Html.IHtmlContainer)">
+            <summary>
+            获取容器所有子元素
+            </summary>
+            <param name="node">要获取子元素的容器</param>
+            <returns>容器的所有子元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Elements(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            获取容器符合条件的子元素
+            </summary>
+            <param name="node">要获取子元素的容器</param>
+            <param name="selector">用来筛选子元素的元素选择器</param>
+            <returns>符合条件的子元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Ancestors(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取节点的所有父代元素
+            </summary>
+            <param name="node">要获取父代元素集合的节点</param>
+            <returns>节点的所有父代元素集合</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Ancestors(Ivony.Html.IHtmlNode,System.String)">
+            <summary>
+            获取节点符合条件的父代元素
+            </summary>
+            <param name="node">要获取父代元素集合的节点</param>
+            <param name="selector">用来筛选父代元素的元素选择器</param>
+            <returns>节点的所有父代元素集合</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.AncestorsAndSelf(Ivony.Html.IHtmlElement)">
+            <summary>
+            获取元素所有的父代元素以及元素自身
+            </summary>
+            <param name="element">要获取父代元素及自身的元素</param>
+            <returns>元素的所有父代元素和自身的集合</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Descendants(Ivony.Html.IHtmlContainer)">
+            <summary>
+            获取所有的子代元素
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <returns>容器所有的子代元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Descendants(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            获取所有的子代元素
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <param name="selector">用于筛选子代元素的选择器</param>
+            <returns>符合选择器的容器的所有子代元素</returns>
+            <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.DescendantNodes(Ivony.Html.IHtmlContainer)">
+            <summary>
+            获取所有的子代节点
+            </summary>
+            <param name="container">要获取子代元素的容器对象</param>
+            <returns>容器所有的子代节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.SiblingNodes(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取所有的兄弟（同级）节点
+            </summary>
+            <param name="node">要获取兄弟节点的节点</param>
+            <returns>所有的兄弟节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Siblings(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取所有的兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取兄弟（同级）元素节点的节点</param>
+            <returns>所有的兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Siblings(Ivony.Html.IHtmlNode,System.String)">
+            <summary>
+            获取所有的兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取兄弟（同级）元素节点的节点</param>
+            <param name="selector">用于筛选元素的元素选择器</param>
+            <returns>所有的兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.SiblingNodesBeforeSelf(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取在自身之前的所有兄弟（同级）节点
+            </summary>
+            <param name="node">要获取之前的兄弟（同级）节点的节点</param>
+            <returns>在这之后的所有兄弟（同级）节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.SiblingNodesAfterSelf(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取在之后的所有兄弟（同级）节点
+            </summary>
+            <param name="node">要获取之后的兄弟（同级）节点的节点</param>
+            <returns>之后的所有兄弟（同级）节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.SiblingsBeforeSelf(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取在自身之前的所有兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取之前的兄弟（同级）元素节点的节点</param>
+            <returns>在这之后的所有兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.SiblingsAfterSelf(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取在之后的所有兄弟（同级）元素节点
+            </summary>
+            <param name="node">要获取之后的兄弟（同级）元素节点的节点</param>
+            <returns>之后的所有兄弟（同级）元素节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.PreviousElement(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之前的元素
+            </summary>
+            <param name="node">要获取紧邻之前的元素的节点</param>
+            <returns>紧邻当前节点的前一个元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.NextElement(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之后的元素
+            </summary>
+            <param name="node">要获取紧邻之后的元素的节点</param>
+            <returns>紧邻当前节点的后一个元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.PreviousNode(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之前的节点
+            </summary>
+            <param name="node">要获取紧邻之前的元素的节点</param>
+            <returns>紧邻当前节点的前一个节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.NextNode(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取紧邻之后的节点
+            </summary>
+            <param name="node">要获取紧邻之后的元素的节点</param>
+            <returns>紧邻当前节点的后一个节点</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Find(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的元素
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expression">CSS选择器</param>
+            <returns>搜索到的符合要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.FindSingle(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expression">CSS选择器</param>
+            <returns>搜索到的符合要求的唯一元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.Find(Ivony.Html.IHtmlContainer,System.String[])">
+            <summary>
+            从当前容器按照CSS3选择器搜索符合要求的元素
+            </summary>
+            <param name="container">要搜索子代元素的容器</param>
+            <param name="expressions">多个CSS选择器，结果会合并</param>
+            <returns>搜索到的符合要求的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.NodesIndexOfSelf(Ivony.Html.IHtmlNode)">
+            <summary>
+            获取在兄弟节点中，自己的顺序位置
+            </summary>
+            <param name="node">要获取序号的节点</param>
+            <returns>顺序位置</returns>
+        </member>
+        <member name="M:Ivony.Html.NavigateExtensions.IndexOfSelf(Ivony.Html.IHtmlElement)">
+            <summary>
+            获取在兄弟元素中，自己的顺序位置
+            </summary>
+            <param name="element">要获取序号的元素</param>
+            <returns>顺序位置</returns>
+        </member>
+        <member name="T:Ivony.Html.ContentExtensions">
+            <summary>
+            提供内容分析呈现的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.InnerHtml(Ivony.Html.IHtmlContainer)">
+            <summary>
+            尝试获取元素子节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+            </summary>
+            <param name="container">要生成InnerHTML的容器</param>
+            <returns>容器所有子节点的HTML表现形式</returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.InnerHtml(Ivony.Html.IHtmlContainer,System.Boolean)">
+            <summary>
+            尝试获取元素子节点的HTML表现形式
+            </summary>
+            <param name="container">要生成InnerHTML的容器</param>
+            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
+            <returns>容器所有子节点的HTML表现形式</returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.OuterHtml(Ivony.Html.IHtmlNode)">
+            <summary>
+            尝试获取整个节点的HTML表现形式，如果DOM不支持RawHtml，则此方法尝试生成HTML
+            </summary>
+            <param name="node">要获取HTML表现形式的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.OuterHtml(Ivony.Html.IHtmlNode,System.Boolean)">
+            <summary>
+            尝试获取整个节点的HTML表现形式
+            </summary>
+            <param name="node">要获取HTML表现形式的节点</param>
+            <param name="normalization">指定是否强制生成规范化的HTML，如果此参数为true，将忽略DOM节点的RawHtml属性</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.GenerateHtml(Ivony.Html.IHtmlNode)">
+            <summary>
+            尝试生成节点的HTML表现形式
+            </summary>
+            <param name="node">要生成HTML的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.GenerateElementHtml(Ivony.Html.IHtmlElement)">
+            <summary>
+            尝试生成元素的HTML表现形式
+            </summary>
+            <param name="element">要生成HTML的元素</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.GenerateTagHtml(Ivony.Html.IHtmlElement)">
+            <summary>
+            尝试生成元素开始标签的HTML形式
+            </summary>
+            <param name="element">要生成HTML的元素</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.InnerText(Ivony.Html.IHtmlNode)">
+            <summary>
+            尝试获取节点的文本表现形式，对于某些不支持文本表现形式的元素，将直接返回null
+            </summary>
+            <param name="node">要获取文本表现形式的节点</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.ContentExtensions.IsWhiteSpace(Ivony.Html.IHtmlTextNode)">
+            <summary>
+            判断一个文本节点是不是全部由空白字符组成
+            </summary>
+            <param name="textNode">要判断的文本节点</param>
+            <returns>是否全部是空白字符</returns>
         </member>
         <member name="T:Ivony.Html.IHtmlNodeFactory">
             <summary>
@@ -786,45 +795,17 @@
             所属的文档
             </summary>
         </member>
-        <member name="M:Ivony.Html.DocumentExtensions.GetElementById(Ivony.Html.IHtmlDocument,System.String)">
-            <summary>
-            在文档中通过ID来查找元素
-            </summary>
-            <param name="document">要查找元素的文档</param>
-            <param name="id">元素ID</param>
-            <returns>找到的元素，没有符合要求的则返回null</returns>
-            <exception cref="T:System.InvalidOperationException">找到多个ID相同的元素</exception>
-        </member>
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement)">
-            <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
-            </summary>
-            <param name="element">要标识的元素</param>
-            <returns>元素的唯一ID。</returns>
-        </member>
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean)">
-            <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
-            </summary>
-            <param name="element">要标识的元素</param>
-            <param name="create">指示当没有唯一ID时是否创建一个</param>
-            <returns>元素的唯一ID。</returns>
-        </member>
-        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean,System.Boolean)">
-            <summary>
-            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
-            </summary>
-            <param name="element">要标识的元素</param>
-            <param name="create">指示当没有唯一ID时是否创建一个</param>
-            <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
-            <returns>元素的唯一ID。</returns>
-        </member>
         <member name="M:Ivony.Html.IHtmlParser.Parse(System.String)">
             <summary>
             分析 HTML 创建一个文档
             </summary>
             <param name="html">HTML文本</param>
             <returns></returns>
+        </member>
+        <member name="T:Ivony.Html.Html5DraftSpecification">
+            <summary>
+            定义 HTML5 草案规范
+            </summary>
         </member>
         <member name="T:Ivony.Html.HtmlDocumentWrapper">
             <summary>
@@ -840,21 +821,6 @@
         <member name="P:Ivony.Html.IHtmlDocument.DocumentDeclaration">
             <summary>
             获取文档的声明信息，可以是xml声明，也可以是DTD。如果不被支持，则返回null。
-            </summary>
-        </member>
-        <member name="T:Ivony.Html.IHtmlAttribute">
-            <summary>
-            HTML 元素属性
-            </summary>
-            <remarks>
-            与XML和HTML标准DOM模型不同，在Jumony里面，Attribute不被认为是一个节点（不从IHtmlNode继承）。
-            这是因为IHtmlNode被定义为位置敏感的DOM对象，而Attribute是非位置敏感的（在元素中定义的顺序无关紧要）。
-            这与LINQ to XML的模型是一致的。
-            </remarks>
-        </member>
-        <member name="M:Ivony.Html.IHtmlAttribute.Remove">
-            <summary>
-            移除此属性
             </summary>
         </member>
         <member name="T:Ivony.Html.DomExtensions">
@@ -1053,27 +1019,146 @@
             <param name="element">要判断的元素</param>
             <returns></returns>
         </member>
+        <member name="T:Ivony.Html.DocumentExtensions">
+            <summary>
+            提供应用于 Document 特有的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.DocumentExtensions.GetElementById(Ivony.Html.IHtmlDocument,System.String)">
+            <summary>
+            在文档中通过ID来查找元素
+            </summary>
+            <param name="document">要查找元素的文档</param>
+            <param name="id">元素ID</param>
+            <returns>找到的元素，没有符合要求的则返回null</returns>
+            <exception cref="T:System.InvalidOperationException">找到多个ID相同的元素</exception>
+        </member>
+        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement)">
+            <summary>
+            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+            </summary>
+            <param name="element">要标识的元素</param>
+            <returns>元素的唯一ID。</returns>
+        </member>
+        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean)">
+            <summary>
+            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+            </summary>
+            <param name="element">要标识的元素</param>
+            <param name="create">指示当没有唯一ID时是否创建一个</param>
+            <returns>元素的唯一ID。</returns>
+        </member>
+        <member name="M:Ivony.Html.DocumentExtensions.Identity(Ivony.Html.IHtmlElement,System.Boolean,System.Boolean)">
+            <summary>
+            返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+            </summary>
+            <param name="element">要标识的元素</param>
+            <param name="create">指示当没有唯一ID时是否创建一个</param>
+            <param name="ancestorsCreate">在创建ID的过程中，是否为没有唯一ID的父级也创建ID</param>
+            <returns>元素的唯一ID。</returns>
+        </member>
+        <member name="T:Ivony.Html.IHtmlAttribute">
+            <summary>
+            HTML 元素属性
+            </summary>
+            <remarks>
+            与XML和HTML标准DOM模型不同，在Jumony里面，Attribute不被认为是一个节点（不从IHtmlNode继承）。
+            这是因为IHtmlNode被定义为位置敏感的DOM对象，而Attribute是非位置敏感的（在元素中定义的顺序无关紧要）。
+            这与LINQ to XML的模型是一致的。
+            </remarks>
+        </member>
+        <member name="M:Ivony.Html.IHtmlAttribute.Remove">
+            <summary>
+            移除此属性
+            </summary>
+        </member>
         <member name="T:Ivony.Html.HtmlFragment">
             <summary>
             HTML 文档碎片，游离节点的容器
             </summary>
         </member>
-        <member name="M:Ivony.Html.HtmlFragment.AddNodesCopy(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlNode},Ivony.Html.IHtmlNodeFactory)">
+        <member name="M:Ivony.Html.HtmlFragment.AddNode(Ivony.Html.IFreeNode)">
             <summary>
-            向文档碎片中添加节点副本
+            向文档碎片中添加游离节点
             </summary>
-            <param name="nodes">要添加的节点</param>
-            <param name="factory">用于创建游离节点副本的节点工厂</param>
+            <param name="node">要添加的游离节点</param>
+            <returns>文档碎片自身</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.AddNode(System.Int32,Ivony.Html.IFreeNode)">
+            <summary>
+            向文档碎片中添加游离节点
+            </summary>
+            <param name="index">要添加的位置</param>
+            <param name="node">要添加的游离节点</param>
+            <returns>文档碎片自身</returns>
         </member>
         <member name="M:Ivony.Html.HtmlFragment.AddNodes(System.Collections.Generic.IEnumerable{Ivony.Html.IFreeNode})">
             <summary>
             向文档碎片中添加游离节点
             </summary>
             <param name="nodes">要添加的游离节点</param>
+            <returns>文档碎片自身</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.AddCopy(Ivony.Html.IHtmlNode)">
+            <summary>
+            向文档碎片中添加节点本地副本
+            </summary>
+            <param name="nodes">要添加副本的节点</param>
+            <returns>文档碎片自身</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.AddCopy(System.Int32,Ivony.Html.IHtmlNode)">
+            <summary>
+            向文档碎片中添加节点本地副本
+            </summary>
+            <param name="index">要添加的位置</param>
+            <param name="nodes">要添加副本的节点</param>
+            <returns>文档碎片自身</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.AddCopies(System.Collections.Generic.IEnumerable{Ivony.Html.IHtmlNode})">
+            <summary>
+            向文档碎片中添加节点本地副本
+            </summary>
+            <param name="nodes">要添加的节点</param>
+            <returns>文档碎片自身</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.MakeCopy(Ivony.Html.IHtmlNode)">
+            <summary>
+            创建指定节点的本地副本
+            </summary>
+            <param name="node">要创建副本的节点</param>
+            <returns>创建的本地副本</returns>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.CanAdded(Ivony.Html.IFreeNode)">
+            <summary>
+            检查节点是否可以被加入文档碎片。
+            </summary>
+            <param name="node">要检查的节点</param>
+        </member>
+        <member name="M:Ivony.Html.HtmlFragment.InsertTo(Ivony.Html.IHtmlContainer,System.Int32)">
+            <summary>
+            将文档碎片插入到容器的指定位置
+            </summary>
+            <param name="container">容器</param>
+            <param name="index">位置</param>
+        </member>
+        <member name="P:Ivony.Html.HtmlFragment.SyncRoot">
+            <summary>
+            获取用于同步操作的对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.HtmlFragment.Nodes">
+            <summary>
+            获取所有游离节点
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.HtmlFragment.Factory">
+            <summary>
+            用于创建游离节点的创建器
+            </summary>
         </member>
         <member name="T:Ivony.Html.HtmlSpecification">
             <summary>
-            定义 HTML 规范
+            定义 HTML 规范（依据 HTML 4.01规范）
             </summary>
         </member>
         <member name="M:Ivony.Html.HtmlSpecification.ImmediatelyClose(System.String,System.String)">

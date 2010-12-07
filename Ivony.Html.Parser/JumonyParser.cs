@@ -13,7 +13,7 @@ namespace Ivony.Html.Parser
 
     private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
 
-    private static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled );
+    private static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
@@ -23,7 +23,7 @@ namespace Ivony.Html.Parser
     {
       foreach ( var tagName in HtmlSpecification.cdataTags )//为所有的CDATA标签准备匹配结束标记的正则表达式
       {
-        endTagRegexes.Add( tagName, new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled ) );
+        endTagRegexes.Add( tagName, new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
       }
     }
 

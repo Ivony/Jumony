@@ -12,7 +12,7 @@ namespace Ivony.Html.Parser
 
     private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
 
-    protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled );
+    protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
 
@@ -69,7 +69,7 @@ namespace Ivony.Html.Parser
         Regex regex;
 
         if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
-          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled ) );
+          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
 
         return regex;
       }

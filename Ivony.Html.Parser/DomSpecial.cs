@@ -40,7 +40,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private static readonly Regex specialTagRegex = new Regex( Regulars.specialTagPattern, RegexOptions.Compiled );
+    private static readonly Regex specialTagRegex = new Regex( Regulars.specialTagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     #region IHtmlTextNode 成员
 

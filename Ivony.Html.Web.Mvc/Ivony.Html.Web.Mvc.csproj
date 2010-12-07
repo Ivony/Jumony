@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IViewProvider.cs" />
+    <Compile Include="JumonyAttribute.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewContext.cs" />
     <Compile Include="JumonyViewEngine.cs" />

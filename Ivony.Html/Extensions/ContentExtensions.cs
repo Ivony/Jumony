@@ -178,7 +178,7 @@ namespace Ivony.Html
 
     private static readonly string[] noTextElements = new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" };
 
-    private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
+    private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     /// <summary>
     /// 尝试获取节点的文本表现形式，对于某些不支持文本表现形式的元素，将直接返回null

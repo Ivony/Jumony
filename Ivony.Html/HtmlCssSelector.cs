@@ -15,9 +15,9 @@ namespace Ivony.Html
   {
 
 
-    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled );
+    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
-    public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled );
+    public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     private readonly string[] _expressions;
 
@@ -357,7 +357,7 @@ namespace Ivony.Html
     }
 
 
-    public static readonly Regex elementSelectorRegex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled );
+    public static readonly Regex elementSelectorRegex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     internal class ElementSelector
     {
@@ -449,7 +449,7 @@ namespace Ivony.Html
 
 
 
-    public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled );
+    public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     private class AttributeSelector
     {
@@ -461,6 +461,9 @@ namespace Ivony.Html
       private readonly string exp;
 
 
+      private static readonly Regex whiteSpaceSeparatorRegex = new Regex( @"\p{Zs}", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
       private delegate bool ValueMatcher( string exp, string value );
 
       private static readonly Dictionary<string, ValueMatcher> matchers = new Dictionary<string, ValueMatcher>()
@@ -468,7 +471,7 @@ namespace Ivony.Html
         { "^=", ( exp, value ) => value != null && value.StartsWith( exp, StringComparison.Ordinal ) },
         { "$=", ( exp, value ) => value != null && value.EndsWith( exp, StringComparison.Ordinal ) },
         { "*=", ( exp, value ) => value != null && value.Contains( exp ) },
-        { "~=", ( exp, value ) => value != null && value.Split( ' ' ).Contains( exp ) },
+        { "~=", ( exp, value ) => value != null && whiteSpaceSeparatorRegex.Split( value ).Contains( exp,StringComparer.Ordinal ) },
         { "!=", ( exp, value ) => value != exp },
         { "=",  ( exp, value ) => value == exp }
       };
@@ -537,7 +540,7 @@ namespace Ivony.Html
 
     private class PseudoClassFactory
     {
-      private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled );
+      private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
       public static IPseudoClassSelector Create( string expression )
       {
@@ -586,7 +589,7 @@ namespace Ivony.Html
       {
 
         private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>((\+|\-)?#interger)|\-)n\p{Zs}*(?<augend>(\+|\-)\p{Zs}*#interger)?)".Replace( "#interger", Regulars.integerPattern );
-        private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled );
+        private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
         private string _name;
         private string _args;

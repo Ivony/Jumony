@@ -33,7 +33,7 @@ namespace Ivony.Html.Styles
   public class CssStyle
   {
 
-    private static readonly Regex styleSettingsRegex = new Regex( string.Format( @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled );
+    private static readonly Regex styleSettingsRegex = new Regex( string.Format( @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.OrdinalIgnoreCase ) );

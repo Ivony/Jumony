@@ -50,6 +50,18 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+    public ViewDataDictionary ViewData
+    {
+      get { return ViewContext.ViewData; }
+    }
+
+    public object Model
+    {
+      get { return ViewData.Model; }
+    }
+
+
+
 
     protected virtual void Render( TextWriter output )
     {
@@ -57,6 +69,7 @@ namespace Ivony.Html.Web.Mvc
       ProcessDocument();
 
       ProcessActionLinks();
+
 
 
 

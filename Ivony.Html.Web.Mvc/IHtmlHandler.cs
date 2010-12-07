@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Web.Mvc
 {
-  class JumonyViewContext
+  public interface IHtmlHandler
   {
+
+    void ProcessDocument( IHtmlDocument document );
+
   }
 }

@@ -27,7 +27,7 @@ namespace Ivony.Html.Web
     {
       var virtualPath = request.FilePath;
 
-      if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ), StringComparer.InvariantCultureIgnoreCase ) )
+      if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ), StringComparer.OrdinalIgnoreCase ) )
         return null;
 
       if ( !FileExists( virtualPath ) )

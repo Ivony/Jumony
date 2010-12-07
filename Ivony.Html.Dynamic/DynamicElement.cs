@@ -21,11 +21,6 @@ namespace Ivony.Html.Dynamic
     }
 
 
-    public override bool TryInvokeMember( InvokeMemberBinder binder, object[] args, out object result )
-    {
-      return base.TryInvokeMember( binder, args, out result );
-    }
-
     public override bool TryGetMember( GetMemberBinder binder, out object result )
     {
 
@@ -34,10 +29,18 @@ namespace Ivony.Html.Dynamic
       if ( binder.ReturnType.IsAssignableFrom( typeof( string ) ) )
       {
 
-        switch ( binder.Name.ToLowerInvariant() )
+        switch ( binder.Name )
         {
           case "tagName":
             result = Element.Name;
+            return true;
+
+          case "innerText":
+            result = Element.InnerText();
+            return true;
+
+          case "innerHTML":
+            result = Element.InnerHtml();
             return true;
         }
 
@@ -47,7 +50,35 @@ namespace Ivony.Html.Dynamic
       }
 
       return true;
+    }
 
+    public override bool TrySetMember( SetMemberBinder binder, object value )
+    {
+
+      string str = value as string;
+
+      if ( str != null )
+      {
+
+        switch ( binder.Name )
+        {
+          case "tagName":
+            throw new NotSupportedException( "元素名不能被修改" );
+
+          case "innerText":
+            Element.InnerText( str );
+            return true;
+
+          case "innerHTML":
+            Element.InnerHtml( str );
+            return true;
+        }
+
+        Element.SetAttribute( binder.Name, str );
+
+      }
+
+      return false;
     }
 
     private bool FindAttribute( string name, ref object result )

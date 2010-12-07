@@ -1,0 +1,11 @@
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Web.Html.Parser.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Web.Html.Parser.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Core.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Web.Html.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Core.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Core.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Web.Html.pdb
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\bin\Release\Ivony.Web.Html.xml
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\obj\Release\Ivony.Web.Html.Parser.dll
+C:\Users\Ivony\Documents\Visual Studio 2010\Projects\iTemplate\Ivony.Web.Html.Parser\obj\Release\Ivony.Web.Html.Parser.pdb

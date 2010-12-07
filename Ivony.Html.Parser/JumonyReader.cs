@@ -99,18 +99,18 @@ namespace Ivony.Html.Parser
             if ( Index != HtmlText.Length )
               yield return CreateText( HtmlText.Length );
 
-            
-            CDataElement = null;//自动退出 CData 元素读取模式
-
 
             yield break;
           }
-
 
           if ( endTagMatch.Index > Index )
             yield return CreateText( endTagMatch.Index );
 
           yield return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
+
+
+          CDataElement = null;//自动退出 CData 元素读取模式
+
         }
 
 

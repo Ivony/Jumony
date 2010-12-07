@@ -9,7 +9,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
-  public abstract class JumonyHandler : IHttpHandler, IRequiresSessionState
+  public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
     public bool IsReusable
@@ -64,14 +64,8 @@ namespace Ivony.Html.Web
       OnPostLoadDocument();
 
 
+      ((IHtmlHandler) this).ProcessDocument( document );//兼容IHtmlHandler。
 
-      OnPreProcessDocument();
-
-      Trace.Write( "Core", "Begin Process Document" );
-      ProcessDocument();
-      Trace.Write( "Core", "End Process Document" );
-
-      OnPostProcessDocument();
 
       AddGeneratorMetaData();
 
@@ -84,6 +78,19 @@ namespace Ivony.Html.Web
       OnPostReander();
     }
 
+
+    void IHtmlHandler.ProcessDocument( IHtmlDocument document )
+    {
+      Document = document;
+
+      OnPreProcessDocument();
+
+      Trace.Write( "Core", "Begin Process Document" );
+      ProcessDocument();
+      Trace.Write( "Core", "End Process Document" );
+
+      OnPostProcessDocument();
+    }
 
 
 

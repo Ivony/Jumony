@@ -66,6 +66,7 @@
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />
+    <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlLoader.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="JumonyHandler.cs" />

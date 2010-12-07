@@ -220,9 +220,9 @@ namespace Ivony.Html
     public static string Render( this IHtmlDocument document )
     {
       var writer = new StringWriter();
-      
+
       Render( document, writer );
-      
+
       return writer.ToString();
     }
 
@@ -245,12 +245,20 @@ namespace Ivony.Html
       var renderable = node as IHtmlRenderableNode;
 
       if ( renderable != null )
+      {
         renderable.Render( writer );
+        return;
+      }
 
       var element = node as IHtmlElement;
       if ( element != null )
+      {
         Render( element, writer );
+        return;
+      }
 
+      
+      
       writer.Write( node.OuterHtml() );
     }
 

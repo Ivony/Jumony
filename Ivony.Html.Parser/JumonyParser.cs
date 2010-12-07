@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
@@ -15,7 +16,7 @@ namespace Ivony.Html.Parser
     private static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled );
 
 
-    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.InvariantCultureIgnoreCase );
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
 
 
     static JumonyParser()
@@ -59,7 +60,7 @@ namespace Ivony.Html.Parser
 
         var element = containerStack.Peek() as DomElement;
 
-        if ( element != null && HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )//如果在CData标签内。
+        if ( element != null && HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )//如果在CData标签内。
         {
 
           Regex endTagRegex = endTagRegexes[element.Name];
@@ -126,14 +127,14 @@ namespace Ivony.Html.Parser
       string tagName = match.Groups["tagName"].Value;
       bool selfClosed = match.Groups["selfClosed"].Success;
 
-      if ( HtmlSpecification.selfCloseTags.Contains( tagName, StringComparer.InvariantCultureIgnoreCase ) )
+      if ( HtmlSpecification.selfCloseTags.Contains( tagName, StringComparer.OrdinalIgnoreCase ) )
         selfClosed = true;
 
 
       //检查父标签是否可选结束标记，并相应处理
       {
         var element = containerStack.Peek() as DomElement;
-        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
           if ( HtmlSpecification.ImmediatelyClose( element.Name, tagName ) )
             containerStack.Pop();
@@ -143,7 +144,7 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
+      var attributes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
       foreach ( Capture capture in match.Groups["attribute"].Captures )
       {
@@ -177,12 +178,12 @@ namespace Ivony.Html.Parser
 
 
 
-      if ( containerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.InvariantCultureIgnoreCase ) )
+      if ( containerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.OrdinalIgnoreCase ) )
       {
         while ( true )
         {
           var element = containerStack.Pop() as DomElement;
-          if ( element.Name.Equals( tagName, StringComparison.InvariantCultureIgnoreCase ) )
+          if ( element.Name.EqualsIgnoreCase( tagName ) )
             break;
         }
       }

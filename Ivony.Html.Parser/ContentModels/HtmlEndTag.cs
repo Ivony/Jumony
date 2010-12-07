@@ -10,6 +10,9 @@ namespace Ivony.Html.Parser.ContentModels
     public HtmlEndTag( HtmlContentFragment info, string tagName )
       : base( info )
     {
+      if ( tagName == null )
+        throw new ArgumentNullException( "tagName" );
+
       TagName = tagName;
     }
 

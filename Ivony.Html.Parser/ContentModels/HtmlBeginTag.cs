@@ -11,6 +11,12 @@ namespace Ivony.Html.Parser.ContentModels
     public HtmlBeginTag( HtmlContentFragment fragment, string tagName, bool selfClosed, IEnumerable<HtmlAttributeSetting> attibutes )
       : base( fragment )
     {
+      if ( tagName == null )
+        throw new ArgumentNullException( "tagName" );
+
+      if ( attibutes == null )
+        throw new ArgumentNullException( "attibutes" );
+
       TagName = tagName;
       Attributes = attibutes;
       SelfClosed = selfClosed;

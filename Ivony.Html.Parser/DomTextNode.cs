@@ -31,7 +31,7 @@ namespace Ivony.Html.Parser
         var element =  this.Parent();
         if ( element != null )
         {
-          if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+          if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
             return raw;
 
           else

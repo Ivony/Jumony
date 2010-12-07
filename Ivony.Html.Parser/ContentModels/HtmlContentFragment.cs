@@ -20,17 +20,25 @@ namespace Ivony.Html.Parser.ContentModels
       if ( length <= 0 )
         throw new ArgumentOutOfRangeException( "length" );
 
+      if ( startIndex >= reader.HtmlText.Length )
+        throw new ArgumentOutOfRangeException( "startIndex" );
+
+      if ( startIndex + length > reader.HtmlText.Length )
+        throw new ArgumentOutOfRangeException( "length" );
+
+
 
       Reader = reader;
       StartIndex = startIndex;
       Length = length;
-
-
     }
 
 
     internal HtmlContentFragment( HtmlContentFragment info )
     {
+      if ( info == null )
+        throw new ArgumentNullException( "info" );
+
       Reader = info.Reader;
       StartIndex = info.StartIndex;
       Length = info.Length;

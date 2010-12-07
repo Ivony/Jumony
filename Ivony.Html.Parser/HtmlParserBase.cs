@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Ivony.Html.Parser.ContentModels;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
@@ -11,7 +12,7 @@ namespace Ivony.Html.Parser
   {
 
 
-    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.InvariantCultureIgnoreCase );
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
 
 
     static HtmlParserBase()
@@ -198,7 +199,7 @@ namespace Ivony.Html.Parser
       //检查父标签是否可选结束标记，并作相应处理
       {
         var element = CurrentContainer as IHtmlElement;
-        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.InvariantCultureIgnoreCase ) )
+        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
           if ( ImmediatelyClose( tagName, element ) )
             ContainerStack.Pop();
@@ -209,7 +210,7 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
+      var attributes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
       foreach ( var a in beginTag.Attributes )
       {
@@ -246,7 +247,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为自结束标签</returns>
     protected virtual bool IsSelfCloseElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.selfCloseTags.Contains( tag.TagName, StringComparer.InvariantCultureIgnoreCase );
+      return HtmlSpecification.selfCloseTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
     }
 
     /// <summary>
@@ -256,7 +257,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为CDATA标签</returns>
     protected virtual bool IsCDataElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.cdataTags.Contains( tag.TagName, StringComparer.InvariantCultureIgnoreCase );
+      return HtmlSpecification.cdataTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
     }
 
 
@@ -296,12 +297,12 @@ namespace Ivony.Html.Parser
       var tagName = endTag.TagName;
 
 
-      if ( ContainerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.InvariantCultureIgnoreCase ) )
+      if ( ContainerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.OrdinalIgnoreCase ) )
       {
         while ( true )
         {
           var element = ContainerStack.Pop() as DomElement;
-          if ( element.Name.Equals( tagName, StringComparison.InvariantCultureIgnoreCase ) )
+          if ( element.Name.EqualsIgnoreCase( tagName ) )
             break;
         }
       }

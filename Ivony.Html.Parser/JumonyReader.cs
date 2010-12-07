@@ -55,7 +55,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.InvariantCultureIgnoreCase );
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
 
     private object _sync = new object();
 

@@ -228,11 +228,12 @@ namespace Ivony.Html
 
     public static string Render( this IHtmlDocument document )
     {
-      var writer = new StringWriter();
+      using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
+      {
+        Render( document, writer );
 
-      Render( document, writer );
-
-      return writer.ToString();
+        return writer.ToString();
+      }
     }
 
     public static void Render( this IHtmlDocument document, TextWriter writer )
@@ -266,8 +267,8 @@ namespace Ivony.Html
         return;
       }
 
-      
-      
+
+
       writer.Write( node.OuterHtml() );
     }
 

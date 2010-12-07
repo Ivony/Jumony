@@ -37,6 +37,12 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
     public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlContainer
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
 
       var fragment = container as HtmlFragment;
 
@@ -68,6 +74,12 @@ namespace Ivony.Html
     /// <returns>插入后的元素</returns>
     public static IHtmlElement InsertTo( this IFreeElement element, IHtmlContainer container, int index )
     {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
 
       lock ( container.SyncRoot )
       {
@@ -86,12 +98,26 @@ namespace Ivony.Html
     /// <returns>添加后的元素</returns>
     public static IHtmlElement AppendTo( this IFreeElement element, IHtmlContainer container )
     {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
       return element.InsertTo( container, container.Nodes().Count() );
     }
 
 
     public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
     {
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
       lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( textNode.Document ) )
@@ -103,12 +129,26 @@ namespace Ivony.Html
 
     public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlContainer container )
     {
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
       return textNode.InsertTo( container, container.Nodes().Count() );
     }
 
 
     public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
     {
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
       lock ( container.SyncRoot )
       {
         if ( !container.Document.Equals( comment.Document ) )
@@ -120,6 +160,13 @@ namespace Ivony.Html
 
     public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )
     {
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
       return comment.InsertTo( container, container.Nodes().Count() );
     }
 
@@ -134,6 +181,13 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">被替换的节点与用于替换的节点不属于同一个文档</exception>
     public static IHtmlNode Replace( this IHtmlNode oldNode, IFreeNode newNode )
     {
+      if ( oldNode == null )
+        throw new ArgumentNullException( "oldNode" );
+
+      if ( newNode == null )
+        throw new ArgumentNullException( "newNode" );
+
+      
       var container = oldNode.Container;
 
       if ( container == null )
@@ -162,6 +216,13 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">容器所在的文档不支持创建节点，或不支持创建此类节点的副本（譬如说IHtmlDocument）</exception>
     public static TContainer AppendCopy<TContainer>( this TContainer container, IHtmlNode node ) where TContainer : IHtmlContainer
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
       lock ( container.SyncRoot )
       {
         return InsertCopy( container, container.Nodes().Count(), node );

@@ -15,7 +15,7 @@ namespace Ivony.Fluent
       return new DisposableWrapper<T>( obj, disposeMethod );
     }
 
-    private class DisposableWrapper<T> : IDisposable
+    public class DisposableWrapper<T> : IDisposable
     {
       private T _obj;
       private Action<T> _disposableMethod;
@@ -32,6 +32,12 @@ namespace Ivony.Fluent
       public void Dispose()
       {
         _disposableMethod( _obj );
+      }
+
+
+      public static implicit operator T( DisposableWrapper<T> wrapper )
+      {
+        return wrapper._obj;
       }
     }
 

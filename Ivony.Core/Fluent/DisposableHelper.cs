@@ -7,7 +7,7 @@ namespace Ivony.Fluent
 {
   public static class DisposableHelper
   {
-    public static IDisposable AsDisposable<T>( this T obj, Action<T> disposeMethod )
+    public static DisposableWrapper<T> AsDisposable<T>( this T obj, Action<T> disposeMethod )
     {
       if ( obj == null )
         return null;

@@ -67,6 +67,7 @@
     <Compile Include="Data\IPagingData.cs" />
     <Compile Include="Data\PagingExtension.cs" />
     <Compile Include="Fluent\ConvertExtensions.cs" />
+    <Compile Include="Fluent\DisposableHelper.cs" />
     <Compile Include="Fluent\EnumerableExtension.cs" />
     <Compile Include="Fluent\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

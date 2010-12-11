@@ -6,10 +6,10 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlParserProvider
+  public interface IHtmlDocumentProvider
   {
 
-    IHtmlParser GetParser( HttpContextBase context, string virtualPath, string htmlContent );
+    IHtmlParser ParseDocument( HttpContextBase context, string virtualPath, string htmlContent );
 
   }
 

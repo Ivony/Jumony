@@ -16,8 +16,8 @@ namespace Ivony.Html.Web
 
     static HtmlProviders()
     {
-      ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
-      Loaders = new SynchronizedCollection<IHtmlLoader>( _loadersSync );
+      ParserProviders = new SynchronizedCollection<IHtmlDocumentProvider>( _parserProvidersSync );
+      Loaders = new SynchronizedCollection<IHtmlContentProvider>( _loadersSync );
       Mappers = new SynchronizedCollection<IRequestMapper>( _mapperSync );
 
 
@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     private static readonly object _parserProvidersSync = new object();
 
-    public static ICollection<IHtmlParserProvider> ParserProviders
+    public static ICollection<IHtmlDocumentProvider> ParserProviders
     {
       get;
       private set;
@@ -39,7 +39,7 @@ namespace Ivony.Html.Web
 
     private static readonly object _loadersSync = new object();
 
-    public static ICollection<IHtmlLoader> Loaders
+    public static ICollection<IHtmlContentProvider> Loaders
     {
       get;
       private set;
@@ -98,7 +98,7 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ParserProviders )
         {
-          var parser = provider.GetParser( context, virtualPath, htmlContent );
+          var parser = provider.ParseDocument( context, virtualPath, htmlContent );
 
           if ( parser != null )
             return parser;
@@ -125,7 +125,7 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in Loaders )
         {
-          var content = provider.Load( context, virtualPath );
+          var content = provider.LoadContent( context, virtualPath );
 
           if ( content != null )
             return content;

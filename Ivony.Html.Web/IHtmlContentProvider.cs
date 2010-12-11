@@ -10,10 +10,10 @@ using System.Web.Caching;
 namespace Ivony.Html.Web
 {
 
-  public interface IHtmlLoader
+  public interface IHtmlContentProvider
   {
 
-    string Load( HttpContextBase context, string virtualPath );
+    string LoadContent( HttpContextBase context, string virtualPath );
 
   }
 
@@ -21,7 +21,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 静态文件内容加载器，用于从静态文件中加载HTML内容，会自动缓存
   /// </summary>
-  public class StaticFileLoader : IHtmlLoader
+  public class StaticFileLoader : IHtmlContentProvider
   {
 
     protected static Cache Cache
@@ -32,7 +32,7 @@ namespace Ivony.Html.Web
 
     private static readonly string[] allowsExtensions = new[] { ".html", ".htm" };
 
-    public string Load( HttpContextBase context, string virtualPath )
+    public string LoadContent( HttpContextBase context, string virtualPath )
     {
 
       if ( context == null )
@@ -104,12 +104,12 @@ namespace Ivony.Html.Web
   }
 
 
-  public class AspxFileLoader : IHtmlLoader
+  public class AspxFileLoader : IHtmlContentProvider
   {
 
     private static readonly string[] allowsExtensions = new[] { ".aspx" };
 
-    public string Load( HttpContextBase context, string virtualPath )
+    public string LoadContent( HttpContextBase context, string virtualPath )
     {
 
       if ( context == null )

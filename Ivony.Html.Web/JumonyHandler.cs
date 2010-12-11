@@ -64,7 +64,7 @@ namespace Ivony.Html.Web
       OnPostLoadDocument();
 
 
-      ((IHtmlHandler) this).ProcessDocument( document );//兼容IHtmlHandler。
+      ( (IHtmlHandler) this ).ProcessDocument( document );
 
 
       AddGeneratorMetaData();
@@ -78,7 +78,6 @@ namespace Ivony.Html.Web
       OnPostReander();
     }
 
-
     void IHtmlHandler.ProcessDocument( IHtmlDocument document )
     {
       Document = document;
@@ -91,6 +90,8 @@ namespace Ivony.Html.Web
 
       OnPostProcessDocument();
     }
+
+
 
 
 
@@ -280,6 +281,7 @@ namespace Ivony.Html.Web
     }
 
     #endregion
+
 
   }
 }

@@ -57,6 +57,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -69,6 +70,7 @@
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlLoader.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
+    <Compile Include="IHtmlHandlerFactory.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="MapInfo.cs" />
     <Compile Include="JumonyModule.cs" />

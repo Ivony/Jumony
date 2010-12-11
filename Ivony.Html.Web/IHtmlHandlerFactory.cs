@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlHandler
+  public interface IHtmlHandlerFactory
   {
 
-    void ProcessDocument( IHtmlDocument document );
+    IHtmlHandler CreateHandler( RequestContext context );
+
 
   }
 }

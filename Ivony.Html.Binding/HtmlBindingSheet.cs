@@ -87,7 +87,7 @@ namespace Ivony.Html.Binding
 
   public class HtmlBindingRule
   {
-    private Dictionary<string, string> settings = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+    private Dictionary<string, string> settings = new Dictionary<string, string>( StringComparer.InvariantCultureIgnoreCase );
 
 
     private static readonly Regex styleRulesRegex = new Regex( @"^\s*" + Regulars.styleRulePattern + @"\s*$", RegexOptions.Compiled );

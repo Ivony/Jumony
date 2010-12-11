@@ -16,7 +16,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     private Type _handlerType;
-    private IHtmlHandlerFactory _factory;
+    private IHtmlHandlerProvider _provider;
 
 
     public JumonyFilterAttribute( Type handlerType )
@@ -26,8 +26,8 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      if ( typeof( IHtmlHandlerFactory ).IsAssignableFrom( handlerType ) )
-        _factory = (IHtmlHandlerFactory) Activator.CreateInstance( handlerType );
+      if ( typeof( IHtmlHandlerProvider ).IsAssignableFrom( handlerType ) )
+        _provider = (IHtmlHandlerProvider) Activator.CreateInstance( handlerType );
 
       else if ( typeof( IHtmlHandler ).IsAssignableFrom( handlerType ) )
         _handlerType = handlerType;
@@ -47,7 +47,7 @@ namespace Ivony.Html.Web.Mvc
         var handler = CreateHandler( filterContext.RequestContext );
 
         if ( handler != null )
-          filterContext.Result = new JumonyViewResult( viewResult, handler );
+          filterContext.Result = new ViewResultWrapper( viewResult, handler );
       }
     }
 
@@ -56,7 +56,7 @@ namespace Ivony.Html.Web.Mvc
       if ( _handlerType != null )
         return (IHtmlHandler) Activator.CreateInstance( _handlerType );
       else
-        return _factory.CreateHandler( context );
+        return _provider.TryGetHandler( context );
     }
 
     void IActionFilter.OnActionExecuting( ActionExecutingContext filterContext )

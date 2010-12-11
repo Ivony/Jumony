@@ -69,9 +69,12 @@
     <Compile Include="JumonyFilterAttribute.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewEngine.cs" />
-    <Compile Include="JumonyViewResult.cs" />
+    <Compile Include="ViewResultWrapper.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewExtensions.cs" />
+    <Compile Include="ViewWrapper.cs" />
+    <Compile Include="WebFormViewEngineWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">

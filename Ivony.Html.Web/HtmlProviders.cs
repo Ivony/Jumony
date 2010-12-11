@@ -17,14 +17,14 @@ namespace Ivony.Html.Web
     static HtmlProviders()
     {
       ParserProviders = new SynchronizedCollection<IHtmlDocumentProvider>( _parserProvidersSync );
-      Loaders = new SynchronizedCollection<IHtmlContentProvider>( _loadersSync );
-      Mappers = new SynchronizedCollection<IRequestMapper>( _mapperSync );
+      ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
+      RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
 
 
-      Loaders.Add( new StaticFileLoader() );
-      Loaders.Add( new AspxFileLoader() );
+      ContentProviders.Add( new StaticFileLoader() );
+      ContentProviders.Add( new AspxFileLoader() );
 
-      Mappers.Add( new DefaultRequestMapper() );
+      RequestMappers.Add( new DefaultRequestMapper() );
     }
 
 
@@ -37,18 +37,18 @@ namespace Ivony.Html.Web
     }
 
 
-    private static readonly object _loadersSync = new object();
+    private static readonly object _contentProvidersSync = new object();
 
-    public static ICollection<IHtmlContentProvider> Loaders
+    public static ICollection<IHtmlContentProvider> ContentProviders
     {
       get;
       private set;
     }
 
 
-    private static readonly object _mapperSync = new object();
+    private static readonly object _mappersSync = new object();
 
-    public static ICollection<IRequestMapper> Mappers
+    public static ICollection<IRequestMapper> RequestMappers
     {
       get;
       private set;
@@ -63,9 +63,9 @@ namespace Ivony.Html.Web
     public static MapInfo MapRequest( HttpRequest request )
     {
 
-      lock ( _mapperSync )
+      lock ( _mappersSync )
       {
-        foreach ( var mapper in Mappers )
+        foreach ( var mapper in RequestMappers )
         {
           var result = mapper.MapRequest( request );
           if ( result != null )
@@ -95,9 +95,9 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "context" );
 
 
-      lock ( _loadersSync )
+      lock ( _contentProvidersSync )
       {
-        foreach ( var provider in Loaders )
+        foreach ( var provider in ContentProviders )
         {
           var content = provider.LoadContent( context, virtualPath );
 
@@ -136,9 +136,23 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
     /// <param name="virtualPath">请求的虚拟路径</param>
-    /// <param name="htmlContent">文档内容</param>
+    /// <param name="result">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult result )
+    {
+      var document = ParseDocument( context, virtualPath, result.Content );
+      return document;
+    }
+
+
+    /// <summary>
+    /// 分析 HTML 文档
+    /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="htmlContent">文档内容</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
     {
       if ( context == null )
         throw new ArgumentNullException( "context" );
@@ -147,7 +161,7 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ParserProviders )
         {
-          var document = provider.ParseDocument( context, virtualPath, result.Content );
+          var document = provider.ParseDocument( context, virtualPath, htmlContent );
 
           if ( document != null )
             return document;
@@ -156,7 +170,7 @@ namespace Ivony.Html.Web
 
       var parser = new JumonyHtmlParser();
 
-      return parser.Parse( result.Content );
+      return parser.Parse( htmlContent );
     }
   }
 

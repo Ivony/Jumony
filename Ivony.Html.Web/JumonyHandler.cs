@@ -26,11 +26,6 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 派生类重写此方法处理文档
-    /// </summary>
-    protected abstract void ProcessDocument();
-
 
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
@@ -64,7 +59,15 @@ namespace Ivony.Html.Web
       OnPostLoadDocument();
 
 
-      ( (IHtmlHandler) this ).ProcessDocument( document );
+      Document = document;
+
+      OnPreProcessDocument();
+
+      Trace.Write( "Core", "Begin Process Document" );
+      Handler.ProcessDocument( document );
+      Trace.Write( "Core", "End Process Document" );
+
+      OnPostProcessDocument();
 
 
       AddGeneratorMetaData();
@@ -78,18 +81,22 @@ namespace Ivony.Html.Web
       OnPostReander();
     }
 
+
     void IHtmlHandler.ProcessDocument( IHtmlDocument document )
     {
+
       Document = document;
-
-      OnPreProcessDocument();
-
-      Trace.Write( "Core", "Begin Process Document" );
       ProcessDocument();
-      Trace.Write( "Core", "End Process Document" );
 
-      OnPostProcessDocument();
     }
+
+
+    /// <summary>
+    /// 派生类重写此方法处理文档
+    /// </summary>
+    protected abstract void ProcessDocument();
+
+
 
 
 
@@ -127,6 +134,16 @@ namespace Ivony.Html.Web
       get;
       private set;
     }
+
+
+    /// <summary>
+    /// 获取负责处理 HTML 的处理器
+    /// </summary>
+    internal IHtmlHandler Handler
+    {
+      get { return this; }
+    }
+
 
 
     /// <summary>

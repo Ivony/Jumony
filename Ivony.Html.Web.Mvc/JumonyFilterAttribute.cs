@@ -38,12 +38,17 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    public void OnActionExecuted( ActionExecutedContext filterContext )
+    void IActionFilter.OnActionExecuted( ActionExecutedContext filterContext )
     {
       var viewResult = filterContext.Result as ViewResultBase;
 
       if ( viewResult != null )
-        filterContext.Result = new ViewResultWrapper( viewResult, CreateHandler( filterContext.RequestContext ) );
+      {
+        var handler = CreateHandler( filterContext.RequestContext );
+
+        if ( handler != null )
+          filterContext.Result = new JumonyViewResult( viewResult, handler );
+      }
     }
 
     private IHtmlHandler CreateHandler( RequestContext context )
@@ -58,95 +63,5 @@ namespace Ivony.Html.Web.Mvc
     {
     }
 
-
-    private class ViewResultWrapper : ActionResult
-    {
-
-      private ViewResultBase _result;
-
-      private IHtmlHandler _handler;
-
-      public ViewResultWrapper( ViewResultBase result, IHtmlHandler handler )
-      {
-        _result = result;
-        _handler = handler;
-      }
-
-      public override void ExecuteResult( ControllerContext context )
-      {
-        var response = context.HttpContext.Response;
-        var responseWriter = response.Output;          //先保存下标准输出
-
-
-        string content;
-
-        using ( var writer = new StringWriter() )      //创建StringWriter截获标准输出
-        {
-          response.Output = writer;
-
-          _result.ExecuteResult( context );            //执行操作
-
-          content = writer.ToString();
-        }
-
-
-        var parser = HtmlProviders.GetParser( context.HttpContext, context.HttpContext.Request.AppRelativeCurrentExecutionFilePath, content );
-
-        var document = parser.Parse( content );
-
-        _handler.ProcessDocument( document );          //处理文档
-
-        response.Output = responseWriter;              //将标准输出复原
-
-        document.Render( responseWriter );             //输出处理后的结果
-      }
-    }
-
-
-    private class ViewWrapper : IView
-    {
-
-      private IView _view;
-      private IHtmlHandler _handler;
-
-
-      public IView View
-      {
-        get;
-        private set;
-      }
-
-      public ViewWrapper( IView view, IHtmlHandler handler )
-      {
-
-        if ( view == null )
-          throw new ArgumentNullException( "view" );
-
-        if ( handler == null )
-          throw new ArgumentNullException( "handler" );
-
-
-
-        _view = view;
-        _handler = handler;
-      }
-
-      public void Render( ViewContext viewContext, TextWriter writer )
-      {
-        var innerWriter = new StringWriter();
-
-        _view.Render( viewContext, innerWriter );
-
-        string content = innerWriter.ToString();
-
-        var parser =HtmlProviders.GetParser( viewContext.HttpContext, viewContext.HttpContext.Request.AppRelativeCurrentExecutionFilePath, content );
-
-        var document = parser.Parse( content );
-
-        _handler.ProcessDocument( document );
-
-        document.Render( writer );
-      }
-    }
   }
 }

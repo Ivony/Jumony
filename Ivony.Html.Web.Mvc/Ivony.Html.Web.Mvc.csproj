@@ -65,12 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IHtmlHandler.cs" />
-    <Compile Include="IHtmlHandlerFactory.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewEngine.cs" />
+    <Compile Include="JumonyViewResult.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

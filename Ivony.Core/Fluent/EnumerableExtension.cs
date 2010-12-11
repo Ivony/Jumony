@@ -10,6 +10,21 @@ namespace Ivony.Fluent
   public static class EnumerableExtension
   {
 
+
+
+
+    private static readonly Random random = new Random( DateTime.Now.Millisecond );
+
+    public static T RandomElement<T>( this IEnumerable<T> source )
+    {
+      return source.ElementAt( random.Next( source.Count() ) );
+    }
+
+
+
+
+
+
     public static IEnumerable<T> ForAll<T>( this IEnumerable<T> source, Action<T> action )
     {
       foreach ( T item in source )

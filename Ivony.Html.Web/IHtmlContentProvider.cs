@@ -19,24 +19,54 @@ namespace Ivony.Html.Web
 
   public class HtmlContentResult
   {
+
+    /// <summary>
+    /// HTML 文本内容
+    /// </summary>
     public string Content
     {
       get;
       set;
     }
 
+
+    /// <summary>
+    /// 获取或设置文档内容是否可以被缓存
+    /// </summary>
     public bool Cacheable
     {
       get;
       set;
     }
 
+
+    /// <summary>
+    /// 获取或设置缓存依赖项
+    /// </summary>
     public CacheDependency CacheDependency
     {
       get;
       set;
     }
 
+    /// <summary>
+    /// 获取产生此结果的 HtmlContentProvider
+    /// </summary>
+    public IHtmlContentProvider Provider
+    {
+      get;
+      internal set;
+    }
+
+
+    /// <summary>
+    /// 获取或设置缓存时使用的索引键
+    /// </summary>
+    public string CacheKey
+    {
+      get;
+      set;
+    }
   }
 
 
@@ -101,6 +131,7 @@ namespace Ivony.Html.Web
         Content = fileInfo.Content,
         Cacheable = true,
         CacheDependency = fileInfo.CacheDependency,
+        CacheKey = key,
       };
     }
 

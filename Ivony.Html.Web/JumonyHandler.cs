@@ -12,20 +12,14 @@ namespace Ivony.Html.Web
   public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
-    protected JumonyHandler()
-    {
-
-    }
-
-
-    public bool IsReusable
+    public virtual bool IsReusable
     {
       get { return false; }
     }
 
 
 
-    protected MapInfo MapperResult
+    protected RequestMapResult MapperResult
     {
       get;
       private set;
@@ -64,19 +58,8 @@ namespace Ivony.Html.Web
 
       OnPostLoadDocument();
 
-
-      Document = document;
-
-      OnPreProcessDocument();
-
-      Trace.Write( "Core", "Begin Process Document" );
       ((IHtmlHandler) this).ProcessDocument( document );
-      Trace.Write( "Core", "End Process Document" );
 
-      OnPostProcessDocument();
-
-
-      AddGeneratorMetaData();
 
       OnPreRender();
 
@@ -92,7 +75,16 @@ namespace Ivony.Html.Web
     {
 
       Document = document;
+
+      OnPreProcessDocument();
+
+      Trace.Write( "Core", "Begin Process Document" );
       ProcessDocument();
+      Trace.Write( "Core", "End Process Document" );
+
+      OnPostProcessDocument();
+
+      AddGeneratorMetaData();//为处理后的文档加上Jumony生成器的meta信息。
 
     }
 

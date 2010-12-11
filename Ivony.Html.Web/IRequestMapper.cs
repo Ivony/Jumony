@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   public interface IRequestMapper
   {
 
-    MapInfo MapRequest( HttpRequest request );
+    RequestMapResult MapRequest( HttpRequest request );
 
   }
 

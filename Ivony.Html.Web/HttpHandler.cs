@@ -18,6 +18,8 @@ namespace Ivony.Html.Web
     {
       if ( handler == null )
         throw new ArgumentNullException( "handler" );
+
+      _handler = handler;
     }
 
     protected override void ProcessDocument()
@@ -27,7 +29,6 @@ namespace Ivony.Html.Web
 
     public override void Dispose()
     {
-
       _handler.Dispose();
 
     }

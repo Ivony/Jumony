@@ -9,11 +9,13 @@ using System.Web;
 namespace Ivony.Html.Web
 {
 
-
-  public class MapInfo
+  /// <summary>
+  /// IRequestMapper 产生的映射结果
+  /// </summary>
+  public class RequestMapResult
   {
 
-    public MapInfo( string templatePath, IHtmlHandler handler )
+    public RequestMapResult( string templatePath, IHtmlHandler handler )
     {
       TemplatePath = templatePath;
       Handler = handler;

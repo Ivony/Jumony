@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
 
     private static readonly string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
 
-    public MapInfo MapRequest( HttpRequest request )
+    public RequestMapResult MapRequest( HttpRequest request )
     {
       var virtualPath = request.FilePath;
 
@@ -31,7 +31,7 @@ namespace Ivony.Html.Web
       if ( handler == null )
         return null;
 
-      return new MapInfo( virtualPath, handler );
+      return new RequestMapResult( virtualPath, handler );
     }
 
 

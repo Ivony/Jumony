@@ -6,6 +6,7 @@ using Ivony.Html.Parser;
 using System.Web.Hosting;
 using System.Web;
 using System.IO;
+using System.Web.Caching;
 
 namespace Ivony.Html.Web
 {
@@ -60,7 +61,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="request">当前 HTTP 请求信息</param>
     /// <returns>请求映射信息</returns>
-    public static MapInfo MapRequest( HttpRequest request )
+    public static RequestMapResult MapRequest( HttpRequest request )
     {
 
       lock ( _mappersSync )
@@ -87,7 +88,7 @@ namespace Ivony.Html.Web
     /// 加载 HTML 文档内容
     /// </summary>
     /// <param name="virtualPath">请求的虚拟路径</param>
-    /// <returns>HTML 文档内容</returns>
+    /// <returns>HTML 文档内容加载结果</returns>
     public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
@@ -99,10 +100,13 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ContentProviders )
         {
-          var content = provider.LoadContent( context, virtualPath );
+          var result = provider.LoadContent( context, virtualPath );
 
-          if ( content != null )
-            return content;
+          if ( result != null )
+          {
+            result.Provider = provider;
+            return result;
+          }
         }
       }
 
@@ -132,12 +136,12 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取用于分析 HTML 文档的 Parser
+    /// 获取用于分析 HTML 文档的分析器
     /// </summary>
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">HTML 文档内容</param>
-    /// <returns>分析后的 HTML 文档</returns>
-    public static IHtmlParser GetParser( HttpContextBase context, string virtualPath, string htmlContent )
+    /// <returns>HTML 分析器相关信息</returns>
+    public static HtmlParserResult GetParser( HttpContextBase context, string virtualPath, string htmlContent )
     {
 
       if ( context == null )
@@ -147,14 +151,21 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ParserProviders )
         {
-          var parser = provider.GetParser( context, virtualPath, htmlContent );
+          var result = provider.GetParser( context, virtualPath, htmlContent );
 
-          if ( parser != null )
-            return parser;
+          if ( result != null )
+          {
+            result.Provider = provider;
+            return result;
+          }
         }
       }
 
-      return new JumonyHtmlParser();
+      return new HtmlParserResult()
+      {
+        Parser = new JumonyHtmlParser(),
+        DomProvider = new DomProvider(),
+      };
     }
 
 
@@ -166,10 +177,38 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="result">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult result )
+    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult contentResult )
     {
-      var document = ParseDocument( context, virtualPath, result.Content );
-      return document;
+
+      var content = contentResult.Content;
+
+      var result = GetParser( context, virtualPath, content );
+
+
+      if ( contentResult.Cacheable && result.DomProvider != null )//如果可以缓存
+      {
+        var key = contentResult.CacheKey ?? virtualPath;
+        key = string.Format( "HtmlProviders_HtmlDocumentCache_{0}", key );
+
+        var createDocument = Cache.Get( key ) as Func<IHtmlDomProvider, IHtmlDocument>;
+
+        if ( createDocument != null )
+          return createDocument( result.DomProvider );
+
+
+
+        var document = ParseDocument( result, content );
+
+        createDocument = document.Compile();
+
+        Cache.Insert( key, createDocument, contentResult.CacheDependency );
+
+        return document;
+      }
+
+      else
+
+        return ParseDocument( result, content );
     }
 
 
@@ -182,10 +221,30 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
     {
-      var parser = GetParser( context, virtualPath, htmlContent );
+      var result = GetParser( context, virtualPath, htmlContent );
 
-      return parser.Parse( htmlContent );
+      return ParseDocument( result, htmlContent );
     }
+
+    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent )
+    {
+      var parser = result.Parser;
+
+      var document = parser.Parse( htmlContent );
+
+      if ( result.Provider != null )
+        result.Provider.ReleaseParser( parser );
+
+      return document;
+    }
+
+
+
+    private static Cache Cache
+    {
+      get { return HostingEnvironment.Cache; }
+    }
+
   }
 
 }

@@ -15,12 +15,12 @@ namespace Ivony.Html.Web
 
     private const string requestDataToken = "Jumony_HttpContext_RequestMapResult";
 
-    public static MapInfo GetMapperResult( this HttpContext context )
+    public static RequestMapResult GetMapperResult( this HttpContext context )
     {
-      return (MapInfo) context.Items[requestDataToken];
+      return (RequestMapResult) context.Items[requestDataToken];
     }
 
-    internal static void SetMapResult( this HttpContext context, MapInfo data )
+    internal static void SetMapResult( this HttpContext context, RequestMapResult data )
     {
       context.Items[requestDataToken] = data;
     }

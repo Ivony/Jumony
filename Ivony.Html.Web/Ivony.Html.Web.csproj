@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultParserResult.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HttpHandler.cs" />
@@ -74,7 +75,7 @@
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
-    <Compile Include="MapInfo.cs" />
+    <Compile Include="RequestMapResult.cs" />
     <Compile Include="JumonyModule.cs" />
     <Compile Include="IRequestMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

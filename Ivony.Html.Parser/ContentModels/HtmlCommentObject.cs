@@ -11,9 +11,6 @@ namespace Ivony.Html.Parser.ContentModels
     public HtmlCommentContent( HtmlContentFragment fragment, string comment )
       : base( fragment )
     {
-      if ( comment == null )
-        throw new ArgumentNullException( "comment" );
-
       Comment = comment;
     }
 

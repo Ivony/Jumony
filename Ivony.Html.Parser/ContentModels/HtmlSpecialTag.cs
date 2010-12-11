@@ -11,12 +11,6 @@ namespace Ivony.Html.Parser.ContentModels
     public HtmlSpecialTag( HtmlContentFragment fragment, string content, string speciaSymbol )
       : base( fragment )
     {
-      if ( content == null )
-        throw new ArgumentNullException( "content" );
-
-      if ( speciaSymbol == null )
-        throw new ArgumentNullException( "speciaSymbol" );
-
       Content = content;
       SpecialSymbol = speciaSymbol;
     }

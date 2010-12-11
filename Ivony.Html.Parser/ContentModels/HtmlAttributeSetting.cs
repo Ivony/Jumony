@@ -11,9 +11,6 @@ namespace Ivony.Html.Parser.ContentModels
     public HtmlAttributeSetting( HtmlContentFragment info, string name, string value )
       : base( info )
     {
-      if ( name == null )
-        throw new ArgumentNullException( "name" );
-
       Name = name;
       Value = value;
     }

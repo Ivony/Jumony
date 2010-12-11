@@ -128,9 +128,6 @@ namespace Ivony.Html.Binding
       return HtmlBindingSheet.Load( physicalPath );
     }
 
-
-
-
     #endregion
   }
 }

@@ -3,25 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
 
   public static class HttpHelper
   {
-
-
-    private const string originUrlToken = "Jumony_HttpContext_OriginUrl";
-
-    public static Uri GetOriginUri( this HttpContext context )
-    {
-      return (Uri) context.Items[originUrlToken];
-    }
-
-    internal static void SetOriginUrl( this HttpContext context )
-    {
-      context.Items[originUrlToken] = context.Request.Url;
-    }
 
 
 
@@ -36,6 +24,26 @@ namespace Ivony.Html.Web
     {
       context.Items[requestDataToken] = data;
     }
+
+
+
+
+    public static IHtmlHandler TryGetHandler( this IHtmlHandlerProvider provider, RequestContext context )
+    {
+      return TryGetHandler( provider, context, context.HttpContext.Request.RawUrl );
+    }
+
+    public static IHtmlHandler TryGetHandler( this IHtmlHandlerProvider provider, RequestContext context, string virtualPath )
+    {
+      var handler = provider.GetHandler( context, virtualPath );
+
+      if ( handler == null )
+        handler = provider.GetHandler( context.HttpContext, virtualPath );
+
+      return handler;
+
+    }
+
 
 
   }

@@ -16,7 +16,7 @@ namespace Ivony.Html.Web
 
     static HtmlProviders()
     {
-      ParserProviders = new SynchronizedCollection<IHtmlDocumentProvider>( _parserProvidersSync );
+      ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
       ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
       RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
 
@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     private static readonly object _parserProvidersSync = new object();
 
-    public static ICollection<IHtmlDocumentProvider> ParserProviders
+    public static ICollection<IHtmlParserProvider> ParserProviders
     {
       get;
       private set;
@@ -132,7 +132,35 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 分析 HTML 文档
+    /// 获取用于分析 HTML 文档的 Parser
+    /// </summary>
+    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="htmlContent">HTML 文档内容</param>
+    /// <returns>分析后的 HTML 文档</returns>
+    public static IHtmlParser GetParser( HttpContextBase context, string virtualPath, string htmlContent )
+    {
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      lock ( _parserProvidersSync )
+      {
+        foreach ( var provider in ParserProviders )
+        {
+          var parser = provider.GetParser( context, virtualPath, htmlContent );
+
+          if ( parser != null )
+            return parser;
+        }
+      }
+
+      return new JumonyHtmlParser();
+    }
+
+
+
+    /// <summary>
+    /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
     /// <param name="virtualPath">请求的虚拟路径</param>
@@ -146,7 +174,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 分析 HTML 文档
+    /// 分析 HTML 文档，此方法永不缓存
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
     /// <param name="virtualPath">请求的虚拟路径</param>
@@ -154,21 +182,7 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
     {
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
-
-      lock ( _parserProvidersSync )
-      {
-        foreach ( var provider in ParserProviders )
-        {
-          var document = provider.ParseDocument( context, virtualPath, htmlContent );
-
-          if ( document != null )
-            return document;
-        }
-      }
-
-      var parser = new JumonyHtmlParser();
+      var parser = GetParser( context, virtualPath, htmlContent );
 
       return parser.Parse( htmlContent );
     }

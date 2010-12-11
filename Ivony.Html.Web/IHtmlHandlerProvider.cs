@@ -26,11 +26,5 @@ namespace Ivony.Html.Web
     /// <returns>HTML 处理程序</returns>
     IHtmlHandler GetHandler( RequestContext context, string virtualPath );
 
-
-    /// <summary>
-    /// 释放 HTML 处理程序
-    /// </summary>
-    /// <param name="handler">HTML 处理程序</param>
-    void ReleaseHandler( IHtmlHandler handler );
   }
 }

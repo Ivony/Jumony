@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlHandler
+  public interface IHtmlHandler : IDisposable
   {
 
     void ProcessDocument( IHtmlDocument document );

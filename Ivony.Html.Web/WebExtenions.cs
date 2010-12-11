@@ -6,11 +6,7 @@ using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlHandlerFactory
+  public static class WebExtenions
   {
-
-    IHtmlHandler CreateHandler( RequestContext context );
-
-
   }
 }

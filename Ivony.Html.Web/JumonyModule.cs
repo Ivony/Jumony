@@ -33,11 +33,17 @@ namespace Ivony.Html.Web
         return;
 
 
-//      result.OriginUrl = request.Url;
+      var handler = result.Handler;
+
+      var httpHandler = handler as JumonyHandler;
+
+      if ( httpHandler == null )
+        httpHandler = new HttpHandler( handler );
+
 
       context.SetMapResult( result );
 
-      context.RemapHandler( result.Handler );
+      context.RemapHandler( httpHandler );
 
     }
 

@@ -12,6 +12,12 @@ namespace Ivony.Html.Web
   public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
+    protected JumonyHandler()
+    {
+
+    }
+
+
     public bool IsReusable
     {
       get { return false; }
@@ -64,7 +70,7 @@ namespace Ivony.Html.Web
       OnPreProcessDocument();
 
       Trace.Write( "Core", "Begin Process Document" );
-      Handler.ProcessDocument( document );
+      ((IHtmlHandler) this).ProcessDocument( document );
       Trace.Write( "Core", "End Process Document" );
 
       OnPostProcessDocument();
@@ -133,15 +139,6 @@ namespace Ivony.Html.Web
     {
       get;
       private set;
-    }
-
-
-    /// <summary>
-    /// 获取负责处理 HTML 的处理器
-    /// </summary>
-    internal IHtmlHandler Handler
-    {
-      get { return this; }
     }
 
 
@@ -292,13 +289,12 @@ namespace Ivony.Html.Web
 
     #region IDisposable 成员
 
-    public void Dispose()
+    public virtual void Dispose()
     {
 
     }
 
     #endregion
-
 
   }
 }

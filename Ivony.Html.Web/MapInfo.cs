@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   public class MapInfo
   {
 
-    public MapInfo( string templatePath, IHttpHandler handler )
+    public MapInfo( string templatePath, IHtmlHandler handler )
     {
       TemplatePath = templatePath;
       Handler = handler;
@@ -32,7 +32,7 @@ namespace Ivony.Html.Web
       private set;
     }
 
-    public IHttpHandler Handler
+    public IHtmlHandler Handler
     {
       get;
       private set;

@@ -13,7 +13,29 @@ namespace Ivony.Html.Web
   public interface IHtmlContentProvider
   {
 
-    string LoadContent( HttpContextBase context, string virtualPath );
+    HtmlContentResult LoadContent( HttpContextBase context, string virtualPath );
+
+  }
+
+  public class HtmlContentResult
+  {
+    public string Content
+    {
+      get;
+      set;
+    }
+
+    public bool Cacheable
+    {
+      get;
+      set;
+    }
+
+    public CacheDependency CacheDependency
+    {
+      get;
+      set;
+    }
 
   }
 
@@ -32,7 +54,7 @@ namespace Ivony.Html.Web
 
     private static readonly string[] allowsExtensions = new[] { ".html", ".htm" };
 
-    public string LoadContent( HttpContextBase context, string virtualPath )
+    public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
       if ( context == null )
@@ -46,7 +68,7 @@ namespace Ivony.Html.Web
     }
 
 
-    public static string LoadContent( VirtualPathProvider provider, string virtualPath )
+    public static HtmlContentResult LoadContent( VirtualPathProvider provider, string virtualPath )
     {
 
       if ( provider.FileExists( virtualPath ) )
@@ -68,14 +90,18 @@ namespace Ivony.Html.Web
       {
         fileInfo = new VirtualFileInfo() { VirtualPath = virtualPath, Content = LoadContent( file ) };
 
-        var dependency = provider.GetCacheDependency( virtualPath, null, DateTime.UtcNow );
+        fileInfo.CacheDependency = provider.GetCacheDependency( virtualPath, null, DateTime.UtcNow );
 
-        Cache.Insert( key, fileInfo, dependency );
+        Cache.Insert( key, fileInfo, fileInfo.CacheDependency );
       }
 
 
-
-      return fileInfo.Content;
+      return new HtmlContentResult()
+      {
+        Content = fileInfo.Content,
+        Cacheable = true,
+        CacheDependency = fileInfo.CacheDependency,
+      };
     }
 
     protected static string LoadContent( VirtualFile file )
@@ -99,6 +125,12 @@ namespace Ivony.Html.Web
         get;
         set;
       }
+
+      public CacheDependency CacheDependency
+      {
+        get;
+        set;
+      }
     }
 
   }
@@ -109,7 +141,7 @@ namespace Ivony.Html.Web
 
     private static readonly string[] allowsExtensions = new[] { ".aspx" };
 
-    public string LoadContent( HttpContextBase context, string virtualPath )
+    public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
       if ( context == null )
@@ -124,7 +156,10 @@ namespace Ivony.Html.Web
       {
         context.Server.Execute( virtualPath, writer, false );
 
-        return writer.ToString();
+        return new HtmlContentResult()
+        {
+          Content = writer.ToString()
+        };
       }
     }
   }

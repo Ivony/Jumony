@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
   public interface IHtmlDocumentProvider
   {
 
-    IHtmlParser ParseDocument( HttpContextBase context, string virtualPath, string htmlContent );
+    IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent );
 
   }
 

@@ -82,39 +82,13 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>
-    /// 获取用于分析 HTML 文档的 Parser
-    /// </summary>
-    /// <param name="virtualPath">请求的虚拟路径</param>
-    /// <param name="htmlContent">HTML 文档内容</param>
-    /// <returns>分析后的 HTML 文档</returns>
-    public static IHtmlParser GetParser( HttpContextBase context, string virtualPath, string htmlContent )
-    {
-
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
-
-      lock ( _parserProvidersSync )
-      {
-        foreach ( var provider in ParserProviders )
-        {
-          var parser = provider.ParseDocument( context, virtualPath, htmlContent );
-
-          if ( parser != null )
-            return parser;
-        }
-      }
-
-      return new JumonyHtmlParser();
-    }
-
 
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档内容</returns>
-    public static string LoadContent( HttpContextBase context, string virtualPath )
+    public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
       if ( context == null )
@@ -164,11 +138,25 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">文档内容</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
+    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult result )
     {
-      var parser = GetParser( context, virtualPath, htmlContent );
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
 
-      return parser.Parse( htmlContent );
+      lock ( _parserProvidersSync )
+      {
+        foreach ( var provider in ParserProviders )
+        {
+          var document = provider.ParseDocument( context, virtualPath, result.Content );
+
+          if ( document != null )
+            return document;
+        }
+      }
+
+      var parser = new JumonyHtmlParser();
+
+      return parser.Parse( result.Content );
     }
   }
 

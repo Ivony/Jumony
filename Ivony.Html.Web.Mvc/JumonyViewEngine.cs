@@ -76,9 +76,7 @@ namespace Ivony.Html.Web.Mvc
     {
       var content = StaticFileLoader.LoadContent( VirtualPathProvider, virtualPath );
 
-      var parser = HtmlProviders.GetParser( context, virtualPath, content );
-
-      return parser.Parse( content );
+      return HtmlProviders.ParseDocument( context, virtualPath, content );
     }
 
 

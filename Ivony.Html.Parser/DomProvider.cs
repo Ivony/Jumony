@@ -24,6 +24,18 @@ namespace Ivony.Html.Parser
     }
 
 
+    private static DomProvider _instance = new DomProvider();
+
+    public static DomProvider Instance
+    {
+      get
+      {
+        return _instance;
+      }
+    }
+
+
+
     private static T AddNode<T>( int index, IDomContainer domContainer, T element ) where T : DomNode
     {
       domContainer.NodeCollection.Insert( index, element );

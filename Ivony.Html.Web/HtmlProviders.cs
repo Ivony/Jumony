@@ -127,11 +127,11 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "context" );
 
 
-      var content = LoadContent( context, virtualPath );
-      if ( content == null )
+      var contentResult = LoadContent( context, virtualPath );
+      if ( contentResult == null )
         return null;
 
-      return ParseDocument( context, virtualPath, content );
+      return ParseDocument( context, virtualPath, contentResult );
     }
 
 
@@ -164,7 +164,7 @@ namespace Ivony.Html.Web
       return new HtmlParserResult()
       {
         Parser = new JumonyHtmlParser(),
-        DomProvider = new DomProvider(),
+        DomProvider = DomProvider.Instance
       };
     }
 

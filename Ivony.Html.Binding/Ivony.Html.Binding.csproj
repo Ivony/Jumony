@@ -72,7 +72,6 @@
     <Compile Include="IDataSource.cs" />
     <Compile Include="EnvironmentExpressions.cs" />
     <Compile Include="IHtmlBindingSheet.cs" />
-    <Compile Include="IElementBinder.cs" />
     <Compile Include="PagingDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

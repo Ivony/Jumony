@@ -137,7 +137,11 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 确保节点是已分配在一个固定的文档上
+    /// </summary>
+    /// <param name="node">要检查的节点</param>
+    /// <exception cref="System.InvalidOperationException">如果节点没有被分配在一个固定的文档。</exception>
     public static void EnsureAllocated( this IHtmlNode node )
     {
 
@@ -215,7 +219,7 @@ namespace Ivony.Html
         constructor.Parameters.Add( new CodeParameterDeclarationExpression( typeof( IHtmlDomProvider ), "provider" ) );
         constructor.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
-        var providerVariable =  new CodeVariableReferenceExpression( "provider" );
+        var providerVariable = new CodeVariableReferenceExpression( "provider" );
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
 
@@ -290,7 +294,11 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 将文档结构编译成一个方法，文档结构可以由此方法复原
+    /// </summary>
+    /// <param name="document">要编译的文档</param>
+    /// <returns>复原文档的方法</returns>
     public static Func<IHtmlDomProvider, IHtmlDocument> Compile( this IHtmlDocument document )
     {
       return DocumentCompiler.Compile( document );
@@ -362,7 +370,7 @@ namespace Ivony.Html
 
         //end create document
         //ret
-        
+
         il.DeclareLocal( typeof( IHtmlContainer ) );
 
         il.Emit( OpCodes.Ldarg_0 );
@@ -449,6 +457,44 @@ namespace Ivony.Html
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );
       private static readonly ConstructorInfo NewDictionary = typeof( Dictionary<string, string> ).GetConstructor( new Type[0] );
       private static readonly MethodInfo DictionaryAdd = typeof( IDictionary<string, string> ).GetMethod( "Add" );
+    }
+
+
+
+
+
+    public static void ResolveAbsoluteUrl( this IHtmlDocument document, string baseUrl )
+    {
+
+      Uri _base;
+      if ( !Uri.TryCreate( baseUrl, UriKind.Absolute, out _base ) )
+        throw new ArgumentException( "不正确的 URL 格式，baseUrl 参数必须指定一个绝对 URL 地址", "baseUrl" );
+
+      ResolveUrl( document, url => new Uri( _base, url ) );
+    }
+
+    private static readonly string[] _urlValueAttributes = new[] { "href", "src" };
+
+
+    public static void ResolveUrl( this IHtmlDocument document, Func<Uri, Uri> resolver )
+    {
+      foreach ( var element in document.Descendants() )
+      {
+
+        foreach ( var name in _urlValueAttributes )
+        {
+          var value = element.Attribute( name ).Value();
+
+          if ( value == null )
+            continue;
+
+          Uri url;
+          if ( Uri.TryCreate( value, UriKind.RelativeOrAbsolute, out url ) )
+            element.SetAttribute( name, resolver( url ).ToString() );
+        }
+
+      }
+
     }
   }
 }

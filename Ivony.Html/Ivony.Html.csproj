@@ -59,9 +59,6 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup>
-    <BaseIntermediateOutputPath>..\obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />

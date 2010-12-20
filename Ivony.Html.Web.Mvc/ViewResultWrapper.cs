@@ -44,7 +44,7 @@ namespace Ivony.Html.Web.Mvc
         }
 
 
-        var document = HtmlProviders.ParseDocument( context.HttpContext, null, content );
+        var document = HtmlProviders.ParseDocument( context.HttpContext, context.HttpContext.Request.AppRelativeCurrentExecutionFilePath, content );
 
         _handler.ProcessDocument( document );          //处理文档
 

@@ -87,7 +87,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
-    /// <param name="virtualPath">HTML 文件虚拟路径</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档内容加载结果</returns>
     public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
@@ -118,7 +118,7 @@ namespace Ivony.Html.Web
     /// 加载 HTML 文档
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">HTML 文档的虚拟路径</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
@@ -127,18 +127,18 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "context" );
 
 
-      var contentResult = LoadContent( context, virtualPath );
-      if ( contentResult == null )
+      var content = LoadContent( context, virtualPath );
+      if ( content == null )
         return null;
 
-      return ParseDocument( context, virtualPath, contentResult );
+      return ParseDocument( context, virtualPath, content );
     }
 
 
     /// <summary>
     /// 获取用于分析 HTML 文档的分析器
     /// </summary>
-    /// <param name="virtualPath">HTML 文档的虚拟路径</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">HTML 文档内容</param>
     /// <returns>HTML 分析器相关信息</returns>
     public static HtmlParserResult GetParser( HttpContextBase context, string virtualPath, string htmlContent )
@@ -164,7 +164,7 @@ namespace Ivony.Html.Web
       return new HtmlParserResult()
       {
         Parser = new JumonyHtmlParser(),
-        DomProvider = DomProvider.Instance
+        DomProvider = new DomProvider(),
       };
     }
 
@@ -174,7 +174,7 @@ namespace Ivony.Html.Web
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">HTML 文档的虚拟路径</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="result">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult contentResult )
@@ -216,7 +216,7 @@ namespace Ivony.Html.Web
     /// 分析 HTML 文档，此方法永不缓存
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">HTML 文档的虚拟路径</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">文档内容</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )

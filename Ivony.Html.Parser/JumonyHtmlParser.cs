@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
 
     protected override IHtmlDomProvider Provider
     {
-      get { return DomProvider.Instance; }
+      get { return new DomProvider(); }
     }
 
     protected override IHtmlReader CreateReader( string html )

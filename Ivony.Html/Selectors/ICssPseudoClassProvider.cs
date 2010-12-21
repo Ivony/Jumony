@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Ivony.Html
 {
-  public interface IPseudoClassSelector
+  public class ICssPseudoClassProvider
   {
-    bool Allows( ElementSelector elementSelector, IHtmlElement element );
+
+
   }
 }

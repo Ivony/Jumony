@@ -7,13 +7,13 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
-  public class AttributeSelector
+  public class CssAttributeSelector
   {
     public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private readonly string name;
-    private readonly string separator;
+    private readonly string comparison;
     private readonly string value;
 
     private readonly string exp;
@@ -37,8 +37,11 @@ namespace Ivony.Html
 
 
 
-
-    public AttributeSelector( string expression )
+    /// <summary>
+    /// 创建一个属性选择器实例
+    /// </summary>
+    /// <param name="expression">属性选择表达式（注意，不支持ID和类选择符）</param>
+    public CssAttributeSelector( string expression )
     {
 
       exp = expression;
@@ -52,7 +55,7 @@ namespace Ivony.Html
       name = match.Groups["name"].Value;
       if ( match.Groups["separator"].Success )
       {
-        separator = match.Groups["separator"].Value;
+        comparison = match.Groups["separator"].Value;
         if ( match.Groups["quoteText"].Success )
           value = match.Groups["quoteText"].Value;
         else
@@ -62,27 +65,32 @@ namespace Ivony.Html
     }
 
 
-    public bool Allows( IHtmlElement element )
+    /// <summary>
+    /// 检查元素是否符合选择条件
+    /// </summary>
+    /// <param name="element">要检查的元素</param>
+    /// <returns>是否符合条件</returns>
+    public bool IsEligible( IHtmlElement element )
     {
 
       string _value = null;
 
       var attribute = element.Attribute( name );
 
-      if ( separator == null )//如果没有运算符，那么表示判断属性是否存在
+      if ( comparison == null )//如果没有运算符，那么表示判断属性是否存在
         return attribute != null;
 
       if ( attribute != null )
         _value = attribute.AttributeValue;
 
-      return matchers[separator]( value, _value );
+      return matchers[comparison]( value, _value );
     }
 
 
     public override string ToString()
     {
-      if ( separator != null )
-        return string.Format( CultureInfo.InvariantCulture, "[{0}{1}'{2}']", name, separator, value.Replace( "'", "\\'" ).Replace( "\"", "\\\"" ) );
+      if ( comparison != null )
+        return string.Format( CultureInfo.InvariantCulture, "[{0}{1}'{2}']", name, comparison, value.Replace( "'", "\\'" ).Replace( "\"", "\\\"" ) );
       else
         return string.Format( CultureInfo.InvariantCulture, "[{0}]", name );
     }

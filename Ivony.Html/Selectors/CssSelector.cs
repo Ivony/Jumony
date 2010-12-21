@@ -11,7 +11,11 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
-  public class CssSelector
+
+  /// <summary>
+  /// 代表一个CSS选择器
+  /// </summary>
+  public sealed class CssSelector
   {
 
 
@@ -52,9 +56,9 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="expression">元素选择器表达式</param>
     /// <returns>CSS元素选择器</returns>
-    internal static ElementSelector CreateElementSelector( string expression )
+    internal static CssElementSelector CreateElementSelector( string expression )
     {
-      return new ElementSelector( expression );
+      return new CssElementSelector( expression );
     }
 
 
@@ -85,7 +89,7 @@ namespace Ivony.Html
         throw new FormatException();
 
 
-      var selector = new PartSelector( new ElementSelector( match.Groups["elementSelector"].Value ) );
+      var selector = new PartSelector( new CssElementSelector( match.Groups["elementSelector"].Value ) );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -97,7 +101,7 @@ namespace Ivony.Html
         var relative = extraMatch.Groups["relative"].Value.Trim();
         var elementSelector = extraMatch.Groups["elementSelector"].Value.Trim();
 
-        var newPartSelector = new PartSelector( new ElementSelector( elementSelector ), relative, selector );
+        var newPartSelector = new PartSelector( new CssElementSelector( elementSelector ), relative, selector );
         selector = newPartSelector;
 
       }
@@ -135,11 +139,10 @@ namespace Ivony.Html
     /// <param name="element">元素</param>
     /// <param name="scope">上溯范畴</param>
     /// <returns>是否符合选择器要求</returns>
-    private bool Allows( IHtmlElement element, IHtmlContainer scope )
+    private bool IsEligible( IHtmlElement element, IHtmlContainer scope )
     {
       return _selectors.Any( s => s.Allows( element, scope ) );
     }
-
 
 
 
@@ -176,109 +179,13 @@ namespace Ivony.Html
 
       var elements = container.Descendants();
 
-      elements = elements.Where( element => Allows( element, asScope ? container : null ) );
+      elements = elements.Where( element => IsEligible( element, asScope ? container : null ) );
 
 
       elements = new TraceEnumerable<IHtmlElement>( this, elements );
 
       return elements;
     }
-
-
-    private class TraceEnumerable<T> : IEnumerable<T>
-    {
-
-      private CssSelector _selector;
-      private IEnumerable<T> _enumerable;
-
-      public TraceEnumerable( CssSelector selector, IEnumerable<T> enumerable )
-      {
-        _selector = selector;
-        _enumerable = enumerable;
-      }
-
-      private class Enumerator : IEnumerator<T>
-      {
-
-        private CssSelector coreSelector;
-        private IEnumerator<T> coreEnumerator;
-
-        public Enumerator( CssSelector selector, IEnumerator<T> enumerator )
-        {
-          coreSelector = selector;
-          coreEnumerator = enumerator;
-
-          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
-        }
-
-
-        #region IEnumerator<T> 成员
-
-        T IEnumerator<T>.Current
-        {
-          get { return coreEnumerator.Current; }
-        }
-
-        #endregion
-
-        #region IDisposable 成员
-
-        void IDisposable.Dispose()
-        {
-          coreEnumerator.Dispose();
-          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "End Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
-        }
-
-        #endregion
-
-        #region IEnumerator 成员
-
-        object System.Collections.IEnumerator.Current
-        {
-          get { return coreEnumerator.Current; }
-        }
-
-        bool System.Collections.IEnumerator.MoveNext()
-        {
-          return coreEnumerator.MoveNext();
-        }
-
-        void System.Collections.IEnumerator.Reset()
-        {
-          Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
-          coreEnumerator.Reset();
-        }
-
-        #endregion
-      }
-
-
-
-      #region IEnumerable<T> 成员
-
-      IEnumerator<T> IEnumerable<T>.GetEnumerator()
-      {
-        return new Enumerator( _selector, _enumerable.GetEnumerator() );
-      }
-
-      #endregion
-
-      #region IEnumerable 成员
-
-      System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-      {
-        throw new NotImplementedException();
-      }
-
-      #endregion
-    }
-
-
-
-
-
-
-
 
 
     private class PartSelector
@@ -290,8 +197,8 @@ namespace Ivony.Html
         get { return _relative; }
       }
 
-      private readonly ElementSelector _selector;
-      public ElementSelector ElementSelector
+      private readonly CssElementSelector _selector;
+      public CssElementSelector ElementSelector
       {
         get { return _selector; }
       }
@@ -303,13 +210,13 @@ namespace Ivony.Html
       }
 
 
-      public PartSelector( ElementSelector selector )
+      public PartSelector( CssElementSelector selector )
         : this( selector, null, null )
       {
 
       }
 
-      public PartSelector( ElementSelector selector, string relative, PartSelector parent )
+      public PartSelector( CssElementSelector selector, string relative, PartSelector parent )
       {
         _selector = selector;
         _relative = relative;
@@ -320,7 +227,7 @@ namespace Ivony.Html
       public bool Allows( IHtmlElement element, IHtmlContainer scope )
       {
 
-        if ( !ElementSelector.Allows( element ) )
+        if ( !ElementSelector.IsEligible( element ) )
           return false;
 
         if ( Relative == null )
@@ -355,6 +262,5 @@ namespace Ivony.Html
       }
 
     }
-
   }
 }

@@ -7,11 +7,15 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
-  public class PseudoClassFactory
+
+  /// <summary>
+  /// 检索、创建和注册伪类选择器
+  /// </summary>
+  public class CssPseudoClassSelectors
   {
     private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
-    public static IPseudoClassSelector Create( string expression )
+    public static ICssPseudoClassSelector Create( string expression )
     {
       var match = pseudoClassRegex.Match( expression );
 
@@ -28,7 +32,7 @@ namespace Ivony.Html
 
     }
 
-    public static IPseudoClassSelector Create( string name, string args, string expression )
+    public static ICssPseudoClassSelector Create( string name, string args, string expression )
     {
       switch ( name.ToLowerInvariant() )
       {
@@ -54,7 +58,7 @@ namespace Ivony.Html
       }
     }
 
-    private class NthPseudoClass : IPseudoClassSelector
+    private class NthPseudoClass : ICssPseudoClassSelector
     {
 
       private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>((\+|\-)?#interger)|\-)n\p{Zs}*(?<augend>(\+|\-)\p{Zs}*#interger)?)".Replace( "#interger", Regulars.integerPattern );
@@ -136,7 +140,7 @@ namespace Ivony.Html
           augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ) );//这里的正则用于去掉符号与数字之间的空白
       }
 
-      public bool Allows( ElementSelector elementSelector, IHtmlElement element )
+      public bool Allows( IHtmlElement element )
       {
 
         List<IHtmlElement> siblings;
@@ -223,7 +227,7 @@ namespace Ivony.Html
 
 
 
-    private class CountPseudoClass : IPseudoClassSelector
+    private class CountPseudoClass : ICssPseudoClassSelector
     {
 
 
@@ -258,7 +262,7 @@ namespace Ivony.Html
 
       #region IPseudoClassSelector 成员
 
-      public bool Allows( ElementSelector elementSelector, IHtmlElement element )
+      public bool Allows( IHtmlElement element )
       {
         switch ( _name )
         {

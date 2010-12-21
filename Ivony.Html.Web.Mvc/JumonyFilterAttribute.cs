@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.IO;
 using Ivony.Html;
 using System.Web.Routing;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -44,19 +45,19 @@ namespace Ivony.Html.Web.Mvc
 
       if ( viewResult != null )
       {
-        var handler = CreateHandler( filterContext.RequestContext );
+        var handler = CreateHandler( filterContext.HttpContext );
 
         if ( handler != null )
           filterContext.Result = new ViewResultWrapper( viewResult, handler );
       }
     }
 
-    private IHtmlHandler CreateHandler( RequestContext context )
+    private IHtmlHandler CreateHandler( HttpContextBase context )
     {
       if ( _handlerType != null )
         return (IHtmlHandler) Activator.CreateInstance( _handlerType );
       else
-        return _provider.GetHandler( context.HttpContext, null );
+        return _provider.GetHandler( context, null );
     }
 
     void IActionFilter.OnActionExecuting( ActionExecutingContext filterContext )

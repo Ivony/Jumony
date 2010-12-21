@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />
+    <Compile Include="JumonyTemplate.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="ViewResultWrapper.cs" />

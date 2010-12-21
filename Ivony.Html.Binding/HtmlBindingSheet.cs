@@ -101,7 +101,7 @@ namespace Ivony.Html.Binding
       if ( !ruleMatch.Success )
         throw new FormatException();
 
-      Selector = HtmlCssSelector.Create( ruleMatch.Groups["selector"].Value );
+      Selector = CssSelector.Create( ruleMatch.Groups["selector"].Value );
 
       foreach ( Capture settingCapture in ruleMatch.Groups["styleSetting"].Captures )
       {
@@ -121,7 +121,7 @@ namespace Ivony.Html.Binding
 
     }
 
-    protected HtmlCssSelector Selector
+    protected CssSelector Selector
     {
       get;
       private set;

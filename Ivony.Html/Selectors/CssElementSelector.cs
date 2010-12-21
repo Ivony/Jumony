@@ -13,13 +13,18 @@ namespace Ivony.Html
   /// <summary>
   /// 代表一个元素选择器
   /// </summary>
-  public class CssElementSelector
+  public sealed class CssElementSelector
   {
     /// <summary>
     /// 匹配CSS元素选择器的正则表达式。
     /// </summary>
     public static readonly Regex elementSelectorRegex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
+
+    /// <summary>
+    /// 创建一个CSS元素选择器
+    /// </summary>
+    /// <param name="expression">元素选择表达式</param>
     public CssElementSelector( string expression )
     {
 
@@ -51,13 +56,18 @@ namespace Ivony.Html
     }
 
 
-    private string _tagName;
+    private readonly string _tagName;
 
     private readonly CssAttributeSelector[] attributeSelectors;
 
     private readonly ICssPseudoClassSelector[] pseudoClassSelectors;
 
 
+    /// <summary>
+    /// 检查一个元素是否符合选择条件
+    /// </summary>
+    /// <param name="element">要检查的元素</param>
+    /// <returns>是否符合</returns>
     public bool IsEligible( IHtmlElement element )
     {
       if ( element == null )
@@ -95,6 +105,9 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 获取元素名限定条件，如没有限制，则返回"*"
+    /// </summary>
     public string ElementName { get { return _tagName; } }
 
 

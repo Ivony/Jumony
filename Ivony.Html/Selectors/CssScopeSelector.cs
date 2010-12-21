@@ -17,5 +17,14 @@ namespace Ivony.Html.Selectors
       private set;
     }
 
+
+    public CssSelector Selector
+    {
+      get;
+      private set;
+    }
+
+
+
   }
 }

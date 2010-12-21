@@ -29,6 +29,16 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
+      var attributes = element.Attributes();
+
+      /*
+      //即使按字典检索，由于大部分元素属性都很少，也不见得有性能提升
+      var dictionary = attributes as IDictionary<string, IHtmlAttribute>;
+
+      if ( dictionary != null )
+        return dictionary[name];
+      */
+
       return element.Attributes().Where( a => a.Name.EqualsIgnoreCase( name ) ).SingleOrDefault();
     }
 
@@ -152,7 +162,7 @@ namespace Ivony.Html
     {
       if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
-      
+
       if ( evaluator == null )
         throw new ArgumentNullException( "evaluator" );
 
@@ -267,7 +277,7 @@ namespace Ivony.Html
       /// <param name="newValue">用于替换的字符串</param>
       /// <returns>被设置的属性对象</returns>
       public IHtmlElement Value( string oldValue, string newValue )
-      {   
+      {
         if ( oldValue == null )
           throw new ArgumentNullException( "oldValue" );
 
@@ -284,7 +294,7 @@ namespace Ivony.Html
       /// <param name="replacement">替换字符串</param>
       /// <returns></returns>
       public IHtmlElement Value( Regex pattern, string replacement )
-      {  
+      {
         if ( pattern == null )
           throw new ArgumentNullException( "pattern" );
 
@@ -301,7 +311,7 @@ namespace Ivony.Html
       /// <param name="evaluator">用于每一步替换的计算函数</param>
       /// <returns></returns>
       public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
-      { 
+      {
         if ( pattern == null )
           throw new ArgumentNullException( "pattern" );
 
@@ -318,7 +328,7 @@ namespace Ivony.Html
       /// <param name="evaluator">用于每一步替换的计算函数</param>
       /// <returns></returns>
       public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
-      { 
+      {
         if ( pattern == null )
           throw new ArgumentNullException( "pattern" );
 
@@ -428,7 +438,7 @@ namespace Ivony.Html
     {
       private readonly IEnumerable<IHtmlElement> _elements;
       private readonly AttributeValueSetter[] _setters;
-//      private readonly string _attributeName;
+      //      private readonly string _attributeName;
 
 
       internal AttributeSetValueSetter( IEnumerable<IHtmlElement> elements, string attributeName )
@@ -437,7 +447,7 @@ namespace Ivony.Html
           throw new ArgumentNullException( "attributeName" );
 
         _elements = elements;
-//        _attributeName = attributeName;
+        //        _attributeName = attributeName;
 
         _setters = _elements.Select( e => e.SetAttribute( attributeName ) ).ToArray();
       }

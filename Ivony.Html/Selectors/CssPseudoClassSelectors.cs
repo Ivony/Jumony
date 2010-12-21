@@ -140,7 +140,7 @@ namespace Ivony.Html
           augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ) );//这里的正则用于去掉符号与数字之间的空白
       }
 
-      public bool Allows( IHtmlElement element )
+      public bool IsEligible( IHtmlElement element )
       {
 
         List<IHtmlElement> siblings;
@@ -262,7 +262,7 @@ namespace Ivony.Html
 
       #region IPseudoClassSelector 成员
 
-      public bool Allows( IHtmlElement element )
+      public bool IsEligible( IHtmlElement element )
       {
         switch ( _name )
         {

@@ -75,7 +75,7 @@ namespace Ivony.Html
 
       foreach ( var selector in pseudoClassSelectors )
       {
-        if ( !selector.Allows( element ) )
+        if ( !selector.IsEligible( element ) )
           return false;
       }
 
@@ -83,7 +83,7 @@ namespace Ivony.Html
     }
 
 
-    public IEnumerable<IHtmlElement> Search( IEnumerable<IHtmlElement> source )
+    public IEnumerable<IHtmlElement> Filter( IEnumerable<IHtmlElement> source )
     {
       return source.Where( element => IsEligible( element ) );
     }

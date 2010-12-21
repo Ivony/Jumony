@@ -104,7 +104,7 @@
     <Compile Include="Selectors\CssElementSelector.cs" />
     <Compile Include="Selectors\ICssPseudoClassProvider.cs" />
     <Compile Include="Selectors\ICssPseudoClassSelector.cs" />
-    <Compile Include="Selectors\CssPseudoClassSelector.cs" />
+    <Compile Include="Selectors\CssPseudoClassSelectors.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />
     <Compile Include="Styles\CssStyle.cs" />
   </ItemGroup>

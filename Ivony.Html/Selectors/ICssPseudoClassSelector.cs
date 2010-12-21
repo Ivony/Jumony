@@ -7,6 +7,6 @@ namespace Ivony.Html
 {
   public interface ICssPseudoClassSelector
   {
-    bool Allows( IHtmlElement element );
+    bool IsEligible( IHtmlElement element );
   }
 }

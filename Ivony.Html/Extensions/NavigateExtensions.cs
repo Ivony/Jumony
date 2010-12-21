@@ -46,7 +46,7 @@ namespace Ivony.Html
     /// <returns>符合条件的子元素</returns>
     public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node, string selector )
     {
-      return CssSelector.CreateElementSelector( selector ).Search( Elements( node ) );
+      return CssSelector.CreateElementSelector( selector ).Filter( Elements( node ) );
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ namespace Ivony.Html
     /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node, string selector )
     {
-      return CssSelector.CreateElementSelector( selector ).Search( Ancestors( node ) );
+      return CssSelector.CreateElementSelector( selector ).Filter( Ancestors( node ) );
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ namespace Ivony.Html
     /// <returns>所有的兄弟（同级）元素节点</returns>
     public static IEnumerable<IHtmlElement> Siblings( this IHtmlNode node, string selector )
     {
-      return CssSelector.CreateElementSelector( selector ).Search( node.Siblings() );
+      return CssSelector.CreateElementSelector( selector ).Filter( node.Siblings() );
     }
 
 

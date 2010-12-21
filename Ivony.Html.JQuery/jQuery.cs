@@ -18,7 +18,7 @@ namespace Ivony.Html
     private readonly IHtmlContainer _scope;
 
 
-    private readonly HtmlCssSelector _selector;
+    private readonly CssSelector _selector;
     private readonly IEnumerable<IHtmlElement> _elements;
 
     public jQuery( string selector, IHtmlContainer scope )
@@ -26,7 +26,7 @@ namespace Ivony.Html
       _selectorExpression = selector;
       _scope = scope;
 
-      _selector = HtmlCssSelector.Create( selector );
+      _selector = CssSelector.Create( selector );
       _elements = _selector.Search( _scope, true );
 
     }

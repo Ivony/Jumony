@@ -56,7 +56,7 @@ namespace Ivony.Html.Web.Mvc
       if ( _handlerType != null )
         return (IHtmlHandler) Activator.CreateInstance( _handlerType );
       else
-        return _provider.TryGetHandler( context );
+        return _provider.GetHandler( context.HttpContext, null );
     }
 
     void IActionFilter.OnActionExecuting( ActionExecutingContext filterContext )

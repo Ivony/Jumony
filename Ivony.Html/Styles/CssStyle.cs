@@ -30,6 +30,10 @@ namespace Ivony.Html
 namespace Ivony.Html.Styles
 {
 
+
+  /// <summary>
+  /// 提供元素CSS样式管理
+  /// </summary>
   public class CssStyle
   {
 
@@ -57,11 +61,23 @@ namespace Ivony.Html.Styles
       }
     }
 
+
+    /// <summary>
+    /// 获取样式设置值
+    /// </summary>
+    /// <param name="name">样式名</param>
+    /// <returns>样式设置值</returns>
     public virtual string Get( string name )
     {
       return (string) settings[name];
     }
 
+    /// <summary>
+    /// 设置样式值
+    /// </summary>
+    /// <param name="name">样式名</param>
+    /// <param name="value">样式值</param>
+    /// <returns>样式管理器自身</returns>
     public virtual CssStyle Set( string name, string value )
     {
       settings[name] = value;
@@ -73,7 +89,11 @@ namespace Ivony.Html.Styles
 
 
 
-
+    /// <summary>
+    /// 分析样式表达式，获取所有样式值
+    /// </summary>
+    /// <param name="styleExpression">样式表达式</param>
+    /// <returns>样式设置值</returns>
     protected Hashtable GetStyleSettings( string styleExpression )
     {
 
@@ -98,8 +118,12 @@ namespace Ivony.Html.Styles
 
 
 
-
-    private string GetStyleExpression( Hashtable styleSettings )
+    /// <summary>
+    /// 生成样式表达式
+    /// </summary>
+    /// <param name="styleSettings">样式设置</param>
+    /// <returns>样式表达式</returns>
+    protected string GetStyleExpression( Hashtable styleSettings )
     {
       var builder = new StringBuilder();
 

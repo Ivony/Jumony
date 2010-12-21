@@ -7,6 +7,13 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// CSS属性选择器
+  /// </summary>
+  /// <remarks>
+  /// 此类型实例是线程安全的
+  /// </remarks>
   public class CssAttributeSelector
   {
     public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );

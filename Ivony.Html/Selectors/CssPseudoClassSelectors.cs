@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Collections;
 
 namespace Ivony.Html
 {
@@ -32,9 +33,34 @@ namespace Ivony.Html
 
     }
 
+
+
+    private static readonly Hashtable _providers = new Hashtable();
+
+
+    public static void Register( string name, ICssPseudoClassProvider provider )
+    {
+      name = name.ToLowerInvariant();
+
+      lock ( _providers )
+      {
+        if ( _providers.ContainsKey( name ) )
+          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "系统中已经存在提供 \"{0}\" 伪类的提供程序", name ) );
+
+        _providers.Add( name, provider );
+      }
+    }
+
+
+
+
+
+
     public static ICssPseudoClassSelector Create( string name, string args, string expression )
     {
-      switch ( name.ToLowerInvariant() )
+      name = name.ToLowerInvariant();
+
+      switch ( name )
       {
         case "nth-child":
         case "nth-last-child":
@@ -54,9 +80,15 @@ namespace Ivony.Html
           return new CountPseudoClass( name, args, expression );
 
         default:
+          var provider = _providers[name] as ICssPseudoClassProvider;
+          if ( provider != null )
+            return provider.CreateSelector( name, args );
           throw new NotSupportedException();
       }
     }
+
+
+
 
     private class NthPseudoClass : ICssPseudoClassSelector
     {

@@ -11,8 +11,11 @@ namespace Ivony.Html
 
 
   /// <summary>
-  /// 代表一个元素选择器
+  /// CSS元素选择器
   /// </summary>
+  /// <remarks>
+  /// 此类型实例是线程安全的。
+  /// </remarks>
   public sealed class CssElementSelector
   {
     /// <summary>
@@ -93,6 +96,11 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 从元素集合中筛选出符合条件的元素
+    /// </summary>
+    /// <param name="source">要筛选的元素集合</param>
+    /// <returns>筛选结果</returns>
     public IEnumerable<IHtmlElement> Filter( IEnumerable<IHtmlElement> source )
     {
       return source.Where( element => IsEligible( element ) );

@@ -46,7 +46,7 @@ namespace Ivony.Html
     /// <returns>符合条件的子元素</returns>
     public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node, string selector )
     {
-      return HtmlCssSelector.CreateElementSelector( selector ).Search( Elements( node ) );
+      return CssSelector.CreateElementSelector( selector ).Search( Elements( node ) );
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ namespace Ivony.Html
     /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node, string selector )
     {
-      return HtmlCssSelector.CreateElementSelector( selector ).Search( Ancestors( node ) );
+      return CssSelector.CreateElementSelector( selector ).Search( Ancestors( node ) );
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ namespace Ivony.Html
     /// <remarks>与Find方法不同的是，Descendants方法的选择器会无限上溯，即当判断父代约束时，会无限上溯到文档根。而Find方法只会上溯到自身的子节点</remarks>
     public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container, string selector )
     {
-      return HtmlCssSelector.Create( selector ).Search( container, false );
+      return CssSelector.Create( selector ).Search( container, false );
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ namespace Ivony.Html
     /// <returns>所有的兄弟（同级）元素节点</returns>
     public static IEnumerable<IHtmlElement> Siblings( this IHtmlNode node, string selector )
     {
-      return HtmlCssSelector.CreateElementSelector( selector ).Search( node.Siblings() );
+      return CssSelector.CreateElementSelector( selector ).Search( node.Siblings() );
     }
 
 
@@ -282,7 +282,7 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
-      var selector = HtmlCssSelector.Create( expression );
+      var selector = CssSelector.Create( expression );
       return selector.Search( container, true );
     }
 
@@ -307,7 +307,7 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, params string[] expressions )
     {
-      var selector = HtmlCssSelector.Create( expressions );
+      var selector = CssSelector.Create( expressions );
       return selector.Search( container, true );
     }
 

@@ -81,7 +81,6 @@
     <Compile Include="Extensions\DomExtensions.cs" />
     <Compile Include="Extensions\NavigateExtensions.cs" />
     <Compile Include="EnumerableWrapper.cs" />
-    <Compile Include="HtmlCssSelector.cs" />
     <Compile Include="HtmlDocumentWrapper.cs" />
     <Compile Include="HtmlElementWrapper.cs" />
     <Compile Include="HtmlNodeWrapper.cs" />
@@ -99,6 +98,11 @@
     <Compile Include="IHtmlTextNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
+    <Compile Include="Selectors\AttributeSelector.cs" />
+    <Compile Include="Selectors\CssSelector.cs" />
+    <Compile Include="Selectors\ElementSelector.cs" />
+    <Compile Include="Selectors\IPseudoClassFilter.cs" />
+    <Compile Include="Selectors\PseudoClassFilter.cs" />
     <Compile Include="Styles\CssStyle.cs" />
   </ItemGroup>
   <ItemGroup>

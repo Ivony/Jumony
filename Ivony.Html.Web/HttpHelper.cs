@@ -26,26 +26,5 @@ namespace Ivony.Html.Web
     }
 
 
-
-
-    public static IHtmlHandler TryGetHandler( this IHtmlHandlerProvider provider, RequestContext context )
-    {
-      return TryGetHandler( provider, context, context.HttpContext.Request.RawUrl );
-    }
-
-    public static IHtmlHandler TryGetHandler( this IHtmlHandlerProvider provider, RequestContext context, string virtualPath )
-    {
-      var handler = provider.GetHandler( context, virtualPath );
-
-      if ( handler == null )
-        handler = provider.GetHandler( context.HttpContext, virtualPath );
-
-      return handler;
-
-    }
-
-
-
   }
-
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Styles
 {
-  class CssPercentageValue
+  public class CssPercentageValue
   {
   }
 }

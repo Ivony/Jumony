@@ -40,9 +40,8 @@ namespace Ivony.Html.Styles
     private static readonly InheritValue _instance = new InheritValue();
 
     public static InheritValue Insatnce { get { return _instance; } }
-
-
   }
+
 
   public class EnumStyleValue : CssStyleValue
   {

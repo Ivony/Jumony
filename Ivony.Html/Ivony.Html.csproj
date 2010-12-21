@@ -100,12 +100,14 @@
     <Compile Include="Regulars.cs" />
     <Compile Include="Selectors\CssCascadingSelector.cs" />
     <Compile Include="Selectors\CssAttributeSelector.cs" />
+    <Compile Include="Selectors\CssMultipleSelector.cs" />
     <Compile Include="Selectors\CssScopeSelector.cs" />
     <Compile Include="Selectors\CssSelector.cs" />
     <Compile Include="Selectors\CssElementSelector.cs" />
     <Compile Include="Selectors\ICssPseudoClassProvider.cs" />
     <Compile Include="Selectors\ICssPseudoClassSelector.cs" />
     <Compile Include="Selectors\CssPseudoClassSelectors.cs" />
+    <Compile Include="Selectors\ICssScopeSelector.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />
     <Compile Include="Styles\CssStyle.cs" />
   </ItemGroup>

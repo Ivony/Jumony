@@ -141,7 +141,7 @@ namespace Ivony.Html
     /// <returns>是否符合选择器要求</returns>
     private bool IsEligible( IHtmlElement element, IHtmlContainer scope )
     {
-      return _selectors.Any( s => s.Allows( element, scope ) );
+      return _selectors.Any( s => s.IsEligible( element, scope ) );
     }
 
 

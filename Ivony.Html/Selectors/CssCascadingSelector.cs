@@ -5,22 +5,35 @@ using System.Text;
 
 namespace Ivony.Html
 {
-  public class CssCasecadingSelector
+
+  /// <summary>
+  /// 层级选择器
+  /// </summary>
+  internal class CssCasecadingSelector
   {
 
     private readonly string _relative;
+    /// <summary>
+    /// 关系选择符
+    /// </summary>
     public string Relative
     {
       get { return _relative; }
     }
 
     private readonly CssElementSelector _selector;
+    /// <summary>
+    /// 元素选择器
+    /// </summary>
     public CssElementSelector ElementSelector
     {
       get { return _selector; }
     }
 
     private readonly CssCasecadingSelector _parent;
+    /// <summary>
+    /// 父级选择器
+    /// </summary>
     public CssCasecadingSelector ParentSelector
     {
       get { return _parent; }
@@ -37,7 +50,13 @@ namespace Ivony.Html
     }
 
 
-    public bool Allows( IHtmlElement element, IHtmlContainer scope )
+    /// <summary>
+    /// 检查元素是否符合选择条件
+    /// </summary>
+    /// <param name="element">要检查的元素</param>
+    /// <param name="scope">范围限定，追溯父级到此为止</param>
+    /// <returns>是否符合选择条件</returns>
+    public bool IsEligible( IHtmlElement element, IHtmlContainer scope )
     {
 
       if ( !ElementSelector.IsEligible( element ) )
@@ -47,16 +66,16 @@ namespace Ivony.Html
         return true;
 
       else if ( Relative == ">" )
-        return element.Parent().Equals( scope ) ? false : ParentSelector.Allows( element.Parent(), scope );
+        return element.Parent().Equals( scope ) ? false : ParentSelector.IsEligible( element.Parent(), scope );
 
       else if ( Relative == "" )
-        return element.Ancestors().TakeWhile( e => !e.Equals( scope ) ).Any( e => ParentSelector.Allows( e, scope ) );
+        return element.Ancestors().TakeWhile( e => !e.Equals( scope ) ).Any( e => ParentSelector.IsEligible( e, scope ) );
 
       else if ( Relative == "+" )
-        return ParentSelector.Allows( element.PreviousElement(), scope );
+        return ParentSelector.IsEligible( element.PreviousElement(), scope );
 
       else if ( Relative == "~" )
-        return element.SiblingsBeforeSelf().Any( e => ParentSelector.Allows( e, scope ) );
+        return element.SiblingsBeforeSelf().Any( e => ParentSelector.IsEligible( e, scope ) );
 
       else
         throw new FormatException();

@@ -14,8 +14,16 @@ namespace Ivony.Html
   /// </summary>
   public class CssPseudoClassSelectors
   {
+    
     private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
+    /// <summary>
+    /// 创建一个伪类选择器
+    /// </summary>
+    /// <param name="expression">伪类表达式</param>
+    /// <returns>伪类选择器</returns>
+    /// <exception cref="System.NotSupportedException">不被支持的伪类</exception>
+    /// <exception cref="System.FormatException">伪类表达式格式不正确或者无法解释</exception>
     public static ICssPseudoClassSelector Create( string expression )
     {
       var match = pseudoClassRegex.Match( expression );
@@ -45,7 +53,7 @@ namespace Ivony.Html
       lock ( _providers )
       {
         if ( _providers.ContainsKey( name ) )
-          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "系统中已经存在提供 \"{0}\" 伪类的提供程序", name ) );
+          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "系统中已经存在提供 \"{0}\" 的伪类的提供程序", name ) );
 
         _providers.Add( name, provider );
       }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using Ivony.Fluent;
+using System.Globalization;
 
 namespace Ivony.Html.Parser
 {
@@ -78,8 +79,8 @@ namespace Ivony.Html.Parser
     {
       CheckDisposed();
 
-      if ( _attributes.Contains( attributeName.ToLowerInvariant() ) )//执行不区分大小写的查找
-        throw new InvalidOperationException();
+      if ( _attributes.Contains( attributeName ) )//容器自身会执行不区分大小写的查找
+        throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", attributeName ) );
 
       var attribute = new DomAttribute( this, attributeName, null );
       _attributes.Add( attribute );
@@ -195,7 +196,7 @@ namespace Ivony.Html.Parser
     {
 
       public DomAttributeCollection( DomElement element )
-        : base( element.SyncRoot )
+        : base( element.SyncRoot, StringComparer.OrdinalIgnoreCase )
       {
       }
 

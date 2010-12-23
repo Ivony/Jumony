@@ -16,7 +16,7 @@ namespace Ivony.Html
     /// 创建伪类选择器
     /// </summary>
     /// <param name="name">伪类名</param>
-    /// <param name="expression">伪类参数表达式</param>
+    /// <param name="args">伪类参数表达式</param>
     /// <returns>伪类选择器</returns>
     ICssPseudoClassSelector CreateSelector( string name, string args );
 

@@ -212,11 +212,24 @@ namespace Ivony.Html
       return selector.Filter( container.Descendants() );
     }
 
+    public static IEnumerable<IHtmlElement> Search( this ICssSelectorWithScope selector, IHtmlContainer container, bool asScope )
+    {
+      return selector.Filter( container.Descendants(), asScope ? container : null );
+    }
+
+
+    public static IEnumerable<IHtmlElement> Filter( this ICssSelectorWithScope selector, IEnumerable<IHtmlElement> source, IHtmlContainer scope )
+    {
+      return source.Where( e => selector.IsEligible( e, scope ) );
+    }
+
 
     public static IEnumerable<IHtmlElement> Filter( this ICssSelector selector, IEnumerable<IHtmlElement> source )
     {
       return source.Where( e => selector.IsEligible( e ) );
     }
+
+
   }
 
 }

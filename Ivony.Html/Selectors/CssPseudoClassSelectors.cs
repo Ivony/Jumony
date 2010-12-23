@@ -12,7 +12,7 @@ namespace Ivony.Html
   /// <summary>
   /// 检索、创建和注册伪类选择器
   /// </summary>
-  public class CssPseudoClassSelectors
+  public static class CssPseudoClassSelectors
   {
     
     private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );

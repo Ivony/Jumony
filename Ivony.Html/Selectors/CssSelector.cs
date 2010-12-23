@@ -52,17 +52,6 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 创建一个元素选择器实例
-    /// </summary>
-    /// <param name="expression">元素选择器表达式</param>
-    /// <returns>CSS元素选择器</returns>
-    internal static CssElementSelector CreateElementSelector( string expression )
-    {
-      return new CssElementSelector( expression );
-    }
-
-
-    /// <summary>
     /// 创建一个CSS选择器实例
     /// </summary>
     /// <param name="expressions"></param>
@@ -81,7 +70,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
-    private CssCasecadingSelector CreateSelector( string expression )
+    private static CssCasecadingSelector CreateSelector( string expression )
     {
 
       var match = cssSelectorRegex.Match( expression );
@@ -89,7 +78,7 @@ namespace Ivony.Html
         throw new FormatException();
 
 
-      var selector = new CssCasecadingSelector( new CssElementSelector( match.Groups["elementSelector"].Value ) );
+      var selector = new CssCasecadingSelector( CssElementSelector.Create( match.Groups["elementSelector"].Value ) );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -101,7 +90,7 @@ namespace Ivony.Html
         var relative = extraMatch.Groups["relative"].Value.Trim();
         var elementSelector = extraMatch.Groups["elementSelector"].Value.Trim();
 
-        var newPartSelector = new CssCasecadingSelector( new CssElementSelector( elementSelector ), relative, selector );
+        var newPartSelector = new CssCasecadingSelector( CssElementSelector.Create( elementSelector ), relative, selector );
         selector = newPartSelector;
 
       }
@@ -109,6 +98,15 @@ namespace Ivony.Html
 
       return selector;
     }
+
+
+
+    private static CssMultipleSelector CreateSelector( string[] expressions )
+    {
+      return new CssMultipleSelector( expressions.Select( e => CreateSelector( e ) ).ToArray() );
+    }
+
+
 
 
     internal string ExpressionString

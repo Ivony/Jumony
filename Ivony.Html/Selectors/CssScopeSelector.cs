@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Selectors
+namespace Ivony.Html
 {
   /// <summary>
   /// 代表一个范围限定的选择器，
   /// </summary>
-  public sealed class CssScopeSelector
+  public sealed class CssScopeSelector : ICssSelector
   {
 
     public IHtmlContainer Scope
@@ -18,13 +18,16 @@ namespace Ivony.Html.Selectors
     }
 
 
-    public CssSelector Selector
+    public ICssScopedSelector Selector
     {
       get;
       private set;
     }
 
 
-
+    public bool IsEligible( IHtmlElement element )
+    {
+      return Selector.IsEligible( element, Scope );
+    }
   }
 }

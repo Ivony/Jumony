@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Selectors
+namespace Ivony.Html
 {
 
   /// <summary>
   /// 多重（并列）选择器
   /// </summary>
-  internal class CssMultipleSelector
+  internal sealed class CssMultipleSelector
   {
 
     private CssCasecadingSelector[] _selectors;

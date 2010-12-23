@@ -14,7 +14,7 @@ namespace Ivony.Html
   /// <remarks>
   /// 此类型实例是线程安全的
   /// </remarks>
-  public class CssAttributeSelector
+  public sealed class CssAttributeSelector
   {
     public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
@@ -48,7 +48,7 @@ namespace Ivony.Html
     /// 创建一个属性选择器实例
     /// </summary>
     /// <param name="expression">属性选择表达式（注意，不支持ID和类选择符）</param>
-    public CssAttributeSelector( string expression )
+    internal CssAttributeSelector( string expression )
     {
 
       exp = expression;

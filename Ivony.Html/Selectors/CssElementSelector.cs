@@ -28,8 +28,9 @@ namespace Ivony.Html
     /// 创建一个CSS元素选择器
     /// </summary>
     /// <param name="expression">元素选择表达式</param>
-    public CssElementSelector( string expression )
+    public static CssElementSelector Create( string expression )
     {
+      string tagName;
 
       if ( string.IsNullOrEmpty( expression ) )
         throw new ArgumentNullException( "expression" );
@@ -40,9 +41,9 @@ namespace Ivony.Html
 
 
       if ( match.Groups["name"].Success )
-        _tagName = match.Groups["name"].Value;
+        tagName = match.Groups["name"].Value;
       else
-        _tagName = "*";
+        tagName = "*";
 
       var _attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new CssAttributeSelector( c.Value ) ).ToList();
 
@@ -52,14 +53,30 @@ namespace Ivony.Html
       if ( match.Groups["class"].Success )
         _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[class~={0}]", match.Groups["class"].Value ) ) );
 
-      attributeSelectors = _attributeSelectors.ToArray();
 
-      pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => CssPseudoClassSelectors.Create( c.Value ) ).ToArray();
+      var attributeSelectors = _attributeSelectors.ToArray();
+
+      var pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => CssPseudoClassSelectors.Create( c.Value ) ).ToArray();
+
+      return new CssElementSelector( tagName, attributeSelectors, pseudoClassSelectors );
 
     }
 
 
-    private readonly string _tagName;
+    private CssElementSelector( string tagName, CssAttributeSelector[] attributes, ICssPseudoClassSelector[] pseudoClasses )
+    {
+
+      if ( string.IsNullOrEmpty( tagName ) )
+        tagName = "*";
+
+      elementType = tagName;
+      attributeSelectors = attributes;
+      pseudoClassSelectors = pseudoClasses;
+    }
+
+
+
+    private readonly string elementType;
 
     private readonly CssAttributeSelector[] attributeSelectors;
 
@@ -77,7 +94,7 @@ namespace Ivony.Html
         return false;
 
 
-      if ( _tagName != "*" && !element.Name.EqualsIgnoreCase( _tagName ) )
+      if ( elementType != "*" && !element.Name.EqualsIgnoreCase( elementType ) )
         return false;
 
       foreach ( var selector in attributeSelectors )
@@ -109,14 +126,14 @@ namespace Ivony.Html
 
     public override string ToString()
     {
-      return string.Format( "{0}{1}{2}", _tagName.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
+      return string.Format( "{0}{1}{2}", elementType.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
     }
 
 
     /// <summary>
     /// 获取元素名限定条件，如没有限制，则返回"*"
     /// </summary>
-    public string ElementName { get { return _tagName; } }
+    public string ElementName { get { return elementType; } }
 
 
 

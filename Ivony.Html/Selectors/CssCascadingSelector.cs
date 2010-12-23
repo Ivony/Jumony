@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 
 namespace Ivony.Html
 {
 
   /// <summary>
-  /// 层级选择器
+  /// CSS层叠选择器
   /// </summary>
-  internal class CssCasecadingSelector
+  internal sealed class CssCasecadingSelector
   {
 
     private readonly string _relative;
@@ -40,12 +41,12 @@ namespace Ivony.Html
     }
 
 
-    public CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
+    internal CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
 
-    public CssCasecadingSelector( CssElementSelector selector, string relative, CssCasecadingSelector parent )
+    internal CssCasecadingSelector( CssElementSelector selector, string relative, CssCasecadingSelector parent )
     {
       _selector = selector;
-      _relative = relative;
+      _relative = relative.Trim();
       _parent = parent;
     }
 
@@ -78,7 +79,7 @@ namespace Ivony.Html
         return element.SiblingsBeforeSelf().Any( e => ParentSelector.IsEligible( e, scope ) );
 
       else
-        throw new FormatException();
+        throw new NotSupportedException( string.Format( CultureInfo.InvariantCulture, "不支持的关系选择符 \"{0}\"", Relative ) );
     }
 
     public override string ToString()

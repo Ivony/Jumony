@@ -8,8 +8,13 @@ namespace Ivony.Html
   /// <summary>
   /// 代表一个范围限定的选择器，
   /// </summary>
-  public sealed class CssScopeSelector : ICssSelector
+  public sealed class CssScopedSelector : ICssSelector
   {
+    public CssScopedSelector( ICssSelectorWithScope selector, IHtmlContainer scope )
+    {
+      Selector = selector;
+      Scope = scope;
+    }
 
     public IHtmlContainer Scope
     {
@@ -18,7 +23,7 @@ namespace Ivony.Html
     }
 
 
-    public ICssScopedSelector Selector
+    public ICssSelectorWithScope Selector
     {
       get;
       private set;

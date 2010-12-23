@@ -9,7 +9,7 @@ namespace Ivony.Html
   /// <summary>
   /// 多重（并列）选择器
   /// </summary>
-  internal sealed class CssMultipleSelector
+  internal sealed class CssMultipleSelector : ICssSelectorWithScope
   {
 
     private CssCasecadingSelector[] _selectors;

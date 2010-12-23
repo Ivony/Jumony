@@ -10,12 +10,12 @@ namespace Ivony.Html
   /// <summary>
   /// CSS层叠选择器
   /// </summary>
-  internal sealed class CssCasecadingSelector
+  internal sealed class CssCasecadingSelector : ICssSelectorWithScope
   {
 
     private readonly string _relative;
     /// <summary>
-    /// 关系选择符
+    /// 关系描述符
     /// </summary>
     public string Relative
     {

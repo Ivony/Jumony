@@ -16,7 +16,7 @@ namespace Ivony.Html
   /// <remarks>
   /// 此类型实例是线程安全的。
   /// </remarks>
-  public sealed class CssElementSelector
+  public sealed class CssElementSelector : ICssSelector
   {
     /// <summary>
     /// 匹配CSS元素选择器的正则表达式。

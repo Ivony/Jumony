@@ -107,6 +107,22 @@ namespace Ivony.Html
     }
 
 
+    public static IEnumerable<IHtmlElement> Search( string selectorExpression, IHtmlContainer container, bool asScope )
+    {
+
+      ICssSelector selector;
+
+      ICssSelectorWithScope scopedSelector = CreateSelector( selectorExpression );
+
+      if ( asScope )
+        selector = new CssScopedSelector( scopedSelector, container );
+      else
+        selector = new CssScopedSelector( scopedSelector, null );
+
+
+      return selector.Search( container );
+    }
+
 
 
     internal string ExpressionString
@@ -187,4 +203,20 @@ namespace Ivony.Html
 
 
   }
+
+
+  public static class SelectorExtensions
+  {
+    public static IEnumerable<IHtmlElement> Search( this ICssSelector selector, IHtmlContainer container )
+    {
+      return selector.Filter( container.Descendants() );
+    }
+
+
+    public static IEnumerable<IHtmlElement> Filter( this ICssSelector selector, IEnumerable<IHtmlElement> source )
+    {
+      return source.Where( e => selector.IsEligible( e ) );
+    }
+  }
+
 }

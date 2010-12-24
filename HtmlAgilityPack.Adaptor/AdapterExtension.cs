@@ -11,7 +11,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public static IEnumerable<HtmlNode> Find( this HtmlNode node, params string[] expressions )
     {
-      var selector = HtmlCssSelector.Create( expressions );
+      var selector = CssSelector.Create( expressions );
       return selector.Search( node.AsContainer(), true ).Select( element => (HtmlNode) element.RawObject );
     }
 

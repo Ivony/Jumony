@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 
 namespace Ivony.Html.Web
 {
@@ -24,7 +25,7 @@ namespace Ivony.Html.Web
 
     protected override void ProcessDocument()
     {
-      _handler.ProcessDocument( Document );
+      _handler.ProcessDocument( new HttpContextWrapper( HttpContext.Current ), Document );
     }
 
     public override void Dispose()

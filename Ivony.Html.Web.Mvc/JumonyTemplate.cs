@@ -42,7 +42,7 @@ namespace Ivony.Html.Web.Mvc
 
       var document = HtmlProviders.LoadDocument( _context.HttpContext, null );
 
-      _handler.ProcessDocument( document );
+      _handler.ProcessDocument( _context.HttpContext, document );
 
       document.Render( originWriter );
 

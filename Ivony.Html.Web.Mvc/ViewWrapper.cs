@@ -38,7 +38,7 @@ namespace Ivony.Html.Web.Mvc
 
       var document = HtmlProviders.ParseDocument( viewContext.HttpContext, null, innerWriter.ToString() );
 
-      Handler.ProcessDocument( document );
+      Handler.ProcessDocument( viewContext.HttpContext, document );
 
       document.Render( writer );
     }

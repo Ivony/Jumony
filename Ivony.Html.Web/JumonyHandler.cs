@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.SessionState;
 using System.IO;
 using Ivony.Fluent;
+using System.Web.Hosting;
 
 namespace Ivony.Html.Web
 {
@@ -64,10 +65,21 @@ namespace Ivony.Html.Web
       OnPreRender();
 
       Trace.Write( "Core", "Begin Render Document" );
-      RenderDocument();
+      string output = RenderDocument();
+
+      Response.Write( output );
       Trace.Write( "Core", "End Render Document" );
 
       OnPostReander();
+
+      UpdateCache( output );
+
+    }
+
+    protected virtual void UpdateCache( string output )
+    {
+
+      throw new NotImplementedException();
     }
 
 
@@ -118,9 +130,11 @@ namespace Ivony.Html.Web
     }
 
 
-    protected virtual void RenderDocument()
+    protected virtual string RenderDocument()
     {
-      Response.Write( Document.InnerHtml( false ) );
+
+      return Document.Render();
+
     }
 
 

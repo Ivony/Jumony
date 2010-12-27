@@ -70,6 +70,7 @@
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />
+    <Compile Include="IHtmlCachePolicy.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />

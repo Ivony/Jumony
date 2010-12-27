@@ -79,7 +79,11 @@ namespace Ivony.Html.Web
     protected virtual void UpdateCache( string output )
     {
 
-      throw new NotImplementedException();
+      var key = HtmlProviders.GetCacheKey( new HttpContextWrapper( HttpContext.Current ) );
+
+
+
+
     }
 
 

@@ -20,6 +20,7 @@ namespace Ivony.Html.Web
       ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
       ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
       RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
+      CachePolicies = new SynchronizedCollection<IHtmlCachePolicy>( _cachePoliciesSync );
 
 
       ContentProviders.Add( new StaticFileLoader() );
@@ -50,6 +51,15 @@ namespace Ivony.Html.Web
     private static readonly object _mappersSync = new object();
 
     public static ICollection<IRequestMapper> RequestMappers
+    {
+      get;
+      private set;
+    }
+
+
+    private static readonly object _cachePoliciesSync = new object();
+
+    public static ICollection<IHtmlCachePolicy> CachePolicies
     {
       get;
       private set;
@@ -245,6 +255,27 @@ namespace Ivony.Html.Web
       get { return HostingEnvironment.Cache; }
     }
 
+
+    public static string GetCacheKey( HttpContextBase context )
+    {
+      lock ( _cachePoliciesSync )
+      {
+        foreach ( var policy in CachePolicies )
+        {
+          string cacheKey = policy.CacheKey( context );
+          if ( cacheKey != null )
+            return cacheKey;
+        }
+      }
+
+      return DefaultCacheKey( context );
+
+    }
+
+    private static string DefaultCacheKey( HttpContextBase context )
+    {
+      return context.Request.Url.AbsoluteUri;
+    }
   }
 
 }

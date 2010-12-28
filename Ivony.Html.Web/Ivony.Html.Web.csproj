@@ -67,10 +67,11 @@
     <Compile Include="DefaultParserResult.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingModule.cs" />
+    <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />
-    <Compile Include="IHtmlCachePolicy.cs" />
+    <Compile Include="IHtmlCachePolicyProvider.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="WebExtenions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ivony\Ivony.Core\Ivony.Core.csproj">
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>

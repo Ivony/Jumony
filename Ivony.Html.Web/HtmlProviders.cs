@@ -20,7 +20,7 @@ namespace Ivony.Html.Web
       ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
       ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
       RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
-      CachePolicies = new SynchronizedCollection<IHtmlCachePolicy>( _cachePoliciesSync );
+      CachePolicyProviders = new SynchronizedCollection<IHtmlCachePolicyProvider>( _cachePoliciesSync );
 
 
       ContentProviders.Add( new StaticFileLoader() );
@@ -59,7 +59,7 @@ namespace Ivony.Html.Web
 
     private static readonly object _cachePoliciesSync = new object();
 
-    public static ICollection<IHtmlCachePolicy> CachePolicies
+    public static ICollection<IHtmlCachePolicyProvider> CachePolicyProviders
     {
       get;
       private set;
@@ -260,9 +260,9 @@ namespace Ivony.Html.Web
     {
       lock ( _cachePoliciesSync )
       {
-        foreach ( var policy in CachePolicies )
+        foreach ( var policy in CachePolicyProviders )
         {
-          string cacheKey = policy.CacheKey( context );
+          string cacheKey = policy.GetCacheKey( context );
           if ( cacheKey != null )
             return cacheKey;
         }
@@ -270,6 +270,26 @@ namespace Ivony.Html.Web
 
       return DefaultCacheKey( context );
 
+    }
+
+    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, IHtmlHandler handler, IHtmlDocument document )
+    {
+      lock ( _cachePoliciesSync )
+      {
+        foreach ( var provider in CachePolicyProviders )
+        {
+          var policy = provider.GetPolicy( context, handler, document );
+          if ( policy != null )
+            return policy;
+        }
+      }
+
+      return DefaultCachePolicy( context );
+    }
+
+    private static HtmlCachePolicy DefaultCachePolicy( HttpContextBase context )
+    {
+      return new HtmlCachePolicy() { Duration = new TimeSpan( 0, 0, 10 ) };
     }
 
     private static string DefaultCacheKey( HttpContextBase context )

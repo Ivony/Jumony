@@ -15,7 +15,7 @@ namespace Ivony.Html.Binding
 
 
 
-    private const string inited_token = "Jumony_Binding_ExvironmentExpression_Inited";
+    private const string inited_token = "Jumony_Binding_EnvironmentExpression_Inited";
 
     #region IHttpModule 成员
 

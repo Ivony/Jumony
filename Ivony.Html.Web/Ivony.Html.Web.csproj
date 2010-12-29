@@ -64,7 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultParserResult.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />

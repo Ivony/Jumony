@@ -11,7 +11,9 @@ using System.Web.Caching;
 namespace Ivony.Html.Web
 {
 
-
+  /// <summary>
+  /// 提供Jumony Web所有提供程序的管理和注册的静态类
+  /// </summary>
   public static class HtmlProviders
   {
 
@@ -32,6 +34,9 @@ namespace Ivony.Html.Web
 
     private static readonly object _parserProvidersSync = new object();
 
+    /// <summary>
+    /// 所有解析器提供程序
+    /// </summary>
     public static ICollection<IHtmlParserProvider> ParserProviders
     {
       get;
@@ -41,6 +46,9 @@ namespace Ivony.Html.Web
 
     private static readonly object _contentProvidersSync = new object();
 
+    /// <summary>
+    /// 所有内容提供程序
+    /// </summary>
     public static ICollection<IHtmlContentProvider> ContentProviders
     {
       get;
@@ -50,6 +58,9 @@ namespace Ivony.Html.Web
 
     private static readonly object _mappersSync = new object();
 
+    /// <summary>
+    /// 所有请求映射提供程序
+    /// </summary>
     public static ICollection<IRequestMapper> RequestMappers
     {
       get;
@@ -59,6 +70,9 @@ namespace Ivony.Html.Web
 
     private static readonly object _cachePoliciesSync = new object();
 
+    /// <summary>
+    /// 所有缓存策略提供程序
+    /// </summary>
     public static ICollection<IHtmlCachePolicyProvider> CachePolicyProviders
     {
       get;
@@ -256,6 +270,14 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+
+    /// <summary>
+    /// 获取缓存键（依据）
+    /// </summary>
+    /// <param name="context">当前HTTP请求信息</param>
+    /// <returns>缓存键，对于可能产生同一结果的请求，应产生同一缓存键</returns>
     public static string GetCacheKey( HttpContextBase context )
     {
       lock ( _cachePoliciesSync )
@@ -272,6 +294,14 @@ namespace Ivony.Html.Web
 
     }
 
+    /// <summary>
+    /// 获取缓存策略
+    /// </summary>
+    /// <param name="context">当前HTTP请求信息</param>
+    /// <param name="handler">当前负责处理请求的处理程序</param>
+    /// <param name="document">处理后的文档</param>
+    /// <returns>缓存策略</returns>
+    /// <remarks>缓存策略决定了缓存时间和缓存依赖项</remarks>
     public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, IHtmlHandler handler, IHtmlDocument document )
     {
       lock ( _cachePoliciesSync )
@@ -297,5 +327,27 @@ namespace Ivony.Html.Web
       return context.Request.Url.AbsoluteUri;
     }
   }
+
+
+
+  [Flags]
+  public enum CacheBasis
+  {
+
+    /// <summary>指定对于所有请求都不要缓存</summary>
+    NoCache = 0,
+
+    /// <summary>指定对于所有请求，以url作为缓存依据</summary>
+    ByUrl = 1,
+
+    /// <summary>指定对于所有请求，以SessionID作为依据</summary>
+    BySession = 2,
+
+    /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
+    ByIdentity = 4,
+
+
+  }
+
 
 }

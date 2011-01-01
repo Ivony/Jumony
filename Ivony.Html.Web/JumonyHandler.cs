@@ -161,16 +161,6 @@ namespace Ivony.Html.Web
       return Document.Find( selector );
     }
 
-    /// <summary>
-    /// 在文档范围类使用选择器查找符合要求的元素
-    /// </summary>
-    /// <param name="selectors">多个CSS选择器，结果会合并</param>
-    /// <returns>符合选择器要求的元素</returns>
-    protected IEnumerable<IHtmlElement> Find( params string[] selectors )
-    {
-      return Document.Find( selectors );
-    }
-
 
 
     /// <summary>

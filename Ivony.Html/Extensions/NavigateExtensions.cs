@@ -282,8 +282,7 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
-      var selector = CssSelector.Create( expression, container );
-      return selector.Filter( container.Descendants() );
+      return CssSelector.Search( expression, container );
     }
 
 

@@ -54,6 +54,18 @@ namespace Ivony.Html
       return new CssMultipleSelector( selectors );
     }
 
+
+
+
+    public static IEnumerable<IHtmlElement> Search( string expression, IHtmlContainer scope )
+    {
+
+      var selector = Create( expression, scope );
+      return selector.Filter( scope.Descendants() );
+
+    }
+
+
   }
 
 

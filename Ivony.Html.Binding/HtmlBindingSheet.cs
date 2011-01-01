@@ -121,7 +121,7 @@ namespace Ivony.Html.Binding
 
     }
 
-    protected CssSelector Selector
+    protected ICssSelector Selector
     {
       get;
       private set;
@@ -255,7 +255,7 @@ namespace Ivony.Html.Binding
     public void Apply( BindingContext context )
     {
 
-      var elements = Selector.Search( context.Scope, true );
+      var elements = Selector.Filter( context.Scope.Descendants() );
 
       switch ( SourceType )
       {

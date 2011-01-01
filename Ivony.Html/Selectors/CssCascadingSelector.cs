@@ -184,16 +184,20 @@ namespace Ivony.Html
 
     }
 
-
-
-    #region ICssSelector 成员
-
     public bool IsEligible( IHtmlElement element )
     {
-      throw new NotImplementedException();
-    }
 
-    #endregion
+      while ( element.Container != null )
+      {
+        if ( element.Container == _scope )
+          return true;
+
+        element = element.Parent();
+
+      }
+
+      return false;
+    }
   }
 
 

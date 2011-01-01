@@ -30,7 +30,7 @@ namespace Ivony.Html
         coreSelector = selector;
         coreEnumerator = enumerator;
 
-        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ToString() ) );
       }
 
 
@@ -48,7 +48,7 @@ namespace Ivony.Html
       void IDisposable.Dispose()
       {
         coreEnumerator.Dispose();
-        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "End Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "End Enumerate Search \"{0}\"", coreSelector.ToString() ) );
       }
 
       #endregion
@@ -67,7 +67,7 @@ namespace Ivony.Html
 
       void System.Collections.IEnumerator.Reset()
       {
-        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ExpressionString ) );
+        Trace.Write( "Selector", string.Format( CultureInfo.InvariantCulture, "Begin Enumerate Search \"{0}\"", coreSelector.ToString() ) );
         coreEnumerator.Reset();
       }
 

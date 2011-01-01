@@ -33,7 +33,7 @@ namespace Ivony.Html.Forms
     public static IEnumerable<HtmlButtonGroup> CaptureInputGroups( HtmlForm form )
     {
 
-      var inputItems = form.Element.Find( "input[type=radio][name]", "input[type=checkbox][name]" );
+      var inputItems = form.Element.Find( "input[type=radio][name] , input[type=checkbox][name]" );
 
       var groups = inputItems.GroupBy( item => item.Attribute( "name" ).Value() )
           .Select( item => new HtmlButtonGroup( form, item ) );

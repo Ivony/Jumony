@@ -35,7 +35,7 @@ namespace Ivony.Html.Forms
 
 
       textControls =
-      Element.Find( "input[type=text]", "input[type=password]", "input[type=hidden]" )
+      Element.Find( "input[type=text] , input[type=password] , input[type=hidden]" )
         .Select( e => new HtmlInputText( this, e ) ).Cast<IHtmlTextControl>()
         .Union( Element.Find( "textarea" ).Select( e => new HtmlTextArea( this, e ) ).Cast<IHtmlTextControl>() )
         .ForAll( control => controlsTable.Add( control.Name, control ) )

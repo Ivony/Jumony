@@ -27,5 +27,14 @@ namespace Ivony.Html
       return _selectors.Any( s => s.IsEligible( element ) );
     }
 
+
+    public override string ToString()
+    {
+
+      return string.Join( " , ", Array.ConvertAll( _selectors, s => s.ToString() ) );
+
+    }
+
+
   }
 }

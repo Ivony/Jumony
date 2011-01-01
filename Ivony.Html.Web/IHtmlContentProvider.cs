@@ -101,7 +101,7 @@ namespace Ivony.Html.Web
     public static HtmlContentResult LoadContent( VirtualPathProvider provider, string virtualPath )
     {
 
-      if ( provider.FileExists( virtualPath ) )
+      if ( !provider.FileExists( virtualPath ) )
         return null;
 
       var file = provider.GetFile( virtualPath );

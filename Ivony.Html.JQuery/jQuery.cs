@@ -18,7 +18,7 @@ namespace Ivony.Html
     private readonly IHtmlContainer _scope;
 
 
-    private readonly CssSelector _selector;
+    private readonly ICssSelector _selector;
     private readonly IEnumerable<IHtmlElement> _elements;
 
     public jQuery( string selector, IHtmlContainer scope )
@@ -26,8 +26,8 @@ namespace Ivony.Html
       _selectorExpression = selector;
       _scope = scope;
 
-      _selector = CssSelector.Create( selector );
-      _elements = _selector.Search( _scope, true );
+      _selector = CssSelector.Create( selector, scope );
+      _elements = _selector.Filter( _scope.Descendants() );
 
     }
 
@@ -310,7 +310,7 @@ namespace Ivony.Html
 
       foreach ( PropertyDescriptor property in TypeDescriptor.GetProperties( properties ) )
       {
-        var key =   property.Name;
+        var key = property.Name;
         var _value = property.GetValue( properties );
 
         string value = null;

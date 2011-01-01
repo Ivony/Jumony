@@ -25,7 +25,7 @@ namespace Ivony.Html
     /// <summary>
     /// 创建一个CSS选择器
     /// </summary>
-    /// <param name="expressions">选择器表达式</param>
+    /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
     public static ICssSelector Create( string expression )
     {
@@ -39,7 +39,7 @@ namespace Ivony.Html
     /// 创建一个CSS选择器
     /// </summary>
     /// <param name="scope">范畴限定</param>
-    /// <param name="expressions">选择器表达式</param>
+    /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {

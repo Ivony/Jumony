@@ -18,20 +18,41 @@ namespace Ivony.Html
   public sealed class CssSelector
   {
 
-    public static ICssSelector Create( params string[] expressions )
+
+    private static readonly Regex cssSelectorRegex = new Regex( Regulars.cssSelectorPattern, RegexOptions.Compiled );
+
+
+    /// <summary>
+    /// 创建一个CSS选择器
+    /// </summary>
+    /// <param name="expressions">选择器表达式</param>
+    /// <returns></returns>
+    public static ICssSelector Create( string expression )
     {
-      var selectors = expressions.Select( e => CssCasecadingSelector.Create( e ) ).ToArray();
+      return Create( expression, null );
+    }
+
+
+
+
+    /// <summary>
+    /// 创建一个CSS选择器
+    /// </summary>
+    /// <param name="scope">范畴限定</param>
+    /// <param name="expressions">选择器表达式</param>
+    /// <returns></returns>
+    public static ICssSelector Create( string expression, IHtmlContainer scope )
+    {
+
+      var match = cssSelectorRegex.Match( expression );
+      if ( !match.Success )
+        throw new FormatException( "无法识别的CSS选择器" );
+
+
+      var selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value, scope ) ).ToArray();
 
       return new CssMultipleSelector( selectors );
     }
-    public static ICssSelector Create( IHtmlContainer scope, params string[] expressions )
-    {
-      var selectors = expressions.Select( e => CssCasecadingSelector.Create( e, scope ) ).ToArray();
-
-      return new CssMultipleSelector( selectors );
-    }
-
-
 
   }
 

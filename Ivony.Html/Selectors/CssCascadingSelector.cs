@@ -15,18 +15,15 @@ namespace Ivony.Html
   {
 
 
-    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssCasecadingSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-    private readonly string[] _expressions;
-
 
 
 
 
     /// <summary>
-    /// 创建层级选择器
+    /// 创建层叠选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
@@ -39,9 +36,10 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建选择器，这是核心函数
+    /// 创建层叠选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
+    /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
     /// <returns></returns>
     public static CssCasecadingSelector Create( string expression, IHtmlContainer scope )
     {
@@ -98,7 +96,6 @@ namespace Ivony.Html
     }
 
     private readonly ICssSelector _parent;
-    private CssElementSelector cssElementSelector;
     /// <summary>
     /// 父级选择器
     /// </summary>
@@ -117,7 +114,10 @@ namespace Ivony.Html
     private CssCasecadingSelector( CssElementSelector selector, string relative, ICssSelector parent )
     {
       _selector = selector;
-      _relative = relative.Trim();
+
+      if ( relative != null )
+        _relative = relative.Trim();
+
       _parent = parent;
     }
 

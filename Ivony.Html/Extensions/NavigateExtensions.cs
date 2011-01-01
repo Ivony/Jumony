@@ -282,7 +282,7 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
-      var selector = CssSelector.Create( container, expression );
+      var selector = CssSelector.Create( expression, container );
       return selector.Filter( container.Descendants() );
     }
 
@@ -296,19 +296,6 @@ namespace Ivony.Html
     public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
     {
       return Find( container, expression ).Single();
-    }
-
-
-    /// <summary>
-    /// 从当前容器按照CSS3选择器搜索符合要求的元素
-    /// </summary>
-    /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expressions">多个CSS选择器，结果会合并</param>
-    /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, params string[] expressions )
-    {
-      var selector = CssSelector.Create( container, expressions );
-      return selector.Filter( container.Descendants() );
     }
 
 

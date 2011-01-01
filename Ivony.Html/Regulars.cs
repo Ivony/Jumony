@@ -25,8 +25,14 @@ namespace Ivony.Html
     public static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}", relativeExpressionPattern, elementExpressionPattern );
     public static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
 
-    public static readonly string cssSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
-    public static readonly string cssSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
+    /// <summary>匹配CSS层叠选择器正则表达式</summary>
+    public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
+    /// <summary>匹配CSS层叠选择器正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
+    public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
+
+    public static readonly string cssSelectorPattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})(\s+,\s+(?<selector>{0}))*", cssCasecadingSelectorPatternNoGroup );
+    public static readonly string cssSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"({0})(\s+,\s+({0}))*", cssCasecadingSelectorPatternNoGroup );
+
 
     public static readonly string integerPattern = "([1-9][0-9]*|0)";
     public static readonly string decimalPattern = string.Format( CultureInfo.InvariantCulture, @"({0}(\.[0-9]*[1-9]))", integerPattern );
@@ -34,7 +40,7 @@ namespace Ivony.Html
 
     public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", quoteTextPattern );
 
-    public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", cssSelectorPatternNoGroup, styleSettingPattern );
+    public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", cssCasecadingSelectorPatternNoGroup, styleSettingPattern );
     public static readonly string styleSheetPattern = string.Format( CultureInfo.InvariantCulture, @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", styleRulePattern );
 
 

@@ -319,15 +319,77 @@ namespace Ivony.Html.Web
 
     private static HtmlCachePolicy DefaultCachePolicy( HttpContextBase context )
     {
-
-
-      return new HtmlCachePolicy() { Duration = new TimeSpan( 0, 0, 10 ) };
+      return new HtmlCachePolicy() { Duration = DefaultCacheDuration };
     }
 
     private static string DefaultCacheKey( HttpContextBase context )
     {
-      return context.Request.Url.AbsoluteUri;
+
+      if ( DefaultCacheKeyBasis == Web.CacheKeyBasis.NoCache )
+        return null;
+
+      var keys = new List<string>();
+
+      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.BySession) != 0 )
+      {
+        if ( !context.Session.IsCookieless && !context.Session.IsNewSession )
+          keys.Add( context.Session.SessionID );
+      }
+
+      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.ByIdentity) != 0 )
+      {
+        if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
+          keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
+      }
+
+      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.ByUrl) != 0 )
+        keys.Add( context.Request.Url.AbsoluteUri );
+
+      return string.Join( ":", keys.ToArray() );
     }
+
+
+    /// <summary>
+    /// 设置默认缓存键的产生依据
+    /// </summary>
+    public static CacheKeyBasis DefaultCacheKeyBasis
+    {
+      get;
+      set;
+    }
+
+
+    /// <summary>
+    /// 获取或设置默认缓存时间
+    /// </summary>
+    public static TimeSpan DefaultCacheDuration
+    {
+      get;
+      set;
+    }
+
+
+  }
+
+
+
+  [Flags]
+  public enum CacheKeyBasis
+  {
+
+    /// <summary>指定对于所有请求都不要缓存</summary>
+    NoCache = 0,
+
+    /// <summary>指定对于所有请求，以url作为缓存依据</summary>
+    ByUrl = 1,
+
+    /// <summary>指定对于所有请求，以SessionID作为依据</summary>
+    BySession = 2,
+
+    /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
+    ByIdentity = 4,
+
+
   }
 
 

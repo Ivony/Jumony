@@ -72,7 +72,7 @@ namespace Ivony.Html.Web
 
       OnPostReander();
 
-      UpdateCache( output );
+      UpdateCache( document, output );
 
     }
 

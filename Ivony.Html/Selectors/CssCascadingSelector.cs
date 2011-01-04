@@ -27,7 +27,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
-    public static CssCasecadingSelector Create( string expression )
+    public static ICssSelector Create( string expression )
     {
 
       return Create( expression, null );
@@ -41,7 +41,7 @@ namespace Ivony.Html
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
     /// <returns></returns>
-    public static CssCasecadingSelector Create( string expression, IHtmlContainer scope )
+    public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
 
       var match = cssSelectorRegex.Match( expression );
@@ -49,12 +49,12 @@ namespace Ivony.Html
         throw new FormatException();
 
 
-      CssCasecadingSelector selector;
+      ICssSelector selector;
 
       if ( scope != null )
         selector = new CssCasecadingSelector( CssElementSelector.Create( match.Groups["elementSelector"].Value ), scope );
       else
-        selector = new CssCasecadingSelector( CssElementSelector.Create( match.Groups["elementSelector"].Value ) );
+        selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -86,22 +86,22 @@ namespace Ivony.Html
       get { return _relative; }
     }
 
-    private readonly CssElementSelector _selector;
+    private readonly CssElementSelector _right;
     /// <summary>
     /// 元素选择器
     /// </summary>
-    public CssElementSelector ElementSelector
+    public CssElementSelector RightSelector
     {
-      get { return _selector; }
+      get { return _right; }
     }
 
-    private readonly ICssSelector _parent;
+    private readonly ICssSelector _left;
     /// <summary>
     /// 父级选择器
     /// </summary>
-    public ICssSelector ParentSelector
+    public ICssSelector LeftSelector
     {
-      get { return _parent; }
+      get { return _left; }
     }
 
 
@@ -113,12 +113,12 @@ namespace Ivony.Html
 
     private CssCasecadingSelector( CssElementSelector selector, string relative, ICssSelector parent )
     {
-      _selector = selector;
+      _right = selector;
 
       if ( relative != null )
         _relative = relative.Trim();
 
-      _parent = parent;
+      _left = parent;
     }
 
 
@@ -131,28 +131,28 @@ namespace Ivony.Html
     public bool IsEligible( IHtmlElement element )
     {
 
-      if ( !ElementSelector.IsEligible( element ) )
+      if ( !RightSelector.IsEligible( element ) )
         return false;
 
-      if ( _parent == null )
+      if ( _left == null )
         return true;
 
 
 
       if ( Relative == null )
-        return ParentSelector.IsEligible( element );
+        return LeftSelector.IsEligible( element );
 
       else if ( Relative == ">" )
-        return ParentSelector.IsEligible( element.Parent() );
+        return LeftSelector.IsEligible( element.Parent() );
 
       else if ( Relative == "" )
-        return element.Ancestors().Any( e => ParentSelector.IsEligible( e ) );
+        return element.Ancestors().Any( e => LeftSelector.IsEligible( e ) );
 
       else if ( Relative == "+" )
-        return ParentSelector.IsEligible( element.PreviousElement() );
+        return LeftSelector.IsEligible( element.PreviousElement() );
 
       else if ( Relative == "~" )
-        return element.SiblingsBeforeSelf().Any( e => ParentSelector.IsEligible( e ) );
+        return element.SiblingsBeforeSelf().Any( e => LeftSelector.IsEligible( e ) );
 
       else
         throw new NotSupportedException( string.Format( CultureInfo.InvariantCulture, "不支持的关系选择符 \"{0}\"", Relative ) );
@@ -161,13 +161,13 @@ namespace Ivony.Html
     public override string ToString()
     {
       if ( Relative == null )
-        return ElementSelector.ToString();
+        return RightSelector.ToString();
 
       else if ( Relative == "" )
-        return string.Format( "{0} {1}", ParentSelector, ElementSelector );
+        return string.Format( "{0} {1}", LeftSelector, RightSelector );
 
       else
-        return string.Format( "{0} {1} {2}", ParentSelector, Relative, ElementSelector );
+        return string.Format( "{0} {1} {2}", LeftSelector, Relative, RightSelector );
     }
   }
 
@@ -198,6 +198,22 @@ namespace Ivony.Html
 
       return false;
     }
+
+    public override string ToString()
+    {
+
+      IHtmlElement element = _scope as IHtmlElement;
+      if ( element != null )
+        return "#" + element.Unique() + " ";
+      else if ( _scope is IHtmlDocument )
+        return "#document# ";
+      else if ( _scope is HtmlFragment )
+        return "#fragment# ";
+      else
+        return "#unknow#";
+
+    }
+
   }
 
 

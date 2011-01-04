@@ -46,9 +46,9 @@ public class SelectorAndBind_html : Ivony.Html.Web.JumonyHandler
 
     //Bind方法延迟执行的原因在于，在执行Bind时，有可能会对文档对象树造成破坏性修改（例如设置InnerHTML或是移除节点），而枚举器不能在遍历的时候修改集合。
     //Bind提供了一个简单的方式让你可以延迟安全的执行你想要做的操作，如果你需要延迟安全的执行自定义的操作，可以用BindAction扩展方法，例如下面这行代码删掉我们自己加在页面上的诡异元素<special>
-    Find( "special" ).ForAll( element => element.BindAction( e => e.RawObject.CastTo<HtmlNode>().Remove() ) );
+    Find( "special" ).ForAll( element => element.BindAction( e => e.Remove() ) );
     //如果直接执行下面的代码，则会报错：
-    //Find( "special" ).ForAll( element => element.NodeObject.Cast<HtmlNode>().Remove() );
+    //Find( "special" ).ForAll( element => element.Remove() );
 
 
 

@@ -1,6 +1,7 @@
 ﻿#list1 li
 {
   binding-source: $;
+  binding-source-type: asobject;
   binding-path: @:text;
 }
 

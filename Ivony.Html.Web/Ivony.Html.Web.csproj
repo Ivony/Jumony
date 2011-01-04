@@ -68,6 +68,7 @@
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="HttpHandler.cs" />
+    <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="IHtmlCachePolicyProvider.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
-    <Compile Include="JumonyHandler.cs" />
     <Compile Include="RequestMapResult.cs" />
     <Compile Include="JumonyModule.cs" />
     <Compile Include="IRequestMapper.cs" />

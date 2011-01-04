@@ -4,7 +4,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 表示一个 HTML 对象
+  /// 表示一个 HTML DOM 的对象
   /// </summary>
   public interface IHtmlDomObject
   {
@@ -26,6 +26,8 @@ namespace Ivony.Html
     {
       get;
     }
+
+
 
     object SyncRoot
     {

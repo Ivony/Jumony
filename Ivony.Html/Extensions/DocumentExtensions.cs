@@ -73,6 +73,17 @@ namespace Ivony.Html
       return id;
     }
 
+
+    public static string Unique( this IHtmlElement element )
+    {
+      var id = element.Identity();
+
+      if ( id == null )
+        return CreateIdentity( element, false );
+      else
+        return id;
+    }
+
     private static string CreateIdentity( IHtmlElement element, bool ancestorsCreate )
     {
       string parentId;
@@ -145,22 +156,36 @@ namespace Ivony.Html
     public static void EnsureAllocated( this IHtmlNode node )
     {
 
-      if ( node is IFreeNode )
-        throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
-
-      var container = node.Container;
-
-      if ( container is HtmlFragment )
-        throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
-
-      node = container as IHtmlNode;
       if ( node == null )
-        return;
+        throw new ArgumentNullException( "node" );
 
-      else
-        EnsureAllocated( node );
+      if ( !IsAllocated( node ) )
+        throw new InvalidOperationException( "无法对没有被分配在文档上的元素或节点进行操作" );
 
     }
+
+
+    public static bool IsAllocated( this IHtmlNode node )
+    {
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
+      if ( node.Container == null )
+        return false;
+
+      if ( node.Container.Equals( node.Document ) )
+        return true;
+
+      if ( node.Parent() == null )
+        return false;
+
+      return IsAllocated( node.Parent() );
+
+    }
+
+
 
     private static string GetElementName( IHtmlElement element )
     {

@@ -12,9 +12,9 @@ namespace Ivony.Html
   internal sealed class CssMultipleSelector : ICssSelector
   {
 
-    private CssCasecadingSelector[] _selectors;
+    private ICssSelector[] _selectors;
 
-    public CssMultipleSelector( params CssCasecadingSelector[] selectors )
+    public CssMultipleSelector( params ICssSelector[] selectors )
     {
 
       _selectors = selectors;

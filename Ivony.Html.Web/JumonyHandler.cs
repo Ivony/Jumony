@@ -82,14 +82,14 @@ namespace Ivony.Html.Web
     /// 刷新输出缓存
     /// </summary>
     /// <param name="output"></param>
-    protected virtual void UpdateCache( string output )
+    protected virtual void UpdateCache( IHtmlDocument document, string output )
     {
 
       var context = new HttpContextWrapper( HttpContext.Current );
 
       var key = HtmlProviders.GetCacheKey( context );
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, Document );
+      var policy = HtmlProviders.GetCachePolicy( context, this, document );
 
       Cache.Insert( key, output, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
 

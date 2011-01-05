@@ -23,27 +23,31 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建层叠选择器
-    /// </summary>
-    /// <param name="expression">选择器表达式</param>
-    /// <returns></returns>
-    public static ICssSelector Create( string expression )
-    {
-
-      return Create( expression, null );
-
-    }
-
-
-    /// <summary>
-    /// 创建层叠选择器
+    /// 创建选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
     /// <returns></returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
+      if ( scope == null )
+        throw new ArgumentNullException( "scope" );
 
+      var selector = Create( expression );
+
+      return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
+
+    }
+
+
+
+    /// <summary>
+    /// 创建选择器
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <returns></returns>
+    public static ICssSelector Create( string expression )
+    {
       var match = cssSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
@@ -51,10 +55,9 @@ namespace Ivony.Html
 
       ICssSelector selector;
 
-      if ( scope != null )
-        selector = new CssCasecadingSelector( CssElementSelector.Create( match.Groups["elementSelector"].Value ), scope );
-      else
-        selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
+
+
+      selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -73,6 +76,7 @@ namespace Ivony.Html
 
 
       return selector;
+
     }
 
 
@@ -108,14 +112,8 @@ namespace Ivony.Html
     //没有左选择器的情况
     private CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
 
-    //利用指定容器作为范围限定
-    private CssCasecadingSelector( CssElementSelector selector, IHtmlContainer scope ) : this( selector, null, new CssScopeRestrictionSelector( scope ) ) { }
-
-    //利用指定选择器作为范围限定
-    private CssCasecadingSelector( CssElementSelector selector, ICssSelector scope ) : this( selector, "", scope ) { }
-
     //一般情况
-    private CssCasecadingSelector( CssElementSelector rightSelector, string relative, ICssSelector leftSelector )
+    private CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
       _right = rightSelector;
 

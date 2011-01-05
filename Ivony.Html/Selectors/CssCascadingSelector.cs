@@ -86,11 +86,11 @@ namespace Ivony.Html
       get { return _relative; }
     }
 
-    private readonly CssElementSelector _right;
+    private readonly ICssSelector _right;
     /// <summary>
     /// 元素选择器
     /// </summary>
-    public CssElementSelector RightSelector
+    public ICssSelector RightSelector
     {
       get { return _right; }
     }
@@ -105,20 +105,24 @@ namespace Ivony.Html
     }
 
 
+    //没有左选择器的情况
     private CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
 
+    //利用指定容器作为范围限定
     private CssCasecadingSelector( CssElementSelector selector, IHtmlContainer scope ) : this( selector, null, new CssScopeRestrictionSelector( scope ) ) { }
 
+    //利用指定选择器作为范围限定
     private CssCasecadingSelector( CssElementSelector selector, ICssSelector scope ) : this( selector, "", scope ) { }
 
-    private CssCasecadingSelector( CssElementSelector selector, string relative, ICssSelector parent )
+    //一般情况
+    private CssCasecadingSelector( CssElementSelector rightSelector, string relative, ICssSelector leftSelector )
     {
-      _right = selector;
+      _right = rightSelector;
 
       if ( relative != null )
         _relative = relative.Trim();
 
-      _left = parent;
+      _left = leftSelector;
     }
 
 
@@ -175,7 +179,6 @@ namespace Ivony.Html
 
     private class CssScopeRestrictionSelector : ICssSelector
     {
-
 
       private readonly IHtmlContainer _scope;
 

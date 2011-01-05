@@ -26,25 +26,6 @@ namespace Ivony.Html
     /// 创建选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
-    /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
-    /// <returns></returns>
-    public static ICssSelector Create( string expression, IHtmlContainer scope )
-    {
-      if ( scope == null )
-        throw new ArgumentNullException( "scope" );
-
-      var selector = Create( expression );
-
-      return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
-
-    }
-
-
-
-    /// <summary>
-    /// 创建选择器
-    /// </summary>
-    /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
     public static ICssSelector Create( string expression )
     {
@@ -53,11 +34,7 @@ namespace Ivony.Html
         throw new FormatException();
 
 
-      ICssSelector selector;
-
-
-
-      selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
+      ICssSelector selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
 
       foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
       {
@@ -76,8 +53,28 @@ namespace Ivony.Html
 
 
       return selector;
+    }
+
+
+    /// <summary>
+    /// 创建选择器
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
+    /// <returns></returns>
+    public static ICssSelector Create( string expression, IHtmlContainer scope )
+    {
+      if ( scope == null )
+        throw new ArgumentNullException( "scope" );
+
+      var selector = Create( expression );
+
+      return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
 
     }
+
+
+
 
 
 
@@ -92,7 +89,7 @@ namespace Ivony.Html
 
     private readonly ICssSelector _right;
     /// <summary>
-    /// 元素选择器
+    /// 子级选择器
     /// </summary>
     public ICssSelector RightSelector
     {

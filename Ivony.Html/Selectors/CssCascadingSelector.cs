@@ -142,6 +142,7 @@ namespace Ivony.Html
       if ( Relative == null )
         return LeftSelector.IsEligible( element );
 
+
       else if ( Relative == ">" )
         return LeftSelector.IsEligible( element.Parent() );
 
@@ -169,52 +170,56 @@ namespace Ivony.Html
       else
         return string.Format( "{0} {1} {2}", LeftSelector, Relative, RightSelector );
     }
-  }
-
-  public class CssScopeRestrictionSelector : ICssSelector
-  {
 
 
-    private readonly IHtmlContainer _scope;
 
-    public CssScopeRestrictionSelector( IHtmlContainer scope )
+    private class CssScopeRestrictionSelector : ICssSelector
     {
 
-      _scope = scope;
 
-    }
+      private readonly IHtmlContainer _scope;
 
-    public bool IsEligible( IHtmlElement element )
-    {
-
-      while ( element.Container != null )
+      public CssScopeRestrictionSelector( IHtmlContainer scope )
       {
-        if ( element.Container == _scope )
-          return true;
 
-        element = element.Parent();
+        _scope = scope;
 
       }
 
-      return false;
+      public bool IsEligible( IHtmlElement element )
+      {
+
+        while ( element.Container != null )
+        {
+          if ( element.Container == _scope )
+            return true;
+
+          element = element.Parent();
+
+        }
+
+        return false;
+      }
+
+      public override string ToString()
+      {
+
+        IHtmlElement element = _scope as IHtmlElement;
+        if ( element != null )
+          return "#" + element.Unique() + " ";
+        else if ( _scope is IHtmlDocument )
+          return "#document# ";
+        else if ( _scope is HtmlFragment )
+          return "#fragment# ";
+        else
+          return "#unknow#";
+
+      }
+
     }
 
-    public override string ToString()
-    {
 
-      IHtmlElement element = _scope as IHtmlElement;
-      if ( element != null )
-        return "#" + element.Unique() + " ";
-      else if ( _scope is IHtmlDocument )
-        return "#document# ";
-      else if ( _scope is HtmlFragment )
-        return "#fragment# ";
-      else
-        return "#unknow#";
 
-    }
 
   }
-
-
 }

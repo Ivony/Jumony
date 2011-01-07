@@ -24,7 +24,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-    public IHtmlContainer Container
+    public IHtmlContainer Parent
     {
       get
       {
@@ -36,7 +36,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public object RawObject
+    public object NodeObject
     {
       get { return Node; }
     }
@@ -51,13 +51,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       {
         var node = obj as IHtmlNode;
         if ( node != null )
-          return RawObject.Equals( node.RawObject );
+          return NodeObject.Equals( node.NodeObject );
       }
 
       {
         var node = obj as AP.HtmlNode;
         if ( node != null )
-          return RawObject.Equals( node );
+          return NodeObject.Equals( node );
       }
 
 
@@ -66,7 +66,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public override int GetHashCode()
     {
-      return RawObject.GetHashCode();
+      return NodeObject.GetHashCode();
     }
 
 
@@ -77,7 +77,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IHtmlDocument Document
     {
-      get { return Container.Document; }
+      get { return Parent.Document; }
     }
 
     public string RawHtml

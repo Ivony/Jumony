@@ -21,17 +21,11 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IFreeElement CreateElement( string name )
     {
-      if ( string.IsNullOrEmpty( name ) )//TODO 检查name的合法性
-        throw new ArgumentNullException( "name" );
-
       return new FreeElementAdaptor( this, _document.CreateElement( name ) );
     }
 
     public IFreeTextNode CreateTextNode( string htmlText )
     {
-      if ( string.IsNullOrEmpty( htmlText ) )
-        throw new ArgumentNullException( "htmlText" );
-
       return new FreeTextNodeAdaptor( this, _document.CreateTextNode( htmlText ) );
     }
 
@@ -40,24 +34,18 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return new FreeCommentAdaptor( this, _document.CreateComment( comment ) );
     }
 
-    public IHtmlDocument Document
-    {
-      get { return _document.AsDocument(); }
-    }
-
 
 
     public HtmlFragment ParseHtml( string html )
     {
-      if ( html == null )
-        return null;
-
       var document = new AP.HtmlDocument();
 
       document.LoadHtml( html );
 
+      var fragment =  new HtmlFragment( this );
+      fragment.AddNodesCopy( document.AsDocument().Nodes(), this );
 
-      return this.MakeFragment( document.AsDocument() );
+      return fragment;
     }
 
     #endregion
@@ -83,12 +71,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerNode = container as IHtmlContainerNode;
-        if ( containerNode == null )
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
           throw new InvalidOperationException();
 
 
-        containerNode.ChildNodes.Insert( index, Node );
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }
@@ -100,12 +88,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Parent
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlDomObject.Document
+      IHtmlDocument IHtmlNode.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -132,12 +120,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerNode = container as IHtmlContainerNode;
-        if ( containerNode == null )
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
           throw new InvalidOperationException();
 
 
-        containerNode.ChildNodes.Insert( index, Node );
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }
@@ -149,12 +137,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Parent
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlDomObject.Document
+      IHtmlDocument IHtmlNode.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -181,12 +169,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         if ( container == null )
           throw new ArgumentNullException( "container" );
 
-        var containerNode = container as IHtmlContainerNode;
-        if ( containerNode == null )
+        var containerAdapter = container as HtmlContainerAdapter;
+        if ( containerAdapter == null )
           throw new InvalidOperationException();
 
 
-        containerNode.ChildNodes.Insert( index, Node );
+        containerAdapter.Node.ChildNodes.Insert( index, Node );
 
         return Node.AsNode();
       }
@@ -198,12 +186,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Container
+      IHtmlContainer IHtmlNode.Parent
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlDomObject.Document
+      IHtmlDocument IHtmlNode.Document
       {
         get { return _factory._document.AsDocument(); }
       }

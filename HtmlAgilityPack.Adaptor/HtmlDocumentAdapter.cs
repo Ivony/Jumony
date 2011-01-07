@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  internal class HtmlDocumentAdapter : IHtmlDocument, IHtmlContainerNode
+  internal class HtmlDocumentAdapter : HtmlContainerAdapter, IHtmlDocument
   {
 
 
@@ -16,6 +16,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     private AP.HtmlDocument _document;
 
     public HtmlDocumentAdapter( AP.HtmlDocument document )
+      : base( document.DocumentNode )
     {
       if ( document.DocumentNode.ChildNodes.Any() )
       {
@@ -39,92 +40,49 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
+    public string Handle( IHtmlNode node )
+    {
+      var htmlNode = node.NodeObject.CastTo<AP.HtmlNode>();
+      return string.Format( "{0}:{1}", htmlNode.Line, htmlNode.LinePosition );
+    }
+
+
+    Regex handleRegex = new Regex( string.Format( "^{0}:{1}$", Regulars.integerPattern, Regulars.integerPattern ), RegexOptions.Compiled );
+
+    public IHtmlNode Handle( string handler )
+    {
+      if ( handleRegex.IsMatch( handler ) )
+        throw new FormatException();
+
+      string[] values = handler.Split( ':' );
+      int line = int.Parse( values[0] );
+      int linePosition = int.Parse( values[1] );
+
+      var htmlNode = Node.DescendantNodesAndSelf().FirstOrDefault( node => node.Line == line && node.LinePosition == linePosition );
+      if ( htmlNode == null )
+        return null;
+
+      return htmlNode.AsNode();
+
+    }
+
     public IHtmlNodeFactory GetNodeFactory()
     {
       return new HtmlNodeFactory( this._document );
     }
 
 
-    IHtmlDocument IHtmlDomObject.Document
+
+
+    void IHtmlNode.Remove()
+    {
+      throw new InvalidOperationException();
+    }
+
+    IHtmlDocument IHtmlNode.Document
     {
       get { return this; }
     }
 
-
-    public IEnumerable<IHtmlNode> Nodes()
-    {
-      return ChildNodes.Select( node => node.AsNode() );
-    }
-
-    public AP.HtmlNode Node
-    {
-      get { return _document.DocumentNode; }
-    }
-
-    public object RawObject
-    {
-      get { return Node; }
-    }
-
-    public object SyncRoot
-    {
-      get { return Node; }
-    }
-
-
-    public AP.HtmlNodeCollection ChildNodes
-    {
-      get { return Node.ChildNodes; }
-    }
-
-
-    public override bool Equals( object obj )
-    {
-
-      if ( obj == null )
-        return false;
-
-      {
-        var document = obj as IHtmlDocument;
-        if ( document != null )
-          return RawObject.Equals( document.RawObject );
-      }
-
-      {
-        var document = obj as AP.HtmlDocument;
-        if ( document != null )
-          return _document.Equals( document );
-      }
-
-      {
-        var node = obj as AP.HtmlNode;
-        if ( node != null )
-          return RawObject.Equals( node );
-      }
-
-
-      return base.Equals( obj );
-    }
-
-    public override int GetHashCode()
-    {
-      return RawObject.GetHashCode();
-    }
-
-
-    public IHtmlContainer Container
-    {
-      get { return null; }
-    }
-
-    public string RawHtml
-    {
-      get { return Node.OuterHtml; }
-    }
-
-    public void Remove()
-    {
-      throw new NotSupportedException();
-    }
   }
 }

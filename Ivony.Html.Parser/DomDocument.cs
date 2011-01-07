@@ -29,10 +29,6 @@ namespace Ivony.Html.Parser
       return new DomFactory( this );
     }
 
-
-
-    #region IDomContianer Implements
-
     private readonly DomNodeCollection nodeCollection;
 
     DomNodeCollection IDomContainer.NodeCollection
@@ -45,7 +41,20 @@ namespace Ivony.Html.Parser
       return nodeCollection.Cast<IHtmlNode>().AsReadOnly();
     }
 
-    #endregion
 
+    public IHtmlContainer Container
+    {
+      get { return null; }
+    }
+
+    public string RawHtml
+    {
+      get { return null; }
+    }
+
+    public void Remove()
+    {
+      throw new NotSupportedException();
+    }
   }
 }

@@ -76,7 +76,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     void IHtmlNode.Remove()
     {
-      throw new InvalidOperationException();
+      throw new NotSupportedException();
     }
 
     IHtmlDocument IHtmlDomObject.Document

@@ -209,10 +209,10 @@ namespace Ivony.Html.Web
       var result = GetParser( context, virtualPath, content );
 
 
-      if ( contentResult.Cacheable && result.DomProvider != null )//如果可以缓存
+      if ( contentResult.CacheKey != null && result.DomProvider != null )//如果可以缓存
       {
-        var key = contentResult.CacheKey ?? virtualPath;
-        key = string.Format( "HtmlProviders_HtmlDocumentCache_{0}", key );
+        var key = contentResult.CacheKey;
+        var cacheKey = string.Format( "HtmlProviders_HtmlDocumentCache_{0}", key );
 
         var createDocument = Cache.Get( key ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
@@ -225,7 +225,7 @@ namespace Ivony.Html.Web
 
         createDocument = document.Compile();
 
-        Cache.Insert( key, createDocument, contentResult.CacheDependency );
+        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
 
         return document;
       }

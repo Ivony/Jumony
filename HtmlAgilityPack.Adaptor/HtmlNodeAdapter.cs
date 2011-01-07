@@ -77,7 +77,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IHtmlDocument Document
     {
-      get { return Container.Document; }
+      get { return Node.OwnerDocument.AsDocument(); }
     }
 
     public string RawHtml

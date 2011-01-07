@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  internal class DomNodeCollection : SynchronizedCollection<DomNode>
+  public class DomNodeCollection : SynchronizedCollection<DomNode>
   {
 
-    public IHtmlContainer Container
+    public DomContainer Container
     {
       get;
       private set;
     }
 
-    public DomNodeCollection( IHtmlContainer container )
+    public DomNodeCollection( DomContainer container )
       : base( container.SyncRoot )
     {
       Container = container;

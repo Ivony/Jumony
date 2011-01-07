@@ -16,7 +16,7 @@ namespace Ivony.Html.Parser
 
   internal static class DomContianerExtension
   {
-    public static DomNode InsertNode( this IDomContainer container, int index, DomNode node )
+    public static T InsertNode<T>( this IDomContainer container, int index, T node ) where T : DomNode
     {
       container.NodeCollection.Insert( index, node );
       return node;

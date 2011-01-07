@@ -36,27 +36,19 @@ namespace Ivony.Html.Parser
 
 
 
-    private static T AddNode<T>( int index, IDomContainer domContainer, T element ) where T : DomNode
-    {
-      domContainer.NodeCollection.Insert( index, element );
-      return element;
-    }
-
-
     public IHtmlElement AddElement( IHtmlContainer container, int index, string name, IDictionary<string, string> attributes )
     {
-      return AddNode( index, EnsureDomContainer( container ), new DomElement( name, attributes ) );
+      return EnsureDomContainer( container ).InsertNode( index, new DomElement( name, attributes ) );
     }
-
 
     public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
     {
-      return AddNode( index, EnsureDomContainer( container ), new DomTextNode( htmlText ) );
+      return EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
     }
 
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
-      return AddNode( index, EnsureDomContainer( container ), new DomComment( comment ) );
+      return EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
     }
 
     public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )

@@ -48,6 +48,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return fragment;
     }
 
+
+    public IHtmlDocument Document
+    {
+      get { return _document.AsDocument(); }
+    }
+
+
     #endregion
 
 
@@ -88,12 +95,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Parent
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlNode.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -137,12 +144,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Parent
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlNode.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }
@@ -186,12 +193,12 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
 
-      IHtmlContainer IHtmlNode.Parent
+      IHtmlContainer IHtmlNode.Container
       {
         get { return null; }
       }
 
-      IHtmlDocument IHtmlNode.Document
+      IHtmlDocument IHtmlDomObject.Document
       {
         get { return _factory._document.AsDocument(); }
       }

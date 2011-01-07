@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  public class DomDocumenType : DomNode, IHtmlSpecial
+  public class DomDocumentType : DomNode, IHtmlSpecial
   {
 
     private const string DocumentTypePattern = @"\<!DOCTYPE .+?\>";
@@ -13,7 +13,7 @@ namespace Ivony.Html.Parser
 
     private string _declares;
 
-    internal DomDocumenType( string declares )
+    internal DomDocumentType( string declares )
     {
       _declares = declares;
     }

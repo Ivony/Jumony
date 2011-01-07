@@ -68,10 +68,6 @@
       <Project>{193BB801-054F-4729-9D5D-FCE1E32594BF}</Project>
       <Name>HtmlAgilityPack</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
-      <Project>{6CE7336E-D881-40B2-9495-C06CF9A61AC6}</Project>
-      <Name>Ivony.Html.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
       <Name>Ivony.Html</Name>

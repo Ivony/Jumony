@@ -50,7 +50,7 @@ namespace Ivony.Html.Parser
     public DomFreeComment( DomFactory factory, string comment )
     {
       _factory = factory;
-      _node = new DomComment(  comment );
+      _node = new DomComment( comment );
     }
 
 

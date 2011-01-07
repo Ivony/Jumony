@@ -42,7 +42,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public string Handle( IHtmlNode node )
     {
-      var htmlNode = node.NodeObject.CastTo<AP.HtmlNode>();
+      var htmlNode = node.RawObject.CastTo<AP.HtmlNode>();
       return string.Format( "{0}:{1}", htmlNode.Line, htmlNode.LinePosition );
     }
 
@@ -79,7 +79,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       throw new InvalidOperationException();
     }
 
-    IHtmlDocument IHtmlNode.Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get { return this; }
     }

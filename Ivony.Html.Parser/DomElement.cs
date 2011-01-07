@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace Ivony.Html.Parser
 {
-  internal class DomElement : DomNode, IHtmlElement, IDomContainer
+  internal class DomElement : DomContainer, IHtmlElement
   {
 
     private readonly string _name;
@@ -18,8 +18,6 @@ namespace Ivony.Html.Parser
 
     internal DomElement( string name, IDictionary<string, string> attributes )
     {
-      nodeCollection = new DomNodeCollection( this );
-
       if ( name == null )
         throw new ArgumentNullException( "name" );
 
@@ -46,25 +44,6 @@ namespace Ivony.Html.Parser
         return _name;
       }
     }
-
-
-    #region IDomContianer Implements
-
-    private readonly DomNodeCollection nodeCollection;
-
-    DomNodeCollection IDomContainer.NodeCollection
-    {
-      get { return nodeCollection; }
-    }
-
-    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
-    {
-      return nodeCollection.Cast<IHtmlNode>().AsReadOnly();
-    }
-
-    #endregion
-
-
 
 
     public IEnumerable<IHtmlAttribute> Attributes()

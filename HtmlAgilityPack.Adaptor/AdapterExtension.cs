@@ -9,15 +9,14 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
   public static class AdapterExtension
   {
 
-    public static IEnumerable<HtmlNode> Find( this HtmlNode node, params string[] expressions )
+    public static IEnumerable<HtmlNode> Find( this HtmlNode node, string expression )
     {
-      var selector = HtmlCssSelector.Create( expressions );
-      return selector.Search( node.AsContainer(), true ).Select( element => (HtmlNode) element.NodeObject );
+      return CssSelector.Search( expression, node.AsContainer() ).Select( element => (HtmlNode) element.RawObject );
     }
 
-    public static IEnumerable<HtmlNode> Find( this HtmlDocument document, params string[] expressions )
+    public static IEnumerable<HtmlNode> Find( this HtmlDocument document, string expression )
     {
-      return document.DocumentNode.Find( expressions );
+      return document.DocumentNode.Find( expression );
     }
 
   }

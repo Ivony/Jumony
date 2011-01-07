@@ -6,13 +6,8 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  public class DomDocument : DomObject, IHtmlDocument, IDomContainer
+  public class DomDocument : DomContainer, IHtmlDocument
   {
-
-    public DomDocument()
-    {
-      nodeCollection = new DomNodeCollection( this );
-    }
 
     public override IHtmlDocument Document
     {
@@ -27,18 +22,6 @@ namespace Ivony.Html.Parser
     public IHtmlNodeFactory GetNodeFactory()
     {
       return new DomFactory( this );
-    }
-
-    private readonly DomNodeCollection nodeCollection;
-
-    DomNodeCollection IDomContainer.NodeCollection
-    {
-      get { return nodeCollection; }
-    }
-
-    IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
-    {
-      return nodeCollection.Cast<IHtmlNode>().AsReadOnly();
     }
 
 

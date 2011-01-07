@@ -79,7 +79,7 @@ namespace Ivony.Html.Web
         }
 
 
-        public static HtmlContentResult LoadContent(VirtualPathProvider provider, string virtualPath)
+        private static HtmlContentResult LoadContent(VirtualPathProvider provider, string virtualPath)
         {
 
             if (!provider.FileExists(virtualPath))
@@ -91,7 +91,7 @@ namespace Ivony.Html.Web
                 return null;
 
 
-            var key = string.Format("StaticFileLoader_VirtualPath_{0}_{1}", provider.ToString(), virtualPath);
+            var key = string.Format("StaticFile_{0}",  virtualPath);
 
             var fileInfo = Cache.Get(key) as VirtualFileInfo;
 

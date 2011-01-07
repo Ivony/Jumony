@@ -225,5 +225,20 @@ namespace Ivony.Html
 
     #endregion
 
+
+    public IHtmlContainer Container
+    {
+      get { return null; }
+    }
+
+    public string RawHtml
+    {
+      get { return null; }
+    }
+
+    public void Remove()
+    {
+      throw new NotSupportedException();
+    }
   }
 }

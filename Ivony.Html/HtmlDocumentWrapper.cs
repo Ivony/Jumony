@@ -19,7 +19,6 @@ namespace Ivony.Html
 
 
 
-    #region IHtmlDocument 成员
 
     string IHtmlDocument.DocumentDeclaration
     {
@@ -31,18 +30,12 @@ namespace Ivony.Html
       return Document.GetNodeFactory();
     }
 
-    #endregion
-
-    #region IHtmlNodeContainer 成员
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
       return Document.Nodes();
     }
 
-    #endregion
-
-    #region IHtmlObject 成员
 
     object IHtmlDomObject.RawObject
     {
@@ -59,6 +52,20 @@ namespace Ivony.Html
       get { return Document.SyncRoot; }
     }
 
-    #endregion
+
+    public IHtmlContainer Container
+    {
+      get { return Document.Container; }
+    }
+
+    public string RawHtml
+    {
+      get { return Document.RawHtml; }
+    }
+
+    public void Remove()
+    {
+      Document.Remove();
+    }
   }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html
 {
-  public interface IHtmlContainer : IHtmlDomObject
+  public interface IHtmlContainer : IHtmlNode
   {
     IEnumerable<IHtmlNode> Nodes();
   }

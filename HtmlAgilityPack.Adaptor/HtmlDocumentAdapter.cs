@@ -112,5 +112,19 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
+    public IHtmlContainer Container
+    {
+      get { return null; }
+    }
+
+    public string RawHtml
+    {
+      get { return Node.OuterHtml; }
+    }
+
+    public void Remove()
+    {
+      throw new NotSupportedException();
+    }
   }
 }

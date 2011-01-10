@@ -126,8 +126,6 @@ namespace Ivony.Html.Binding
     #endregion
 
 
-
-
     #region Bind( path, data, nullBehavior )
 
     /// <summary>
@@ -194,27 +192,6 @@ namespace Ivony.Html.Binding
     }
 
     #endregion
-
-
-
-
-    /// <summary>
-    /// 格式化值
-    /// </summary>
-    /// <param name="format">格式化表达式</param>
-    /// <param name="value">要被格式化的值</param>
-    /// <returns>值格式化后的形式</returns>
-    private static string FormatValue( string format, object value )
-    {
-
-      if ( value == null )
-        return null;
-
-      if ( format == null )
-        return string.Format( format, value );
-      else
-        return value.ToString();
-    }
 
 
 

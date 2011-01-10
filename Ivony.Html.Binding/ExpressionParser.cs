@@ -89,7 +89,7 @@ namespace Ivony.Html.Binding
         string providerName = environmentVariableMatch.Groups["prefix"].Value;
         string exp =  environmentVariableMatch.Groups["name"].Value;
 
-        return EnvironmentExpressions.EvaluateExpression( providerName, exp );
+        return HtmlBinder.EvaluateExpression( providerName, exp );
       }
 
       return expression;

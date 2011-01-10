@@ -289,7 +289,7 @@ namespace Ivony.Html.Binding
     /// <param name="elements"></param>
     private void BindAsObject( IEnumerable<IHtmlElement> elements )
     {
-      elements.Bind( TargetPath, DataSource, FormatString, NullBehavior );
+      elements.Bind( TargetPath, HtmlBinder.FormatValue( DataSource, FormatString ), NullBehavior );
     }
 
     /// <summary>
@@ -302,7 +302,7 @@ namespace Ivony.Html.Binding
 
       Action<object, IHtmlElement> binder = ( item, e ) =>
       {
-        e.Bind( TargetPath, item, FormatString, NullBehavior );
+        e.Bind( TargetPath, HtmlBinder.FormatValue( DataSource, FormatString ), NullBehavior );
       };
 
       if ( DataSourceDefault == ValueNotSet.Instance )

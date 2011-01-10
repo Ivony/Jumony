@@ -67,7 +67,7 @@ public class list_html : Ivony.Html.Web.JumonyHandler
 
     //使用 Data 方法可以附着任何数据到元素上，然后我们可以在附着了数据的子元素中直接取得这些数据：
     Find( "li" ).ForAll( element =>
-      element.Bind( "@onclick", element.Data(), "window.alert( '{0}' );" )
+      element.Bind( "@onclick",  HtmlBinder.FormatValue( element.Data(), "window.alert( '{0}' );" ) )
     );
     //不带参数的 Data 方法用于获取附着的数据，如果当前元素找不到，则会自动上溯。
 

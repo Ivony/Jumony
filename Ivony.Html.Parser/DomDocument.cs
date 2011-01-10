@@ -39,5 +39,10 @@ namespace Ivony.Html.Parser
     {
       throw new NotSupportedException();
     }
+
+    protected override string ObjectName
+    {
+      get { return "Document"; }
+    }
   }
 }

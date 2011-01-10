@@ -50,21 +50,8 @@ namespace Ivony.Html.Binding
 
 
 
-    /// <summary>
-    /// 绑定数据到指定位置
-    /// </summary>
-    /// <param name="element">要绑定数据的元素</param>
-    /// <param name="path">绑定路径</param>
-    /// <param name="value">绑定值</param>
-    /// <returns>被绑定的元素</returns>
-    public static IHtmlElement Bind( this IHtmlElement element, string path, object value )
-    {
-      if ( value == null )
-        throw new ArgumentNullException();
 
-      return Bind( element, path, value, null );
-    }
-
+    #region Bind( path, value )
 
     /// <summary>
     /// 绑定数据到指定位置，集合版本
@@ -81,21 +68,61 @@ namespace Ivony.Html.Binding
       return elements.ForAll( e => e.Bind( path, value ) );
     }
 
+
+    /// <summary>
+    /// 绑定数据到指定位置
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="evaluator">用于计算绑定值的函数</param>
+    /// <returns>被绑定的元素</returns>
+    public static IHtmlElement Bind( this IHtmlElement element, string path, Func<IHtmlElement, object> evaluator )
+    {
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
+      return Bind( element, path, evaluator( element ) );
+    }
+
+
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <returns>被绑定的元素</returns>
+    public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, Func<IHtmlElement, object> evaluator )
+    {
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
+      return elements.ForAll( e => e.Bind( path, evaluator( e ) ) );
+    }
+
+
     /// <summary>
     /// 绑定数据到指定位置
     /// </summary>
     /// <param name="element">要绑定数据的元素</param>
     /// <param name="path">绑定路径</param>
     /// <param name="value">绑定值</param>
-    /// <param name="format">用于绑定值的格式化字符串</param>
     /// <returns>被绑定的元素</returns>
-    public static IHtmlElement Bind( this IHtmlElement element, string path, object value, string format )
+    public static IHtmlElement Bind( this IHtmlElement element, string path, object value )
     {
       if ( value == null )
-        throw new ArgumentNullException();
+        throw new ArgumentNullException( "value" );
 
-      return Bind( element, path, value, format, BindingNullBehavior.Ignore );
+      BindCore( element, path, value.ToString(), BindingNullBehavior.Ignore );
+
+      return element;
     }
+
+
+    #endregion
+
+
+
 
     /// <summary>
     /// 绑定数据到指定位置，集合版本
@@ -108,10 +135,87 @@ namespace Ivony.Html.Binding
     public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, object value, string format )
     {
       if ( value == null )
-        throw new ArgumentNullException();
+        throw new ArgumentNullException( "value" );
 
       return elements.ForAll( e => e.Bind( path, value, format ) );
     }
+
+    /// <summary>
+    /// 绑定数据到指定位置
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <param name="format">用于绑定值的格式化字符串</param>
+    /// <returns>被绑定的元素</returns>
+    public static IHtmlElement Bind( this IHtmlElement element, string path, object value, string format )
+    {
+      if ( value == null )
+        throw new ArgumentNullException( "value" );
+
+      BindCore( element, path, FormatValue( format, value ), BindingNullBehavior.Ignore );
+
+      return element;
+    }
+
+
+    /// <summary>
+    /// 格式化值
+    /// </summary>
+    /// <param name="format">格式化表达式</param>
+    /// <param name="value">要被格式化的值</param>
+    /// <returns>值格式化后的形式</returns>
+    private static string FormatValue( string format, object value )
+    {
+
+      if ( value == null )
+        return null;
+
+      if ( format == null )
+        return string.Format( format, value );
+      else
+        return value.ToString();
+    }
+
+
+
+
+    /// <summary>
+    /// 绑定数据到指定位置，集合版本
+    /// </summary>
+    /// <param name="elements">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="evaluator">绑定值</param>
+    /// <param name="format">用于绑定值的格式化字符串</param>
+    /// <returns>被绑定的元素</returns>
+    public static IEnumerable<IHtmlElement> Bind( this IEnumerable<IHtmlElement> elements, string path, Func<IHtmlElement, object> evaluator, string format )
+    {
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
+      return elements.ForAll( e => e.Bind( path, evaluator, format ) );
+    }
+
+    /// <summary>
+    /// 绑定数据到指定位置
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    /// <param name="path">绑定路径</param>
+    /// <param name="value">绑定值</param>
+    /// <param name="format">用于绑定值的格式化字符串</param>
+    /// <returns>被绑定的元素</returns>
+    public static IHtmlElement Bind( this IHtmlElement element, string path, Func<IHtmlElement, object> evaluator, string format )
+    {
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
+      return Bind( element, path, evaluator( element ), format, BindingNullBehavior.Ignore );
+    }
+
+
+
+
+
 
     /// <summary>
     /// 绑定数据到指定位置

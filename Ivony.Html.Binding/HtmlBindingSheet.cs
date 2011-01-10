@@ -71,12 +71,20 @@ namespace Ivony.Html.Binding
       _rules = rules;
     }
 
+    /// <summary>
+    /// 获取样式表的字符串表达形式
+    /// </summary>
+    /// <returns>一段描述样式表的文本，样式表可从此文本加载还原</returns>
     public override string ToString()
     {
       return string.Join( "\n", Array.ConvertAll( _rules, r => r.ToString() ) );
     }
 
 
+    /// <summary>
+    /// 应用样式表到绑定上下文
+    /// </summary>
+    /// <param name="context">绑定上下文</param>
     public void Apply( BindingContext context )
     {
       _rules.ForAll( r => r.Apply( context ) );

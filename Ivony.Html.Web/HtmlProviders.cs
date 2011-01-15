@@ -129,6 +129,8 @@ namespace Ivony.Html.Web
           if ( result != null )
           {
             result.Provider = provider;
+            result.VirtualPath = virtualPath;
+
             return result;
           }
         }
@@ -155,7 +157,7 @@ namespace Ivony.Html.Web
       if ( content == null )
         return null;
 
-      return ParseDocument( context, virtualPath, content );
+      return ParseDocument( context, content );
     }
 
 
@@ -201,10 +203,11 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="result">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult contentResult )
+    public static IHtmlDocument ParseDocument( HttpContextBase context, HtmlContentResult contentResult )
     {
 
       var content = contentResult.Content;
+      var virtualPath = contentResult.VirtualPath;
 
       var result = GetParser( context, virtualPath, content );
 

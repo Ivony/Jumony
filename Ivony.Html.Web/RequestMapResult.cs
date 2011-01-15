@@ -54,5 +54,20 @@ namespace Ivony.Html.Web
 
     }
 
+
+    public virtual WebPage LoadPage()
+    {
+      var context = new HttpContextWrapper( HttpContext.Current );
+
+      var contentResult = HtmlProviders.LoadContent( context, TemplatePath );
+
+      HtmlProviders.ParseDocument( context, contentResult );
+
+      throw new NotImplementedException();
+
+
+    }
+
+
   }
 }

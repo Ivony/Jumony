@@ -5,33 +5,37 @@ using System.Text;
 
 namespace Ivony.Html.Web
 {
-  public class WebPage : HtmlDocumentWrapper
+  public class WebPage
   {
 
-    public WebPage( IHtmlDocument document, Uri url )
+    public WebPage( IHtmlDocument document, Uri url, string cacheKey )
     {
-      _document = document;
-      _url = url;
-
+      Document = document;
+      Url = url;
+      CacheKey = cacheKey;
     }
 
-    private Uri _url;
 
-    private IHtmlDocument _document;
-
-    protected override IHtmlDocument Document
+    public override IHtmlDocument Document
     {
-      get { return _document; }
+      private set;
+      get;
     }
 
     public Uri Url
     {
-      get { return _url; }
+      private set;
+      get;
     }
 
 
+    public string CacheKey
+    {
+      private set;
+      get;
+    }
 
-    
+
 
   }
 }

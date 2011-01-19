@@ -7,6 +7,7 @@ using System.Web.Hosting;
 using System.Web;
 using System.IO;
 using System.Web.Caching;
+using System.Globalization;
 
 namespace Ivony.Html.Web
 {
@@ -88,6 +89,11 @@ namespace Ivony.Html.Web
     public static RequestMapResult MapRequest( HttpRequest request )
     {
 
+      if ( request == null )
+        throw new ArgumentNullException( "request" );
+
+
+
       lock ( _mappersSync )
       {
         foreach ( var mapper in RequestMappers )
@@ -118,6 +124,10 @@ namespace Ivony.Html.Web
 
       if ( context == null )
         throw new ArgumentNullException( "context" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
 
 
       lock ( _contentProvidersSync )
@@ -150,6 +160,10 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
 
       var content = LoadContent( context, virtualPath );
       if ( content == null )
@@ -157,6 +171,33 @@ namespace Ivony.Html.Web
 
       return ParseDocument( context, virtualPath, content );
     }
+
+
+    /// <summary>
+    /// 加载一个 Web 页面
+    /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <returns>Web 页面对象</returns>
+    public static WebPage LoadPage( HttpContextBase context, string virtualPath )
+    {
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+      var content = LoadContent( context, virtualPath );
+      if ( content == null )
+        return null;
+
+      var document = ParseDocument( context, virtualPath, content );
+
+      return new WebPage( document, new Uri( context.Request.Url, virtualPath ), content.CacheKey );
+
+    }
+
 
 
     /// <summary>
@@ -170,6 +211,7 @@ namespace Ivony.Html.Web
 
       if ( context == null )
         throw new ArgumentNullException( "context" );
+
 
       lock ( _parserProvidersSync )
       {
@@ -194,6 +236,8 @@ namespace Ivony.Html.Web
 
 
 
+    private const string DocumentCacheKey = "HtmlProviders_HtmlDocumentCache_{0}";
+
     /// <summary>
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
@@ -212,7 +256,7 @@ namespace Ivony.Html.Web
       if ( contentResult.CacheKey != null && result.DomProvider != null )//如果可以缓存
       {
         var key = contentResult.CacheKey;
-        var cacheKey = string.Format( "HtmlProviders_HtmlDocumentCache_{0}", key );
+        var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, key );
 
         var createDocument = Cache.Get( key ) as Func<IHtmlDomProvider, IHtmlDocument>;
 

@@ -48,17 +48,6 @@ namespace Ivony.Html.Web
       get;
       set;
     }
-
-
-    /// <summary>
-    /// 获取文档的虚拟路径
-    /// </summary>
-    public string VirtualPath
-    {
-      get;
-      internal set;
-    }
-
   }
 
 

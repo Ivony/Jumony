@@ -29,14 +29,9 @@ namespace Ivony.Html.Web
       get { return _url; }
     }
 
-    public string CacheKey
-    {
-      get;
-      internal set;
-    }
 
 
-
+    
 
   }
 }

@@ -56,7 +56,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-"c:\Program Files\CollabNet\Subversion Client\svn" propset svn:ignore . -R -F ../1.props
 "c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
 
 DEL "$(TargetDir)Code.RAR"

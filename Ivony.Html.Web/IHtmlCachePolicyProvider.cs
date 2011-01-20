@@ -12,7 +12,7 @@ namespace Ivony.Html.Web
 
     string GetCacheKey( HttpContextBase context );
 
-    HtmlCachePolicy GetPolicy( HttpContextBase context, IHtmlHandler handler, IHtmlDocument document );
+    HtmlCachePolicy GetPolicy( HttpContextBase context, IHtmlHandler handler, WebPage page );
 
   }
 }

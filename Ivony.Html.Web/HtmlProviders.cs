@@ -343,16 +343,16 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">当前HTTP请求信息</param>
     /// <param name="handler">当前负责处理请求的处理程序</param>
-    /// <param name="document">处理后的文档</param>
+    /// <param name="page">处理后的文档</param>
     /// <returns>缓存策略</returns>
     /// <remarks>缓存策略决定了缓存时间和缓存依赖项</remarks>
-    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, IHtmlHandler handler, IHtmlDocument document )
+    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, IHtmlHandler handler, WebPage page )
     {
       lock ( _cachePoliciesSync )
       {
         foreach ( var provider in CachePolicyProviders )
         {
-          var policy = provider.GetPolicy( context, handler, document );
+          var policy = provider.GetPolicy( context, handler, page );
           if ( policy != null )
             return policy;
         }

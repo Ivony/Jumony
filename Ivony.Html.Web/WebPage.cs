@@ -16,7 +16,7 @@ namespace Ivony.Html.Web
     }
 
 
-    public override IHtmlDocument Document
+    public IHtmlDocument Document
     {
       private set;
       get;

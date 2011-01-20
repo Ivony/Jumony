@@ -46,20 +46,26 @@ namespace Ivony.Html.Web
 
         builder.Path = path.Remove( path.Length - 5 );
 
-        Trace.Warn( "Core", "redirect to template vitual path." );
+        Trace.Warn( "Core", "redirect to template vitualpath." );
         Response.Redirect( builder.Uri.AbsoluteUri );
       }
 
 
+      OnPreResolveCache();
+
+      ResolveCache();
+
+
+
       OnPreLoadDocument();
 
-      Trace.Write( "Core", "Begin Load Document" );
-      var document = MapperResult.LoadTemplate();
-      Trace.Write( "Core", "End Load Document" );
+      Trace.Write( "Core", "Begin Load Page" );
+      var page = LoadPage();
+      Trace.Write( "Core", "End Load Page" );
 
       OnPostLoadDocument();
 
-      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), document );
+      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), page );
 
 
       OnPreRender();
@@ -72,8 +78,18 @@ namespace Ivony.Html.Web
 
       OnPostReander();
 
-      UpdateCache( document, output );
+      UpdateCache( page, output );
 
+    }
+
+    protected void ResolveCache()
+    {
+      throw new NotImplementedException();
+    }
+
+    protected void OnPreResolveCache()
+    {
+      throw new NotImplementedException();
     }
 
 
@@ -82,24 +98,24 @@ namespace Ivony.Html.Web
     /// 刷新输出缓存
     /// </summary>
     /// <param name="output"></param>
-    protected virtual void UpdateCache( IHtmlDocument document, string output )
+    protected virtual void UpdateCache( WebPage page, string output )
     {
 
       var context = new HttpContextWrapper( HttpContext.Current );
 
       var key = HtmlProviders.GetCacheKey( context );
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, document );
+      var policy = HtmlProviders.GetCachePolicy( context, this, page );
 
       Cache.Insert( key, output, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
 
     }
 
 
-    void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
+    void IHtmlHandler.ProcessDocument( HttpContextBase context, WebPage page )
     {
 
-      Document = document;
+      Page = page;
 
       OnPreProcessDocument();
 
@@ -156,6 +172,14 @@ namespace Ivony.Html.Web
     /// </summary>
     public IHtmlDocument Document
     {
+      get { return Page.Document; }
+    }
+
+    /// <summary>
+    /// 获取正在处理的Web页面
+    /// </summary>
+    public WebPage Page
+    {
       get;
       private set;
     }
@@ -175,17 +199,15 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取页面模板（即HTML静态页）
+    /// 加载Web页面
     /// </summary>
     /// <returns></returns>
-    protected virtual IHtmlDocument LoadTemplate()
+    protected virtual WebPage LoadPage()
     {
+      var page = MapperResult.LoadPage();
 
 
-      var document = MapperResult.LoadTemplate();
-
-
-      return document;
+      return page;
     }
 
 

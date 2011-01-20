@@ -37,5 +37,15 @@ namespace Ivony.Html.Web
 
 
 
+
+    public RawResponse Render()
+    {
+
+      return new RawResponse()
+      {
+        Content = Document.Render()
+      };
+
+    }
   }
 }

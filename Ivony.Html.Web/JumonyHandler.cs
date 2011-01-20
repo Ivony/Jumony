@@ -75,7 +75,7 @@ namespace Ivony.Html.Web
 
       UpdateCache( response );
 
-      response.Output( Response );
+      response.Apply( Response );
 
     }
 
@@ -91,7 +91,7 @@ namespace Ivony.Html.Web
       if ( cacheItem == null )
         return false;
 
-      cacheItem.Output( Response );
+      cacheItem.Apply( Response );
 
       return true;
     }
@@ -129,7 +129,7 @@ namespace Ivony.Html.Web
     /// <returns>响应</returns>
     protected virtual RawResponse CreateResponse()
     {
-      return new DocumentResponse( Document );
+      return new WebPageResponse( Document );
     }
 
 

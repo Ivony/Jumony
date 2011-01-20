@@ -65,11 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestMapper.cs" />
-    <Compile Include="DocumentResponseCache.cs" />
+    <Compile Include="WebPageResponse.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="HtmlHead.cs" />
     <Compile Include="HttpHandler.cs" />
+    <Compile Include="ICachedResponse.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="HttpHelper.cs" />

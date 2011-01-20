@@ -3,13 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Collections.Specialized;
+using System.IO;
 
 namespace Ivony.Html.Web
 {
-  public abstract class RawResponse
+  public class RawResponse : ICachedResponse
   {
 
-    public abstract void Output( HttpResponseBase response );
+    public NameValueCollection Headers
+    {
+      get;
+      set;
+    }
+
+    public string Content
+    {
+      get;
+      set;
+    }
+
+    public Encoding Encoding
+    {
+      get;
+      set;
+    }
+
+
+
+    public virtual void Apply( HttpResponseBase response )
+    {
+      response.Clear();
+
+
+    }
 
   }
 }

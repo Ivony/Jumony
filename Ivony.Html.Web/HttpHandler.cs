@@ -25,7 +25,7 @@ namespace Ivony.Html.Web
 
     protected override void ProcessDocument()
     {
-      _handler.ProcessDocument( new HttpContextWrapper( HttpContext.Current ), Page );
+      _handler.ProcessDocument( new HttpContextWrapper( HttpContext.Current ), Document );
     }
 
     public override void Dispose()

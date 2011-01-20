@@ -60,12 +60,12 @@ namespace Ivony.Html.Web
       OnPreLoadDocument();
 
       Trace.Write( "Core", "Begin Load Page" );
-      var page = LoadPage();
+      Page = LoadPage();
       Trace.Write( "Core", "End Load Page" );
 
       OnPostLoadDocument();
 
-      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), page );
+      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Page.Document );
 
 
       OnPreRender();
@@ -78,7 +78,7 @@ namespace Ivony.Html.Web
 
       OnPostReander();
 
-      UpdateCache( page, output );
+      UpdateCache( Page.Document, output );
 
     }
 
@@ -98,24 +98,22 @@ namespace Ivony.Html.Web
     /// 刷新输出缓存
     /// </summary>
     /// <param name="output"></param>
-    protected virtual void UpdateCache( WebPage page, string output )
+    protected virtual void UpdateCache( IHtmlDocument document, string output )
     {
 
       var context = new HttpContextWrapper( HttpContext.Current );
 
       var key = HtmlProviders.GetCacheKey( context );
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, page );
+      var policy = HtmlProviders.GetCachePolicy( context, this, document );
 
       Cache.Insert( key, output, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
 
     }
 
 
-    void IHtmlHandler.ProcessDocument( HttpContextBase context, WebPage page )
+    void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
-
-      Page = page;
 
       OnPreProcessDocument();
 

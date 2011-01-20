@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
   public interface IHtmlHandler : IDisposable
   {
 
-    void ProcessDocument( HttpContextBase context, WebPage page );
+    void ProcessDocument( HttpContextBase context, IHtmlDocument document );
 
   }
 }

@@ -17,6 +17,11 @@ namespace Ivony.Html.Web
 
     public static RequestMapResult GetMapperResult( this HttpContext context )
     {
+      return GetMapperResult( new HttpContextWrapper( context ) );
+    }
+
+    public static RequestMapResult GetMapperResult( this HttpContextBase context )
+    {
       return (RequestMapResult) context.Items[requestDataToken];
     }
 

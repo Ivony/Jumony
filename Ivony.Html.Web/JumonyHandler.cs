@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
-      Context = context;
+      Context = new HttpContextWrapper( context );
 
       MapperResult = Context.GetMapperResult();
 
@@ -68,24 +68,34 @@ namespace Ivony.Html.Web
       ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Page.Document );
 
 
-      OnPreRender();
-
       Trace.Write( "Core", "Begin Render Document" );
-      string output = RenderDocument();
-
-      Response.Write( output );
+      var response = CreateResponse();
       Trace.Write( "Core", "End Render Document" );
 
-      OnPostReander();
 
-      UpdateCache( Page.Document, output );
+      UpdateCache( response );
+
+      response.Output( Response );
 
     }
 
-    protected void ResolveCache()
+    protected virtual bool ResolveCache()
     {
-      throw new NotImplementedException();
+
+      var key = HtmlProviders.GetCacheKey( Context );
+
+      if ( key == null )
+        return false;
+
+      var cacheItem = Cache.Get( key ) as RawResponse;
+      if ( cacheItem == null )
+        return false;
+
+      cacheItem.Output( Response );
+
+      return true;
     }
+
 
     protected void OnPreResolveCache()
     {
@@ -98,17 +108,28 @@ namespace Ivony.Html.Web
     /// 刷新输出缓存
     /// </summary>
     /// <param name="output"></param>
-    protected virtual void UpdateCache( IHtmlDocument document, string output )
+    protected virtual void UpdateCache( RawResponse cacheItem )
     {
 
       var context = new HttpContextWrapper( HttpContext.Current );
 
       var key = HtmlProviders.GetCacheKey( context );
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, document );
+      var policy = HtmlProviders.GetCachePolicy( context, this, cacheItem );
 
-      Cache.Insert( key, output, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
 
+      Cache.Insert( key, cacheItem, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
+
+    }
+
+
+    /// <summary>
+    /// 创建响应
+    /// </summary>
+    /// <returns>响应</returns>
+    protected virtual RawResponse CreateResponse()
+    {
+      return new DocumentResponse( Document );
     }
 
 
@@ -156,13 +177,6 @@ namespace Ivony.Html.Web
       }
     }
 
-
-    protected virtual string RenderDocument()
-    {
-
-      return Document.Render();
-
-    }
 
 
     /// <summary>
@@ -218,7 +232,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取与该页关联的 HttpContext 对象。
     /// </summary>
-    public HttpContext Context
+    public HttpContextBase Context
     {
       get;
       private set;
@@ -228,7 +242,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取请求的页的 HttpRequest 对象
     /// </summary>
-    protected HttpRequest Request
+    protected HttpRequestBase Request
     {
       get { return Context.Request; }
     }
@@ -237,7 +251,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取与该 Page 对象关联的 HttpResponse 对象。该对象使您得以将 HTTP 响应数据发送到客户端，并包含有关该响应的信息
     /// </summary>
-    protected HttpResponse Response
+    protected HttpResponseBase Response
     {
       get { return Context.Response; }
     }
@@ -246,7 +260,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取 Server 对象，它是 HttpServerUtility 类的实例
     /// </summary>
-    protected HttpServerUtility Server
+    protected HttpServerUtilityBase Server
     {
       get { return Context.Server; }
     }
@@ -255,7 +269,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 为当前 Web 请求获取 HttpApplicationState 对象
     /// </summary>
-    protected HttpApplicationState Application
+    protected HttpApplicationStateBase Application
     {
       get { return Context.Application; }
     }
@@ -298,13 +312,6 @@ namespace Ivony.Html.Web
     protected virtual void OnPostLoadDocument() { if ( PostLoadDocument != null ) PostLoadDocument( this, EventArgs.Empty ); }
 
 
-    public event EventHandler PreParseDocument;
-    public event EventHandler PostParseDocument;
-
-    protected virtual void OnPreParseDocument() { if ( PreParseDocument != null ) PreParseDocument( this, EventArgs.Empty ); }
-    protected virtual void OnPostParseDocument() { if ( PostParseDocument != null ) PostParseDocument( this, EventArgs.Empty ); }
-
-
     public event EventHandler PreProcessDocument;
     public event EventHandler PostProcessDocument;
 
@@ -312,11 +319,11 @@ namespace Ivony.Html.Web
     protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
 
 
-    public event EventHandler PreRender;
-    public event EventHandler PostReander;
+    public event EventHandler BeginResponse;
+    public event EventHandler EndResponse;
 
-    protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
-    protected virtual void OnPostReander() { if ( PostReander != null ) PostReander( this, EventArgs.Empty ); }
+    protected virtual void OnBeginResponse() { if ( BeginResponse != null ) BeginResponse( this, EventArgs.Empty ); }
+    protected virtual void OnEndResponse() { if ( EndResponse != null ) EndResponse( this, EventArgs.Empty ); }
 
 
 

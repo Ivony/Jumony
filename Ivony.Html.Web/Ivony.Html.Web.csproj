@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestMapper.cs" />
+    <Compile Include="DocumentResponseCache.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="HtmlHead.cs" />
@@ -77,11 +78,11 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
-    <Compile Include="OnPreResolveCache.cs" />
     <Compile Include="RequestMapResult.cs" />
     <Compile Include="JumonyModule.cs" />
     <Compile Include="IRequestMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawResponse.cs" />
     <Compile Include="WebExtenions.cs" />
     <Compile Include="WebPage.cs" />
   </ItemGroup>

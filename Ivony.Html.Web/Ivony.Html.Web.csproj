@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultRequestMapper.cs" />
-    <Compile Include="WebPageResponse.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="HtmlHead.cs" />

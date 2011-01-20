@@ -38,14 +38,10 @@ namespace Ivony.Html.Web
 
 
 
-    public RawResponse Render()
+    public virtual string Render()
     {
 
-      return new RawResponse()
-      {
-        Content = Document.Render()
-      };
-
+      return Document.Render();
     }
   }
 }

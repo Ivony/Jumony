@@ -129,7 +129,7 @@ namespace Ivony.Html.Web
     /// <returns>响应</returns>
     protected virtual RawResponse CreateResponse()
     {
-      return new WebPageResponse( Document );
+      return new RawResponse() { Content = Page.Render() };
     }
 
 

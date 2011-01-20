@@ -65,7 +65,7 @@ namespace Ivony.Html.Web
 
       OnPostLoadDocument();
 
-      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), page.Document );
+      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), page );
 
 
       OnPreRender();

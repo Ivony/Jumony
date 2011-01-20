@@ -170,7 +170,13 @@ namespace Ivony.Html.Web
     /// </summary>
     public IHtmlDocument Document
     {
-      get { return Page.Document; }
+      get
+      {
+        if ( Page == null )
+          return null;
+
+        return Page.Document;
+      }
     }
 
     /// <summary>

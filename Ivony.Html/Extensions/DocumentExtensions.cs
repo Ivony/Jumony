@@ -63,7 +63,7 @@ namespace Ivony.Html
 
       var id = element.Attribute( "id" ).Value();
 
-      if ( string.IsNullOrEmpty( id ) || !element.Document.Descendants().Where( e => e.Attribute( "id" ).Value() == id ).OnlyOne() )
+      if ( string.IsNullOrEmpty( id ) || !element.Document.Descendants().Where( e => e.Attribute( "id" ).Value() == id ).IsSingle() )
         id = null;
 
       if ( create && id == null )
@@ -117,7 +117,7 @@ namespace Ivony.Html
 
       builder.Append( name );
 
-      if ( element.Siblings().Where( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) ).OnlyOne() )
+      if ( element.Siblings().Where( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) ).IsSingle() )
         return builder.ToString();
 
 

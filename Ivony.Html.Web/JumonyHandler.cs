@@ -53,8 +53,12 @@ namespace Ivony.Html.Web
 
       OnPreResolveCache();
 
-      ResolveCache();
+      if ( ResolveCache() )
+      {
+        Context.ApplicationInstance.CompleteRequest();
+      }
 
+      OnPostResolveCache();
 
 
       OnPreLoadDocument();
@@ -77,6 +81,11 @@ namespace Ivony.Html.Web
 
       response.Apply( Response );
 
+    }
+
+    private void OnPostResolveCache()
+    {
+      throw new NotImplementedException();
     }
 
     protected virtual bool ResolveCache()

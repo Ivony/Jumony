@@ -260,7 +260,11 @@ namespace Ivony.Html.Binding
     /// <returns></returns>
     private static string GetValue( IHtmlElement element, string path, object data )
     {
-      throw new NotImplementedException();
+      if ( data == null )
+        return null;
+
+      return data.ToString();
+
     }
 
 

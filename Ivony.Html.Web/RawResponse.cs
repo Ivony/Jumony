@@ -14,9 +14,25 @@ namespace Ivony.Html.Web
     public RawResponse()
     {
       Headers = new NameValueCollection();
-      
+
+      StatusCode = 200;
+      Status = "OK";
+
       HeaderEncoding = Encoding.UTF8;
       ContentEncoding = Encoding.UTF8;
+    }
+
+
+    public int StatusCode
+    {
+      get;
+      set;
+    }
+
+    public string Status
+    {
+      get;
+      set;
     }
 
 

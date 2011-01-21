@@ -64,10 +64,10 @@ namespace Ivony.Html
     /// <returns></returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
-      if ( scope == null )
-        throw new ArgumentNullException( "scope" );
-
       var selector = Create( expression );
+
+      if ( scope == null )
+        return selector;
 
       return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
 

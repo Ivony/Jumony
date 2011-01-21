@@ -125,6 +125,10 @@ namespace Ivony.Html.Web
 
       var key = HtmlProviders.GetCacheKey( context );
 
+      if ( key == null )
+        return;
+
+
       var policy = HtmlProviders.GetCachePolicy( context, this, cacheItem );
 
 

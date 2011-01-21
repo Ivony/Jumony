@@ -83,10 +83,6 @@ namespace Ivony.Html.Web
 
     }
 
-    private void OnPostResolveCache()
-    {
-      throw new NotImplementedException();
-    }
 
     protected virtual bool ResolveCache()
     {
@@ -106,11 +102,16 @@ namespace Ivony.Html.Web
     }
 
 
-    protected void OnPreResolveCache()
+    protected virtual void OnPreResolveCache()
     {
-      throw new NotImplementedException();
+      //throw new NotImplementedException();
     }
 
+
+    protected virtual void OnPostResolveCache()
+    {
+      //throw new NotImplementedException();
+    }
 
 
     /// <summary>

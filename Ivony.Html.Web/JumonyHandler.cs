@@ -56,6 +56,7 @@ namespace Ivony.Html.Web
       if ( ResolveCache() )
       {
         Context.ApplicationInstance.CompleteRequest();
+        return;
       }
 
       OnPostResolveCache();

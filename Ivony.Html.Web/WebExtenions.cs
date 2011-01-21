@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
   public static class WebExtenions
   {
 
-    public HtmlHead Head( this IHtmlDocument document )
+    public static HtmlHead Head( this IHtmlDocument document )
     {
       if ( document == null )
         throw new ArgumentNullException( "document" );

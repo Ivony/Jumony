@@ -25,7 +25,7 @@ namespace Ivony.Html.Web
     {
       get
       {
-        var titleElement = Element.Find( "title" ).SingleOrDefault();
+        var titleElement = Element.Elements( "title" ).SingleOrDefault();
         if ( titleElement == null )
           return null;
 
@@ -33,12 +33,12 @@ namespace Ivony.Html.Web
       }
       set
       {
-        var titleElement = Element.Find( "title" ).SingleOrDefault();
+        var titleElement = Element.Elements( "title" ).SingleOrDefault();
 
         if ( titleElement == null )
         {
           var factory = Element.Document.GetNodeFactory();
-          titleElement = (IHtmlElement) factory.CreateElement( "title" ).Into( Element, 0 );
+          titleElement = (IHtmlElement) factory.CreateElement( "title" ).InsertTo( Element, 0 );
         }
 
         titleElement.InnerText( value );

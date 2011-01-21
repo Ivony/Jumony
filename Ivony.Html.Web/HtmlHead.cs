@@ -16,7 +16,7 @@ namespace Ivony.Html.Web
     }
 
 
-    protected IHtmlElement Element
+    public IHtmlElement Element
     {
       get { return _element; }
     }

@@ -56,7 +56,7 @@ namespace Ivony.Fluent
     }
 
 
-    public static bool OnlyOne<T>( this IEnumerable<T> source )
+    public static bool IsSingle<T>( this IEnumerable<T> source )
     {
 
       var onlyone = false;

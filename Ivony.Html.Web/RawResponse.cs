@@ -11,6 +11,13 @@ namespace Ivony.Html.Web
   public class RawResponse : ICachedResponse
   {
 
+    public RawResponse()
+    {
+      Headers = new NameValueCollection();
+      Encoding = Encoding.UTF8;
+    }
+
+
     public NameValueCollection Headers
     {
       get;
@@ -35,6 +42,19 @@ namespace Ivony.Html.Web
     {
       response.Clear();
 
+      foreach ( var key in Headers.AllKeys )
+      {
+        foreach ( var value in Headers.GetValues( key ) )
+        {
+          response.AppendHeader( key, value );
+        }
+      }
+
+      response.ContentEncoding = Encoding;
+
+      response.Charset = Encoding.WebName;
+
+      response.Write( Content );
 
     }
 

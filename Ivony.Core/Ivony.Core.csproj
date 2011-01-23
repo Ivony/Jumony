@@ -135,6 +135,50 @@ SET PlatformName=
 SET ProjectExt=
 SET SolutionExt=</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>SET OutDir=$(OutDir)
+SET ConfigurationName=$(ConfigurationName)
+SET ProjectName=$(ProjectName)
+SET TargetName=$(TargetName)
+SET TargetPath=$(TargetPath)
+SET ProjectPath=$(ProjectPath)
+SET ProjectFileName=$(ProjectFileName)
+SET TargetExt=$(TargetExt)
+SET TargetFileName=$(TargetFileName)
+SET DevEnvDir=$(DevEnvDir)
+SET TargetDir=$(TargetDir)
+SET ProjectDir=$(ProjectDir)
+SET SolutionFileName=$(SolutionFileName)
+SET SolutionPath=$(SolutionPath)
+SET SolutionDir=$(SolutionDir)
+SET SolutionName=$(SolutionName)
+SET PlatformName=$(PlatformName)
+SET ProjectExt=$(ProjectExt)
+SET SolutionExt=$(SolutionExt)
+
+$(SolutionDir)PreBuild.bat
+$(ProjectDir)PreBuild.bat
+
+SET OutDir=
+SET ConfigurationName=
+SET ProjectName=
+SET TargetName=
+SET TargetPath=
+SET ProjectPath=
+SET ProjectFileName=
+SET TargetExt=
+SET TargetFileName=
+SET DevEnvDir=
+SET TargetDir=
+SET ProjectDir=
+SET SolutionFileName=
+SET SolutionPath=
+SET SolutionDir=
+SET SolutionName=
+SET PlatformName=
+SET ProjectExt=
+SET SolutionExt=</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -108,13 +108,92 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cd $(ProjectDir)
-"c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
+    <PostBuildEvent>SET OutDir=$(OutDir)
+SET ConfigurationName=$(ConfigurationName)
+SET ProjectName=$(ProjectName)
+SET TargetName=$(TargetName)
+SET TargetPath=$(TargetPath)
+SET ProjectPath=$(ProjectPath)
+SET ProjectFileName=$(ProjectFileName)
+SET TargetExt=$(TargetExt)
+SET TargetFileName=$(TargetFileName)
+SET DevEnvDir=$(DevEnvDir)
+SET TargetDir=$(TargetDir)
+SET ProjectDir=$(ProjectDir)
+SET SolutionFileName=$(SolutionFileName)
+SET SolutionPath=$(SolutionPath)
+SET SolutionDir=$(SolutionDir)
+SET SolutionName=$(SolutionName)
+SET PlatformName=$(PlatformName)
+SET ProjectExt=$(ProjectExt)
+SET SolutionExt=$(SolutionExt)
 
-DEL "$(TargetDir)Code.RAR"
-"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe -x.svn "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
-"%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx -x.svn C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
-DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
+$(SolutionDir)PostBuild.bat
+$(ProjectDir)PostBuild.bat
+
+SET OutDir=
+SET ConfigurationName=
+SET ProjectName=
+SET TargetName=
+SET TargetPath=
+SET ProjectPath=
+SET ProjectFileName=
+SET TargetExt=
+SET TargetFileName=
+SET DevEnvDir=
+SET TargetDir=
+SET ProjectDir=
+SET SolutionFileName=
+SET SolutionPath=
+SET SolutionDir=
+SET SolutionName=
+SET PlatformName=
+SET ProjectExt=
+SET SolutionExt=</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>SET OutDir=$(OutDir)
+SET ConfigurationName=$(ConfigurationName)
+SET ProjectName=$(ProjectName)
+SET TargetName=$(TargetName)
+SET TargetPath=$(TargetPath)
+SET ProjectPath=$(ProjectPath)
+SET ProjectFileName=$(ProjectFileName)
+SET TargetExt=$(TargetExt)
+SET TargetFileName=$(TargetFileName)
+SET DevEnvDir=$(DevEnvDir)
+SET TargetDir=$(TargetDir)
+SET ProjectDir=$(ProjectDir)
+SET SolutionFileName=$(SolutionFileName)
+SET SolutionPath=$(SolutionPath)
+SET SolutionDir=$(SolutionDir)
+SET SolutionName=$(SolutionName)
+SET PlatformName=$(PlatformName)
+SET ProjectExt=$(ProjectExt)
+SET SolutionExt=$(SolutionExt)
+
+$(SolutionDir)PreBuild.bat
+$(ProjectDir)PreBuild.bat
+
+SET OutDir=
+SET ConfigurationName=
+SET ProjectName=
+SET TargetName=
+SET TargetPath=
+SET ProjectPath=
+SET ProjectFileName=
+SET TargetExt=
+SET TargetFileName=
+SET DevEnvDir=
+SET TargetDir=
+SET ProjectDir=
+SET SolutionFileName=
+SET SolutionPath=
+SET SolutionDir=
+SET SolutionName=
+SET PlatformName=
+SET ProjectExt=
+SET SolutionExt=</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -119,12 +119,19 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
+"C:\Program Files\git\bin\git.exe" checkout work
+"C:\Program Files\git\bin\git.exe" merge auto-commit
+
 "c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
 
 DEL "$(TargetDir)Code.RAR"
 "%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -x"$(TargetDir)" -x*.pfx -x*.dll -x*.pdb -x*.exe -x.svn "$(TargetDir)Code.RAR" "$(ProjectDir)..\$(ProjectName)"
 "%25ProgramFiles%25\WinRAR\RAR.exe" a -cfg- -inul -k -ep1 -m5 -rr -ag_yyyy.mm.dd_n -ms*.rar -x*.tmp -x*.pdb -x*.pfx -x.svn C:\Assembly\$(ProjectName)_$(ConfigurationName).RAR "$(TargetDir)*.*"
 DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

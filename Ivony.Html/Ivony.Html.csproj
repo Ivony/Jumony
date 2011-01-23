@@ -149,10 +149,8 @@ DEL "$(TargetDir)Code.RAR"
 DEL "$(TargetDir)Code.RAR"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>cd $(ProjectDir)
-"C:\Program Files\git\bin\git.exe" checkout auto-commit
-"C:\Program Files\git\bin\git.exe" add -A
-"C:\Program Files\git\bin\git.exe" commit -m "commit on Prebuild"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

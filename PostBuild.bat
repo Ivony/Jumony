@@ -4,6 +4,7 @@ DEL "%TargetDir%Code.RAR"
 DEL "%TargetDir%Code.RAR"
 
 cd "%ProjectDir%"
+
 "c:\Program Files\CollabNet\Subversion Client\SvnCommitHelper.exe"
 
 IF EXIST PostBuild.bat ( call PostBuild.bat )

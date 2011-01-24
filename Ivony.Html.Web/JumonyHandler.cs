@@ -87,7 +87,6 @@ namespace Ivony.Html.Web
 
 
       {
-        OnBeginResponse();
         Trace.Write( "Jumony Web", "Begin response." );
         var response = CreateResponse();
 
@@ -95,7 +94,6 @@ namespace Ivony.Html.Web
 
         response.Apply( Response );
         Trace.Write( "Jumony Web", "End response." );
-        OnEndResponse();
       }
     }
 
@@ -347,13 +345,6 @@ namespace Ivony.Html.Web
 
     protected virtual void OnPreProcessDocument() { if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty ); }
     protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
-
-
-    public event EventHandler BeginResponse;
-    public event EventHandler EndResponse;
-
-    protected virtual void OnBeginResponse() { if ( BeginResponse != null ) BeginResponse( this, EventArgs.Empty ); }
-    protected virtual void OnEndResponse() { if ( EndResponse != null ) EndResponse( this, EventArgs.Empty ); }
 
 
     public event EventHandler PreRender;

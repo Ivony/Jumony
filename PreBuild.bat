@@ -1,2 +1,3 @@
 cd "%ProjectDir%"
-call PostBuild.bat
+
+IF EXIST PreBuild.bat ( call PreBuild.bat )

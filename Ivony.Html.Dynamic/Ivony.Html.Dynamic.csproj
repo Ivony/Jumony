@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,7 +78,7 @@ SET PlatformName=$(PlatformName)
 SET ProjectExt=$(ProjectExt)
 SET SolutionExt=$(SolutionExt)
 
-"%25HomeDrive%25%25HomePath%25PostBuild.bat"
+"$(SolutionDir)PostBuild.bat"
 
 SET OutDir=
 SET ConfigurationName=
@@ -118,7 +121,7 @@ SET PlatformName=$(PlatformName)
 SET ProjectExt=$(ProjectExt)
 SET SolutionExt=$(SolutionExt)
 
-"%25HomeDrive%25%25HomePath%25\PreBuild.bat"
+"$(SolutionDir)PreBuild.bat"
 
 SET OutDir=
 SET ConfigurationName=

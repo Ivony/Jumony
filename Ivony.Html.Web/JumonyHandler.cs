@@ -13,13 +13,18 @@ namespace Ivony.Html.Web
   public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
+    /// <summary>
+    /// 指定此实例是否可以被复用，默认值为false
+    /// </summary>
     public virtual bool IsReusable
     {
       get { return false; }
     }
 
 
-
+    /// <summary>
+    /// 获取映射的结果
+    /// </summary>
     protected RequestMapResult MapperResult
     {
       get;
@@ -27,7 +32,10 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 实现 IHttpHandler.ProcessRequest
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求的上下文</param>
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
       Context = new HttpContextWrapper( context );
@@ -36,7 +44,7 @@ namespace Ivony.Html.Web
 
       if ( MapperResult == null )
       {
-        Trace.Warn( "Core", "origin url is not found." );
+        Trace.Warn( "Jumony Web", "origin url is not found." );
 
         var builder = new UriBuilder( Request.Url );
         var path = builder.Path;
@@ -46,45 +54,56 @@ namespace Ivony.Html.Web
 
         builder.Path = path.Remove( path.Length - 5 );
 
-        Trace.Warn( "Core", "redirect to template vitualpath." );
+        Trace.Warn( "Jumony Web", "redirect to template vitualpath." );
         Response.Redirect( builder.Uri.AbsoluteUri );
       }
 
 
+      Trace.Write( "Jumony Web", "Begin resolve cache." );
       OnPreResolveCache();
 
       if ( ResolveCache() )
       {
+        Trace.Write( "Jumony Web", "Cache resolved." );
+
         Context.ApplicationInstance.CompleteRequest();
         return;
       }
 
       OnPostResolveCache();
+      Trace.Write( "Jumony Web", "Cache is not resolved." );
 
+      {
+        OnPreLoadDocument();
 
-      OnPreLoadDocument();
+        Trace.Write( "Jumony Web", "Begin load page." );
+        Page = LoadPage();
+        Trace.Write( "Jumony Web", "End load page." );
 
-      Trace.Write( "Core", "Begin Load Page" );
-      Page = LoadPage();
-      Trace.Write( "Core", "End Load Page" );
-
-      OnPostLoadDocument();
+        OnPostLoadDocument();
+      }
 
       ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Page.Document );
 
 
-      Trace.Write( "Core", "Begin Render Document" );
-      var response = CreateResponse();
-      Trace.Write( "Core", "End Render Document" );
+      {
+        OnBeginResponse();
+        Trace.Write( "Jumony Web", "Begin response." );
+        var response = CreateResponse();
 
+        UpdateCache( response );
 
-      UpdateCache( response );
-
-      response.Apply( Response );
-
+        response.Apply( Response );
+        Trace.Write( "Jumony Web", "End response." );
+        OnEndResponse();
+      }
     }
 
 
+    /// <summary>
+    /// 尝试从缓存输出
+    /// </summary>
+    /// <returns>缓存是否命中</returns>
     protected virtual bool ResolveCache()
     {
 
@@ -103,23 +122,12 @@ namespace Ivony.Html.Web
     }
 
 
-    protected virtual void OnPreResolveCache()
-    {
-      //throw new NotImplementedException();
-    }
-
-
-    protected virtual void OnPostResolveCache()
-    {
-      //throw new NotImplementedException();
-    }
-
 
     /// <summary>
     /// 刷新输出缓存
     /// </summary>
-    /// <param name="output"></param>
-    protected virtual void UpdateCache( RawResponse cacheItem )
+    /// <param name="cachedResponse">响应的缓存</param>
+    protected virtual void UpdateCache( RawResponse cachedResponse )
     {
 
       var context = new HttpContextWrapper( HttpContext.Current );
@@ -130,10 +138,10 @@ namespace Ivony.Html.Web
         return;
 
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, cacheItem );
+      var policy = HtmlProviders.GetCachePolicy( context, this, cachedResponse );
 
 
-      Cache.Insert( key, cacheItem, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
+      Cache.Insert( key, cachedResponse, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
 
     }
 
@@ -144,7 +152,14 @@ namespace Ivony.Html.Web
     /// <returns>响应</returns>
     protected virtual RawResponse CreateResponse()
     {
-      return new RawResponse() { Content = Page.Render() };
+
+      var response = new RawResponse();
+
+      Trace.Write( "Jumony Web", "Begin render page." );
+      response.Content = Page.Render();
+      Trace.Write( "Jumony Web", "End render page." );
+
+      return response;
     }
 
 
@@ -153,9 +168,9 @@ namespace Ivony.Html.Web
 
       OnPreProcessDocument();
 
-      Trace.Write( "Core", "Begin Process Document" );
+      Trace.Write( "Jumony Web", "Begin Process Document." );
       ProcessDocument();
-      Trace.Write( "Core", "End Process Document" );
+      Trace.Write( "Jumony Web", "End Process Document." );
 
       OnPostProcessDocument();
 
@@ -220,9 +235,9 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 在文档范围类使用选择器查找符合要求的元素
+    /// 在文档范围内使用选择器查找符合要求的元素
     /// </summary>
-    /// <param name="selector">CSS选择器</param>
+    /// <param name="selector">CSS选择器表达式</param>
     /// <returns>符合选择器要求的元素</returns>
     protected IEnumerable<IHtmlElement> Find( string selector )
     {
@@ -341,7 +356,22 @@ namespace Ivony.Html.Web
     protected virtual void OnEndResponse() { if ( EndResponse != null ) EndResponse( this, EventArgs.Empty ); }
 
 
+    public event EventHandler PreRender;
+    public event EventHandler PostRender;
 
+    protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
+    protected virtual void OnPostRender() { if ( PostRender != null ) PostRender( this, EventArgs.Empty ); }
+
+
+
+    public event EventHandler PreResolveCache;
+    public event EventHandler PostResolveCache;
+
+    /// <summary>引发PreResolveCache事件</summary>
+    protected virtual void OnPreResolveCache() { if ( PreResolveCache != null ) PreResolveCache( this, EventArgs.Empty ); }
+
+    /// <summary>引发PostResolveCache事件</summary>
+    protected virtual void OnPostResolveCache() { if ( PostResolveCache != null ) PostResolveCache( this, EventArgs.Empty ); }
 
 
     #region IDisposable 成员

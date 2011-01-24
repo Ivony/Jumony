@@ -155,7 +155,7 @@ SET PlatformName=$(PlatformName)
 SET ProjectExt=$(ProjectExt)
 SET SolutionExt=$(SolutionExt)
 
-$(SolutionDir)PreBuild.bat
+"$(SolutionDir)PreBuild.bat"
 
 SET OutDir=
 SET ConfigurationName=

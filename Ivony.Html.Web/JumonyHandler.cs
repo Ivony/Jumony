@@ -88,7 +88,17 @@ namespace Ivony.Html.Web
 
       {
         Trace.Write( "Jumony Web", "Begin response." );
-        var response = CreateResponse();
+
+        OnPreRender();
+
+        Trace.Write( "Jumony Web", "Begin render page." );
+        var content = Page.Render();
+        Trace.Write( "Jumony Web", "End render page." );
+
+        OnPostRender();
+
+
+        var response = CreateResponse( content );
 
         UpdateCache( response );
 
@@ -148,16 +158,9 @@ namespace Ivony.Html.Web
     /// 创建响应
     /// </summary>
     /// <returns>响应</returns>
-    protected virtual RawResponse CreateResponse()
+    protected virtual RawResponse CreateResponse( string content )
     {
-
-      var response = new RawResponse();
-
-      Trace.Write( "Jumony Web", "Begin render page." );
-      response.Content = Page.Render();
-      Trace.Write( "Jumony Web", "End render page." );
-
-      return response;
+      return new RawResponse() { Content = content };
     }
 
 

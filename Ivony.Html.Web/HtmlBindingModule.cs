@@ -121,7 +121,7 @@ namespace Ivony.Html.Binding
 
       if ( !File.Exists( physicalPath ) )
       {
-        Trace.TraceWarning( "Core", string.Format( "在 \"{0}\" 找不到样式表文件", physicalPath ) );
+        Trace.TraceWarning( "Jumony Web", string.Format( "在 \"{0}\" 找不到样式表文件", physicalPath ) );
         return null;
       }
 

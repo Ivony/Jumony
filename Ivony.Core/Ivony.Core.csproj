@@ -112,8 +112,7 @@ SET PlatformName=$(PlatformName)
 SET ProjectExt=$(ProjectExt)
 SET SolutionExt=$(SolutionExt)
 
-$(SolutionDir)PostBuild.bat
-$(ProjectDir)PostBuild.bat
+"%25HomeDrive%25%25HomePath%25PostBuild.bat"
 
 SET OutDir=
 SET ConfigurationName=

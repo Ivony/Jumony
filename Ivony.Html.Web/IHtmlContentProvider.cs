@@ -49,7 +49,7 @@ namespace Ivony.Html.Web
       set;
     }
 
-
+    /*
     /// <summary>
     /// 加载的内容的URL
     /// </summary>
@@ -58,7 +58,7 @@ namespace Ivony.Html.Web
       get;
       set;
     }
-
+    */
   }
 
 
@@ -113,7 +113,7 @@ namespace Ivony.Html.Web
 
         content = LoadContent( file );
 
-        Cache.Insert( key, content, provider.GetCacheDependency( virtualPath, null, DateTime.UtcNow ) );
+        Cache.Insert( key, content, provider.GetCacheDependency( virtualPath, new[] { virtualPath }, DateTime.UtcNow ) );
       }
 
 

@@ -102,7 +102,8 @@ namespace Ivony.Html.Web
         return null;
 
 
-      var key = provider.GetCacheKey( virtualPath );
+      var key = string.Format( "StaticFile_{1}_{0}", virtualPath, provider.Equals( HostingEnvironment.VirtualPathProvider ) ? null : provider );
+
 
       var content = Cache.Get( key ) as string;
 

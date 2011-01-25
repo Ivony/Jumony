@@ -43,20 +43,7 @@ namespace Ivony.Html.Web
       MapperResult = Context.GetMapperResult();
 
       if ( MapperResult == null )
-      {
-        Trace.Warn( "Jumony Web", "origin url is not found." );
-
-        var builder = new UriBuilder( Request.Url );
-        var path = builder.Path;
-
-        if ( !path.EndsWith( ".ashx" ) )
-          throw new InvalidOperationException();
-
-        builder.Path = path.Remove( path.Length - 5 );
-
-        Trace.Warn( "Jumony Web", "redirect to template vitualpath." );
-        Response.Redirect( builder.Uri.AbsoluteUri );
-      }
+        throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
 
 
       Trace.Write( "Jumony Web", "Begin resolve cache." );
@@ -138,15 +125,13 @@ namespace Ivony.Html.Web
     protected virtual void UpdateCache( RawResponse cachedResponse )
     {
 
-      var context = new HttpContextWrapper( HttpContext.Current );
-
-      var key = HtmlProviders.GetCacheKey( context );
+      var key = HtmlProviders.GetCacheKey( Context );
 
       if ( key == null )
         return;
 
 
-      var policy = HtmlProviders.GetCachePolicy( context, this, cachedResponse );
+      var policy = HtmlProviders.GetCachePolicy( Context, this, cachedResponse );
 
 
       Cache.Insert( key, cachedResponse, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
@@ -254,7 +239,6 @@ namespace Ivony.Html.Web
     protected virtual WebPage LoadPage()
     {
       var page = MapperResult.LoadPage();
-
 
       return page;
     }

@@ -48,6 +48,17 @@ namespace Ivony.Html.Web
       get;
       set;
     }
+
+
+    /// <summary>
+    /// 加载的内容的URL
+    /// </summary>
+    public Uri Url
+    {
+      get;
+      set;
+    }
+
   }
 
 
@@ -91,8 +102,7 @@ namespace Ivony.Html.Web
         return null;
 
 
-      var key = string.Format( "StaticFile_{1}_{0}", virtualPath, provider.Equals( HostingEnvironment.VirtualPathProvider ) ? null : provider );
-
+      var key = provider.GetCacheKey( virtualPath );
 
       var content = Cache.Get( key ) as string;
 

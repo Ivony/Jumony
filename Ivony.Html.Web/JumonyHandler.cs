@@ -140,7 +140,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 创建响应
+    /// 派生类重写此方法自定义创建响应的逻辑
     /// </summary>
     /// <returns>响应</returns>
     protected virtual RawResponse CreateResponse( string content )
@@ -149,8 +149,14 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 实现IHtmlHandler接口
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="document"></param>
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
+      Context = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
 
       OnPreProcessDocument();
 
@@ -161,7 +167,6 @@ namespace Ivony.Html.Web
       OnPostProcessDocument();
 
       AddGeneratorMetaData();//为处理后的文档加上Jumony生成器的meta信息。
-
     }
 
 
@@ -172,10 +177,9 @@ namespace Ivony.Html.Web
 
 
 
-
-
-
-
+    /// <summary>
+    /// 这个方法是用来添加<![CDATA[<meta name="generator" value="jumony" />]]>元素的。
+    /// </summary>
     private void AddGeneratorMetaData()
     {
       var factory = Document.GetNodeFactory();

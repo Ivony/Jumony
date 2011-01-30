@@ -128,8 +128,15 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+      {
+        if ( !VirtualPathUtility.IsAbsolute( virtualPath ) )
+          throw new ArgumentException( "不能使用相对路径来加载文档" );
 
+
+        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      }
 
 
       lock ( _contentProvidersSync )

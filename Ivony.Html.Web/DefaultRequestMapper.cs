@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
 
     public RequestMapResult MapRequest( HttpRequest request )
     {
-      var virtualPath = request.FilePath;
+      var virtualPath = request.AppRelativeCurrentExecutionFilePath;
 
       if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ), StringComparer.InvariantCultureIgnoreCase ) )
         return null;

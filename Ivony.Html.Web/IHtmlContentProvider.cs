@@ -92,10 +92,18 @@ namespace Ivony.Html.Web
       return LoadContent( HostingEnvironment.VirtualPathProvider, virtualPath );
     }
 
-
+    /// <summary>
+    /// 利用指定VirtualPathProvider将虚拟路径所指向文件当作静态文件加载。
+    /// </summary>
+    /// <param name="provider">指定的VirtualPathProvider</param>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns>加载结果</returns>
     public static HtmlContentResult LoadContent( VirtualPathProvider provider, string virtualPath )
     {
 
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        return null;
+      
       if ( !provider.FileExists( virtualPath ) )
         return null;
 
@@ -105,8 +113,8 @@ namespace Ivony.Html.Web
         return null;
 
 
-      var key = string.Format( "StaticFile_{1}_{0}", virtualPath, provider.Equals( HostingEnvironment.VirtualPathProvider ) ? null : provider );
 
+      var key = provider.GetCacheKey( virtualPath ) ?? "StaticFile_" + virtualPath;
 
       var content = Cache.Get( key ) as string;
 
@@ -115,8 +123,10 @@ namespace Ivony.Html.Web
       {
 
         content = LoadContent( file );
+        var dependency = provider.GetCacheDependency( virtualPath, new[] { virtualPath }, DateTime.UtcNow ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
 
-        Cache.Insert( key, content, provider.GetCacheDependency( virtualPath, new[] { virtualPath }, DateTime.UtcNow ) );
+
+        Cache.Insert( key, content, dependency );
       }
 
 
@@ -127,7 +137,13 @@ namespace Ivony.Html.Web
       };
     }
 
-    protected static string LoadContent( VirtualFile file )
+
+    /// <summary>
+    /// 从指定虚拟文件中读取文本内容
+    /// </summary>
+    /// <param name="file">虚拟文件</param>
+    /// <returns></returns>
+    public static string LoadContent( VirtualFile file )
     {
       using ( var reader = new StreamReader( file.Open(), true ) )
       {

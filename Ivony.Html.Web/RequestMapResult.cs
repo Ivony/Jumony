@@ -17,6 +17,10 @@ namespace Ivony.Html.Web
 
     public RequestMapResult( string templatePath, IHtmlHandler handler )
     {
+
+      if ( !VirtualPathUtility.IsAppRelative( templatePath ) )
+        throw new ArgumentException( "模版文件路径必须是相对于应用程序根路径", "templatePath" );
+
       TemplatePath = templatePath;
       Handler = handler;
     }

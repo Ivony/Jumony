@@ -82,6 +82,9 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        return null;
+
 
       if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ) ) )
         return null;
@@ -144,6 +147,10 @@ namespace Ivony.Html.Web
 
       if ( context == null )
         throw new ArgumentNullException( "context" );
+
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        return null;
+
 
 
       if ( !allowsExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ) ) )

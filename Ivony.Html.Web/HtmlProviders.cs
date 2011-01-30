@@ -128,6 +128,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
 
 
       lock ( _contentProvidersSync )
@@ -163,6 +165,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
 
 
       var content = LoadContent( context, virtualPath );
@@ -188,6 +192,10 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
+
+
       var content = LoadContent( context, virtualPath );
       if ( content == null )
         return null;
@@ -212,6 +220,10 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
+      if ( virtualPath != null )
+        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
+
 
       lock ( _parserProvidersSync )
       {
@@ -227,6 +239,8 @@ namespace Ivony.Html.Web
         }
       }
 
+
+      //默认行为
       return new HtmlParserResult()
       {
         Parser = new JumonyHtmlParser(),
@@ -247,6 +261,13 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, HtmlContentResult contentResult )
     {
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      if ( contentResult == null )
+        throw new ArgumentNullException( "contentResult" );
+
 
       var content = contentResult.Content;
 
@@ -289,6 +310,14 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string virtualPath, string htmlContent )
     {
+
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      if ( htmlContent == null )
+        throw new ArgumentNullException( "htmlContent" );
+
+
       var result = GetParser( context, virtualPath, htmlContent );
 
       return ParseDocument( result, htmlContent );

@@ -113,7 +113,6 @@ namespace Ivony.Html.Web
 
 
 
-
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
@@ -128,15 +127,9 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      
+
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-      {
-        if ( !VirtualPathUtility.IsAbsolute( virtualPath ) )
-          throw new ArgumentException( "不能使用相对路径来加载文档" );
-
-
-        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
-      }
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径", "virtualPath" );
 
 
       lock ( _contentProvidersSync )
@@ -172,8 +165,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
-
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var content = LoadContent( context, virtualPath );
@@ -199,8 +192,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
-
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var content = LoadContent( context, virtualPath );
@@ -210,7 +203,6 @@ namespace Ivony.Html.Web
       var document = ParseDocument( context, virtualPath, content );
 
       return new WebPage( document, new Uri( context.Request.Url, virtualPath ), content.CacheKey );
-
     }
 
 
@@ -227,8 +219,9 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      if ( virtualPath != null )
-        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
+
 
 
 
@@ -274,6 +267,10 @@ namespace Ivony.Html.Web
 
       if ( contentResult == null )
         throw new ArgumentNullException( "contentResult" );
+
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
+
 
 
       var content = contentResult.Content;
@@ -323,6 +320,9 @@ namespace Ivony.Html.Web
 
       if ( htmlContent == null )
         throw new ArgumentNullException( "htmlContent" );
+
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var result = GetParser( context, virtualPath, htmlContent );

@@ -403,24 +403,6 @@ namespace Ivony.Html.Web
 
 
 
-  [Flags]
-  public enum CacheKeyBasis
-  {
-
-    /// <summary>指定对于所有请求都不要缓存</summary>
-    NoCache = 0,
-
-    /// <summary>指定对于所有请求，以url作为缓存依据</summary>
-    ByUrl = 1,
-
-    /// <summary>指定对于所有请求，以SessionID作为依据</summary>
-    BySession = 2,
-
-    /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
-    ByIdentity = 4,
-
-
-  }
 
 
 }

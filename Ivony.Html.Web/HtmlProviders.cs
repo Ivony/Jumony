@@ -349,7 +349,6 @@ namespace Ivony.Html.Web
 
 
 
-
     /// <summary>
     /// 获取缓存键（依据）
     /// </summary>
@@ -367,7 +366,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return DefaultCacheKey( context );
+      return DefaultCachePolicies.GetCacheKey( context );
 
     }
 
@@ -391,59 +390,13 @@ namespace Ivony.Html.Web
         }
       }
 
-      return DefaultCachePolicy( context );
-    }
-
-    private static HtmlCachePolicy DefaultCachePolicy( HttpContextBase context )
-    {
-      return new HtmlCachePolicy() { Duration = DefaultCacheDuration };
-    }
-
-    private static string DefaultCacheKey( HttpContextBase context )
-    {
-
-      if ( DefaultCacheKeyBasis == Web.CacheKeyBasis.NoCache )
-        return null;
-
-      var keys = new List<string>();
-
-      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.BySession) != 0 )
-      {
-        if ( !context.Session.IsCookieless && !context.Session.IsNewSession )
-          keys.Add( context.Session.SessionID );
-      }
-
-      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.ByIdentity) != 0 )
-      {
-        if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
-          keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
-      }
-
-      if ( (DefaultCacheKeyBasis & Web.CacheKeyBasis.ByUrl) != 0 )
-        keys.Add( context.Request.Url.AbsoluteUri );
-
-      return string.Join( ":", keys.ToArray() );
+      return DefaultCachePolicies.GetPolicy( context, handler, cacheItem );
     }
 
 
-    /// <summary>
-    /// 设置默认缓存键的产生依据
-    /// </summary>
-    public static CacheKeyBasis DefaultCacheKeyBasis
-    {
-      get;
-      set;
-    }
 
 
-    /// <summary>
-    /// 获取或设置默认缓存时间
-    /// </summary>
-    public static TimeSpan DefaultCacheDuration
-    {
-      get;
-      set;
-    }
+
 
 
   }

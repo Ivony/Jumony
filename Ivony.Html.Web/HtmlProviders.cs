@@ -139,10 +139,7 @@ namespace Ivony.Html.Web
           var result = provider.LoadContent( context, virtualPath );
 
           if ( result != null )
-          {
-            result.Provider = provider;
             return result;
-          }
         }
       }
 

@@ -127,10 +127,9 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = ToAbsolute( virtualPath );
 
-      if ( virtualPath == null )
-        throw new ArgumentException( "virtualPath必须是一个相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径", "virtualPath" );
 
 
       lock ( _contentProvidersSync )
@@ -144,29 +143,6 @@ namespace Ivony.Html.Web
         }
       }
 
-
-      return null;
-    }
-
-    private static string ToAbsolute( string virtualPath )
-    {
-
-      if ( VirtualPathUtility.IsAbsolute( virtualPath ) )
-        return virtualPath;
-
-      if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
-        return VirtualPathUtility.ToAbsolute( virtualPath );
-
-      if ( !VirtualPathUtility.IsAbsolute( virtualPath ) )
-      {
-        Uri url;
-
-        if ( Uri.TryCreate( virtualPath, UriKind.Absolute, out url ) )
-        {
-          return url.AbsoluteUri;
-        }
-
-      }
 
       return null;
     }
@@ -186,10 +162,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = ToAbsolute( virtualPath );
-
-      if ( virtualPath == null )
-        throw new ArgumentException( "virtualPath必须是一个相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var content = LoadContent( context, virtualPath );
@@ -215,10 +189,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-      virtualPath = ToAbsolute( virtualPath );
-
-      if ( virtualPath == null )
-        throw new ArgumentException( "virtualPath必须是一个相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var content = LoadContent( context, virtualPath );
@@ -227,7 +199,7 @@ namespace Ivony.Html.Web
 
       var document = ParseDocument( context, virtualPath, content );
 
-      return new WebPage( document, content.Url, content.CacheKey );
+      return new WebPage( document, new Uri( context.Request.Url, virtualPath ), content.CacheKey );
     }
 
 
@@ -244,13 +216,9 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      if ( virtualPath != null )
-      {
-        virtualPath = ToAbsolute( virtualPath );
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
-        if ( virtualPath == null )
-          throw new ArgumentException( "virtualPath只能为null或相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
-      }
 
 
 
@@ -297,13 +265,8 @@ namespace Ivony.Html.Web
       if ( contentResult == null )
         throw new ArgumentNullException( "contentResult" );
 
-      if ( virtualPath != null )
-      {
-        virtualPath = ToAbsolute( virtualPath );
-
-        if ( virtualPath == null )
-          throw new ArgumentException( "virtualPath只能为null或相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
-      }
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
 
@@ -355,13 +318,8 @@ namespace Ivony.Html.Web
       if ( htmlContent == null )
         throw new ArgumentNullException( "htmlContent" );
 
-      if ( virtualPath != null )
-      {
-        virtualPath = ToAbsolute( virtualPath );
-
-        if ( virtualPath == null )
-          throw new ArgumentException( "virtualPath只能为null或相对于应用程序的虚拟路径，或一个绝对虚拟路径，或一个绝对Uri", "virtualPath" );
-      }
+      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
       var result = GetParser( context, virtualPath, htmlContent );

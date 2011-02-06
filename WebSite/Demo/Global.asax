@@ -1,11 +1,12 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="Ivony.Html.Web" %>
+
 <script RunAt="server">
 
   void Application_Start( object sender, EventArgs e )
   {
-    HtmlProviders.DefaultCacheKeyBasis = CacheKeyBasis.ByUrl;
-    HtmlProviders.DefaultCacheDuration = new TimeSpan( 0, 1, 0 );
+    DefaultCachePolicy.CacheKeyBasis = CacheKeyProlicy.ByUrl;
+    DefaultCachePolicy.CacheDuration = new TimeSpan( 0, 1, 0 );
 
   }
 
@@ -37,3 +38,4 @@
   }
        
 </script>
+

@@ -7,6 +7,11 @@ using System.Web.Caching;
 
 namespace Ivony.Html.Web
 {
+
+
+  /// <summary>
+  /// 定义缓存策略提供程序
+  /// </summary>
   public interface IHtmlCachePolicyProvider
   {
 
@@ -17,6 +22,9 @@ namespace Ivony.Html.Web
   }
 
 
+  /// <summary>
+  /// 用于枚举设置默认缓存键策略（缓存依据）
+  /// </summary>
   [Flags]
   public enum CacheKeyProlicy
   {
@@ -37,11 +45,14 @@ namespace Ivony.Html.Web
   }
 
 
-  public static class DefaultCachePolicies
+  /// <summary>
+  /// 用于设置和获取默认缓存策略
+  /// </summary>
+  public static class DefaultCachePolicy
   {
 
 
-    static DefaultCachePolicies()
+    static DefaultCachePolicy()
     {
       CacheKeyBasis = CacheKeyProlicy.NoCache;
       CacheDuration = new TimeSpan( 0 );
@@ -66,7 +77,11 @@ namespace Ivony.Html.Web
       set;
     }
 
-
+    /// <summary>
+    /// 获取默认缓存键
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <returns>默认缓存键，根据缓存键依据设置而产生</returns>
     public static string GetCacheKey( HttpContextBase context )
     {
       if ( CacheKeyBasis == Web.CacheKeyProlicy.NoCache )
@@ -92,6 +107,13 @@ namespace Ivony.Html.Web
       return string.Join( ":", keys.ToArray() );
     }
 
+    /// <summary>
+    /// 获取默认缓存策略
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <param name="handler">请求处理程序</param>
+    /// <param name="cacheItem">缓存项</param>
+    /// <returns>默认缓存策略</returns>
     public static HtmlCachePolicy GetPolicy( HttpContextBase context, IHtmlHandler handler, RawResponse cacheItem )
     {
       return new HtmlCachePolicy() { Duration = CacheDuration };

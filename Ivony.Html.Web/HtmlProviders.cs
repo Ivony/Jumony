@@ -116,8 +116,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
-    /// <param name="virtualPath">请求的虚拟路径</param>
-    /// <returns>HTML 文档内容加载结果</returns>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <returns>HTML 内容加载结果</returns>
     public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
@@ -151,7 +151,7 @@ namespace Ivony.Html.Web
     /// 加载 HTML 文档
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
@@ -178,7 +178,7 @@ namespace Ivony.Html.Web
     /// 加载一个 Web 页面
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="virtualPath">页面的虚拟路径</param>
     /// <returns>Web 页面对象</returns>
     public static WebPage LoadPage( HttpContextBase context, string virtualPath )
     {
@@ -197,9 +197,8 @@ namespace Ivony.Html.Web
       if ( content == null )
         return null;
 
-      var document = ParseDocument( context, content );
+      return LoadPage( context, content );
 
-      return new WebPage( document, content.ContentUri, content.CacheKey );
     }
 
 
@@ -208,9 +207,9 @@ namespace Ivony.Html.Web
     /// 加载一个 Web 页面
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="content">要被加载的 HTML 内容</param>
     /// <returns>Web 页面对象</returns>
-    public static WebPage LoadPage( HttpContextBase context, string virtualPath, HtmlContentResult content )
+    public static WebPage LoadPage( HttpContextBase context, HtmlContentResult content )
     {
 
       if ( context == null )
@@ -218,9 +217,6 @@ namespace Ivony.Html.Web
 
       if ( content == null )
         throw new ArgumentNullException( "content" );
-
-      if ( virtualPath != null && !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath只能为null或使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
       var document = ParseDocument( context, content );
 
@@ -387,7 +383,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return DefaultCachePolicies.GetCacheKey( context );
+      return DefaultCachePolicy.GetCacheKey( context );
 
     }
 
@@ -411,7 +407,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return DefaultCachePolicies.GetPolicy( context, handler, cacheItem );
+      return DefaultCachePolicy.GetPolicy( context, handler, cacheItem );
     }
 
 
@@ -421,9 +417,5 @@ namespace Ivony.Html.Web
 
 
   }
-
-
-
-
 
 }

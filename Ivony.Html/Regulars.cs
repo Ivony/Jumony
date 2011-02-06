@@ -10,24 +10,33 @@ namespace Ivony.Html
     public const string squoteTextPattern = @"('(?<quoteText>(\\.|[^'\\])*)')";
     public const string quoteTextPattern = "(" + dquoteTextPattern + "|" + squoteTextPattern + ")";
 
+    /// <summary>匹配CSS层叠关系选择符的正则表达式</summary>
     public const string relativeExpressionPattern = @"(?<relative>(\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
+    /// <summary>匹配CSS层叠关系选择符的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public const string relativeExpressionPatternNoGroup = @"((\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
 
+    /// <summary>匹配CSS属性选择器的正则表达式</summary>
     public static readonly string attributeExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^'""\]]*))?\]", quoteTextPattern );
+    /// <summary>匹配CSS属性选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string attributeExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^'""\]]*))?\]", quoteTextPattern );
 
+    /// <summary>匹配CSS伪类选择器的正则表达式</summary>
     public static readonly string pseudoClassPattern = string.Format( CultureInfo.InvariantCulture, @":(?<name>[\w-]+)(\((?<args>{0}|[^'""\)]*)\))?", quoteTextPattern );
+    /// <summary>匹配CSS伪类选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string pseudoClassPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @":([\w-]+)(\(({0}|[^'""\)]*)\))?", quoteTextPattern );
 
+
+    /// <summary>匹配CSS元素选择器的正则表达式</summary>
     public static readonly string elementExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+)))?(?<attributeSelector>{0})*(?<pseudoClassSelector>{1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
+    /// <summary>匹配CSS元素选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string elementExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*({1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
 
-    public static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}", relativeExpressionPattern, elementExpressionPattern );
-    public static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
+    public static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "(?<relative>{0})(?<elementSelector>{1})", relativeExpressionPattern, elementExpressionPattern );
+    public static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
 
-    /// <summary>匹配CSS层叠选择器正则表达式</summary>
-    public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
-    /// <summary>匹配CSS层叠选择器正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
+    /// <summary>匹配CSS层叠选择器的正则表达式</summary>
+    public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}(?<extra>{1})*", elementExpressionPattern, extraExpressionPatternNoGroup );
+    /// <summary>匹配CSS层叠选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 
     public static readonly string cssSelectorPattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})(\s+,\s+(?<selector>{0}))*", cssCasecadingSelectorPatternNoGroup );

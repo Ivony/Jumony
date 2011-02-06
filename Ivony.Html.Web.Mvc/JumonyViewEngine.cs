@@ -76,7 +76,7 @@ namespace Ivony.Html.Web.Mvc
     {
       var content = new StaticFileLoader().LoadContent( VirtualPathProvider, virtualPath );//UNDONE 不应每次创建一个实例
 
-      return HtmlProviders.ParseDocument( context, virtualPath, content );
+      return HtmlProviders.ParseDocument( context, content );
     }
 
 

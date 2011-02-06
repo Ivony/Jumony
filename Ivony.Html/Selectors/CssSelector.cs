@@ -29,6 +29,9 @@ namespace Ivony.Html
     /// <returns></returns>
     public static ICssSelector Create( string expression )
     {
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
       return Create( expression, null );
     }
 
@@ -38,11 +41,13 @@ namespace Ivony.Html
     /// <summary>
     /// 创建一个CSS选择器
     /// </summary>
-    /// <param name="scope">范畴限定</param>
     /// <param name="expression">选择器表达式</param>
+    /// <param name="scope">范畴限定</param>
     /// <returns></returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
 
       var match = cssSelectorRegex.Match( expression );
       if ( !match.Success )
@@ -56,16 +61,26 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 执行CSS选择器搜索
+    /// </summary>
+    /// <param name="expression">CSS选择器表达式</param>
+    /// <param name="scope">CSS选择器和搜索范畴</param>
+    /// <returns>搜索结果</returns>
     public static IEnumerable<IHtmlElement> Search( string expression, IHtmlContainer scope )
     {
+
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
+      if ( scope == null )
+        throw new ArgumentNullException( "scope" );
+
 
       var selector = Create( expression, scope );
       return selector.Filter( scope.Descendants() );
 
     }
-
-
   }
 
 

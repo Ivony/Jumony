@@ -110,7 +110,8 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "virtualPath" );
 
 
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      if ( VirtualPathUtility.IsAbsolute( virtualPath ) )
+        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;
@@ -139,7 +140,8 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "virtualPath" );
 
 
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      if ( VirtualPathUtility.IsAbsolute( virtualPath ) )
+        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;
@@ -205,8 +207,8 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
-
-      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+      if ( VirtualPathUtility.IsAbsolute( virtualPath ) )
+        virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;

@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
   public interface IHtmlParserProvider
   {
 
-    HtmlParserResult GetParser( HttpContextBase context, string virtualPath, string htmlContent );
+    HtmlParserResult GetParser( HttpContextBase context, Uri contentUri, string htmlContent );
 
 
     void ReleaseParser( IHtmlParser parser );

@@ -31,11 +31,11 @@ namespace Ivony.Html
     /// <summary>匹配CSS元素选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string elementExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*({1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
 
-    public static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "(?<relative>{0})(?<elementSelector>{1})", relativeExpressionPattern, elementExpressionPattern );
-    public static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
+    public static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}", relativeExpressionPattern, elementExpressionPattern );
+    public static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "(?<extra>{0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
 
     /// <summary>匹配CSS层叠选择器的正则表达式</summary>
-    public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}(?<extra>{1})*", elementExpressionPattern, extraExpressionPatternNoGroup );
+    public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPattern, extraExpressionPatternNoGroup );
     /// <summary>匹配CSS层叠选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 

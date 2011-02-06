@@ -106,6 +106,12 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;
 
@@ -126,8 +132,19 @@ namespace Ivony.Html.Web
     public HtmlContentResult LoadContent( VirtualPathProvider provider, string virtualPath )
     {
 
+      if ( provider == null )
+        throw new ArgumentNullException( "provider" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
+
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;
+
+
 
       if ( !provider.FileExists( virtualPath ) )
         return null;
@@ -184,6 +201,12 @@ namespace Ivony.Html.Web
 
       if ( context == null )
         throw new ArgumentNullException( "context" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
+      virtualPath = VirtualPathUtility.ToAppRelative( virtualPath );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         return null;

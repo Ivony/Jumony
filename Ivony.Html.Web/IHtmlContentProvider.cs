@@ -121,7 +121,7 @@ namespace Ivony.Html.Web
         return null;
 
 
-      return LoadContent( HostingEnvironment.VirtualPathProvider, virtualPath );
+      return LoadContent( context, HostingEnvironment.VirtualPathProvider, virtualPath );
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ namespace Ivony.Html.Web
     /// <param name="provider">指定的VirtualPathProvider</param>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>加载结果</returns>
-    public HtmlContentResult LoadContent( VirtualPathProvider provider, string virtualPath )
+    public HtmlContentResult LoadContent( HttpContextBase context, VirtualPathProvider provider, string virtualPath )
     {
 
       if ( provider == null )
@@ -174,7 +174,7 @@ namespace Ivony.Html.Web
       }
 
 
-      return new HtmlContentResult( this, content, new Uri( VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
+      return new HtmlContentResult( this, content, new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
     }
 
 
@@ -223,7 +223,7 @@ namespace Ivony.Html.Web
       {
         context.Server.Execute( virtualPath, writer, false );
 
-        return new HtmlContentResult( this, writer.ToString(), new Uri( VirtualPathUtility.ToAbsolute( virtualPath ) ) );
+        return new HtmlContentResult( this, writer.ToString(), new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ) );
       }
     }
   }

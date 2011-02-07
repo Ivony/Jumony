@@ -45,20 +45,6 @@ namespace Ivony.Html.Web
     }
 
 
-
-
-    public virtual IHtmlDocument LoadTemplate()
-    {
-      var document = HtmlProviders.LoadDocument( new HttpContextWrapper( HttpContext.Current ), TemplatePath );
-
-      if ( document == null )
-        throw new InvalidOperationException();
-
-      return document;
-
-    }
-
-
     public virtual WebPage LoadPage()
     {
       var page = HtmlProviders.LoadPage( new HttpContextWrapper( HttpContext.Current ), TemplatePath );

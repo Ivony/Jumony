@@ -86,7 +86,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="request">当前 HTTP 请求信息</param>
     /// <returns>请求映射信息</returns>
-    public static RequestMapResult MapRequest( HttpRequest request )
+    public static RequestMapResult MapRequest( HttpRequestBase request )
     {
 
       if ( request == null )

@@ -54,6 +54,34 @@ namespace Ivony.Html.Binding
 
 
 
+  public abstract class BindingTarget
+  {
+    public abstract void BindValue( object value );
+  }
+
+  public sealed class ElementTarget : BindingTarget
+  {
+
+    public IHtmlElement Target
+    {
+      get;
+      private set;
+    }
+
+    public ElementTarget( IHtmlElement element )
+    {
+      Target = element;
+    }
+
+    public override void BindValue( object value )
+    {
+      var binder = HtmlBinder.GetBinder( Target );
+      binder.Bind( value, Target );
+    }
+  }
+
+
+
 
 
   public interface IUniformResource

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Ivony.Html.Web
 {
@@ -42,6 +43,16 @@ namespace Ivony.Html.Web
     {
 
       return Document.Render();
+    }
+
+    public void Render( TextWriter output )
+    {
+      Document.Render( output );
+    }
+
+    public IEnumerable<IHtmlElement> Find( string selector )
+    {
+      return Document.Find( selector );
     }
   }
 }

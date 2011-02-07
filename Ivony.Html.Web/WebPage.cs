@@ -39,20 +39,27 @@ namespace Ivony.Html.Web
 
 
 
-    public virtual string Render()
+    public string Render()
     {
-
-      return Document.Render();
+      using ( var writer = new StringWriter() )
+      {
+        Render( writer );
+        return writer.ToString();
+      }
     }
 
-    public virtual void Render( TextWriter output )
+    public virtual void Render( TextWriter writer )
     {
-      Document.Render( output );
+      Document.Render( writer );
     }
 
     public IEnumerable<IHtmlElement> Find( string selector )
     {
       return Document.Find( selector );
     }
+
+
+
+
   }
 }

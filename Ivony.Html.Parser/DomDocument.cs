@@ -25,17 +25,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlContainer Container
+    public IHtmlContainer Container//UNDONE
     {
       get { return null; }
     }
 
-    public string RawHtml
-    {
-      get { return null; }
-    }
-
-    public void Remove()
+    public void Remove()//UNDONE
     {
       throw new NotSupportedException();
     }

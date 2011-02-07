@@ -45,7 +45,7 @@ namespace Ivony.Html.Web
       return Document.Render();
     }
 
-    public void Render( TextWriter output )
+    public virtual void Render( TextWriter output )
     {
       Document.Render( output );
     }

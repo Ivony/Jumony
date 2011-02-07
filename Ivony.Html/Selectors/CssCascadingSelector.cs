@@ -11,6 +11,10 @@ namespace Ivony.Html
   /// <summary>
   /// CSS层叠选择器
   /// </summary>
+  /// <remarks>
+  /// 层叠选择器的表达式分析过程是从左至右，而处理则是从右至左，采取从左至右的方式分析主要考虑到正则工作模式和效率问题。但由于处理方式是从右至左，所以左选择器（父级选择器）是可选的，而右选择器（子级选择器）是必须的。
+  /// 简单的说只有一个元素选择器所构成的层叠选择器，其元素选择器是位于右边的。
+  /// </remarks>
   internal sealed class CssCasecadingSelector : ICssSelector
   {
 
@@ -26,7 +30,7 @@ namespace Ivony.Html
     /// 创建选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
-    /// <returns></returns>
+    /// <returns>选择器实例</returns>
     public static ICssSelector Create( string expression )
     {
       var match = cssSelectorRegex.Match( expression );
@@ -61,7 +65,12 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
-    /// <returns></returns>
+    /// <returns>带范畴限定的层叠选择器</returns>
+    /// <remarks>
+    /// 层叠选择器已经被重写以适应更多情况，范畴限定也已经被包装为一个ICssSelector对象，作为左选择器而存在。所以范畴限定等同于，仅选择这个容器子元素的选择器。
+    /// 为此还约定了一个特殊关系运算符：null，这个关系运算符表示被考察的元素本身必须同时满足左选择器。换言之A null .class其实等同于A.class
+    /// 在范畴限定的ICssSelector对象实现中，容器的所有子代都会被认为符合条件，从而实现了范畴限定。
+    /// </remarks>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
       var selector = Create( expression );
@@ -107,9 +116,9 @@ namespace Ivony.Html
 
 
     //没有左选择器的情况
-    private CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
+    //private CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
 
-    //一般情况
+
     private CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
       _right = rightSelector;
@@ -158,6 +167,12 @@ namespace Ivony.Html
         throw new NotSupportedException( string.Format( CultureInfo.InvariantCulture, "不支持的关系选择符 \"{0}\"", Relative ) );
     }
 
+
+
+    /// <summary>
+    /// 重写ToString输出规范化的选择器表达式
+    /// </summary>
+    /// <returns>选择器表达式</returns>
     public override string ToString()
     {
       if ( Relative == null )

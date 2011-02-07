@@ -67,13 +67,12 @@
     <Compile Include="DataBinder.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="BindingContext.cs" />
-    <Compile Include="ElementBinder.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="HtmlBinder.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
+    <Compile Include="IBindingTargetProvider.cs" />
     <Compile Include="IDataSource.cs" />
     <Compile Include="IHtmlBindingSheet.cs" />
-    <Compile Include="IValueProvider.cs" />
     <Compile Include="PagingDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

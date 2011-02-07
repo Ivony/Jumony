@@ -6,7 +6,7 @@ using System.Configuration;
 
 namespace Ivony.Html.Binding
 {
-  public static class HtmlBinder
+  public static partial class HtmlBinder
   {
 
     /// <summary>

@@ -25,12 +25,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlContainer Container//UNDONE
+    public IHtmlContainer Container//UNDONE 需要重写
     {
       get { return null; }
     }
 
-    public void Remove()//UNDONE
+    public void Remove()//UNDONE 需要重写
     {
       throw new NotSupportedException();
     }

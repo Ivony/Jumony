@@ -16,11 +16,5 @@ namespace Ivony.Html
     /// <returns></returns>
     IHtmlDocument Parse( string html );
 
-
-
-
-
-
-
   }
 }

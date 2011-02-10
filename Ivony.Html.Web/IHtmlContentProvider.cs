@@ -10,6 +10,9 @@ using System.Web.Caching;
 namespace Ivony.Html.Web
 {
 
+  /// <summary>
+  /// 定义 HTML 内容提供程序
+  /// </summary>
   public interface IHtmlContentProvider
   {
 
@@ -17,14 +20,30 @@ namespace Ivony.Html.Web
 
   }
 
+
+  /// <summary>
+  /// IHtmlContentProvider 的内容加载结果
+  /// </summary>
   public class HtmlContentResult
   {
 
 
+    /// <summary>
+    /// 创建 HtmlContentResult 实例
+    /// </summary>
+    /// <param name="provider">负责加载的提供程序</param>
+    /// <param name="content">加载的内容</param>
+    /// <param name="contentUri">内容的URL地址</param>
+    public HtmlContentResult( IHtmlContentProvider provider, string content, Uri contentUri ) : this( provider, content, contentUri, null ) { }
 
-    public HtmlContentResult( IHtmlContentProvider provider, string content, string localPath, Uri contentUri ) : this( provider, content, localPath, contentUri, null ) { }
-
-    public HtmlContentResult( IHtmlContentProvider provider, string content, string localPath, Uri contentUri, string cacheKey )
+    /// <summary>
+    /// 创建 HtmlContentResult 实例
+    /// </summary>
+    /// <param name="provider">负责加载的提供程序</param>
+    /// <param name="content">加载的内容</param>
+    /// <param name="contentUri">内容的URL地址</param>
+    /// <param name="cacheKey">缓存内容所使用的缓存键</param>
+    public HtmlContentResult( IHtmlContentProvider provider, string content, Uri contentUri, string cacheKey )
     {
 
       if ( provider == null )
@@ -32,9 +51,6 @@ namespace Ivony.Html.Web
 
       if ( content == null )
         throw new ArgumentNullException( "content" );
-
-      if ( localPath != null && !VirtualPathUtility.IsAppRelative( localPath ) )
-        throw new ArgumentException( "localPath必须是一个应用程序相对路径或者为null", "localPath" );
 
       if ( contentUri == null )
         throw new ArgumentNullException( "contentUri" );
@@ -158,7 +174,7 @@ namespace Ivony.Html.Web
       }
 
 
-      return new HtmlContentResult( this, content, virtualPath, new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
+      return new HtmlContentResult( this, content, new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
     }
 
 
@@ -177,11 +193,20 @@ namespace Ivony.Html.Web
   }
 
 
+  /// <summary>
+  /// ASPX 文件内容加载器，用于从 ASPX 动态页面中加载内容
+  /// </summary>
   public class AspxFileLoader : IHtmlContentProvider
   {
 
     private static readonly string[] allowsExtensions = new[] { ".aspx" };
 
+    /// <summary>
+    /// 读取 ASPX 页面所呈现的 HTML 内容
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求</param>
+    /// <param name="virtualPath">ASPX 文件路径</param>
+    /// <returns>ASPX 页面所呈现的 HTML 内容</returns>
     public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
@@ -201,7 +226,7 @@ namespace Ivony.Html.Web
       {
         context.Server.Execute( virtualPath, writer, false );
 
-        return new HtmlContentResult( this, writer.ToString(), virtualPath, new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ) );
+        return new HtmlContentResult( this, writer.ToString(), new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ) );
       }
     }
   }

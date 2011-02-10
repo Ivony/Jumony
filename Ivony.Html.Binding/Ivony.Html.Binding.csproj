@@ -70,7 +70,6 @@
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="HtmlBinder.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
-    <Compile Include="IBindingTargetProvider.cs" />
     <Compile Include="IDataSource.cs" />
     <Compile Include="IHtmlBindingSheet.cs" />
     <Compile Include="PagingDataSource.cs" />

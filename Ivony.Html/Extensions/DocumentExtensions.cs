@@ -30,7 +30,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+    /// 返回元素的唯一ID，如果没有ID属性，或者有但非唯一，返回null
     /// </summary>
     /// <param name="element">要标识的元素</param>
     /// <returns>元素的唯一ID。</returns>
@@ -40,7 +40,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 返回元素的唯一ID，没有ID属性，或者有但非唯一，返回null
+    /// 返回元素的唯一ID，如果没有ID属性，或者有但非唯一，返回null
     /// </summary>
     /// <param name="element">要标识的元素</param>
     /// <param name="create">指示当没有唯一ID时是否创建一个</param>
@@ -74,6 +74,14 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 获取元素的唯一标识
+    /// </summary>
+    /// <param name="element">要获取标识的元素</param>
+    /// <returns>唯一标识</returns>
+    /// <remarks>
+    /// 元素的唯一标识仅在文档结构不被修改时唯一，当文档结构变化时，元素的唯一标识将会改变，也不能确保唯一性
+    /// </remarks>
     public static string Unique( this IHtmlElement element )
     {
       var id = element.Identity();
@@ -165,6 +173,11 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 确定节点被分配在一个固定的文档上（并非游离状态）
+    /// </summary>
+    /// <param name="node">要确定的节点</param>
+    /// <returns>是否被分配在一个固定的文档上</returns>
     public static bool IsAllocated( this IHtmlNode node )
     {
 
@@ -228,6 +241,11 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 根据文档结构产生一个方法，文档结构可以由此方法的执行结果复原
+    /// </summary>
+    /// <param name="document">要编译的文档</param>
+    /// <returns>可以复原文档的方法代码</returns>
     public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
     {
       return CodeGenerator.GenerateCodeMethod( document, methodName );

@@ -8,9 +8,17 @@ using System.IO;
 
 namespace Ivony.Html.Web
 {
+ 
+  
+  /// <summary>
+  /// 定义响应内容，用于缓存
+  /// </summary>
   public class RawResponse : ICachedResponse
   {
 
+    /// <summary>
+    /// 创建 RawResponse 对象
+    /// </summary>
     public RawResponse()
     {
       Headers = new NameValueCollection();

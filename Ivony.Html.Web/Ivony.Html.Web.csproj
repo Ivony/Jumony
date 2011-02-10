@@ -73,7 +73,6 @@
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
-    <Compile Include="HttpHelper.cs" />
     <Compile Include="IHtmlCachePolicyProvider.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />

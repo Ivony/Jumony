@@ -16,7 +16,7 @@ namespace Ivony.Html.Parser
 
     private Uri _url;
 
-    public Uri DocumentUrl
+    public Uri DocumentUri
     {
       get { return _url; }
     }

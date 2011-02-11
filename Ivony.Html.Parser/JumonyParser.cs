@@ -35,6 +35,12 @@ namespace Ivony.Html.Parser
 
     public virtual DomDocument Parse( string html, Uri url )
     {
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      if ( url != null && !url.IsAbsoluteUri )
+        throw new ArgumentException( "必须是绝对URI", "url" );
+
 
       var document = new DomDocument( url );
 

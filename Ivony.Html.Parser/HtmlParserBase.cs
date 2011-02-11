@@ -97,6 +97,11 @@ namespace Ivony.Html.Parser
     /// <returns>分析好的 HTML 文档</returns>
     public virtual IHtmlDocument Parse( string html, Uri url )
     {
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      if ( url != null && !url.IsAbsoluteUri )
+        throw new ArgumentException( "必须是绝对URI", "url" );
 
       lock ( SyncRoot )
       {

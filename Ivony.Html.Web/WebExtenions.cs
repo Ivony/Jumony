@@ -50,14 +50,22 @@ namespace Ivony.Html.Web
       if ( htmlElement == null )
         return null;
 
+      var headElement = EnsureHeader( htmlElement );
+
+      return new HtmlHead( headElement );
+    }
+
+
+
+    private static IHtmlElement EnsureHeader( IHtmlElement htmlElement )
+    {
       var headElement = htmlElement.Elements( "head" ).SingleOrDefault();
       if ( headElement == null )
       {
         var freeHead = htmlElement.Document.GetNodeFactory().CreateElement( "head" );
         headElement = freeHead.InsertTo( htmlElement, 0 );
       }
-
-      return new HtmlHead( headElement );
+      return headElement;
     }
 
   }

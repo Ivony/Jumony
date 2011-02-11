@@ -106,10 +106,6 @@ namespace Ivony.Html
     }
 
 
-    //没有左选择器的情况
-    //private CssCasecadingSelector( CssElementSelector selector ) : this( selector, null, null ) { }
-
-
     private CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
       _right = rightSelector;

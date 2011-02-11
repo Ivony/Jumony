@@ -11,7 +11,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取文档内容的统一资源位置
     /// </summary>
-    Uri DocumentUrl
+    Uri DocumentUri
     {
       get;
     }

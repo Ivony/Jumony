@@ -267,8 +267,8 @@ namespace Ivony.Html
 
         CodeExpression urlExpression;
 
-        if ( document.DocumentUrl != null )
-          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUrl ) );
+        if ( document.DocumentUri != null )
+          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUri ) );
         else
           urlExpression = new CodePrimitiveExpression( null );
 
@@ -426,11 +426,11 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ldarg_0 );
 
-        if ( document.DocumentUrl == null )
+        if ( document.DocumentUri == null )
           il.Emit( OpCodes.Ldnull );
         else
         {
-          il.Emit( OpCodes.Ldstr, document.DocumentUrl.AbsoluteUri );
+          il.Emit( OpCodes.Ldstr, document.DocumentUri.AbsoluteUri );
           il.Emit( OpCodes.Newobj, NewUri );
         }
 
@@ -525,14 +525,9 @@ namespace Ivony.Html
 
 
 
-    public static void ResolveAbsoluteUrl( this IHtmlDocument document, string baseUrl )
+    public static void ResolveAbsoluteUri( this IHtmlDocument document )
     {
-
-      Uri _base;
-      if ( !Uri.TryCreate( baseUrl, UriKind.Absolute, out _base ) )
-        throw new ArgumentException( "不正确的 URL 格式，baseUrl 参数必须指定一个绝对 URL 地址", "baseUrl" );
-
-      ResolveUrl( document, url => new Uri( _base, url ) );
+      ResolveUrl( document, url => new Uri( document.DocumentUri, url ) );
     }
 
     private static readonly string[] _urlValueAttributes = new[] { "href", "src" };

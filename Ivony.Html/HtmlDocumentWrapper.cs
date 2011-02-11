@@ -68,9 +68,9 @@ namespace Ivony.Html
       Document.Remove();
     }
 
-    public Uri DocumentUrl
+    public Uri DocumentUri
     {
-      get { return Document.DocumentUrl; }
+      get { return Document.DocumentUri; }
     }
 
   }

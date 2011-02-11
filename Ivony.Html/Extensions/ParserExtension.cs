@@ -29,7 +29,7 @@ namespace Ivony.Html
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
 
-      if ( parser == url )
+      if ( url == null )
         throw new ArgumentNullException( "url" );
 
 

@@ -18,10 +18,10 @@ public class Handler : IHttpHandler
 
     var client = new WebClient();
 
-    var parser = new JumonyHtmlParser();
+    var parser = new JumonyParser();
 
-    var dataDocument = parser.Parse( client.DownloadString( "http://www.360buy.com" ) );
-    var templateDocument = parser.Parse( client.DownloadString( "http://www.wsdeal.com/" ) );
+    var dataDocument = parser.LoadDocument( "http://www.360buy.com" );
+    var templateDocument = parser.LoadDocument( "http://www.wsdeal.com/" );
 
 
     dataDocument.Find( "ul[class=list-h] li" ).BindTo( templateDocument.Find( "div.index_3_b1 ul li" ), ( dataElement, targetElement ) =>

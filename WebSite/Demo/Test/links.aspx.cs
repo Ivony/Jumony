@@ -18,14 +18,13 @@ public partial class links : System.Web.UI.Page
   {
 
     var client = new WebClient();
-    var html = client.DownloadString( "http://www.cnblogs.com/" );
 
-    var parser = new JumonyParser();
-    var document = parser.Parse( html );
+    var parser = new JumonyLegacyParser();
+    var document = parser.LoadDocument( "http://www.cnblogs.com/" );
 
     var links = document.Find( "a[href]" );
 
-    var baseUrl = new Uri( "http://www.cnblogs.com" );
+    var baseUrl = document.DocumentUrl;
 
     var data = from hyperLink in links
                let url = new Uri( baseUrl, hyperLink.Attribute( "href" ).Value() )

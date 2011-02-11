@@ -323,7 +323,7 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">请求的虚拟路径</param>
     /// <param name="htmlContent">文档内容</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, Uri contentUri, string htmlContent )
+    public static IHtmlDocument ParseDocument( HttpContextBase context, string htmlContent, Uri contentUri )
     {
 
       if ( context == null )

@@ -264,7 +264,15 @@ namespace Ivony.Html
 
         var providerVariable = new CodeVariableReferenceExpression( "provider" );
 
-        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = factory.CreateDocument();
+
+        CodeExpression urlExpression;
+
+        if ( document.DocumentUrl != null )
+        {
+          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUrl ) );
+        }
+
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = provider.CreateDocument();
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlNode ), "node" ) );// var node;
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
@@ -417,6 +425,16 @@ namespace Ivony.Html
         il.DeclareLocal( typeof( IHtmlContainer ) );
 
         il.Emit( OpCodes.Ldarg_0 );
+
+        if ( document.DocumentUrl == null )
+          il.Emit( OpCodes.Ldnull );
+        else
+        {
+          il.Emit( OpCodes.Ldstr, document.DocumentUrl.AbsoluteUri );
+          il.Emit( OpCodes.Newobj, NewUri );
+        }
+
+
         il.Emit( OpCodes.Callvirt, CreateDocument );
 
         int index = 0;
@@ -494,6 +512,7 @@ namespace Ivony.Html
         }
       }
 
+      private static readonly ConstructorInfo NewUri = typeof( Uri ).GetConstructor( new[] { typeof( string ) } );
       private static readonly MethodInfo CreateDocument = typeof( IHtmlDomProvider ).GetMethod( "CreateDocument" );
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );

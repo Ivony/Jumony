@@ -11,13 +11,6 @@ namespace Ivony.Html
   /// </summary>
   public interface IHtmlDomProvider
   {
-    /// <summary>
-    /// 创建一个空白文档
-    /// </summary>
-    /// <returns>空白文档</returns>
-    IHtmlDocument CreateDocument();
-
-
 
     /// <summary>
     /// 创建一个空白文档

@@ -48,7 +48,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public Uri DocumentUrl
+    public Uri DocumentUri
     {
       get { return _url; }
     }

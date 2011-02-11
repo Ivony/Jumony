@@ -24,7 +24,7 @@ public partial class links : System.Web.UI.Page
 
     var links = document.Find( "a[href]" );
 
-    var baseUrl = document.DocumentUrl;
+    var baseUrl = document.DocumentUri;
 
     var data = from hyperLink in links
                let url = new Uri( baseUrl, hyperLink.Attribute( "href" ).Value() )

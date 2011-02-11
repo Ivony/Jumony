@@ -81,10 +81,10 @@
     <Compile Include="ContentModels\HtmlBeginTag.cs" />
     <Compile Include="ContentModels\HtmlContentFragment.cs" />
     <Compile Include="IHtmlReader.cs" />
-    <Compile Include="JumonyHtmlParser.cs" />
+    <Compile Include="JumonyParser.cs" />
     <Compile Include="HtmlParserBase.cs" />
     <Compile Include="IDomContainer.cs" />
-    <Compile Include="JumonyParser.cs" />
+    <Compile Include="JumonyLegacyParser.cs" />
     <Compile Include="JumonyReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />

@@ -19,7 +19,7 @@ namespace Ivony.Html
   {
 
 
-    public static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssCasecadingSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    public static readonly Regex casecadingSelectorRegex = new Regex( "^" + Regulars.cssCasecadingSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
@@ -33,25 +33,19 @@ namespace Ivony.Html
     /// <returns>选择器实例</returns>
     public static ICssSelector Create( string expression )
     {
-      var match = cssSelectorRegex.Match( expression );
+      var match = casecadingSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
 
 
-      ICssSelector selector = CssElementSelector.Create( match.Groups["elementSelector"].Value );
+      ICssSelector selector = CssElementSelector.Create( match.Groups["leftSelector"].Value );
 
-      foreach ( var extraExpression in match.Groups["extra"].Captures.Cast<Capture>().Select( c => c.Value ) )
+      foreach ( var extraCapture in match.Groups["extra"].Captures.Cast<Capture>() )
       {
-        var extraMatch = extraRegex.Match( extraExpression );
+        var relative = extraCapture.FindCaptures( match.Groups["relative"] ).Single().Value.Trim();
+        var rightSelector = extraCapture.FindCaptures( match.Groups["rightSelector"] ).Single().Value.Trim();
 
-        if ( !extraMatch.Success )
-          throw new FormatException();
-
-        var relative = extraMatch.Groups["relative"].Value.Trim();
-        var elementSelector = extraMatch.Groups["elementSelector"].Value.Trim();
-
-        var newPartSelector = new CssCasecadingSelector( CssElementSelector.Create( elementSelector ), relative, selector );
-        selector = newPartSelector;
+        selector = new CssCasecadingSelector( CssElementSelector.Create( rightSelector ), relative, selector );
 
       }
 
@@ -227,9 +221,6 @@ namespace Ivony.Html
       }
 
     }
-
-
-
 
   }
 }

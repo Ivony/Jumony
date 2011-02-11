@@ -18,6 +18,14 @@ namespace Ivony.Html
     IHtmlDocument CreateDocument();
 
 
+
+    /// <summary>
+    /// 创建一个空白文档
+    /// </summary>
+    /// <param name="url">文档的统一资源路径</param>
+    /// <returns>空白文档</returns>
+    IHtmlDocument CreateDocument( Uri url );
+
     /// <summary>
     /// 向指定容器中添加一个元素
     /// </summary>
@@ -54,6 +62,7 @@ namespace Ivony.Html
     /// <param name="html">特殊标签的HTML</param>
     /// <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
     IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html );
+
 
   }
 

@@ -268,11 +268,11 @@ namespace Ivony.Html
         CodeExpression urlExpression;
 
         if ( document.DocumentUrl != null )
-        {
           urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUrl ) );
-        }
+        else
+          urlExpression = new CodePrimitiveExpression( null );
 
-        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument" ) ) );//var document = provider.CreateDocument();
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument", urlExpression ) ) );//var document = provider.CreateDocument();
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlNode ), "node" ) );// var node;
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes

@@ -259,7 +259,7 @@ namespace Ivony.Html.Web
       //默认行为
       return new HtmlParserResult()
       {
-        Parser = new JumonyHtmlParser(),
+        Parser = new JumonyParser(),
         DomProvider = new DomProvider(),
       };
     }
@@ -286,9 +286,7 @@ namespace Ivony.Html.Web
 
 
 
-      var content = contentResult.Content;
-
-      var result = GetParser( context, contentResult.ContentUri, content );
+      var result = GetParser( context, contentResult.ContentUri, contentResult.Content );
 
 
       if ( contentResult.CacheKey != null && result.DomProvider != null )//如果可以缓存
@@ -303,7 +301,7 @@ namespace Ivony.Html.Web
 
 
 
-        var document = ParseDocument( result, content );
+        var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
         createDocument = document.Compile();
 
@@ -314,7 +312,7 @@ namespace Ivony.Html.Web
 
       else
 
-        return ParseDocument( result, content );
+        return ParseDocument( result, contentResult.Content, contentResult.ContentUri );
     }
 
 
@@ -340,15 +338,15 @@ namespace Ivony.Html.Web
 
       var result = GetParser( context, contentUri, htmlContent );
 
-      return ParseDocument( result, htmlContent );
+      return ParseDocument( result, htmlContent, contentUri );
     }
 
 
-    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent )
+    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent, Uri url )
     {
       var parser = result.Parser;
 
-      var document = parser.Parse( htmlContent );
+      var document = parser.Parse( htmlContent, url );
 
       if ( result.Provider != null )
         result.Provider.ReleaseParser( parser );

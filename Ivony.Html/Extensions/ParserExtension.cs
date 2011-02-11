@@ -99,7 +99,7 @@ namespace Ivony.Html
 
       var html = reader.ReadToEnd();
 
-      var document = parser.Parse( html );
+      var document = parser.Parse( html, url );
 
       return document;
 

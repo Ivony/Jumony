@@ -44,7 +44,7 @@ namespace Ivony.Html
 
     IHtmlDocument IHtmlDomObject.Document
     {
-      get { return this; }
+      get { return Document.Document; }
     }
 
     object IHtmlDomObject.SyncRoot
@@ -67,5 +67,11 @@ namespace Ivony.Html
     {
       Document.Remove();
     }
+
+    public Uri DocumentUrl
+    {
+      get { return Document.DocumentUrl; }
+    }
+
   }
 }

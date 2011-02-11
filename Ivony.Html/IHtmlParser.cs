@@ -12,9 +12,11 @@ namespace Ivony.Html
     /// <summary>
     /// 分析 HTML 创建一个文档
     /// </summary>
-    /// <param name="html">HTML文本</param>
+    /// <param name="html">HTML 文本</param>
+    /// <param name="url">HTML 内容统一资源位置</param>
     /// <returns></returns>
-    IHtmlDocument Parse( string html );
+    IHtmlDocument Parse( string html, Uri url );
+
 
   }
 }

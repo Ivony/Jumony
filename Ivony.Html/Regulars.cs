@@ -37,7 +37,7 @@ namespace Ivony.Html
     /// <summary>匹配CSS层叠选择器的正则表达式</summary>
     public static readonly string cssCasecadingSelectorPattern = string.Format( CultureInfo.InvariantCulture, "{0}(?<extra>{1})*", elementExpressionPattern, extraExpressionPatternNoGroup );
     /// <summary>匹配CSS层叠选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
-    public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}{1}*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
+    public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "{0}({1})*", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 
     public static readonly string cssSelectorPattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})(\s+,\s+(?<selector>{0}))*", cssCasecadingSelectorPatternNoGroup );
     public static readonly string cssSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"({0})(\s+,\s+({0}))*", cssCasecadingSelectorPatternNoGroup );

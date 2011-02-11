@@ -12,12 +12,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
   {
 
 
-
+    private Uri _url;
     private AP.HtmlDocument _document;
 
     public HtmlDocumentAdapter( AP.HtmlDocument document )
       : base( document.DocumentNode )
     {
+
       if ( document.DocumentNode.ChildNodes.Any() )
       {
         var node = document.DocumentNode.ChildNodes[0];
@@ -30,6 +31,13 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       }
 
       _document = document;
+
+      var uriAttribute = document.DocumentNode.Attributes.SingleOrDefault( a => a.Name == "uri" );
+      if ( uriAttribute != null )
+      {
+        Uri.TryCreate( uriAttribute.Value, UriKind.Absolute, out _url );
+      }
+
     }
 
     string _declaration;
@@ -40,38 +48,17 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public string Handle( IHtmlNode node )
+    public Uri DocumentUrl
     {
-      var htmlNode = node.RawObject.CastTo<AP.HtmlNode>();
-      return string.Format( "{0}:{1}", htmlNode.Line, htmlNode.LinePosition );
+      get { return _url; }
     }
 
 
-    Regex handleRegex = new Regex( string.Format( "^{0}:{1}$", Regulars.integerPattern, Regulars.integerPattern ), RegexOptions.Compiled );
-
-    public IHtmlNode Handle( string handler )
-    {
-      if ( handleRegex.IsMatch( handler ) )
-        throw new FormatException();
-
-      string[] values = handler.Split( ':' );
-      int line = int.Parse( values[0] );
-      int linePosition = int.Parse( values[1] );
-
-      var htmlNode = Node.DescendantNodesAndSelf().FirstOrDefault( node => node.Line == line && node.LinePosition == linePosition );
-      if ( htmlNode == null )
-        return null;
-
-      return htmlNode.AsNode();
-
-    }
 
     public IHtmlNodeFactory GetNodeFactory()
     {
       return new HtmlNodeFactory( this._document );
     }
-
-
 
 
     void IHtmlNode.Remove()

@@ -11,14 +11,24 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
   {
     #region IHtmlParser 成员
 
-    public IHtmlDocument Parse( string html )
+    public IHtmlDocument Parse( string html, Uri url )
     {
+      if ( html == null )
+        throw new ArgumentNullException("html");
+
+      if ( url != null && !url.IsAbsoluteUri )
+        throw new ArgumentException( "必须是绝对URI", "url" );
+
+
       var rawDocument = new HtmlDocument();
 
       if ( !string.IsNullOrEmpty( html ) )
         rawDocument.LoadHtml( html );
 
-      return rawDocument.AsDocument();
+      if ( url != null )
+        rawDocument.DocumentNode.SetAttributeValue( "uri", url.AbsoluteUri );
+
+      return new HtmlDocumentAdapter( rawDocument );
 
     }
 

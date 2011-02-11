@@ -33,10 +33,10 @@ namespace Ivony.Html.Parser
 
 
 
-    public virtual DomDocument Parse( string html )
+    public virtual DomDocument Parse( string html, Uri url )
     {
 
-      var document = new DomDocument();
+      var document = new DomDocument( url );
 
       if ( string.IsNullOrEmpty( html ) )
         return document;

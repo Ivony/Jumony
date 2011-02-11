@@ -9,7 +9,12 @@ namespace Ivony.Html.Parser
   {
     public IHtmlDocument CreateDocument()
     {
-      return new DomDocument();
+      return new DomDocument( null );
+    }
+
+    public IHtmlDocument CreateDocument( Uri url )
+    {
+      return new DomDocument( url );
     }
 
 

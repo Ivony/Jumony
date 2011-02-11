@@ -95,7 +95,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="html">HTML 文本</param>
     /// <returns>分析好的 HTML 文档</returns>
-    public virtual IHtmlDocument Parse( string html )
+    public virtual IHtmlDocument Parse( string html, Uri url )
     {
 
       lock ( SyncRoot )
@@ -103,7 +103,7 @@ namespace Ivony.Html.Parser
 
         InitializeStack();
 
-        var document = Provider.CreateDocument();
+        var document = Provider.CreateDocument( url );
 
         if ( string.IsNullOrEmpty( html ) )
           return document;

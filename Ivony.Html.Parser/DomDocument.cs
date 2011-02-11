@@ -9,6 +9,18 @@ namespace Ivony.Html.Parser
   public class DomDocument : DomContainer, IHtmlDocument
   {
 
+    public DomDocument( Uri url )
+    {
+      _url = url;
+    }
+
+    private Uri _url;
+
+    public Uri DocumentUrl
+    {
+      get { return _url; }
+    }
+
     public override IHtmlDocument Document
     {
       get { return this; }

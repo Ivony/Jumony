@@ -257,9 +257,9 @@ namespace Ivony.Html.Parser
     }
 
 
-    IHtmlDocument IHtmlParser.Parse( string html )
+    IHtmlDocument IHtmlParser.Parse( string html, Uri url )
     {
-      return Parse( html );
+      return Parse( html, url );
     }
 
   }

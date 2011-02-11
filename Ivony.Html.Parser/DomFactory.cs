@@ -51,7 +51,7 @@ namespace Ivony.Html.Parser
       if ( html == null )
         throw new ArgumentNullException( "html" );
 
-      return this.MakeFragment( new JumonyParser().Parse( html ) );
+      return this.MakeFragment( new JumonyParser().Parse( html, null ) );
     }
 
 

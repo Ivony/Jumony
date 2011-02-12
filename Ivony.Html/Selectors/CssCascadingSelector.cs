@@ -106,7 +106,7 @@ namespace Ivony.Html
     }
 
 
-    private CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
+    public CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
       _right = rightSelector;
 

@@ -321,5 +321,23 @@ namespace Ivony.Html
       return siblings.ToList().IndexOf( element );
     }
 
+
+
+    public static IEnumerable<IHtmlElement> Find( this IEnumerable<IHtmlElement> elements, string expression )
+    {
+      if ( !elements.Any() )
+        return Enumerable.Empty<IHtmlElement>();
+
+      if ( elements.IsSingle() )
+        return elements.Single().Find( expression );
+
+      var document = elements.First().Document;
+
+      if ( elements.Any( e => !e.Document.Equals( document ) ) )
+        throw new InvalidOperationException( "不支持在不同的文档中搜索" );
+
+    }
+
+
   }
 }

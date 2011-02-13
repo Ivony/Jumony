@@ -10,7 +10,7 @@ namespace Ivony.Html.Parser
 
     private IDomContainer _container;
 
-    public IHtmlContainer Container
+    public virtual IHtmlContainer Container
     {
       get
       {
@@ -40,7 +40,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public void Remove()
+    public virtual void Remove()
     {
       //CheckDisposed();
 

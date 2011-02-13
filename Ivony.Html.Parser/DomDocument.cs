@@ -37,12 +37,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlContainer Container//UNDONE 需要重写
+    public override IHtmlContainer Container
     {
       get { return null; }
     }
 
-    public void Remove()//UNDONE 需要重写
+    public override void Remove()
     {
       throw new NotSupportedException();
     }

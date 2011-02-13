@@ -522,37 +522,5 @@ namespace Ivony.Html
       private static readonly MethodInfo DictionaryAdd = typeof( IDictionary<string, string> ).GetMethod( "Add" );
     }
 
-
-
-
-
-    public static void ResolveAbsoluteUri( this IHtmlDocument document )
-    {
-      ResolveUrl( document, url => new Uri( document.DocumentUri, url ) );
-    }
-
-    private static readonly string[] _urlValueAttributes = new[] { "href", "src" };
-
-
-    public static void ResolveUrl( this IHtmlDocument document, Func<Uri, Uri> resolver )
-    {
-      foreach ( var element in document.Descendants() )
-      {
-
-        foreach ( var name in _urlValueAttributes )
-        {
-          var value = element.Attribute( name ).Value();
-
-          if ( value == null )
-            continue;
-
-          Uri url;
-          if ( Uri.TryCreate( value, UriKind.RelativeOrAbsolute, out url ) )
-            element.SetAttribute( name, resolver( url ).ToString() );
-        }
-
-      }
-
-    }
   }
 }

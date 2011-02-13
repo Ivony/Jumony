@@ -204,7 +204,7 @@ namespace Ivony.Html
 
         while ( element != null )
         {
-          if ( element.Container == _scope )
+          if ( element.Container.Equals( _scope ) )
             return true;
 
           element = element.Parent();

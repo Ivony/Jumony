@@ -132,6 +132,10 @@ namespace Ivony.Html
     /// <returns>是否符合选择条件</returns>
     public bool IsEligible( IHtmlElement element )
     {
+      if ( element == null )
+        return false;
+
+
 
       if ( !RightSelector.IsEligible( element ) )
         return false;
@@ -197,6 +201,10 @@ namespace Ivony.Html
 
       public bool IsEligible( IHtmlElement element )
       {
+        if ( element == null )
+          return false;
+
+
 
         while ( element.Container != null )
         {
@@ -249,12 +257,18 @@ namespace Ivony.Html
       public CssElementsRestrictionSelector( IEnumerable<IHtmlElement> elements )
       {
 
+        if ( elements == null )
+          throw new ArgumentNullException( "elements" );
+
         _elements = elements;
 
       }
 
       public bool IsEligible( IHtmlElement element )
       {
+        if ( element == null )
+          return false;
+
         return _elements.Contains( element );
       }
 

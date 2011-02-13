@@ -6,6 +6,10 @@ using System.ComponentModel;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 定义 HTML 文档节点
+  /// </summary>
   public interface IHtmlNode : IHtmlDomObject
   {
     /// <summary>

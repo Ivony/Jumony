@@ -6,6 +6,10 @@ using System.ComponentModel;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 定义 HTML 元素
+  /// </summary>
   public interface IHtmlElement :  IHtmlContainer
   {
 

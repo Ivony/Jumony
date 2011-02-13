@@ -6,6 +6,9 @@ using System.Text;
 namespace Ivony.Html
 {
 
+  /// <summary>
+  /// 定义 HTML 文档解析器
+  /// </summary>
   public interface IHtmlParser
   {
 
@@ -15,7 +18,7 @@ namespace Ivony.Html
     /// <param name="html">HTML 文本</param>
     /// <param name="url">HTML 内容统一资源位置</param>
     /// <returns></returns>
-    IHtmlDocument Parse( string html, Uri url );
+    IHtmlDocument Parse( string html, Uri uri );
 
 
   }

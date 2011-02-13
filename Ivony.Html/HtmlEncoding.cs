@@ -5,8 +5,18 @@ using System.Reflection;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 提供 HTML 编码和解码。
+  /// </summary>
   public class HtmlEncoding
   {
+
+    /// <summary>
+    /// 对字符串进行 HTML 编码。
+    /// </summary>
+    /// <param name="text">要编码的字符串</param>
+    /// <returns>编码后的字符串</returns>
     public static string HtmlEncode(string text)
     {
 
@@ -22,6 +32,11 @@ namespace Ivony.Html
 #endif
     }
 
+    /// <summary>
+    /// 对字符串进行 HTML 编码。
+    /// </summary>
+    /// <param name="text">要编码的字符串</param>
+    /// <param name="writer">用于写入编码后字符串的文本写入器</param>
     public static void HtmlEncode(string text, TextWriter writer)
     {
 #if dotnet4
@@ -70,7 +85,11 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 对字符串进行 HTML 解码。
+    /// </summary>
+    /// <param name="text">要解码的字符串</param>
+    /// <returns>解码后的字符串</returns>
     public static string HtmlDecode(string htmlText)
     {
 #if dotnet4
@@ -87,7 +106,12 @@ namespace Ivony.Html
 
     }
 
-    public static void HtmlDecode(string htmlText, TextWriter writer)
+    /// <summary>
+    /// 对字符串进行 HTML 解码。
+    /// </summary>
+    /// <param name="text">要解码的字符串</param>
+    /// <param name="writer">用于写入解码后字符串的文本写入器</param>
+    public static void HtmlDecode( string htmlText, TextWriter writer )
     {
 
 #if dotnet4
@@ -164,7 +188,11 @@ namespace Ivony.Html
 #endif
     }
 
-
+    /// <summary>
+    /// 将字符串最小限度地转换为 HTML 编码的字符串。
+    /// </summary>
+    /// <param name="text">要编码的字符串</param>
+    /// <returns>编码后的字符串</returns>
     public static string HtmlAttributeEncode(string text)
     {
       using ( StringWriter writer = new StringWriter() )
@@ -175,7 +203,12 @@ namespace Ivony.Html
       }
     }
 
-    public static void HtmlAttributeEncode(string text, TextWriter writer)
+    /// <summary>
+    /// 将字符串最小限度地转换为 HTML 编码的字符串。
+    /// </summary>
+    /// <param name="text">要编码的字符串</param>
+    /// <param name="writer">用于写入编码后字符串的文本写入器</param>
+    public static void HtmlAttributeEncode( string text, TextWriter writer )
     {
 
       if ( text == null )

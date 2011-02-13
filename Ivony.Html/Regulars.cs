@@ -4,10 +4,16 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 namespace Ivony.Html
 {
+  /// <summary>
+  /// 定义所有用于分析 HTML 和 CSS 选择器的正则表达式
+  /// </summary>
   public static class Regulars
   {
+    /// <summary>匹配用双引号标识的引用文本</summary>
     public const string dquoteTextPattern = @"(""(?<quoteText>(\\.|[^""\\])*)"")";
+    /// <summary>匹配用单引号标识的引用文本</summary>
     public const string squoteTextPattern = @"('(?<quoteText>(\\.|[^'\\])*)')";
+    /// <summary>匹配用引号标识的引用文本</summary>
     public const string quoteTextPattern = "(" + dquoteTextPattern + "|" + squoteTextPattern + ")";
 
     /// <summary>匹配CSS层叠关系选择符的正则表达式</summary>
@@ -39,17 +45,24 @@ namespace Ivony.Html
     /// <summary>匹配CSS层叠选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string cssCasecadingSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "({0}{1}*)", elementExpressionPatternNoGroup, extraExpressionPatternNoGroup );
 
+    /// <summary>匹配CSS选择器的正则表达式</summary>
     public static readonly string cssSelectorPattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})(\s+,\s+(?<selector>{0}))*", cssCasecadingSelectorPatternNoGroup );
+    /// <summary>匹配CSS选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
     public static readonly string cssSelectorPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"({0})(\s+,\s+({0}))*", cssCasecadingSelectorPatternNoGroup );
 
 
+    /// <summary>匹配任意十进制无符号整数</summary>
     public static readonly string integerPattern = "([1-9][0-9]*|0)";
+    /// <summary>匹配任意十进制无符号小数</summary>
     public static readonly string decimalPattern = string.Format( CultureInfo.InvariantCulture, @"({0}(\.[0-9]*[1-9]))", integerPattern );
 
 
+    /// <summary>匹配 CSS 样式设置</summary>
     public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", quoteTextPattern );
 
+    /// <summary>匹配 CSS 样式规则</summary>
     public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", cssSelectorPatternNoGroup, styleSettingPattern );
+    /// <summary>匹配 CSS 样式表</summary>
     public static readonly string styleSheetPattern = string.Format( CultureInfo.InvariantCulture, @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", styleRulePattern );
 
 

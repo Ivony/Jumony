@@ -106,6 +106,13 @@ namespace Ivony.Html
     }
 
 
+
+    /// <summary>
+    /// 创建层叠选择器
+    /// </summary>
+    /// <param name="rightSelector">右选择器</param>
+    /// <param name="relative">关系选择符</param>
+    /// <param name="leftSelector">左选择器</param>
     public CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
       _right = rightSelector;
@@ -218,5 +225,41 @@ namespace Ivony.Html
 
     }
 
+    /// <summary>
+    /// 创建层叠选择器
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <param name="elements">作为范畴限定的元素集</param>
+    /// <returns>层叠选择器</returns>
+    public static object Create( string expression, IEnumerable<IHtmlElement> elements )
+    {
+      var rightSelector = Create( expression );
+
+      return new CssCasecadingSelector( rightSelector, "", new CssElementsRestrictionSelector( elements ) );
+    }
+
+
+    private class CssElementsRestrictionSelector : ICssSelector
+    {
+
+      private readonly IEnumerable<IHtmlElement> _elements;
+
+      public CssElementsRestrictionSelector( IEnumerable<IHtmlElement> elements )
+      {
+
+        _elements = elements;
+
+      }
+
+      public bool IsEligible( IHtmlElement element )
+      {
+        return _elements.Contains( element );
+      }
+
+      public override string ToString()
+      {
+        return "#elements#";
+      }
+    }
   }
 }

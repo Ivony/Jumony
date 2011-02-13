@@ -336,6 +336,8 @@ namespace Ivony.Html
       if ( elements.Any( e => !e.Document.Equals( document ) ) )
         throw new InvalidOperationException( "不支持在不同的文档中搜索" );
 
+      var selector = CssCasecadingSelector.Create( expression, elements );
+
     }
 
 

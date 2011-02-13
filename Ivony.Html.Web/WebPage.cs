@@ -17,12 +17,11 @@ namespace Ivony.Html.Web
     /// 创建一个 Web 页面
     /// </summary>
     /// <param name="document">HTML 文档</param>
-    /// <param name="url">文档地址</param>
+    /// <param name="uri">文档地址</param>
     /// <param name="cacheKey">文档缓存键</param>
-    public WebPage( IHtmlDocument document, Uri url, string cacheKey )
+    public WebPage( IHtmlDocument document, Uri uri, string cacheKey )
     {
       Document = document;
-      Url = url;
       CacheKey = cacheKey;
     }
 
@@ -36,14 +35,6 @@ namespace Ivony.Html.Web
       get;
     }
 
-    /// <summary>
-    /// 文档地址
-    /// </summary>
-    public Uri Url
-    {
-      private set;
-      get;
-    }
 
     /// <summary>
     /// 文档缓存键

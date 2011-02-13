@@ -231,7 +231,7 @@ namespace Ivony.Html
     /// <param name="expression">选择器表达式</param>
     /// <param name="elements">作为范畴限定的元素集</param>
     /// <returns>层叠选择器</returns>
-    public static object Create( string expression, IEnumerable<IHtmlElement> elements )
+    public static ICssSelector Create( string expression, IEnumerable<IHtmlElement> elements )
     {
       var rightSelector = Create( expression );
 

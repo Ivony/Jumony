@@ -338,6 +338,8 @@ namespace Ivony.Html
 
       var selector = CssCasecadingSelector.Create( expression, elements );
 
+      return selector.Filter( document.Descendants() );
+
     }
 
 

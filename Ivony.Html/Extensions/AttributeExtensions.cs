@@ -22,7 +22,7 @@ namespace Ivony.Html
     /// <param name="name">属性名</param>
     /// <returns>属性对象，如果没找到，则返回null</returns>
     /// <remarks>
-    /// 为了性能考虑，如果有多个同名的属性，此方法只返回第一个
+    /// 如果有多个同名的属性，此方法将报错。
     /// </remarks>
     public static IHtmlAttribute Attribute( this IHtmlElement element, string name )
     {
@@ -39,7 +39,7 @@ namespace Ivony.Html
         return dictionary[name];
       */
 
-      return element.Attributes().FirstOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
+      return element.Attributes().SingleOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
     }
 
 

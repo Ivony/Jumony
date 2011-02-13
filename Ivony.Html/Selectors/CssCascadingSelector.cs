@@ -201,12 +201,8 @@ namespace Ivony.Html
 
       public bool IsEligible( IHtmlElement element )
       {
-        if ( element == null )
-          return false;
 
-
-
-        while ( element.Container != null )
+        while ( element != null )
         {
           if ( element.Container == _scope )
             return true;

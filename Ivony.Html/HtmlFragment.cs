@@ -120,7 +120,7 @@ namespace Ivony.Html
     /// 向文档碎片中添加节点本地副本
     /// </summary>
     /// <param name="index">要添加的位置</param>
-    /// <param name="nodes">要添加副本的节点</param>
+    /// <param name="node">要添加副本的节点</param>
     /// <returns>文档碎片自身</returns>
     public HtmlFragment AddCopy( int index, IHtmlNode node )
     {

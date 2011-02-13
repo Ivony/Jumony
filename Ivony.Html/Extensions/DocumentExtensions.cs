@@ -245,6 +245,7 @@ namespace Ivony.Html
     /// 根据文档结构产生一个方法，文档结构可以由此方法的执行结果复原
     /// </summary>
     /// <param name="document">要编译的文档</param>
+    /// <param name="methodName">产生的方法名称</param>
     /// <returns>可以复原文档的方法代码</returns>
     public static CodeMemberMethod GenerateCodeMethod( this IHtmlDocument document, string methodName )
     {

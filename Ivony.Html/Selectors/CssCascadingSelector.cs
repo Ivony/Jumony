@@ -188,6 +188,8 @@ namespace Ivony.Html
 
       public CssScopeRestrictionSelector( IHtmlContainer scope )
       {
+        if ( scope == null )
+          throw new ArgumentNullException( "scope" );
 
         _scope = scope;
 

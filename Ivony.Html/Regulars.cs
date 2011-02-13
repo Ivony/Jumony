@@ -65,13 +65,24 @@ namespace Ivony.Html
     /// <summary>匹配 CSS 样式表</summary>
     public static readonly string styleSheetPattern = string.Format( CultureInfo.InvariantCulture, @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", styleRulePattern );
 
-
-    public static string ReplaceEscape( string str )
+    /// <summary>
+    /// 转换转义字符
+    /// </summary>
+    /// <param name="str">要执行转换的字符串</param>
+    /// <returns>转换后的结果</returns>
+    /// <remarks>此方法用于将字符串中的转义字符如"\t"替换为转义后的形式，例如"  "（跳格）。</remarks>
+    public static string ResolveEscape( string str )
     {
       return str.Replace( "\\n", "\n" ).Replace( "\\r", "\r" ).Replace( "\\t", "\t" ).Replace( "\\\"", "\"" ).Replace( "\\\'", "\'" );
     }
 
-
+    /// <summary>
+    /// 查找捕获组在指定捕获内存在的捕获
+    /// </summary>
+    /// <param name="capture">要限定查找范围的捕获</param>
+    /// <param name="group">要查找的捕获组</param>
+    /// <returns>找到的捕获</returns>
+    /// <remarks>这个扩展方法用于从一个大的捕获组的匹配中分离出子捕获组的匹配。</remarks>
     public static IEnumerable<Capture> FindCaptures( this Capture capture, Group group )
     {
       foreach ( Capture c in group.Captures )

@@ -35,7 +35,7 @@ namespace Ivony.Html.Binding
       //字符串表达式
       var quoteMatch = quoteTextRegex.Match( expression );
       if ( quoteMatch.Success )
-        return Regulars.ReplaceEscape( quoteMatch.Groups["quoteText"].Value );
+        return Regulars.ResolveEscape( quoteMatch.Groups["quoteText"].Value );
 
 
 

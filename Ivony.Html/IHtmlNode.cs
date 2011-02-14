@@ -21,15 +21,6 @@ namespace Ivony.Html
     }
 
 
-    /// <summary>
-    /// 获取节点的原始 HTML，如果不支持，请返回null
-    /// </summary>
-    [EditorBrowsable( EditorBrowsableState.Advanced )]
-    string RawHtml
-    {
-      get;
-    }
-
 
     /// <summary>
     /// 从文档对象树上移除此节点

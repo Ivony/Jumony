@@ -11,16 +11,27 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取在原始文档对象树上的对象
+    /// 获取在原始文档对象树上的对象，如果原始对象不存在，返回null
     /// </summary>
     object RawObject
     {
       get;
     }
 
+    /// <summary>
+    /// 获取 DOM 对象的原始 HTML，如果不支持，返回null
+    /// </summary>
+    [EditorBrowsable( EditorBrowsableState.Advanced )]
+    string RawHtml
+    {
+      get;
+    }
+
+
+
 
     /// <summary>
-    /// 获取节点所属的文档
+    /// 获取 DOM 对象所属的文档
     /// </summary>
     IHtmlDocument Document
     {

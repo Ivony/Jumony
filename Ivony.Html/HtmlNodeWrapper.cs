@@ -38,7 +38,7 @@ namespace Ivony.Html
       get { return Node.Document; }
     }
 
-    string IHtmlNode.RawHtml
+    string IHtmlDomObject.RawHtml
     {
       get { return Node.RawHtml; }
     }

@@ -187,7 +187,7 @@ namespace Ivony.Html
       if ( newNode == null )
         throw new ArgumentNullException( "newNode" );
 
-      
+
       var container = oldNode.Container;
 
       if ( container == null )
@@ -196,6 +196,35 @@ namespace Ivony.Html
       lock ( container.SyncRoot )
       {
         var result = newNode.Into( container, oldNode.NodesIndexOfSelf() );
+        oldNode.Remove();
+
+        return result;
+      }
+    }
+
+    /// <summary>
+    /// 替换指定节点
+    /// </summary>
+    /// <param name="oldNode">被替换的节点</param>
+    /// <param name="fragment">用于替换的碎片</param>
+    /// <exception cref="System.InvalidOperationException">被替换的节点与用于替换的节点不属于同一个文档</exception>
+    public static IEnumerable<IHtmlNode> Replace( this IHtmlNode oldNode, HtmlFragment fragment )
+    {
+      if ( oldNode == null )
+        throw new ArgumentNullException( "oldNode" );
+
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+
+      var container = oldNode.Container;
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        var result = fragment.InsertTo( container, oldNode.NodesIndexOfSelf() );
         oldNode.Remove();
 
         return result;
@@ -299,8 +328,6 @@ namespace Ivony.Html
         return result;
       }
     }
-
-
 
 
 

@@ -178,16 +178,21 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">容器</param>
     /// <param name="index">位置</param>
-    public void InsertTo( IHtmlContainer container, int index )
+    public IEnumerable<IHtmlNode> InsertTo( IHtmlContainer container, int index )
     {
+
+      var result = new List<IHtmlNode>();
+
       lock ( SyncRoot )
       {
         foreach ( var node in _nodes.Reverse().ToArray() )
         {
-          node.Into( container, index );
+          result.Add( node.Into( container, index ) );
           _nodes.Remove( node );
         }
       }
+
+      return result.AsReadOnly();
     }
 
 

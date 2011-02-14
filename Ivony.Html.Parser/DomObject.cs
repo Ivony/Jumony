@@ -24,5 +24,11 @@ namespace Ivony.Html.Parser
     {
       get { return _sync; }
     }
+
+
+    public string RawHtml
+    {
+      get { return null; }
+    }
   }
 }

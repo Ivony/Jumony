@@ -68,17 +68,6 @@ namespace Ivony.Html.Parser
       }
     }
 
-    public virtual string RawHtml
-    {
-      get
-      {
-        CheckDisposed();
-
-        return null;
-      }
-    }
-
-
     protected bool removed = false;
 
     protected void CheckDisposed()

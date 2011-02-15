@@ -226,6 +226,11 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 将文档呈现为 HTML
+    /// </summary>
+    /// <param name="document">要呈现的文档</param>
+    /// <returns>文档的 HTML 形式</returns>
     public static string Render( this IHtmlDocument document )
     {
       using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
@@ -236,10 +241,30 @@ namespace Ivony.Html
       }
     }
 
+    /// <summary>
+    /// 将文档呈现为 HTML
+    /// </summary>
+    /// <param name="document">要呈现的文档</param>
+    /// <param name="writer">HTML 编写器</param>
     public static void Render( this IHtmlDocument document, TextWriter writer )
     {
       RenderChilds( document, writer );
     }
+
+    /// <summary>
+    /// 将文档呈现为 HTML
+    /// </summary>
+    /// <param name="document">要呈现的文档</param>
+    /// <param name="stream">用于输出呈现的 HTML 的流</param>
+    /// <param name="encoding">呈现的 HTML 的编码格式</param>
+    public static void Render( this IHtmlDocument document, Stream stream, Encoding encoding )
+    {
+      using ( var writer = new StreamWriter( stream, encoding ) )
+      {
+        Render( document, writer );
+      }
+    }
+
 
     private static void RenderChilds( IHtmlContainer container, TextWriter writer )
     {

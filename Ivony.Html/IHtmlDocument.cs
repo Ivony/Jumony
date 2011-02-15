@@ -32,6 +32,5 @@ namespace Ivony.Html
     /// <returns>文档节点构造器</returns>
     IHtmlNodeFactory GetNodeFactory();
 
-
   }
 }

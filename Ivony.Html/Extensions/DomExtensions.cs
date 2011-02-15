@@ -734,7 +734,7 @@ namespace Ivony.Html
 
     }
 
-    public static string PathOf( this IHtmlElement element, IHtmlContainer container )
+    public static string PathOf( this IHtmlElement element, IHtmlContainer ancestor )
     {
 
       if ( element is IFreeNode )
@@ -747,13 +747,13 @@ namespace Ivony.Html
         builder.Insert( 0, "/" + element.Name );
 
 
-        var parent = element.Container;
+        var container = element.Container;
 
-        if ( parent.Equals( container ) )
+        if ( container.Equals( ancestor ) )
           return builder.ToString();
 
 
-        element = parent as IHtmlElement;
+        element = container as IHtmlElement;
 
         if ( element == null )
           return null;

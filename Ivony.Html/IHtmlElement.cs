@@ -10,7 +10,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义 HTML 元素
   /// </summary>
-  public interface IHtmlElement :  IHtmlContainer
+  public interface IHtmlElement : IHtmlNode, IHtmlContainer
   {
 
     /// <summary>

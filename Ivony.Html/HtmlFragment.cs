@@ -230,17 +230,25 @@ namespace Ivony.Html
 
     #endregion
 
-
+    /// <summary>
+    /// 获取节点的容器，此属性始终返回 null
+    /// </summary>
     public IHtmlContainer Container
     {
       get { return null; }
     }
 
+    /// <summary>
+    /// 获取原始 HTML，始终返回 null
+    /// </summary>
     public string RawHtml
     {
       get { return null; }
     }
 
+    /// <summary>
+    /// 从 DOM 中移除节点，此方法始终抛出 NotSupportedException 异常
+    /// </summary>
     public void Remove()
     {
       throw new NotSupportedException();

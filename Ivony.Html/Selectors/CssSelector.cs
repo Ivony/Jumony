@@ -84,9 +84,18 @@ namespace Ivony.Html
   }
 
 
+  /// <summary>
+  /// 为选择器提供扩展方法的类型
+  /// </summary>
   public static class SelectorExtensions
   {
 
+    /// <summary>
+    /// 使用选择器从元素集中筛选出符合选择器要求的元素
+    /// </summary>
+    /// <param name="selector">选择器</param>
+    /// <param name="source">源元素集</param>
+    /// <returns>筛选结果</returns>
     public static IEnumerable<IHtmlElement> Filter( this ICssSelector selector, IEnumerable<IHtmlElement> source )
     {
       return source.Where( e => selector.IsEligible( e ) );

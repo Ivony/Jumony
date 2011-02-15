@@ -85,7 +85,7 @@ namespace MhtCreator
 
     public static IEnumerable<LinkedResource> GetResources( IHtmlDocument document )
     {
-      foreach ( var element in document.Find( "img[src], script[src]" ) )
+      foreach ( var element in document.Find( "[src]" ) )
       {
         var attribute = element.Attribute( "src" );
 

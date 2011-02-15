@@ -19,7 +19,7 @@ namespace Ivony.Html
   {
 
 
-    private static readonly Regex cssSelectorRegex = new Regex( Regulars.cssSelectorPattern, RegexOptions.Compiled );
+    private static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled );
 
 
     /// <summary>

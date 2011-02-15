@@ -261,6 +261,8 @@ namespace Ivony.Html
     {
       var writer = new StreamWriter( stream, encoding );
       Render( document, writer );
+
+      writer.Flush();
     }
 
 

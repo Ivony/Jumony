@@ -52,21 +52,24 @@ namespace Ivony.Html
       get { return Document.SyncRoot; }
     }
 
-
-    public IHtmlContainer Container
-    {
-      get { return Document.Container; }
-    }
-
     public string RawHtml
     {
       get { return Document.RawHtml; }
+    }
+
+
+    /*
+    public IHtmlContainer Container
+    {
+      get { return Document.Container; }
     }
 
     public void Remove()
     {
       Document.Remove();
     }
+    */
+
 
     public Uri DocumentUri
     {

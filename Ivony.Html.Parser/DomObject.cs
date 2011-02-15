@@ -26,7 +26,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public string RawHtml
+    public virtual string RawHtml
     {
       get { return null; }
     }

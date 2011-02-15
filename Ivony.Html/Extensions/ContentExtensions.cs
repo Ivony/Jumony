@@ -259,10 +259,8 @@ namespace Ivony.Html
     /// <param name="encoding">呈现的 HTML 的编码格式</param>
     public static void Render( this IHtmlDocument document, Stream stream, Encoding encoding )
     {
-      using ( var writer = new StreamWriter( stream, encoding ) )
-      {
-        Render( document, writer );
-      }
+      var writer = new StreamWriter( stream, encoding );
+      Render( document, writer );
     }
 
 

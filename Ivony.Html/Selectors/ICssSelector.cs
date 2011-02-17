@@ -15,14 +15,4 @@ namespace Ivony.Html
     bool IsEligible( IHtmlElement element );
 
   }
-
-  /// <summary>
-  /// 带有范围限制的CSS选择器
-  /// </summary>
-  public interface ICssSelectorWithScope
-  {
-
-    bool IsEligible( IHtmlElement element, IHtmlContainer scope );
-
-  }
 }

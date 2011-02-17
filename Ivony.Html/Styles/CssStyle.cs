@@ -11,13 +11,28 @@ namespace Ivony.Html
 {
   using Ivony.Html.Styles;
 
+  /// <summary>
+  /// 提供操纵元素 CSS 样式的一些扩展方法
+  /// </summary>
   public static class StyleExtensions
   {
+
+    /// <summary>
+    /// 获取元素的样式对象，用于方便的操纵元素样式
+    /// </summary>
+    /// <param name="element">要操纵样式的元素</param>
+    /// <returns>样式对象</returns>
     public static CssStyle Style( this IHtmlElement element )
     {
       return new CssStyle( element );
     }
 
+
+    /// <summary>
+    /// 获取元素集合的样式对象，用于方便的操纵一组元素的样式
+    /// </summary>
+    /// <param name="element">要操纵样式的元素集合</param>
+    /// <returns>样式对象</returns>
     public static CssStyle Style( this IEnumerable<IHtmlElement> elements )
     {
       return new CssStyleSetSetter( elements );

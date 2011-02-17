@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 定义一个 HTML 文档
+  /// </summary>
   public interface IHtmlDocument : IHtmlContainer
   {
 

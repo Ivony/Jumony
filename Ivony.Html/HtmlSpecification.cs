@@ -14,27 +14,40 @@ namespace Ivony.Html
   public static class HtmlSpecification
   {
 
+    /// <summary>所有 CDATA 元素，其内部文本不被当作 HTML 文本解释</summary>
     public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "pre", "code", "style", "textarea", "title" } );
+    /// <summary>所有自结束元素，没有内容和结束标签</summary>
     public static readonly ICollection<string> selfCloseTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
 
+    /// <summary>所有可选结束元素，其在何处结束由 ImmediatelyClose 方法确定</summary>
     public static readonly ICollection<string> optionalCloseTags = new ReadOnlyCollection<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" } );
 
 
 
+    /// <summary>所有设置字体和样式的元素</summary>
     public static readonly ICollection<string> fontstyleElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
+    /// <summary>所有界定文本段落的元素</summary>
     public static readonly ICollection<string> phrasElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
+    /// <summary>所有用于特殊目的的 HTML 元素</summary>
     public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
+    /// <summary>所有表单控件元素</summary>
     public static readonly ICollection<string> formcontrolElements = new ReadOnlyCollection<string>( new[] { "input", "select", "textarea", "label", "button" } );
 
+    /// <summary>所有行内呈现的元素</summary>
     public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( fontstyleElements.Union( phrasElements ).Union( specialElements ).Union( formcontrolElements ).ToArray() );
 
 
+    /// <summary>所有定义章节标题元素</summary>
     public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
+    /// <summary>所有定义列表的元素</summary>
     public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol" } );
+    /// <summary>预格式化元素</summary>
     public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
 
+    /// <summary>所有块级元素</summary>
     public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "dl", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
 
+    /// <summary>所有文本流元素</summary>
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
 
 

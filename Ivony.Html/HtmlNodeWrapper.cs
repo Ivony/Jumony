@@ -11,6 +11,9 @@ namespace Ivony.Html
   public abstract class HtmlNodeWrapper : IHtmlNode
   {
 
+    /// <summary>
+    /// 被包装的 IHtmlNode 对象
+    /// </summary>
     protected abstract IHtmlNode Node
     {
       get;
@@ -51,11 +54,21 @@ namespace Ivony.Html
     #endregion
 
 
+    /// <summary>
+    /// 用作特定类型的哈希函数。
+    /// </summary>
+    /// <returns>当前对象的哈希代码。</returns>
     public override int GetHashCode()
     {
       return Node.GetHashCode();
     }
 
+
+    /// <summary>
+    /// 确定指定的 System.Object 是否等于当前的 System.Object。
+    /// </summary>
+    /// <param name="obj">与当前的 System.Object 进行比较的 System.Object。</param>
+    /// <returns>如果指定的 System.Object 等于当前的 System.Object，则为 true；否则为 false。</returns>
     public override bool Equals( object obj )
     {
       return Node.Equals( obj );

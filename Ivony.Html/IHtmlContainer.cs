@@ -11,6 +11,11 @@ namespace Ivony.Html
   /// </summary>
   public interface IHtmlContainer : IHtmlDomObject
   {
+
+    /// <summary>
+    /// 获取所有子节点
+    /// </summary>
+    /// <returns>容器的子节点</returns>
     IEnumerable<IHtmlNode> Nodes();
   }
 }

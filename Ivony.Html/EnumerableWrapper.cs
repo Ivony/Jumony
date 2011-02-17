@@ -19,10 +19,6 @@ namespace Ivony.Html
     protected abstract IEnumerable GetEnumerable();
 
 
-    /// <summary>
-    /// 获取枚举器
-    /// </summary>
-    /// <returns>枚举器</returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return GetEnumerable().GetEnumerator();
@@ -44,19 +40,11 @@ namespace Ivony.Html
     protected abstract IEnumerable<T> GetEnumerable();
 
 
-    /// <summary>
-    /// 获取枚举器
-    /// </summary>
-    /// <returns>枚举器</returns>
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
       return GetEnumerable().GetEnumerator();
     }
 
-    /// <summary>
-    /// 获取枚举器
-    /// </summary>
-    /// <returns>枚举器</returns>
     IEnumerator IEnumerable.GetEnumerator()
     {
       return GetEnumerable().GetEnumerator();

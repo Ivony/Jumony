@@ -12,8 +12,19 @@ namespace Ivony.Html
   /// </summary>
   public interface IFreeNode : IHtmlNode
   {
+    /// <summary>
+    /// 将节点插入到指定位置
+    /// </summary>
+    /// <param name="container">要插入的容器</param>
+    /// <param name="index">要插入的位置</param>
+    /// <returns>固定于文档上的节点</returns>
     [EditorBrowsable( EditorBrowsableState.Never )]
     IHtmlNode Into( IHtmlContainer container, int index );
+    
+    
+    /// <summary>
+    /// 获取创建游离节点的工厂
+    /// </summary>
     IHtmlNodeFactory Factory { get; }
 
     //bool CanInsertTo( IHtmlContainer container );

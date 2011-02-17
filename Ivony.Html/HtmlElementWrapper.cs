@@ -11,6 +11,10 @@ namespace Ivony.Html
   public abstract class HtmlElementWrapper : HtmlNodeWrapper, IHtmlElement
   {
 
+
+    /// <summary>
+    /// 被包装的 IHtmlElement 对象
+    /// </summary>
     protected abstract IHtmlElement Element
     {
       get;
@@ -44,6 +48,9 @@ namespace Ivony.Html
 
     #endregion
 
+    /// <summary>
+    /// 提供被包装的 IHtmlNode 对象，用于实现 HtmlNodeWrapper
+    /// </summary>
     protected override sealed IHtmlNode Node
     {
       get { return Element; }

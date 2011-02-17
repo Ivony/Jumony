@@ -12,6 +12,10 @@ namespace Ivony.Html
   public abstract class HtmlDocumentWrapper : IHtmlDocument
   {
 
+
+    /// <summary>
+    /// 被包装的 IHtmlDocument对象
+    /// </summary>
     protected abstract IHtmlDocument Document
     {
       get;
@@ -52,7 +56,7 @@ namespace Ivony.Html
       get { return Document.SyncRoot; }
     }
 
-    public string RawHtml
+    string IHtmlDomObject.RawHtml
     {
       get { return Document.RawHtml; }
     }
@@ -71,7 +75,7 @@ namespace Ivony.Html
     */
 
 
-    public Uri DocumentUri
+    Uri IHtmlDocument.DocumentUri
     {
       get { return Document.DocumentUri; }
     }

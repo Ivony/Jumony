@@ -7,39 +7,62 @@ using System.IO;
 
 namespace Ivony.Html
 {
+  
+  
+  /// <summary>
+  /// 提供 HTML 解析器的一些扩展
+  /// </summary>
   public static class ParserExtension
   {
 
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string url )
+    /// <summary>
+    /// 从指定的 URL 地址加载 HTML 文档
+    /// </summary>
+    /// <param name="parser">用于解析 HTML 文本的解析器</param>
+    /// <param name="uri">用于加载 HTML 文档的地址</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string uri )
     {
 
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
 
-      if ( url == null )
-        throw new ArgumentNullException( "url" );
+      if ( uri == null )
+        throw new ArgumentNullException( "uri" );
 
 
-      return LoadDocument( parser, new Uri( url ) );
+      return LoadDocument( parser, new Uri( uri ) );
 
     }
 
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri url )
+    /// <summary>
+    /// 从指定的 URL 地址加载 HTML 文档
+    /// </summary>
+    /// <param name="parser">用于解析 HTML 文本的解析器</param>
+    /// <param name="uri">用于加载 HTML 文档的地址</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri uri )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
 
-      if ( url == null )
-        throw new ArgumentNullException( "url" );
+      if ( uri == null )
+        throw new ArgumentNullException( "uri" );
 
 
-      var request = WebRequest.Create( url );
+      var request = WebRequest.Create( uri );
       var response = request.GetResponse();
 
       return LoadDocument( parser, response );
 
     }
 
+    /// <summary>
+    /// 从指定的 Web 响应数据地址加载 HTML 文档
+    /// </summary>
+    /// <param name="parser">用于解析 HTML 文本的解析器</param>
+    /// <param name="response">用于加载 HTML 文档的 Web 响应数据</param>
+    /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( this IHtmlParser parser, WebResponse response )
     {
       if ( parser == null )
@@ -70,7 +93,16 @@ namespace Ivony.Html
       return LoadDocument( parser, response.GetResponseStream(), response.ResponseUri );
     }
 
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Stream stream, Uri url )
+
+
+    /// <summary>
+    /// 从指定的流加载 HTML 文档
+    /// </summary>
+    /// <param name="parser">用于解析 HTML 文本的解析器</param>
+    /// <param name="stream">用于加载 HTML 文档的流</param>
+    /// <param name="uri">文档的 URL 地址</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Stream stream, Uri uri )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -78,11 +110,11 @@ namespace Ivony.Html
       if ( stream == null )
         throw new ArgumentNullException( "stream" );
 
-      if ( url == null )
-        throw new ArgumentNullException( "url" );
+      if ( uri == null )
+        throw new ArgumentNullException( "uri" );
 
 
-      return LoadDocument( parser, new StreamReader( stream, true ), url );
+      return LoadDocument( parser, new StreamReader( stream, true ), uri );
     }
 
     public static IHtmlDocument LoadDocument( this IHtmlParser parser, TextReader reader, Uri url )

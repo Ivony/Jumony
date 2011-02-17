@@ -7,15 +7,26 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Parser
 {
+  
+  /// <summary>
+  /// Jumony 提供的HTML文档读取器的一个实现
+  /// </summary>
   public class JumonyReader : IHtmlReader
   {
 
     private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
 
+    /// <summary>
+    /// 用于匹配 HTML 标签的正则表达式对象
+    /// </summary>
     protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
 
+    /// <summary>
+    /// 创建一个 JumonyReader对象
+    /// </summary>
+    /// <param name="htmlText"></param>
     public JumonyReader( string htmlText )
     {
       if ( htmlText == null )
@@ -27,6 +38,9 @@ namespace Ivony.Html.Parser
 
     }
 
+    /// <summary>
+    /// 要分析的 HTML 文本
+    /// </summary>
     public string HtmlText
     {
       get;
@@ -34,6 +48,9 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 若当前处于 CData 元素内部，此属性指示元素名
+    /// </summary>
     protected string CDataElement
     {
       get;
@@ -48,6 +65,9 @@ namespace Ivony.Html.Parser
 
 
 
+    /// <summary>
+    /// 当前所读取的位置
+    /// </summary>
     protected int Index
     {
       get;
@@ -60,6 +80,11 @@ namespace Ivony.Html.Parser
     private object _sync = new object();
 
 
+    /// <summary>
+    /// 获取匹配指定结束标签的正则表达式对象
+    /// </summary>
+    /// <param name="tagName">标签名</param>
+    /// <returns>匹配指定结束标签的正则表达式对象</returns>
     protected Regex GetEndTagRegex( string tagName )
     {
       tagName = tagName.ToLowerInvariant();
@@ -76,6 +101,11 @@ namespace Ivony.Html.Parser
     }
 
 
+
+    /// <summary>
+    /// 枚举读取到的每一个内容元素
+    /// </summary>
+    /// <returns>枚举结果</returns>
     public IEnumerable<HtmlContentFragment> EnumerateContent()
     {
 
@@ -148,6 +178,12 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+    /// <summary>
+    /// 创建开始标签内容对象
+    /// </summary>
+    /// <param name="match">开始标签的匹配</param>
+    /// <returns>开始标签内容对象</returns>
     protected virtual HtmlBeginTag CreateBeginTag( Match match )
     {
       string tagName = match.Groups["tagName"].Value;

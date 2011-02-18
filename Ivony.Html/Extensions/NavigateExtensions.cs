@@ -322,7 +322,12 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 在元素集所有子代元素中使用 CSS 选择器选出符合要求的元素
+    /// </summary>
+    /// <param name="elements">作为选择范围的元素集</param>
+    /// <param name="expression">CSS 选择器表达式</param>
+    /// <returns>符合选择器的所有子代</returns>
     public static IEnumerable<IHtmlElement> Find( this IEnumerable<IHtmlElement> elements, string expression )
     {
       if ( !elements.Any() )

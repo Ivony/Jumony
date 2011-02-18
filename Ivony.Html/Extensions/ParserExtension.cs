@@ -7,8 +7,8 @@ using System.IO;
 
 namespace Ivony.Html
 {
-  
-  
+
+
   /// <summary>
   /// 提供 HTML 解析器的一些扩展
   /// </summary>
@@ -80,7 +80,7 @@ namespace Ivony.Html
         foreach ( var value in contentType.Split( ';' ) )
         {
           var _value = value.Trim();
-          if ( _value.StartsWith( "charset=" ) )
+          if ( _value.StartsWith( "charset=", StringComparison.OrdinalIgnoreCase ) )
             encoding = Encoding.GetEncoding( _value.Substring( 8 ) );
         }
       }

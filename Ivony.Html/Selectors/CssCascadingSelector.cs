@@ -177,10 +177,10 @@ namespace Ivony.Html
         return RightSelector.ToString();
 
       else if ( Relative == "" )
-        return string.Format( "{0} {1}", LeftSelector, RightSelector );
+        return string.Format( CultureInfo.InvariantCulture, "{0} {1}", LeftSelector, RightSelector );
 
       else
-        return string.Format( "{0} {1} {2}", LeftSelector, Relative, RightSelector );
+        return string.Format( CultureInfo.InvariantCulture, "{0} {1} {2}", LeftSelector, Relative, RightSelector );
     }
 
 

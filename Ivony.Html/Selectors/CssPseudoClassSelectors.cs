@@ -52,6 +52,14 @@ namespace Ivony.Html
     /// <param name="provider">伪类选择器提供程序</param>
     public static void Register( string name, ICssPseudoClassProvider provider )
     {
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
+      if ( provider == null )
+        throw new ArgumentNullException( "provider" );
+
+
+
       name = name.ToLowerInvariant();
 
       lock ( _providers )

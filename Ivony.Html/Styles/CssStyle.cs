@@ -33,7 +33,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="elements">要操纵样式的元素集合</param>
     /// <returns>样式对象</returns>
-    public static CssStyle Style( this IEnumerable<IHtmlElement> elements )
+    internal static CssStyle Style( this IEnumerable<IHtmlElement> elements )
     {
       return new CssStyleSetSetter( elements );
     }

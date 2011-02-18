@@ -109,7 +109,7 @@ namespace Ivony.Html
     /// <summary>
     /// 对字符串进行 HTML 解码。
     /// </summary>
-    /// <param name="text">要解码的字符串</param>
+    /// <param name="htmlText">要解码的字符串</param>
     /// <param name="writer">用于写入解码后字符串的文本写入器</param>
     public static void HtmlDecode( string htmlText, TextWriter writer )
     {

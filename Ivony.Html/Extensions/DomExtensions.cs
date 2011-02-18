@@ -109,6 +109,13 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 将文本节点插入到指定位置。
+    /// </summary>
+    /// <param name="textNode">要插入的文本节点</param>
+    /// <param name="container">被插入的容器</param>
+    /// <param name="index">插入的位置</param>
+    /// <returns>插入后的节点</returns>
     public static IHtmlTextNode InsertTo( this IFreeTextNode textNode, IHtmlContainer container, int index )
     {
       if ( textNode == null )
@@ -127,6 +134,12 @@ namespace Ivony.Html
       }
     }
 
+    /// <summary>
+    /// 将文本节点添加到指定容器的末尾。
+    /// </summary>
+    /// <param name="textNode">要添加的文本节点</param>
+    /// <param name="container">被添加的容器</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlTextNode AppendTo( this IFreeTextNode textNode, IHtmlContainer container )
     {
       if ( textNode == null )
@@ -140,6 +153,13 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 将 HTML 注释插入到指定位置。
+    /// </summary>
+    /// <param name="textNode">要插入的 HTML 注释</param>
+    /// <param name="container">被插入的容器</param>
+    /// <param name="index">插入的位置</param>
+    /// <returns>插入后的 HTML 注释</returns>
     public static IHtmlComment InsertTo( this IFreeComment comment, IHtmlContainer container, int index )
     {
       if ( comment == null )
@@ -158,6 +178,12 @@ namespace Ivony.Html
       }
     }
 
+    /// <summary>
+    /// 将 HTML 注释添加到指定容器的末尾。
+    /// </summary>
+    /// <param name="textNode">要添加的 HTML 注释</param>
+    /// <param name="container">被添加的容器</param>
+    /// <returns>添加后的 HTML 注释</returns>
     public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )
     {
       if ( comment == null )

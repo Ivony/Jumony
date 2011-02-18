@@ -723,7 +723,11 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 获取元素相对于文档根的路径表达
+    /// </summary>
+    /// <param name="element">要获取路径的元素</param>
+    /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element )
     {
 
@@ -734,6 +738,12 @@ namespace Ivony.Html
 
     }
 
+    /// <summary>
+    /// 获取元素相对于指定元素的路径表达
+    /// </summary>
+    /// <param name="element">要获取路径的文档</param>
+    /// <param name="ancestor">计算路径的起始元素</param>
+    /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element, IHtmlContainer ancestor )
     {
 
@@ -761,7 +771,31 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 判断指定节点是否为指定容器的后代。
+    /// </summary>
+    /// <param name="node">要判断的节点</param>
+    /// <param name="container">要判断的容器</param>
+    /// <returns>若节点的父级包含容器，则返回 true ，否则返回 false 。</returns>
+    public static bool IsDescendantOf( this IHtmlNode node, IHtmlContainer container )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
 
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      while ( true )
+      {
+        if ( node.Container == null )
+          return false;
+
+        if ( object.Equals( node.Container, container ) )
+          return true;
+
+        node = node.Container as IHtmlNode;
+      }
+    }
 
 
 

@@ -202,16 +202,10 @@ namespace Ivony.Html
       public bool IsEligible( IHtmlElement element )
       {
 
-        while ( element != null )
-        {
-          if ( element.Container.Equals( _scope ) )
-            return true;
+        if ( element == null )
+          return false;
 
-          element = element.Parent();
-
-        }
-
-        return false;
+        return element.IsDescendantOf( _scope );
       }
 
       public override string ToString()

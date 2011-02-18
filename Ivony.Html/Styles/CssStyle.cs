@@ -31,7 +31,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取元素集合的样式对象，用于方便的操纵一组元素的样式
     /// </summary>
-    /// <param name="element">要操纵样式的元素集合</param>
+    /// <param name="elements">要操纵样式的元素集合</param>
     /// <returns>样式对象</returns>
     public static CssStyle Style( this IEnumerable<IHtmlElement> elements )
     {

@@ -19,7 +19,10 @@ namespace Ivony.Html
 
     private IHtmlNodeFactory _factory;
 
-
+    /// <summary>
+    /// 创建 HtmlFragment 实例
+    /// </summary>
+    /// <param name="factory">用于创建游离节点的节点工厂</param>
     public HtmlFragment( IHtmlNodeFactory factory )
     {
       _factory = factory;

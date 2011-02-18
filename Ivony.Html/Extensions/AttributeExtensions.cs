@@ -126,6 +126,9 @@ namespace Ivony.Html
       if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
 
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
+
       if ( evaluator == null )
         throw new ArgumentNullException( "evaluator" );
 

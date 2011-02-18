@@ -60,7 +60,7 @@ namespace Ivony.Html
   }
 
 
-  public interface IHtmlProvider<TDocument, TElement, TTextNode, TComment, TContainer>
+  internal interface IHtmlDomProvider<TDocument, TElement, TTextNode, TComment, TContainer>
     where TDocument : IHtmlDocument, TContainer
     where TElement : IHtmlElement, TContainer
     where TTextNode : IHtmlTextNode

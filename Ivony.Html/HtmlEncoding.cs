@@ -88,7 +88,7 @@ namespace Ivony.Html
     /// <summary>
     /// 对字符串进行 HTML 解码。
     /// </summary>
-    /// <param name="text">要解码的字符串</param>
+    /// <param name="htmlText">要解码的字符串</param>
     /// <returns>解码后的字符串</returns>
     public static string HtmlDecode(string htmlText)
     {

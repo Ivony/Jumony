@@ -94,6 +94,10 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 返回表示当前选择器的表达式
+    /// </summary>
+    /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
       if ( comparison != null )

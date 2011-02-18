@@ -121,10 +121,10 @@ namespace Ivony.Html
     /// 从指定的文本读取器加载 HTML 文档
     /// </summary>
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
-    /// <param name="stream">用于加载 HTML 文档的文本读取器</param>
+    /// <param name="reader">用于加载 HTML 文档的文本读取器</param>
     /// <param name="uri">文档的 URL 地址</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, TextReader reader, Uri url )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, TextReader reader, Uri uri )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -132,13 +132,13 @@ namespace Ivony.Html
       if ( reader == null )
         throw new ArgumentNullException( "reader" );
 
-      if ( url == null )
+      if ( uri == null )
         throw new ArgumentNullException( "url" );
 
 
       var html = reader.ReadToEnd();
 
-      var document = parser.Parse( html, url );
+      var document = parser.Parse( html, uri );
 
       return document;
 

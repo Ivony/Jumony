@@ -150,6 +150,11 @@ namespace Ivony.Html.Styles
 
 
 
+    /// <summary>
+    /// 添加一个样式类
+    /// </summary>
+    /// <param name="className">类名</param>
+    /// <returns>被操作的元素</returns>
     public IHtmlElement AddClass( string className )
     {
       lock ( _element.SyncRoot )
@@ -166,6 +171,11 @@ namespace Ivony.Html.Styles
     }
 
 
+    /// <summary>
+    /// 移除一个样式类
+    /// </summary>
+    /// <param name="className">类名</param>
+    /// <returns>被操作的元素</returns>
     public IHtmlElement RemoveClass( string className )
     {
       lock ( _element.SyncRoot )
@@ -182,6 +192,10 @@ namespace Ivony.Html.Styles
     }
 
 
+    /// <summary>
+    /// 获取当前应用的所有样式类
+    /// </summary>
+    /// <returns>样式类名集合</returns>
     public IEnumerable<string> Classes()
     {
       return GetClasses();

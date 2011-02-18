@@ -23,8 +23,6 @@ namespace Ivony.Html
     private readonly string comparison;
     private readonly string value;
 
-    private readonly string exp;
-
 
     private static readonly Regex whiteSpaceSeparatorRegex = new Regex( @"\p{Zs}", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
@@ -51,7 +49,7 @@ namespace Ivony.Html
     internal CssAttributeSelector( string expression )
     {
 
-      exp = expression;
+      //exp = expression;
 
       var match = attributeSelectorRegex.Match( expression );
 

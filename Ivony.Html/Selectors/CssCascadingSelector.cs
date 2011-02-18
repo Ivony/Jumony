@@ -168,9 +168,9 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 重写ToString输出规范化的选择器表达式
+    /// 返回表示当前选择器的表达式
     /// </summary>
-    /// <returns>选择器表达式</returns>
+    /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
       if ( Relative == null )

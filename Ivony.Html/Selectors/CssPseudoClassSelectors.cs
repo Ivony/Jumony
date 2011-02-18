@@ -45,7 +45,11 @@ namespace Ivony.Html
 
     private static readonly Hashtable _providers = new Hashtable();
 
-
+    /// <summary>
+    /// 注册自定义 CSS 伪类选择器提供程序
+    /// </summary>
+    /// <param name="name">伪类名</param>
+    /// <param name="provider">伪类选择器提供程序</param>
     public static void Register( string name, ICssPseudoClassProvider provider )
     {
       name = name.ToLowerInvariant();

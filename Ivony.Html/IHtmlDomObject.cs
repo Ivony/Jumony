@@ -39,7 +39,9 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 获取用于同步的对象
+    /// </summary>
     object SyncRoot
     {
       get;

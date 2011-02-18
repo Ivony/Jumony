@@ -17,16 +17,25 @@ namespace Ivony.Html
   public interface IHtmlAttribute
   {
 
+    /// <summary>
+    /// 获取属性所属的元素
+    /// </summary>
     IHtmlElement Element
     {
       get;
     }
 
+    /// <summary>
+    /// 属性名
+    /// </summary>
     string Name
     {
       get;
     }
 
+    /// <summary>
+    /// 属性值
+    /// </summary>
     string AttributeValue
     {
       get;

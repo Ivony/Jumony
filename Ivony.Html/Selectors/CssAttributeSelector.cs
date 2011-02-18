@@ -16,7 +16,7 @@ namespace Ivony.Html
   /// </remarks>
   public sealed class CssAttributeSelector
   {
-    public static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    private static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private readonly string name;

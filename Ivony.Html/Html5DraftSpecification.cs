@@ -14,18 +14,33 @@ namespace Ivony.Html
   public class Html5DraftSpecification
   {
 
+    /// <summary>
+    /// 定义 HTML 内容种类
+    /// </summary>
     public interface IContentKind
     {
+      /// <summary>
+      /// 判断一个节点是否属于此内容种类
+      /// </summary>
+      /// <param name="node">要判断的节点</param>
+      /// <returns>是否能被归属于此种类</returns>
       bool IsBelong( IHtmlNode node );
     }
 
 
 
-
+    /// <summary>
+    /// 定义 HTML 元数据内容
+    /// </summary>
     public static readonly IContentKind MetadataContent = new MetadataContentKind();
 
     private class MetadataContentKind : IContentKind
     {
+      /// <summary>
+      /// 判断一个节点是否属于元数据内容
+      /// </summary>
+      /// <param name="node">要判断的节点</param>
+      /// <returns>是否能被归属于此种类</returns>
       public bool IsBelong( IHtmlNode node )
       {
         var element = node as IHtmlElement;
@@ -53,6 +68,9 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 定义 HTML 文本流内容
+    /// </summary>
     public static readonly IContentKind FlowContent = new FlowContentKind();
 
     internal class FlowContentKind : IContentKind

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  internal interface IDomContainer : IHtmlContainer
+  public interface IDomContainer : IHtmlContainer
   {
     DomNodeCollection NodeCollection
     {

@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// IHtmlNode 的实现
+  /// </summary>
   public abstract class DomNode : DomObject, IHtmlNode
   {
 
@@ -42,8 +46,6 @@ namespace Ivony.Html.Parser
 
     public virtual void Remove()
     {
-      //CheckDisposed();
-
       if ( removed )
         return;
 

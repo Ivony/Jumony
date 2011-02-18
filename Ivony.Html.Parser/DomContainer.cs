@@ -6,7 +6,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  public abstract class DomContainer : DomNode, IHtmlContainer, IDomContainer
+  public abstract class DomContainer : DomObject, IHtmlContainer, IDomContainer
   {
 
     protected DomContainer()
@@ -18,7 +18,7 @@ namespace Ivony.Html.Parser
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      return collection.Cast<IHtmlNode>().AsReadOnly();
+      return collection;
     }
 
     public DomNodeCollection NodeCollection

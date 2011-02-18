@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Ivony.Html.Parser
 {
-  public class DomNodeCollection : SynchronizedCollection<DomNode>
+
+  /// <summary>
+  /// 实现一个DomNode的容器
+  /// </summary>
+  public class DomNodeCollection : SynchronizedCollection<DomNode>, IEnumerable<IHtmlNode>
   {
 
-    public DomContainer Container
+    public IDomContainer Container
     {
       get;
       private set;
     }
 
-    public DomNodeCollection( DomContainer container )
+    public DomNodeCollection( IDomContainer container )
       : base( container.SyncRoot )
     {
       Container = container;
@@ -36,5 +41,16 @@ namespace Ivony.Html.Parser
 
     }
 
+
+
+    IEnumerator<IHtmlNode> IEnumerable<IHtmlNode>.GetEnumerator()
+    {
+      return Items.Cast<IHtmlNode>().GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      return GetEnumerator();
+    }
   }
 }

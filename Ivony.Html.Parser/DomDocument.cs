@@ -36,20 +36,5 @@ namespace Ivony.Html.Parser
       return new DomFactory( this );
     }
 
-
-    public override IHtmlContainer Container
-    {
-      get { return null; }
-    }
-
-    public override void Remove()
-    {
-      throw new NotSupportedException();
-    }
-
-    protected override string ObjectName
-    {
-      get { return "Document"; }
-    }
   }
 }

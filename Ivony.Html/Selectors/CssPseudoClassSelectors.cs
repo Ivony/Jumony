@@ -67,7 +67,13 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 创建一个 CSS 伪类选择器
+    /// </summary>
+    /// <param name="name">伪类名</param>
+    /// <param name="args">参数值</param>
+    /// <param name="expression">伪类选择器表达式</param>
+    /// <returns></returns>
     public static ICssPseudoClassSelector Create( string name, string args, string expression )
     {
       name = name.ToLowerInvariant();

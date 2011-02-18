@@ -19,9 +19,10 @@ namespace Ivony.Html
     /// <summary>
     /// 在末尾添加节点
     /// </summary>
-    /// <param name="container">要添加节点的容器</param>
+    /// <param name="container">被添加节点的容器</param>
     /// <param name="node">要添加的节点</param>
-    /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+    /// <returns>被添加节点的容器</returns>
+    /// <exception cref="System.InvalidOperationException">添加的节点与节点容器不属于同一个文档</exception>
     public static TContainer Append<TContainer>( this TContainer container, IFreeNode node ) where TContainer : IHtmlContainer
     {
       return Insert( container, container.Nodes().Count(), node );
@@ -34,7 +35,7 @@ namespace Ivony.Html
     /// <param name="container">要添加节点的容器</param>
     /// <param name="index">要插入节点的位置</param>
     /// <param name="node">要添加的节点</param>
-    /// <exception cref="System.InvalidOperationException">被添加的节点与节点容器不属于同一个文档</exception>
+    /// <exception cref="System.InvalidOperationException">添加的节点与节点容器不属于同一个文档</exception>
     public static TContainer Insert<TContainer>( this TContainer container, int index, IFreeNode node ) where TContainer : IHtmlContainer
     {
       if ( container == null )
@@ -156,7 +157,7 @@ namespace Ivony.Html
     /// <summary>
     /// 将 HTML 注释插入到指定位置。
     /// </summary>
-    /// <param name="textNode">要插入的 HTML 注释</param>
+    /// <param name="comment">要插入的 HTML 注释</param>
     /// <param name="container">被插入的容器</param>
     /// <param name="index">插入的位置</param>
     /// <returns>插入后的 HTML 注释</returns>
@@ -181,7 +182,7 @@ namespace Ivony.Html
     /// <summary>
     /// 将 HTML 注释添加到指定容器的末尾。
     /// </summary>
-    /// <param name="textNode">要添加的 HTML 注释</param>
+    /// <param name="comment">要添加的 HTML 注释</param>
     /// <param name="container">被添加的容器</param>
     /// <returns>添加后的 HTML 注释</returns>
     public static IHtmlComment AppendTo( this IFreeComment comment, IHtmlContainer container )

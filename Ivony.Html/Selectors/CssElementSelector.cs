@@ -124,6 +124,10 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 返回表示当前选择器的表达式
+    /// </summary>
+    /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
       return string.Format( "{0}{1}{2}", elementType.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );

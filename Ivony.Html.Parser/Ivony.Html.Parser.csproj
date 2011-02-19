@@ -66,6 +66,7 @@
     <Compile Include="ContentModels\HtmlEndTag.cs" />
     <Compile Include="ContentModels\HtmlSpecialTag.cs" />
     <Compile Include="ContentModels\HtmlTextObject.cs" />
+    <Compile Include="DomAttribute.cs" />
     <Compile Include="DomComment.cs" />
     <Compile Include="DomContainer.cs" />
     <Compile Include="DomDocument.cs" />

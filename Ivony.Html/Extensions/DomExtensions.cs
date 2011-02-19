@@ -358,61 +358,6 @@ namespace Ivony.Html
 
 
 
-    /*
-    /// <summary>
-    /// 创建副本
-    /// </summary>
-    /// <param name="node">要创建副本的节点</param>
-    /// <returns>节点的副本</returns>
-    public static IFreeNode MakeCopy( this IFreeNode node )
-    {
-      if ( node == null )
-        throw new ArgumentNullException( "node" );
-
-      return MakeCopy( node.Factory, node );
-    }
-    */
-
-    /// <summary>
-    /// 创建副本
-    /// </summary>
-    /// <param name="element">要创建副本的元素</param>
-    /// <returns>元素的副本</returns>
-    public static IFreeElement MakeCopy( this IFreeElement element )
-    {
-      if ( element == null )
-        throw new ArgumentNullException( "element" );
-
-      return MakeCopy( element.Factory, element );
-    }
-
-    /// <summary>
-    /// 创建副本
-    /// </summary>
-    /// <param name="comment">要创建副本的注释</param>
-    /// <returns>注释的副本</returns>
-    public static IFreeComment MakeCopy( this IFreeComment comment )
-    {
-      if ( comment == null )
-        throw new ArgumentNullException( "comment" );
-
-      return MakeCopy( comment.Factory, comment );
-    }
-
-    /// <summary>
-    /// 创建副本
-    /// </summary>
-    /// <param name="textNode">要创建副本的文本节点</param>
-    /// <returns>文本节点的副本</returns>
-    public static IFreeTextNode MakeCopy( this IFreeTextNode textNode )
-    {
-      if ( textNode == null )
-        throw new ArgumentNullException( "textNode" );
-
-      return MakeCopy( textNode.Factory, textNode );
-    }
-
-
     /// <summary>
     /// 创建节点的副本
     /// </summary>

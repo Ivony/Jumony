@@ -105,8 +105,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    private DomNodeCollection nodeCollection;
 
+    private DomNodeCollection nodeCollection;
+    
+    /// <summary>
+    /// 获取子节点容器
+    /// </summary>
     public DomNodeCollection NodeCollection
     {
       get
@@ -121,6 +125,10 @@ namespace Ivony.Html.Parser
       }
     }
 
+    /// <summary>
+    /// 获取所有子节点
+    /// </summary>
+    /// <returns>所有子节点列表</returns>
     public IEnumerable<IHtmlNode> Nodes()
     {
       lock ( SyncRoot )

@@ -358,7 +358,7 @@ namespace Ivony.Html
 
 
 
-
+    /*
     /// <summary>
     /// 创建副本
     /// </summary>
@@ -371,6 +371,7 @@ namespace Ivony.Html
 
       return MakeCopy( node.Factory, node );
     }
+    */
 
     /// <summary>
     /// 创建副本

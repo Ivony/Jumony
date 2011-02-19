@@ -10,7 +10,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义一个游离的，尚未被分配的 HTML 节点，稍候可以将该节点插入到文档合适位置
   /// </summary>
-  public interface IFreeNode : IHtmlNode
+  public interface IFreeNode : IHtmlDomObject
   {
     /// <summary>
     /// 将节点插入到指定位置

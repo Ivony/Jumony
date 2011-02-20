@@ -13,9 +13,9 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 代表一个CSS选择器
+  /// 提供一系列静态和扩展方法来辅助使用CSS选择器。
   /// </summary>
-  public sealed class CssSelector
+  public static class CssSelector
   {
 
 
@@ -81,14 +81,6 @@ namespace Ivony.Html
       return selector.Filter( scope.Descendants() );
 
     }
-  }
-
-
-  /// <summary>
-  /// 为选择器提供扩展方法的类型
-  /// </summary>
-  public static class SelectorExtensions
-  {
 
     /// <summary>
     /// 使用选择器从元素集中筛选出符合选择器要求的元素
@@ -101,7 +93,7 @@ namespace Ivony.Html
       return source.Where( e => selector.IsEligible( e ) );
     }
 
-
   }
+
 
 }

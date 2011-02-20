@@ -18,4 +18,12 @@ namespace Ivony.Html
     /// <returns>容器的子节点</returns>
     IEnumerable<IHtmlNode> Nodes();
   }
+
+  /// <summary>
+  /// 定义一个 HTML 节点收集器，其可以收纳 HTML 节点，但不会修改 HTML 节点的 Container 属性。
+  /// </summary>
+  public interface IHtmlCollection : IHtmlContainer
+  {
+    void AddNode( int index, IHtmlNode node );
+  }
 }

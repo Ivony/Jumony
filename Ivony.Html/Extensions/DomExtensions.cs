@@ -538,7 +538,7 @@ namespace Ivony.Html
         }
         else
         {
-          var fragment = factory.ParseHtml( html );
+          var fragment = factory.ParseFragment( html );
           fragment.InsertTo( element, 0 );
         }
       }
@@ -745,11 +745,11 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 判断指定节点是否为指定容器的后代。
+    /// 判断指定节点是否为指定容器的子代。
     /// </summary>
     /// <param name="node">要判断的节点</param>
     /// <param name="container">要判断的容器</param>
-    /// <returns>若节点的父级包含容器，则返回 true ，否则返回 false 。</returns>
+    /// <returns>若节点位于容器的子代，则返回 true ，否则返回 false 。</returns>
     public static bool IsDescendantOf( this IHtmlNode node, IHtmlContainer container )
     {
       if ( node == null )
@@ -757,6 +757,12 @@ namespace Ivony.Html
 
       if ( container == null )
         throw new ArgumentNullException( "container" );
+
+      var collection = container as IHtmlCollection;
+
+      if ( collection != null )
+        return IsDescendantOf( node, collection );
+
 
       while ( true )
       {
@@ -768,6 +774,34 @@ namespace Ivony.Html
 
         node = node.Container as IHtmlNode;
       }
+    }
+
+
+    /// <summary>
+    /// 判断指定节点是否为指定容器的子代。
+    /// </summary>
+    /// <param name="node">要判断的节点</param>
+    /// <param name="collection">要判断的容器</param>
+    /// <returns>若节点位于容器的子代，则返回 true ，否则返回 false 。</returns>
+    /// <remarks>
+    /// 出于性能考虑， IsDescendantOf( this node, container ) 方法检查节点的所有父级是否包含指定的容器，但对于IHtmlCollection来说，即使节点是其子代，其也不会在其父级中出现。
+    /// 所以这是针对 IHtmlCollection 的一个特定实现，而 IsDescendantOf( this IHtmlNode, IHtmlContainer ) 方法发现第二个参数是IHtmlCollection时，也会自动调用此重载
+    /// </remarks>
+    public static bool IsDescendantOf( this IHtmlNode node, IHtmlCollection collection )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( collection == null )
+        throw new ArgumentNullException( "collection" );
+
+      if ( collection.Nodes().Contains( node ) )
+        return true;
+
+      if ( collection.Nodes().OfType<IHtmlContainer>().Any( child => node.IsDescendantOf( child ) ) )
+        return true;
+
+      return false;
     }
 
 

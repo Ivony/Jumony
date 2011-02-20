@@ -13,7 +13,7 @@ namespace Ivony.Html
   /// <summary>
   /// HTML 文档碎片，游离节点的容器
   /// </summary>
-  public class HtmlFragment : IHtmlContainer
+  public class HtmlFragment : IHtmlContainer, IHtmlCollection
   {
 
 
@@ -52,9 +52,6 @@ namespace Ivony.Html
     {
       get { return _nodes; }
     }
-
-
-
 
 
     /// <summary>
@@ -207,18 +204,17 @@ namespace Ivony.Html
       get { return _factory; }
     }
 
-
-
-    public object RawObject
-    {
-      get { return this; }
-    }
-
     public IHtmlDocument Document
     {
       get { return Factory.Document; }
     }
 
+
+
+    object IHtmlDomObject.RawObject
+    {
+      get { return this; }
+    }
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
@@ -226,29 +222,23 @@ namespace Ivony.Html
     }
 
 
-
-    /// <summary>
-    /// 获取节点的容器，此属性始终返回 null
-    /// </summary>
-    public IHtmlContainer Container
+    string IHtmlDomObject.RawHtml
     {
       get { return null; }
     }
 
-    /// <summary>
-    /// 获取原始 HTML，始终返回 null
-    /// </summary>
-    public string RawHtml
+
+
+
+    void IHtmlCollection.AddNode( int index, IHtmlNode node )
     {
-      get { return null; }
+      var freeNode = node as IFreeNode;
+
+      if ( freeNode == null )
+        throw new NotSupportedException();
+
+      AddNode( index, freeNode );
     }
 
-    /// <summary>
-    /// 从 DOM 中移除节点，此方法始终抛出 NotSupportedException 异常
-    /// </summary>
-    public void Remove()
-    {
-      throw new NotSupportedException();
-    }
   }
 }

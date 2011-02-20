@@ -169,7 +169,7 @@ namespace Ivony.Html
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
-      if ( !node.Factory.Document.Equals( Factory.Document ) )
+      if ( !node.Document.Equals( Document ) )
         throw new InvalidOperationException( "不能添加另一文档的游离节点" );
     }
 
@@ -209,29 +209,23 @@ namespace Ivony.Html
 
 
 
-    #region IHtmlNode 成员
-
-    object IHtmlDomObject.RawObject
+    public object RawObject
     {
       get { return this; }
     }
 
-    IHtmlDocument IHtmlDomObject.Document
+    public IHtmlDocument Document
     {
       get { return Factory.Document; }
     }
 
-
-    #endregion
-
-    #region IHtmlContainer 成员
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
       return Nodes.Cast<IHtmlNode>().AsReadOnly();
     }
 
-    #endregion
+
 
     /// <summary>
     /// 获取节点的容器，此属性始终返回 null

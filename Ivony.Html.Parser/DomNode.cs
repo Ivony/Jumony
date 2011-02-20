@@ -22,6 +22,7 @@ namespace Ivony.Html.Parser
       get
       {
         CheckDisposed();
+        
         return _container;
       }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Html;
 
 namespace Ivony.Html.Parser
 {
@@ -22,7 +23,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    #region IHtmlNodeFactory 成员
+
+    public HtmlFragment CreateFragment()
+    {
+      return new DomFragment( this );
+    }
+
 
     public IFreeElement CreateElement( string name )
     {
@@ -61,9 +67,27 @@ namespace Ivony.Html.Parser
     }
 
 
-
-    #endregion
   }
 
+  public class DomFragment : HtmlFragment, IDomContainer
+  {
+
+    public DomFragment( DomFactory factory )
+      : base( factory )
+    {
+      _nodeCollection = new DomNodeCollection( this );
+    }
+
+
+    private DomNodeCollection _nodeCollection;
+
+
+    public DomNodeCollection NodeCollection
+    {
+      get { return _nodeCollection; }
+    }
+  }
 
 }
+
+

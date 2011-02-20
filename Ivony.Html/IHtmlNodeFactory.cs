@@ -21,6 +21,13 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 创建 HTML 碎片对象
+    /// </summary>
+    /// <returns>HTML 碎片，其作为游离节点的容器</returns>
+    HtmlFragment CreateFragment();
+
+
+    /// <summary>
     /// 创建元素对象
     /// </summary>
     /// <param name="name">元素名</param>

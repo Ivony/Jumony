@@ -48,7 +48,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取所有游离节点
     /// </summary>
-    protected SynchronizedCollection<IFreeNode> Nodes
+    protected virtual SynchronizedCollection<IFreeNode> Nodes
     {
       get { return _nodes; }
     }

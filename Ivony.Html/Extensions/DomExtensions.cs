@@ -364,7 +364,7 @@ namespace Ivony.Html
     /// <param name="factory">用于创建节点的构建器</param>
     /// <param name="node">需要被创建副本的节点</param>
     /// <returns>节点的未分配副本</returns>
-    /// <exception cref="System.NotSupportedException">试图创建不被支持的节点的副本，例如IHtmlDocument</exception>
+    /// <exception cref="System.NotSupportedException">试图创建不被支持的节点的副本</exception>
     public static IFreeNode MakeCopy( this IHtmlNodeFactory factory, IHtmlNode node )
     {
 

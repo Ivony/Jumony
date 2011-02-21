@@ -36,7 +36,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-    public HtmlFragment ParseHtml( string html )
+    public HtmlFragment ParseFragment( string html )
     {
       var document = new AP.HtmlDocument();
 

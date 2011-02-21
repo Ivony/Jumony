@@ -89,7 +89,7 @@ namespace Ivony.Html.Parser
       return attribute;
     }
 
-    private class DomAttributeCollection : SynchronizedKeyedCollection<string, DomAttribute>
+    protected class DomAttributeCollection : SynchronizedKeyedCollection<string, DomAttribute>
     {
 
       public DomAttributeCollection( DomElement element )
@@ -107,7 +107,7 @@ namespace Ivony.Html.Parser
 
 
     private DomNodeCollection nodeCollection;
-    
+
     /// <summary>
     /// 获取子节点容器
     /// </summary>
@@ -139,6 +139,16 @@ namespace Ivony.Html.Parser
         return nodeCollection;
       }
     }
+
+
+
+    public override void Remove()
+    {
+      this.ClearNodes();
+
+      base.Remove();
+    }
+
 
 
 
@@ -301,104 +311,5 @@ namespace Ivony.Html.Parser
       #endregion
     }
 
-
-
-
-
-
-
-
-
-
-
-
-  }
-
-
-  internal class DomFreeElement : HtmlElementWrapper, IFreeElement, IDomContainer
-  {
-
-    private DomElement _element;
-    private readonly DomFactory _factory;
-
-    private bool disposed = false;
-
-    public DomFreeElement( DomFactory factory, string name )
-    {
-      _element = new DomElement( name, null );
-      _factory = factory;
-    }
-
-
-    private void CheckDisposed()
-    {
-      if ( disposed )
-        throw new ObjectDisposedException( "FreeElement" );
-    }
-
-
-    protected override IHtmlElement Element
-    {
-      get
-      {
-        CheckDisposed();
-
-        return _element;
-      }
-    }
-
-
-    IHtmlDocument IHtmlDomObject.Document
-    {
-      get
-      {
-        CheckDisposed();
-
-        return _factory.Document;
-      }
-    }
-
-
-    #region IFreeNode 成员
-
-    public IHtmlNode Into( IHtmlContainer container, int index )
-    {
-      CheckDisposed();
-
-      if ( container == null )
-        throw new ArgumentNullException( "container" );
-
-      var domContainer = container as IDomContainer;
-      if ( domContainer == null )
-        throw new InvalidOperationException();
-
-
-      domContainer.InsertNode( index, _element );
-      disposed = true;
-
-      return _element;
-
-    }
-
-    public IHtmlNodeFactory Factory
-    {
-      get
-      {
-        CheckDisposed();
-
-        return _factory;
-      }
-    }
-
-    #endregion
-
-    #region IDomContainer 成员
-
-    DomNodeCollection IDomContainer.NodeCollection
-    {
-      get { return ((IDomContainer) Element).NodeCollection; }
-    }
-
-    #endregion
   }
 }

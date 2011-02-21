@@ -52,7 +52,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    public HtmlFragment ParseHtml( string html )
+    public HtmlFragment ParseFragment( string html )
     {
       if ( html == null )
         throw new ArgumentNullException( "html" );
@@ -65,29 +65,78 @@ namespace Ivony.Html.Parser
     {
       get { return Document; }
     }
-
-
   }
 
-  public class DomFragment : HtmlFragment, IDomContainer
+
+  public class DomFragment : IHtmlFragment, IDomContainer
   {
 
     public DomFragment( DomFactory factory )
-      : base( factory )
     {
+      _factory = factory;
       _nodeCollection = new DomNodeCollection( this );
     }
 
-
+    private object _sync = new object();
+    private DomFactory _factory;
     private DomNodeCollection _nodeCollection;
-
 
     public DomNodeCollection NodeCollection
     {
       get { return _nodeCollection; }
     }
-  }
 
+
+    public void AddNode( int index, IFreeNode node )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( !Document.Equals( node.Document ) )
+        throw new ArgumentException( "不支持添加其他文档的游离节点", "node" );
+
+
+      lock ( SyncRoot )
+      {
+        if ( index < 0 || index > _nodeCollection.Count )
+          throw new ArgumentOutOfRangeException( "index" );
+      }
+    }
+
+
+
+
+    public IHtmlNodeFactory Factory
+    {
+      get { return _factory; }
+    }
+
+
+    public IEnumerable<IHtmlNode> Nodes()
+    {
+      return _nodeCollection;
+    }
+
+    public object RawObject
+    {
+      get { return this; }
+    }
+
+    public string RawHtml
+    {
+      get { return null; }
+    }
+
+    public IHtmlDocument Document
+    {
+      get { return _factory.Document; }
+    }
+
+    public object SyncRoot
+    {
+      get { return _sync; }
+    }
+  }
 }
 
 

@@ -43,7 +43,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要添加注释的容器</param>
     /// <param name="index">添加的位置</param>
-    /// <param name="comment">HTML 注释</param>
+    /// <param name="comment">HTML 注释内容</param>
     /// <returns>添加好的注释节点</returns>
     IHtmlComment AddComment( IHtmlContainer container, int index, string comment );
 
@@ -52,7 +52,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要添加特殊标签的容器</param>
     /// <param name="index">添加的位置</param>
-    /// <param name="html">特殊标签的HTML</param>
+    /// <param name="html">特殊标签的 HTML</param>
     /// <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
     IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html );
 

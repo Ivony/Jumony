@@ -207,31 +207,34 @@ namespace Ivony.Html.Parser
       if ( object.Equals( x, y ) )
         return 0;
 
-      IHtmlNode node = x;
+      if ( object.Equals( x.Container, y.Container ) )
+        return x.NodesIndexOfSelf() - y.NodesIndexOfSelf();
 
+
+      var ancetors1 = x.Ancestors().Reverse().ToArray();
+      var ancetors2 = y.Ancestors().Reverse().ToArray();
+
+      int i = 0;
       while ( true )
       {
-        var container = node.Container;
 
-        if ( container == null )
-          throw new InvalidOperationException();
+        if ( i >= ancetors1.Length )
+          return -1;
 
-        if ( y.IsDescendantOf( container ) )
+        if ( i >= ancetors2.Length )
+          return 1;
+
+
+
+
+        if ( !object.Equals( ancetors1[i], ancetors2[i] ) )
           break;
-
-        node = container as IHtmlNode;
-        if ( node == null )
-          throw new InvalidOperationException();
-
       }
 
 
 
 
 
-
-
-      throw new NotImplementedException();
     }
   }
 

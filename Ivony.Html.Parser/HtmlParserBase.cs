@@ -176,7 +176,7 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     protected virtual IHtmlTextNode CreateTextNode( string text )
     {
-      return Provider.AddTextNode( CurrentContainer, CurrentContainer.Nodes().Count(), text );
+      return Provider.AddTextNode( CurrentContainer, text );
     }
 
 
@@ -287,7 +287,7 @@ namespace Ivony.Html.Parser
     /// <returns>创建好的元素</returns>
     protected virtual IHtmlElement CreateElement( string tagName, Dictionary<string, string> attributes )
     {
-      return Provider.AddElement( CurrentContainer, CurrentContainer.Nodes().Count(), tagName, attributes );
+      return Provider.AddElement( CurrentContainer, tagName, attributes );
     }
 
 
@@ -350,7 +350,7 @@ namespace Ivony.Html.Parser
     /// <returns>创建的注释节点</returns>
     protected virtual IHtmlComment CreateCommet( string comment )
     {
-      return Provider.AddComment( CurrentContainer, CurrentContainer.Nodes().Count(), comment );
+      return Provider.AddComment( CurrentContainer, comment );
     }
 
 

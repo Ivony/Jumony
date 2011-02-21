@@ -41,22 +41,22 @@ namespace Ivony.Html.Parser
 
 
 
-    public IHtmlElement AddElement( IHtmlContainer container, int index, string name, IDictionary<string, string> attributes )
+    public IHtmlElement AddElement( IHtmlContainer container, string name, IDictionary<string, string> attributes )
     {
-      return EnsureDomContainer( container ).InsertNode( index, new DomElement( name, attributes ) );
+      return EnsureDomContainer( container ).AddNode( new DomElement( name, attributes ) );
     }
 
-    public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
+    public IHtmlTextNode AddTextNode( IHtmlContainer container, string htmlText )
     {
-      return EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
+      return EnsureDomContainer( container ).AddNode( new DomTextNode( htmlText ) );
     }
 
-    public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
+    public IHtmlComment AddComment( IHtmlContainer container, string comment )
     {
-      return EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
+      return EnsureDomContainer( container ).AddNode( new DomComment( comment ) );
     }
 
-    public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
+    public IHtmlSpecial AddSpecial( IHtmlContainer container, string html )
     {
       //UNDONE
       throw new NotImplementedException();

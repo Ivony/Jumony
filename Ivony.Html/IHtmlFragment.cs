@@ -63,7 +63,7 @@ namespace Ivony.Html
   /// <summary>
   /// HTML 文档碎片，游离节点的容器
   /// </summary>
-  public class HtmlFragment : IHtmlContainer, IHtmlCollection
+  public class HtmlFragment : IHtmlContainer
   {
 
 
@@ -280,18 +280,6 @@ namespace Ivony.Html
       get { return null; }
     }
 
-
-
-
-    void IHtmlCollection.AddNode( int index, IHtmlNode node )
-    {
-      var freeNode = node as IFreeNode;
-
-      if ( freeNode == null )
-        throw new NotSupportedException();
-
-      AddNode( index, freeNode );
-    }
 
   }
 }

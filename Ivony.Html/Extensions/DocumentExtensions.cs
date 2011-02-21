@@ -302,12 +302,12 @@ namespace Ivony.Html
 
           var textNode = node as IHtmlTextNode;
           if ( textNode != null )
-            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
+            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddTextNode", contaienrVariable, /*new CodePrimitiveExpression( index ),*/ new CodePrimitiveExpression( textNode.HtmlText ) ) ) );
 
 
           var comment = node as IHtmlComment;
           if ( comment != null )
-            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( comment.Comment ) ) ) );
+            statements.Add( new CodeAssignStatement( nodeVariable, new CodeMethodInvokeExpression( providerVariable, "AddComment", contaienrVariable, /*new CodePrimitiveExpression( index ),*/ new CodePrimitiveExpression( comment.Comment ) ) ) );
 
 
           var element = node as IHtmlElement;
@@ -329,7 +329,7 @@ namespace Ivony.Html
             foreach ( var attribute in element.Attributes() )
               statements.Add( new CodeMethodInvokeExpression( attributesVariable, "Add", new CodePrimitiveExpression( attribute.Name ), new CodePrimitiveExpression( attribute.AttributeValue ) ) );
 
-            statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, new CodePrimitiveExpression( index ), new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
+            statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlElement ), elementId, new CodeMethodInvokeExpression( providerVariable, "AddElement", contaienrVariable, /*new CodePrimitiveExpression( index ),*/ new CodePrimitiveExpression( element.Name ), attributesVariable ) ) );
 
             var elementVariable = new CodeVariableReferenceExpression( elementId );
 
@@ -452,7 +452,7 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ldarg_0 );       //ld provider
         il.Emit( OpCodes.Ldloc_0 );       //ld container
-        il.Emit( OpCodes.Ldc_I4, index ); //ld index
+//        il.Emit( OpCodes.Ldc_I4, index ); //ld index
 
         var textNode = node as IHtmlTextNode;
         if ( textNode != null )

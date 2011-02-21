@@ -14,8 +14,6 @@ namespace Ivony.Html
   public static class DomExtensions
   {
 
-
-
     /// <summary>
     /// 在末尾添加节点
     /// </summary>

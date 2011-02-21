@@ -6,7 +6,17 @@ using Ivony.Fluent;
 
 namespace Ivony.Html
 {
-  public class HtmlCollection : IHtmlCollection
+
+  /// <summary>
+  /// 定义一个 HTML 节点收集器，其可以收纳 HTML 节点，但不会修改 HTML 节点的 Container 属性。
+  /// </summary>
+  public interface IHtmlCollection : IHtmlContainer
+  {
+    void AddNode( IHtmlNode node );
+  }
+
+
+  public class HtmlCollection : IHtmlCollection, ICollection<IHtmlNode>
   {
 
     private IHtmlDocument _document;
@@ -96,6 +106,63 @@ namespace Ivony.Html
     }
 
 
+
+    #region ICollection<IHtmlNode> 成员
+
+    void ICollection<IHtmlNode>.Add( IHtmlNode item )
+    {
+      AddNode( item );
+    }
+
+    void ICollection<IHtmlNode>.Clear()
+    {
+      
+    }
+
+    public bool Contains( IHtmlNode item )
+    {
+      throw new NotImplementedException();
+    }
+
+    public void CopyTo( IHtmlNode[] array, int arrayIndex )
+    {
+      throw new NotImplementedException();
+    }
+
+    public int Count
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public bool IsReadOnly
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public bool Remove( IHtmlNode item )
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+
+    #region IEnumerable<IHtmlNode> 成员
+
+    public IEnumerator<IHtmlNode> GetEnumerator()
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+
+    #region IEnumerable 成员
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
   }
 
 

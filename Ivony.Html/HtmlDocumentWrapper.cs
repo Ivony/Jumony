@@ -80,5 +80,16 @@ namespace Ivony.Html
       get { return Document.DocumentUri; }
     }
 
+
+
+    IHtmlFragment IHtmlDocument.CreateFragment()
+    {
+      return Document.CreateFragment();
+    }
+
+    IHtmlFragment IHtmlDocument.CreateFragment( string html )
+    {
+      return Document.CreateFragment( html );
+    }
   }
 }

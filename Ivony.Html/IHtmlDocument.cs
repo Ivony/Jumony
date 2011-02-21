@@ -38,6 +38,13 @@ namespace Ivony.Html
     IHtmlFragment CreateFragment();
 
     /// <summary>
+    /// 创建一个文档碎片
+    /// </summary>
+    /// <param name="html">要分析用于创建文档碎片的 HTML</param>
+    /// <returns></returns>
+    IHtmlFragment CreateFragment( string html );
+
+    /// <summary>
     /// 获取文档节点构造器，如果不支持，则返回null
     /// </summary>
     /// <returns>文档节点构造器</returns>

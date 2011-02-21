@@ -76,6 +76,7 @@
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Html5DraftSpecification.cs" />
     <Compile Include="HtmlEncoding.cs" />
+    <Compile Include="IHtmlCollection.cs" />
     <Compile Include="IHtmlFragment.cs" />
     <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlDomObject.cs" />

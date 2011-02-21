@@ -57,7 +57,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container"></param>
     /// <param name="index"></param>
-    void Into( IHtmlContainer container, int index );
+    IHtmlCollection Into( IHtmlContainer container, int index );
   }
 
   /// <summary>

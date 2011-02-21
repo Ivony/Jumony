@@ -12,7 +12,7 @@ namespace Ivony.Html
 
 
   /// <summary>
-  /// 定义 HTML 文档碎片，游离节点的容器
+  /// 定义 HTML 文档碎片，未分配节点的容器，文档碎片可以再次被分配到 DOM 上。
   /// </summary>
   public interface IHtmlFragment : IHtmlContainer
   {

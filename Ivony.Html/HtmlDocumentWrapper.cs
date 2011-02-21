@@ -29,11 +29,6 @@ namespace Ivony.Html
       get { return Document.DocumentDeclaration; }
     }
 
-    IHtmlNodeFactory IHtmlDocument.GetNodeFactory()
-    {
-      return Document.GetNodeFactory();
-    }
-
 
     IEnumerable<IHtmlNode> IHtmlContainer.Nodes()
     {
@@ -82,14 +77,9 @@ namespace Ivony.Html
 
 
 
-    IHtmlFragment IHtmlDocument.CreateFragment()
+    IHtmlFragmentProvider IHtmlDocument.FragmentProvider
     {
-      return Document.CreateFragment();
-    }
-
-    IHtmlFragment IHtmlDocument.CreateFragment( string html )
-    {
-      return Document.CreateFragment( html );
+      get { return Document.FragmentProvider; }
     }
   }
 }

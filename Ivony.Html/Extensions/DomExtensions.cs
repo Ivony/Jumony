@@ -259,7 +259,7 @@ namespace Ivony.Html
     }
 
 
-
+    /*
     /// <summary>
     /// 在末尾添加节点的副本，此方法总是创建节点的副本
     /// </summary>
@@ -322,8 +322,10 @@ namespace Ivony.Html
         return container;
       }
     }
+    */
 
 
+    /*
     /// <summary>
     /// 替换指定节点
     /// </summary>
@@ -355,7 +357,7 @@ namespace Ivony.Html
         return result;
       }
     }
-
+    */
 
 
     /// <summary>
@@ -479,7 +481,7 @@ namespace Ivony.Html
 
 
 
-
+    /*
     /// <summary>
     /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
     /// </summary>
@@ -543,6 +545,7 @@ namespace Ivony.Html
         }
       }
     }
+    */
 
 
     /// <summary>
@@ -608,7 +611,7 @@ namespace Ivony.Html
     }
 
 
-
+    /*
     /// <summary>
     /// 设置元素的InnerHTML
     /// </summary>
@@ -651,7 +654,7 @@ namespace Ivony.Html
         ReplaceChildsWithText( element, text );
       }
     }
-
+    */
 
 
 

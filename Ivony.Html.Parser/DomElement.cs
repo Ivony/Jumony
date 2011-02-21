@@ -106,7 +106,7 @@ namespace Ivony.Html.Parser
 
 
 
-    private DomNodeCollection nodeCollection;
+    private DomNodeCollection _nodeCollection;
 
     /// <summary>
     /// 获取子节点容器
@@ -117,10 +117,10 @@ namespace Ivony.Html.Parser
       {
         lock ( SyncRoot )
         {
-          if ( nodeCollection == null )
-            nodeCollection = new DomNodeCollection( this );
+          if ( _nodeCollection == null )
+            _nodeCollection = new DomNodeCollection( this );
 
-          return nodeCollection;
+          return _nodeCollection;
         }
       }
     }
@@ -133,10 +133,10 @@ namespace Ivony.Html.Parser
     {
       lock ( SyncRoot )
       {
-        if ( nodeCollection == null )
-          nodeCollection = new DomNodeCollection( this );
+        if ( _nodeCollection == null )
+          _nodeCollection = new DomNodeCollection( this );
 
-        return nodeCollection;
+        return _nodeCollection.HtmlNodes;
       }
     }
 

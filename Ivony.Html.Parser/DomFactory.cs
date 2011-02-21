@@ -6,79 +6,19 @@ using Ivony.Html;
 
 namespace Ivony.Html.Parser
 {
-  public class DomFactory : IHtmlNodeFactory
-  {
-
-
-    internal DomFactory( DomDocument document )
-    {
-      Document = document;
-    }
-
-
-    internal DomDocument Document
-    {
-      get;
-      private set;
-    }
-
-
-
-    public HtmlFragment CreateFragment()
-    {
-      return new DomFragment( this );
-    }
-
-
-    public IFreeElement CreateElement( string name )
-    {
-      if ( string.IsNullOrEmpty( name ) )//TODO 检查name的合法性
-        throw new ArgumentNullException( "name" );
-
-      return new DomFreeElement( this, name );
-    }
-
-    public IFreeTextNode CreateTextNode( string htmlText )
-    {
-      if ( string.IsNullOrEmpty( htmlText ) )
-        throw new ArgumentNullException( "htmlText" );
-
-      return new DomFreeTextNode( this, htmlText );
-    }
-
-    public IFreeComment CreateComment( string comment )
-    {
-      return new DomFreeComment( this, comment );
-    }
-
-
-    public HtmlFragment ParseFragment( string html )
-    {
-      if ( html == null )
-        throw new ArgumentNullException( "html" );
-
-      return this.MakeFragment( new JumonyParser().Parse( html, null ) );
-    }
-
-
-    IHtmlDocument IHtmlNodeFactory.Document
-    {
-      get { return Document; }
-    }
-  }
 
 
   public class DomFragment : IHtmlFragment, IDomContainer
   {
 
-    public DomFragment( DomFactory factory )
+    public DomFragment( DomDocument document )
     {
-      _factory = factory;
+      _document = document;
       _nodeCollection = new DomNodeCollection( this );
     }
 
     private object _sync = new object();
-    private DomFactory _factory;
+    private DomDocument _document;
     private DomNodeCollection _nodeCollection;
 
     public DomNodeCollection NodeCollection
@@ -87,34 +27,9 @@ namespace Ivony.Html.Parser
     }
 
 
-    public void AddNode( int index, IFreeNode node )
-    {
-      if ( node == null )
-        throw new ArgumentNullException( "node" );
-
-      if ( !Document.Equals( node.Document ) )
-        throw new ArgumentException( "不支持添加其他文档的游离节点", "node" );
-
-
-      lock ( SyncRoot )
-      {
-        if ( index < 0 || index > _nodeCollection.Count )
-          throw new ArgumentOutOfRangeException( "index" );
-      }
-    }
-
-
-
-
-    public IHtmlNodeFactory Factory
-    {
-      get { return _factory; }
-    }
-
-
     public IEnumerable<IHtmlNode> Nodes()
     {
-      return _nodeCollection;
+      return _nodeCollection.HtmlNodes;
     }
 
     public object RawObject
@@ -129,12 +44,72 @@ namespace Ivony.Html.Parser
 
     public IHtmlDocument Document
     {
-      get { return _factory.Document; }
+      get { return _document; }
     }
 
     public object SyncRoot
     {
       get { return _sync; }
+    }
+
+
+
+
+
+
+
+    public IHtmlElement AddElement( int index, string name, IDictionary<string, string> attributes )
+    {
+      lock ( SyncRoot )
+      {
+        var element = new DomElement( name, attributes );
+        NodeCollection.Insert( index, element );
+        return element;
+      }
+    }
+
+    public IHtmlTextNode AddTextNode( int index, string htmlText )
+    {
+      lock ( SyncRoot )
+      {
+        var textNode = new DomTextNode( htmlText );
+        NodeCollection.Insert( index, textNode );
+        return textNode;
+      }
+    }
+
+    public IHtmlComment AddComment( int index, string comment )
+    {
+      lock ( SyncRoot )
+      {
+        var commentNode = new DomComment( comment );
+        NodeCollection.Insert( index, commentNode );
+        return commentNode;
+      }
+    }
+
+    public IHtmlSpecial AddSpecial( int index, string html )
+    {
+      throw new NotSupportedException();
+    }
+
+    public void Into( IHtmlContainer container, int index )
+    {
+      lock ( SyncRoot )
+      {
+
+        var nodeList = NodeCollection.ToArray();
+
+        Array.Reverse( nodeList );
+
+        lock ( container.SyncRoot )
+        {
+          foreach ( var node in nodeList )
+          {
+            node.Container = null;
+          }
+        }
+      }
     }
   }
 }

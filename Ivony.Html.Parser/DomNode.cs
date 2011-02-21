@@ -32,7 +32,7 @@ namespace Ivony.Html.Parser
         {
           CheckDisposed();
 
-          if ( _container != null )
+          if ( _container != null && (_container is DomFragment) )
             throw new InvalidOperationException();
 
 
@@ -120,57 +120,6 @@ namespace Ivony.Html.Parser
 
 
 
-    protected abstract class DomFreeNode : DomNode, IFreeNode
-    {
-
-      public DomFreeNode( DomFactory factory )
-      {
-        Factory = factory;
-      }
-
-      public DomFactory Factory
-      {
-        get;
-        private set;
-      }
-
-
-
-      protected abstract DomNode StaticCopy();
-
-
-      IHtmlNode IFreeNode.Into( IHtmlContainer container, int index )
-      {
-
-        if ( container == null )
-          throw new ArgumentNullException( "container" );
-
-        if ( !object.Equals( container.Document, Document ) )
-          throw new InvalidOperationException();
-
-        var domContainer = container as IDomContainer;
-
-        if( domContainer == null )
-          throw new InvalidOperationException();
-
-        var staticCopy = StaticCopy();
-
-        domContainer.NodeCollection.Insert( index, StaticCopy() );
-
-        return staticCopy;
-      }
-
-      IHtmlNodeFactory IFreeNode.Factory
-      {
-        get { return Factory; }
-      }
-
-      public override IHtmlDocument Document
-      {
-        get { return Factory.Document; }
-      }
-
-    }
 
 
   }

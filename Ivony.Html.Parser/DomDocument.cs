@@ -48,18 +48,9 @@ namespace Ivony.Html.Parser
       get { return null; }
     }
 
-    /// <summary>
-    /// 获取用于创建游离节点的节点工厂
-    /// </summary>
-    /// <returns></returns>
-    public virtual IHtmlNodeFactory GetNodeFactory()
-    {
-      return new DomFactory( this );
-    }
 
 
-
-    private DomNodeCollection collection;
+    private DomNodeCollection _nodeCollection;
 
     /// <summary>
     /// 获取节点容器
@@ -68,10 +59,10 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        if ( collection == null )
-          collection = new DomNodeCollection( this );
+        if ( _nodeCollection == null )
+          _nodeCollection = new DomNodeCollection( this );
 
-        return collection;
+        return _nodeCollection;
       }
     }
 
@@ -80,10 +71,27 @@ namespace Ivony.Html.Parser
     /// </summary>
     public IEnumerable<IHtmlNode> Nodes()
     {
-      if ( collection == null )
-        collection = new DomNodeCollection( this );
+      if ( _nodeCollection == null )
+        _nodeCollection = new DomNodeCollection( this );
 
-      return collection;
+      return _nodeCollection.HtmlNodes;
+    }
+
+
+    public IHtmlFragment CreateFragment()
+    {
+      throw new NotImplementedException();
+    }
+
+    public IHtmlFragment CreateFragment( string html )
+    {
+      throw new NotImplementedException();
+    }
+
+
+    public IHtmlNodeFactory GetNodeFactory()
+    {
+      throw new NotSupportedException();
     }
   }
 }

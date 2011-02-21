@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Html;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
@@ -95,18 +96,30 @@ namespace Ivony.Html.Parser
 
     public void Into( IHtmlContainer container, int index )
     {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( !object.Equals( container.Document, Document ) )
+        throw new InvalidOperationException();
+
+      var domContainer = container as IDomContainer;
+      if ( domContainer == null )
+        throw new InvalidOperationException();
+
       lock ( SyncRoot )
       {
 
         var nodeList = NodeCollection.ToArray();
 
-        Array.Reverse( nodeList );
-
         lock ( container.SyncRoot )
         {
-          foreach ( var node in nodeList )
+          foreach ( var node in nodeList.Reverse() )
           {
             node.Container = null;
+            NodeCollection.Remove( node );
+
+            domContainer.NodeCollection.Insert( index, node );
           }
         }
       }

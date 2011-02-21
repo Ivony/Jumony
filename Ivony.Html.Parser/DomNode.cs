@@ -32,7 +32,14 @@ namespace Ivony.Html.Parser
         {
           CheckDisposed();
 
-          if ( _container != null && !(_container is DomFragment) )
+
+          if ( _container is DomFragment && value == null )//从碎片中移除的逻辑
+          {
+            _container = null;
+            return;
+          }
+
+          if ( _container != null )
             throw new InvalidOperationException();
 
 

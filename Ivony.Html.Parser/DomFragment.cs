@@ -143,6 +143,13 @@ namespace Ivony.Html.Parser
 
     public void AddNode( IHtmlNode node )
     {
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( !object.Equals( node.Document, Document ) )
+        throw new InvalidOperationException();
+
       if ( node.IsDescendantOf( this ) )
         return;
 
@@ -153,7 +160,7 @@ namespace Ivony.Html.Parser
         descendants.ForAll( n => _nodeCollection.Remove( n ) );
       }
 
-      throw new NotImplementedException();
+
     }
 
     public IEnumerable<IHtmlNode> Nodes()
@@ -181,9 +188,50 @@ namespace Ivony.Html.Parser
       get { return _sync; }
     }
 
-    public DomNodeCollection NodeCollection
+
+  }
+
+  public class DomNodeLocationComparer : IComparer<DomNode>
+  {
+    public int Compare( DomNode x, DomNode y )
     {
-      get { throw new NotImplementedException(); }
+      if ( x == null )
+        throw new ArgumentNullException( "x" );
+
+      if ( y == null )
+        throw new ArgumentNullException( "y" );
+
+      if ( !object.Equals( x.Document, y.Document ) )
+        throw new InvalidOperationException();
+
+      if ( object.Equals( x, y ) )
+        return 0;
+
+      IHtmlNode node = x;
+
+      while ( true )
+      {
+        var container = node.Container;
+
+        if ( container == null )
+          throw new InvalidOperationException();
+
+        if ( y.IsDescendantOf( container ) )
+          break;
+
+        node = container as IHtmlNode;
+        if ( node == null )
+          throw new InvalidOperationException();
+
+      }
+
+
+
+
+
+
+
+      throw new NotImplementedException();
     }
   }
 

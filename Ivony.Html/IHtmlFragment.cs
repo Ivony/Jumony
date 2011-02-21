@@ -20,36 +20,31 @@ namespace Ivony.Html
     /// <summary>
     /// 添加一个元素
     /// </summary>
-    /// <param name="container">要添加元素的容器</param>
-    /// <param name="index">添加的位置</param>
     /// <param name="name">元素名</param>
     /// <param name="attributes">元素属性</param>
     /// <returns>添加好的元素</returns>
-    IHtmlElement AddElement( int index, string name, IDictionary<string, string> attributes );
+    IHtmlElement AddElement( string name, IDictionary<string, string> attributes );
 
     /// <summary>
     /// 添加一个文本节点
     /// </summary>
-    /// <param name="index">添加的位置</param>
     /// <param name="htmlText">HTML 文本</param>
     /// <returns>添加好的文本节点</returns>
-    IHtmlTextNode AddTextNode( int index, string htmlText );
+    IHtmlTextNode AddTextNode( string htmlText );
 
     /// <summary>
     /// 添加一个注释
     /// </summary>
-    /// <param name="index">添加的位置</param>
     /// <param name="comment">HTML 注释内容</param>
     /// <returns>添加好的注释节点</returns>
-    IHtmlComment AddComment( int index, string comment );
+    IHtmlComment AddComment(  string comment );
 
     /// <summary>
     /// 添加一个特殊标签
     /// </summary>
-    /// <param name="index">添加的位置</param>
     /// <param name="html">特殊标签的 HTML</param>
     /// <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
-    IHtmlSpecial AddSpecial( int index, string html );
+    IHtmlSpecial AddSpecial(  string html );
 
 
     /// <summary>

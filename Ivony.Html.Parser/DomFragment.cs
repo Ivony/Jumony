@@ -125,6 +125,69 @@ namespace Ivony.Html.Parser
       }
     }
   }
+
+
+  public class DomCollection : IHtmlCollection
+  {
+
+    private DomDocument _document;
+    private object _sync = new object();
+    private IList<DomNode> _nodeCollection;
+
+    public DomCollection( DomDocument document )
+    {
+      _document = document;
+      _nodeCollection = new SynchronizedCollection<DomNode>( SyncRoot );
+    }
+
+
+    public void AddNode( IHtmlNode node )
+    {
+      if ( node.IsDescendantOf( this ) )
+        return;
+
+      var container = node as IHtmlContainer;
+      if ( container != null )
+      {
+        var descendants = _nodeCollection.Where( n => n.IsDescendantOf( container ) ).ToArray();
+        descendants.ForAll( n => _nodeCollection.Remove( n ) );
+      }
+
+      throw new NotImplementedException();
+    }
+
+    public IEnumerable<IHtmlNode> Nodes()
+    {
+      return _nodeCollection.Cast<IHtmlNode>().AsReadOnly();
+    }
+
+    public object RawObject
+    {
+      get { return this; }
+    }
+
+    public string RawHtml
+    {
+      get { return null; }
+    }
+
+    public IHtmlDocument Document
+    {
+      get { return _document; }
+    }
+
+    public object SyncRoot
+    {
+      get { return _sync; }
+    }
+
+    public DomNodeCollection NodeCollection
+    {
+      get { throw new NotImplementedException(); }
+    }
+  }
+
+
 }
 
 

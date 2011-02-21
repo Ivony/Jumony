@@ -24,6 +24,6 @@ namespace Ivony.Html
   /// </summary>
   public interface IHtmlCollection : IHtmlContainer
   {
-    void AddNode( int index, IHtmlNode node );
+    void AddNode( IHtmlNode node );
   }
 }

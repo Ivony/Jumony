@@ -57,6 +57,9 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 尝试从 DOM 中移除此节点
     /// </summary>
+    /// <remarks>
+    /// 一旦从 DOM 中移除节点，则节点及其子节点均会被标为已销毁
+    /// </remarks>
     public virtual void Remove()
     {
       lock ( SyncRoot )

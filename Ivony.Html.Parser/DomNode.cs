@@ -32,7 +32,7 @@ namespace Ivony.Html.Parser
         {
           CheckDisposed();
 
-          if ( _container != null && (_container is DomFragment) )
+          if ( _container != null && !(_container is DomFragment) )
             throw new InvalidOperationException();
 
 

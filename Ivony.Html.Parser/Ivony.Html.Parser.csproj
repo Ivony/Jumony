@@ -69,7 +69,7 @@
     <Compile Include="DomComment.cs" />
     <Compile Include="DomDocument.cs" />
     <Compile Include="DomDocumentType.cs" />
-    <Compile Include="DomFactory.cs" />
+    <Compile Include="DomFragment.cs" />
     <Compile Include="DomNode.cs" />
     <Compile Include="DomElement.cs" />
     <Compile Include="DomNodeCollection.cs" />

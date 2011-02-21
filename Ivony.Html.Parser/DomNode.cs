@@ -59,14 +59,14 @@ namespace Ivony.Html.Parser
     /// </summary>
     public virtual void Remove()
     {
-      if ( removed )
-        return;
-
-      if ( Container == null )
-        throw new InvalidOperationException();
-
       lock ( SyncRoot )
       {
+        if ( removed )
+          return;
+
+        if ( Container == null )
+          throw new InvalidOperationException();
+
         _container.NodeCollection.Remove( this );
         _container = null;
         removed = true;
@@ -118,16 +118,6 @@ namespace Ivony.Html.Parser
 
       return this.OuterHtml();
     }
-
-
-
-
-
-
-
-
-
-
 
   }
 }

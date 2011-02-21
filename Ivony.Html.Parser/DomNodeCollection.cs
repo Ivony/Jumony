@@ -42,13 +42,6 @@ namespace Ivony.Html.Parser
 
     }
 
-    protected override void RemoveItem( int index )
-    {
-      
-
-      base.RemoveItem( index );
-    }
-
 
     public IEnumerable<IHtmlNode> HtmlNodes
     {

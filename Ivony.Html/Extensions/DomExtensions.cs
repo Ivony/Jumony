@@ -177,5 +177,38 @@ namespace Ivony.Html
     }
 
 
+
+
+    public static IHtmlElement InsertElement( this IHtmlContainer container, int index, string name )
+    {
+      var fragment = container.Document.CreateFragment();
+
+      fragment.AddElement( name, new Dictionary<string, string>() );
+
+      return (IHtmlElement) fragment.Into( container, index ).Single();
+    }
+
+
+    public static IHtmlTextNode InsertTextNode( this IHtmlContainer container, int index, string htmlText )
+    {
+      var fragment = container.Document.CreateFragment();
+
+      fragment.AddTextNode( htmlText );
+
+      return (IHtmlTextNode) fragment.Into( container, index ).Single();
+    }
+
+
+    public static IHtmlComment InsertComment( this IHtmlContainer container, int index, string comment )
+    {
+      var fragment = container.Document.CreateFragment();
+
+      fragment.AddComment( comment );
+
+      return (IHtmlComment) fragment.Into( container, index ).Single();
+    }
+
+
+
   }
 }

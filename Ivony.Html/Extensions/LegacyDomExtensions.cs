@@ -546,25 +546,6 @@ namespace Ivony.Html
     */
 
 
-    /// <summary>
-    /// 清除所有子节点
-    /// </summary>
-    /// <param name="element">要清除所有子节点的元素</param>
-    public static IHtmlElement ClearNodes( this IHtmlElement element )
-    {
-
-      if ( element == null )
-        throw new ArgumentNullException( "element" );
-
-      lock ( element.SyncRoot )
-      {
-        var childs = element.Nodes().ToArray();//清除所有的子节点
-        foreach ( var node in childs )
-          node.Remove();
-      }
-
-      return element;
-    }
 
 
 

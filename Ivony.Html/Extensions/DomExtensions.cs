@@ -15,7 +15,7 @@ namespace Ivony.Html.Extensions
     /// </summary>
     /// <param name="element">要替换内容的元素</param>
     /// <param name="text">文本内容</param>
-    public static void ReplaceChildsWithText( this IHtmlElement element, string text )
+    public static void InnerText( this IHtmlElement element, string text )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -100,7 +100,7 @@ namespace Ivony.Html.Extensions
     /// </summary>
     /// <param name="element">要替换内容的元素</param>
     /// <param name="html">要替换的HTML代码</param>
-    public static void ReplaceChildsWithHtml( this IHtmlElement element, string html )
+    public static void InnerHtml( this IHtmlElement element, string html )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );

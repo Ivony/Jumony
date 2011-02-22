@@ -54,14 +54,14 @@ namespace Ivony.Html.Web
 
     static DefaultCachePolicy()
     {
-      CacheKeyBasis = CacheKeyProlicy.NoCache;
+      CacheKeyPolicy = CacheKeyProlicy.NoCache;
       CacheDuration = new TimeSpan( 0 );
     }
 
     /// <summary>
     /// 设置默认缓存键的产生依据
     /// </summary>
-    public static CacheKeyProlicy CacheKeyBasis
+    public static CacheKeyProlicy CacheKeyPolicy
     {
       get;
       set;
@@ -84,24 +84,24 @@ namespace Ivony.Html.Web
     /// <returns>默认缓存键，根据缓存键依据设置而产生</returns>
     public static string GetCacheKey( HttpContextBase context )
     {
-      if ( CacheKeyBasis == Web.CacheKeyProlicy.NoCache )
+      if ( CacheKeyPolicy == Web.CacheKeyProlicy.NoCache )
         return null;
 
       var keys = new List<string>();
 
-      if ( (CacheKeyBasis & Web.CacheKeyProlicy.BySession) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.BySession) != 0 )
       {
         if ( !context.Session.IsCookieless && !context.Session.IsNewSession )
           keys.Add( context.Session.SessionID );
       }
 
-      if ( (CacheKeyBasis & Web.CacheKeyProlicy.ByIdentity) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.ByIdentity) != 0 )
       {
         if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
           keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
       }
 
-      if ( (CacheKeyBasis & Web.CacheKeyProlicy.ByUrl) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.ByUrl) != 0 )
         keys.Add( context.Request.Url.AbsoluteUri );
 
       return string.Join( ":", keys.ToArray() );

@@ -10,6 +10,21 @@ namespace Ivony.Html
   /// </summary>
   public static class DomExtensions
   {
+
+    /// <summary>
+    /// 创建文档碎片
+    /// </summary>
+    /// <param name="document">要创建文档碎片的文档</param>
+    /// <returns>创建的文档碎片</returns>
+    public static IHtmlFragment CreateFragment( this IHtmlDocument document )
+    {
+      var manager = document.FragmentManager;
+      if ( manager == null )
+        throw new NotSupportedException();
+
+      return manager.CreateFragment();
+    }
+
     /// <summary>
     /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
     /// </summary>
@@ -21,6 +36,9 @@ namespace Ivony.Html
         throw new ArgumentNullException( "element" );
 
       var manager = element.Document.FragmentManager;
+
+      if ( manager == null )
+        throw new NotSupportedException();
 
       lock ( element.SyncRoot )
       {
@@ -86,13 +104,20 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 解析 HTML 并创建文档碎片
+    /// </summary>
+    /// <param name="document">要创建文档碎片的文档</param>
+    /// <param name="html">要解析的 HTML</param>
+    /// <returns>创建的文档碎片</returns>
     public static IHtmlFragment ParseFragment( this IHtmlDocument document, string html )
     {
       var fragmentManager = document.FragmentManager;
-      var fragment = fragmentManager.ParseFragment( html );
 
-      return fragment;
+      if ( fragmentManager == null )
+        throw new NotSupportedException();
+
+      return fragmentManager.ParseFragment( html );
     }
 
     /// <summary>
@@ -114,7 +139,7 @@ namespace Ivony.Html
 
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
-          var fragment = manager.CreateFragment();
+          var fragment = element.Document.CreateFragment();
 
           fragment.AddTextNode( html );
 
@@ -122,7 +147,7 @@ namespace Ivony.Html
         }
         else
         {
-          var fragment = manager.ParseFragment( html );
+          var fragment = element.Document.ParseFragment( html );
 
           fragment.Into( element, 0 );
         }

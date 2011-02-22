@@ -78,20 +78,16 @@ namespace Ivony.Html.Parser
     }
 
 
-    public IHtmlFragment CreateFragment()
-    {
-      throw new NotImplementedException();
-    }
-
-    public IHtmlFragment CreateFragment( string html )
-    {
-      throw new NotImplementedException();
-    }
-
 
     public IHtmlNodeFactory GetNodeFactory()
     {
       throw new NotSupportedException();
+    }
+
+
+    public IHtmlFragmentManager FragmentManager
+    {
+      get { throw new NotImplementedException(); }
     }
   }
 }

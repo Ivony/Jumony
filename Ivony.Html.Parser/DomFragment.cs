@@ -12,15 +12,43 @@ namespace Ivony.Html.Parser
   public class DomFragment : IHtmlFragment, IDomContainer
   {
 
-    public DomFragment( DomDocument document )
+    public DomFragment( DomFragmentManager manager )
     {
-      _document = document;
+      _manager = manager;
       _nodeCollection = new DomNodeCollection( this );
     }
 
+    public DomFragment( DomFragmentManager manager, string html )
+      : this( manager )
+    {
+      _rawHtml = html;
+    }
+
+
+
+    protected class FragmentParser : HtmlParserBase
+    {
+      private DomProvider _provider = new DomProvider();
+
+      protected override IHtmlReader CreateReader( string html )
+      {
+        return new JumonyReader( html );
+      }
+
+      protected override IHtmlDomProvider Provider
+      {
+        get
+        {
+          return _provider;
+        }
+      }
+
+    }
+
     private object _sync = new object();
-    private DomDocument _document;
+    private DomFragmentManager _manager;
     private DomNodeCollection _nodeCollection;
+    private string _rawHtml;
 
     public DomNodeCollection NodeCollection
     {
@@ -45,7 +73,7 @@ namespace Ivony.Html.Parser
 
     public IHtmlDocument Document
     {
-      get { return _document; }
+      get { return _manager.Document; }
     }
 
     public object SyncRoot
@@ -122,121 +150,15 @@ namespace Ivony.Html.Parser
             domContainer.NodeCollection.Insert( index, node );
           }
         }
+
+
+        _manager.Allocated( this );
+
       }
     }
   }
 
 
-  public class DomCollection : IHtmlCollection
-  {
-
-    private DomDocument _document;
-    private object _sync = new object();
-    private IList<DomNode> _nodeCollection;
-
-    public DomCollection( DomDocument document )
-    {
-      _document = document;
-      _nodeCollection = new SynchronizedCollection<DomNode>( SyncRoot );
-    }
-
-
-    public void AddNode( IHtmlNode node )
-    {
-
-      if ( node == null )
-        throw new ArgumentNullException( "node" );
-
-      if ( !object.Equals( node.Document, Document ) )
-        throw new InvalidOperationException();
-
-      if ( node.IsDescendantOf( this ) )
-        return;
-
-      var container = node as IHtmlContainer;
-      if ( container != null )
-      {
-        var descendants = _nodeCollection.Where( n => n.IsDescendantOf( container ) ).ToArray();
-        descendants.ForAll( n => _nodeCollection.Remove( n ) );
-      }
-
-
-    }
-
-    public IEnumerable<IHtmlNode> Nodes()
-    {
-      return _nodeCollection.Cast<IHtmlNode>().AsReadOnly();
-    }
-
-    public object RawObject
-    {
-      get { return this; }
-    }
-
-    public string RawHtml
-    {
-      get { return null; }
-    }
-
-    public IHtmlDocument Document
-    {
-      get { return _document; }
-    }
-
-    public object SyncRoot
-    {
-      get { return _sync; }
-    }
-
-
-  }
-
-  public class DomNodeLocationComparer : IComparer<DomNode>
-  {
-    public int Compare( DomNode x, DomNode y )
-    {
-      if ( x == null )
-        throw new ArgumentNullException( "x" );
-
-      if ( y == null )
-        throw new ArgumentNullException( "y" );
-
-      if ( !object.Equals( x.Document, y.Document ) )
-        throw new InvalidOperationException();
-
-      if ( object.Equals( x, y ) )
-        return 0;
-
-      if ( object.Equals( x.Container, y.Container ) )
-        return x.NodesIndexOfSelf() - y.NodesIndexOfSelf();
-
-
-      var ancetors1 = x.Ancestors().Reverse().ToArray();
-      var ancetors2 = y.Ancestors().Reverse().ToArray();
-
-      int i = 0;
-      while ( true )
-      {
-
-        if ( i >= ancetors1.Length )
-          return -1;
-
-        if ( i >= ancetors2.Length )
-          return 1;
-
-
-
-
-        if ( !object.Equals( ancetors1[i], ancetors2[i] ) )
-          break;
-      }
-
-
-
-
-
-    }
-  }
 
 
 }

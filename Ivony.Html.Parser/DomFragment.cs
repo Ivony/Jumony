@@ -87,42 +87,42 @@ namespace Ivony.Html.Parser
 
 
 
-    public IHtmlElement AddElement( int index, string name, IDictionary<string, string> attributes )
+    public IHtmlElement AddElement( string name, IDictionary<string, string> attributes )
     {
       lock ( SyncRoot )
       {
         var element = new DomElement( name, attributes );
-        NodeCollection.Insert( index, element );
+        NodeCollection.Add( element );
         return element;
       }
     }
 
-    public IHtmlTextNode AddTextNode( int index, string htmlText )
+    public IHtmlTextNode AddTextNode( string htmlText )
     {
       lock ( SyncRoot )
       {
         var textNode = new DomTextNode( htmlText );
-        NodeCollection.Insert( index, textNode );
+        NodeCollection.Add( textNode );
         return textNode;
       }
     }
 
-    public IHtmlComment AddComment( int index, string comment )
+    public IHtmlComment AddComment( string comment )
     {
       lock ( SyncRoot )
       {
         var commentNode = new DomComment( comment );
-        NodeCollection.Insert( index, commentNode );
+        NodeCollection.Add( commentNode );
         return commentNode;
       }
     }
 
-    public IHtmlSpecial AddSpecial( int index, string html )
+    public IHtmlSpecial AddSpecial( string html )
     {
       throw new NotSupportedException();
     }
 
-    public void Into( IHtmlContainer container, int index )
+    public IEnumerable<IHtmlNode> Into( IHtmlContainer container, int index )
     {
 
       if ( container == null )
@@ -138,6 +138,9 @@ namespace Ivony.Html.Parser
       lock ( SyncRoot )
       {
 
+        _manager.Allocated( this );
+
+
         var nodeList = NodeCollection.ToArray();
 
         lock ( container.SyncRoot )
@@ -152,7 +155,7 @@ namespace Ivony.Html.Parser
         }
 
 
-        _manager.Allocated( this );
+        return nodeList.Cast<IHtmlNode>();
 
       }
     }

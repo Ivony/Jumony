@@ -19,6 +19,7 @@ namespace Ivony.Html.Parser
     public DomDocument( Uri url )
     {
       _url = url;
+      _manager = new DomFragmentManager( this );
     }
 
 
@@ -85,9 +86,10 @@ namespace Ivony.Html.Parser
     }
 
 
+    private DomFragmentManager _manager;
     public IHtmlFragmentManager FragmentManager
     {
-      get { throw new NotImplementedException(); }
+      get { return _manager; }
     }
   }
 }

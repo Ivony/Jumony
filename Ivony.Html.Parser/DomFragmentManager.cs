@@ -25,6 +25,8 @@ namespace Ivony.Html.Parser
         if ( document.FragmentManager != null )
           throw new InvalidOperationException();
 
+        _document = document;
+
         _fragments = new SynchronizedCollection<DomFragment>( SyncRoot );
       }
     }

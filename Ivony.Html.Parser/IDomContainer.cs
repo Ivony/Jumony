@@ -21,5 +21,12 @@ namespace Ivony.Html.Parser
       container.NodeCollection.Add( node );
       return node;
     }
+
+    public static T InsertNode<T>( this IDomContainer container, int index, T node ) where T : DomNode
+    {
+      container.NodeCollection.Insert( index, node );
+      return node;
+    }
+
   }
 }

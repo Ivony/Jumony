@@ -20,12 +20,5 @@ namespace Ivony.Html
       get;
     }
 
-
-
-    /// <summary>
-    /// 从文档对象树上移除此节点
-    /// </summary>
-    void Remove();
-
   }
 }

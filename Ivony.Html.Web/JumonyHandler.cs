@@ -183,23 +183,15 @@ namespace Ivony.Html.Web
     /// </summary>
     private void AddGeneratorMetaData()
     {
-      var manager = Document.FragmentManager;
-      if ( manager != null )
+      var modifier = Document.DomModifier;
+      if ( modifier != null )
       {
-
-        var fragment = manager.CreateFragment();
-
-        fragment.AddElement( "meta",
-          new Dictionary<string, string>
-          {
-            {"name", "generator"},
-            {"content", "Jumony"}
-          } );
-
         var header = Document.Find( "html head" ).FirstOrDefault();
 
-        if ( header != null )
-          fragment.Into( header, 0 );
+        var metaElement = modifier.AddElement( header, "meta" );
+
+        metaElement.SetAttribute( "name", "generator" );
+        metaElement.SetAttribute( "content", "Jumony" );
       }
     }
 

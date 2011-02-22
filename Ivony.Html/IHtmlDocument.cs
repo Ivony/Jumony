@@ -39,5 +39,15 @@ namespace Ivony.Html
       get;
     }
 
+
+    /// <summary>
+    /// 获取修改 DOM 结构的修改器，如不支持修改 DOM 结构，请返回null。
+    /// </summary>
+    IHtmlDomModifier DomModifier
+    {
+      get;
+    }
+
+
   }
 }

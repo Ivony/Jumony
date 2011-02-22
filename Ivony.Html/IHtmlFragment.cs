@@ -16,37 +16,6 @@ namespace Ivony.Html
   /// </summary>
   public interface IHtmlFragment : IHtmlContainer
   {
-
-    /// <summary>
-    /// 添加一个元素
-    /// </summary>
-    /// <param name="name">元素名</param>
-    /// <param name="attributes">元素属性</param>
-    /// <returns>添加好的元素</returns>
-    IHtmlElement AddElement( string name, IDictionary<string, string> attributes );
-
-    /// <summary>
-    /// 添加一个文本节点
-    /// </summary>
-    /// <param name="htmlText">HTML 文本</param>
-    /// <returns>添加好的文本节点</returns>
-    IHtmlTextNode AddTextNode( string htmlText );
-
-    /// <summary>
-    /// 添加一个注释
-    /// </summary>
-    /// <param name="comment">HTML 注释内容</param>
-    /// <returns>添加好的注释节点</returns>
-    IHtmlComment AddComment(  string comment );
-
-    /// <summary>
-    /// 添加一个特殊标签
-    /// </summary>
-    /// <param name="html">特殊标签的 HTML</param>
-    /// <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
-    IHtmlSpecial AddSpecial(  string html );
-
-
     /// <summary>
     /// 将碎片插入到文档指定位置
     /// </summary>

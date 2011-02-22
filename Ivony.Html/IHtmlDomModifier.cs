@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 提供修改 DOM 结构的方法
+  /// </summary>
   public interface IHtmlDomModifier
   {
 
@@ -14,9 +18,8 @@ namespace Ivony.Html
     /// <param name="container">要添加元素的容器</param>
     /// <param name="index">添加的位置</param>
     /// <param name="name">元素名</param>
-    /// <param name="attributes">元素属性</param>
     /// <returns>添加好的元素</returns>
-    IHtmlElement AddElement( IHtmlContainer container, int index, string name, IDictionary<string, string> attributes );
+    IHtmlElement AddElement( IHtmlContainer container, int index, string name );
 
     /// <summary>
     /// 向指定容器中添加一个文本节点

@@ -34,7 +34,7 @@ namespace Ivony.Html.Web
 
 
 
-
+    /*
     /// <summary>
     /// 获取 HtmlHead 对象，用于操作 &lt;head&gt; 元素
     /// </summary>
@@ -67,6 +67,9 @@ namespace Ivony.Html.Web
       }
       return headElement;
     }
+    */
+
+
 
   }
 }

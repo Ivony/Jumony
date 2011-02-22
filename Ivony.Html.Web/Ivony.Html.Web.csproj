@@ -66,8 +66,6 @@
   <ItemGroup>
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
-    <Compile Include="HtmlHead.cs" />
-    <Compile Include="HtmlMeta.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="JumonyHandler.cs" />

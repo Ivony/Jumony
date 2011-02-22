@@ -77,9 +77,9 @@ namespace Ivony.Html
 
 
 
-    IHtmlFragmentProvider IHtmlDocument.FragmentProvider
+    IHtmlFragmentManager IHtmlDocument.FragmentManager
     {
-      get { return Document.FragmentProvider; }
+      get { return Document.FragmentManager; }
     }
   }
 }

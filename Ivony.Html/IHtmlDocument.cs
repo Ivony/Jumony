@@ -34,7 +34,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取文档碎片的提供程序，如不支持，请抛出 NotSupportedException 异常
     /// </summary>
-    IHtmlFragmentProvider FragmentProvider
+    IHtmlFragmentManager FragmentManager
     {
       get;
     }

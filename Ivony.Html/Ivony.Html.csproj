@@ -73,6 +73,7 @@
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
+    <Compile Include="Extensions\DomExtensions.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Html5DraftSpecification.cs" />
     <Compile Include="HtmlEncoding.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlDomObject.cs" />
     <Compile Include="IHtmlParser.cs" />
-    <Compile Include="Extensions\DomExtensions.cs" />
+    <Compile Include="Extensions\LegacyDomExtensions.cs" />
     <Compile Include="Extensions\NavigateExtensions.cs" />
     <Compile Include="EnumerableWrapper.cs" />
     <Compile Include="HtmlDocumentWrapper.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="IHtmlDocument.cs" />
     <Compile Include="IHtmlElement.cs" />
     <Compile Include="IHtmlNode.cs" />
-    <Compile Include="IHtmlNodeFactory.cs" />
+    <Compile Include="IHtmlFragmentManager.cs" />
     <Compile Include="IHtmlDomProvider.cs" />
     <Compile Include="IHtmlRenderable.cs" />
     <Compile Include="IHtmlSpecial.cs" />

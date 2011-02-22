@@ -74,6 +74,7 @@
     <Compile Include="Extensions\ContentExtensions.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\DomExtensions.cs" />
+    <Compile Include="Extensions\DomModifierExtensions.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Html5DraftSpecification.cs" />
     <Compile Include="HtmlEncoding.cs" />

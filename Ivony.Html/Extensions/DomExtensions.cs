@@ -18,6 +18,10 @@ namespace Ivony.Html
     /// <returns>创建的文档碎片</returns>
     public static IHtmlFragment CreateFragment( this IHtmlDocument document )
     {
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+
       var manager = document.FragmentManager;
       if ( manager == null )
         throw new NotSupportedException();
@@ -35,6 +39,14 @@ namespace Ivony.Html
     /// <returns>创建的文档碎片</returns>
     public static IHtmlFragment ParseFragment( this IHtmlDocument document, string html )
     {
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+
+
       var manager = document.FragmentManager;
       if ( manager == null )
         throw new NotSupportedException();
@@ -46,6 +58,10 @@ namespace Ivony.Html
 
     private static IHtmlDomModifier EnsureModifiable( IHtmlDomObject domObject )
     {
+      if ( domObject == null )
+        throw new ArgumentNullException( "domObject" );
+
+
       var modifier = domObject.Document.DomModifier;
       if ( modifier == null )
         throw new NotSupportedException( "文档不支持修改 DOM 结构" );
@@ -65,6 +81,14 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
     public static IHtmlElement AddElement( this IHtmlContainer container, string name )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
+
+
       lock ( container.SyncRoot )
       {
         return AddElement( container, container.Nodes().Count(), name );
@@ -76,14 +100,22 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="index">添加的位置</param>
-    /// <param name="name">元素名</param>
+    /// <param name="elementName">元素名</param>
     /// <returns>创建并添加好的元素</returns>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
-    public static IHtmlElement AddElement( this IHtmlContainer container, int index, string name )
+    public static IHtmlElement AddElement( this IHtmlContainer container, int index, string elementName )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( elementName == null )
+        throw new ArgumentNullException( "elementName" );
+
+
+
       var modifier = EnsureModifiable( container );
 
-      return modifier.AddElement( container, index, name );
+      return modifier.AddElement( container, index, elementName );
     }
 
 
@@ -96,6 +128,13 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
     public static IHtmlTextNode AddTextNode( this IHtmlContainer container, string htmlText )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( htmlText == null )
+        throw new ArgumentNullException( "htmlText" );
+
+
       lock ( container.SyncRoot )
       {
         return AddTextNode( container, container.Nodes().Count(), htmlText );
@@ -112,6 +151,14 @@ namespace Ivony.Html
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
     public static IHtmlTextNode AddTextNode( this IHtmlContainer container, int index, string htmlText )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( htmlText == null )
+        throw new ArgumentNullException( "htmlText" );
+
+
+
       var modifier = EnsureModifiable( container );
 
       return modifier.AddTextNode( container, index, htmlText );
@@ -215,11 +262,10 @@ namespace Ivony.Html
       if ( attribute.Element == null )
         throw new InvalidOperationException();
 
+
       var modifier = EnsureModifiable( attribute.Element );
 
-
       modifier.RemoveAttribute( attribute );
-
     }
 
 

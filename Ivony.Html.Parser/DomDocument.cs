@@ -91,5 +91,12 @@ namespace Ivony.Html.Parser
     {
       get { return _manager; }
     }
+
+
+    private DomProvider _provider = new DomProvider();
+    public IHtmlDomModifier DomModifier
+    {
+      get { return _provider; }
+    }
   }
 }

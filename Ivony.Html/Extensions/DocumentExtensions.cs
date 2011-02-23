@@ -417,7 +417,18 @@ namespace Ivony.Html
 
         var il = method.GetILGenerator();
 
-        EmitCreateDocument( il, document );
+
+        il.DeclareLocal( typeof( IHtmlContainer ) );
+
+        il.Emit( OpCodes.Ldarg_0 );                         //ld provider        provider
+        il.Emit( OpCodes.Dup );                             //dup                provider provider
+                                                            
+                                                            
+        EmitCreateDocument( il, document );                 //create document    provider document
+                                                            
+                                                            
+        il.Emit( OpCodes.Callvirt, CompleteDocument );      //complete document  document
+
 
         il.Emit( OpCodes.Ret );
 
@@ -475,9 +486,6 @@ namespace Ivony.Html
         //complete   document
         //ret
 
-        il.DeclareLocal( typeof( IHtmlContainer ) );
-
-        il.Emit( OpCodes.Ldarg_0 );
 
         if ( document.DocumentUri == null )
           il.Emit( OpCodes.Ldnull );
@@ -497,8 +505,6 @@ namespace Ivony.Html
 
         foreach ( var node in document.Nodes() )
           EmitCreateNode( il, node, index++ );
-
-        il.Emit( OpCodes.Callvirt, CompleteDocument );
 
       }
 

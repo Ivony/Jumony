@@ -18,7 +18,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    internal static IDomContainer EnsureDomContainer( IHtmlContainer container )
+    private static IDomContainer EnsureDomContainer( IHtmlContainer container )
     {
       var domContainer = container as IDomContainer;
 
@@ -60,6 +60,7 @@ namespace Ivony.Html.Parser
     {
       return EnsureDomContainer( container ).AddNode( new DomSpecial( html ) );
     }
+
 
   }
 }

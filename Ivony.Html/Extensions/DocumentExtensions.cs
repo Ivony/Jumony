@@ -194,10 +194,11 @@ namespace Ivony.Html
       if ( node.Container is IHtmlFragment )
         return false;
 
-      if ( node.Parent() == null )
+      node = node.Container as IHtmlNode;
+      if ( node == null )
         return false;
 
-      return IsAllocated( node.Parent() );
+      return IsAllocated( node );
 
     }
 

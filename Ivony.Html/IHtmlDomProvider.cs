@@ -57,7 +57,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="document">正在被创建的文档</param>
     /// <returns>创建好的文档对象</returns>
-    IHtmlDocument CompleteDocument( object document );
+    IHtmlDocument CompleteDocument( IHtmlDocument document );
   }
 
 

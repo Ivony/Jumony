@@ -300,9 +300,27 @@ namespace Ivony.Html
 
     private static void Render( IHtmlElement element, TextWriter writer )
     {
-      writer.Write( GenerateTagHtml( element ) );
-      RenderChilds( element, writer );
-      writer.Write( "</{0}>", element.Name );
+
+
+      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+      {
+        var builder = new StringBuilder();
+
+        builder.Append( GenerateTagHtml( element ) );
+
+        if ( element.Nodes().Any() )
+          throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
+
+        builder.Insert( builder.Length - 1, " /" );//在末尾插入自结束标志“/”。
+      }
+      else
+      {
+
+        writer.Write( GenerateTagHtml( element ) );
+        RenderChilds( element, writer );
+        writer.Write( "</{0}>", element.Name );
+
+      }
     }
 
 

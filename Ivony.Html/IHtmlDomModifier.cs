@@ -56,5 +56,65 @@ namespace Ivony.Html
     void RemoveNode( IHtmlNode node );
 
 
+
+
+    /// <summary>
+    /// 为元素添加一个属性
+    /// </summary>
+    /// <param name="element">要添加属性的元素</param>
+    /// <param name="name">属性名</param>
+    /// <returns>被添加的属性对象</returns>
+    IHtmlAttribute AddAttribute( IHtmlElement element, string name );
+
+    /// <summary>
+    /// 从元素中移除一个属性
+    /// </summary>
+    /// <param name="attribute">要移除的属性</param>
+    void RemoveAttribute( IHtmlAttribute attribute );
+
+
+
+    /// <summary>
+    /// 获取所属的文档
+    /// </summary>
+    IHtmlDocument Document
+    {
+      get;
+    }
+
+
+
+    /// <summary>
+    /// 指示是否支持通知 DOM 的改动。
+    /// </summary>
+    bool SupportsNotifyChange
+    {
+      get;
+    }
+
+
+    /// <summary>
+    /// 当 DOM 发生改变时，引发此事件
+    /// </summary>
+    public event EventHandler<HtmlNodeEventArgs> DomChanged;
+
+  }
+
+
+  /// <summary>
+  /// 为 HTML DOM 节点事件提供参数
+  /// </summary>
+  public class HtmlNodeEventArgs : EventArgs
+  {
+    public HtmlNodeEventArgs( IHtmlNode node )
+    {
+      Node = node;
+    }
+
+    public IHtmlNode Node
+    {
+      get;
+      private set;
+    }
   }
 }

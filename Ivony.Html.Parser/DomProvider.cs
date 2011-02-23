@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
-  public class DomProvider : IHtmlDomProvider, IHtmlDomModifier
+  public class DomProvider : IHtmlDomProvider
   {
     public IHtmlDocument CreateDocument()
     {
@@ -18,7 +18,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private static IDomContainer EnsureDomContainer( IHtmlContainer container )
+    internal static IDomContainer EnsureDomContainer( IHtmlContainer container )
     {
       var domContainer = container as IDomContainer;
 
@@ -61,47 +61,5 @@ namespace Ivony.Html.Parser
       return EnsureDomContainer( container ).AddNode( new DomSpecial( html ) );
     }
 
-
-
-
-    #region IHtmlDomModifier 成员
-
-    public IHtmlElement AddElement( IHtmlContainer container, int index, string name )
-    {
-      return EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
-    }
-
-    public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
-    {
-      return EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
-    }
-
-    public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
-    {
-      return EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
-    }
-
-    public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
-    {
-      //UNDONE
-      throw new NotSupportedException();
-    }
-
-    public void RemoveNode( IHtmlNode node )
-    {
-      EnsureDomNode( node ).Remove();
-    }
-
-    private DomNode EnsureDomNode( IHtmlNode node )
-    {
-      var domNode = node as DomNode;
-
-      if ( domNode == null )
-        throw new NotSupportedException( "只能移除特定类型节点" );
-
-      return domNode;
-    }
-
-    #endregion
   }
 }

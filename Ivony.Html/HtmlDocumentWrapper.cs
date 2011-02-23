@@ -81,5 +81,11 @@ namespace Ivony.Html
     {
       get { return Document.FragmentManager; }
     }
+
+
+    IHtmlDomModifier IHtmlDocument.DomModifier
+    {
+      get { return Document.DomModifier; }
+    }
   }
 }

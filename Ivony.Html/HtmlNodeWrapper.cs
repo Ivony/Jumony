@@ -31,11 +31,6 @@ namespace Ivony.Html
       get { return Node.RawObject; }
     }
 
-    void IHtmlNode.Remove()
-    {
-      Node.Remove();
-    }
-
     IHtmlDocument IHtmlDomObject.Document
     {
       get { return Node.Document; }

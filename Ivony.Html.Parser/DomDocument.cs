@@ -93,10 +93,10 @@ namespace Ivony.Html.Parser
     }
 
 
-    private DomProvider _provider = new DomProvider();
+    private DomModifier _modifier = new DomModifier();
     public IHtmlDomModifier DomModifier
     {
-      get { return _provider; }
+      get { return _modifier; }
     }
   }
 }

@@ -151,6 +151,14 @@ namespace Ivony.Html.Parser
 
       base.Remove();
     }
+
+    internal void RemoveAttribute( DomAttribute attribute )
+    {
+      lock ( SyncRoot )
+      {
+        _attributes.Remove( attribute );
+      }
+    }
   }
 
 
@@ -284,7 +292,7 @@ namespace Ivony.Html.Parser
 
       lock ( Element.SyncRoot )
       {
-        _element._attributes.Remove( this );
+        _element.RemoveAttribute( this );
         disposed = true;
       }
     }

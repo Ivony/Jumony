@@ -302,6 +302,9 @@ namespace Ivony.Html
 
     private static class CodeGenerator
     {
+
+
+
       public static CodeMemberMethod GenerateCodeMethod( IHtmlDocument document, string methodName )
       {
         var constructor = new CodeMemberMethod();
@@ -330,7 +333,7 @@ namespace Ivony.Html
 
         BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
 
-        constructor.Statements.Add( new CodeMethodReturnStatement( documentVariable ) );
+        constructor.Statements.Add( new CodeMethodReturnStatement( new CodeMethodInvokeExpression( providerVariable, "CompleteDocument", documentVariable ) ) );
 
         return constructor;
       }
@@ -469,6 +472,7 @@ namespace Ivony.Html
 
 
         //end create document
+        //complete   document
         //ret
 
         il.DeclareLocal( typeof( IHtmlContainer ) );
@@ -493,6 +497,9 @@ namespace Ivony.Html
 
         foreach ( var node in document.Nodes() )
           EmitCreateNode( il, node, index++ );
+
+        il.Emit( OpCodes.Callvirt, CompleteDocument );
+
       }
 
       private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
@@ -566,6 +573,7 @@ namespace Ivony.Html
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );
+      private static readonly MethodInfo CompleteDocument = typeof( IHtmlDomProvider ).GetMethod( "CompleteDocument" );
       private static readonly ConstructorInfo NewDictionary = typeof( Dictionary<string, string> ).GetConstructor( new Type[0] );
       private static readonly MethodInfo DictionaryAdd = typeof( IDictionary<string, string> ).GetMethod( "Add" );
     }

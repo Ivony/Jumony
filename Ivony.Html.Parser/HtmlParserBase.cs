@@ -360,9 +360,14 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="match">特殊节点的匹配</param>
     /// <returns>创建的特殊节点的匹配</returns>
-    protected virtual IHtmlSpecial ProcessSpecial( HtmlSpecialTag special )
+    protected virtual void ProcessSpecial( HtmlSpecialTag special )
     {
-      return null;
+      CreateSpecial( special.Html );
+    }
+
+    protected virtual IHtmlSpecial CreateSpecial( string html )
+    {
+      return Provider.AddSpecial( CurrentContainer, html );
     }
 
   }

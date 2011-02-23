@@ -58,8 +58,7 @@ namespace Ivony.Html.Parser
 
     public IHtmlSpecial AddSpecial( IHtmlContainer container, string html )
     {
-      //UNDONE
-      throw new NotSupportedException();
+      return EnsureDomContainer( container ).AddNode( new DomSpecial( html ) );
     }
 
 

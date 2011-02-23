@@ -30,7 +30,7 @@ namespace Ivony.Html
       if ( id == null )
         throw new ArgumentNullException( "id" );
 
-      return AllNodes( document ).OfType<IHtmlElement>().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
+      return AllElements( document ).SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
     }
 
 
@@ -68,7 +68,7 @@ namespace Ivony.Html
 
       var id = element.Attribute( "id" ).Value();
 
-      if ( string.IsNullOrEmpty( id ) || !element.Document.Descendants().Where( e => e.Attribute( "id" ).Value() == id ).IsSingle() )
+      if ( string.IsNullOrEmpty( id ) || !element.Document.AllElements().Where( e => e.Attribute( "id" ).Value() == id ).IsSingle() )
         id = null;
 
       if ( create && id == null )
@@ -268,6 +268,21 @@ namespace Ivony.Html
         nodes.UnionWith( manager.AllFragments.SelectMany( fragment => fragment.DescendantNodes() ) );
 
       return nodes;
+    }
+
+
+
+    /// <summary>
+    /// 返回文档所有元素，包括已分配和游离的
+    /// </summary>
+    /// <param name="document">查找元素的文档</param>
+    /// <returns>文档的所有元素</returns>
+    public static IEnumerable<IHtmlElement> AllElements( this IHtmlDocument document )
+    {
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+      return AllNodes( document ).OfType<IHtmlElement>();
     }
 
 

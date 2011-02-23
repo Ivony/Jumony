@@ -25,7 +25,12 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">找到多个ID相同的元素</exception>
     public static IHtmlElement GetElementById( this IHtmlDocument document, string id )
     {
-      return document.Descendants().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+      if ( id == null )
+        throw new ArgumentNullException( "id" );
+
+      return AllNodes( document ).OfType<IHtmlElement>().SingleOrDefault( element => element.Attribute( "id" ).Value() == id );
     }
 
 
@@ -241,6 +246,30 @@ namespace Ivony.Html
 
       }
     }
+
+
+    /// <summary>
+    /// 返回文档所有节点，包括已分配和游离的
+    /// </summary>
+    /// <param name="document">查找节点的文档</param>
+    /// <returns>文档的所有节点</returns>
+    public static IEnumerable<IHtmlNode> AllNodes( this IHtmlDocument document )
+    {
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+
+      var nodes = new HashSet<IHtmlNode>();
+
+      nodes.UnionWith( document.DescendantNodes() );
+
+      var manager = document.FragmentManager;
+      if ( manager != null )
+        nodes.UnionWith( manager.AllFragments.SelectMany( fragment => fragment.DescendantNodes() ) );
+
+      return nodes;
+    }
+
 
 
 

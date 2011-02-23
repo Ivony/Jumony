@@ -35,12 +35,11 @@ namespace Ivony.Html
     /// <returns>创建的文档碎片</returns>
     public static IHtmlFragment ParseFragment( this IHtmlDocument document, string html )
     {
-      var fragmentManager = document.FragmentManager;
-
-      if ( fragmentManager == null )
+      var manager = document.FragmentManager;
+      if ( manager == null )
         throw new NotSupportedException();
 
-      return fragmentManager.ParseFragment( html );
+      return manager.ParseFragment( html );
     }
 
 

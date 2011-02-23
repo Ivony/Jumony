@@ -183,6 +183,27 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 尝试从 DOM 中移除此属性
+    /// </summary>
+    /// <param name="attribute">要被移除的属性</param>
+    public static void Remove( this IHtmlAttribute attribute )
+    {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( attribute.Element == null )
+        throw new InvalidOperationException();
+
+      var modifier = EnsureModifiable( attribute.Element );
+
+      
+      modifier.RemoveAttribute( attribute );
+
+    }
+
+
+
 
 
 

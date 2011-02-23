@@ -42,11 +42,5 @@ namespace Ivony.Html
       set;
     }
 
-
-    /// <summary>
-    /// 移除此属性
-    /// </summary>
-    void Remove();
-
   }
 }

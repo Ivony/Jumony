@@ -73,31 +73,6 @@ namespace Ivony.Html
     void RemoveAttribute( IHtmlAttribute attribute );
 
 
-
-    /// <summary>
-    /// 获取所属的文档
-    /// </summary>
-    IHtmlDocument Document
-    {
-      get;
-    }
-
-
-
-    /// <summary>
-    /// 指示是否支持通知 DOM 的改动。
-    /// </summary>
-    bool SupportsNotifyChange
-    {
-      get;
-    }
-
-
-    /// <summary>
-    /// 当 DOM 发生改变时，引发此事件
-    /// </summary>
-    public event EventHandler<HtmlNodeEventArgs> DomChanged;
-
   }
 
 

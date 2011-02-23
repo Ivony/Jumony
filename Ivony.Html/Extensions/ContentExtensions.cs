@@ -96,7 +96,7 @@ namespace Ivony.Html
         return textNode.HtmlText;
       }
 
-      var specialNode = node as IHtmlSpecial;//对于特殊标签原样输出。
+      var specialNode = node as IHtmlSpecial;//对于特殊标签无条件原样输出。
       if ( specialNode != null )
         return specialNode.RawHtml;
 
@@ -128,17 +128,17 @@ namespace Ivony.Html
     {
       var builder = new StringBuilder();
 
-      builder.Append( GenerateTagHtml( element ) );
-
       if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
       {
         if ( element.Nodes().Any() )
           throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
 
-        builder.Insert( builder.Length - 1, " /" );//在末尾插入自结束标志“/”。
+        builder.Append( GenerateTagHtml( element, true ) );
       }
       else
       {
+        builder.Append( GenerateTagHtml( element, false ) );
+
         element.Nodes().ForAll( node => builder.Append( GenerateHtml( node ) ) );
 
         builder.AppendFormat( "</{0}>", element.Name );
@@ -153,7 +153,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要生成HTML的元素</param>
     /// <returns></returns>
-    internal static string GenerateTagHtml( IHtmlElement element )
+    internal static string GenerateTagHtml( IHtmlElement element, bool selfClosed )
     {
       var builder = new StringBuilder();
 
@@ -167,6 +167,9 @@ namespace Ivony.Html
         if ( attribute.AttributeValue != null )
           builder.AppendFormat( "=\"{0}\"", HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) );
       }
+
+      if ( selfClosed )
+        builder.Append( " /" );
 
       builder.Append( ">" );
       return builder.ToString();
@@ -306,12 +309,10 @@ namespace Ivony.Html
       {
         var builder = new StringBuilder();
 
-        builder.Append( GenerateTagHtml( element ) );
+        builder.Append( GenerateTagHtml( element, true ) );
 
         if ( element.Nodes().Any() )
           throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
-
-        builder.Insert( builder.Length - 1, " /" );//在末尾插入自结束标志“/”。
 
 
         writer.Write( builder );
@@ -319,7 +320,7 @@ namespace Ivony.Html
       else
       {
 
-        writer.Write( GenerateTagHtml( element ) );
+        writer.Write( GenerateTagHtml( element, false ) );
         RenderChilds( element, writer );
         writer.Write( "</{0}>", element.Name );
 

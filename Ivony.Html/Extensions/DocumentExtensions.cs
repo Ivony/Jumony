@@ -326,7 +326,7 @@ namespace Ivony.Html
             elementId = "element_" + elementId;
 
 
-            statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element ) ) );
+            statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element, false ) ) );
 
             statements.Add( new CodeAssignStatement( attributesVariable, new CodeObjectCreateExpression( typeof( Dictionary<string, string> ) ) ) );
 

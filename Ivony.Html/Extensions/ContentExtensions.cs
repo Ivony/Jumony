@@ -312,6 +312,9 @@ namespace Ivony.Html
           throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
 
         builder.Insert( builder.Length - 1, " /" );//在末尾插入自结束标志“/”。
+
+
+        writer.Write( builder );
       }
       else
       {

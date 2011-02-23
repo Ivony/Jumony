@@ -188,8 +188,11 @@ namespace Ivony.Html
       if ( node.Container == null )
         return false;
 
-      if ( node.Container.Equals( node.Document ) )
+      if ( node.Container is IHtmlDocument )
         return true;
+
+      if ( node.Container is IHtmlFragment )
+        return false;
 
       if ( node.Parent() == null )
         return false;
@@ -452,7 +455,7 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ldarg_0 );       //ld provider
         il.Emit( OpCodes.Ldloc_0 );       //ld container
-//        il.Emit( OpCodes.Ldc_I4, index ); //ld index
+        //        il.Emit( OpCodes.Ldc_I4, index ); //ld index
 
         var textNode = node as IHtmlTextNode;
         if ( textNode != null )

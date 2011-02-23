@@ -18,7 +18,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private static IDomContainer EnsureDomContainer( IHtmlContainer container )
+    internal static IDomContainer EnsureDomContainer( IHtmlContainer container )
     {
       var domContainer = container as IDomContainer;
 
@@ -62,5 +62,19 @@ namespace Ivony.Html.Parser
     }
 
 
+
+    #region IHtmlDomProvider 成员
+
+
+    public IHtmlDocument CompleteDocument( IHtmlDocument document )
+    {
+      var domDocument = document as DomDocument;
+      if ( domDocument == null )
+        throw new InvalidOperationException();
+
+      return domDocument;
+    }
+
+    #endregion
   }
 }

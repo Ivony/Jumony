@@ -134,7 +134,7 @@ namespace Ivony.Html
       if ( comment == null )
         throw new ArgumentNullException( "comment" );
 
-      
+
       lock ( container.SyncRoot )
       {
         return AddComment( container, container.Nodes().Count(), comment );
@@ -200,6 +200,10 @@ namespace Ivony.Html
       if ( fragment == null )
         throw new ArgumentNullException( "fragment" );
 
+      if ( !object.Equals( fragment.Document, node.Document ) )
+        throw new InvalidOperationException();
+
+
 
 
 
@@ -209,8 +213,8 @@ namespace Ivony.Html
         Remove( node );
         return fragment.Into( node.Container, index );
       }
-
     }
+
 
 
 

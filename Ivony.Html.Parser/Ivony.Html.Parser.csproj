@@ -71,6 +71,7 @@
     <Compile Include="DomDocumentType.cs" />
     <Compile Include="DomFragment.cs" />
     <Compile Include="DomFragmentManager.cs" />
+    <Compile Include="DomModifier.cs" />
     <Compile Include="DomNode.cs" />
     <Compile Include="DomElement.cs" />
     <Compile Include="DomNodeCollection.cs" />

@@ -8,32 +8,24 @@ namespace Ivony.Html.Parser
   public class DomModifier : IHtmlDomModifier
   {
 
-    private DomDocument _document;
-
-    public DomModifier( DomDocument document )
-    {
-      _document = document;
-    }
-
-
     public IHtmlElement AddElement( IHtmlContainer container, int index, string name )
     {
       var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
-      OnDomChanged( element );
+
       return element;
     }
 
     public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
     {
       var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
-      OnDomChanged( textNode );
+
       return textNode;
     }
 
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
       var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
-      OnDomChanged( commentNode );
+
       return commentNode;
     }
 
@@ -66,8 +58,6 @@ namespace Ivony.Html.Parser
       if ( domElement == null )
         throw new InvalidOperationException();
 
-      OnDomChanged( domElement );
-
       return domElement.AddAttribute( name );
     }
 
@@ -77,31 +67,8 @@ namespace Ivony.Html.Parser
       if ( domAttribute == null )
         throw new InvalidOperationException();
 
-      OnDomChanged( domAttribute.Element );
-
       domAttribute.Remove();
     }
-
-    public IHtmlDocument Document
-    {
-      get { throw new NotImplementedException(); }
-    }
-
-
-
-    public bool SupportsNotifyChange
-    {
-      get { return true; }
-    }
-
-
-    protected virtual void OnDomChanged( DomNode node )
-    {
-      if ( DomChanged != null )
-        DomChanged( this, new HtmlNodeEventArgs( node ) );
-    }
-
-    public event EventHandler<HtmlNodeEventArgs>  DomChanged;
 
   }
 }

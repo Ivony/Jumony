@@ -17,7 +17,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="url">文档的统一资源路径</param>
     /// <returns>空白文档</returns>
-    IHtmlDocument CreateDocument( Uri url );
+    object CreateDocument( Uri url );
 
     /// <summary>
     /// 向指定容器中添加一个元素
@@ -26,7 +26,7 @@ namespace Ivony.Html
     /// <param name="name">元素名</param>
     /// <param name="attributes">元素属性</param>
     /// <returns>添加好的元素</returns>
-    IHtmlElement AddElement( IHtmlContainer container, string name, IDictionary<string, string> attributes );
+    object AddElement( object container, string name, IDictionary<string, string> attributes );
 
     /// <summary>
     /// 向指定容器中添加一个文本节点
@@ -34,7 +34,7 @@ namespace Ivony.Html
     /// <param name="container">要添加节点的容器</param>
     /// <param name="htmlText">HTML 文本</param>
     /// <returns>添加好的文本节点</returns>
-    IHtmlTextNode AddTextNode( IHtmlContainer container, string htmlText );
+    object AddTextNode( object container, string htmlText );
 
     /// <summary>
     /// 向指定容器中添加一个注释
@@ -42,7 +42,7 @@ namespace Ivony.Html
     /// <param name="container">要添加注释的容器</param>
     /// <param name="comment">HTML 注释内容</param>
     /// <returns>添加好的注释节点</returns>
-    IHtmlComment AddComment( IHtmlContainer container, string comment );
+    object AddComment( object container, string comment );
 
     /// <summary>
     /// 向指定容器添加一个特殊标签
@@ -50,9 +50,14 @@ namespace Ivony.Html
     /// <param name="container">要添加特殊标签的容器</param>
     /// <param name="html">特殊标签的 HTML</param>
     /// <returns>如果特殊标签作为一个节点而存在，则返回特殊节点，否则返回null。</returns>
-    IHtmlSpecial AddSpecial( IHtmlContainer container, string html );
+    object AddSpecial( object container, string html );
 
-
+    /// <summary>
+    /// 完成文档创建
+    /// </summary>
+    /// <param name="document">正在被创建的文档</param>
+    /// <returns>创建好的文档对象</returns>
+    IHtmlDocument CompleteDocument( object document );
   }
 
 

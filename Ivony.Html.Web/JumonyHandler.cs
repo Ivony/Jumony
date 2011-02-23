@@ -188,10 +188,14 @@ namespace Ivony.Html.Web
       {
         var header = Document.Find( "html head" ).FirstOrDefault();
 
-        var metaElement = modifier.AddElement( header, "meta" );
+        if ( header != null )
+        {
 
-        metaElement.SetAttribute( "name", "generator" );
-        metaElement.SetAttribute( "content", "Jumony" );
+          var metaElement = modifier.AddElement( header, "meta" );
+
+          metaElement.SetAttribute( "name", "generator" );
+          metaElement.SetAttribute( "content", "Jumony" );
+        }
       }
     }
 

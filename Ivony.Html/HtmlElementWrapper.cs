@@ -32,11 +32,6 @@ namespace Ivony.Html
       return Element.Attributes();
     }
 
-    IHtmlAttribute IHtmlElement.AddAttribute( string attributeName )
-    {
-      return Element.AddAttribute( attributeName );
-    }
-
     #endregion
 
     #region IHtmlContainer 成员

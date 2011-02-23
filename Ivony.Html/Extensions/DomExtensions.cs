@@ -167,6 +167,27 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 添加一个属性
+    /// </summary>
+    /// <param name="attributeName">属性名</param>
+    /// <returns>添加的属性</returns>
+    public static IHtmlAttribute AddAttribute( this IHtmlElement element, string attributeName )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+
+      var modifier = EnsureModifiable( element );
+
+      return modifier.AddAttribute( element, attributeName );
+    }
+
+
+
+    /// <summary>
     /// 尝试从 DOM 中移除此节点
     /// </summary>
     /// <param name="node">要被移除的节点</param>
@@ -197,7 +218,7 @@ namespace Ivony.Html
 
       var modifier = EnsureModifiable( attribute.Element );
 
-      
+
       modifier.RemoveAttribute( attribute );
 
     }

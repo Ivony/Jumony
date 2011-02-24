@@ -140,9 +140,6 @@ namespace Ivony.Html.Forms.Validation
       {
         IHtmlElement list;
 
-
-        IHtmlNodeFactory factory;
-
         list = EnsureList( summaryContainer );
 
         foreach ( var v in failedDalidators )

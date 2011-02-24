@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Web.Mvc", "C:\Users\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MhtCreator", "MhtCreator\MhtCreator.csproj", "{8A4B2ACB-5C79-4171-950E-2FA7D8325A52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.LegacyDomModel", "Ivony.Html.LegacyDomModel\Ivony.Html.LegacyDomModel.csproj", "{43ED2A81-21D8-4105-AE7B-7F03F9E98557}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +211,16 @@ Global
 		{8A4B2ACB-5C79-4171-950E-2FA7D8325A52}.Release|Mixed Platforms.Build.0 = Release|x86
 		{8A4B2ACB-5C79-4171-950E-2FA7D8325A52}.Release|x86.ActiveCfg = Release|x86
 		{8A4B2ACB-5C79-4171-950E-2FA7D8325A52}.Release|x86.Build.0 = Release|x86
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{43ED2A81-21D8-4105-AE7B-7F03F9E98557}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

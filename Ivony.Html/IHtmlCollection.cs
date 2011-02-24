@@ -71,7 +71,7 @@ namespace Ivony.Html
         descendants.ForAll( n => _nodeCollection.Remove( n ) );
       }
 
-      var comparer = new NodeLocationComparer();
+      var comparer = LocationExtensions.NodeLocationComparer;
       var index = 0;
       var before = Nodes().LastOrDefault( n => comparer.Compare( n, node ) < 0 );
       if ( before != null )
@@ -116,7 +116,7 @@ namespace Ivony.Html
 
     void ICollection<IHtmlNode>.Clear()
     {
-      
+
     }
 
     public bool Contains( IHtmlNode item )
@@ -166,48 +166,5 @@ namespace Ivony.Html
   }
 
 
-  public class NodeLocationComparer : IComparer<IHtmlNode>
-  {
-    public int Compare( IHtmlNode x, IHtmlNode y )
-    {
-      if ( x == null )
-        throw new ArgumentNullException( "x" );
-
-      if ( y == null )
-        throw new ArgumentNullException( "y" );
-
-      if ( !object.Equals( x.Document, y.Document ) )
-        throw new InvalidOperationException();
-
-      x.EnsureAllocated();
-      y.EnsureAllocated();
-
-      if ( object.Equals( x, y ) )
-        return 0;
-
-      if ( object.Equals( x.Container, y.Container ) )
-        return x.NodesIndexOfSelf() - y.NodesIndexOfSelf();
-
-
-      var ancetors1 = x.Ancestors().Reverse().ToArray();
-      var ancetors2 = y.Ancestors().Reverse().ToArray();
-
-      int i = 0;
-      while ( true )
-      {
-
-        if ( i > ancetors1.Length )
-          return -1;
-
-        if ( i > ancetors2.Length )
-          return 1;
-
-        if ( !object.Equals( ancetors1[i], ancetors2[i] ) )
-          break;
-      }
-
-      return ancetors1[i].NodesIndexOfSelf() - ancetors2[i].NodesIndexOfSelf();
-    }
-  }
 
 }

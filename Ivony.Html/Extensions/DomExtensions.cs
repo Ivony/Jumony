@@ -27,6 +27,7 @@ namespace Ivony.Html
         throw new NotSupportedException();
 
       return manager.CreateFragment();
+
     }
 
 
@@ -215,6 +216,7 @@ namespace Ivony.Html
     /// <summary>
     /// 添加一个属性
     /// </summary>
+    /// <param name="element">要添加属性的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <returns>添加的属性</returns>
     public static IHtmlAttribute AddAttribute( this IHtmlElement element, string attributeName )

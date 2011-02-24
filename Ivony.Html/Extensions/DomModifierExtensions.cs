@@ -8,7 +8,14 @@ namespace Ivony.Html
   public static class DomModifierExtensions
   {
 
-    public static IHtmlElement AddElement( this IHtmlDomModifier modifier, IHtmlContainer container, string name )
+    /// <summary>
+    /// 在容器末尾增加一个元素
+    /// </summary>
+    /// <param name="modifier">DOM 结构修改器</param>
+    /// <param name="container">要添加元素的容器</param>
+    /// <param name="elementName">元素名</param>
+    /// <returns>添加的元素</returns>
+    public static IHtmlElement AddElement( this IHtmlDomModifier modifier, IHtmlContainer container, string elementName )
     {
       if ( modifier == null )
         throw new ArgumentNullException( "modifier" );
@@ -16,12 +23,12 @@ namespace Ivony.Html
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      if ( name == null )
-        throw new ArgumentNullException( "name" );
+      if ( elementName == null )
+        throw new ArgumentNullException( "elementName" );
 
       lock ( container.SyncRoot )
       {
-        return modifier.AddElement( container, container.Nodes().Count(), name );
+        return modifier.AddElement( container, container.Nodes().Count(), elementName );
       }
     }
 

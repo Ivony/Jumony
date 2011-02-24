@@ -77,22 +77,22 @@ namespace Ivony.Html
     /// 尝试为容器添加一个元素
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
-    /// <param name="name">元素名</param>
+    /// <param name="elementName">元素名</param>
     /// <returns>创建并添加好的元素</returns>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
-    public static IHtmlElement AddElement( this IHtmlContainer container, string name )
+    public static IHtmlElement AddElement( this IHtmlContainer container, string elementName )
     {
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      if ( name == null )
-        throw new ArgumentNullException( "name" );
+      if ( elementName == null )
+        throw new ArgumentNullException( "elementName" );
 
 
 
       lock ( container.SyncRoot )
       {
-        return AddElement( container, container.Nodes().Count(), name );
+        return AddElement( container, container.Nodes().Count(), elementName );
       }
     }
 

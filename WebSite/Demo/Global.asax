@@ -5,7 +5,7 @@
 
   void Application_Start( object sender, EventArgs e )
   {
-    DefaultCachePolicy.CacheKeyBasis = CacheKeyProlicy.ByUrl;
+    DefaultCachePolicy.CacheKeyPolicy = CacheKeyPolicy.ByUrl;
     DefaultCachePolicy.CacheDuration = new TimeSpan( 0, 1, 0 );
 
   }

@@ -10,7 +10,6 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
-
   /// <summary>
   /// 提供内容分析呈现的扩展方法
   /// </summary>

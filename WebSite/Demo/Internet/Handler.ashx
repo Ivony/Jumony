@@ -38,10 +38,9 @@ public class Handler : IHttpHandler
       } );
 
 
-    var baseElement = templateDocument.GetNodeFactory().CreateElement( "base" );
-    baseElement.SetAttribute( "href" ).Value( "http://www.wsdeal.com/" );
 
-    templateDocument.Find( "head" ).First().Insert( 0, baseElement );
+    var baseElement =templateDocument.Find( "head" ).First().AddElement( 0, "base" );
+    baseElement.SetAttribute( "href" ).Value( "http://www.wsdeal.com/" );
 
     context.Response.Write( templateDocument.InnerHtml( false ) );
 

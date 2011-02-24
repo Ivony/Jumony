@@ -15,7 +15,7 @@ namespace Ivony.Html
   {
 
     /// <summary>所有 CDATA 元素，其内部文本不被当作 HTML 文本解释</summary>
-    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "pre", "code", "style", "textarea", "title" } );
+    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "code", "style", "textarea", "title" } );
     /// <summary>所有自结束元素，没有内容和结束标签</summary>
     public static readonly ICollection<string> selfCloseTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
 

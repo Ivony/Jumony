@@ -72,20 +72,21 @@ namespace Ivony.Html.Parser
 
 
     /// <summary>
-    /// 添加一个属性，稍候可以设置其值
+    /// 添加一个属性
     /// </summary>
-    /// <param name="attributeName">属性名</param>
+    /// <param name="name">属性名</param>
+    /// <param name="value">属性值</param>
     /// <returns>添加后的属性</returns>
-    public IHtmlAttribute AddAttribute( string attributeName )
+    internal IHtmlAttribute AddAttribute( string name, string value )
     {
       lock ( SyncRoot )
       {
         CheckDisposed();
 
-        if ( _attributes.Contains( attributeName ) )//容器自身会执行不区分大小写的查找
-          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", attributeName ) );
+        if ( _attributes.Contains( name ) )//容器自身会执行不区分大小写的查找
+          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", name ) );
 
-        var attribute = new DomAttribute( this, attributeName, null );
+        var attribute = new DomAttribute( this, name, null );
         _attributes.Add( attribute );
 
         return attribute;

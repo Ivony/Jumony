@@ -191,7 +191,21 @@ namespace Ivony.Html
     {
       var textNode = node as IHtmlTextNode;
       if ( textNode != null )
-        return HtmlEncoding.HtmlDecode( whitespaceRegex.Replace( textNode.HtmlText, " " ) );
+      {
+
+        var element = textNode.Parent();
+        if ( element == null )
+          throw new InvalidOperationException();
+
+        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+          return textNode.HtmlText;
+        
+        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+          return HtmlEncoding.HtmlDecode( textNode.HtmlText );
+        
+        else
+          return HtmlEncoding.HtmlDecode( whitespaceRegex.Replace( textNode.HtmlText, " " ) );
+      }
 
       var commentNode = node as IHtmlComment;
       if ( commentNode != null )

@@ -218,8 +218,10 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要添加属性的元素</param>
     /// <param name="attributeName">属性名</param>
+    /// <param name="attributeValue">属性值</param>
     /// <returns>添加的属性</returns>
-    public static IHtmlAttribute AddAttribute( this IHtmlElement element, string attributeName )
+    /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    public static IHtmlAttribute AddAttribute( this IHtmlElement element, string attributeName, string attributeValue )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -227,10 +229,12 @@ namespace Ivony.Html
       if ( attributeName == null )
         throw new ArgumentNullException( "attributeName" );
 
+      if ( attributeValue == null )
+        throw new ArgumentNullException( "attributeValue" );
 
       var modifier = EnsureModifiable( element );
 
-      return modifier.AddAttribute( element, attributeName );
+      return modifier.AddAttribute( element, attributeName, attributeValue );
     }
 
 
@@ -293,9 +297,6 @@ namespace Ivony.Html
         throw new InvalidOperationException();
 
 
-
-
-
       lock ( node.Container )
       {
         int index = node.NodesIndexOfSelf();
@@ -327,9 +328,14 @@ namespace Ivony.Html
       {
         ClearNodes( element );
 
-        if ( !HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+
+        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
-          modifier.AddTextNode( element, 0, text );
+          modifier.AddTextNode( element, text );
+        }
+        if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        {
+          modifier.AddTextNode( element, HtmlEncoding.HtmlEncode( text ) );
         }
         else
         {

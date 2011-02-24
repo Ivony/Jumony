@@ -64,7 +64,7 @@ namespace Ivony.Html
     /// <param name="element">要添加属性的元素</param>
     /// <param name="name">属性名</param>
     /// <returns>被添加的属性对象</returns>
-    IHtmlAttribute AddAttribute( IHtmlElement element, string name );
+    IHtmlAttribute AddAttribute( IHtmlElement element, string name, string value );
 
     /// <summary>
     /// 从元素中移除一个属性

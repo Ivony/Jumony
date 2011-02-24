@@ -52,13 +52,13 @@ namespace Ivony.Html.Parser
 
 
 
-    public IHtmlAttribute AddAttribute( IHtmlElement element, string name )
+    public IHtmlAttribute AddAttribute( IHtmlElement element, string name, string value )
     {
       var domElement = element as DomElement;
       if ( domElement == null )
         throw new InvalidOperationException();
 
-      return domElement.AddAttribute( name );
+      return domElement.AddAttribute( name, value );
     }
 
     public void RemoveAttribute( IHtmlAttribute attribute )

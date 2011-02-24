@@ -80,12 +80,6 @@ namespace Ivony.Html.Parser
 
 
 
-    public IHtmlNodeFactory GetNodeFactory()
-    {
-      throw new NotSupportedException();
-    }
-
-
     private DomFragmentManager _manager;
     public IHtmlFragmentManager FragmentManager
     {

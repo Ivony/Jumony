@@ -26,7 +26,7 @@ namespace Ivony.Html.Web
   /// 用于枚举设置默认缓存键策略（缓存依据）
   /// </summary>
   [Flags]
-  public enum CacheKeyProlicy
+  public enum CacheKeyPolicy
   {
 
     /// <summary>指定对于所有请求都不要缓存，即不产生任何CacheKey</summary>
@@ -54,14 +54,14 @@ namespace Ivony.Html.Web
 
     static DefaultCachePolicy()
     {
-      CacheKeyPolicy = CacheKeyProlicy.NoCache;
+      CacheKeyPolicy = CacheKeyPolicy.NoCache;
       CacheDuration = new TimeSpan( 0 );
     }
 
     /// <summary>
     /// 设置默认缓存键的产生依据
     /// </summary>
-    public static CacheKeyProlicy CacheKeyPolicy
+    public static CacheKeyPolicy CacheKeyPolicy
     {
       get;
       set;
@@ -84,24 +84,24 @@ namespace Ivony.Html.Web
     /// <returns>默认缓存键，根据缓存键依据设置而产生</returns>
     public static string GetCacheKey( HttpContextBase context )
     {
-      if ( CacheKeyPolicy == Web.CacheKeyProlicy.NoCache )
+      if ( CacheKeyPolicy == Web.CacheKeyPolicy.NoCache )
         return null;
 
       var keys = new List<string>();
 
-      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.BySession) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyPolicy.BySession) != 0 )
       {
         if ( !context.Session.IsCookieless && !context.Session.IsNewSession )
           keys.Add( context.Session.SessionID );
       }
 
-      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.ByIdentity) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByIdentity) != 0 )
       {
         if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
           keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
       }
 
-      if ( (CacheKeyPolicy & Web.CacheKeyProlicy.ByUrl) != 0 )
+      if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByUrl) != 0 )
         keys.Add( context.Request.Url.AbsoluteUri );
 
       return string.Join( ":", keys.ToArray() );

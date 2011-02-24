@@ -123,18 +123,19 @@ namespace Ivony.Html.Web.Mvc
 
     private void AddGeneratorMetaData()
     {
-      var factory = Page.Document.GetNodeFactory();
-      if ( factory != null )
+      var modifier = Page.Document.DomModifier;
+      if ( modifier != null )
       {
-        var meta = factory.CreateElement( "meta" );
-        meta.SetAttribute( "name" ).Value( "generator" );
-        meta.SetAttribute( "content" ).Value( "Jumony" );
-
-        var header = Page.Find( "html head" ).FirstOrDefault();
+        var header = Page.Document.Find( "html head" ).FirstOrDefault();
 
         if ( header != null )
-          meta.InsertTo( header, 0 );
+        {
 
+          var metaElement = modifier.AddElement( header, "meta" );
+
+          metaElement.SetAttribute( "name", "generator" );
+          metaElement.SetAttribute( "content", "Jumony" );
+        }
       }
     }
 

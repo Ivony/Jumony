@@ -143,13 +143,13 @@ namespace Ivony.Html.Forms.Validation
 
         IHtmlNodeFactory factory;
 
-        list = EnsureList( summaryContainer, out factory );
+        list = EnsureList( summaryContainer );
 
         foreach ( var v in failedDalidators )
         {
           var messages = v.FailedMessage();
 
-          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+          var item = list.AddElement( "li" );
 
           RenderMessages( item, messages );
         }
@@ -168,11 +168,10 @@ namespace Ivony.Html.Forms.Validation
 
       else
       {
-        IHtmlNodeFactory factory;
-        var list = EnsureList( container, out factory );
+        var list = EnsureList( container );
         foreach ( var m in messages )
         {
-          var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+          var item = list.AddElement( "li" );
           item.InnerText( m );
         }
       }
@@ -192,12 +191,11 @@ namespace Ivony.Html.Forms.Validation
           var rules = field.RuleDescription();
 
 
-          IHtmlNodeFactory factory;
-          var list = EnsureList( container, out factory );
+          var list = EnsureList( container );
 
           foreach ( var r in rules )
           {
-            var item = (IHtmlElement) factory.CreateElement( "li" ).AppendTo( list );
+            var item = list.AddElement( "li" );
             item.InnerText( r );
           }
         }
@@ -208,15 +206,13 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-    protected IHtmlElement EnsureList( IHtmlElement container, out IHtmlNodeFactory factory )
+    protected IHtmlElement EnsureList( IHtmlElement container )
     {
-      factory = container.Document.GetNodeFactory();
-
       if ( HtmlSpecification.listElements.Contains( container.Name.ToLowerInvariant() ) )
         return container;
 
 
-      return factory.CreateElement( "ul" ).AppendTo( container );
+      return container.AddElement( "ul" );
     }
 
     public EventHandler Failed;

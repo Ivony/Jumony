@@ -85,14 +85,12 @@
     <Compile Include="IHtmlContainer.cs" />
     <Compile Include="IHtmlDomObject.cs" />
     <Compile Include="IHtmlParser.cs" />
-    <Compile Include="Extensions\LegacyDomExtensions.cs" />
     <Compile Include="Extensions\NavigateExtensions.cs" />
     <Compile Include="EnumerableWrapper.cs" />
     <Compile Include="HtmlDocumentWrapper.cs" />
     <Compile Include="HtmlElementWrapper.cs" />
     <Compile Include="HtmlNodeWrapper.cs" />
     <Compile Include="HtmlSpecification.cs" />
-    <Compile Include="IFreeNode.cs" />
     <Compile Include="IHtmlAttribute.cs" />
     <Compile Include="IHtmlComment.cs" />
     <Compile Include="IHtmlDocument.cs" />
@@ -139,9 +137,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -216,7 +216,7 @@ namespace Ivony.Html
           return "#" + element.Unique() + " ";
         else if ( _scope is IHtmlDocument )
           return "#document# ";
-        else if ( _scope is HtmlFragment )
+        else if ( _scope is IHtmlFragment )
           return "#fragment# ";
         else
           return "#unknow#";

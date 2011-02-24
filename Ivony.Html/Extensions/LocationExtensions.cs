@@ -77,9 +77,7 @@ namespace Ivony.Html
     /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element )
     {
-
-      if ( element is IFreeNode )
-        throw new InvalidOperationException();
+      element.EnsureAllocated();
 
       return PathOf( element, element.Document );
 
@@ -94,8 +92,7 @@ namespace Ivony.Html
     public static string PathOf( this IHtmlElement element, IHtmlContainer ancestor )
     {
 
-      if ( element is IFreeNode )
-        throw new InvalidOperationException();
+      element.EnsureAllocated();
 
       StringBuilder builder = new StringBuilder();
 

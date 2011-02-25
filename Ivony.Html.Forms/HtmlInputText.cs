@@ -52,7 +52,7 @@ namespace Ivony.Html.Forms
       set
       {
         if ( !_type.EqualsIgnoreCase( "password" ) )
-          _element.SetAttribute( "value" ).Value( value );
+          _element.SetAttribute( "value", value );
       }
     }
 

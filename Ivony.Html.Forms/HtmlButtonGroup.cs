@@ -133,7 +133,7 @@ namespace Ivony.Html.Forms
         }
         set
         {
-          Element.SetAttribute( "value" ).Value( value );
+          Element.SetAttribute( "value", value );
         }
       }
 
@@ -150,7 +150,7 @@ namespace Ivony.Html.Forms
             if ( radio )//如果是单选按钮，那么只有一个可以被选中
               _group.items.Where( item => item.radio ).ForAll( item => item.Selected = false );
 
-            Element.SetAttribute( "checked" ).Value( "checked" );
+            Element.SetAttribute( "checked", "checked" );
 
             return;
           }

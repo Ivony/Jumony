@@ -97,7 +97,7 @@ namespace Ivony.Html.Forms
         {
           if ( value )
           {
-            Element.SetAttribute( "selected" ).Value( "selected" );
+            Element.SetAttribute( "selected", "selected" );
           }
           else
           {

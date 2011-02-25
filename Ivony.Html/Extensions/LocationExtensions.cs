@@ -51,7 +51,7 @@ namespace Ivony.Html
     /// 出于性能考虑， IsDescendantOf( this node, container ) 方法检查节点的所有父级是否包含指定的容器，但对于IHtmlCollection来说，即使节点是其子代，其也不会在其父级中出现。
     /// 所以这是针对 IHtmlCollection 的一个特定实现，而 IsDescendantOf( this IHtmlNode, IHtmlContainer ) 方法发现第二个参数是IHtmlCollection时，也会自动调用此重载
     /// </remarks>
-    public static bool IsDescendantOf( this IHtmlNode node, IHtmlCollection collection )
+    internal static bool IsDescendantOf( this IHtmlNode node, IHtmlCollection collection )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );

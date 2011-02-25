@@ -11,8 +11,6 @@ namespace Ivony.Html.Forms.Validation
 
     bool Validate( string value );
 
-    string GenerateScript();
-
     string ErrorMessage { get; }
 
     string RuleDescription { get; }

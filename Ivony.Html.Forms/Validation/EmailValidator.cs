@@ -18,11 +18,6 @@ namespace Ivony.Html.Forms.Validation
       return emailRegex.IsMatch( value );
     }
 
-    public string GenerateScript()
-    {
-      throw new NotImplementedException();
-    }
-
     public string ErrorMessage
     {
       get { return "<field>不是一个有效的电子邮件地址。"; }

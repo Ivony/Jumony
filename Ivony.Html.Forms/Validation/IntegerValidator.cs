@@ -18,11 +18,6 @@ namespace Ivony.Html.Forms.Validation
       return integerRegex.IsMatch( value );
     }
 
-    public string GenerateScript()
-    {
-      throw new NotImplementedException();
-    }
-
     public string ErrorMessage
     {
       get { return "<field>无法被识别为有效的整数"; }

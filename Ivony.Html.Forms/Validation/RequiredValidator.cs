@@ -17,11 +17,6 @@ namespace Ivony.Html.Forms.Validation
       return true;
     }
 
-    public string GenerateScript()
-    {
-      throw new NotImplementedException();
-    }
-
     public string ErrorMessage
     {
       get { return "<field>不能为空。"; }

@@ -260,10 +260,11 @@ namespace Ivony.Html
     /// 尝试从 DOM 中移除此属性
     /// </summary>
     /// <param name="attribute">要被移除的属性</param>
+    /// <remarks>若属性不存在，此方法不执行任何操作</remarks>
     public static void Remove( this IHtmlAttribute attribute )
     {
       if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
+        return;
 
       if ( attribute.Element == null )
         throw new InvalidOperationException();

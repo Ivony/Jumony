@@ -18,7 +18,7 @@ public class links_aspx : JumonyHandler
 
     var dataList = Find( "#DataList" ).Single();
     dataList.Style().Set( "font-size", "12px" );
-    dataList.SetAttribute( "cellpadding" ).Value( "3" );
+    dataList.SetAttribute( "cellpadding", "3" );
 
     var header = dataList.Elements( "tr" ).First();
     header.Style().Set( "text-align", "center" );

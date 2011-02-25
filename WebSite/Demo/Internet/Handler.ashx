@@ -31,16 +31,16 @@ public class Handler : IHttpHandler
         string image = dataElement.Find( "[class=p-img] img" ).Single().Attribute( "src2" ).Value();
         string link = dataElement.Find( "[class=p-img] a" ).First().Attribute( "href" ).Value();
 
-        targetElement.Find( "a" ).SetAttribute( "href" ).Value( link ).SetAttribute( "target" ).Value( "_blank" );
+        targetElement.Find( "a" ).SetAttribute( "href", link ).SetAttribute( "target", "_blank" );
         targetElement.Find( "div.index_3_top1_txt3" ).Single().InnerText( price );
         targetElement.Find( "div.index_3_top1_txt1a a" ).Single().InnerText( name );
-        targetElement.Find( "a img" ).Single().SetAttribute( "src" ).Value( image );
+        targetElement.Find( "a img" ).Single().SetAttribute( "src", image );
       } );
 
 
 
     var baseElement =templateDocument.Find( "head" ).First().AddElement( 0, "base" );
-    baseElement.SetAttribute( "href" ).Value( "http://www.wsdeal.com/" );
+    baseElement.SetAttribute( "href", "http://www.wsdeal.com/" );
 
     context.Response.Write( templateDocument.InnerHtml( false ) );
 

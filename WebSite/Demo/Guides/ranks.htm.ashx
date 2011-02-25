@@ -33,8 +33,8 @@ public class ranks : JumonyHandler
         nameContainer.InnerText( dataItem.Name );
         votesContainer.InnerText( dataItem.Votes.ToString() );
         linkContainer.InnerText( dataItem.Url );
-        linkContainer.SetAttribute( "href" ).Value( dataItem.Url );
-        
+        linkContainer.SetAttribute( "href", dataItem.Url );
+
       } );
 
   }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Caching;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
@@ -40,9 +41,6 @@ namespace Ivony.Html.Web
 
     /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
     ByIdentity = 4,
-
-    /// <summary>指定对于所有请求，还要以Post的数据作为依据</summary>
-    ByPostData = 8
   }
 
 
@@ -85,6 +83,9 @@ namespace Ivony.Html.Web
     /// <returns>默认缓存键，根据缓存键依据设置而产生</returns>
     public static string GetCacheKey( HttpContextBase context )
     {
+      if ( StringComparer.OrdinalIgnoreCase.Equals( "post", context.Request.HttpMethod ) )
+        return null;
+
       if ( CacheKeyPolicy == Web.CacheKeyPolicy.NoCache )
         return null;
 

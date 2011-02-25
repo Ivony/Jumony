@@ -114,7 +114,7 @@ namespace Ivony.Html.Web.Mvc
 
         var href = UrlHelper.GenerateUrl( null, action, controller, routeValues, RouteTable.Routes, ViewContext.RequestContext, true );
 
-        actionLink.SetAttribute( "href" ).Value( href );
+        actionLink.SetAttribute( "href", href );
       }
 
     }

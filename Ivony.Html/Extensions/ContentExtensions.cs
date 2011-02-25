@@ -193,14 +193,14 @@ namespace Ivony.Html
       if ( textNode != null )
       {
 
-        var element = textNode.Parent();
-        if ( element == null )
+        var parent = textNode.Parent();
+        if ( parent == null )
           throw new InvalidOperationException();
 
-        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( HtmlSpecification.cdataTags.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
           return textNode.HtmlText;
         
-        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( HtmlSpecification.preformatedElements.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
           return HtmlEncoding.HtmlDecode( textNode.HtmlText );
         
         else

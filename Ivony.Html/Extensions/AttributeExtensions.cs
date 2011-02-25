@@ -79,328 +79,143 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="oldValue">要被替换的字符串</param>
-    /// <param name="newValue">用于替换的字符串</param>
-    /// <returns>被设置的属性对象</returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string oldValue, string newValue )
-    {
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      if ( oldValue == null )
-        throw new ArgumentNullException( "oldValue" );
-
-      attribute.AttributeValue = attribute.AttributeValue.Replace( oldValue, newValue );
-      return attribute;
-    }
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-    /// <param name="replacement">替换字符串</param>
-    /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, string replacement )
-    {
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      if ( pattern == null )
-        throw new ArgumentNullException( "pattern" );
-
-      attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, replacement );
-      return attribute;
-    }
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-    /// <param name="evaluator">用于每一步替换的计算函数</param>
-    /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Regex pattern, MatchEvaluator evaluator )
-    {
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      if ( pattern == null )
-        throw new ArgumentNullException( "pattern" );
-
-      if ( evaluator == null )
-        throw new ArgumentNullException( "evaluator" );
-
-      attribute.AttributeValue = pattern.Replace( attribute.AttributeValue, evaluator );
-      return attribute;
-    }
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-    /// <param name="evaluator">用于每一步替换的计算函数</param>
-    /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string pattern, MatchEvaluator evaluator )
-    {
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      if ( evaluator == null )
-        throw new ArgumentNullException( "evaluator" );
-
-      attribute.AttributeValue = Regex.Replace( attribute.AttributeValue, pattern, evaluator );
-      return attribute;
-    }
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="evaluator">用于替换属性值的计算函数</param>
-    /// <returns></returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, Func<string, string> evaluator )
-    {
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      if ( evaluator == null )
-        throw new ArgumentNullException( "evaluator" );
-
-      attribute.AttributeValue = evaluator( attribute.AttributeValue );
-      return attribute;
-    }
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="element">要设置属性值的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <returns>属性设置器</returns>
-    public static AttributeValueSetter SetAttribute( this IHtmlElement element, string attributeName )
-    {
-
-      if ( element == null )
-        throw new ArgumentNullException( "element" );
-
-      return new AttributeValueSetter( element, attributeName );
-    }
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
     /// <param name="element">要设置属性值的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>设置了属性的元素</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
     {
-
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return new AttributeValueSetter( element, attributeName ).Value( value );
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      var attribute = element.Attribute( attributeName );
+
+      if ( attribute != null )
+        attribute.Remove();
+
+      element.AddAttribute( attributeName, value );
+
+
+      return element;
+    }
+
+
+    public IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      elements.ForAll( e => e.SetAttribute( attributeName, value );
+    }
+
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="oldValue">要被替换的字符串</param>
+    /// <param name="newValue">用于替换的字符串</param>
+    /// <returns>设置了属性的元素</returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string oldValue, string newValue )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( oldValue == null )
+        throw new ArgumentNullException( "oldValue" );
+
+
+      return SetAttribute( element, attributeName, value => value.Replace( oldValue, newValue ) );
+    }
+
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+    /// <param name="replacement">替换字符串</param>
+    /// <returns></returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, string replacement )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
+
+      return SetAttribute( element, attributeName, value => pattern.Replace( value, replacement ) );
     }
 
 
     /// <summary>
-    /// 属性设置器，提供Value等方法方便的设置属性值
+    /// 设置属性值
     /// </summary>
-    public class AttributeValueSetter
+    /// <param name="element">要设置属性的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+    /// <param name="replacement">替换字符串</param>
+    /// <returns></returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, MatchEvaluator evaluator )
     {
-      private readonly IHtmlElement _element;
-      private readonly string _attributeName;
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
 
-      private readonly IHtmlAttribute _attribute;
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
 
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
 
-      internal IHtmlElement Element
-      {
-        get { return _element; }
-      }
-
-      internal IHtmlAttribute Attribute
-      {
-        get { return _attribute; }
-      }
-
-      internal string AttributeValue
-      {
-        get { return _attribute.Value(); }
-      }
-
-
-      internal AttributeValueSetter( IHtmlElement element, string attributeName )
-      {
-        if ( element == null )
-          throw new ArgumentNullException( "element" );
-
-        if ( attributeName == null )
-          throw new ArgumentNullException( "attributeName" );
-
-        _element = element;
-        _attributeName = attributeName;
-
-
-        _attribute = _element.Attribute( attributeName );
-        if ( _attribute == null )
-          _attribute = _element.AddAttribute( attributeName );
-      }
-
-      /// <summary>
-      /// 将属性值设置为空
-      /// </summary>
-      /// <returns>设置属性值的元素</returns>
-      public IHtmlElement Null()
-      {
-        _attribute.AttributeValue = null;
-        return _element;
-      }
-
-      /// <summary>
-      /// 将属性值设置为指定字符串
-      /// </summary>
-      /// <param name="value">要设置的属性值</param>
-      /// <returns>设置属性值的元素</returns>
-      public IHtmlElement Value( string value )
-      {
-        _attribute.AttributeValue = value;
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="oldValue">要被替换的字符串</param>
-      /// <param name="newValue">用于替换的字符串</param>
-      /// <returns>被设置的属性对象</returns>
-      public IHtmlElement Value( string oldValue, string newValue )
-      {
-        if ( oldValue == null )
-          throw new ArgumentNullException( "oldValue" );
-
-
-        _attribute.AttributeValue = _attribute.AttributeValue.Replace( oldValue, newValue );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-      /// <param name="replacement">替换字符串</param>
-      /// <returns></returns>
-      public IHtmlElement Value( Regex pattern, string replacement )
-      {
-        if ( pattern == null )
-          throw new ArgumentNullException( "pattern" );
-
-
-        _attribute.AttributeValue = pattern.Replace( _attribute.AttributeValue, replacement );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-      /// <param name="evaluator">用于每一步替换的计算函数</param>
-      /// <returns></returns>
-      public IHtmlElement Value( Regex pattern, MatchEvaluator evaluator )
-      {
-        if ( pattern == null )
-          throw new ArgumentNullException( "pattern" );
-
-
-        _attribute.AttributeValue = pattern.Replace( _attribute.AttributeValue, evaluator );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-      /// <param name="evaluator">用于每一步替换的计算函数</param>
-      /// <returns></returns>
-      public IHtmlElement Value( string pattern, MatchEvaluator evaluator )
-      {
-        if ( pattern == null )
-          throw new ArgumentNullException( "pattern" );
-
-        if ( evaluator == null )
-          throw new ArgumentNullException( "evaluator" );
-
-
-        _attribute.AttributeValue = Regex.Replace( _attribute.AttributeValue, pattern, evaluator );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="evaluator">用于替换属性值的计算函数</param>
-      /// <returns></returns>
-      public IHtmlElement Value( Func<string, string> evaluator )
-      {
-        if ( evaluator == null )
-          throw new ArgumentNullException( "evaluator" );
-
-
-        _attribute.AttributeValue = evaluator( _attribute.AttributeValue );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="evaluator">用于替换属性值的计算函数</param>
-      /// <returns></returns>
-      public IHtmlElement Value( Func<IHtmlElement, string, string> evaluator )
-      {
-        if ( evaluator == null )
-          throw new ArgumentNullException( "evaluator" );
-
-        _attribute.AttributeValue = evaluator( _element, _attribute.AttributeValue );
-        return _element;
-      }
-
-
-      /// <summary>
-      /// 删除这个属性
-      /// </summary>
-      /// <returns></returns>
-      public IHtmlElement Remove()
-      {
-        _attribute.Remove();
-        return _element;
-      }
+      return SetAttribute( element, attributeName, value => pattern.Replace( value, evaluator ) );
+    }
 
 
 
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="evaluator">用于替换属性值的计算函数</param>
+    /// <returns></returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Func<string, string> evaluator )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
 
-      /// <summary>
-      /// 复制属性值
-      /// </summary>
-      /// <param name="element">要复制属性值的元素</param>
-      /// <returns></returns>
-      public IHtmlElement From( IHtmlElement element )
-      {
-        if ( element == null )
-          throw new ArgumentNullException( "element" );
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
 
-        _attribute.AttributeValue = element.Attribute( _attributeName ).Value();
-        return _element;
-      }
+
+      var attribute = element.Attribute( attributeName );
+      var value = attribute.Value();
+
+      if ( value == null )
+        return element;
+
+      value = evaluator( value );
+      attribute.Remove();
+
+      element.AddAttribute( attributeName, value );
+
+      return element;
     }
 
 

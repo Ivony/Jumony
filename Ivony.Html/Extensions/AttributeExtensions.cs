@@ -106,11 +106,11 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="element">要设置属性值的元素集</param>
+    /// <param name="elements">要设置属性值的元素集</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>源元素集</returns>
-    public static IEnumerable<IHtmlElement> SetAttribute<T>( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
+    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );

@@ -10,12 +10,15 @@ namespace Ivony.Html
   /// <summary>
   /// 定义一个 HTML 节点收集器，其可以收纳 HTML 节点，但不会修改 HTML 节点的 Container 属性。
   /// </summary>
-  public interface IHtmlCollection : IHtmlContainer
+  internal interface IHtmlCollection : IHtmlContainer
   {
     void AddNode( IHtmlNode node );
   }
 
 
+  /// <summary>
+  /// 实现一个 HTML 节点收集器，其可以收纳不连续的 HTML 节点，但不会修改 HTML 节点的 Container 属性。
+  /// </summary>
   public class HtmlCollection : IHtmlCollection, ICollection<IHtmlNode>
   {
 

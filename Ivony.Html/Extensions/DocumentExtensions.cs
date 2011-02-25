@@ -72,7 +72,7 @@ namespace Ivony.Html
         id = null;
 
       if ( create && id == null )
-        element.SetAttribute( "id" ).Value( id = CreateIdentity( element, ancestorsCreate ) );
+        element.SetAttribute( "id", id = CreateIdentity( element, ancestorsCreate ) );
 
 
       return id;
@@ -422,11 +422,11 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ldarg_0 );                         //ld provider        provider
         il.Emit( OpCodes.Dup );                             //dup                provider provider
-                                                            
-                                                            
+
+
         EmitCreateDocument( il, document );                 //create document    provider document
-                                                            
-                                                            
+
+
         il.Emit( OpCodes.Callvirt, CompleteDocument );      //complete document  document
 
 

@@ -65,7 +65,7 @@ namespace Ivony.Html
     /// <param name="attribute">属性对象</param>
     /// <param name="value">要设置的属性值</param>
     /// <returns>被设置的属性对象</returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string value )
+    public static T Value<T>( this T attribute, string value ) where T : IHtmlAttribute
     {
 
       if ( attribute == null )
@@ -83,7 +83,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>设置了属性的元素</returns>
-    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
+    public static T SetAttribute<T>( this T element, string attributeName, string value ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -103,7 +103,14 @@ namespace Ivony.Html
     }
 
 
-    public IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素集</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="value">属性值</param>
+    /// <returns>源元素集</returns>
+    public static IEnumerable<IHtmlElement> SetAttribute<T>( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );
@@ -111,7 +118,9 @@ namespace Ivony.Html
       if ( attributeName == null )
         throw new ArgumentNullException( "attributeName" );
 
-      elements.ForAll( e => e.SetAttribute( attributeName, value );
+      elements.NotNull().ForAll( e => SetAttribute( e, attributeName, value ) );
+
+      return elements;
     }
 
 
@@ -124,7 +133,7 @@ namespace Ivony.Html
     /// <param name="oldValue">要被替换的字符串</param>
     /// <param name="newValue">用于替换的字符串</param>
     /// <returns>设置了属性的元素</returns>
-    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string oldValue, string newValue )
+    public static T SetAttribute<T>( this T element, string attributeName, string oldValue, string newValue ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -140,6 +149,32 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="oldValue">要被替换的字符串</param>
+    /// <param name="newValue">用于替换的字符串</param>
+    /// <returns>设置了属性的元素</returns>
+    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string oldValue, string newValue )
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( oldValue == null )
+        throw new ArgumentNullException( "oldValue" );
+
+
+      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, oldValue, newValue ) );
+
+      return elements;
+    }
+
+
 
     /// <summary>
     /// 设置属性值
@@ -149,7 +184,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, string replacement )
+    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, string replacement ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -172,7 +207,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, MatchEvaluator evaluator )
+    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, MatchEvaluator evaluator ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -195,7 +230,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Func<string, string> evaluator )
+    public static T SetAttribute<T>( this T element, string attributeName, Func<string, string> evaluator ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -222,180 +257,10 @@ namespace Ivony.Html
 
 
 
-    /// <summary>
-    /// 批量设置属性值
-    /// </summary>
-    /// <param name="elements">要设置属性值的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <returns>属性设置器</returns>
-    public static AttributeSetValueSetter SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName )
-    {
-      return new AttributeSetValueSetter( elements, attributeName );
-    }
 
 
-    /// <summary>
-    /// 批量设置属性值
-    /// </summary>
-    /// <param name="elements">要设置属性值的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <param name="value">属性值</param>
-    /// <returns>设置了属性的元素</returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
-    {
-      elements.ForAll( e => e.SetAttribute( attributeName, value ) );
-
-      return elements;
-    }
 
 
-    /// <summary>
-    /// 批量属性设置器，提供Value方法方便的批量设置属性值
-    /// </summary>
-    public class AttributeSetValueSetter
-    {
-      private readonly IEnumerable<IHtmlElement> _elements;
-      private readonly AttributeValueSetter[] _setters;
-      //      private readonly string _attributeName;
-
-
-      internal AttributeSetValueSetter( IEnumerable<IHtmlElement> elements, string attributeName )
-      {
-        if ( attributeName == null )
-          throw new ArgumentNullException( "attributeName" );
-
-        _elements = elements;
-        //        _attributeName = attributeName;
-
-        _setters = _elements.Select( e => e.SetAttribute( attributeName ) ).ToArray();
-      }
-
-      /// <summary>
-      /// 将属性值设置为空
-      /// </summary>
-      /// <returns>设置属性值的元素</returns>
-      public IEnumerable<IHtmlElement> Null()
-      {
-        _setters.ForAll( s => s.Null() );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 将属性值设置为指定字符串
-      /// </summary>
-      /// <param name="value">要设置的属性值</param>
-      /// <returns>设置属性值的元素</returns>
-      public IEnumerable<IHtmlElement> Value( string value )
-      {
-        _setters.ForAll( s => s.Value( value ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="oldValue">要被替换的字符串</param>
-      /// <param name="newValue">用于替换的字符串</param>
-      /// <returns>被设置的属性对象</returns>
-      public IEnumerable<IHtmlElement> Value( string oldValue, string newValue )
-      {
-        _setters.ForAll( s => s.Value( oldValue, newValue ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-      /// <param name="replacement">替换字符串</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( Regex pattern, string replacement )
-      {
-        _setters.ForAll( s => s.Value( pattern, replacement ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-      /// <param name="evaluator">用于每一步替换的计算函数</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( Regex pattern, MatchEvaluator evaluator )
-      {
-        _setters.ForAll( s => s.Value( pattern, evaluator ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式</param>
-      /// <param name="evaluator">用于每一步替换的计算函数</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( string pattern, MatchEvaluator evaluator )
-      {
-        _setters.ForAll( s => s.Value( pattern, evaluator ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="evaluator">用于替换属性值的计算函数</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( Func<string, string> evaluator )
-      {
-        _setters.ForAll( s => s.Value( evaluator ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="evaluator">用于替换属性值的计算函数</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( Func<IHtmlElement, string, string> evaluator )
-      {
-        _setters.ForAll( s => s.Value( evaluator ) );
-        return _elements;
-      }
-
-      /// <summary>
-      /// 设置属性值
-      /// </summary>
-      /// <param name="evaluator">用于替换属性值的计算函数</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Value( Func<int, string, string> evaluator )
-      {
-        _setters.ForAll( ( s, i ) => s.Value( evaluator( i, s.AttributeValue ) ) );
-        return _elements;
-      }
-
-
-      /// <summary>
-      /// 删除这个属性
-      /// </summary>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> Remove()
-      {
-        _setters.ForAll( ( s, i ) => s.Remove() );
-        return _elements;
-      }
-
-
-      /// <summary>
-      /// 复制属性值
-      /// </summary>
-      /// <param name="element">要复制属性值的元素</param>
-      /// <returns></returns>
-      public IEnumerable<IHtmlElement> From( IHtmlElement element )
-      {
-        _setters.ForAll( s => s.From( element ) );
-        return _elements;
-      }
-
-    }
 
   }
 }

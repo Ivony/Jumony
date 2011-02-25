@@ -97,7 +97,7 @@ namespace Ivony.Html.Styles
     {
       settings[name] = value;
 
-      _element.SetAttribute( "style" ).Value( GetStyleExpression( settings ) );
+      _element.SetAttribute( "style", GetStyleExpression( settings ) );
 
       return this;
     }

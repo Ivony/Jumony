@@ -409,7 +409,7 @@ namespace Ivony.Html
 
       var free = factory.CreateElement( element.Name );
       foreach ( var attribute in element.Attributes() )
-        free.AddAttribute( attribute.Name ).Value( attribute.Value() );
+        free.AddAttribute( attribute.Name, attribute.Value() );
 
       CopyChildNodes( element, free );
 

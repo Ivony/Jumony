@@ -76,6 +76,7 @@ namespace Ivony.Html
     }
 
 
+
     /// <summary>
     /// 设置属性值
     /// </summary>
@@ -106,28 +107,6 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性值的元素集</param>
-    /// <param name="attributeName">属性名</param>
-    /// <param name="value">属性值</param>
-    /// <returns>源元素集</returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
-    {
-      if ( elements == null )
-        throw new ArgumentNullException( "elements" );
-
-      if ( attributeName == null )
-        throw new ArgumentNullException( "attributeName" );
-
-      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value ) );
-
-      return elements;
-    }
-
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
     /// <param name="element">要设置属性值的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="oldValue">要被替换的字符串</param>
@@ -147,33 +126,6 @@ namespace Ivony.Html
 
       return SetAttribute( element, attributeName, value => value.Replace( oldValue, newValue ) );
     }
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="elements">要设置属性值的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <param name="oldValue">要被替换的字符串</param>
-    /// <param name="newValue">用于替换的字符串</param>
-    /// <returns>设置了属性的元素</returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string oldValue, string newValue )
-    {
-      if ( elements == null )
-        throw new ArgumentNullException( "element" );
-
-      if ( attributeName == null )
-        throw new ArgumentNullException( "attributeName" );
-
-      if ( oldValue == null )
-        throw new ArgumentNullException( "oldValue" );
-
-
-      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => value.Replace( oldValue, newValue ) ) );
-
-      return elements;
-    }
-
 
 
     /// <summary>
@@ -202,33 +154,6 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-    /// <param name="replacement">替换字符串</param>
-    /// <returns></returns>
-    public static IEnumerable<IHtmlElement> SetAttribute<T>( this IEnumerable<IHtmlElement> elements, string attributeName, Regex pattern, string replacement )
-    {
-      if ( elements == null )
-        throw new ArgumentNullException( "elements" );
-
-      if ( attributeName == null )
-        throw new ArgumentNullException( "attributeName" );
-
-      if ( pattern == null )
-        throw new ArgumentNullException( "pattern" );
-
-      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => pattern.Replace( value, replacement ) ) );
-
-      return elements;
-    }
-
-
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
     /// <param name="element">要设置属性的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
@@ -247,32 +172,6 @@ namespace Ivony.Html
 
       return SetAttribute( element, attributeName, value => pattern.Replace( value, evaluator ) );
     }
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
-    /// <param name="elements">要设置属性的元素</param>
-    /// <param name="attributeName">属性名</param>
-    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
-    /// <param name="evaluator">替换字符串</param>
-    /// <returns></returns>
-    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, Regex pattern, MatchEvaluator evaluator ) where T : IHtmlElement
-    {
-      if ( elements == null )
-        throw new ArgumentNullException( "elements" );
-
-      if ( attributeName == null )
-        throw new ArgumentNullException( "attributeName" );
-
-      if ( pattern == null )
-        throw new ArgumentNullException( "pattern" );
-
-      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => pattern.Replace( value, evaluator ) ) );
-
-      return elements;
-    }
-
 
 
     /// <summary>
@@ -305,6 +204,107 @@ namespace Ivony.Html
       return element;
     }
 
+
+
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性值的元素集</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="value">属性值</param>
+    /// <returns>源元素集</returns>
+    public static TContainer SetAttribute<TElement, TContainer>( this TContainer elements, string attributeName, string value )
+      where TContainer : IEnumerable<TElement>
+      where TElement : IHtmlElement
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value ) );
+
+      return elements;
+    }
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="oldValue">要被替换的字符串</param>
+    /// <param name="newValue">用于替换的字符串</param>
+    /// <returns>设置了属性的元素</returns>
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, string oldValue, string newValue ) where T : IHtmlElement
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( oldValue == null )
+        throw new ArgumentNullException( "oldValue" );
+
+
+      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => value.Replace( oldValue, newValue ) ) );
+
+      return elements;
+    }
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+    /// <param name="replacement">替换字符串</param>
+    /// <returns></returns>
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, Regex pattern, string replacement ) where T : IHtmlElement
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
+
+      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => pattern.Replace( value, replacement ) ) );
+
+      return elements;
+    }
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
+    /// <param name="evaluator">替换字符串</param>
+    /// <returns></returns>
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, Regex pattern, MatchEvaluator evaluator ) where T : IHtmlElement
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( pattern == null )
+        throw new ArgumentNullException( "pattern" );
+
+      elements.NotNull().ForAll( e => e.SetAttribute( attributeName, value => pattern.Replace( value, evaluator ) ) );
+
+      return elements;
+    }
 
 
     /// <summary>

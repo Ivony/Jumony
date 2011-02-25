@@ -65,7 +65,7 @@ namespace Ivony.Html
     /// <param name="attribute">属性对象</param>
     /// <param name="value">要设置的属性值</param>
     /// <returns>被设置的属性对象</returns>
-    public static T Value<T>( this T attribute, string value ) where T : IHtmlAttribute
+    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string value )
     {
 
       if ( attribute == null )
@@ -84,7 +84,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>设置了属性的元素</returns>
-    public static T SetAttribute<T>( this T element, string attributeName, string value ) where T : IHtmlElement
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -112,7 +112,7 @@ namespace Ivony.Html
     /// <param name="oldValue">要被替换的字符串</param>
     /// <param name="newValue">用于替换的字符串</param>
     /// <returns>设置了属性的元素</returns>
-    public static T SetAttribute<T>( this T element, string attributeName, string oldValue, string newValue ) where T : IHtmlElement
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string oldValue, string newValue )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -136,7 +136,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, string replacement ) where T : IHtmlElement
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, string replacement )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -159,7 +159,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">替换字符串</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, MatchEvaluator evaluator ) where T : IHtmlElement
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, MatchEvaluator evaluator )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -181,7 +181,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Func<string, string> evaluator ) where T : IHtmlElement
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Func<string, string> evaluator )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );

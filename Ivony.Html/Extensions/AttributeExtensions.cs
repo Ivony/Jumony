@@ -331,5 +331,32 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="elements">要设置属性的元素集</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="evaluator">用于替换属性值的计算函数</param>
+    /// <returns></returns>
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, Func<string, int, string> evaluator ) where T : IHtmlElement
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( elements == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      if ( evaluator == null )
+        throw new ArgumentNullException( "evaluator" );
+
+
+      elements.ForAll( ( e, index ) => e.SetAttribute( attributeName, value => evaluator( value, index ) ) );
+
+      return elements;
+
+    }
+
+
+
   }
 }

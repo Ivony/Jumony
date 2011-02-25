@@ -215,9 +215,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>源元素集</returns>
-    public static TContainer SetAttribute<TElement, TContainer>( this TContainer elements, string attributeName, string value )
-      where TContainer : IEnumerable<TElement>
-      where TElement : IHtmlElement
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, string value ) where T : IHtmlElement
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );
@@ -331,12 +329,6 @@ namespace Ivony.Html
       return elements;
 
     }
-
-
-
-
-
-
 
 
   }

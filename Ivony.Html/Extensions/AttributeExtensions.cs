@@ -202,7 +202,7 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="element">要设置属性的元素</param>
+    /// <param name="elements">要设置属性的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>

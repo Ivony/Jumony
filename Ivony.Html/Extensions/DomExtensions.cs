@@ -244,10 +244,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要被移除的节点</param>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    /// <remarks>
+    /// 若节点不存在（即为 null），则此方法不执行任何操作
+    /// </remarks>
     public static void Remove( this IHtmlNode node )
     {
       if ( node == null )
-        throw new ArgumentNullException( "node" );
+        return;
 
 
       var modifier = EnsureModifiable( node );
@@ -260,7 +263,10 @@ namespace Ivony.Html
     /// 尝试从 DOM 中移除此属性
     /// </summary>
     /// <param name="attribute">要被移除的属性</param>
-    /// <remarks>若属性不存在，此方法不执行任何操作</remarks>
+    /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    /// <remarks>
+    /// 若属性不存在（即为 null），则此方法不执行任何操作
+    /// </remarks>
     public static void Remove( this IHtmlAttribute attribute )
     {
       if ( attribute == null )

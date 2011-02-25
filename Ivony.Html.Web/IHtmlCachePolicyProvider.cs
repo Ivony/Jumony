@@ -41,7 +41,8 @@ namespace Ivony.Html.Web
     /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
     ByIdentity = 4,
 
-
+    /// <summary>指定对于所有请求，还要以Post的数据作为依据</summary>
+    ByPostData = 8
   }
 
 

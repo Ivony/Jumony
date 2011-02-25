@@ -86,7 +86,7 @@ namespace Ivony.Html.Parser
         if ( _attributes.Contains( name ) )//容器自身会执行不区分大小写的查找
           throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", name ) );
 
-        var attribute = new DomAttribute( this, name, null );
+        var attribute = new DomAttribute( this, name, value );
         _attributes.Add( attribute );
 
         return attribute;

@@ -44,19 +44,19 @@ namespace Ivony.Html
 
     public jQuery attr( string name, string value )
     {
-      _elements.SetAttribute( name ).Value( value );
+      _elements.SetAttribute( name, value );
       return this;
     }
 
     public jQuery attr( string name, Func<string, string> evaluator )
     {
-      _elements.SetAttribute( name ).Value( evaluator );
+      _elements.SetAttribute( name, evaluator );
       return this;
     }
 
     public jQuery attr( string name, Func<int, string, string> evaluator )
     {
-      _elements.SetAttribute( name ).Value( evaluator );
+      _elements.SetAttribute( name, evaluator );
       return this;
     }
 
@@ -72,7 +72,7 @@ namespace Ivony.Html
       var elements = _elements.ToArray();
 
       foreach ( var pair in properties )
-        elements.SetAttribute( pair.Key ).Value( pair.Value );
+        elements.SetAttribute( pair.Key, pair.Value );
 
       return this;
     }
@@ -80,7 +80,7 @@ namespace Ivony.Html
 
     public jQuery removeAttr( string name )
     {
-      ForAll( e => e.SetAttribute( name ).Remove() );
+      ForAll( e => e.Attribute( name ).Remove() );
       return this;
     }
 

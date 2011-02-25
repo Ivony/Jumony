@@ -312,7 +312,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( IEnumerable<IHtmlElement> elements, string attributeName, Func<string, string> evaluator )
+    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Func<string, string> evaluator )
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );
@@ -338,7 +338,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( IEnumerable<IHtmlElement> elements, string attributeName, Func<int, string, string> evaluator )
+    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Func<int, string, string> evaluator )
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );

@@ -87,9 +87,6 @@ namespace Ivony.Html
       if ( name == null )
         throw new ArgumentNullException( "name" );
 
-      if ( args == null )
-        throw new ArgumentNullException( "args" );
-
       if ( expression == null )
         throw new ArgumentNullException( "expression" );
 

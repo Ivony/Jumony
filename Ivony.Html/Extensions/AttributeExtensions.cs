@@ -62,24 +62,6 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="attribute">属性对象</param>
-    /// <param name="value">要设置的属性值</param>
-    /// <returns>被设置的属性对象</returns>
-    public static IHtmlAttribute Value( this IHtmlAttribute attribute, string value )
-    {
-
-      if ( attribute == null )
-        throw new ArgumentNullException( "attribute" );
-
-      attribute.AttributeValue = value;
-      return attribute;
-    }
-
-
-
-    /// <summary>
-    /// 设置属性值
-    /// </summary>
     /// <param name="element">要设置属性值的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>

@@ -26,7 +26,7 @@ namespace Ivony.Html.Binding
 
         var provider = _providers[providerName.ToLowerInvariant()];
 
-        return provider.Evaluate( expression );
+        return provider.EvaluateExpression( expression );
       }
     }
 
@@ -101,7 +101,7 @@ namespace Ivony.Html.Binding
         get { return _name; }
       }
 
-      public object Evaluate( string expression )
+      public object EvaluateExpression( string expression )
       {
         return _evaluator( expression );
       }
@@ -119,7 +119,7 @@ namespace Ivony.Html.Binding
       get;
     }
 
-    object Evaluate( string expression );
+    object EvaluateExpression( string expression );
 
   }
 }

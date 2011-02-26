@@ -233,7 +233,7 @@ namespace Ivony.Html.Binding
       if ( attributeMatch.Success )
       {
         string attributeName = attributeMatch.Groups["name"].Value;
-        BindingContext.Action( element, e => element.SetAttribute( attributeName ).Value( value ) );
+        BindingContext.Action( element, e => element.SetAttribute( attributeName , value ) );
       }
 
       if ( path == "@:text" )

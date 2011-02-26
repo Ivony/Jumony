@@ -35,7 +35,7 @@ namespace Ivony.Html.Binding
       //字符串表达式
       var quoteMatch = quoteTextRegex.Match( expression );
       if ( quoteMatch.Success )
-        return Regulars.ResolveEscape( quoteMatch.Groups["quoteText"].Value );
+        return Regulars.ReplaceEscape( quoteMatch.Groups["quoteText"].Value );
 
 
 
@@ -89,7 +89,7 @@ namespace Ivony.Html.Binding
         string providerName = environmentVariableMatch.Groups["prefix"].Value;
         string exp =  environmentVariableMatch.Groups["name"].Value;
 
-        return HtmlBinder.EvaluateExpression( providerName, exp );
+        return EnvironmentExpressions.EvaluateExpression( providerName, exp );
       }
 
       return expression;

@@ -35,21 +35,21 @@ namespace Ivony.Html.Binding
       {
         if ( context.Application[inited_token] == null )
         {
-          HtmlBinder.RegisterExpressionProvider( "Application", name => HttpContext.Current.Application[name] );
-          HtmlBinder.RegisterExpressionProvider( "Session", name => HttpContext.Current.Session[name] );
-          HtmlBinder.RegisterExpressionProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
-          HtmlBinder.RegisterExpressionProvider( "Post", name => HttpContext.Current.Request.Form[name] );
-          HtmlBinder.RegisterExpressionProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
-          HtmlBinder.RegisterExpressionProvider( "Context", name => HttpContext.Current.Items[name] );
+          EnvironmentExpressions.RegisterProvider( "Application", name => HttpContext.Current.Application[name] );
+          EnvironmentExpressions.RegisterProvider( "Session", name => HttpContext.Current.Session[name] );
+          EnvironmentExpressions.RegisterProvider( "Get", name => HttpContext.Current.Request.QueryString[name] );
+          EnvironmentExpressions.RegisterProvider( "Post", name => HttpContext.Current.Request.Form[name] );
+          EnvironmentExpressions.RegisterProvider( "Server", name => HttpContext.Current.Request.ServerVariables[name] );
+          EnvironmentExpressions.RegisterProvider( "Context", name => HttpContext.Current.Items[name] );
 
-          HtmlBinder.RegisterExpressionProvider( new CookiesProvider() );
+          EnvironmentExpressions.RegisterProvider( new CookiesProvider() );
 
           context.Application[inited_token] = new object();
         }
       }
     }
 
-    private class CookiesProvider : IExpressionProvider
+    private class CookiesProvider : IEnvironmentVariableProvider
     {
       public string Name { get { return "Cookies"; } }
       public object EvaluateExpression( string expression )

@@ -68,10 +68,12 @@
     <Compile Include="DataSourceType.cs" />
     <Compile Include="BindingContext.cs" />
     <Compile Include="ExpressionParser.cs" />
+    <Compile Include="HtmlBinder.cs" />
     <Compile Include="HtmlBindingSheet.cs" />
     <Compile Include="IDataSource.cs" />
     <Compile Include="EnvironmentExpressions.cs" />
     <Compile Include="IHtmlBindingSheet.cs" />
+    <Compile Include="IHtmlContent.cs" />
     <Compile Include="PagingDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

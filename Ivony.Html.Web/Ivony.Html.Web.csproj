@@ -75,6 +75,7 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
+    <Compile Include="NoResponseHttpContext.cs" />
     <Compile Include="RequestMapResult.cs" />
     <Compile Include="JumonyModule.cs" />
     <Compile Include="IRequestMapper.cs" />

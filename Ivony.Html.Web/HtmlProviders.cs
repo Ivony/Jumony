@@ -147,6 +147,7 @@ namespace Ivony.Html.Web
       return null;
     }
 
+
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
@@ -154,6 +155,20 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
+    {
+      string cacheKey;
+
+      return LoadDocument( context, virtualPath, out cacheKey );
+    }
+
+    /// <summary>
+    /// 加载 HTML 文档
+    /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <param name="cacheKey">若文档已被缓存，获取缓存键</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath, out string cacheKey )
     {
 
       if ( context == null )
@@ -166,9 +181,13 @@ namespace Ivony.Html.Web
         throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
 
 
+      cacheKey = null;
+
       var content = LoadContent( context, virtualPath );
       if ( content == null )
         return null;
+
+      cacheKey = content.CacheKey;
 
       return ParseDocument( context, content );
     }
@@ -407,6 +426,7 @@ namespace Ivony.Html.Web
 
       return DefaultCachePolicy.GetPolicy( context, handler, cacheItem );
     }
+
 
 
 

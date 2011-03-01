@@ -38,6 +38,37 @@ namespace Ivony.Html.Web
       private set;
     }
 
+
+    private bool _templateLoaded;
+    private string _templateCacheKey;
+
+    public virtual string TemplateCacheKey
+    {
+      get
+      {
+        if ( _templateLoaded )
+          return _templateCacheKey;
+
+        else
+          throw new InvalidOperationException( "模版尚未加载" );
+
+      }
+    }
+
+    public virtual IHtmlDocument LoadDocument()
+    {
+      var document = LoadDocument( out _templateCacheKey );
+
+      _templateLoaded = true;
+      return document;
+    }
+
+    protected virtual IHtmlDocument LoadDocument( out string cacheKey )
+    {
+      var document = HtmlProviders.LoadDocument( new HttpContextWrapper( HttpContext.Current ), TemplatePath, out cacheKey );
+      return document;
+    }
+
     public IHtmlHandler Handler
     {
       get;

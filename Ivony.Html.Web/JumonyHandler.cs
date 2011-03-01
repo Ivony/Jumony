@@ -64,13 +64,13 @@ namespace Ivony.Html.Web
         OnPreLoadDocument();
 
         Trace.Write( "Jumony Web", "Begin load page." );
-        Page = LoadPage();
+        Document = LoadDocument();
         Trace.Write( "Jumony Web", "End load page." );
 
         OnPostLoadDocument();
       }
 
-      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Page.Document );
+      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Document );
 
 
       {
@@ -79,7 +79,7 @@ namespace Ivony.Html.Web
         OnPreRender();
 
         Trace.Write( "Jumony Web", "Begin render page." );
-        var content = Page.Render();
+        var content = Document.Render();
         Trace.Write( "Jumony Web", "End render page." );
 
         OnPostRender();
@@ -205,24 +205,9 @@ namespace Ivony.Html.Web
     /// </summary>
     public IHtmlDocument Document
     {
-      get
-      {
-        if ( Page == null )
-          return null;
-
-        return Page.Document;
-      }
-    }
-
-    /// <summary>
-    /// 获取正在处理的Web页面
-    /// </summary>
-    public WebPage Page
-    {
       get;
       private set;
     }
-
 
 
     /// <summary>
@@ -241,11 +226,11 @@ namespace Ivony.Html.Web
     /// 加载Web页面
     /// </summary>
     /// <returns></returns>
-    protected virtual WebPage LoadPage()
+    protected virtual IHtmlDocument LoadDocument()
     {
-      var page = MapperResult.LoadPage();
+      var document = MapperResult.LoadDocument();
 
-      return page;
+      return document;
     }
 
 

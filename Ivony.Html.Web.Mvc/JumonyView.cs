@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.IO;
 using System.Web.Routing;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -66,6 +67,8 @@ namespace Ivony.Html.Web.Mvc
     protected virtual void Render( TextWriter output )
     {
 
+      ResolveDocumentUri();
+
       ProcessDocument();
 
       ProcessActionLinks();
@@ -76,6 +79,32 @@ namespace Ivony.Html.Web.Mvc
       AddGeneratorMetaData();
 
       Document.Render( output );
+    }
+
+    private void ResolveDocumentUri()
+    {
+
+      Uri baseUri = new Uri( VirtualPathUtility.ToAbsolute( VirtualPath ) );
+
+      foreach ( var element in Document.Find( "a[href] , link[href]" ) )
+      {
+        var href = element.Attribute( "href" ).Value();
+        if ( string.IsNullOrWhiteSpace( href ) )
+          continue;
+
+
+        Uri uri;
+
+        if ( !Uri.TryCreate( href, UriKind.Relative, out uri ) )
+          continue;
+
+        uri = new Uri( baseUri, uri );
+
+        uri = ViewContext.HttpContext.Request.Url.MakeRelativeUri( uri );
+
+        element.SetAttribute( href, uri.ToString() );
+
+      }
     }
 
 

@@ -18,17 +18,17 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected WebPage Page
+    protected IHtmlDocument Document
     {
       get;
       private set;
     }
 
 
-    public JumonyView( string virtualPath, WebPage page )
+    public JumonyView( string virtualPath, IHtmlDocument document )
     {
       VirtualPath = virtualPath;
-      Page = page;
+      Document = document;
     }
 
 
@@ -75,7 +75,7 @@ namespace Ivony.Html.Web.Mvc
 
       AddGeneratorMetaData();
 
-      Page.Render( output );
+      Document.Render( output );
     }
 
 
@@ -88,7 +88,7 @@ namespace Ivony.Html.Web.Mvc
     protected void ProcessActionLinks()
     {
 
-      var links = Page.Find( "a[action]" );
+      var links = Document.Find( "a[action]" );
 
       foreach ( var actionLink in links )
       {
@@ -123,10 +123,10 @@ namespace Ivony.Html.Web.Mvc
 
     private void AddGeneratorMetaData()
     {
-      var modifier = Page.Document.DomModifier;
+      var modifier = Document.DomModifier;
       if ( modifier != null )
       {
-        var header = Page.Document.Find( "html head" ).FirstOrDefault();
+        var header = Document.Find( "html head" ).FirstOrDefault();
 
         if ( header != null )
         {

@@ -60,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
-      return new JumonyView( partialPath, LoadPage( controllerContext.HttpContext, partialPath ) );
+      return new JumonyView( partialPath, LoadDocument( controllerContext.HttpContext, partialPath ) );
     }
 
 
@@ -69,14 +69,14 @@ namespace Ivony.Html.Web.Mvc
       if ( !string.IsNullOrEmpty( masterPath ) )
         throw new NotSupportedException();
 
-      return CreateView( viewPath, LoadPage( controllerContext.HttpContext, viewPath ) );
+      return CreateView( viewPath, LoadDocument( controllerContext.HttpContext, viewPath ) );
     }
 
-    protected virtual WebPage LoadPage( HttpContextBase context, string virtualPath )
+    protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
       var content = new StaticFileLoader().LoadContent( context, VirtualPathProvider, virtualPath );//UNDONE 不应每次创建一个实例
 
-      return HtmlProviders.LoadPage( context, content );
+      return HtmlProviders.ParseDocument( context, content );
     }
 
 
@@ -86,18 +86,18 @@ namespace Ivony.Html.Web.Mvc
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
     }
 
-    public static JumonyView CreateView( string virtualPath, WebPage page )
+    public static JumonyView CreateView( string virtualPath, IHtmlDocument document )
     {
       lock ( _providersSync )
       {
         foreach ( var provider in ViewProviders )
         {
-          var view = provider.TryCreateView( virtualPath, page );
+          var view = provider.TryCreateView( virtualPath, document );
           if ( view != null )
             return view;
         }
 
-        return new JumonyView( virtualPath, page );
+        return new JumonyView( virtualPath, document );
 
       }
     }

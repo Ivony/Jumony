@@ -8,7 +8,7 @@ namespace Ivony.Html.Web
 {
   
   /// <summary>
-  /// 代表一个 Web 页面，其包含一个HTML文档和URI地址，以及缓存信息。
+  /// 代表一个 Web 页面，其包含一个HTML文档及缓存信息。
   /// </summary>
   public class WebPage
   {
@@ -17,9 +17,9 @@ namespace Ivony.Html.Web
     /// 创建一个 Web 页面
     /// </summary>
     /// <param name="document">HTML 文档</param>
-    /// <param name="uri">文档地址</param>
+    /// 
     /// <param name="cacheKey">文档缓存键</param>
-    public WebPage( IHtmlDocument document, Uri uri, string cacheKey )
+    public WebPage( IHtmlDocument document, string cacheKey )
     {
       Document = document;
       CacheKey = cacheKey;

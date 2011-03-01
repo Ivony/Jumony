@@ -220,7 +220,7 @@ namespace Ivony.Html.Web
 
       var document = ParseDocument( context, content );
 
-      return new WebPage( document, content.ContentUri, content.CacheKey );
+      return new WebPage( document, content.CacheKey );
     }
 
     /// <summary>

@@ -72,8 +72,8 @@ namespace Ivony.Html.Binding
 
           if ( item.Binder != null )
             item.Binder.BindData( target, item.Data );
-
-          HtmlBinder.BindData( target, item.Data );
+          else
+            HtmlBinder.BindData( target, item.Data );
         }
 
       }

@@ -66,18 +66,14 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual void Render( TextWriter output )
     {
-
-      ResolveDocumentUri();
-
       ProcessDocument();
 
       ProcessActionLinks();
 
-
-
-
       AddGeneratorMetaData();
 
+
+      ResolveDocumentUri();
       Document.Render( output );
     }
 

@@ -73,44 +73,11 @@ namespace Ivony.Html.Web.Mvc
       AddGeneratorMetaData();
 
 
-      ResolveDocumentUri();
+      Document.ResolveUriToAbsoluate();
+
       Document.Render( output );
     }
 
-    private void ResolveDocumentUri()
-    {
-
-      Uri baseUri = new Uri( VirtualPathUtility.ToAbsolute( VirtualPath ) );
-
-      foreach ( var element in Document.Find( "a[href] , link[href]" ) )
-      {
-        ResolveUri( baseUri, element, "href" );
-      }
-
-      foreach ( var element in Document.Find( "img[src] , script[src]" ) )
-      {
-        ResolveUri( baseUri, element, "src" );
-      }
-    }
-
-    private void ResolveUri( Uri baseUri, IHtmlElement element, string attributeName )
-    {
-      var href = element.Attribute( attributeName ).Value();
-      if ( string.IsNullOrWhiteSpace( href ) )
-        return;
-
-
-      Uri uri;
-
-      if ( !Uri.TryCreate( href, UriKind.Relative, out uri ) )
-        return;
-
-      uri = new Uri( baseUri, uri );
-
-      uri = ViewContext.HttpContext.Request.Url.MakeRelativeUri( uri );
-
-      element.SetAttribute( href, uri.ToString() );
-    }
 
 
     protected virtual void ProcessDocument()

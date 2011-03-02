@@ -287,6 +287,45 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 将文档中所有的uri属性转换为绝对的uri。
+    /// </summary>
+    /// <param name="document">要执行转换的文档</param>
+    public static void ResolveUriToAbsoluate( this IHtmlDocument document )
+    {
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+
+      var baseUri = document.DocumentUri;
+
+      if ( baseUri == null )
+        throw new InvalidOperationException();
+
+      foreach ( var attribute in document.AllElements().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ) )
+      {
+
+        var value = attribute.Value();
+        if ( string.IsNullOrEmpty( value ) )
+          continue;
+
+        Uri uri;
+
+        if ( !Uri.TryCreate( baseUri, value, out uri ) )
+          continue;
+
+        attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
+
+      }
+
+    }
+
+
+
+
+
+
+
 
 
     /// <summary>
@@ -583,6 +622,11 @@ namespace Ivony.Html
       private static readonly ConstructorInfo NewDictionary = typeof( Dictionary<string, string> ).GetConstructor( new Type[0] );
       private static readonly MethodInfo DictionaryAdd = typeof( IDictionary<string, string> ).GetMethod( "Add" );
     }
+
+
+
+
+
 
   }
 }

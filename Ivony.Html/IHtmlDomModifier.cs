@@ -13,7 +13,7 @@ namespace Ivony.Html
   {
 
 
-    void ResolveUri( IHtmlDocument document, Uri uri );
+    //void ResolveUri( IHtmlDocument document, Uri uri );
 
 
 

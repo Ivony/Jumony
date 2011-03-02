@@ -56,6 +56,70 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 判断一个属性值的值是否应被视为URI。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>其值是否应被视为URI</returns>
+    public static bool IsUriValue( IHtmlAttribute attribute )
+    {
+
+      var elementName = attribute.Element.Name;
+
+      switch ( attribute.Name.ToLowerInvariant() )
+      {
+        case "action":
+          return elementName.EqualsIgnoreCase( "form" );
+
+        case "background":
+          return elementName.EqualsIgnoreCase( "body" );
+
+        case "cite":
+          return elementName.EqualsIgnoreCase( "blockquote" )
+            || elementName.EqualsIgnoreCase( "q" )
+            || elementName.EqualsIgnoreCase( "del" )
+            || elementName.EqualsIgnoreCase( "ins" );
+
+        case "classid":
+          return elementName.EqualsIgnoreCase( "object" );
+
+        case "codebase":
+          return elementName.EqualsIgnoreCase( "object" )
+            || elementName.EqualsIgnoreCase( "applet" );
+
+        case "data":
+          return elementName.EqualsIgnoreCase( "object" );
+
+        case "href":
+          return elementName.EqualsIgnoreCase( "a" )
+            || elementName.EqualsIgnoreCase( "area" )
+            || elementName.EqualsIgnoreCase( "link" )
+            || elementName.EqualsIgnoreCase( "base" );
+
+
+        case "longdesc":
+          return elementName.EqualsIgnoreCase( "img" )
+            || elementName.EqualsIgnoreCase( "frame" )
+            || elementName.EqualsIgnoreCase( "iframe" );
+
+        case "profile":
+          return elementName.EqualsIgnoreCase( "head" );
+
+        case "src":
+          return elementName.EqualsIgnoreCase( "script" )
+            || elementName.EqualsIgnoreCase( "input" )
+            || elementName.EqualsIgnoreCase( "frame" )
+            || elementName.EqualsIgnoreCase( "iframe" )
+            || elementName.EqualsIgnoreCase( "img" );
+
+        default:
+          return false;
+
+      }
+    }
+
+
+
 
 
 

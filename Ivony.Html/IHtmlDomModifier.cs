@@ -12,6 +12,11 @@ namespace Ivony.Html
   public interface IHtmlDomModifier
   {
 
+
+    void ResolveUri( IHtmlDocument document, Uri uri );
+
+
+
     /// <summary>
     /// 向指定容器中添加一个元素
     /// </summary>

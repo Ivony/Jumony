@@ -15,9 +15,9 @@ namespace Ivony.Html
     /// <summary>
     /// 创建一个空白文档
     /// </summary>
-    /// <param name="url">文档的统一资源路径</param>
+    /// <param name="uri">文档的统一资源路径</param>
     /// <returns>空白文档</returns>
-    IHtmlDocument CreateDocument( Uri url );
+    IHtmlDocument CreateDocument( Uri uri );
 
     /// <summary>
     /// 向指定容器中添加一个元素

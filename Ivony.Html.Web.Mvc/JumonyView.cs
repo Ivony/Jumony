@@ -88,23 +88,32 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var element in Document.Find( "a[href] , link[href]" ) )
       {
-        var href = element.Attribute( "href" ).Value();
-        if ( string.IsNullOrWhiteSpace( href ) )
-          continue;
-
-
-        Uri uri;
-
-        if ( !Uri.TryCreate( href, UriKind.Relative, out uri ) )
-          continue;
-
-        uri = new Uri( baseUri, uri );
-
-        uri = ViewContext.HttpContext.Request.Url.MakeRelativeUri( uri );
-
-        element.SetAttribute( href, uri.ToString() );
-
+        ResolveUri( baseUri, element, "href" );
       }
+
+      foreach ( var element in Document.Find( "img[src] , script[src]" ) )
+      {
+        ResolveUri( baseUri, element, "src" );
+      }
+    }
+
+    private void ResolveUri( Uri baseUri, IHtmlElement element, string attributeName )
+    {
+      var href = element.Attribute( attributeName ).Value();
+      if ( string.IsNullOrWhiteSpace( href ) )
+        return;
+
+
+      Uri uri;
+
+      if ( !Uri.TryCreate( href, UriKind.Relative, out uri ) )
+        return;
+
+      uri = new Uri( baseUri, uri );
+
+      uri = ViewContext.HttpContext.Request.Url.MakeRelativeUri( uri );
+
+      element.SetAttribute( href, uri.ToString() );
     }
 
 

@@ -15,22 +15,23 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 创建 DomDocument 对象
     /// </summary>
-    /// <param name="url">文档的 URL</param>
-    public DomDocument( Uri url )
+    /// <param name="uri">文档的 URL</param>
+    public DomDocument( Uri uri )
     {
-      _url = url;
+      _uri = uri;
       _manager = new DomFragmentManager( this );
     }
 
 
-    private Uri _url;
+    private Uri _uri;
 
     /// <summary>
     /// 获取文档的 URL
     /// </summary>
     public Uri DocumentUri
     {
-      get { return _url; }
+      get { return _uri; }
+      internal set { _uri = value; }
     }
 
     /// <summary>

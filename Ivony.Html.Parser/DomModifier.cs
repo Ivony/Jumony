@@ -8,6 +8,18 @@ namespace Ivony.Html.Parser
   public class DomModifier : IHtmlDomModifier
   {
 
+    public void ResolveUri( IHtmlDocument document, Uri uri )
+    {
+
+      var domDocument = document as DomDocument;
+
+      if ( domDocument == null )
+        throw new InvalidOperationException();
+
+      domDocument.DocumentUri = uri;
+    }
+
+
     public IHtmlElement AddElement( IHtmlContainer container, int index, string name )
     {
       var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );

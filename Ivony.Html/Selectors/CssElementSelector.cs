@@ -51,7 +51,11 @@ namespace Ivony.Html
         _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[id={0}]", match.Groups["identity"].Value ) ) );
 
       if ( match.Groups["class"].Success )
-        _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[class~={0}]", match.Groups["class"].Value ) ) );
+      {
+
+        foreach ( Capture capture in match.Groups["class"].Captures )
+          _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[class~={0}]", capture.Value ) ) );
+      }
 
 
       var attributeSelectors = _attributeSelectors.ToArray();

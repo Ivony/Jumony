@@ -35,9 +35,9 @@ namespace Ivony.Html
 
 
     /// <summary>匹配CSS元素选择器的正则表达式</summary>
-    public static readonly string elementExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+)))?(?<attributeSelector>{0})*(?<pseudoClassSelector>{1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
+    public static readonly string elementExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"(?<elementSelector>(?<name>\w+)?((#(?<identity>\w+))|(\.(?<class>\w+))+)?(?<attributeSelector>{0})*(?<pseudoClassSelector>{1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
     /// <summary>匹配CSS元素选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
-    public static readonly string elementExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"((\w+)?((#(\w+))|(\.(\w+)))?({0})*({1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
+    public static readonly string elementExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"((\w+)?((#(\w+))|(\.(\w+))+)?({0})*({1})*)", attributeExpressionPatternNoGroup, pseudoClassPatternNoGroup );
 
     internal static readonly string extraExpressionPattern = string.Format( CultureInfo.InvariantCulture, "(?<extra>(?<relative>{0})(?<rightSelector>{1}))", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );
     internal static readonly string extraExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, "({0}{1})", relativeExpressionPatternNoGroup, elementExpressionPatternNoGroup );

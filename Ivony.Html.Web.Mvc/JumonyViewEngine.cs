@@ -60,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
-      return new JumonyView( partialPath, LoadDocument( controllerContext.HttpContext, partialPath ) );
+      return CreateView( partialPath, LoadDocument( controllerContext.HttpContext, partialPath ) );
     }
 
 

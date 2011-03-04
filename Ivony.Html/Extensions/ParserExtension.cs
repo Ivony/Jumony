@@ -145,5 +145,17 @@ namespace Ivony.Html
     }
 
 
+
+    /// <summary>
+    /// 从指定文本解析 HTML 文档
+    /// </summary>
+    /// <param name="parser">用于解析 HTML 文本的解析器</param>
+    /// <param name="html">要解析的 HTML 文本</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument Parse( this IHtmlParser parser, string html )
+    {
+      return parser.Parse( html, null );
+    }
+
   }
 }

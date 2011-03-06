@@ -31,7 +31,7 @@ namespace Ivony.Html
     /// <summary>匹配CSS伪类选择器的正则表达式</summary>
     public static readonly string pseudoClassPattern = string.Format( CultureInfo.InvariantCulture, @":(?<name>[\w-]+)(\((?<args>{0}|([^'""\(\)]|(?<open>\()|(?<-open>\)))*)\)(?(open)(?!)))?", quoteTextPattern );
     /// <summary>匹配CSS伪类选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
-    public static readonly string pseudoClassPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @":([\w-]+)(\(({0}|([^'""\(\)]|(?<-open>\))|(?<open>\())*)\))?", quoteTextPattern );
+    public static readonly string pseudoClassPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @":([\w-]+)(\(({0}|([^'""\(\)]|(?<-open>\))|(?<open>\())*)\)(?(open)(?!)))?", quoteTextPattern );
 
 
     /// <summary>匹配CSS元素选择器的正则表达式</summary>

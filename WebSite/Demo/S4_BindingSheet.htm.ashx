@@ -13,5 +13,7 @@ public class BindingSheet : JumonyHandler
   protected override void ProcessDocument()
   {
 
+    var a = new jQuery( "#dataList", Document );
+    
   }
 }

@@ -1,6 +1,6 @@
 ﻿#list1 li
 {
-  binding-source: $;
+  binding-source: $Data:Products;
   binding-source-type: asobject;
   binding-path: @:text;
 }

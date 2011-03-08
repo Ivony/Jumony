@@ -39,7 +39,7 @@ public class Handler : IHttpHandler
 
 
 
-    var baseElement =templateDocument.Find( "head" ).First().AddElement( 0, "base" );
+    var baseElement = templateDocument.Find( "head" ).First().AddElement( 0, "base" );
     baseElement.SetAttribute( "href", "http://www.wsdeal.com/" );
 
     context.Response.Write( templateDocument.InnerHtml( false ) );

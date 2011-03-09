@@ -86,7 +86,7 @@ namespace Ivony.Html.Web.Mvc
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
     }
 
-    public static JumonyView CreateView( string virtualPath, IHtmlDocument document )
+    public IView CreateView( string virtualPath, IHtmlDocument document )
     {
       lock ( _providersSync )
       {
@@ -96,6 +96,25 @@ namespace Ivony.Html.Web.Mvc
           if ( view != null )
             return view;
         }
+
+
+        var handlerPath = virtualPath + ".ashx";
+        if ( VirtualPathProvider.FileExists( handlerPath ) )
+        {
+          try
+          {
+            var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
+            if ( handler != null )
+            {
+              return handler;
+            }
+          }
+          catch
+          {
+
+          }
+        }
+
 
         return new JumonyView( virtualPath, document );
 

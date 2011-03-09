@@ -22,13 +22,19 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+    private RequestMapping _mapping;
+
     /// <summary>
     /// 获取映射的结果
     /// </summary>
-    protected RequestMapping RequestMapping
+    protected virtual RequestMapping RequestMapping
     {
-      get;
-      private set;
+      get
+      {
+        return _mapping;
+      }
     }
 
 
@@ -39,7 +45,7 @@ namespace Ivony.Html.Web
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
 
-      ProcessRequestCore( CreateContext( context ) );
+      ProcessRequest( CreateContext( context ) );
 
     }
 
@@ -47,29 +53,48 @@ namespace Ivony.Html.Web
     /// 处理 HTTP 请求
     /// </summary>
     /// <param name="context">HTTP 上下文信息</param>
-    protected virtual void ProcessRequestCore( HttpContextBase context )
+    protected virtual void ProcessRequest( HttpContextBase context )
     {
       Context = context;
 
-      RequestMapping = Context.GetMapperResult();
+      _mapping = Context.GetMapping();
 
       if ( RequestMapping == null )
         throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
 
 
-      Trace.Write( "Jumony Web", "Begin resolve cache." );
-      OnPreResolveCache();
+      var response = ProcessRequestCore( context );
 
-      if ( ResolveCache() )
+      OutputResponse( response );
+
+      Trace.Write( "Jumony Web", "End response." );
+
+    }
+
+
+    protected virtual RawResponse ProcessRequestCore( HttpContextBase context )
+    {
+
+      RawResponse response;
+
+
       {
-        Trace.Write( "Jumony Web", "Cache resolved." );
+        Trace.Write( "Jumony Web", "Begin resolve cache." );
+        OnPreResolveCache();
 
-        Context.ApplicationInstance.CompleteRequest();
-        return;
+
+        response = ResolveCache();
+
+        if ( response != null )
+        {
+          Trace.Write( "Jumony Web", "Cache resolved." );
+          return response;
+        }
+
+        OnPostResolveCache();
+        Trace.Write( "Jumony Web", "Cache is not resolved." );
       }
 
-      OnPostResolveCache();
-      Trace.Write( "Jumony Web", "Cache is not resolved." );
 
       {
         OnPreLoadDocument();
@@ -81,11 +106,12 @@ namespace Ivony.Html.Web
         OnPostLoadDocument();
       }
 
+
       ((IHtmlHandler) this).ProcessDocument( Context, Document );
 
 
       {
-        Trace.Write( "Jumony Web", "Begin response." );
+        Trace.Write( "Jumony Web", "Begin create response." );
 
         OnPreRender();
 
@@ -96,16 +122,26 @@ namespace Ivony.Html.Web
         OnPostRender();
 
 
-        var response = CreateResponse( content );
+        response = CreateResponse( content );
+
+        Trace.Write( "Jumony Web", "End create response." );
+      }
+
+      {
+        Trace.Write( "Jumony Web", "Begin update cache." );
 
         UpdateCache( response );
 
-        OutputResponse( response );
-
-        Trace.Write( "Jumony Web", "End response." );
+        Trace.Write( "Jumony Web", "End update cache." );
       }
 
+
+      return response;
+
+
+
     }
+
 
     /// <summary>
     /// 创建本次请求的上下文，派生类重写此方法提供自定义上下文。
@@ -119,24 +155,22 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 尝试从缓存输出
+    /// 尝试获取缓存的输出
     /// </summary>
-    /// <returns>缓存是否命中</returns>
-    protected virtual bool ResolveCache()
+    /// <returns>缓存的输出</returns>
+    protected virtual RawResponse ResolveCache()
     {
 
       var key = HtmlProviders.GetCacheKey( Context );
 
       if ( key == null )
-        return false;
+        return null;
 
       var cacheItem = Cache.Get( key ) as RawResponse;
       if ( cacheItem == null )
-        return false;
+        return null;
 
-      OutputResponse( cacheItem );
-
-      return true;
+      return cacheItem;
     }
 
 
@@ -190,7 +224,7 @@ namespace Ivony.Html.Web
     /// <param name="document"></param>
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
-      
+
       Context = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
       Document = document;
 

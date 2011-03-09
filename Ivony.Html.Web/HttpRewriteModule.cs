@@ -41,7 +41,7 @@ namespace Ivony.Html.Web
         httpHandler = new HttpHandler( handler );
 
 
-      context.SetMapResult( result );
+      context.SetMapping( result );
 
       context.RemapHandler( httpHandler );
 

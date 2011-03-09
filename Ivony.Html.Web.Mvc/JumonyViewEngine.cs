@@ -60,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
-      return CreateView( partialPath, LoadDocument( controllerContext.HttpContext, partialPath ) );
+      return CreateView( controllerContext, partialPath );
     }
 
 
@@ -69,7 +69,7 @@ namespace Ivony.Html.Web.Mvc
       if ( !string.IsNullOrEmpty( masterPath ) )
         throw new NotSupportedException();
 
-      return CreateView( viewPath, LoadDocument( controllerContext.HttpContext, viewPath ) );
+      return CreateView( controllerContext, viewPath );
     }
 
     protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
@@ -86,39 +86,43 @@ namespace Ivony.Html.Web.Mvc
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
     }
 
-    public IView CreateView( string virtualPath, IHtmlDocument document )
+    public IView CreateView( ControllerContext context, string virtualPath )
     {
       lock ( _providersSync )
       {
         foreach ( var provider in ViewProviders )
         {
-          var view = provider.TryCreateView( virtualPath, document );
+          var view = provider.TryCreateView( context, virtualPath );
           if ( view != null )
             return view;
         }
+      }
 
-
-        var handlerPath = virtualPath + ".ashx";
-        if ( VirtualPathProvider.FileExists( handlerPath ) )
+      var handlerPath = virtualPath + ".ashx";
+      if ( VirtualPathProvider.FileExists( handlerPath ) )
+      {
+        try
         {
-          try
+          var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
+          if ( handler != null )
           {
-            var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
-            if ( handler != null )
-            {
-              return handler;
-            }
-          }
-          catch
-          {
+
+            var mapping = new MvcMapping( virtualPath, handler );
+
+            context.HttpContext.SetMapping( mapping );
+
+            return handler;
 
           }
         }
+        catch
+        {
 
-
-        return new JumonyView( virtualPath, document );
-
+        }
       }
+
+
+      return new JumonyView( virtualPath, LoadDocument( context.HttpContext, virtualPath ) );
     }
 
 

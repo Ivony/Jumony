@@ -24,24 +24,33 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+    protected object ViewModel
+    {
+      get { return ViewContext.ViewData.Model; }
+    }
+
+    protected ViewDataDictionary ViewData
+    {
+      get { return ViewContext.ViewData; }
+    }
 
     public void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
       Writer = writer;
 
-      ProcessRequestCore( ViewContext.HttpContext );
+      ProcessRequest( ViewContext.HttpContext );
     }
 
     protected override void OnPostProcessDocument()
     {
-      
+
       base.OnPostProcessDocument();
 
       ProcessActionLinks();
 
       Document.ResolveUriToAbsoluate();
-    
+
     }
 
     protected void ProcessActionLinks()

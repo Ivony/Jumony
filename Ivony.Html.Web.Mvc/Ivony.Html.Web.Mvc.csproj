@@ -70,6 +70,7 @@
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="JumonyViewResult.cs" />
+    <Compile Include="MvcAdapter.cs" />
     <Compile Include="MvcMapping.cs" />
     <Compile Include="ProcessPartials.cs" />
     <Compile Include="ViewHandler.cs" />
@@ -80,6 +81,10 @@
     <Compile Include="WebFormViewEngineWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
       <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
       <Name>Ivony.Html.Binding</Name>

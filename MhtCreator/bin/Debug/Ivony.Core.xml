@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ivony.Core</name>
+    </assembly>
+    <members>
+        <member name="M:Ivony.Fluent.StringExtensions.EqualsIgnoreCase(System.String,System.String)">
+            <summary>
+            对字符串执行不区分大小写的比较
+            </summary>
+            <param name="str1"></param>
+            <param name="str2"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.ReadOnlyEnumerable`1">
+            <summary>
+            该类为可修改的集合提供一份只读的枚举包装，避免用户利用强制类型转换来修改集合。
+            </summary>
+            <typeparam name="T">枚举元素类型</typeparam>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindTo``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Action{``0,``1})">
+            <summary>
+            将集合的每一项按顺序绑定到另一个集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindTo``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Action{``0,``1,System.Int32})">
+            <summary>
+            将集合的每一项按顺序绑定到另一个集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindTo``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},``0,System.Action{``0,``1})">
+            <summary>
+            将集合的每一项按顺序绑定到另一个集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindTo``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},``0,System.Action{``0,``1,System.Int32})">
+            <summary>
+            将集合的每一项按顺序绑定到另一个集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindFrom``2(System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``0},System.Action{``0,``1})">
+            <summary>
+            将源集合的每一项按顺序绑定到集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindFrom``2(System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``0},System.Action{``0,``1,System.Int32})">
+            <summary>
+            将源集合的每一项按顺序绑定到集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindFrom``2(System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``0},``0,System.Action{``0,``1})">
+            <summary>
+            将源集合的每一项按顺序绑定到集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.BindFrom``2(System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``0},``0,System.Action{``0,``1,System.Int32})">
+            <summary>
+            将源集合的每一项按顺序绑定到集合
+            </summary>
+            <typeparam name="TSource">源集合元素类型</typeparam>
+            <typeparam name="TTarget">目标集合元素类型</typeparam>
+            <param name="source">源集合</param>
+            <param name="targets">目标集合</param>
+            <param name="defaultValue">当源集合元素不够时所采用的默认元素</param>
+            <param name="binder">绑定方法</param>
+            <returns>源集合</returns>
+        </member>
+        <member name="M:Ivony.Fluent.EnumerableExtension.AsReadOnly``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            创建只读枚举封装，避免集合类型强制类型转换后被修改
+            </summary>
+            <typeparam name="T">枚举元素类型</typeparam>
+            <param name="enumerable">要创建只读枚举封装的集合</param>
+            <returns>只读枚举封装</returns>
+        </member>
+        <member name="T:Ivony.Data.IPagingData">
+            <summary>
+            定义一个数据分页器
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.IPagingData.GetPage(System.Int32)">
+            <summary>
+            获取分页后的数据
+            </summary>
+            <param name="pageIndex">页序号</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.IPagingData.Count">
+            <summary>
+            获取数据总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Data.IPagingData.PageSize">
+            <summary>
+            页大小
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.IPagingData`1">
+            <summary>
+            定义一个数据分页器
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Ivony.Data.IPagingData`1.GetPage(System.Int32)">
+            <summary>
+            获取分页后的数据
+            </summary>
+            <param name="pageIndex">页序号</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Data.IPagingDataSource`1">
+            <summary>
+            可分页数据源
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Ivony.Data.IPagingDataSource`1.CreatePaging(System.Int32)">
+            <summary>
+            创建分页器
+            </summary>
+            <param name="pageSize">分页大小</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.PagingExtension.Take``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            从序列的指定位置返回指定数量的连续元素
+            </summary>
+            <typeparam name="TSource">list 中的元素的类型</typeparam>
+            <param name="list">要从其返回元素的序列</param>
+            <param name="start">要返回的元素在序列的开始位置</param>
+            <param name="count">要返回的元素数量</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.PagingExtension.CopySegment``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            从数组中拷贝出一个片段
+            </summary>
+            <typeparam name="T">数组元素类型</typeparam>
+            <param name="source">要从其拷贝的源数组</param>
+            <param name="start">片段的开始位置</param>
+            <param name="size">片段的大小</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.PagingExtension.GetMaxPage``1(Ivony.Data.IPagingData{``0})">
+            <summary>
+            获取分页器的最大页数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="pagingData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.PagingExtension.ToPagingSource``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            从IList&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
+            </summary>
+            <typeparam name="T">source 中的元素的类型</typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.PagingExtension.ToPagingSource``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            从IEnumerable&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
+            </summary>
+            <typeparam name="T">source 中的元素的类型</typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

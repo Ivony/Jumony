@@ -8,16 +8,31 @@ using System.Web.Routing;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Compilation;
+using System.Web.Caching;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class JumonyView : IView
+  public class JumonyView : IView, IHtmlHandler
   {
+
+
+    public JumonyView( string virtualPath )
+    {
+      VirtualPath = virtualPath;
+    }
+
+
+
+    protected JumonyView()
+    {
+
+    }
+
 
     protected string VirtualPath
     {
       get;
-      private set;
+      protected set;
     }
 
 
@@ -28,11 +43,47 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public JumonyView( string virtualPath, IHtmlDocument document )
+    protected ViewContext ViewContext
     {
-      VirtualPath = virtualPath;
-      Document = document;
+      get;
+      private set;
     }
+
+    protected object ViewModel
+    {
+      get { return ViewContext.ViewData.Model; }
+    }
+
+    protected ViewDataDictionary ViewData
+    {
+      get { return ViewContext.ViewData; }
+    }
+
+    protected HttpContextBase HttpContext
+    {
+      get { return ViewContext.HttpContext; }
+    }
+
+    protected RequestContext RequestContext
+    {
+      get { return ViewContext.RequestContext; }
+    }
+
+    protected RouteData RouteData
+    {
+      get { return ViewContext.RouteData; }
+    }
+
+    protected TempDataDictionary TempData
+    {
+      get { return ViewContext.TempData; }
+    }
+
+    protected Cache Cache
+    {
+      get { return HttpContext.Cache; }
+    }
+
 
 
 
@@ -43,51 +94,67 @@ namespace Ivony.Html.Web.Mvc
 
       var strings = new string[0];
       object[] objects = strings;
-
     }
 
 
-    public ViewContext ViewContext
+
+    private MvcAdapter _adapter = new MvcAdapter();
+    protected virtual MvcAdapter HtmlAdapter
     {
-      get;
-      private set;
+      get { return _adapter; }
     }
-
-    public ViewDataDictionary ViewData
-    {
-      get { return ViewContext.ViewData; }
-    }
-
-    public object Model
-    {
-      get { return ViewData.Model; }
-    }
-
 
 
 
     protected virtual void Render( TextWriter output )
     {
-      ProcessDocument();
+      Document = LoadDocument( VirtualPath );
 
-      ProcessActionLinks();
+      ProcessDocument( ViewContext.HttpContext, Document );
 
-      AddGeneratorMetaData();
-
+      ProcessPartials();
 
       Document.ResolveUriToAbsoluate();
 
-      Document.Render( output );
+      var cacheKey = ViewContext.TempData["CacheKey"];
+
+      if ( cacheKey != null )
+      {
+        var content = Document.Render( HtmlAdapter );
+        UpdateCache( cacheKey, content );
+      }
+      else
+      {
+        Document.Render( output, HtmlAdapter );
+      }
+
+    }
+
+    private void UpdateCache( object cacheKey, string content )
+    {
+      throw new NotImplementedException();
+    }
+
+    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    {
+      return HtmlProviders.LoadDocument( HttpContext, virtualPath );
     }
 
 
-
-    protected virtual void ProcessDocument()
-    { 
-    
+    public void ProcessDocument( HttpContextBase context, IHtmlDocument document )
+    {
+      return;
     }
 
 
+    private void ProcessPartials()
+    {
+
+
+
+
+
+    }
 
 
     protected void ProcessActionLinks()
@@ -145,5 +212,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+
+    public void Dispose()
+    {
+    }
   }
 }

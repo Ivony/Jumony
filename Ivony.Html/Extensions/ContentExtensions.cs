@@ -200,10 +200,10 @@ namespace Ivony.Html
 
         if ( HtmlSpecification.cdataTags.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
           return textNode.HtmlText;
-        
+
         else if ( HtmlSpecification.preformatedElements.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
           return HtmlEncoding.HtmlDecode( textNode.HtmlText );
-        
+
         else
           return HtmlEncoding.HtmlDecode( whitespaceRegex.Replace( textNode.HtmlText, " " ) );
       }
@@ -243,103 +243,6 @@ namespace Ivony.Html
     }
 
 
-    /// <summary>
-    /// 将文档呈现为 HTML
-    /// </summary>
-    /// <param name="document">要呈现的文档</param>
-    /// <returns>文档的 HTML 形式</returns>
-    public static string Render( this IHtmlDocument document )
-    {
-      using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
-      {
-        Render( document, writer );
-
-        return writer.ToString();
-      }
-    }
-
-    /// <summary>
-    /// 将文档呈现为 HTML
-    /// </summary>
-    /// <param name="document">要呈现的文档</param>
-    /// <param name="writer">HTML 编写器</param>
-    public static void Render( this IHtmlDocument document, TextWriter writer )
-    {
-      RenderChilds( document, writer );
-    }
-
-    /// <summary>
-    /// 将文档呈现为 HTML
-    /// </summary>
-    /// <param name="document">要呈现的文档</param>
-    /// <param name="stream">用于输出呈现的 HTML 的流</param>
-    /// <param name="encoding">呈现的 HTML 的编码格式</param>
-    public static void Render( this IHtmlDocument document, Stream stream, Encoding encoding )
-    {
-      var writer = new StreamWriter( stream, encoding );
-      Render( document, writer );
-
-      writer.Flush();
-    }
-
-
-    private static void RenderChilds( IHtmlContainer container, TextWriter writer )
-    {
-      foreach ( var node in container.Nodes() )
-      {
-        Render( node, writer );
-      }
-    }
-
-
-    private static void Render( IHtmlNode node, TextWriter writer )
-    {
-      var renderable = node as IHtmlRenderableNode;
-
-      if ( renderable != null )
-      {
-        renderable.Render( writer );
-        return;
-      }
-
-      var element = node as IHtmlElement;
-      if ( element != null )
-      {
-        Render( element, writer );
-        return;
-      }
-
-
-
-      writer.Write( node.OuterHtml() );
-    }
-
-
-    private static void Render( IHtmlElement element, TextWriter writer )
-    {
-
-
-      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
-      {
-        var builder = new StringBuilder();
-
-        builder.Append( GenerateTagHtml( element, true ) );
-
-        if ( element.Nodes().Any() )
-          throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
-
-
-        writer.Write( builder );
-      }
-      else
-      {
-
-        writer.Write( GenerateTagHtml( element, false ) );
-        RenderChilds( element, writer );
-        writer.Write( "</{0}>", element.Name );
-
-      }
-    }
 
 
   }

@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.IO;
 using System.Web.Routing;
 using System.Web;
+using System.Web.Hosting;
+using System.Web.Compilation;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -82,6 +84,28 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual void ProcessDocument()
     {
+
+      IHtmlHandler handler = FindHandler();
+
+      if ( handler != null )
+        handler.ProcessDocument( ViewContext.HttpContext, Document );
+
+    }
+
+    private IHtmlHandler FindHandler()
+    {
+      var handlerPath = VirtualPath + ".ashx";
+
+      if ( HostingEnvironment.VirtualPathProvider.FileExists( handlerPath ) )
+      {
+        try
+        {
+          return BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( JumonyHandler ) ) as JumonyHandler;
+        }
+        catch { }
+      }
+
+      return null;
     }
 
 

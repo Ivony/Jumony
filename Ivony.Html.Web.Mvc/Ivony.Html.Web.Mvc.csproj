@@ -69,6 +69,8 @@
     <Compile Include="JumonyFilterAttribute.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewEngine.cs" />
+    <Compile Include="MvcMapResult.cs" />
+    <Compile Include="ViewHandler.cs" />
     <Compile Include="ViewResultWrapper.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

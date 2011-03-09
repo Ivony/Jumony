@@ -17,7 +17,7 @@ namespace Ivony.Html.Web
   public interface IRequestMapper
   {
 
-    RequestMapResult MapRequest( HttpRequestBase request );
+    RequestMapping MapRequest( HttpRequestBase request );
 
   }
 
@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     private static readonly string[] allowsExtensions = new[] { ".html", ".htm", ".aspx" };
 
-    public RequestMapResult MapRequest( HttpRequestBase request )
+    public RequestMapping MapRequest( HttpRequestBase request )
     {
       var virtualPath = request.AppRelativeCurrentExecutionFilePath;
 
@@ -48,7 +48,7 @@ namespace Ivony.Html.Web
       if ( handler == null )
         return null;
 
-      return new RequestMapResult( virtualPath, handler );
+      return new RequestMapping( virtualPath, handler );
     }
 
 

@@ -12,16 +12,23 @@ namespace Ivony.Html.Web
   /// <summary>
   /// IRequestMapper 产生的映射结果
   /// </summary>
-  public class RequestMapResult
+  public class RequestMapping
   {
 
-    public RequestMapResult( string templatePath, IHtmlHandler handler )
+    public RequestMapping( string templatePath, IHtmlHandler handler )
     {
 
       if ( !VirtualPathUtility.IsAppRelative( templatePath ) )
         throw new ArgumentException( "模版文件路径必须是相对于应用程序根路径", "templatePath" );
 
       TemplatePath = templatePath;
+      Handler = handler;
+    }
+
+
+    protected RequestMapping( IRequestMapper mapper, IHtmlHandler handler )
+    {
+      Mapper = mapper;
       Handler = handler;
     }
 
@@ -35,7 +42,7 @@ namespace Ivony.Html.Web
     protected virtual string TemplatePath
     {
       get;
-      private set;
+      set;
     }
 
 
@@ -55,7 +62,7 @@ namespace Ivony.Html.Web
       }
     }
 
-    public virtual IHtmlDocument LoadDocument()
+    public virtual IHtmlDocument LoadTemplate()
     {
       var document = LoadDocument( out _templateCacheKey );
 
@@ -74,15 +81,6 @@ namespace Ivony.Html.Web
       get;
       private set;
     }
-
-
-    public virtual WebPage LoadPage()
-    {
-      var page = HtmlProviders.LoadPage( new HttpContextWrapper( HttpContext.Current ), TemplatePath );
-
-      return page;
-    }
-
 
   }
 }

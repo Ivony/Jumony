@@ -17,17 +17,17 @@ namespace Ivony.Html.Web
 
     private const string requestDataToken = "Jumony_HttpContext_RequestMapResult";
 
-    public static RequestMapResult GetMapperResult( this HttpContext context )
+    public static RequestMapping GetMapperResult( this HttpContext context )
     {
       return GetMapperResult( new HttpContextWrapper( context ) );
     }
 
-    public static RequestMapResult GetMapperResult( this HttpContextBase context )
+    public static RequestMapping GetMapperResult( this HttpContextBase context )
     {
-      return (RequestMapResult) context.Items[requestDataToken];
+      return (RequestMapping) context.Items[requestDataToken];
     }
 
-    internal static void SetMapResult( this HttpContext context, RequestMapResult data )
+    internal static void SetMapResult( this HttpContext context, RequestMapping data )
     {
       context.Items[requestDataToken] = data;
     }

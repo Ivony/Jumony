@@ -25,7 +25,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取映射的结果
     /// </summary>
-    protected RequestMapResult MapperResult
+    protected RequestMapping RequestMapping
     {
       get;
       private set;
@@ -38,11 +38,22 @@ namespace Ivony.Html.Web
     /// <param name="context">当前 HTTP 请求的上下文</param>
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
-      Context = new HttpContextWrapper( context );
 
-      MapperResult = Context.GetMapperResult();
+      ProcessRequestCore( CreateContext( context ) );
 
-      if ( MapperResult == null )
+    }
+
+    /// <summary>
+    /// 处理 HTTP 请求
+    /// </summary>
+    /// <param name="context">HTTP 上下文信息</param>
+    protected virtual void ProcessRequestCore( HttpContextBase context )
+    {
+      Context = context;
+
+      RequestMapping = Context.GetMapperResult();
+
+      if ( RequestMapping == null )
         throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
 
 
@@ -70,7 +81,7 @@ namespace Ivony.Html.Web
         OnPostLoadDocument();
       }
 
-      ((IHtmlHandler) this).ProcessDocument( new HttpContextWrapper( context ), Document );
+      ((IHtmlHandler) this).ProcessDocument( Context, Document );
 
 
       {
@@ -89,9 +100,21 @@ namespace Ivony.Html.Web
 
         UpdateCache( response );
 
-        response.Apply( Response );
+        OutputResponse( response );
+
         Trace.Write( "Jumony Web", "End response." );
       }
+
+    }
+
+    /// <summary>
+    /// 创建本次请求的上下文，派生类重写此方法提供自定义上下文。
+    /// </summary>
+    /// <param name="context">HTTP 上下文</param>
+    /// <returns>请求上下文信息</returns>
+    protected virtual HttpContextBase CreateContext( HttpContext context )
+    {
+      return new HttpContextWrapper( context );
     }
 
 
@@ -111,11 +134,10 @@ namespace Ivony.Html.Web
       if ( cacheItem == null )
         return false;
 
-      cacheItem.Apply( Response );
+      OutputResponse( cacheItem );
 
       return true;
     }
-
 
 
     /// <summary>
@@ -149,6 +171,18 @@ namespace Ivony.Html.Web
     }
 
 
+
+    /// <summary>
+    /// 派生类重写此方法自定义输出响应的逻辑
+    /// </summary>
+    /// <param name="responseData">响应信息</param>
+    protected virtual void OutputResponse( RawResponse responseData )
+    {
+      responseData.Apply( Response );
+    }
+
+
+
     /// <summary>
     /// 实现IHtmlHandler接口
     /// </summary>
@@ -156,6 +190,7 @@ namespace Ivony.Html.Web
     /// <param name="document"></param>
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
+      
       Context = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
       Document = document;
 
@@ -229,7 +264,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected virtual IHtmlDocument LoadDocument()
     {
-      var document = MapperResult.LoadDocument();
+      var document = RequestMapping.LoadTemplate();
 
       return document;
     }

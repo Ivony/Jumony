@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.IO;
 using System.Web.Caching;
+using System.Collections.ObjectModel;
 
 namespace Ivony.Html.Web
 {
@@ -117,7 +118,7 @@ namespace Ivony.Html.Web
     }
 
 
-    private static readonly string[] allowsExtensions = new[] { ".html", ".htm" };
+    private static readonly ICollection<string> allowsExtensions = new ReadOnlyCollection<string>( new[] { ".html", ".htm" } );
 
     public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {

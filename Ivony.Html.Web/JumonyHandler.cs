@@ -157,6 +157,7 @@ namespace Ivony.Html.Web
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
       Context = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
+      Document = document;
 
       OnPreProcessDocument();
 

@@ -26,6 +26,8 @@ namespace Ivony.Data
       }
     }
 
+
+
     /// <summary>
     /// 从数组中拷贝出一个片段
     /// </summary>
@@ -360,6 +362,66 @@ namespace Ivony.Data
       }
     }
 
+
+  }
+
+
+  public class QueryPagingSourceWrapper<T> : IPagingDataSource<T>
+  {
+
+    private IQueryable<T> _queryable;
+    private int _pageSize;
+
+    public QueryPagingSourceWrapper( IQueryable<T> queryable )
+    {
+      _queryable = queryable;
+    }
+
+
+
+    public IPagingData<T> CreatePaging( int pageSize )
+    {
+      return new QueryPaging<T>( _queryable, pageSize );
+    }
+
+    IPagingData IPagingDataSource.CreatePaging( int pageSize )
+    {
+      return CreatePaging( pageSize );
+    }
+
+
+    public class QueryPaging<Q> : IPagingData<Q>
+    {
+      private IQueryable<Q> _queryable;
+      private int _pageSize;
+
+      public QueryPaging( IQueryable<Q> queryable, int pageSize )
+      {
+        _queryable = queryable;
+        _pageSize = pageSize;
+      }
+
+      public IEnumerable<Q> GetPage( int pageIndex )
+      {
+        return _queryable.Take( pageIndex * PageSize ).Skip( (pageIndex - 1) * PageSize );
+      }
+
+      IEnumerable IPagingData.GetPage( int pageIndex )
+      {
+        return GetPage( pageIndex );
+      }
+
+
+      public int Count()
+      {
+        return _queryable.Count();
+      }
+
+      public int PageSize
+      {
+        get { return _pageSize; }
+      }
+    }
 
   }
 

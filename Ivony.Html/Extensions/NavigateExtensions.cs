@@ -282,6 +282,9 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
       return CssSelector.Search( expression, container );
     }
 
@@ -294,6 +297,9 @@ namespace Ivony.Html
     /// <returns>搜索到的符合要求的唯一元素</returns>
     public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
       return Find( container, expression ).Single();
     }
 

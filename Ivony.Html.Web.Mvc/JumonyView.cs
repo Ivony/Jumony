@@ -12,7 +12,7 @@ using System.Web.Caching;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class JumonyView : IView, IHtmlHandler
+  public class JumonyView : IView, ICachableView
   {
 
 
@@ -32,7 +32,7 @@ namespace Ivony.Html.Web.Mvc
     protected string VirtualPath
     {
       get;
-      protected set;
+      set;
     }
 
 
@@ -90,49 +90,47 @@ namespace Ivony.Html.Web.Mvc
     public void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
-      Render( writer );
 
-      var strings = new string[0];
-      object[] objects = strings;
+
+      var content = RenderContent();
+
+      CachedResult = new ContentResult()
+      {
+        Content = content,
+        ContentType = "text/html"
+      };
+
+      writer.Write( content );
     }
 
 
-
-    private MvcAdapter _adapter = new MvcAdapter();
-    protected virtual MvcAdapter HtmlAdapter
+    public ActionResult CachedResult
     {
-      get { return _adapter; }
+      get;
+      protected set;
     }
 
 
 
-    protected virtual void Render( TextWriter output )
+    protected virtual string RenderContent()
+    {
+      ProcessMain();
+
+      return Document.Render();
+    }
+
+
+    protected virtual void ProcessMain()
     {
       Document = LoadDocument( VirtualPath );
 
-      ProcessDocument( ViewContext.HttpContext, Document );
+      ProcessDocument();
+
+      ProcessActionLinks();
 
       ProcessPartials();
 
       Document.ResolveUriToAbsoluate();
-
-      var cacheKey = ViewContext.TempData["CacheKey"];
-
-      if ( cacheKey != null )
-      {
-        var content = Document.Render( HtmlAdapter );
-        UpdateCache( cacheKey, content );
-      }
-      else
-      {
-        Document.Render( output, HtmlAdapter );
-      }
-
-    }
-
-    private void UpdateCache( object cacheKey, string content )
-    {
-      throw new NotImplementedException();
     }
 
     protected virtual IHtmlDocument LoadDocument( string virtualPath )
@@ -141,7 +139,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public void ProcessDocument( HttpContextBase context, IHtmlDocument document )
+    public virtual void ProcessDocument()
     {
       return;
     }
@@ -217,5 +215,6 @@ namespace Ivony.Html.Web.Mvc
     public void Dispose()
     {
     }
+
   }
 }

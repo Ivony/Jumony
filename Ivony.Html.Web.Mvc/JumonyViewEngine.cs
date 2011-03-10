@@ -60,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
-      return CreateView( controllerContext, partialPath );
+      return CreateViewCore( controllerContext, partialPath );
     }
 
 
@@ -69,7 +69,7 @@ namespace Ivony.Html.Web.Mvc
       if ( !string.IsNullOrEmpty( masterPath ) )
         throw new NotSupportedException();
 
-      return CreateView( controllerContext, viewPath );
+      return CreateViewCore( controllerContext, viewPath );
     }
 
     protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
@@ -86,7 +86,7 @@ namespace Ivony.Html.Web.Mvc
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
     }
 
-    public IView CreateView( ControllerContext context, string virtualPath )
+    public IView CreateViewCore( ControllerContext context, string virtualPath )
     {
       lock ( _providersSync )
       {
@@ -107,9 +107,7 @@ namespace Ivony.Html.Web.Mvc
           if ( handler != null )
           {
 
-            var mapping = new MvcMapping( virtualPath, handler );
-
-            context.HttpContext.SetMapping( mapping );
+            handler.SetVirtualPath( virtualPath );
 
             return handler;
 
@@ -122,7 +120,7 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      return new JumonyView( virtualPath, LoadDocument( context.HttpContext, virtualPath ) );
+      return new JumonyView( virtualPath );
     }
 
 

@@ -29,5 +29,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
     #endregion
+
+    internal void SetVirtualPath( string virtualPath )
+    {
+      VirtualPath = virtualPath;
+    }
   }
 }

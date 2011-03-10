@@ -229,9 +229,6 @@ namespace Ivony.Html
       if ( attributeName == null )
         throw new ArgumentNullException( "attributeName" );
 
-      if ( attributeValue == null )
-        throw new ArgumentNullException( "attributeValue" );
-
       var modifier = EnsureModifiable( element );
 
       return modifier.AddAttribute( element, attributeName, attributeValue );

@@ -322,7 +322,40 @@ namespace Ivony.Html
       }
     }
 
-    private static void Render( this IHtmlNode node, TextWriter writer, IHtmlAdapter adapter )
+    /// <summary>
+    /// 将节点呈现为 HTML
+    /// </summary>
+    /// <param name="node">要呈现的节点</param>
+    /// <returns>呈现的 HTML</returns>
+    public static string Render( this IHtmlNode node )
+    {
+      using ( var writer = new StringWriter() )
+      {
+        Render( node, writer );
+
+        return writer.ToString();
+      }
+    }
+
+
+    /// <summary>
+    /// 将节点呈现为 HTML
+    /// </summary>
+    /// <param name="node">要呈现的节点</param>
+    /// <param name="writer">HTML 编写器</param>
+    public static void Render( this IHtmlNode node, TextWriter writer )
+    {
+      Render( node, writer, null );
+    }
+
+
+    /// <summary>
+    /// 将节点呈现为 HTML
+    /// </summary>
+    /// <param name="node">要呈现的节点</param>
+    /// <param name="writer">HTML 编写器</param>
+    /// <param name="adapter">HTML 输出转换器</param>
+    public static void Render( this IHtmlNode node, TextWriter writer, IHtmlAdapter adapter )
     {
 
       if ( adapter != null )

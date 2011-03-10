@@ -9,16 +9,16 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Compilation;
 using System.Web.Caching;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
   public class JumonyView : IView, ICachableView
   {
-
-
-    public JumonyView( string virtualPath )
+    public JumonyView( string virtualPath, bool isPartial )
     {
       VirtualPath = virtualPath;
+      IsPartial = isPartial;
     }
 
 
@@ -36,11 +36,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    protected bool IsPartial
+    {
+      get;
+      set;
+    }
+
+
     protected IHtmlDocument Document
     {
       get;
       private set;
     }
+
 
 
     protected ViewContext ViewContext
@@ -84,12 +92,20 @@ namespace Ivony.Html.Web.Mvc
       get { return HttpContext.Cache; }
     }
 
+    protected UrlHelper Url
+    {
+      get;
+      private set;
+    }
+
 
 
 
     public void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
+
+      Url = new UrlHelper( viewContext.RequestContext );
 
 
       var content = RenderContent();
@@ -116,7 +132,15 @@ namespace Ivony.Html.Web.Mvc
     {
       ProcessMain();
 
-      return Document.Render();
+
+      if ( IsPartial )
+      {
+        return Document.FindSingle( "body" ).Render();
+      }
+      else
+      {
+        return Document.Render();
+      }
     }
 
 
@@ -124,7 +148,7 @@ namespace Ivony.Html.Web.Mvc
     {
       Document = LoadDocument( VirtualPath );
 
-      ProcessDocument();
+      ProcessDocument( ViewModel );
 
       ProcessActionLinks();
 
@@ -139,7 +163,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public virtual void ProcessDocument()
+    public virtual void ProcessDocument( object model )
     {
       return;
     }
@@ -147,10 +171,6 @@ namespace Ivony.Html.Web.Mvc
 
     private void ProcessPartials()
     {
-
-
-
-
 
     }
 
@@ -182,7 +202,7 @@ namespace Ivony.Html.Web.Mvc
           controllerAttribute.Remove();
 
 
-        var href = UrlHelper.GenerateUrl( null, action, controller, routeValues, RouteTable.Routes, ViewContext.RequestContext, true );
+        var href = Url.Action( action, controller, routeValues );
 
         actionLink.SetAttribute( "href", href );
       }
@@ -214,6 +234,17 @@ namespace Ivony.Html.Web.Mvc
 
     public void Dispose()
     {
+    }
+
+  }
+
+
+  public class JumonyView<T> : JumonyView
+  {
+
+    protected T ViewModel
+    {
+      get { return base.ViewModel.CastTo<T>(); }
     }
 
   }

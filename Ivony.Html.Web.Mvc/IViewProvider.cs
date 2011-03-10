@@ -9,7 +9,7 @@ namespace Ivony.Html.Web.Mvc
   public interface IViewProvider
   {
 
-    JumonyView TryCreateView( ControllerContext context, string virtualPath );
+    JumonyView TryCreateView( ControllerContext context, string virtualPath, bool isPartial );
 
   }
 }

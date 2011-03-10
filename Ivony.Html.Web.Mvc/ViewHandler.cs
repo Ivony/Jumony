@@ -30,9 +30,10 @@ namespace Ivony.Html.Web.Mvc
 
     #endregion
 
-    internal void SetVirtualPath( string virtualPath )
+    internal void Initialize( string virtualPath, bool isPartial )
     {
       VirtualPath = virtualPath;
+      IsPartial = isPartial;
     }
   }
 }

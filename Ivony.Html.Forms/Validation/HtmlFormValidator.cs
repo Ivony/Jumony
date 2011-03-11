@@ -109,17 +109,6 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-    protected virtual void OnFailed()
-    {
-      ShowFailedMessage();
-
-
-      if ( Failed != null )
-        Failed( this, EventArgs.Empty );
-    }
-
-
-
     protected virtual void ShowFailedMessage()
     {
       var failedDalidators = _validators.Where( v => !v.IsValid );
@@ -212,7 +201,18 @@ namespace Ivony.Html.Forms.Validation
       return container.AddElement( "ul" );
     }
 
-    public EventHandler Failed;
+
+
+    protected virtual void OnFailed()
+    {
+      ShowFailedMessage();
+
+
+      if ( Failed != null )
+        Failed( this, EventArgs.Empty );
+    }
+
+    public event EventHandler Failed;
 
 
 
@@ -223,7 +223,7 @@ namespace Ivony.Html.Forms.Validation
         Successful( this, EventArgs.Empty );
     }
 
-    public EventHandler Successful;
+    public event EventHandler Successful;
 
 
 

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public interface ICachableView
+  public interface ICachableResult
   {
 
     ActionResult CachedResult

@@ -13,7 +13,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class JumonyView : IView, ICachableView
+  public class JumonyView : IView, ICachableResult
   {
     public JumonyView( string virtualPath, bool isPartial )
     {

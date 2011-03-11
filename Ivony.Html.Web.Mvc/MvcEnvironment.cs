@@ -10,13 +10,40 @@ using System.Web.Mvc;
 namespace Ivony.Html.Web.Mvc
 {
 
-  public class MvcEnvironment
+  public static class MvcEnvironment
   {
 
     public static void Initialize()
     {
-      ViewEngines.Engines.Add( new JumonyViewEngine() );
+      ViewEngines.Engines.Add( _viewEngine );
     }
+
+    private static JumonyViewEngine _viewEngine = new JumonyViewEngine();
+
+    public static JumonyViewEngine JumonyViewEngine
+    {
+      get { return _viewEngine; }
+    }
+
+
+
+
+
+    public static string GetCacheKey( ControllerContext context, ActionDescriptor actionDescriptor )
+    {
+
+      return HtmlProviders.GetCacheKey( context.HttpContext );
+
+    }
+
+
+    public static HtmlCachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor actionDescriptor, ActionResult cacheItem )
+    {
+
+      return HtmlProviders.GetCachePolicy( context.HttpContext, null, null );
+
+    }
+
 
 
 

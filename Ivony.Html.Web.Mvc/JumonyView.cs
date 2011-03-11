@@ -163,7 +163,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public virtual void ProcessDocument( object model )
+    protected virtual void ProcessDocument( dynamic model )
     {
       return;
     }
@@ -187,7 +187,7 @@ namespace Ivony.Html.Web.Mvc
 
         var routeValues = new RouteValueDictionary();
 
-        foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ) )
+        foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
         {
           routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
           attribute.Remove();
@@ -239,13 +239,20 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
-  public class JumonyView<T> : JumonyView
+  public abstract class JumonyView<T> : JumonyView
   {
 
-    protected T ViewModel
+    protected new T ViewModel
     {
       get { return base.ViewModel.CastTo<T>(); }
     }
+
+    protected override void ProcessDocument( object model )
+    {
+      ProcessDocument( (T) model );
+    }
+
+    protected new abstract void ProcessDocument( T model );
 
   }
 }

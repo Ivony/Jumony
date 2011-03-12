@@ -300,12 +300,13 @@ namespace Ivony.Html
       if ( !object.Equals( fragment.Document, node.Document ) )
         throw new InvalidOperationException();
 
+      var container = node.Container;
 
-      lock ( node.Container )
+      lock ( container )
       {
         int index = node.NodesIndexOfSelf();
         Remove( node );
-        return fragment.Into( node.Container, index );
+        return fragment.Into( container, index );
       }
     }
 

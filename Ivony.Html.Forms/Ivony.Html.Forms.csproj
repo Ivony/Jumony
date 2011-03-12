@@ -76,6 +76,7 @@
     <Compile Include="Validation\IHtmlValueValidator.cs" />
     <Compile Include="Validation\HtmlFieldValidator.cs" />
     <Compile Include="Validation\IntegerValidator.cs" />
+    <Compile Include="Validation\ISubmitValidator.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\ValidationRegulars.cs" />
   </ItemGroup>

@@ -12,6 +12,8 @@ namespace Ivony.Html.Parser
   public class DomFragment : IHtmlFragment, IDomContainer
   {
 
+
+
     public DomFragment( DomFragmentManager manager )
     {
       _manager = manager;
@@ -22,11 +24,17 @@ namespace Ivony.Html.Parser
       : this( manager )
     {
       _rawHtml = html;
+
+
+      var parser = new FragmentParser();
+
+      parser.ProcessFragment( html, this );
+
     }
 
 
 
-    protected class FragmentParser : HtmlParserBase
+    protected class FragmentParser : JumonyParser
     {
       private DomProvider _provider = new DomProvider();
 
@@ -42,6 +50,30 @@ namespace Ivony.Html.Parser
           return _provider;
         }
       }
+
+
+      public override IHtmlDocument Parse( string html, Uri url )
+      {
+        throw new NotSupportedException();
+      }
+
+      public virtual void ProcessFragment( string html, DomFragment fragment )
+      {
+
+        if ( string.IsNullOrEmpty( html ) )
+          return;
+
+        lock ( SyncRoot )
+        {
+          InitializeStack();
+
+          ContainerStack.Push( fragment );
+
+          ParseInternal( html );
+
+        }
+      }
+
 
     }
 
@@ -85,42 +117,6 @@ namespace Ivony.Html.Parser
 
 
 
-
-
-    public IHtmlElement AddElement( string name, IDictionary<string, string> attributes )
-    {
-      lock ( SyncRoot )
-      {
-        var element = new DomElement( name, attributes );
-        NodeCollection.Add( element );
-        return element;
-      }
-    }
-
-    public IHtmlTextNode AddTextNode( string htmlText )
-    {
-      lock ( SyncRoot )
-      {
-        var textNode = new DomTextNode( htmlText );
-        NodeCollection.Add( textNode );
-        return textNode;
-      }
-    }
-
-    public IHtmlComment AddComment( string comment )
-    {
-      lock ( SyncRoot )
-      {
-        var commentNode = new DomComment( comment );
-        NodeCollection.Add( commentNode );
-        return commentNode;
-      }
-    }
-
-    public IHtmlSpecial AddSpecial( string html )
-    {
-      throw new NotSupportedException();
-    }
 
     public IEnumerable<IHtmlNode> Into( IHtmlContainer container, int index )
     {

@@ -65,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CachedResult.cs" />
+    <Compile Include="HtmlCachableAttribute.cs" />
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />

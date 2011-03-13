@@ -190,7 +190,7 @@ namespace Ivony.Html.Web
       var policy = HtmlProviders.GetCachePolicy( Context, this, cachedResponse );
 
 
-      Cache.Insert( key, cachedResponse, policy.Dependency, System.Web.Caching.Cache.NoAbsoluteExpiration, policy.Duration );
+      Cache.Insert( key, cachedResponse, policy.Dependency, DateTime.UtcNow + policy.Duration, System.Web.Caching.Cache.NoSlidingExpiration );
 
     }
 

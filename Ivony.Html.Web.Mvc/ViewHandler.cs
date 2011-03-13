@@ -13,6 +13,16 @@ namespace Ivony.Html.Web.Mvc
   {
 
 
+    protected override void ProcessDocument()
+    {
+      ProcessDocument( ViewModel );
+    }
+
+    protected virtual void ProcessDocument( dynamic model )
+    {
+
+    }
+
 
 
 
@@ -36,4 +46,35 @@ namespace Ivony.Html.Web.Mvc
       IsPartial = isPartial;
     }
   }
+
+
+  public class ViewHandler<T> : JumonyView<T>, IHttpHandler
+  {
+
+    protected override void ProcessDocument()
+    {
+      ProcessDocument( ViewModel );
+    }
+
+    protected virtual void ProcessDocument( T model )
+    {
+
+    }
+
+
+    #region IHttpHandler 成员
+
+    public bool IsReusable
+    {
+      get { return false; }
+    }
+
+    public void ProcessRequest( HttpContext context )
+    {
+      throw new NotSupportedException();
+    }
+
+    #endregion
+  }
+
 }

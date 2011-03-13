@@ -13,7 +13,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class JumonyView : IView, ICachableResult
+  public abstract class JumonyView : IView, ICachableResult
   {
     public JumonyView( string virtualPath, bool isPartial )
     {
@@ -148,7 +148,7 @@ namespace Ivony.Html.Web.Mvc
     {
       Document = LoadDocument( VirtualPath );
 
-      ProcessDocument( ViewModel );
+      ProcessDocument();
 
       ProcessActionLinks();
 
@@ -163,10 +163,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected virtual void ProcessDocument( dynamic model )
-    {
-      return;
-    }
+    protected abstract void ProcessDocument();
 
 
     private void ProcessPartials()
@@ -247,12 +244,22 @@ namespace Ivony.Html.Web.Mvc
       get { return base.ViewModel.CastTo<T>(); }
     }
 
-    protected override void ProcessDocument( object model )
+  }
+
+
+  internal class GenericView : JumonyView
+  {
+
+    public GenericView( string virtualPath, bool isPartial )
+      : base( virtualPath, isPartial )
     {
-      ProcessDocument( (T) model );
+
     }
 
-    protected new abstract void ProcessDocument( T model );
 
+    protected override void ProcessDocument()
+    {
+      return;
+    }
   }
 }

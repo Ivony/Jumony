@@ -120,7 +120,7 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      return new JumonyView( virtualPath, isPartial );
+      return new GenericView( virtualPath, isPartial );
     }
 
 

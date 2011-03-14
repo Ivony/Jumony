@@ -69,6 +69,9 @@ namespace Ivony.Html
           case '>':
             writer.Write( "&gt;" );
             continue;
+          case ' ':
+            writer.Write( "&nbsp;" );
+            continue;
         }
 
         if ( ( ch >= '\x00a0' ) && ( ch < '\x0100' ) )

@@ -19,8 +19,9 @@ namespace Ivony.Html
     /// <summary>
     /// 将碎片插入到文档指定位置
     /// </summary>
-    /// <param name="container"></param>
-    /// <param name="index"></param>
+    /// <param name="container">要插入的容器</param>
+    /// <param name="index">要插入的位置</param>
+    /// <returns>固定于文档上的节点集</returns>
     IEnumerable<IHtmlNode> Into( IHtmlContainer container, int index );
   }
 }

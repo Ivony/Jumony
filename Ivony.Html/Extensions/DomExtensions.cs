@@ -212,6 +212,102 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 尝试为容器添加一个文档碎片
+    /// </summary>
+    /// <param name="container">要添加碎片的容器</param>
+    /// <param name="fragment">要添加的碎片</param>
+    /// <returns></returns>
+    public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, IHtmlFragment fragment )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+
+
+      lock ( container.SyncRoot )
+      {
+        return AddFragment( container, container.Nodes().Count(), fragment );
+      }
+    }
+
+
+    /// <summary>
+    /// 尝试为容器添加一个文档碎片
+    /// </summary>
+    /// <param name="container">要添加碎片的容器</param>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="fragment">要添加的碎片</param>
+    /// <returns></returns>
+    public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, int index, IHtmlFragment fragment )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+      return fragment.Into( container, index );
+
+    }
+
+
+    /// <summary>
+    /// 尝试为容器添加一个文档碎片
+    /// </summary>
+    /// <param name="container">要添加碎片的容器</param>
+    /// <param name="html">要分析成碎片的 HTML 文本</param>
+    /// <returns></returns>
+    public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, string html )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      var fragment = container.Document.ParseFragment( html );
+
+      return AddFragment( container, fragment );
+
+    }
+
+
+    /// <summary>
+    /// 尝试为容器添加一个文档碎片
+    /// </summary>
+    /// <param name="container">要添加碎片的容器</param>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="html">要分析成碎片的 HTML 文本</param>
+    /// <returns></returns>
+    public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, int index, string html )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      var fragment = container.Document.ParseFragment( html );
+
+      return AddFragment( container, index, fragment );
+
+    }
+
+
+
+
+
+
+
+
 
     /// <summary>
     /// 添加一个属性

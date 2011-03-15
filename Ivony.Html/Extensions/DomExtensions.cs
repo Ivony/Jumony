@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -350,6 +351,38 @@ namespace Ivony.Html
 
       modifier.RemoveNode( node );
     }
+
+
+
+    /// <summary>
+    /// 尝试从 DOM 中移除指定节点
+    /// </summary>
+    /// <typeparam name="T">节点类型</typeparam>
+    /// <param name="nodes">要移除的节点</param>
+    /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    public static void Remove<T>( this IEnumerable<T> nodes ) where T : IHtmlNode
+    {
+
+      if ( !nodes.Any() )
+        return;
+
+      var document = nodes.First().Document;
+      var modifier = document.DomModifier;
+
+      if ( modifier == null )
+        throw new NotSupportedException();
+
+      var array = nodes.ToArray();
+
+      if ( array.Any( item => !item.Document.Equals( document ) ) )
+        throw new InvalidOperationException();
+
+      foreach ( var node in array )
+      {
+        modifier.RemoveNode( node );
+      }
+    }
+
 
 
     /// <summary>

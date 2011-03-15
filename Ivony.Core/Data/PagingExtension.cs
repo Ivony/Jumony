@@ -51,7 +51,7 @@ namespace Ivony.Data
     /// <typeparam name="T"></typeparam>
     /// <param name="pagingData"></param>
     /// <returns></returns>
-    public static int GetMaxPage<T>( this IPagingData<T> pagingData )
+    public static int MaxPages( this IPagingData pagingData )
     {
       int count = pagingData.Count();
       int pageSize = pagingData.PageSize;

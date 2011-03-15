@@ -360,6 +360,7 @@ namespace Ivony.Html
     /// <typeparam name="T">节点类型</typeparam>
     /// <param name="nodes">要移除的节点</param>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    /// <exception cref="System.InvalidOperationException">若节点不是位于同一文档</exception>
     public static void Remove<T>( this IEnumerable<T> nodes ) where T : IHtmlNode
     {
 

@@ -26,6 +26,10 @@ namespace Ivony.Html
     private object _sync = new object();
     private IList<IHtmlNode> _nodeCollection;
 
+    /// <summary>
+    /// 创建空的 IHtmlCollection 对象
+    /// </summary>
+    /// <param name="document">要搜集节点所属的文档</param>
     public HtmlCollection( IHtmlDocument document )
     {
       if ( document == null )
@@ -36,6 +40,11 @@ namespace Ivony.Html
       _nodeCollection = new SynchronizedCollection<IHtmlNode>( SyncRoot );
     }
 
+
+    /// <summary>
+    /// 创建 IHtmlCollection 对象
+    /// </summary>
+    /// <param name="nodes">包含的节点</param>
     public HtmlCollection( IEnumerable<IHtmlNode> nodes )
     {
       if ( nodes == null )
@@ -51,7 +60,11 @@ namespace Ivony.Html
 
     }
 
-
+    /// <summary>
+    /// 添加一个节点
+    /// </summary>
+    /// <param name="node">要添加的节点</param>
+    /// <exception cref="System.InvalidOperationException">若节点不是位于同一文档</exception>
     public void AddNode( IHtmlNode node )
     {
 

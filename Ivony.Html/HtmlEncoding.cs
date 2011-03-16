@@ -37,6 +37,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="text">要编码的字符串</param>
     /// <param name="writer">用于写入编码后字符串的文本写入器</param>
+    /// <remarks>注意！空白字符不会被自动编码</remarks>
     public static void HtmlEncode(string text, TextWriter writer)
     {
 #if dotnet4
@@ -68,9 +69,6 @@ namespace Ivony.Html
             continue;
           case '>':
             writer.Write( "&gt;" );
-            continue;
-          case ' ':
-            writer.Write( "&nbsp;" );
             continue;
         }
 

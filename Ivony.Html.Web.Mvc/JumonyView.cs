@@ -107,8 +107,9 @@ namespace Ivony.Html.Web.Mvc
 
       Url = new UrlHelper( viewContext.RequestContext );
 
+      ProcessMain();
 
-      var content = RenderContent();
+      var content = RenderDocument();
 
       CachedResult = new ContentResult()
       {
@@ -128,10 +129,8 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    protected virtual string RenderContent()
+    protected virtual string RenderDocument()
     {
-      ProcessMain();
-
 
       if ( IsPartial )
       {

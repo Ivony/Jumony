@@ -118,7 +118,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, string replacement )  where T : IHtmlElement
+    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, string replacement ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -141,7 +141,7 @@ namespace Ivony.Html
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">替换字符串</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, MatchEvaluator evaluator )  where T : IHtmlElement
+    public static T SetAttribute<T>( this T element, string attributeName, Regex pattern, MatchEvaluator evaluator ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -163,7 +163,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
     /// <returns></returns>
-    public static T SetAttribute<T>( this T element, string attributeName, Func<string, string> evaluator )   where T : IHtmlElement
+    public static T SetAttribute<T>( this T element, string attributeName, Func<string, string> evaluator ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -189,6 +189,13 @@ namespace Ivony.Html
 
 
 
+    public static T[] SetAttribute<T>( this T[] elements, string attributeName, string value ) where T : IHtmlElement
+    {
+      SetAttribute( elements.AsEnumerable(), attributeName, value );
+
+      return elements;
+    }
+
 
     /// <summary>
     /// 设置属性值
@@ -197,7 +204,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
     /// <returns>源元素集</returns>
-    public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
+    public static IEnumerable<T> SetAttribute<T>( this IEnumerable<T> elements, string attributeName, string value ) where T : IHtmlElement
     {
       if ( elements == null )
         throw new ArgumentNullException( "elements" );

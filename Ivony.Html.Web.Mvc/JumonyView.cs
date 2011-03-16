@@ -101,7 +101,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    public void Render( ViewContext viewContext, TextWriter writer )
+    public virtual void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
 
@@ -146,7 +146,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual void ProcessMain()
     {
-      Document = LoadDocument( VirtualPath );
+      Document = LoadDocument();
 
       ProcessDocument();
 
@@ -157,16 +157,16 @@ namespace Ivony.Html.Web.Mvc
       Document.ResolveUriToAbsoluate();
     }
 
-    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    protected virtual IHtmlDocument LoadDocument()
     {
-      return HtmlProviders.LoadDocument( HttpContext, virtualPath );
+      return HtmlProviders.LoadDocument( HttpContext, VirtualPath );
     }
 
 
     protected abstract void ProcessDocument();
 
 
-    private void ProcessPartials()
+    protected void ProcessPartials()
     {
 
     }

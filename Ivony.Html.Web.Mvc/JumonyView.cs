@@ -13,7 +13,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class JumonyView : IView, ICachableResult
+  public abstract class JumonyView : JumonyViewBase
   {
     public JumonyView( string virtualPath, bool isPartial )
     {
@@ -29,18 +29,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected string VirtualPath
-    {
-      get;
-      set;
-    }
-
-
-    protected bool IsPartial
-    {
-      get;
-      set;
-    }
 
 
     protected IHtmlDocument Document
@@ -50,108 +38,21 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
-    protected ViewContext ViewContext
+    protected override string RenderContent()
     {
-      get;
-      private set;
-    }
-
-    protected object ViewModel
-    {
-      get { return ViewContext.ViewData.Model; }
-    }
-
-    protected ViewDataDictionary ViewData
-    {
-      get { return ViewContext.ViewData; }
-    }
-
-    protected HttpContextBase HttpContext
-    {
-      get { return ViewContext.HttpContext; }
-    }
-
-    protected RequestContext RequestContext
-    {
-      get { return ViewContext.RequestContext; }
-    }
-
-    protected RouteData RouteData
-    {
-      get { return ViewContext.RouteData; }
-    }
-
-    protected TempDataDictionary TempData
-    {
-      get { return ViewContext.TempData; }
-    }
-
-    protected Cache Cache
-    {
-      get { return HttpContext.Cache; }
-    }
-
-    protected UrlHelper Url
-    {
-      get;
-      private set;
+      return Document.Render();
     }
 
 
-
-
-    public virtual void Render( ViewContext viewContext, TextWriter writer )
-    {
-      ViewContext = viewContext;
-
-      Url = new UrlHelper( viewContext.RequestContext );
-
-      ProcessMain();
-
-      var content = RenderDocument();
-
-      CachedResult = new ContentResult()
-      {
-        Content = content,
-        ContentType = "text/html"
-      };
-
-      writer.Write( content );
-    }
-
-
-    public ActionResult CachedResult
-    {
-      get;
-      protected set;
-    }
-
-
-
-    protected virtual string RenderDocument()
-    {
-
-      if ( IsPartial )
-      {
-        return Document.FindSingle( "body" ).Render();
-      }
-      else
-      {
-        return Document.Render();
-      }
-    }
-
-
-    protected virtual void ProcessMain()
+    protected override void ProcessMain()
     {
       Document = LoadDocument();
 
       ProcessDocument();
 
-      ProcessActionLinks();
+      ProcessActionLinks( Document );
 
-      ProcessPartials();
+      ProcessPartials( Document );
 
       Document.ResolveUriToAbsoluate();
     }
@@ -163,47 +64,6 @@ namespace Ivony.Html.Web.Mvc
 
 
     protected abstract void ProcessDocument();
-
-
-    protected void ProcessPartials()
-    {
-
-    }
-
-
-    protected void ProcessActionLinks()
-    {
-
-      var links = Document.Find( "a[action]" );
-
-      foreach ( var actionLink in links )
-      {
-        var action = actionLink.Attribute( "action" ).Value();
-        var controller = actionLink.Attribute( "controller" ).Value();
-
-        var routeValues = new RouteValueDictionary();
-
-        foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
-        {
-          routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
-          attribute.Remove();
-        }
-
-
-
-        actionLink.Attribute( "action" ).Remove();
-
-        var controllerAttribute = actionLink.Attribute( "controller" );
-        if ( controllerAttribute != null )
-          controllerAttribute.Remove();
-
-
-        var href = Url.Action( action, controller, routeValues );
-
-        actionLink.SetAttribute( "href", href );
-      }
-
-    }
 
 
 
@@ -225,12 +85,6 @@ namespace Ivony.Html.Web.Mvc
       }
     }
 
-
-
-
-    public void Dispose()
-    {
-    }
 
   }
 

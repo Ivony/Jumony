@@ -295,6 +295,10 @@ namespace Ivony.Html
     /// <param name="adapter">HTML 输出转换器</param>
     public static void Render( this IHtmlDocument document, TextWriter writer, IHtmlAdapter adapter )
     {
+
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
       RenderChilds( document, writer, adapter );
     }
 

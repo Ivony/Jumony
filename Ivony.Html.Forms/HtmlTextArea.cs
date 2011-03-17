@@ -34,7 +34,7 @@ namespace Ivony.Html.Forms
     public string TextValue
     {
       get { return _element.InnerText(); }
-      set { throw new NotImplementedException(); }
+      set { _element.InnerText( TextValue ); }
     }
 
     public string Name

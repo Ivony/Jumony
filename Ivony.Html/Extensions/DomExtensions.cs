@@ -468,7 +468,7 @@ namespace Ivony.Html
         {
           modifier.AddTextNode( element, text );
         }
-        if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
           modifier.AddTextNode( element, HtmlEncoding.HtmlEncode( text ) );
         }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web;
 using System.IO;
 using System.Web.Routing;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -48,33 +49,24 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
-  public class ViewHandler<T> : JumonyView<T>, IHttpHandler
+  public class ViewHandler<T> : ViewHandler
   {
+
+    protected new T ViewModel
+    {
+      get { return base.ViewModel.CastTo<T>(); }
+    }
+
 
     protected override void ProcessDocument()
     {
       ProcessDocument( ViewModel );
     }
 
-    protected virtual void ProcessDocument( T model )
+    protected new virtual void ProcessDocument( T model )
     {
 
     }
-
-
-    #region IHttpHandler 成员
-
-    public bool IsReusable
-    {
-      get { return false; }
-    }
-
-    public void ProcessRequest( HttpContext context )
-    {
-      throw new NotSupportedException();
-    }
-
-    #endregion
   }
 
 }

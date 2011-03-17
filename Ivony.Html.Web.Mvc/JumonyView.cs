@@ -89,16 +89,6 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
-  public abstract class JumonyView<T> : JumonyView
-  {
-
-    protected new T ViewModel
-    {
-      get { return base.ViewModel.CastTo<T>(); }
-    }
-
-  }
-
 
   internal class GenericView : JumonyView
   {

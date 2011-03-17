@@ -70,6 +70,7 @@
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />
+    <Compile Include="JumonyPartialView.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

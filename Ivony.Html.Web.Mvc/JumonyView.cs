@@ -95,8 +95,8 @@ namespace Ivony.Html.Web.Mvc
   internal class GenericView : JumonyView
   {
 
-    public GenericView( string virtualPath, bool isPartial )
-      : base( virtualPath, isPartial )
+    public GenericView( string virtualPath )
+      : base( virtualPath )
     {
 
     }

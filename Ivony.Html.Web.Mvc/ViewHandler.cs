@@ -43,10 +43,9 @@ namespace Ivony.Html.Web.Mvc
 
     #endregion
 
-    internal void Initialize( string virtualPath, bool isPartial )
+    internal void Initialize( string virtualPath )
     {
       VirtualPath = virtualPath;
-      IsPartial = isPartial;
     }
   }
 

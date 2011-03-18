@@ -88,6 +88,10 @@ namespace Ivony.Html.Web.Mvc
 
     public IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
+
+      if ( isPartial )
+        throw new NotSupportedException();//UNDONE 
+
       lock ( _providersSync )
       {
         foreach ( var provider in ViewProviders )
@@ -107,7 +111,7 @@ namespace Ivony.Html.Web.Mvc
           if ( handler != null )
           {
 
-            handler.Initialize( virtualPath, isPartial );
+            handler.Initialize( virtualPath );
 
             return handler;
 
@@ -120,7 +124,7 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      return new GenericView( virtualPath, isPartial );
+      return new GenericView( virtualPath );
     }
 
 

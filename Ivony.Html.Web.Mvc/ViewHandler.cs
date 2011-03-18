@@ -18,6 +18,11 @@ namespace Ivony.Html.Web.Mvc
     {
     }
 
+    protected virtual void ProcessDocument( dynamic model )
+    {
+
+    }
+
 
 
 

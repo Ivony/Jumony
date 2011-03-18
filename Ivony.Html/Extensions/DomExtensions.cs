@@ -550,6 +550,21 @@ namespace Ivony.Html
 
 
 
+    public static IEnumerable<IHtmlNode> ReplaceWithHtml( this IHtmlNode node, string html )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      var fragment = node.Document.ParseFragment( html );
+
+      return ReplaceWith( node, fragment );
+
+    }
+
+
 
 
 

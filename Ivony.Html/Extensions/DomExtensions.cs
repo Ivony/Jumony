@@ -307,6 +307,114 @@ namespace Ivony.Html
 
 
 
+    public static IHtmlTextNode AddCopy( this IHtmlContainer container, IHtmlTextNode textNode )
+    {
+
+
+      lock ( container.SyncRoot )
+      {
+        return AddCopy( container, container.Nodes().Count(), textNode );
+      }
+    }
+
+
+    public static IHtmlTextNode AddCopy( this IHtmlContainer container, int index, IHtmlTextNode textNode )
+    {
+      return container.AddTextNode( index, textNode.HtmlText );
+    }
+
+
+
+
+    public static IHtmlComment AddCopy( this IHtmlContainer container, IHtmlComment comment )
+    {
+
+
+      lock ( container.SyncRoot )
+      {
+        return AddCopy( container, container.Nodes().Count(), comment );
+      }
+    }
+
+
+    public static IHtmlComment AddCopy( this IHtmlContainer container, int index, IHtmlComment comment )
+    {
+      return container.AddComment( index, comment.Comment );
+    }
+
+
+
+    public static IHtmlElement AddCopy( this IHtmlContainer container, IHtmlElement element )
+    {
+
+
+      lock ( container.SyncRoot )
+      {
+        return AddCopy( container, container.Nodes().Count(), element );
+      }
+    }
+
+
+    public static IHtmlElement AddCopy( this IHtmlContainer container, int index, IHtmlElement element )
+    {
+      var _element = container.AddElement( index, element.Name );
+
+      foreach ( var attribute in element.Attributes() )
+        _element.AddAttribute( attribute.Name, attribute.AttributeValue );
+
+
+      foreach ( var node in element.Nodes() )
+        AddCopy( container, index, node );
+
+
+      return _element;
+    }
+
+
+    public static IHtmlNode AddCopy( this IHtmlContainer container, IHtmlNode node )
+    {
+
+      lock ( container.SyncRoot )
+      {
+        return AddCopy( container, container.Nodes().Count(), node );
+      }
+    }
+
+    public static IHtmlNode AddCopy( this IHtmlContainer container, int index, IHtmlNode node )
+    {
+      var textNode = node as IHtmlTextNode;
+      if ( textNode == null )
+        return AddCopy( container, index, textNode );
+
+      var comment = node as IHtmlComment;
+      if ( textNode == null )
+        return AddCopy( container, index, comment );
+
+      var element = node as IHtmlElement;
+      if ( textNode == null )
+        return AddCopy( container, index, element );
+
+      throw new NotSupportedException();
+    }
+
+
+
+
+
+    public static IHtmlFragment MakeCopy( this IHtmlFragment fragment )
+    {
+      var _fragment = fragment.Document.CreateFragment();
+
+      foreach ( var node in fragment.Nodes() )
+        _fragment.AddCopy( node );
+
+
+      return _fragment;
+    }
+
+
+
+
 
 
 

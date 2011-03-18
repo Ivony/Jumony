@@ -387,11 +387,11 @@ namespace Ivony.Html
         return AddCopy( container, index, textNode );
 
       var comment = node as IHtmlComment;
-      if ( textNode != null )
+      if ( comment != null )
         return AddCopy( container, index, comment );
 
       var element = node as IHtmlElement;
-      if ( textNode != null )
+      if ( element != null )
         return AddCopy( container, index, element );
 
       throw new NotSupportedException();

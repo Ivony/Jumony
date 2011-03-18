@@ -16,6 +16,9 @@ namespace Ivony.Html.Web.Mvc
 
     protected override void ProcessDocument()
     {
+
+      ProcessDocument( ViewModel );
+
     }
 
     protected virtual void ProcessDocument( dynamic model )

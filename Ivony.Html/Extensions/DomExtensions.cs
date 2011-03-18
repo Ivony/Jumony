@@ -364,7 +364,7 @@ namespace Ivony.Html
 
 
       foreach ( var node in element.Nodes() )
-        AddCopy( container, index, node );
+        AddCopy( _element, node );
 
 
       return _element;

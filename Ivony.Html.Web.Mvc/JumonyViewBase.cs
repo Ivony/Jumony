@@ -20,13 +20,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected bool IsPartial
-    {
-      get;
-      set;
-    }
-
-
     protected ViewContext ViewContext
     {
       get;
@@ -67,7 +60,6 @@ namespace Ivony.Html.Web.Mvc
     {
       get { return HttpContext.Cache; }
     }
-
 
 
     protected UrlHelper Url
@@ -119,7 +111,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected void ProcessActionLinks( IHtmlContainer container )
+    protected void ProcessActions( IHtmlContainer container )
     {
 
       var links = container.Find( "a[action]" );

@@ -293,6 +293,10 @@ namespace Ivony.Html
     /// <param name="document">要执行转换的文档</param>
     public static void ResolveUriToAbsoluate( this IHtmlDocument document )
     {
+      ResolveUriToAbsoluate( document, false );
+    }
+    public static void ResolveUriToAbsoluate( this IHtmlDocument document, bool resolveInternalReference )
+    {
       if ( document == null )
         throw new ArgumentNullException( "document" );
 
@@ -313,6 +317,10 @@ namespace Ivony.Html
 
         if ( !Uri.TryCreate( baseUri, value, out uri ) )
           continue;
+
+        if ( uri.Equals( baseUri ) && !resolveInternalReference )
+          continue;
+
 
         attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
 

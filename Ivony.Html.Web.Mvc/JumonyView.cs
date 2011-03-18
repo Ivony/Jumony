@@ -15,10 +15,9 @@ namespace Ivony.Html.Web.Mvc
 {
   public abstract class JumonyView : JumonyViewBase
   {
-    public JumonyView( string virtualPath, bool isPartial )
+    public JumonyView( string virtualPath )
     {
       VirtualPath = virtualPath;
-      IsPartial = isPartial;
     }
 
 
@@ -50,9 +49,12 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessDocument();
 
-      ProcessActionLinks( Document );
+      ProcessActions( Document );
 
       ProcessPartials( Document );
+
+      AddGeneratorMetaData();
+
 
       Document.ResolveUriToAbsoluate();
     }

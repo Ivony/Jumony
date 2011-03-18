@@ -383,15 +383,15 @@ namespace Ivony.Html
     public static IHtmlNode AddCopy( this IHtmlContainer container, int index, IHtmlNode node )
     {
       var textNode = node as IHtmlTextNode;
-      if ( textNode == null )
+      if ( textNode != null )
         return AddCopy( container, index, textNode );
 
       var comment = node as IHtmlComment;
-      if ( textNode == null )
+      if ( textNode != null )
         return AddCopy( container, index, comment );
 
       var element = node as IHtmlElement;
-      if ( textNode == null )
+      if ( textNode != null )
         return AddCopy( container, index, element );
 
       throw new NotSupportedException();

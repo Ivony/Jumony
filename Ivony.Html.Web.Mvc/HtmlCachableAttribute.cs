@@ -13,19 +13,43 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-    public override void OnResultExecuted( ResultExecutedContext filterContext )
+    public override void OnActionExecuted( ActionExecutedContext filterContext )
     {
 
       var result = filterContext.Result;
 
       var cache = GetCachedResult( result );
 
-      base.OnResultExecuted( filterContext );
+      if ( cache != null )
+        UpdateCache( cache );
+
+      base.OnActionExecuted( filterContext );
     }
 
-    private object GetCachedResult( ActionResult result )
+    protected void UpdateCache( ActionResult cache )
     {
-      throw new NotImplementedException();
+    }
+
+    protected ActionResult GetCachedResult( ActionResult result )
+    {
+
+      var cache = result as ICachableResult;
+      if ( cache != null )
+        return cache.CachedResult;
+
+      var view = result as ViewResult;
+      cache = view.View as ICachableResult;
+      if ( cache != null )
+        return cache.CachedResult;
+
+      var content = result as ContentResult;
+      if ( content != null )
+        return content;
+
+
+
+      return null;
+
     }
   }
 }

@@ -10,7 +10,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class ViewHandler : JumonyView, IHttpHandler
+  public class ViewHandler : PageView, IHttpHandler
   {
 
 

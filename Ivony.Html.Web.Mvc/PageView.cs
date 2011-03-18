@@ -13,16 +13,16 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class JumonyView : JumonyViewBase
+  public abstract class PageView : JumonyViewBase
   {
-    public JumonyView( string virtualPath )
+    public PageView( string virtualPath )
     {
       VirtualPath = virtualPath;
     }
 
 
 
-    protected JumonyView()
+    protected PageView()
     {
 
     }
@@ -92,7 +92,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-  internal class GenericView : JumonyView
+  internal class GenericView : PageView
   {
 
     public GenericView( string virtualPath )

@@ -92,10 +92,10 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-  internal class GenericView : PageView
+  internal class GenericPageView : PageView
   {
 
-    public GenericView( string virtualPath )
+    public GenericPageView( string virtualPath )
       : base( virtualPath )
     {
 

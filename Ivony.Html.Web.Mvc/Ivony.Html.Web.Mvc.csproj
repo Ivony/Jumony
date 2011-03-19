@@ -76,6 +76,7 @@
     <Compile Include="MvcAdapter.cs" />
     <Compile Include="MvcMapping.cs" />
     <Compile Include="PartialView.cs" />
+    <Compile Include="PartialViewHandler.cs" />
     <Compile Include="ProcessPartials.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="ViewResultWrapper.cs" />

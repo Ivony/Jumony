@@ -9,6 +9,16 @@ namespace Ivony.Html.Web.Mvc
   {
 
 
+    protected PartialView()
+    { 
+    
+    }
+
+    public PartialView( string virtualPath )
+    {
+      VirtualPath = virtualPath;
+    }
+
 
 
     protected IHtmlContainer Container
@@ -44,7 +54,13 @@ namespace Ivony.Html.Web.Mvc
 
       var document = HtmlProviders.LoadDocument( HttpContext, VirtualPath );
 
-      return document.FindSingle( "body" );
+      var body =  document.Find( "body" ).SingleOrDefault();
+
+      if ( body == null )
+        return document;
+
+      else
+        return body;
     }
 
     protected override string RenderContent()
@@ -58,4 +74,24 @@ namespace Ivony.Html.Web.Mvc
       return builder.ToString();
     }
   }
+
+
+  public class GenericPartialView : PartialView
+  {
+
+    public GenericPartialView( string virtualPath )
+      : base( virtualPath )
+    { }
+
+
+
+
+    protected override void ProcessContainer()
+    {
+      return;
+    }
+  }
+
+
+
 }

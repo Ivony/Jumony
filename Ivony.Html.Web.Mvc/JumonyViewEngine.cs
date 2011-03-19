@@ -89,9 +89,6 @@ namespace Ivony.Html.Web.Mvc
     public IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
 
-      if ( isPartial )
-        throw new NotSupportedException();//UNDONE 
-
       lock ( _providersSync )
       {
         foreach ( var provider in ViewProviders )
@@ -105,26 +102,56 @@ namespace Ivony.Html.Web.Mvc
       var handlerPath = virtualPath + ".ashx";
       if ( VirtualPathProvider.FileExists( handlerPath ) )
       {
-        try
+
+        if ( isPartial )
         {
-          var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
-          if ( handler != null )
-          {
+          
 
-            handler.Initialize( virtualPath );
-
-            return handler;
-
-          }
+          
+          throw new NotSupportedException();//UNDONE 
         }
-        catch
+        else
         {
+
+          var view = CreateHandledPageView( virtualPath, handlerPath );
+          if ( view != null )
+            return view;
 
         }
       }
 
 
-      return new GenericView( virtualPath );
+
+      if ( isPartial )
+        return new GenericPartialView( virtualPath );
+
+      else
+        return new GenericPageView( virtualPath );
+
+    }
+
+
+    private static IView CreateHandledPageView( string virtualPath, string handlerPath )
+    {
+      try
+      {
+        var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
+        if ( handler != null )
+        {
+
+          handler.Initialize( virtualPath );
+
+          return handler;
+
+        }
+      }
+      catch
+      {
+
+      }
+
+      return null;
+
     }
 
 

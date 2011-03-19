@@ -38,7 +38,7 @@ namespace Ivony.Html.Web.Mvc
 
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
-      throw new NotSupportedException();
+      throw new HttpException( 404, "不能直接访问视图处理程序" );
     }
 
     #endregion

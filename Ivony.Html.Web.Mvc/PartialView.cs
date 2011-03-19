@@ -10,11 +10,11 @@ namespace Ivony.Html.Web.Mvc
 
 
     protected PartialView()
-    { 
-    
+    {
+
     }
 
-    public PartialView( string virtualPath )
+    protected PartialView( string virtualPath )
     {
       VirtualPath = virtualPath;
     }
@@ -46,11 +46,26 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    internal void Initialize( string virtualPath )
+    {
+      VirtualPath = virtualPath;
+    }
+
+
+    internal void Initialize( IHtmlContainer container )
+    {
+      Container = container;
+    }
+
+
+
 
     protected virtual IHtmlContainer LoadContainer()
     {
       if ( VirtualPath == null )
+      {
         throw new InvalidOperationException();
+      }
 
       var document = HtmlProviders.LoadDocument( HttpContext, VirtualPath );
 

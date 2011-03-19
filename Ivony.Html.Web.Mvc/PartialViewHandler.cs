@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -22,6 +23,13 @@ namespace Ivony.Html.Web.Mvc
     }
   }
 
+  public abstract class PartialViewHandler<T> : PartialViewHandler
+  {
 
+    protected new T ViewModel
+    {
+      get { return base.ViewModel.CastTo<T>(); }
+    }
 
+  }
 }

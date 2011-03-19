@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class JumonyViewBase : IView, ICachableResult
+  public abstract class ViewBase : IView, ICachableResult
   {
 
     protected string VirtualPath

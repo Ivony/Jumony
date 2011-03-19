@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class PartialView : JumonyViewBase
+  public abstract class PartialView : ViewBase
   {
 
 
@@ -38,7 +38,9 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessPartials( Container );
 
-      //UNDONE Document.ResolveUriToAbsoluate();
+
+      if ( VirtualPath != null )
+        Container.Document.ResolveUriToAbsoluate();
     }
 
     protected abstract void ProcessContainer();

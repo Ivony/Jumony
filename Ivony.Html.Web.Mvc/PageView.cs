@@ -13,7 +13,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class PageView : JumonyViewBase
+  public abstract class PageView : ViewBase
   {
     public PageView( string virtualPath )
     {

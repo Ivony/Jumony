@@ -147,8 +147,87 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
+    {
+
+      var action = partialElement.Attribute( "action" ).Value();
+
+      if ( action != null )
+      {
+
+        var controller = partialElement.Attribute( "controller" ).Value();
+
+
+        var context = new ViewContext( ViewContext, ViewContext.View, ViewContext.ViewData, ViewContext.TempData, writer );
+
+
+        var helper = new HtmlHelper( context, new ViewDataContainer( this ) );
+
+        System.Web.Mvc.Html.ChildActionExtensions.Action( htmlHelper: helper, actionName: action, controllerName: controller );
+
+      }
+
+
+    }
+
+
+
+
     public virtual void Dispose()
     {
+    }
+
+
+    protected class ViewDataContainer : IViewDataContainer
+    {
+
+      private ViewBase _view;
+
+      public ViewDataContainer( ViewBase view )
+      {
+        _view = view;
+      }
+
+
+      public ViewDataDictionary ViewData
+      {
+        get
+        {
+          return _view.ViewData;
+        }
+        set
+        {
+          throw new NotSupportedException();
+        }
+      }
+    }
+
+
+    public class PartialRenderAdapter : IHtmlAdapter
+    {
+
+      private ViewBase _view;
+
+      public PartialRenderAdapter( ViewBase view )
+      {
+        _view = view;
+      }
+
+      public bool Render( IHtmlNode node, TextWriter writer )
+      {
+        var element = node as IHtmlElement;
+
+        if ( element == null )
+          return false;
+
+        if ( element.Name != "partial" )
+          return false;
+
+
+        _view.RenderPartial( element, writer );
+        return true;
+
+      }
     }
 
 

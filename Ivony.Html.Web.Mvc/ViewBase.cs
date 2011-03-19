@@ -170,13 +170,9 @@ namespace Ivony.Html.Web.Mvc
 
         var controller = partialElement.Attribute( "controller" ).Value();
 
+        var helper = new HtmlHelper( ViewContext, new ViewDataContainer( this ) );
 
-        var context = new ViewContext( ViewContext, ViewContext.View, ViewContext.ViewData, ViewContext.TempData, writer );
-
-
-        var helper = new HtmlHelper( context, new ViewDataContainer( this ) );
-
-        System.Web.Mvc.Html.ChildActionExtensions.Action( htmlHelper: helper, actionName: action, controllerName: controller );
+        writer.Write( System.Web.Mvc.Html.ChildActionExtensions.Action( htmlHelper: helper, actionName: action, controllerName: controller ) );
 
       }
 

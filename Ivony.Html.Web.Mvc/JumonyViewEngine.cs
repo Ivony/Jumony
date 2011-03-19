@@ -105,10 +105,11 @@ namespace Ivony.Html.Web.Mvc
 
         if ( isPartial )
         {
-          
 
-          
-          throw new NotSupportedException();//UNDONE 
+          var view = CreateHandledPartialView( virtualPath, handlerPath );
+          if ( view != null )
+            return view;
+
         }
         else
         {
@@ -136,6 +137,30 @@ namespace Ivony.Html.Web.Mvc
       try
       {
         var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
+        if ( handler != null )
+        {
+
+          handler.Initialize( virtualPath );
+
+          return handler;
+
+        }
+      }
+      catch
+      {
+
+      }
+
+      return null;
+
+    }
+
+
+    private static IView CreateHandledPartialView( string virtualPath, string handlerPath )
+    {
+      try
+      {
+        var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( PartialViewHandler ) ) as PartialViewHandler;
         if ( handler != null )
         {
 

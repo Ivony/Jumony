@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -82,13 +83,13 @@ namespace Ivony.Html.Web.Mvc
 
     protected override string RenderContent()
     {
-      var builder = new StringBuilder();
+      var writer = new StringWriter();
 
       foreach ( var node in Container.Nodes() )
-        builder.Append( node.Render() );
+        node.Render( writer, RenderAdapter );
 
 
-      return builder.ToString();
+      return writer.ToString();
     }
   }
 

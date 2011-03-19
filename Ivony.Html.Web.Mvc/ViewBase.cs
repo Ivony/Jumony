@@ -13,6 +13,12 @@ namespace Ivony.Html.Web.Mvc
   public abstract class ViewBase : IView, ICachableResult
   {
 
+    protected ViewBase()
+    {
+      RenderAdapter = new PartialRenderAdapter( this );
+    }
+
+
     protected string VirtualPath
     {
       get;
@@ -94,6 +100,13 @@ namespace Ivony.Html.Web.Mvc
     protected abstract void ProcessMain();
 
     protected abstract string RenderContent();
+
+
+    protected IHtmlAdapter RenderAdapter
+    {
+      get;
+      private set;
+    }
 
 
     public ActionResult CachedResult

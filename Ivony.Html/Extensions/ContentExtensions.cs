@@ -153,7 +153,7 @@ namespace Ivony.Html
     /// <param name="element">要生成HTML的元素</param>
     /// <param name="selfClosed">指示是否应产生自结束符号</param>
     /// <returns></returns>
-    internal static string GenerateTagHtml( IHtmlElement element, bool selfClosed )
+    public static string GenerateTagHtml( IHtmlElement element, bool selfClosed )
     {
       var builder = new StringBuilder();
 

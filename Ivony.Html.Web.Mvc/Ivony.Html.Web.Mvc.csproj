@@ -74,7 +74,6 @@
     <Compile Include="PartialRenderAdapter.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
-    <Compile Include="MvcAdapter.cs" />
     <Compile Include="MvcMapping.cs" />
     <Compile Include="PartialView.cs" />
     <Compile Include="PartialViewHandler.cs" />

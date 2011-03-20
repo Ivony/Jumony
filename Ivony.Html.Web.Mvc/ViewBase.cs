@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Routing;
 using System.Web.Caching;
 using System.IO;
+using System.Web.Mvc.Html;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -161,22 +162,48 @@ namespace Ivony.Html.Web.Mvc
 
 
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
-    {
+    {                      
 
       var action = partialElement.Attribute( "action" ).Value();
+      var view = partialElement.Attribute( "view" ).Value();
+
+      if ( action != null && view != null )
+        throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
+
 
       if ( action != null )
       {
 
         var controller = partialElement.Attribute( "controller" ).Value();
 
-        var helper = new HtmlHelper( ViewContext, new ViewDataContainer( this ) );
+        var helper = MakeHelper();
 
-        writer.Write( System.Web.Mvc.Html.ChildActionExtensions.Action( htmlHelper: helper, actionName: action, controllerName: controller ) );
+        writer.Write( helper.Action( actionName: action, controllerName: controller ) );
+
+        return;
+      }
+
+
+      if ( view != null )
+      {
+
+        var helper = MakeHelper();
+
+        writer.Write( helper.Partial( partialViewName: view ) );
+
+        return;
 
       }
 
 
+
+
+    }
+
+    protected HtmlHelper MakeHelper()
+    {
+      var helper = new HtmlHelper( ViewContext, new ViewDataContainer( this ) );
+      return helper;
     }
 
 

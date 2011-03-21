@@ -154,7 +154,11 @@ namespace Ivony.Html.Web.Mvc
 
         var href = Url.Action( action, controller, routeValues );
 
-        actionLink.SetAttribute( "href", href );
+        if ( href == null )
+          actionLink.Attribute( "href" ).Remove();
+
+        else
+          actionLink.SetAttribute( "href", href );
       }
 
 
@@ -162,7 +166,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
-    {                      
+    {
 
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();

@@ -39,9 +39,8 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessPartials( Container );
 
-
       if ( VirtualPath != null )
-        Container.Document.ResolveUriToAbsoluate();
+        ResolveUri( Container, Container.Document.DocumentUri );
     }
 
     protected abstract void ProcessContainer();

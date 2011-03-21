@@ -53,10 +53,10 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessPartials( Document );
 
+      ResolveUri( Document, Document.DocumentUri );
+
       AddGeneratorMetaData();
 
-
-      Document.ResolveUriToAbsoluate();
     }
 
     protected virtual IHtmlDocument LoadDocument()

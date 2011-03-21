@@ -170,11 +170,39 @@ namespace Ivony.Html.Web.Mvc
 
       }
 
-
-      container.Find( "a[href^=~]" ).ToArray().SetAttribute( "href", url => VirtualPathUtility.ToAbsolute( url ) );
-
-
     }
+
+
+    protected virtual void ResolveUri( IHtmlContainer container, Uri baseUri )
+    {
+      if ( baseUri == null )
+        throw new ArgumentNullException( "baseUri" );
+
+      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      {
+
+        var value = attribute.Value();
+        if ( string.IsNullOrEmpty( value ) )
+          continue;
+
+
+        if ( value.StartsWith( "~/" ) )
+          value = VirtualPathUtility.ToAbsolute( value );
+
+        Uri uri;
+
+        if ( !Uri.TryCreate( baseUri, value, out uri ) )
+          continue;
+
+        if ( uri.Equals( baseUri ) )
+          continue;
+
+
+        attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
+
+      }
+    }
+
 
 
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )

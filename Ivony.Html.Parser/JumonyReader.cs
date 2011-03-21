@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Parser
 {
-  
+
   /// <summary>
   /// Jumony 提供的HTML文档读取器的一个实现
   /// </summary>
@@ -57,7 +57,7 @@ namespace Ivony.Html.Parser
       private set;
     }
 
-    
+
     void IHtmlReader.EnterCDataMode( string elementName )
     {
       CDataElement = elementName;
@@ -77,7 +77,7 @@ namespace Ivony.Html.Parser
 
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
 
-    private object _sync = new object();
+    private static object _sync = new object();
 
 
     /// <summary>

@@ -125,46 +125,53 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected void ProcessActions( IHtmlContainer container )
+    protected void ProcessLinks( IHtmlContainer container )
     {
 
-      var links = container.Find( "a[action]" );
-
-      foreach ( var actionLink in links )
       {
-        var action = actionLink.Attribute( "action" ).Value();
-        var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
+        var links = container.Find( "a[action]" );
 
-        var routeValues = new RouteValueDictionary();
-
-        routeValues["action"] = action;
-        routeValues["controller"] = controller;
-
-
-        foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+        foreach ( var actionLink in links )
         {
-          routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
-          attribute.Remove();
+          var action = actionLink.Attribute( "action" ).Value();
+          var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
+
+          var routeValues = new RouteValueDictionary();
+
+          routeValues["action"] = action;
+          routeValues["controller"] = controller;
+
+
+          foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+          {
+            routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
+            attribute.Remove();
+          }
+
+
+          actionLink.Attribute( "action" ).Remove();
+
+          var controllerAttribute = actionLink.Attribute( "controller" );
+          if ( controllerAttribute != null )
+            controllerAttribute.Remove();
+
+
+
+
+          var href = Url.RouteUrl( routeValues );
+
+          if ( href == null )
+            actionLink.Attribute( "href" ).Remove();
+
+          else
+            actionLink.SetAttribute( "href", href );
         }
 
 
-        actionLink.Attribute( "action" ).Remove();
-
-        var controllerAttribute = actionLink.Attribute( "controller" );
-        if ( controllerAttribute != null )
-          controllerAttribute.Remove();
-
-
-
-
-        var href = Url.RouteUrl( routeValues );
-
-        if ( href == null )
-          actionLink.Attribute( "href" ).Remove();
-
-        else
-          actionLink.SetAttribute( "href", href );
       }
+
+
+      container.Find( "a[href^=~]" ).ToArray().SetAttribute( "href", url => VirtualPathUtility.ToAbsolute( url ) );
 
 
     }

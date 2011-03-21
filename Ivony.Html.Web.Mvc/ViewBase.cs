@@ -133,16 +133,19 @@ namespace Ivony.Html.Web.Mvc
       foreach ( var actionLink in links )
       {
         var action = actionLink.Attribute( "action" ).Value();
-        var controller = actionLink.Attribute( "controller" ).Value();
+        var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
         var routeValues = new RouteValueDictionary();
+
+        routeValues["action"] = action;
+        routeValues["controller"] = controller;
+
 
         foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
         {
           routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
           attribute.Remove();
         }
-
 
 
         actionLink.Attribute( "action" ).Remove();
@@ -152,7 +155,9 @@ namespace Ivony.Html.Web.Mvc
           controllerAttribute.Remove();
 
 
-        var href = Url.Action( action, controller, routeValues );
+
+
+        var href = Url.RouteUrl( routeValues );
 
         if ( href == null )
           actionLink.Attribute( "href" ).Remove();

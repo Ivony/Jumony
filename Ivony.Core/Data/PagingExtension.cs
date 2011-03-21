@@ -61,27 +61,6 @@ namespace Ivony.Data
 
 
     /// <summary>
-    /// 从IList&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
-    /// </summary>
-    /// <typeparam name="T">source 中的元素的类型</typeparam>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public static IPagingDataSource<T> ToPagingSource<T>( this IList<T> source )
-    {
-      if ( source == null )
-        throw new ArgumentNullException( "source" );
-
-
-      var pagingSource = source as PagingSourceWrapper<T>;
-
-      if ( pagingSource != null )
-        return pagingSource;
-      else
-        return new PagingSourceWrapper<T>( source );
-    }
-
-
-    /// <summary>
     /// 从IEnumerable&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
     /// </summary>
     /// <typeparam name="T">source 中的元素的类型</typeparam>
@@ -93,6 +72,11 @@ namespace Ivony.Data
         throw new ArgumentNullException( "source" );
 
 
+      var queryable = source as IQueryable<T>;
+      if ( queryable != null )
+        return ToPagingSource( queryable );
+
+
       var pagingSource = source as PagingSourceWrapper<T>;
 
       if ( pagingSource != null )
@@ -101,6 +85,17 @@ namespace Ivony.Data
         return new PagingSourceWrapper<T>( source );
 
     }
+
+
+
+    public static IPagingDataSource<T> ToPagingSource<T>( this IQueryable<T> source )
+    {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      return new QueryPagingSourceWrapper<T>( source );
+    }
+
 
 
 
@@ -390,7 +385,7 @@ namespace Ivony.Data
     }
 
 
-    public class QueryPaging<Q> : IPagingData<Q>
+    private class QueryPaging<Q> : IPagingData<Q>
     {
       private IQueryable<Q> _queryable;
       private int _pageSize;

@@ -97,7 +97,7 @@ namespace Ivony.Html.Web.Mvc
 
       RawViewContext = viewContext;
 
-      Url = new UrlHelper( RawViewContext.RequestContext );
+      Url = new UrlHelper( RequestContext );
 
       ProcessMain();
 

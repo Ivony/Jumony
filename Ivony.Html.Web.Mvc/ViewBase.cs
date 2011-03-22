@@ -119,12 +119,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    protected void ProcessPartials( IHtmlContainer container )
-    {
-
-    }
-
-
     protected void ProcessActionLinks( IHtmlContainer container )
     {
       var links = container.Find( "a[action]" );
@@ -206,6 +200,7 @@ namespace Ivony.Html.Web.Mvc
 
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();
+      var handler = partialElement.Attribute( "handler" ).Value();
 
       if ( action != null && view != null )
         throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );

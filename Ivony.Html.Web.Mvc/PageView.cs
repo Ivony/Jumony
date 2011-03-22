@@ -49,7 +49,7 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessDocument();
 
-      ProcessLinks( Document );
+      ProcessActionLinks( Document );
 
       ProcessPartials( Document );
 

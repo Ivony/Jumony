@@ -35,7 +35,7 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessContainer();
 
-      ProcessLinks( Container );
+      ProcessActionLinks( Container );
 
       ProcessPartials( Container );
 

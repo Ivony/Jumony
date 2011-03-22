@@ -78,11 +78,26 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    protected ViewContext RawViewContext
+    {
+      get;
+      private set;
+    }
+
+
     public virtual void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
 
-      Url = new UrlHelper( viewContext.RequestContext );
+
+      while ( viewContext.IsChildAction )
+      {
+        viewContext = viewContext.ParentActionViewContext;
+      }
+
+      RawViewContext = viewContext;
+
+      Url = new UrlHelper( RawViewContext.RequestContext );
 
       ProcessMain();
 

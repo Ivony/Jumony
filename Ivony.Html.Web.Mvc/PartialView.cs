@@ -37,8 +37,6 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessActionLinks( Container );
 
-      ProcessPartials( Container );
-
       if ( VirtualPath != null )
         ResolveUri( Container, Container.Document.DocumentUri );
     }
@@ -64,14 +62,9 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual IHtmlContainer LoadContainer()
     {
-      if ( VirtualPath == null )
-      {
-        throw new InvalidOperationException();
-      }
-
       var document = HtmlProviders.LoadDocument( HttpContext, VirtualPath );
 
-      var body =  document.Find( "body" ).SingleOrDefault();
+      var body = document.Find( "body" ).SingleOrDefault();
 
       if ( body == null )
         return document;

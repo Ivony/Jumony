@@ -23,6 +23,8 @@ public class list_html : Ivony.Html.Web.JumonyHandler
       .BindFrom( Enumerable.Range( 1, 10 ), ( dataItem, target ) => target.Bind( "@:text", dataItem ) );
     //BindTo方法会返回数据源支持连写，将一份数据绑定到多个目标
 
+    Document.FindSingle( "@list1 li" );
+
     BindingContext.Enter( "1st" );
 
     //下面来看看数据不够的情况，BindTo就是BindFrom的颠倒版本：

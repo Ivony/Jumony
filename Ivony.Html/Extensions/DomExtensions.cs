@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -246,12 +244,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, int index, IHtmlFragment fragment )
     {
-
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
       if ( fragment == null )
         throw new ArgumentNullException( "fragment" );
+
 
       return fragment.Into( container, index );
 
@@ -266,12 +264,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, string html )
     {
-
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
       if ( html == null )
         throw new ArgumentNullException( "html" );
+
 
       var fragment = container.Document.ParseFragment( html );
 
@@ -289,12 +287,12 @@ namespace Ivony.Html
     /// <returns></returns>
     public static IEnumerable<IHtmlNode> AddFragment( this IHtmlContainer container, int index, string html )
     {
-
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
       if ( html == null )
         throw new ArgumentNullException( "html" );
+
 
       var fragment = container.Document.ParseFragment( html );
 
@@ -306,9 +304,19 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="textNode">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlTextNode AddCopy( this IHtmlContainer container, IHtmlTextNode textNode )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
 
 
       lock ( container.SyncRoot )
@@ -318,16 +326,41 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="index">添加的位置</param>
+    /// <param name="textNode">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlTextNode AddCopy( this IHtmlContainer container, int index, IHtmlTextNode textNode )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
+
+
       return container.AddTextNode( index, textNode.HtmlText );
     }
 
 
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="comment">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlComment AddCopy( this IHtmlContainer container, IHtmlComment comment )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
 
 
       lock ( container.SyncRoot )
@@ -337,15 +370,39 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="comment">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlComment AddCopy( this IHtmlContainer container, int index, IHtmlComment comment )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+
       return container.AddComment( index, comment.Comment );
     }
 
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="element">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlElement AddCopy( this IHtmlContainer container, IHtmlElement element )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
 
 
       lock ( container.SyncRoot )
@@ -355,8 +412,22 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="element">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlElement AddCopy( this IHtmlContainer container, int index, IHtmlElement element )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+
       var _element = container.AddElement( index, element.Name );
 
       foreach ( var attribute in element.Attributes() )
@@ -371,17 +442,37 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="node">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlNode AddCopy( this IHtmlContainer container, IHtmlNode node )
     {
-
       lock ( container.SyncRoot )
       {
         return AddCopy( container, container.Nodes().Count(), node );
       }
     }
 
+
+    /// <summary>
+    /// 添加节点的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="node">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
     public static IHtmlNode AddCopy( this IHtmlContainer container, int index, IHtmlNode node )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
       var textNode = node as IHtmlTextNode;
       if ( textNode != null )
         return AddCopy( container, index, textNode );
@@ -400,9 +491,17 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 创建碎片的副本
+    /// </summary>
+    /// <param name="fragment">要创建副本的碎片</param>
+    /// <returns>碎片的副本</returns>
     public static IHtmlFragment MakeCopy( this IHtmlFragment fragment )
     {
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+
       var _fragment = fragment.Document.CreateFragment();
 
       foreach ( var node in fragment.Nodes() )

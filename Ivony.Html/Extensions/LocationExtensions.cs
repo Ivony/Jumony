@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 提供节点定位、相对位置查询的扩展方法
+  /// </summary>
   public static class LocationExtensions
   {
 
@@ -167,20 +171,11 @@ namespace Ivony.Html
     private static NodeLocationComparerImplements locationComparer = new NodeLocationComparerImplements();
 
     /// <summary>
-    /// 节点位置比较器，可以比较同一文档上节点在文档上出现的位置。
+    /// 获取一个节点位置比较器，可以比较同一文档上节点在文档上出现的位置。
     /// </summary>
     public static IComparer<IHtmlNode> NodeLocationComparer
     {
       get { return locationComparer; }
     }
-
-
-
-
-
   }
-
-
-
-
 }

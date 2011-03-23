@@ -77,9 +77,18 @@ namespace Ivony.Html
         throw new ArgumentNullException( "scope" );
 
 
-      var selector = Create( expression, scope );
-      return selector.Filter( scope.Descendants() );
+      try
+      {
+        var selector = Create( expression, scope );
+        return selector.Filter( scope.Descendants() );
+      }
+      catch ( Exception e )
+      {
+        if ( !e.Data.Contains( "selector expression" ) )
+          e.Data["selector expression"] = expression;
 
+        throw;
+      }
     }
 
     /// <summary>

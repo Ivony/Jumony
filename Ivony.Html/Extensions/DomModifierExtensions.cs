@@ -34,6 +34,13 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 在容器末尾增加一个文本节点
+    /// </summary>
+    /// <param name="modifier">DOM 结构修改器</param>
+    /// <param name="container">要添加节点的容器</param>
+    /// <param name="htmlText">HTML文本</param>
+    /// <returns>添加的文本节点</returns>
     public static IHtmlTextNode AddTextNode( this IHtmlDomModifier modifier, IHtmlContainer container, string htmlText )
     {
       if ( modifier == null )
@@ -53,6 +60,13 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 在容器末尾增加一个注释节点
+    /// </summary>
+    /// <param name="modifier">DOM 结构修改器</param>
+    /// <param name="container">要添加注释的容器</param>
+    /// <param name="htmlText">HTML注释</param>
+    /// <returns>添加的注释节点</returns>
     public static IHtmlComment AddComment( this IHtmlDomModifier modifier, IHtmlContainer container, string comment )
     {
       if ( modifier == null )

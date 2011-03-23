@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using Ivony.Fluent;
-using System.Web;
 
 namespace Ivony.Html
 {
@@ -300,7 +297,17 @@ namespace Ivony.Html
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      return Find( container, expression ).Single();
+      try
+      {
+        return Find( container, expression ).Single();
+      }
+      catch ( Exception e )
+      {
+        if ( !e.Data.Contains( "selector expression" ) )
+          e.Data["selector expression"] = expression;
+
+        throw;
+      }
     }
 
 

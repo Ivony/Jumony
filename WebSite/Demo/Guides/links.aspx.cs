@@ -8,8 +8,6 @@ using System.Net;
 using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.Parser;
-using Ivony.Html.HtmlAgilityPackAdaptor;
-using HtmlAgilityPack;
 
 
 public partial class links : System.Web.UI.Page
@@ -19,7 +17,7 @@ public partial class links : System.Web.UI.Page
 
     var client = new WebClient();
 
-    var parser = new HtmlParser();
+    var parser = new JumonyParser();
     var document = parser.LoadDocument( "http://www.cnblogs.com/" );
 
     var links = document.Find( "a[href]" );

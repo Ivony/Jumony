@@ -8,7 +8,6 @@ using Ivony.Html;
 using Ivony.Html.Styles;
 using Ivony.Html.Forms;
 using Ivony.Html.Forms.Validation;
-using Ivony.Html.HtmlAgilityPackAdaptor;
 using Ivony.Html.Parser;
 using Ivony.Html.Web;
 

@@ -7,7 +7,6 @@ using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.Parser;
 using System.Linq;
-using Ivony.Html.HtmlAgilityPackAdaptor;
 
 public class Handler : IHttpHandler
 {

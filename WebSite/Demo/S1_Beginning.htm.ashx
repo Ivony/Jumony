@@ -5,7 +5,6 @@ using System.Web;
 using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.Binding;
-using Ivony.Html.HtmlAgilityPackAdaptor;
 
 public class Beginning : Ivony.Html.Web.JumonyHandler
 {

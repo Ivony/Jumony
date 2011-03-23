@@ -4,10 +4,8 @@ using System;
 using System.Web;
 using Ivony.Fluent;
 using Ivony.Html;
-using Ivony.Html.HtmlAgilityPackAdaptor;
 using Ivony.Html.Binding;
 using System.Linq;
-using HtmlAgilityPack;
 
 public class list_html : Ivony.Html.Web.JumonyHandler
 {

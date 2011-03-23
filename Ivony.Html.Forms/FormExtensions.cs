@@ -196,7 +196,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="group">输入组</param>
     /// <returns></returns>
-    public static IEnumerable<string> PossibleValues( this IHtmlGroupControl group )
+    public static IEnumerable<string> CandidateValues( this IHtmlGroupControl group )
     {
 
       if ( group == null )
@@ -230,6 +230,7 @@ namespace Ivony.Html.Forms
     /// <param name="group">输入组</param>
     /// <param name="value">要设置的值</param>
     /// <returns>是否成功</returns>
+    /// <remarks>此方法暂不支持设置多个用逗号分隔的值</remarks>
     public static bool TrySetValue( this IHtmlGroupControl group, string value )
     {
       var item = Item( group, value );
@@ -240,6 +241,47 @@ namespace Ivony.Html.Forms
       item.Selected = true;
       return true;
     }
+
+
+    /// <summary>
+    /// 尝试为文本控件设置一个值
+    /// </summary>
+    /// <param name="group">文本控件</param>
+    /// <param name="value">要设置的值</param>
+    /// <remarks>对于密码框此方法会设置失败并返回false</remarks>
+    /// <returns>是否成功</returns>
+    public static bool TrySetValue( this IHtmlTextControl textInput, string value )
+    {
+      textInput.TextValue = value;
+
+      if ( textInput.TextValue == value )
+        return true;
+
+      return false;
+    }
+
+
+    /// <summary>
+    /// 尝试为输入控件设置值
+    /// </summary>
+    /// <param name="input">输入控件</param>
+    /// <param name="value">要设置的值</param>
+    /// <returns>是否成功</returns>
+    /// <remarks>对于密码框或不存在值吻合选项的输入组，此方法会设置失败并返回false</remarks>
+    /// <exception cref="System.NotSupportedException">不被支持的输入控件</exception>
+    public static bool TrySetValue( this IHtmlInputControl input, string value )
+    {
+      var textInput = input as HtmlInputText;
+      if ( textInput != null )
+        return TrySetValue( textInput, value );
+
+      var group = input as IHtmlGroupControl;
+      if ( group != null )
+        return TrySetValue( group, value );
+
+      throw new NotSupportedException();
+    }
+
 
 
     /// <summary>

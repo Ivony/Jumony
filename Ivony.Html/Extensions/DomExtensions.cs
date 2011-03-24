@@ -783,14 +783,30 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      lock ( element.SyncRoot )
+      ClearNodes( (IHtmlContainer) element );
+
+      return element;
+    }
+
+
+    /// <summary>
+    /// 清除所有子节点
+    /// </summary>
+    /// <param name="element">要清除所有子节点的元素</param>
+    public static IHtmlContainer ClearNodes( this IHtmlContainer container )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      lock ( container.SyncRoot )
       {
-        var childs = element.Nodes().ToArray();//清除所有的子节点
+        var childs = container.Nodes().ToArray();//清除所有的子节点
         foreach ( var node in childs )
           node.Remove();
       }
 
-      return element;
+      return container;
     }
 
 

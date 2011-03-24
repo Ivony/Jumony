@@ -18,9 +18,7 @@
 
   void Application_Error( object sender, EventArgs e )
   {
-    
-    this.Context.GetMapping
-    
+
     //在出现未处理的错误时运行的代码
 
   }

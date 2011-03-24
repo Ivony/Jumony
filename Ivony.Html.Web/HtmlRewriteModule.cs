@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Ivony.Html.Web
 {
-  public class HttpRewriteModule : IHttpModule
+  public class HtmlRewriteModule : IHttpModule
   {
 
 

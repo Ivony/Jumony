@@ -62,7 +62,7 @@ namespace Ivony.Html.Forms
 
 
 
-    public void Submit( NameValueCollection data )
+    public HtmlForm Submit( NameValueCollection data )
     {
 
       if ( SubmittedValues != null )
@@ -72,6 +72,8 @@ namespace Ivony.Html.Forms
         throw new InvalidOperationException();
 
       SubmittedValues = data;
+
+      return this;
     }
 
 

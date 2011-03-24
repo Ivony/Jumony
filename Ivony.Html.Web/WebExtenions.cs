@@ -17,22 +17,32 @@ namespace Ivony.Html.Web
 
     private const string requestDataToken = "Jumony_HttpContext_RequestMapping";
 
+    /// <summary>
+    /// 获取请求的映射信息
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <returns>映射信息</returns>
     public static RequestMapping GetMapping( this HttpContext context )
     {
       return GetMapping( new HttpContextWrapper( context ) );
     }
 
+    /// <summary>
+    /// 获取请求的映射信息
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <returns>映射信息</returns>
     public static RequestMapping GetMapping( this HttpContextBase context )
     {
       return (RequestMapping) context.Items[requestDataToken];
     }
 
-    public static void SetMapping( this HttpContext context, RequestMapping data )
+    internal static void SetMapping( this HttpContext context, RequestMapping data )
     {
       context.Items[requestDataToken] = data;
     }
 
-    public static void SetMapping( this HttpContextBase context, RequestMapping data )
+    internal static void SetMapping( this HttpContextBase context, RequestMapping data )
     {
       context.Items[requestDataToken] = data;
     }

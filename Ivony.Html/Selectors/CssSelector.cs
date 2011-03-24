@@ -84,7 +84,7 @@ namespace Ivony.Html
       }
       catch ( Exception e )
       {
-        if ( !e.Data.Contains( "selector expression" ) )
+        if ( e.Data != null && !e.Data.Contains( "Ivony.Html.CssQuery.Expression" ) )
           e.Data["selector expression"] = expression;
 
         throw;

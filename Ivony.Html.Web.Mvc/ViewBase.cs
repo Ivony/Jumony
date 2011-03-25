@@ -136,14 +136,22 @@ namespace Ivony.Html.Web.Mvc
 
     protected void ProcessActionLinks( IHtmlContainer container )
     {
-      var links = container.Find( "a[action]" );
+      var links = container.Find( "a[action] , a[inherits]" );
 
       foreach ( var actionLink in links )
       {
-        var action = actionLink.Attribute( "action" ).Value();
+        var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
         var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
-        var routeValues = new RouteValueDictionary();
+        var inherits = actionLink.Attribute( "inherits" ) != null;
+
+
+        RouteValueDictionary routeValues;
+
+        if ( inherits )
+          routeValues = new RouteValueDictionary( RequestContext.RouteData.Values );
+        else
+          routeValues = new RouteValueDictionary();
 
         routeValues["action"] = action;
         routeValues["controller"] = controller;
@@ -151,7 +159,26 @@ namespace Ivony.Html.Web.Mvc
 
         foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
         {
-          routeValues.Add( attribute.Name.Substring( 1 ), attribute.Value() );
+
+          string key = attribute.Name.Substring( 1 );
+          object value = attribute.Value();
+
+          if ( value == null && routeValues.ContainsKey( key ) )
+          {
+            if ( inherits )
+            {
+              routeValues.Remove( key );
+              continue;
+
+            }
+            else
+            {
+              value = routeValues[key];
+            }
+
+          }
+
+          routeValues.Add( key, value );
           attribute.Remove();
         }
 
@@ -165,7 +192,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-        var href = Url.RouteUrl( routeValues );
+        var href = UrlHelper.GenerateUrl( null, null, null, routeValues, Url.RouteCollection, Url.RequestContext, false );
 
         if ( href == null )
           actionLink.Attribute( "href" ).Remove();

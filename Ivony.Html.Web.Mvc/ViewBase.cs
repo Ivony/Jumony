@@ -143,13 +143,38 @@ namespace Ivony.Html.Web.Mvc
         var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
         var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
-        var inherits = actionLink.Attribute( "inherits" ) != null;
 
+        var inheritsAttribute = actionLink.Attribute( "inherits" );
+
+        string[] inherits = null;
+
+        if ( inheritsAttribute != null )
+        {
+          var inheritsValue = inheritsAttribute.Value() ?? "";
+
+          if ( inheritsValue != null )
+            inherits = inheritsValue.Split( ',' );
+        }
 
         RouteValueDictionary routeValues;
 
-        if ( inherits )
+        if ( inherits != null )
+        {
           routeValues = new RouteValueDictionary( RequestContext.RouteData.Values );
+
+          if ( inherits.Length > 0 )
+          {
+            foreach ( var key in routeValues.Keys )
+            {
+              if ( inherits.Contains( key ) )
+                continue;
+
+              routeValues.Remove( key );
+
+            }
+          }
+        }
+
         else
           routeValues = new RouteValueDictionary();
 
@@ -163,20 +188,11 @@ namespace Ivony.Html.Web.Mvc
           string key = attribute.Name.Substring( 1 );
           object value = attribute.Value();
 
-          if ( value == null && routeValues.ContainsKey( key ) )
-          {
-            if ( inherits )
-            {
-              routeValues.Remove( key );
-              continue;
+          if ( routeValues.ContainsKey( key ) )
+            routeValues.Remove( key );
 
-            }
-            else
-            {
-              value = routeValues[key];
-            }
-
-          }
+          if ( value == null )
+            continue;
 
           routeValues.Add( key, value );
           attribute.Remove();

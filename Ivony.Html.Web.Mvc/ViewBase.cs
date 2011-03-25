@@ -164,7 +164,7 @@ namespace Ivony.Html.Web.Mvc
 
           if ( inherits.Length > 0 )
           {
-            foreach ( var key in routeValues.Keys )
+            foreach ( var key in routeValues.Keys.ToArray() )
             {
               if ( inherits.Contains( key ) )
                 continue;

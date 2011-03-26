@@ -215,7 +215,7 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+      var attributes = new Dictionary<string, string>();
 
       foreach ( var a in beginTag.Attributes )
       {

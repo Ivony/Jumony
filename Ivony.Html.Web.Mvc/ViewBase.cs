@@ -136,47 +136,14 @@ namespace Ivony.Html.Web.Mvc
 
     protected void ProcessActionLinks( IHtmlContainer container )
     {
-      var links = container.Find( "a[action] , a[inherits]" );
+      var links = container.Find( "a[action]" );
 
       foreach ( var actionLink in links )
       {
-        var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
+        var action = actionLink.Attribute( "action" ).Value();
         var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
-
-        var inheritsAttribute = actionLink.Attribute( "inherits" );
-
-        string[] inherits = null;
-
-        if ( inheritsAttribute != null )
-        {
-          var inheritsValue = inheritsAttribute.Value() ?? "";
-
-          if ( inheritsValue != null )
-            inherits = inheritsValue.Split( ',' );
-        }
-
-        RouteValueDictionary routeValues;
-
-        if ( inherits != null )
-        {
-          routeValues = new RouteValueDictionary( RequestContext.RouteData.Values );
-
-          if ( inherits.Length > 0 )
-          {
-            foreach ( var key in routeValues.Keys.ToArray() )
-            {
-              if ( inherits.Contains( key ) )
-                continue;
-
-              routeValues.Remove( key );
-
-            }
-          }
-        }
-
-        else
-          routeValues = new RouteValueDictionary();
+        var routeValues = new RouteValueDictionary();
 
         routeValues["action"] = action;
         routeValues["controller"] = controller;
@@ -185,14 +152,10 @@ namespace Ivony.Html.Web.Mvc
         foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
         {
 
-          string key = attribute.Name.Substring( 1 );
-          object value = attribute.Value();
+          var key = attribute.Name.Substring( 1 );
+          var value = attribute.Value();
 
-          if ( routeValues.ContainsKey( key ) )
-            routeValues.Remove( key );
-
-          if ( value == null )
-            continue;
+          routeValues.Remove( key );
 
           routeValues.Add( key, value );
           attribute.Remove();
@@ -208,7 +171,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-        var href = UrlHelper.GenerateUrl( null, null, null, routeValues, Url.RouteCollection, Url.RequestContext, false );
+        var href = Url.RouteUrl( routeValues );
 
         if ( href == null )
           actionLink.Attribute( "href" ).Remove();

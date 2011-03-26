@@ -207,10 +207,6 @@ namespace Ivony.Html.Parser
         string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
         string value = capture.FindCaptures( match.Groups["attrValue"] ).Select( c => c.Value ).SingleOrDefault();
 
-        if ( value != null )
-          value = HtmlEncoding.HtmlDecode( value );
-
-
         yield return new HtmlAttributeSetting( CreateFragment( capture, false ), name, value );
       }
     }

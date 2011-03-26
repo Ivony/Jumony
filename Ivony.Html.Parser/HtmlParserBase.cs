@@ -215,14 +215,15 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = new Dictionary<string, string>();
+      var attributes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
       foreach ( var a in beginTag.Attributes )
       {
         string name = a.Name;
         string value = a.Value;
 
-        value = HtmlEncoding.HtmlDecode( value );
+        if ( value != null )
+          value = HtmlEncoding.HtmlDecode( value );
 
         if ( attributes.ContainsKey( name ) )//重复的属性名，只取第一个
           continue;

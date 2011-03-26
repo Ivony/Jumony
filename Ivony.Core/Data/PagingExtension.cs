@@ -215,6 +215,10 @@ namespace Ivony.Data
 
       public IPagingData<TResult> CreatePaging( int pageSize )
       {
+
+        if ( pageSize < 1 )
+          throw new ArgumentOutOfRangeException( "pageSize" );
+
         if ( _pageSelector != null )
           return _dataSource.CreatePaging( pageSize ).PageSelect( _pageSelector );
         else if ( _selector != null )
@@ -376,6 +380,9 @@ namespace Ivony.Data
 
     public IPagingData<T> CreatePaging( int pageSize )
     {
+      if ( pageSize < 1 )
+        throw new ArgumentOutOfRangeException( "pageSize" );
+
       return new QueryPaging<T>( _queryable, pageSize );
     }
 

@@ -140,7 +140,7 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var actionLink in links )
       {
-        var action = actionLink.Attribute( "action" ).Value();
+        var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
         var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
         var routeValues = new RouteValueDictionary();

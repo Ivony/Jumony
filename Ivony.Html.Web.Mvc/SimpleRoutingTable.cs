@@ -61,7 +61,6 @@ namespace Ivony.Html.Web.Mvc
       if ( candidateRules.Any() )
         throw new InvalidOperationException( "添加规则失败，路由表中已经存在一条可能冲突的规则" );
 
-
     }
 
 

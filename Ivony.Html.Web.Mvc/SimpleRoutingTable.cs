@@ -54,7 +54,6 @@ namespace Ivony.Html.Web.Mvc
       var candidateRules = _rules
         .Where( r => r.AllKeys.Length == rule.AllKeys.Length )                        //若通过所有键多寡无法区分
         .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
-        .Where( r => r.Paragraphes.Length == rule.Paragraphes.Length )                //若通过URL路径段多寡也无法区分
         .Where( r => r.DynamicParagraphes.Length == rule.DynamicParagraphes.Length )  //若通过动态路径段多寡也无法区分
         .Where( r => r.EqualsConstraints( rule ) );                                   //若约束集也一致
 
@@ -76,13 +75,6 @@ namespace Ivony.Html.Web.Mvc
 
       var maxRouteKeys = candidateRules.Max( r => r.RouteKeys.Length );
       candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );         //拥有最多路由键的被优先考虑
-
-      if ( candidateRules.IsSingle() )
-        return candidateRules.Single();
-
-
-      var maxParagraphes = candidateRules.Max( r => r.Paragraphes.Length );
-      candidateRules = candidateRules.Where( r => r.Paragraphes.Length == maxParagraphes );     //拥有最多URL路径段的被优先考虑
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();

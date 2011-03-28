@@ -28,9 +28,8 @@ namespace Ivony.Html.Web.Mvc
       if ( data == null )
         return null;
 
-      var handler = data.Rule.CreateHandler( httpContext );
 
-      var routeData = new RouteData( this, handler );
+      var routeData = new RouteData( this, Handler );
 
       foreach ( var pair in data.Values )
         routeData.Values.Add( pair.Key, pair.Value );
@@ -74,54 +73,64 @@ namespace Ivony.Html.Web.Mvc
       AddRule( rule );
     }
 
-    private void AddRule( SimpleRoutingRule rule )
+    protected void AddRule( SimpleRoutingRule rule )
     {
 
-      var candidateRules = _rules
-        .Where( r => r.AllKeys.Length == rule.AllKeys.Length )                        //若通过所有键多寡无法区分
-        .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
-        .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )  //若通过动态路径段多寡也无法区分
-        .Where( r => r.EqualsConstraints( rule ) );                                   //若约束集也一致
+      {
+        var conflictRule = _rules
+          .Where( r => r.AllKeys.Length == rule.AllKeys.Length )                        //若通过所有键多寡无法区分
+          .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
+          .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
+          .Where( r => r.EqualsConstraints( rule ) )                                    //若约束集也一致
+          .FirstOrDefault();
 
-      if ( candidateRules.Any() )
-        throw new InvalidOperationException( "添加规则失败，路由表中已经存在一条可能冲突的规则" );
+        if ( conflictRule != null )
+          throw new InvalidOperationException( string.Format( "添加规则失败，路由表中已经存在一条可能冲突的规则：{0}", conflictRule.Name ) );
+      }
 
 
-      candidateRules = _rules
-        .Where( r => r.Paragraphes.Length == rule.Paragraphes.Length )
-        .Where( r => r.UrlPattern.Substring( 0, r.UrlPattern.IndexOf( '{' ) ) == rule.UrlPattern.Substring( 0, r.UrlPattern.IndexOf( '{' ) ) );
+      {
+        var conflictRule = _rules
+          .Where( r => r.Paragraphes.Length == rule.Paragraphes.Length )                //若路径段长度一致
+          .Where( r => r.StaticPrefix.EqualsIgnoreCase( rule.StaticPrefix ) )           //若静态段也一致
+          .FirstOrDefault();
 
-      if ( candidateRules.Any() )
-        throw new InvalidOperationException( "添加规则失败，路由表中已经存在一条可能冲突的规则" );
 
+        if ( conflictRule != null )
+          throw new InvalidOperationException( string.Format( "添加规则失败，路由表中已经存在一条可能冲突的规则：{0}", conflictRule.Name ) );
+      }
     }
 
 
     private SimpleRoutingRule BestRule( IEnumerable<SimpleRoutingRule> candidateRules )
     {
 
-      var maxConstraints = candidateRules.Max( r => r.RouteValueConstraints.Count );            //满足最多约束的被优先考虑
+      //满足最多约束的被优先考虑
+      var maxConstraints = candidateRules.Max( r => r.RouteValueConstraints.Count );
       candidateRules = candidateRules.Where( r => r.RouteValueConstraints.Count == maxConstraints );
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();
 
 
+      //拥有最多路由键的被优先考虑
       var maxRouteKeys = candidateRules.Max( r => r.RouteKeys.Length );
-      candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );         //拥有最多路由键的被优先考虑
+      candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();
 
 
+      //拥有最少参数的被优先考虑。
       var minKeys = candidateRules.Min( r => r.AllKeys );
-      candidateRules = candidateRules.Where( r => r.AllKeys == minKeys );                       //拥有最少参数的被优先考虑。
+      candidateRules = candidateRules.Where( r => r.AllKeys == minKeys );
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();
 
 
-      var minDynamics = candidateRules.Min( p => p.DynamicRouteKyes.Length );                 //拥有最少动态参数的被优先考虑
+      //拥有最少动态参数的被优先考虑
+      var minDynamics = candidateRules.Min( p => p.DynamicRouteKyes.Length );
       candidateRules = candidateRules.Where( r => r.DynamicRouteKyes.Length == minDynamics );
 
       if ( candidateRules.IsSingle() )
@@ -132,6 +141,14 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+
+
+    public SimpleRoutingTable( IRouteHandler handler )
+    {
+      Handler = handler;
+      UrlEncoding = Encoding.UTF8;
+    }
 
 
 
@@ -146,6 +163,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    public IRouteHandler Handler { get; private set; }
+
+    public Encoding UrlEncoding { get; private set; }
   }
 
 
@@ -184,7 +205,7 @@ namespace Ivony.Html.Web.Mvc
         var key = p.Substring( 1, p.Length - 2 );
 
         if ( keys.Contains( key ) )
-          throw new FormatException( "URL模式格式不正确，包含重复的动态参数名或动态参数名与预设路由值重复" );
+          throw new FormatException( "URL模式格式不正确，包含重复的动态参数名或动态参数名与预设路由键重复" );
 
 
         keys.Add( key );
@@ -192,6 +213,8 @@ namespace Ivony.Html.Web.Mvc
 
       _routeKeys = keys.ToArray();
 
+      if ( _routeKeys.Intersect( _queryKeys ).Any() )
+        throw new FormatException( "URL模式格式不正确，动态参数或预设路由键与可选查询字符串名重复" );
 
       _queryKeys = queryKeys;
 
@@ -203,7 +226,6 @@ namespace Ivony.Html.Web.Mvc
       get;
       private set;
     }
-
 
 
     private string[] _paragraphes;
@@ -260,7 +282,7 @@ namespace Ivony.Html.Web.Mvc
       get
       {
         if ( _prefix == null )
-          _prefix = _urlPattern.Substring( 0, _urlPattern.IndexOf( '{' ) );
+          _prefix = _urlPattern.Substring( 0, _urlPattern.IndexOf( '{' ) - 1 );
 
         return _prefix;
       }
@@ -284,9 +306,37 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    public string CreateVirtualPath( RouteValueDictionary routeValues )
+    public string CreateVirtualPath( IDictionary<string, string> routeValues )
     {
+
+      var builder = new StringBuilder( StaticPrefix );
+
+      foreach ( var key in DynamicRouteKyes )
+      {
+        var value = routeValues[key];
+
+        if ( string.IsNullOrEmpty( value ) )
+          throw new ArgumentException( "作为动态路径的路由值不能包含空引用或空字符串", "routeValues" );
+        
+
+        if ( value.Contains( '/' ) )
+          throw new ArgumentException( "作为动态路径的路由值不能包含路径分隔符 '/'", "routeValues" );
+
+        value = HttpUtility.UrlEncode( value, RoutingTable.UrlEncoding );
+
+        builder.Append( "/" + value );
+
+      }
+
+
       throw new NotImplementedException();
+    }
+
+
+    public SimpleRoutingTable RoutingTable
+    {
+      get;
+      private set;
     }
 
 
@@ -351,10 +401,9 @@ namespace Ivony.Html.Web.Mvc
       var values = new Dictionary<string, string>();
 
 
-      foreach ( var key in queryString.AllKeys )
-        values[key] = queryString[key];
 
-
+      foreach ( var pair in _routeValuesConstraints )
+        values.Add( pair.Key, pair.Value );
 
       for ( int i = 0; i < pathParagraphs.Length; i++ )
       {
@@ -363,30 +412,22 @@ namespace Ivony.Html.Web.Mvc
 
         if ( !paragraph.StartsWith( "{" ) )
         {
-          if ( pathParagraphs[i] != paragraph )
+          if ( !pathParagraphs[i].EqualsIgnoreCase( paragraph ) )
             return null;
         }
         else
         {
           var name = paragraph.Substring( 1, paragraph.Length - 2 );
-          values[name] = pathParagraphs[i];
+          values.Add( name, pathParagraphs[i] );
         }
       }
 
 
-      foreach ( var pair in _routeValuesConstraints )
-        values[pair.Key] = pair.Value;
-
+      foreach ( var key in queryString.AllKeys )
+        values.Add( key, queryString[key] );
 
 
       return values;
-    }
-
-    public virtual IRouteHandler CreateHandler( HttpContextBase httpContext )
-    {
-
-      throw new NotSupportedException();
-
     }
   }
 }

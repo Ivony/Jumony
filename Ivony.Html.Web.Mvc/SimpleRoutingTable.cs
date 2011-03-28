@@ -60,7 +60,7 @@ namespace Ivony.Html.Web.Mvc
 
       var bestRule = BestRule( candidateRules );
 
-      var virtualPath = bestRule.CreateVirtualPath( values );
+      var virtualPath = bestRule.CreateVirtualPath( _values );
 
       return new VirtualPathData( this, virtualPath );
     }
@@ -317,7 +317,7 @@ namespace Ivony.Html.Web.Mvc
 
         if ( string.IsNullOrEmpty( value ) )
           throw new ArgumentException( "作为动态路径的路由值不能包含空引用或空字符串", "routeValues" );
-        
+
 
         if ( value.Contains( '/' ) )
           throw new ArgumentException( "作为动态路径的路由值不能包含路径分隔符 '/'", "routeValues" );

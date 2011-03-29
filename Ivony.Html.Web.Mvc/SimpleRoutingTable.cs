@@ -206,13 +206,14 @@ namespace Ivony.Html.Web.Mvc
 
       var keys = new HashSet<string>( _routeValuesConstraints.Keys );
 
-      _dynamics = _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).ToArray();
+      _dynamics = _paragraphes
+        .Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) )
+        .Select( p => p.Substring( 1, p.Length - 2 ) )
+        .ToArray();
 
 
-      foreach ( var p in _dynamics )
+      foreach ( var key in _dynamics )
       {
-        var key = p.Substring( 1, p.Length - 2 );
-
         if ( keys.Contains( key ) )
           throw new FormatException( "URL模式格式不正确，包含重复的动态参数名或动态参数名与预设路由键重复" );
 

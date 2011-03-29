@@ -471,5 +471,12 @@ namespace Ivony.Html.Web.Mvc
 
       return values;
     }
+
+
+    public override string ToString()
+    {
+      return UrlPattern;
+    }
+
   }
 }

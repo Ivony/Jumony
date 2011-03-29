@@ -384,7 +384,7 @@ namespace Ivony.Html.Web.Mvc
           builder.Append( HttpUtility.UrlEncode( key ) );
           builder.Append( '=' );
           builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );
-        
+
         }
       }
 
@@ -415,7 +415,7 @@ namespace Ivony.Html.Web.Mvc
         if ( !values.TryGetValue( key, out value ) )
           return false;
 
-        if ( _routeValuesConstraints[key] != value )
+        if ( !_routeValuesConstraints[key].EqualsIgnoreCase( value ) )
           return false;
       }
 

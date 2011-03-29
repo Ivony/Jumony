@@ -73,7 +73,7 @@ namespace Ivony.Html.Web.Mvc
 
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      var rule = new SimpleRoutingRule( name, urlPattern, routeValues, queryKeys );
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys );
 
       AddRule( rule );
     }
@@ -189,10 +189,13 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
 
-    public SimpleRoutingRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
+      RoutingTable = routingTable;
 
       Name = name;
+
+
 
       var match = urlPatternRegex.Match( urlPattern );
 

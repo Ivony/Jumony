@@ -23,13 +23,13 @@ namespace Ivony.Html.Web.Mvc
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath;
 
       var data = _rules
+        .OrderBy( r => r.DynamicRouteKyes.Length )
         .Select( r => new
           {
             Rule = r,
             Values = r.GetRouteValues( virtualPath, httpContext.Request.QueryString ),
           } )
         .Where( i => i.Values != null )
-        .OrderBy( i => i.Rule.DynamicRouteKyes.Length )
         .FirstOrDefault();
 
       if ( data == null )
@@ -141,9 +141,9 @@ namespace Ivony.Html.Web.Mvc
     private SimpleRoutingRule BestRule( IEnumerable<SimpleRoutingRule> candidateRules )
     {
 
-      //满足最多约束的被优先考虑
-      var maxConstraints = candidateRules.Max( r => r.RouteValueConstraints.Count );
-      candidateRules = candidateRules.Where( r => r.RouteValueConstraints.Count == maxConstraints );
+      //满足最多静态值的被优先考虑
+      var maxConstraints = candidateRules.Max( r => r.StaticRouteValues.Count );
+      candidateRules = candidateRules.Where( r => r.StaticRouteValues.Count == maxConstraints );
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();
@@ -241,7 +241,7 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
 
-    
+
     /// <summary>
     /// 创建一个简单路由规则
     /// </summary>
@@ -267,11 +267,11 @@ namespace Ivony.Html.Web.Mvc
       _paragraphes = match.Groups["paragraph"].Captures.Cast<Capture>().Select( c => c.Value ).ToArray();
 
       _urlPattern = urlPattern;
-      _routeValuesConstraints = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
+      _staticValues = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
       _defaultValues = new Dictionary<string, string>( defaultValues, StringComparer.OrdinalIgnoreCase );
 
 
-      _routeKeys = new HashSet<string>( _routeValuesConstraints.Keys, StringComparer.OrdinalIgnoreCase );
+      _routeKeys = new HashSet<string>( _staticValues.Keys, StringComparer.OrdinalIgnoreCase );
 
       _dynamics = new HashSet<string>( _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).Select( p => p.Substring( 1, p.Length - 2 ) ), StringComparer.OrdinalIgnoreCase );
 
@@ -306,14 +306,23 @@ namespace Ivony.Html.Web.Mvc
 
     private string[] _paragraphes;
 
+    /// <summary>
+    /// 获取所有路径段
+    /// </summary>
     public string[] Paragraphes
     {
-      get { return _paragraphes; }
+      get { return _paragraphes.ToArray(); }
     }
 
 
     private HashSet<string> _routeKeys;
 
+    /// <summary>
+    /// 获取所有路由键（包括静态和动态的）
+    /// </summary>
+    /// <remarks>
+    /// 路由键的值会作为虚拟路径的一部分
+    /// </remarks>
     public string[] RouteKeys
     {
       get { return _routeKeys.ToArray(); }
@@ -323,13 +332,24 @@ namespace Ivony.Html.Web.Mvc
 
     private HashSet<string> _queryKeys;
 
+    /// <summary>
+    /// 获取所有查询键
+    /// </summary>
+    /// <remarks>
+    /// 构造虚拟路径时，查询键都是可选的。
+    /// 查询键的值会被产生为查询字符串。
+    /// </remarks>
     public string[] QueryKeys
     {
       get { return _queryKeys.ToArray(); }
     }
 
+
     private HashSet<string> _allKeys;
 
+    /// <summary>
+    /// 获取所有键（包括路由键和查询键）
+    /// </summary>
     public string[] AllKeys
     {
       get
@@ -341,6 +361,12 @@ namespace Ivony.Html.Web.Mvc
 
     private HashSet<string> _dynamics;
 
+    /// <summary>
+    /// 获取所有动态路由键
+    /// </summary>
+    /// <remarks>
+    /// 动态路由键的值不能包含特殊字符
+    /// </remarks>
     public string[] DynamicRouteKyes
     {
       get { return _dynamics.ToArray(); }
@@ -349,6 +375,9 @@ namespace Ivony.Html.Web.Mvc
 
     private string _prefix;
 
+    /// <summary>
+    /// 获取URL模式的静态前缀
+    /// </summary>
     public string StaticPrefix
     {
       get
@@ -369,23 +398,32 @@ namespace Ivony.Html.Web.Mvc
 
     private string _urlPattern;
 
+    /// <summary>
+    /// 获取整个URL模式
+    /// </summary>
     public string UrlPattern
     {
       get { return _urlPattern; }
     }
 
 
-    private IDictionary<string, string> _routeValuesConstraints;
+    private IDictionary<string, string> _staticValues;
 
-    public IDictionary<string, string> RouteValueConstraints
+    /// <summary>
+    /// 获取所有的静态值
+    /// </summary>
+    public IDictionary<string, string> StaticRouteValues
     {
-      get { return new Dictionary<string, string>( _routeValuesConstraints ); }
+      get { return new Dictionary<string, string>( _staticValues ); }
     }
 
 
     private IDictionary<string, string> _defaultValues;
 
-    public IDictionary<string, string> DefaultValues
+    /// <summary>
+    /// 获取所有的默认值
+    /// </summary>
+    public IDictionary<string, string> DefaultRouteValues
     {
       get { return new Dictionary<string, string>( _defaultValues ); }
     }
@@ -407,7 +445,7 @@ namespace Ivony.Html.Web.Mvc
         if ( value.Contains( '/' ) )
           throw new ArgumentException( "作为动态路径的路由值不能包含路径分隔符 '/'", "routeValues" );
 
-        value = HttpUtility.UrlEncode( value, RoutingTable.UrlEncoding );
+        //value = HttpUtility.UrlEncode( value, RoutingTable.UrlEncoding );
 
         builder.Append( "/" + value );
 
@@ -448,7 +486,11 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 检查指定的路由值是否满足约束
+    /// </summary>
+    /// <param name="values">路由值</param>
+    /// <returns>是否满足路由规则的约束</returns>
     public bool IsMatch( IDictionary<string, string> values )
     {
 
@@ -456,20 +498,26 @@ namespace Ivony.Html.Web.Mvc
         throw new ArgumentNullException( "values" );
 
 
-      foreach ( var key in _routeValuesConstraints.Keys )
+      foreach ( var key in _staticValues.Keys )
       {
-        string value;
+        string val;
 
-        if ( !values.TryGetValue( key, out value ) )
+        if ( !values.TryGetValue( key, out val ) )
           return false;
 
-        if ( !_routeValuesConstraints[key].EqualsIgnoreCase( value ) )
+        if ( !_staticValues[key].EqualsIgnoreCase( val ) )
           return false;
       }
 
       return true;
     }
 
+
+    /// <summary>
+    /// 比较两个路由规则约束是否一致
+    /// </summary>
+    /// <param name="rule">要比较的路由规则</param>
+    /// <returns>两个规则的约束是否一致</returns>
     public bool EqualsConstraints( SimpleRoutingRule rule )
     {
 
@@ -477,10 +525,10 @@ namespace Ivony.Html.Web.Mvc
         throw new ArgumentNullException( "rule" );
 
 
-      if ( rule.RouteValueConstraints.Count != RouteValueConstraints.Count )
+      if ( rule.StaticRouteValues.Count != StaticRouteValues.Count )
         return false;
 
-      return IsMatch( rule.RouteValueConstraints );
+      return IsMatch( rule.StaticRouteValues );
 
     }
 
@@ -519,7 +567,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      foreach ( var pair in _routeValuesConstraints )
+      foreach ( var pair in _staticValues )
         values.Add( pair.Key, pair.Value );
 
       for ( int i = 0; i < pathParagraphs.Length; i++ )

@@ -63,6 +63,10 @@ namespace Ivony.Html.Web.Mvc
 
       var virtualPath = bestRule.CreateVirtualPath( _values );
 
+      if ( MvcCompatible )
+        virtualPath = virtualPath.Substring( 2 );
+
+
       var data = new VirtualPathData( this, virtualPath );
 
       data.DataTokens["RoutingRuleName"] = bestRule.Name;
@@ -151,13 +155,23 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    public SimpleRoutingTable( IRouteHandler handler )
+    public SimpleRoutingTable( IRouteHandler handler, bool mvcCompatible )
     {
       Handler = handler;
+      MvcCompatible = mvcCompatible;
       UrlEncoding = Encoding.UTF8;
 
 
     }
+
+
+
+    public bool MvcCompatible
+    {
+      get;
+      private set;
+    }
+
 
 
 

@@ -291,7 +291,13 @@ namespace Ivony.Html.Web.Mvc
       get
       {
         if ( _prefix == null )
-          _prefix = _urlPattern.Substring( 0, _urlPattern.IndexOf( '{' ) - 1 );
+        {
+          var dynamicStarts = _urlPattern.IndexOf( '{' );
+          if ( dynamicStarts < 0 )
+            _prefix = _urlPattern;
+          else
+            _prefix = _urlPattern.Substring( 0, dynamicStarts - 1 );
+        }
 
         return _prefix;
       }

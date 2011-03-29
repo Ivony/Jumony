@@ -218,7 +218,7 @@ namespace Ivony.Html.Web.Mvc
 
       _routeKeys = keys.ToArray();
 
-      if ( _routeKeys.Intersect( _queryKeys ).Any() )
+      if ( _routeKeys.Intersect( queryKeys ).Any() )
         throw new FormatException( "URL模式格式不正确，动态参数或预设路由键与可选查询字符串名重复" );
 
       _queryKeys = queryKeys;

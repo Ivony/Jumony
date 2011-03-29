@@ -153,11 +153,13 @@ namespace Ivony.Html.Web.Mvc
     {
       Handler = handler;
       UrlEncoding = Encoding.UTF8;
+
+
     }
 
 
 
-    private ICollection<SimpleRoutingRule> _rules;
+    private ICollection<SimpleRoutingRule> _rules = new List<SimpleRoutingRule>();
 
     public SimpleRoutingRule[] Rules
     {

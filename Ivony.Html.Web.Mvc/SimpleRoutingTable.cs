@@ -202,10 +202,10 @@ namespace Ivony.Html.Web.Mvc
 
       var keys = new HashSet<string>( _routeValuesConstraints.Keys );
 
-      var _dynamicParagraphes = _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).ToArray();
+      _dynamics = _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).ToArray();
 
 
-      foreach ( var p in _dynamicParagraphes )
+      foreach ( var p in _dynamics )
       {
         var key = p.Substring( 1, p.Length - 2 );
 

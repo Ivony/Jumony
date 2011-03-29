@@ -46,8 +46,8 @@ namespace Ivony.Html.Web.Mvc
     {
 
 
-      var _values = values.ToDictionary( pair => pair.Key, pair => pair.Value == null ? null : pair.Value.ToString() );
-      var keySet = new HashSet<string>( _values.Keys );
+      var _values = values.ToDictionary( pair => pair.Key, pair => pair.Value == null ? null : pair.Value.ToString(), StringComparer.OrdinalIgnoreCase );
+      var keySet = new HashSet<string>( _values.Keys, StringComparer.OrdinalIgnoreCase );
 
 
       var candidateRules = _rules
@@ -75,9 +75,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
     {
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys );
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, defaultValues, queryKeys );
 
       AddRule( rule );
     }
@@ -203,7 +203,7 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
 
-    public SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
     {
       RoutingTable = routingTable;
 
@@ -219,31 +219,32 @@ namespace Ivony.Html.Web.Mvc
       _paragraphes = match.Groups["paragraph"].Captures.Cast<Capture>().Select( c => c.Value ).ToArray();
 
       _urlPattern = urlPattern;
-      _routeValuesConstraints = routeValues.ToDictionary( pair => pair.Key, pair => pair.Value );
+      _routeValuesConstraints = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
+      _defaultValues = new Dictionary<string, string>( defaultValues, StringComparer.OrdinalIgnoreCase );
 
-      var keys = new HashSet<string>( _routeValuesConstraints.Keys );
 
-      _dynamics = _paragraphes
-        .Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) )
-        .Select( p => p.Substring( 1, p.Length - 2 ) )
-        .ToArray();
+      _routeKeys = new HashSet<string>( _routeValuesConstraints.Keys, StringComparer.OrdinalIgnoreCase );
+
+      _dynamics = new HashSet<string>( _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).Select( p => p.Substring( 1, p.Length - 2 ) ), StringComparer.OrdinalIgnoreCase );
+
 
 
       foreach ( var key in _dynamics )
       {
-        if ( keys.Contains( key ) )
+        if ( _routeKeys.Contains( key ) )
           throw new FormatException( "URL模式格式不正确，包含重复的动态参数名或动态参数名与预设路由键重复" );
 
 
-        keys.Add( key );
+        _routeKeys.Add( key );
       }
 
-      _routeKeys = keys.ToArray();
-
-      if ( _routeKeys.Intersect( queryKeys ).Any() )
+      if ( _routeKeys.Intersect( queryKeys, StringComparer.OrdinalIgnoreCase ).Any() )
         throw new FormatException( "URL模式格式不正确，动态参数或预设路由键与可选查询字符串名重复" );
 
-      _queryKeys = queryKeys;
+      _queryKeys = new HashSet<string>( queryKeys, StringComparer.OrdinalIgnoreCase );
+
+      _allKeys = new HashSet<string>( _routeKeys, StringComparer.OrdinalIgnoreCase );
+      _allKeys.UnionWith( _queryKeys );
 
     }
 
@@ -263,42 +264,38 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private string[] _routeKeys;
+    private HashSet<string> _routeKeys;
 
     public string[] RouteKeys
     {
-      get { return _routeKeys; }
+      get { return _routeKeys.ToArray(); }
     }
 
 
 
-    private string[] _queryKeys;
+    private HashSet<string> _queryKeys;
 
     public string[] QueryKeys
     {
-      get { return _queryKeys; }
+      get { return _queryKeys.ToArray(); }
     }
 
-    private string[] _allKeys;
+    private HashSet<string> _allKeys;
 
     public string[] AllKeys
     {
       get
       {
-        if ( _allKeys == null )
-          _allKeys = _routeKeys.Union( _queryKeys ).ToArray();
-
-
-        return _allKeys;
+        return _allKeys.ToArray();
       }
     }
 
 
-    private string[] _dynamics;
+    private HashSet<string> _dynamics;
 
     public string[] DynamicRouteKyes
     {
-      get { return _dynamics; }
+      get { return _dynamics.ToArray(); }
     }
 
 
@@ -337,6 +334,13 @@ namespace Ivony.Html.Web.Mvc
       get { return new Dictionary<string, string>( _routeValuesConstraints ); }
     }
 
+
+    private IDictionary<string, string> _defaultValues;
+
+    public IDictionary<string, string> DefaultValues
+    {
+      get { return new Dictionary<string, string>( _defaultValues ); }
+    }
 
 
     public string CreateVirtualPath( IDictionary<string, string> routeValues )
@@ -485,6 +489,15 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var key in queryString.AllKeys )
         values.Add( key, queryString[key] );
+
+
+      foreach ( var key in _defaultValues.Keys )
+      {
+        if ( values.ContainsKey( key ) )
+          continue;
+
+        values.Add( key, _defaultValues[key] );
+      }
 
 
       return values;

@@ -370,17 +370,22 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var key in QueryKeys )
       {
-        var value = routeValues[key];
 
-        if ( !isAppendQueryStartSymbol )
-          builder.Append( '?' );
-        else
-          builder.Append( '&' );
+        if ( routeValues.ContainsKey( key ) )
+        {
 
-        builder.Append( HttpUtility.UrlEncode( key ) );
-        builder.Append( '=' );
-        builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );
+          var value = routeValues[key];
 
+          if ( !isAppendQueryStartSymbol )
+            builder.Append( '?' );
+          else
+            builder.Append( '&' );
+
+          builder.Append( HttpUtility.UrlEncode( key ) );
+          builder.Append( '=' );
+          builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );
+        
+        }
       }
 
 

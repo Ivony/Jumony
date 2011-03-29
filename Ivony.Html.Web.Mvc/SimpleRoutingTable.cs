@@ -12,6 +12,12 @@ namespace Ivony.Html.Web.Mvc
 {
   public class SimpleRoutingTable : RouteBase
   {
+
+    /// <summary>
+    /// 获取请求的路由数据
+    /// </summary>
+    /// <param name="httpContext">HTTP 请求</param>
+    /// <returns>路由数据</returns>
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath;
@@ -42,6 +48,13 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 尝试从路由值创建虚拟路径
+    /// </summary>
+    /// <param name="requestContext">当前请求上下文</param>
+    /// <param name="values">路由值</param>
+    /// <returns>虚拟路径信息</returns>
     public override VirtualPathData GetVirtualPath( RequestContext requestContext, RouteValueDictionary values )
     {
 
@@ -75,6 +88,14 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 添加一个路由规则
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="urlPattern"></param>
+    /// <param name="routeValues"></param>
+    /// <param name="defaultValues"></param>
+    /// <param name="queryKeys"></param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
     {
       var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, defaultValues, queryKeys );
@@ -82,6 +103,10 @@ namespace Ivony.Html.Web.Mvc
       AddRule( rule );
     }
 
+    /// <summary>
+    /// 添加一个路由规则
+    /// </summary>
+    /// <param name="rule">路由规则</param>
     protected void AddRule( SimpleRoutingRule rule )
     {
 
@@ -154,7 +179,11 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 创建一个简单路由表实例
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <param name="mvcCompatible"></param>
     public SimpleRoutingTable( IRouteHandler handler, bool mvcCompatible )
     {
       Handler = handler;
@@ -166,6 +195,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 是否产生MVC兼容的虚拟路径（去除~/）
+    /// </summary>
     public bool MvcCompatible
     {
       get;
@@ -177,6 +209,9 @@ namespace Ivony.Html.Web.Mvc
 
     private ICollection<SimpleRoutingRule> _rules = new List<SimpleRoutingRule>();
 
+    /// <summary>
+    /// 路由表中定义的路由规则
+    /// </summary>
     public SimpleRoutingRule[] Rules
     {
       get
@@ -194,6 +229,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+  /// <summary>
+  /// 简单路由规则
+  /// </summary>
   public class SimpleRoutingRule
   {
 
@@ -203,7 +241,17 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
 
-    public SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
+    
+    /// <summary>
+    /// 创建一个简单路由规则
+    /// </summary>
+    /// <param name="routingTable"></param>
+    /// <param name="name"></param>
+    /// <param name="urlPattern"></param>
+    /// <param name="routeValues"></param>
+    /// <param name="defaultValues"></param>
+    /// <param name="queryKeys"></param>
+    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
     {
       RoutingTable = routingTable;
 

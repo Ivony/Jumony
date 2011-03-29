@@ -426,11 +426,18 @@ namespace Ivony.Html.Web.Mvc
 
       virtualPath = Regex.Replace( virtualPath, "/+", "/" );//将连续的/替换成单独的/
 
-      var pathParagraphs = virtualPath.Substring( 2 ).Split( '/' );
+      virtualPath = virtualPath.Substring( 2 );
+
+
+
+      var pathParagraphs = virtualPath.Split( '/' );
+
+      if ( virtualPath == "" )
+        pathParagraphs = new string[0];
+
 
       if ( pathParagraphs.Length != Paragraphes.Length )
         return null;
-
 
 
       var values = new Dictionary<string, string>();

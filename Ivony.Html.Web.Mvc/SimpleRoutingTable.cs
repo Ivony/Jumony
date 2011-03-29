@@ -424,6 +424,8 @@ namespace Ivony.Html.Web.Mvc
         return null;
 
 
+      virtualPath = Regex.Replace( virtualPath, "/+", "/" );//将连续的/替换成单独的/
+
       var pathParagraphs = virtualPath.Substring( 2 ).Split( '/' );
 
       if ( pathParagraphs.Length != Paragraphes.Length )

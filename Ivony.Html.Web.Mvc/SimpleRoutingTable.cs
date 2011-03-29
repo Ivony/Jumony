@@ -17,13 +17,14 @@ namespace Ivony.Html.Web.Mvc
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath;
 
       var data = _rules
-        .OrderBy( r => r.DynamicRouteKyes.Length )
         .Select( r => new
           {
             Rule = r,
             Values = r.GetRouteValues( virtualPath, httpContext.Request.QueryString ),
           } )
-        .NotNull().FirstOrDefault();
+        .Where( i => i.Values != null )
+        .OrderBy( i => i.Rule.DynamicRouteKyes.Length )
+        .FirstOrDefault();
 
       if ( data == null )
         return null;
@@ -62,7 +63,11 @@ namespace Ivony.Html.Web.Mvc
 
       var virtualPath = bestRule.CreateVirtualPath( _values );
 
-      return new VirtualPathData( this, virtualPath );
+      var data = new VirtualPathData( this, virtualPath );
+
+      data.DataTokens["RoutingRuleName"] = bestRule.Name;
+
+      return data;
     }
 
 
@@ -329,7 +334,25 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      throw new NotImplementedException();
+      bool isAppendQueryStartSymbol = false;
+
+      foreach ( var key in QueryKeys )
+      {
+        var value = routeValues[key];
+
+        if ( !isAppendQueryStartSymbol )
+          builder.Append( '?' );
+        else
+          builder.Append( '&' );
+
+        builder.Append( HttpUtility.UrlEncode( key ) );
+        builder.Append( '=' );
+        builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );
+
+      }
+
+
+      return builder.ToString();
     }
 
 

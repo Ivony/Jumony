@@ -185,7 +185,7 @@ namespace Ivony.Html.Web.Mvc
 
     public const string staticParagraphPattern = @"(?<paragraph>[\p{Lu}\p{Ll}\p{Nd}]+)";
     public const string dynamicParagraphPattern = @"(?<paragraph>\{[\p{Lu}\p{Ll}\p{Nd}]+\})";
-    public static readonly string urlPattern = @"^~(/)$|^({static}(/{static})*(/{dynamic})*)|((/{dynamic})+)$".Replace( "{static}", staticParagraphPattern ).Replace( "{dynamic}", dynamicParagraphPattern );
+    public static readonly string urlPattern = @"(^~/$)|(^({static}(/{static})*(/{dynamic})*)|((/{dynamic})+)$)".Replace( "{static}", staticParagraphPattern ).Replace( "{dynamic}", dynamicParagraphPattern );
 
     private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
 

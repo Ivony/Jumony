@@ -119,7 +119,7 @@ namespace Ivony.Html.Web.Mvc
           .FirstOrDefault();
 
         if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则失败，路由表中已经存在一条可能冲突的规则：{0}", conflictRule.Name ) );
+          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
       }
 
 
@@ -131,7 +131,7 @@ namespace Ivony.Html.Web.Mvc
 
 
         if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则失败，路由表中已经存在一条可能冲突的规则：{0}", conflictRule.Name ) );
+          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
       }
 
       _rules.Add( rule );

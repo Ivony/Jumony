@@ -72,7 +72,6 @@
     <Compile Include="JumonyController.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />
     <Compile Include="PageView.cs" />
-    <Compile Include="PartialRenderAdapter.cs" />
     <Compile Include="SimpleRoutingTable.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

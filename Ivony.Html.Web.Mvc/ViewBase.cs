@@ -230,7 +230,7 @@ namespace Ivony.Html.Web.Mvc
       if ( action != null )
       {
 
-        var controller = partialElement.Attribute( "controller" ).Value();
+        var controller = partialElement.Attribute( "controller" ).Value() ?? (string) RouteData.Values["controller"];
 
         var helper = MakeHelperWithoutViewData();
 

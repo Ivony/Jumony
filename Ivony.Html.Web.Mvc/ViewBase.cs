@@ -232,7 +232,7 @@ namespace Ivony.Html.Web.Mvc
 
         var controller = partialElement.Attribute( "controller" ).Value();
 
-        var helper = MakeHelper();
+        var helper = MakeHelperWithoutViewData();
 
         writer.Write( helper.Action( actionName: action, controllerName: controller ) );
 
@@ -243,7 +243,7 @@ namespace Ivony.Html.Web.Mvc
       if ( view != null )
       {
 
-        var helper = MakeHelper();
+        var helper = MakeHelperWithoutViewData();
 
         writer.Write( helper.Partial( partialViewName: view ) );
 
@@ -256,9 +256,14 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-    protected HtmlHelper MakeHelper()
+    protected HtmlHelper MakeHelperWithoutViewData()
     {
-      var helper = new HtmlHelper( ViewContext, new ViewDataContainer( this ) );
+
+      var viewContextWithoutRouteData = new ViewContext( ViewContext, ViewContext.View, ViewContext.ViewData, ViewContext.TempData, ViewContext.Writer );
+      viewContextWithoutRouteData.RouteData = new RouteData();
+
+
+      var helper = new HtmlHelper( viewContextWithoutRouteData, new ViewDataContainer( this ) );
       return helper;
     }
 

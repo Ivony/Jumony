@@ -467,6 +467,8 @@ namespace Ivony.Html.Web.Mvc
           else
             builder.Append( '&' );
 
+          isAppendQueryStartSymbol = true;
+
           builder.Append( HttpUtility.UrlEncode( key ) );
           builder.Append( '=' );
           builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );

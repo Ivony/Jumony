@@ -96,9 +96,9 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues"></param>
     /// <param name="defaultValues"></param>
     /// <param name="queryKeys"></param>
-    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
+    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, defaultValues, queryKeys );
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys );
 
       AddRule( rule );
     }
@@ -251,7 +251,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues"></param>
     /// <param name="defaultValues"></param>
     /// <param name="queryKeys"></param>
-    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, IDictionary<string, string> defaultValues, string[] queryKeys )
+    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
       RoutingTable = routingTable;
 
@@ -268,7 +268,6 @@ namespace Ivony.Html.Web.Mvc
 
       _urlPattern = urlPattern;
       _staticValues = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
-      _defaultValues = new Dictionary<string, string>( defaultValues, StringComparer.OrdinalIgnoreCase );
 
 
       _routeKeys = new HashSet<string>( _staticValues.Keys, StringComparer.OrdinalIgnoreCase );
@@ -415,17 +414,6 @@ namespace Ivony.Html.Web.Mvc
     public IDictionary<string, string> StaticRouteValues
     {
       get { return new Dictionary<string, string>( _staticValues ); }
-    }
-
-
-    private IDictionary<string, string> _defaultValues;
-
-    /// <summary>
-    /// 获取所有的默认值
-    /// </summary>
-    public IDictionary<string, string> DefaultRouteValues
-    {
-      get { return new Dictionary<string, string>( _defaultValues ); }
     }
 
 
@@ -592,15 +580,6 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var key in queryString.AllKeys )
         values.Add( key, queryString[key] );
-
-
-      foreach ( var key in _defaultValues.Keys )
-      {
-        if ( values.ContainsKey( key ) )
-          continue;
-
-        values.Add( key, _defaultValues[key] );
-      }
 
 
       return values;

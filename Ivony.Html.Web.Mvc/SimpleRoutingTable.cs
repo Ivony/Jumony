@@ -563,7 +563,7 @@ namespace Ivony.Html.Web.Mvc
         return null;
 
 
-      var values = new Dictionary<string, string>();
+      var values = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
 
 

@@ -65,6 +65,7 @@
     <Compile Include="BindingExtensions.cs" />
     <Compile Include="BindingNullBehavior.cs" />
     <Compile Include="DataBinder.cs" />
+    <Compile Include="DataContext.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="BindingContext.cs" />
     <Compile Include="ExpressionParser.cs" />

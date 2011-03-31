@@ -10,21 +10,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class ViewHandler : PageView, IHttpHandler
+  public abstract class ViewHandler : PageView, IHttpHandler
   {
 
 
-    protected override void ProcessDocument()
-    {
-
-      ProcessDocument( ViewModel );
-
-    }
-
-    protected virtual void ProcessDocument( dynamic model )
-    {
-
-    }
 
 
 
@@ -50,7 +39,7 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
-  public class ViewHandler<T> : ViewHandler
+  public abstract class ViewHandler<T> : ViewHandler
   {
 
     protected new T ViewModel

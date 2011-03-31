@@ -58,16 +58,6 @@ namespace Ivony.Html.Web.Mvc
       get { return base.ViewModel.CastTo<T>(); }
     }
 
-
-    protected override void ProcessDocument()
-    {
-      ProcessDocument( ViewModel );
-    }
-
-    protected new virtual void ProcessDocument( T model )
-    {
-
-    }
   }
 
 }

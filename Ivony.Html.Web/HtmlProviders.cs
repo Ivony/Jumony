@@ -313,7 +313,7 @@ namespace Ivony.Html.Web
         var key = contentResult.CacheKey;
         var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, key );
 
-        var createDocument = Cache.Get( key ) as Func<IHtmlDomProvider, IHtmlDocument>;
+        var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
         if ( createDocument != null )
           return createDocument( result.DomProvider );

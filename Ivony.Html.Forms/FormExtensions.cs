@@ -283,6 +283,19 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 尝试对表单所有元素设置值
+    /// </summary>
+    /// <param name="form">要设置值的表单</param>
+    /// <param name="values">要设置的值</param>
+    /// <returns>是否成功</returns>
+    public static bool TrySetValues( this HtmlForm form, NameValueCollection values )
+    {
+      throw new NotImplementedException();
+    }
+
+
+
 
     /// <summary>
     /// 获取字符串形式表达的 Value 值

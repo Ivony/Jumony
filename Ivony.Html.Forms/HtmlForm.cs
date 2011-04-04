@@ -64,17 +64,23 @@ namespace Ivony.Html.Forms
 
     public HtmlForm Submit( NameValueCollection data )
     {
+      return Submit( data, true );
+    }
 
+
+    public HtmlForm Submit( NameValueCollection data, bool validateInputs )
+    {
       if ( SubmittedValues != null )
         throw new InvalidOperationException( "表单已经被提交过一次了" );
 
-      if ( !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
+      if ( validateInputs && !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
         throw new InvalidOperationException();
 
       SubmittedValues = data;
 
       return this;
     }
+
 
 
     public NameValueCollection SubmittedValues

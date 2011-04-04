@@ -64,9 +64,9 @@ namespace Ivony.Html.Web.Mvc
 
 
       var candidateRules = _rules
-        .Where( r => keySet.IsSupersetOf( r.RouteKeys ) )  //所有路由键都必须匹配
-        .Where( r => keySet.IsSubsetOf( r.AllKeys ) )      //所有路由键和查询字符串键必须能涵盖要设置的键。
-        .Where( r => r.IsMatch( _values ) );               //必须满足路由规则所定义的路由数据。
+        .Where( r => keySet.IsSupersetOf( r.RouteKeys ) )                      //所有路由键都必须匹配
+        .Where( r => keySet.IsSubsetOf( r.AllKeys ) || r.UnlimitedQueryKeys )  //所有路由键和查询字符串键必须能涵盖要设置的键。
+        .Where( r => r.IsMatch( _values ) );                                   //必须满足路由规则所定义的路由数据。
 
       if ( !candidateRules.Any() )
         return null;
@@ -98,7 +98,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="queryKeys"></param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys );
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys, false );
 
       AddRule( rule );
     }
@@ -112,10 +112,9 @@ namespace Ivony.Html.Web.Mvc
 
       {
         var conflictRule = _rules
-          .Where( r => r.AllKeys.Length == rule.AllKeys.Length )                        //若通过所有键多寡无法区分
           .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
           .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
-          .Where( r => r.EqualsConstraints( rule ) )                                    //若约束集也一致
+          .Where( r => !SimpleRoutingRule.Mutex( r, rule ) )                            //若与现存规则不互斥
           .FirstOrDefault();
 
         if ( conflictRule != null )
@@ -152,14 +151,6 @@ namespace Ivony.Html.Web.Mvc
       //拥有最多路由键的被优先考虑
       var maxRouteKeys = candidateRules.Max( r => r.RouteKeys.Length );
       candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );
-
-      if ( candidateRules.IsSingle() )
-        return candidateRules.Single();
-
-
-      //拥有最少参数的被优先考虑。
-      var minKeys = candidateRules.Min( r => r.AllKeys );
-      candidateRules = candidateRules.Where( r => r.AllKeys == minKeys );
 
       if ( candidateRules.IsSingle() )
         return candidateRules.Single();
@@ -251,11 +242,13 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues"></param>
     /// <param name="defaultValues"></param>
     /// <param name="queryKeys"></param>
-    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool unlimitedQueryKeys )
     {
       RoutingTable = routingTable;
 
       Name = name;
+
+      UnlimitedQueryKeys = unlimitedQueryKeys;
 
 
 
@@ -297,6 +290,14 @@ namespace Ivony.Html.Web.Mvc
 
 
     public string Name
+    {
+      get;
+      private set;
+    }
+
+
+
+    public bool UnlimitedQueryKeys
     {
       get;
       private set;
@@ -440,7 +441,7 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      bool isAppendQueryStartSymbol = false;
+      bool isAppendedQueryStartSymbol = false;
 
       foreach ( var key in QueryKeys )
       {
@@ -450,12 +451,12 @@ namespace Ivony.Html.Web.Mvc
 
           var value = routeValues[key];
 
-          if ( !isAppendQueryStartSymbol )
+          if ( !isAppendedQueryStartSymbol )
             builder.Append( '?' );
           else
             builder.Append( '&' );
 
-          isAppendQueryStartSymbol = true;
+          isAppendedQueryStartSymbol = true;
 
           builder.Append( HttpUtility.UrlEncode( key ) );
           builder.Append( '=' );
@@ -500,6 +501,25 @@ namespace Ivony.Html.Web.Mvc
       }
 
       return true;
+    }
+
+
+
+    /// <summary>
+    /// 检查两个路由规则是否互斥。
+    /// </summary>
+    /// <param name="rule1">路由规则1</param>
+    /// <param name="rule2">路由规则2</param>
+    /// <returns></returns>
+    public static bool Mutex( SimpleRoutingRule rule1, SimpleRoutingRule rule2 )
+    {
+
+      var KeySet = new HashSet<string>( rule1.StaticRouteValues.Keys, StringComparer.OrdinalIgnoreCase );
+      var KeySet2 = new HashSet<string>( rule2.StaticRouteValues.Keys, StringComparer.OrdinalIgnoreCase );
+
+      KeySet.IntersectWith( KeySet2 );
+
+      return KeySet.Any( key => !rule1.StaticRouteValues[key].EqualsIgnoreCase( rule2.StaticRouteValues[key] ) );
     }
 
 

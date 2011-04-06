@@ -98,7 +98,13 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="queryKeys"></param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys, false );
+      AddRule( name, urlPattern, routeValues, queryKeys, false );
+    }
+
+
+    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    {
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys, limitedQueries );
 
       AddRule( rule );
     }
@@ -242,13 +248,13 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues"></param>
     /// <param name="defaultValues"></param>
     /// <param name="queryKeys"></param>
-    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool unlimitedQueryKeys )
+    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
       RoutingTable = routingTable;
 
       Name = name;
 
-      UnlimitedQueryKeys = unlimitedQueryKeys;
+      LimitedQueries = limitedQueries;
 
 
 
@@ -297,7 +303,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    public bool UnlimitedQueryKeys
+    public bool LimitedQueries
     {
       get;
       private set;
@@ -553,7 +559,7 @@ namespace Ivony.Html.Web.Mvc
 
       var queryKeySet = new HashSet<string>( _queryKeys );
 
-      if ( !queryKeySet.IsSupersetOf( queryString.AllKeys ) )
+      if ( LimitedQueries && !queryKeySet.IsSupersetOf( queryString.AllKeys ) )
         return null;
 
 

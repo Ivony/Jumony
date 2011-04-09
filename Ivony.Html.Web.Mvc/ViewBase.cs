@@ -118,7 +118,7 @@ namespace Ivony.Html.Web.Mvc
     protected abstract string RenderContent();
 
 
-    protected IHtmlAdapter RenderAdapter
+    protected virtual IHtmlAdapter RenderAdapter
     {
       get;
       private set;

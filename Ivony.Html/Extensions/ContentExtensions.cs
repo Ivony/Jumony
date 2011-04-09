@@ -163,7 +163,12 @@ namespace Ivony.Html
         builder.Append( " " );
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
-          builder.AppendFormat( "=\"{0}\"", HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) );
+        {
+          if ( HtmlSpecification.IsUriValue( attribute ) )
+            builder.AppendFormat( "=\"{0}\"", attribute.AttributeValue );
+          else
+            builder.AppendFormat( "=\"{0}\"", HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) );
+        }
       }
 
       if ( selfClosed )

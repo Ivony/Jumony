@@ -17,6 +17,11 @@ namespace Ivony.Fluent
 
     public static T RandomElement<T>( this IEnumerable<T> source )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+
       return source.ElementAt( random.Next( source.Count() ) );
     }
 
@@ -24,9 +29,23 @@ namespace Ivony.Fluent
 
 
 
-
+    /// <summary>
+    /// 对序列每一项执行指定操作
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要执行操作的序列</param>
+    /// <param name="action">要执行的操作</param>
+    /// <returns>源序列</returns>
     public static IEnumerable<T> ForAll<T>( this IEnumerable<T> source, Action<T> action )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+
       foreach ( T item in source )
       {
         action( item );
@@ -36,8 +55,23 @@ namespace Ivony.Fluent
     }
 
 
+
+    /// <summary>
+    /// 对序列每一项执行指定操作
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要执行操作的序列</param>
+    /// <param name="action">要执行的操作</param>
+    /// <returns>源序列</returns>
     public static IEnumerable<T> ForAll<T>( this IEnumerable<T> source, Action<T, int> action )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
 
       int i = 0;
 
@@ -48,6 +82,113 @@ namespace Ivony.Fluent
 
       return source;
     }
+
+
+
+    /// <summary>
+    /// 对序列唯一项执行指定操作，若序列包含不止一个项，则抛出异常
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要执行操作的序列</param>
+    /// <param name="action">要执行的操作</param>
+    /// <returns>源序列</returns>
+    public static IEnumerable<T> ForSingle<T>( this IEnumerable<T> source, Action<T> action )
+    {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+
+      T singleItem = default( T );
+      bool assigned = false;
+
+      foreach ( var item in source )
+      {
+        if ( assigned )
+          throw new InvalidOperationException( "序列包含一个以上的元素" );
+        singleItem = item;
+        assigned = true;
+      }
+
+      if ( assigned )
+        action( singleItem );
+
+      return source;
+    }
+
+
+    /// <summary>
+    /// 对序列首项执行指定操作
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要执行操作的序列</param>
+    /// <param name="action">要执行的操作</param>
+    /// <returns>源序列</returns>
+    public static IEnumerable<T> ForFirst<T>( this IEnumerable<T> source, Action<T> action )
+    {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+
+
+      foreach ( var item in source )
+      {
+
+        action( item );
+        break;
+
+      }
+
+      return source;
+
+    }
+
+
+    /// <summary>
+    /// 对序列末项执行指定操作
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要执行操作的序列</param>
+    /// <param name="action">要执行的操作</param>
+    /// <returns>源序列</returns>
+    public static IEnumerable<T> ForLast<T>( this IEnumerable<T> source, Action<T> action )
+    {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+
+      T lastItem = default( T );
+      bool assigned = false;
+
+      foreach ( var item in source )
+      {
+        lastItem = item;
+        assigned = true;
+      }
+
+
+      if ( assigned )
+        action( lastItem );
+
+
+      return source;
+
+    }
+
+
+
+
 
 
     public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source )

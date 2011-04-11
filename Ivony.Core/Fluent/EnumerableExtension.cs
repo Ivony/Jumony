@@ -190,8 +190,13 @@ namespace Ivony.Fluent
 
 
 
-
-    public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source )
+    /// <summary>
+    /// 从序列中去除为空（null）的项。
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
+    public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source ) 
     {
       return source.Where( item => item != null );
     }

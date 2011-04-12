@@ -292,7 +292,6 @@ namespace Ivony.Html
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>
     /// <returns>搜索到的符合要求的唯一元素</returns>
-    [Obsolete( "此方法已过时，请使用Find( \"...\" ).Single()的形式" )]
     public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
     {
       if ( container == null )

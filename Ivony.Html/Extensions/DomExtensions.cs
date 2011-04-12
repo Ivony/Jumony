@@ -676,6 +676,10 @@ namespace Ivony.Html
     /// <param name="text">文本内容</param>
     public static void InnerText( this IHtmlElement element, string text )
     {
+      InnerText( element, text, "#ensp;" );
+    }
+    public static void InnerText( this IHtmlElement element, string text, string spaceReplacement )
+    {
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
@@ -696,47 +700,20 @@ namespace Ivony.Html
         }
         else
         {
-          AddEncodedText( text, element, modifier );
+
+          var encoded = HtmlEncoding.HtmlEncode( text );
+          if ( spaceReplacement != null )
+            encoded.Replace( " ", spaceReplacement );
+
+          encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
+
+          encoded.Replace( "\n", "<br />" );
+
+
+          element.Document.ParseFragment( encoded ).Into( element, 0 );
         }
       }
 
-    }
-
-
-    private static void AddEncodedText( string text, IHtmlContainer container, IHtmlDomModifier modifier )
-    {
-
-      if ( text == null )
-        throw new ArgumentNullException( "text" );
-
-      var encoded = HtmlEncoding.HtmlEncode( text );
-
-      encoded = encoded.Replace( " ", "&#32;" );
-
-      encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
-
-      int index = 0, brIndex = 0;
-      while ( true )
-      {
-        brIndex = encoded.IndexOf( '\n', index );
-
-        if ( brIndex == -1 )
-        {
-          if ( index < encoded.Length )
-            modifier.AddTextNode( container, encoded.Substring( index ) );
-
-          break;
-        }
-
-
-
-        if ( index != brIndex )
-          modifier.AddTextNode( container, encoded.Substring( index, brIndex - index ) );
-
-        modifier.AddElement( container, "br" );
-        index = brIndex + 1;
-
-      }
     }
 
 

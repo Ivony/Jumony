@@ -711,7 +711,7 @@ namespace Ivony.Html
 
       var encoded = HtmlEncoding.HtmlEncode( text );
 
-      encoded = encoded.Replace( " ", "&nbsp;" );
+      encoded = encoded.Replace( " ", "&#32;" );
 
       encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
 

@@ -34,7 +34,7 @@ namespace Ivony.Html.Forms
     public string TextValue
     {
       get { return _element.InnerText(); }
-      set { _element.InnerText( TextValue ); }
+      set { _element.InnerText( value ); }
     }
 
     public string Name

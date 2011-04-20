@@ -15,6 +15,11 @@ namespace Ivony.Html.Web.Mvc
   public class SimpleRoutingTable : RouteBase
   {
 
+
+    protected const string RouteValuesCacheKeyPrefix = "RouteValues_";
+    protected const string RouteVirtualPathCacheKeyPrefix = "RouteVirtualPath_";
+
+
     /// <summary>
     /// 获取请求的路由数据
     /// </summary>
@@ -22,7 +27,16 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>路由数据</returns>
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
-      var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath;
+      var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
+
+      var cacheKey = RouteVirtualPathCacheKeyPrefix + virtualPath;
+
+      var routeData = HostingEnvironment.Cache.Get( cacheKey ) as RouteData;
+
+
+      if ( routeData != null )
+        return routeData;
+
 
       var data = _rules
         .OrderBy( r => r.DynamicRouteKyes.Length )
@@ -38,7 +52,7 @@ namespace Ivony.Html.Web.Mvc
         return null;
 
 
-      var routeData = new RouteData( this, Handler );
+      routeData = new RouteData( this, Handler );
 
       foreach ( var pair in data.Values )
         routeData.Values.Add( pair.Key, pair.Value );
@@ -46,12 +60,12 @@ namespace Ivony.Html.Web.Mvc
 
       routeData.DataTokens["RoutingRuleName"] = data.Rule.Name;
 
+      HostingEnvironment.Cache.Insert( cacheKey, routeData );
+
       return routeData;
 
     }
 
-
-    protected const string RouteValuesCacheKeyPrefix = "RouteValues_";
 
 
     /// <summary>
@@ -94,7 +108,7 @@ namespace Ivony.Html.Web.Mvc
         virtualPath = virtualPath.Substring( 2 );
 
 
-      
+
       HostingEnvironment.Cache.Insert( cacheKey, virtualPath );
 
 

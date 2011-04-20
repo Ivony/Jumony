@@ -17,7 +17,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     protected const string RouteValuesCacheKeyPrefix = "RouteValues_";
-    protected const string RouteVirtualPathCacheKeyPrefix = "RouteVirtualPath_";
+    protected const string RouteUrlCacheKeyPrefix = "RouteVirtualPath_";
 
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace Ivony.Html.Web.Mvc
     {
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
 
-      var cacheKey = RouteVirtualPathCacheKeyPrefix + virtualPath;
+      var cacheKey = RouteUrlCacheKeyPrefix + httpContext.Request.Url.AbsoluteUri;
 
       var routeData = HostingEnvironment.Cache.Get( cacheKey ) as RouteData;
 

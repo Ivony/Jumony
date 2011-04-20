@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Ivony.Fluent;
 using System.Collections.Specialized;
+using System.Web.Caching;
+using System.Web.Hosting;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -49,6 +51,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    protected const string RouteValuesCacheKeyPrefix = "RouteValues_";
+
+
     /// <summary>
     /// 尝试从路由值创建虚拟路径
     /// </summary>
@@ -60,6 +65,15 @@ namespace Ivony.Html.Web.Mvc
 
 
       var _values = values.ToDictionary( pair => pair.Key, pair => pair.Value == null ? null : pair.Value.ToString(), StringComparer.OrdinalIgnoreCase );
+
+      var cacheKey = CreateCacheKey( _values );
+
+      var virtualPath = HostingEnvironment.Cache.Get( cacheKey ) as string;
+
+      if ( virtualPath != null )
+        return new VirtualPathData( this, virtualPath );
+
+
       var keySet = new HashSet<string>( _values.Keys, StringComparer.OrdinalIgnoreCase );
 
 
@@ -74,10 +88,14 @@ namespace Ivony.Html.Web.Mvc
 
       var bestRule = BestRule( candidateRules );
 
-      var virtualPath = bestRule.CreateVirtualPath( _values );
+      virtualPath = bestRule.CreateVirtualPath( _values );
 
       if ( MvcCompatible )
         virtualPath = virtualPath.Substring( 2 );
+
+
+      
+      HostingEnvironment.Cache.Insert( cacheKey, virtualPath );
 
 
       var data = new VirtualPathData( this, virtualPath );
@@ -85,6 +103,24 @@ namespace Ivony.Html.Web.Mvc
       data.DataTokens["RoutingRuleName"] = bestRule.Name;
 
       return data;
+    }
+
+    protected virtual string CreateCacheKey( Dictionary<string, string> values )
+    {
+
+      StringBuilder builder = new StringBuilder( RouteValuesCacheKeyPrefix );
+
+      foreach ( var key in values.Keys )
+      {
+        var val = values[key];
+
+        builder.Append( key.Replace( ":", "::" ).Replace( ";", ";;" ) );
+        builder.Append( ":" );
+        builder.Append( val.Replace( ":", "::" ).Replace( ";", ";;" ) );
+        builder.Append( ";" );
+      }
+
+      return builder.ToString();
     }
 
 

@@ -128,9 +128,15 @@ namespace Ivony.Html.Web.Mvc
       {
         var val = values[key];
 
-        builder.Append( key.Replace( ":", "::" ).Replace( ";", ";;" ) );
+        builder.Append( key.Replace( "\\", "\\\\" ).Replace( ":", "\\:" ).Replace( ";", "\\;" ) );
         builder.Append( ":" );
-        builder.Append( val.Replace( ":", "::" ).Replace( ";", ";;" ) );
+        
+        if ( val == null )
+          builder.Append( "@" );
+
+        else
+          builder.Append( val.Replace( "\\", "\\\\" ).Replace( ":", "\\:" ).Replace( ";", "\\;" ).Replace( "@", "\\@" ) );
+       
         builder.Append( ";" );
       }
 

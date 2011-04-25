@@ -75,6 +75,7 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
+    <Compile Include="MultipleTextWrietr.cs" />
     <Compile Include="NoResponseHttpContext.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />

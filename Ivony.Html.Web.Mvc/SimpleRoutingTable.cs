@@ -130,13 +130,13 @@ namespace Ivony.Html.Web.Mvc
 
         builder.Append( key.Replace( "\\", "\\\\" ).Replace( ":", "\\:" ).Replace( ";", "\\;" ) );
         builder.Append( ":" );
-        
+
         if ( val == null )
           builder.Append( "@" );
 
         else
           builder.Append( val.Replace( "\\", "\\\\" ).Replace( ":", "\\:" ).Replace( ";", "\\;" ).Replace( "@", "\\@" ) );
-       
+
         builder.Append( ";" );
       }
 
@@ -505,10 +505,13 @@ namespace Ivony.Html.Web.Mvc
 
       bool isAppendedQueryStartSymbol = false;
 
-      foreach ( var key in QueryKeys )
+      var unallocatedKeys = routeValues.Keys.Except( RouteKeys );
+
+
+      foreach ( var key in unallocatedKeys )
       {
 
-        if ( routeValues.ContainsKey( key ) )
+        if ( QueryKeys.Contains( key, StringComparer.OrdinalIgnoreCase ) || !LimitedQueries )
         {
 
           var value = routeValues[key];

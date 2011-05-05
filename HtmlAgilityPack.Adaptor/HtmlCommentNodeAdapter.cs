@@ -6,7 +6,7 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  public class HtmlCommentNodeAdapter : HtmlNodeAdapter, IHtmlComment, IHtmlSpecial
+  public class HtmlCommentNodeAdapter : HtmlDomObjectAdapter, IHtmlComment, IHtmlSpecial
   {
     #region IHtmlCommentNode 成员
 
@@ -21,5 +21,16 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       : base( node )
     {
     }
+
+
+    #region IHtmlNode 成员
+
+    public IHtmlContainer Container
+    {
+      get { return Node.ParentNode.AsContainer(); }
+    }
+
+    #endregion
+
   }
 }

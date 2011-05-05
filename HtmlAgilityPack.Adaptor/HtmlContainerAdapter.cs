@@ -8,7 +8,7 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  internal abstract class HtmlContainerAdapter : HtmlNodeAdapter, IHtmlContainer
+  internal abstract class HtmlContainerAdapter : HtmlDomObjectAdapter, IHtmlContainer
   {
     private AP.HtmlNode _node;
 

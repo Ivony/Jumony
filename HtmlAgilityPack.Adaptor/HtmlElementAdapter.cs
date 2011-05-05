@@ -38,5 +38,14 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return this.Attribute( attributeName );
     }
 
+
+    #region IHtmlNode 成员
+
+    public IHtmlContainer Container
+    {
+      get { return Node.ParentNode.AsContainer(); }
+    }
+
+    #endregion
   }
 }

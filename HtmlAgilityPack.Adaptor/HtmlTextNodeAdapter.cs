@@ -6,7 +6,7 @@ using AP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
-  public class HtmlTextNodeAdapter : HtmlNodeAdapter, IHtmlTextNode
+  public class HtmlTextNodeAdapter : HtmlDomObjectAdapter, IHtmlTextNode
   {
     public string HtmlText
     {
@@ -17,6 +17,17 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       : base( node )
     {
     }
+
+
+    #region IHtmlNode 成员
+
+    public IHtmlContainer Container
+    {
+      get { return Node.ParentNode.AsContainer(); }
+    }
+
+    #endregion
+
 
   }
 }

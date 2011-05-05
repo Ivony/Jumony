@@ -41,11 +41,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     }
 
 
-    public void Remove()
-    {
-      _attribute.Remove();
-    }
-
 
 
 

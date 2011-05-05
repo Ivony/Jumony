@@ -53,20 +53,19 @@
     <Compile Include="HtmlContainerAdapter.cs" />
     <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlDocumentAdapter.cs" />
-    <Compile Include="HtmlNodeAdapter.cs" />
-    <Compile Include="HtmlNodeFactory.cs" />
+    <Compile Include="HtmlDomObjectAdapter.cs" />
     <Compile Include="HtmlParser.cs" />
     <Compile Include="HtmlTextNodeAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
-      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
-      <Name>Ivony.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HtmlAgilityPack\HtmlAgilityPack.csproj">
       <Project>{193BB801-054F-4729-9D5D-FCE1E32594BF}</Project>
       <Name>HtmlAgilityPack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>

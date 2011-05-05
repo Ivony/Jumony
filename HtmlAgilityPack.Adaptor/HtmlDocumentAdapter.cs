@@ -55,16 +55,21 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
 
 
-    public IHtmlNodeFactory GetNodeFactory()
-    {
-      return new HtmlNodeFactory( this._document );
-    }
-
-
     IHtmlDocument IHtmlDomObject.Document
     {
       get { return this; }
     }
 
+
+
+    public IHtmlFragmentManager FragmentManager
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public IHtmlDomModifier DomModifier
+    {
+      get { throw new NotImplementedException(); }
+    }
   }
 }

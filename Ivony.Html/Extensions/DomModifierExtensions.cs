@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Ivony.Html
 {
+  /// <summary>
+  /// 针对 DomModifier 对象的扩展方法
+  /// </summary>
   public static class DomModifierExtensions
   {
 

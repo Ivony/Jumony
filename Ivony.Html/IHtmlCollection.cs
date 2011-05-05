@@ -37,7 +37,7 @@ namespace Ivony.Html
 
 
       _document = document;
-      _nodeCollection = new SynchronizedCollection<IHtmlNode>( SyncRoot );
+      _nodeCollection = new SynchronizedCollection<IHtmlNode>( this.CastTo<IHtmlDomObject>().SyncRoot );
     }
 
 
@@ -71,7 +71,7 @@ namespace Ivony.Html
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
-      if ( !object.Equals( node.Document, Document ) )
+      if ( !object.Equals( node.Document, this.CastTo<IHtmlDomObject>().Document ) )
         throw new InvalidOperationException();
 
       node.EnsureAllocated();
@@ -96,27 +96,31 @@ namespace Ivony.Html
       _nodeCollection.Insert( index, node );
     }
 
+    /// <summary>
+    /// 获取所有子节点
+    /// </summary>
+    /// <returns>容器的所有子节点</returns>
     public IEnumerable<IHtmlNode> Nodes()
     {
       return _nodeCollection.Cast<IHtmlNode>().AsReadOnly();
     }
 
-    public object RawObject
+    object IHtmlDomObject.RawObject
     {
       get { return this; }
     }
 
-    public string RawHtml
+    string IHtmlDomObject.RawHtml
     {
       get { return null; }
     }
 
-    public IHtmlDocument Document
+    IHtmlDocument IHtmlDomObject.Document
     {
       get { return _document; }
     }
 
-    public object SyncRoot
+    object IHtmlDomObject.SyncRoot
     {
       get { return _sync; }
     }

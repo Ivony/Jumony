@@ -494,8 +494,7 @@ namespace Ivony.Html
 
         //ld provider    document, provider
         //ld container   document, provider, document
-        //ld index       document, provider, document, 0
-        //ld ElementName document, provider, document, 0, name
+        //ld ElementName document, provider, document, name
         //create element document, element
 
         //dup            document, element, element   
@@ -505,19 +504,7 @@ namespace Ivony.Html
 
         //ld provider    document, element, provider
         //ld container   document, element, provider, element
-        //ld index       document, element, provider, element, 0
-        //ld text        document, element, provider, element, 0, text
-        //create text    document, element, textNode
-        //pop            document, element
-
-        //end create textNode
-
-        //begin create textNode
-
-        //ld provider    document, element, provider
-        //ld container   document, element, provider, element
-        //ld index       document, element, provider, element, 1
-        //ld text        document, element, provider, element, 1, text
+        //ld text        document, element, provider, element, text
         //create text    document, element, textNode
         //pop            document, element
 

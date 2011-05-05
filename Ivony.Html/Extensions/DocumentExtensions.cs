@@ -64,6 +64,11 @@ namespace Ivony.Html
     /// <returns>元素的唯一ID。</returns>
     public static string Identity( this IHtmlElement element, bool create, bool ancestorsCreate )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+
       EnsureAllocated( element );
 
       var id = element.Attribute( "id" ).Value();

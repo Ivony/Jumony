@@ -450,6 +450,14 @@ namespace Ivony.Html
     /// <returns>添加后的节点</returns>
     public static IHtmlNode AddCopy( this IHtmlContainer container, IHtmlNode node )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
+
       lock ( container.SyncRoot )
       {
         return AddCopy( container, container.Nodes().Count(), node );

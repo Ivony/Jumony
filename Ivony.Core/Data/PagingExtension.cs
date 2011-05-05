@@ -48,8 +48,7 @@ namespace Ivony.Data
     /// <summary>
     /// 获取分页器的最大页数
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="pagingData"></param>
+    /// <param name="pagingData">数据分页器</param>
     /// <returns></returns>
     public static int MaxPages( this IPagingData pagingData )
     {

@@ -18,13 +18,13 @@ namespace Ivony.Html.Parser.ContentModels
     public string Content
     {
       get;
-      protected set;
+      private set;
     }
 
     public string SpecialSymbol
     {
       get;
-      protected set;
+      private set;
     }
 
   }

@@ -68,7 +68,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="modifier">DOM 结构修改器</param>
     /// <param name="container">要添加注释的容器</param>
-    /// <param name="htmlText">HTML注释</param>
+    /// <param name="comment">HTML注释</param>
     /// <returns>添加的注释节点</returns>
     public static IHtmlComment AddComment( this IHtmlDomModifier modifier, IHtmlContainer container, string comment )
     {

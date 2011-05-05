@@ -153,6 +153,11 @@ namespace Ivony.Html
     /// <returns></returns>
     public static string GenerateTagHtml( IHtmlElement element, bool selfClosed )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+
       var builder = new StringBuilder();
 
       builder.Append( "<" );
@@ -238,6 +243,11 @@ namespace Ivony.Html
     /// <returns>是否全部是空白字符</returns>
     public static bool IsWhiteSpace( this IHtmlTextNode textNode )
     {
+
+      if ( textNode == null )
+        throw new ArgumentNullException( "textNode" );
+
+
       if ( whitespaceRegex.Match( textNode.HtmlText ).Length == textNode.HtmlText.Length )
         return true;
 
@@ -364,12 +374,20 @@ namespace Ivony.Html
     /// <param name="adapter">HTML 输出转换器</param>
     public static void Render( this IHtmlNode node, TextWriter writer, IHtmlAdapter adapter )
     {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( writer == null )
+        throw new ArgumentNullException( "writer" );
+
+
 
       if ( adapter != null )
       {
         if ( adapter.Render( node, writer ) )
           return;
       }
+
 
       var renderable = node as IHtmlRenderableNode;
 

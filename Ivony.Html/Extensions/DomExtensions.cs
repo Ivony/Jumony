@@ -769,7 +769,7 @@ namespace Ivony.Html
     /// <summary>
     /// 清除所有子节点
     /// </summary>
-    /// <param name="element">要清除所有子节点的元素</param>
+    /// <param name="container">要清除所有子节点的元素</param>
     public static IHtmlContainer ClearNodes( this IHtmlContainer container )
     {
 

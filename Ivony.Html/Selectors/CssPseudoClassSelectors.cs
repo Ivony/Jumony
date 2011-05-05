@@ -206,8 +206,13 @@ namespace Ivony.Html
           augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ) );//这里的正则用于去掉符号与数字之间的空白
       }
 
-      public bool IsEligible( IHtmlElement element )
+
+      bool ICssPseudoClassSelector.IsEligible( IHtmlElement element )
       {
+
+        if ( element == null )
+          throw new ArgumentNullException( "element" );
+
 
         List<IHtmlElement> siblings;
 
@@ -326,10 +331,14 @@ namespace Ivony.Html
 
       }
 
-      #region IPseudoClassSelector 成员
 
-      public bool IsEligible( IHtmlElement element )
+      bool ICssPseudoClassSelector.IsEligible( IHtmlElement element )
       {
+
+        if ( element == null )
+          throw new ArgumentNullException( "element" );
+
+
         switch ( _name )
         {
           case "only-child":
@@ -344,7 +353,6 @@ namespace Ivony.Html
         }
       }
 
-      #endregion
     }
 
 

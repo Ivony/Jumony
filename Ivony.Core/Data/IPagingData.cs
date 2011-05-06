@@ -49,22 +49,30 @@ namespace Ivony.Data
   }
 
 
+  /// <summary>
+  /// 可分页数据源
+  /// </summary>
   public interface IPagingDataSource
   {
+    /// <summary>
+    /// 创建数据分页器
+    /// </summary>
+    /// <param name="pageSize">页大小</param>
+    /// <returns>数据分页器</returns>
     IPagingData CreatePaging( int pageSize );
   }
 
   /// <summary>
   /// 可分页数据源
   /// </summary>
-  /// <typeparam name="T"></typeparam>
+  /// <typeparam name="T">数据元素类型</typeparam>
   public interface IPagingDataSource<T> : IPagingDataSource
   {
     /// <summary>
     /// 创建分页器
     /// </summary>
     /// <param name="pageSize">分页大小</param>
-    /// <returns></returns>
+    /// <returns>数据分页器</returns>
     new IPagingData<T> CreatePaging( int pageSize );
   }
 }

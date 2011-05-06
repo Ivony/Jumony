@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
+#pragma warning disable 1591
+
 namespace Ivony.Html.Web
 {
   /// <summary>
@@ -12,6 +14,10 @@ namespace Ivony.Html.Web
   public class NoResponseHttpContext : HttpContextWrapper
   {
 
+    /// <summary>
+    /// 创建 NoResponseHttpContext 实例
+    /// </summary>
+    /// <param name="context"></param>
     public NoResponseHttpContext( HttpContext context ) : base( context ) { }
 
     public override HttpResponseBase Response

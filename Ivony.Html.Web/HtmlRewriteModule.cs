@@ -7,20 +7,24 @@ using System.IO;
 
 namespace Ivony.Html.Web
 {
-  public class HtmlRewriteModule : IHttpModule
+
+  /// <summary>
+  /// 重写 HTTP 请求映射到 Jumony 处理程序的模块
+  /// </summary>
+  public sealed class HtmlRewriteModule : IHttpModule
   {
 
 
-    public void Dispose()
+    void IHttpModule.Dispose()
     {
     }
 
-    public void Init( HttpApplication context )
+    void IHttpModule.Init( HttpApplication context )
     {
       context.PostResolveRequestCache += new EventHandler( OnPreMapRequestHandler );
     }
 
-    void OnPreMapRequestHandler( object sender, EventArgs e )
+    private void OnPreMapRequestHandler( object sender, EventArgs e )
     {
       var context = HttpContext.Current;
 

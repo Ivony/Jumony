@@ -685,9 +685,16 @@ namespace Ivony.Html
     /// <param name="text">文本内容</param>
     public static void InnerText( this IHtmlElement element, string text )
     {
-      InnerText( element, text, "#ensp;" );
+      InnerText( element, text, false );
     }
-    public static void InnerText( this IHtmlElement element, string text, string spaceReplacement )
+
+    /// <summary>
+    /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
+    /// </summary>
+    /// <param name="element">要替换内容的元素</param>
+    /// <param name="text">文本内容</param>
+    /// <param name="encodeWhiteSpaces">是否编码空白字符</param>
+    public static void InnerText( this IHtmlElement element, string text, bool encodeWhiteSpaces )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -703,7 +710,7 @@ namespace Ivony.Html
         {
           modifier.AddTextNode( element, text );
         }
-        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) || !encodeWhiteSpaces )
         {
           modifier.AddTextNode( element, HtmlEncoding.HtmlEncode( text ) );
         }
@@ -711,8 +718,8 @@ namespace Ivony.Html
         {
 
           var encoded = HtmlEncoding.HtmlEncode( text );
-          if ( spaceReplacement != null )
-            encoded.Replace( " ", spaceReplacement );
+
+          encoded.Replace( " ", "#nbsp;" );
 
           encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
 

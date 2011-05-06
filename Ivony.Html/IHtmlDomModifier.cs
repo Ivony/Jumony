@@ -87,11 +87,18 @@ namespace Ivony.Html
   /// </summary>
   public class HtmlNodeEventArgs : EventArgs
   {
+    /// <summary>
+    /// 构建 HtmlNodeEventArgs 对象
+    /// </summary>
+    /// <param name="node"></param>
     public HtmlNodeEventArgs( IHtmlNode node )
     {
       Node = node;
     }
 
+    /// <summary>
+    /// 引发事件的节点
+    /// </summary>
     public IHtmlNode Node
     {
       get;

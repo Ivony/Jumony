@@ -374,6 +374,7 @@ namespace Ivony.Html
     /// 添加节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
+    /// <param name="index">要添加的位置</param>
     /// <param name="comment">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
     public static IHtmlComment AddCopy( this IHtmlContainer container, int index, IHtmlComment comment )

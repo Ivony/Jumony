@@ -278,7 +278,7 @@ namespace Ivony.Html
     /// <param name="document">要呈现的文档</param>
     /// <param name="adapter">HTML 输出转换器</param>
     /// <returns>文档的 HTML 形式</returns>
-    public static string Render( this IHtmlDocument document, IHtmlAdapter adapter )
+    public static string Render( this IHtmlDocument document, params IHtmlAdapter[] adapter )
     {
       using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
@@ -306,7 +306,7 @@ namespace Ivony.Html
     /// <param name="document">要呈现的文档</param>
     /// <param name="writer">HTML 编写器</param>
     /// <param name="adapter">HTML 输出转换器</param>
-    public static void Render( this IHtmlDocument document, TextWriter writer, IHtmlAdapter adapter )
+    public static void Render( this IHtmlDocument document, TextWriter writer, params IHtmlAdapter[] adapter )
     {
 
       if ( document == null )
@@ -331,7 +331,7 @@ namespace Ivony.Html
     }
 
 
-    private static void RenderChilds( IHtmlContainer container, TextWriter writer, IHtmlAdapter adapter )
+    private static void RenderChilds( IHtmlContainer container, TextWriter writer, params IHtmlAdapter[] adapter )
     {
       foreach ( var node in container.Nodes() )
       {
@@ -372,7 +372,7 @@ namespace Ivony.Html
     /// <param name="node">要呈现的节点</param>
     /// <param name="writer">HTML 编写器</param>
     /// <param name="adapter">HTML 输出转换器</param>
-    public static void Render( this IHtmlNode node, TextWriter writer, IHtmlAdapter adapter )
+    public static void Render( this IHtmlNode node, TextWriter writer, params IHtmlAdapter[] adapters )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
@@ -382,10 +382,15 @@ namespace Ivony.Html
 
 
 
-      if ( adapter != null )
+      if ( adapters != null )
       {
-        if ( adapter.Render( node, writer ) )
-          return;
+
+        foreach ( var a in adapters )
+        {
+          if ( a.Render( node, writer ) )
+            return;
+        }
+
       }
 
 
@@ -400,7 +405,7 @@ namespace Ivony.Html
       var element = node as IHtmlElement;
       if ( element != null )
       {
-        RenderElementAndChilds( element, writer, adapter );
+        RenderElementAndChilds( element, writer, adapters );
         return;
       }
 
@@ -408,7 +413,7 @@ namespace Ivony.Html
     }
 
 
-    private static void RenderElementAndChilds( IHtmlElement element, TextWriter writer, IHtmlAdapter adapter )
+    private static void RenderElementAndChilds( IHtmlElement element, TextWriter writer, params IHtmlAdapter[] adapters )
     {
 
 
@@ -428,7 +433,7 @@ namespace Ivony.Html
       {
 
         writer.Write( GenerateTagHtml( element, false ) );
-        RenderChilds( element, writer, adapter );
+        RenderChilds( element, writer, adapters );
         writer.Write( "</{0}>", element.Name );
 
       }

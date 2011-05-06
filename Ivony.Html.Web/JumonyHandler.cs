@@ -10,6 +10,10 @@ using System.Web.Hosting;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// Jumony 用于处理 HTTP 请求的处理器
+  /// </summary>
   public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 

@@ -6,6 +6,9 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
+  /// <summary>
+  /// 提供一个禁用响应功能的 HttpContext 对象的包装
+  /// </summary>
   public class NoResponseHttpContext : HttpContextWrapper
   {
 

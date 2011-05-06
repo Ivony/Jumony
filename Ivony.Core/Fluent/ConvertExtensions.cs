@@ -5,14 +5,29 @@ using System.Text;
 
 namespace Ivony.Fluent
 {
+  /// <summary>
+  /// 提供类型转换扩展方法
+  /// </summary>
   public static class ConvertExtensions
   {
 
+    /// <summary>
+    /// 将对象强制类型转换为 T 类型。
+    /// </summary>
+    /// <typeparam name="T">要转换的目标类型</typeparam>
+    /// <param name="obj">要转换的对象</param>
+    /// <returns>转换后的结果</returns>
     public static T CastTo<T>( this object obj )
     {
       return (T) obj;
     }
 
+    /// <summary>
+    /// 尝试将对象转换为指定的类型
+    /// </summary>
+    /// <typeparam name="T">要转换的目标类型</typeparam>
+    /// <param name="value">要转换的对象</param>
+    /// <returns>转换后的结果</returns>
     public static T ConvertTo<T>( this object value )
     {
       if ( Convertor<T>.castMethod != null )
@@ -45,6 +60,13 @@ namespace Ivony.Fluent
       public static Func<object, T> castMethod;
     }
 
+    /// <summary>
+    /// 若值是 null 则使用指定值代换
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="value">原始值</param>
+    /// <param name="defaultValue">当值为 null 时用于代换的默认值</param>
+    /// <returns>原始值，当原始值不为 null 或 DBbNull，否则使用代换的默认值</returns>
     public static T IfNull<T>( this T value, T defaultValue )
     {
       if ( value == null || Convert.IsDBNull( value ) )

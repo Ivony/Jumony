@@ -7,6 +7,10 @@ using System.Collections.ObjectModel;
 
 namespace Ivony.Fluent
 {
+ 
+  /// <summary>
+  /// 提供 IEnumerable 对象的扩展方法
+  /// </summary>
   public static class EnumerableExtension
   {
 
@@ -15,6 +19,12 @@ namespace Ivony.Fluent
 
     private static readonly Random random = new Random( DateTime.Now.Millisecond );
 
+    /// <summary>
+    /// 随机获取一个元素
+    /// </summary>
+    /// <typeparam name="T">元素类型</typeparam>
+    /// <param name="source">元素集</param>
+    /// <returns>随机挑选的一个元素</returns>
     public static T RandomElement<T>( this IEnumerable<T> source )
     {
 

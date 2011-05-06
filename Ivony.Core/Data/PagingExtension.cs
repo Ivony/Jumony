@@ -7,6 +7,10 @@ using System.Collections;
 
 namespace Ivony.Data
 {
+
+  /// <summary>
+  /// 提供分页器和分页数据源的扩展方法
+  /// </summary>
   public static class PagingExtension
   {
 

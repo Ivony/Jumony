@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Ivony.Fluent
 {
- 
+
   /// <summary>
   /// 提供 IEnumerable 对象的扩展方法
   /// </summary>
@@ -206,14 +206,23 @@ namespace Ivony.Fluent
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
     /// <returns></returns>
-    public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source ) 
+    public static IEnumerable<T> NotNull<T>( this IEnumerable<T> source )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+
       return source.Where( item => item != null );
     }
 
 
     public static bool IsSingle<T>( this IEnumerable<T> source )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
 
       var onlyone = false;
 
@@ -244,6 +253,15 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, Action<TSource, TTarget> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
       return BindTo( source, targets, ( d, t, i ) => binder( d, t ) );
     }
 
@@ -259,6 +277,15 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, Action<TSource, TTarget, int> binder )
     {
+
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
 
       BindCore( source, targets, binder );
 
@@ -278,6 +305,16 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget> binder )
     {
+      
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
       return BindTo( source, targets, defaultValue, ( d, t, i ) => binder( d, t ) );
     }
 
@@ -294,6 +331,16 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget, int> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
+      
       BindCore( source, targets, defaultValue, binder );
 
       return source;
@@ -314,6 +361,16 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TTarget> BindFrom<TSource, TTarget>( this IEnumerable<TTarget> targets, IEnumerable<TSource> source, Action<TSource, TTarget> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
+      
       return BindFrom( targets, source, ( s, t, i ) => binder( s, t ) );
     }
 
@@ -329,6 +386,14 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TTarget> BindFrom<TSource, TTarget>( this  IEnumerable<TTarget> targets, IEnumerable<TSource> source, Action<TSource, TTarget, int> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
 
       BindCore( source, targets, binder );
 
@@ -348,6 +413,16 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TTarget> BindFrom<TSource, TTarget>( this IEnumerable<TTarget> targets, IEnumerable<TSource> source, TSource defaultValue, Action<TSource, TTarget> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
+      
       return BindFrom( targets, source, defaultValue, ( s, t, i ) => binder( s, t ) );
     }
 
@@ -364,6 +439,16 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TTarget> BindFrom<TSource, TTarget>( this IEnumerable<TTarget> targets, IEnumerable<TSource> source, TSource defaultValue, Action<TSource, TTarget, int> binder )
     {
+      if ( source == null )
+        throw new ArgumentNullException( "source" );
+
+      if ( targets == null )
+        throw new ArgumentNullException( "targets" );
+
+      if ( binder == null )
+        throw new ArgumentNullException( "binder" );
+
+      
       BindCore( source, targets, defaultValue, binder );
 
       return targets;
@@ -434,12 +519,18 @@ namespace Ivony.Fluent
     /// <returns>只读枚举封装</returns>
     public static IEnumerable<T> AsReadOnly<T>( this IEnumerable<T> enumerable )
     {
+      if ( enumerable == null )
+        return null;
+
       return new ReadOnlyEnumerable<T>( enumerable );
     }
 
 
     public static IList<T> AsReadOnly<T>( this IList<T> list )
     {
+      if ( list == null )
+        return null;
+
       return new ReadOnlyCollection<T>( list );
     }
 

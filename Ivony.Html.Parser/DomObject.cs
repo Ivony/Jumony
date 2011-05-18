@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Ivony.Html.Parser
 {
@@ -26,7 +27,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private readonly object _sync = new object();
+    private readonly object _sync = new ReaderWriterLockSlim();
 
     /// <summary>
     /// 获取用于同步的对象

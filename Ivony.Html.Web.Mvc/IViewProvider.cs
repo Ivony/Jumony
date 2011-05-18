@@ -6,6 +6,10 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
+  
+  /// <summary>
+  /// 自定义视图提供程序
+  /// </summary>
   public interface IViewProvider
   {
 

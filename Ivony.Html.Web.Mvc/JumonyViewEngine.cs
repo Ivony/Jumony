@@ -8,6 +8,10 @@ using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 基于 Jumony 技术的视图引擎
+  /// </summary>
   public class JumonyViewEngine : VirtualPathProviderViewEngine
   {
 
@@ -41,29 +45,27 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static readonly JumonyViewEngine _instance = new JumonyViewEngine();
-
-    public static JumonyViewEngine Instance
-    {
-      get { return _instance; }
-    }
 
 
-    private static readonly SynchronizedCollection<IViewProvider> _providers = new SynchronizedCollection<IViewProvider>();
-
-    public static SynchronizedCollection<IViewProvider> Providers
-    {
-      get { return _providers; }
-    }
-
-
-
+    /// <summary>
+    /// 创建部分视图
+    /// </summary>
+    /// <param name="controllerContext"></param>
+    /// <param name="partialPath"></param>
+    /// <returns></returns>
     protected override IView CreatePartialView( ControllerContext controllerContext, string partialPath )
     {
       return CreateViewCore( controllerContext, partialPath, true );
     }
 
 
+    /// <summary>
+    /// 创建页视图
+    /// </summary>
+    /// <param name="controllerContext"></param>
+    /// <param name="viewPath"></param>
+    /// <param name="masterPath"></param>
+    /// <returns></returns>
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {
       if ( !string.IsNullOrEmpty( masterPath ) )
@@ -72,6 +74,13 @@ namespace Ivony.Html.Web.Mvc
       return CreateViewCore( controllerContext, viewPath, false );
     }
 
+
+    /// <summary>
+    /// 加载 HTML 文件
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="virtualPath"></param>
+    /// <returns></returns>
     protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
       var content = new StaticFileLoader().LoadContent( context, VirtualPathProvider, virtualPath );//UNDONE 不应每次创建一个实例
@@ -81,12 +90,15 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    static JumonyViewEngine()
-    {
-      ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
-    }
 
-    public IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
+    /// <summary>
+    /// 创建视图对象
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="virtualPath"></param>
+    /// <param name="isPartial"></param>
+    /// <returns></returns>
+    protected IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
 
       lock ( _providersSync )
@@ -180,8 +192,20 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+
+    static JumonyViewEngine()
+    {
+      ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
+    }
+
+
+
     private static object _providersSync = new object();
 
+    /// <summary>
+    /// 获取或设置自定义视图提供程序
+    /// </summary>
     public static ICollection<IViewProvider> ViewProviders
     {
       get;

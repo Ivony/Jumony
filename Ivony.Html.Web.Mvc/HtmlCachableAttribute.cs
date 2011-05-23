@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 用于指定 Action 或 Controller 应缓存输出结果。
+  /// </summary>
   public class HtmlCachableAttribute : ActionFilterAttribute
   {
     public override void OnActionExecuting( ActionExecutingContext filterContext )
@@ -21,13 +26,40 @@ namespace Ivony.Html.Web.Mvc
       var cache = GetCachedResult( result );
 
       if ( cache != null )
-        UpdateCache( cache );
+        UpdateCache( cache, filterContext.HttpContext );
 
       base.OnActionExecuted( filterContext );
     }
 
-    protected void UpdateCache( ActionResult cache )
+    protected IHtmlCachePolicyProvider CachePolicyProvider
     {
+      get;
+      set;
+    }
+
+
+    protected void UpdateCache( ActionResult cache, HttpContextBase httpContext )
+    {
+
+      throw new NotImplementedException();
+
+      string cacheKey;
+      HtmlCachePolicy cachePolicy;
+
+      if ( CachePolicyProvider != null )
+      {
+        cacheKey = CachePolicyProvider.GetCacheKey( httpContext );
+      }
+      else
+      {
+        cacheKey = HtmlProviders.GetCacheKey( httpContext );
+      }
+
+      
+
+
+
+
     }
 
     protected ActionResult GetCachedResult( ActionResult result )

@@ -13,13 +13,33 @@ namespace Ivony.Html.Web.Mvc
   public interface ICachableResult
   {
 
-    /// <summary>
-    /// 获取用于缓存的 ActionResult ，一般是 ContentResult 的实例。
-    /// </summary>
-    ActionResult CachedResult
-    {
-      get;
-    }
+    ICachedResponse GetCachedResponse();
 
   }
+
+  public static class CacheableResultHelper
+  {
+    private class CachedResponseResult : ActionResult
+    {
+      private ICachedResponse _cachedResponse;
+
+      public CachedResponseResult( ICachedResponse cachedResponse )
+      {
+        _cachedResponse = cachedResponse;
+      }
+
+      public override void ExecuteResult( ControllerContext context )
+      {
+        _cachedResponse.Apply( context.HttpContext.Response );
+      }
+    }
+
+    public ActionResult GetCachedResult( this ICachableResult cachable )
+    {
+      return new CachedResponseResult( cachable.GetCachedResponse() );
+    }
+
+
+  }
+
 }

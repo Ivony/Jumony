@@ -103,14 +103,36 @@ namespace Ivony.Html.Web.Mvc
 
       var content = RenderContent();
 
-      CachedResult = new ContentResult()
-      {
-        Content = content,
-        ContentType = "text/html"
-      };
-
+      UpdateCache( content );
+      
       writer.Write( content );
     }
+
+
+    protected virtual void UpdateCache( string content )
+    {
+      var response = new RawResponse();
+
+      response.Content = content;
+      response.Headers.Add( "ContentType", "text/html" );
+
+      CachedResponse = response;
+    }
+
+    public ICachedResponse CachedResponse
+    {
+      get;
+      protected set;
+    }
+
+
+    ICachedResponse ICachableResult.GetCachedResponse()
+    {
+      return CachedResponse;
+    }
+
+
+
 
 
     protected abstract void ProcessMain();
@@ -122,13 +144,6 @@ namespace Ivony.Html.Web.Mvc
     {
       get;
       private set;
-    }
-
-
-    public ActionResult CachedResult
-    {
-      get;
-      protected set;
     }
 
 
@@ -322,7 +337,6 @@ namespace Ivony.Html.Web.Mvc
 
       }
     }
-
 
 
   }

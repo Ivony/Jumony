@@ -217,6 +217,13 @@ namespace Ivony.Fluent
     }
 
 
+
+    /// <summary>
+    /// 确定序列是否却是有且只有一个元素
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="source"></param>
+    /// <returns></returns>
     public static bool IsSingle<T>( this IEnumerable<T> source )
     {
 

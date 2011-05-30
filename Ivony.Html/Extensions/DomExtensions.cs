@@ -635,6 +635,7 @@ namespace Ivony.Html
     /// <param name="node">要被替换的节点</param>
     /// <param name="fragment">替换节点的 HTML 碎片</param>
     /// <returns>碎片置入后产生的节点集</returns>
+    /// <exception cref="System.InvalidOperationException">若节点和碎片不在同一文档</exception>
     public static IEnumerable<IHtmlNode> ReplaceWith( this IHtmlNode node, IHtmlFragment fragment )
     {
       if ( node == null )
@@ -657,7 +658,12 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 尝试使用指定的 HTML 文本片段替换此节点
+    /// </summary>
+    /// <param name="node">要被替换的节点</param>
+    /// <param name="html">替换节点的 HTML 文本</param>
+    /// <returns>HTML 文本置入后产生的节点集</returns>
     public static IEnumerable<IHtmlNode> ReplaceWithHtml( this IHtmlNode node, string html )
     {
       if ( node == null )

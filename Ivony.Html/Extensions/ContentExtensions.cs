@@ -276,13 +276,13 @@ namespace Ivony.Html
     /// 将文档呈现为 HTML
     /// </summary>
     /// <param name="document">要呈现的文档</param>
-    /// <param name="adapter">HTML 输出转换器</param>
+    /// <param name="adapters">HTML 输出转换器</param>
     /// <returns>文档的 HTML 形式</returns>
-    public static string Render( this IHtmlDocument document, params IHtmlAdapter[] adapter )
+    public static string Render( this IHtmlDocument document, params IHtmlAdapter[] adapters )
     {
       using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
-        Render( document, writer, adapter );
+        Render( document, writer, adapters );
 
         return writer.ToString();
       }
@@ -305,14 +305,14 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="document">要呈现的文档</param>
     /// <param name="writer">HTML 编写器</param>
-    /// <param name="adapter">HTML 输出转换器</param>
-    public static void Render( this IHtmlDocument document, TextWriter writer, params IHtmlAdapter[] adapter )
+    /// <param name="adapters">HTML 输出转换器</param>
+    public static void Render( this IHtmlDocument document, TextWriter writer, params IHtmlAdapter[] adapters )
     {
 
       if ( document == null )
         throw new ArgumentNullException( "document" );
 
-      RenderChilds( document, writer, adapter );
+      RenderChilds( document, writer, adapters );
     }
 
 
@@ -371,7 +371,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要呈现的节点</param>
     /// <param name="writer">HTML 编写器</param>
-    /// <param name="adapter">HTML 输出转换器</param>
+    /// <param name="adapters">HTML 输出转换器</param>
     public static void Render( this IHtmlNode node, TextWriter writer, params IHtmlAdapter[] adapters )
     {
       if ( node == null )

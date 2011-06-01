@@ -8,6 +8,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
+  
+  /// <summary>
+  /// 旧版本的 HTML 解析
+  /// </summary>
   public class JumonyLegacyParser : IHtmlParser
   {
 

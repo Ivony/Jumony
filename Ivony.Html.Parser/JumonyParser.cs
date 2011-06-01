@@ -6,6 +6,10 @@ using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// 一个标准 HTML 解析器的实现（基于HTML 4.01规范）
+  /// </summary>
   public class JumonyParser : HtmlParserBase
   {
 

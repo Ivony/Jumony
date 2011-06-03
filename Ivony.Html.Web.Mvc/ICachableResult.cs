@@ -34,7 +34,7 @@ namespace Ivony.Html.Web.Mvc
       }
     }
 
-    public ActionResult GetCachedResult( this ICachableResult cachable )
+    public static ActionResult GetCachedResult( this ICachableResult cachable )
     {
       return new CachedResponseResult( cachable.GetCachedResponse() );
     }

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
-
+  /*
   /// <summary>
   /// 用于指定 Action 或 Controller 应缓存输出结果。
   /// </summary>
@@ -67,12 +67,12 @@ namespace Ivony.Html.Web.Mvc
 
       var cache = result as ICachableResult;
       if ( cache != null )
-        return cache.CachedResult;
+        return cache.GetCachedResult();
 
       var view = result as ViewResult;
       cache = view.View as ICachableResult;
       if ( cache != null )
-        return cache.CachedResult;
+        return cache.GetCachedResult();
 
       var content = result as ContentResult;
       if ( content != null )
@@ -84,4 +84,6 @@ namespace Ivony.Html.Web.Mvc
 
     }
   }
+
+  */
 }

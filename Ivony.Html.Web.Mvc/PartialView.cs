@@ -77,6 +77,9 @@ namespace Ivony.Html.Web.Mvc
     {
       var writer = new StringWriter();
 
+
+      Container.AddComment( string.Format( "partial url: {0}", HttpContext.Request.Url.AbsoluteUri ) );
+
       foreach ( var node in Container.Nodes() )
         node.Render( writer, RenderAdapter );
 

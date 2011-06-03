@@ -20,6 +20,10 @@ namespace Ivony.Html.Parser
     /// <param name="comment">注释内容</param>
     public DomComment( string comment )
     {
+     
+      if ( comment.Contains( "-->" ) )
+        throw new ArgumentException( "注释文本中不能包含注释结束符", "comment" );
+      
       _comment = comment;
     }
 

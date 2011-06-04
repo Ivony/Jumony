@@ -23,6 +23,10 @@ namespace Ivony.Html.Web
     HtmlParserResult GetParser( HttpContextBase context, Uri contentUri, string htmlContent );
 
 
+    /// <summary>
+    /// 释放解析器实例
+    /// </summary>
+    /// <param name="parser"></param>
     void ReleaseParser( IHtmlParser parser );
 
   }

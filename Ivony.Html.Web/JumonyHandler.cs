@@ -191,7 +191,7 @@ namespace Ivony.Html.Web
         return;
 
 
-      var policy = HtmlProviders.GetCachePolicy( Context, this, cachedResponse );
+      var policy = HtmlProviders.GetCachePolicy( Context, cachedResponse );
 
 
       Cache.Insert( key, cachedResponse, policy.Dependency, DateTime.UtcNow + policy.Duration, System.Web.Caching.Cache.NoSlidingExpiration );

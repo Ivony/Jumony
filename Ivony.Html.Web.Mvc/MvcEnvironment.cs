@@ -40,7 +40,7 @@ namespace Ivony.Html.Web.Mvc
     public static HtmlCachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor actionDescriptor, ActionResult cacheItem )
     {
 
-      return HtmlProviders.GetCachePolicy( context.HttpContext, null, null );
+      return HtmlProviders.GetCachePolicy( context.HttpContext, null );
 
     }
 

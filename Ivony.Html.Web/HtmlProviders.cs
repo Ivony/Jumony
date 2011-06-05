@@ -360,23 +360,22 @@ namespace Ivony.Html.Web
     /// 获取缓存策略
     /// </summary>
     /// <param name="context">当前HTTP请求信息</param>
-    /// <param name="handler">当前负责处理请求的处理程序</param>
-    /// <param name="page">处理后的文档</param>
+    /// <param name="cacheItem">需要被缓存的响应信息</param>
     /// <returns>缓存策略</returns>
     /// <remarks>缓存策略决定了缓存时间和缓存依赖项</remarks>
-    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, IHtmlHandler handler, RawResponse cacheItem )
+    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, RawResponse cacheItem )
     {
       lock ( _cachePoliciesSync )
       {
         foreach ( var provider in CachePolicyProviders )
         {
-          var policy = provider.GetPolicy( context, handler, cacheItem );
+          var policy = provider.GetPolicy( context, cacheItem );
           if ( policy != null )
             return policy;
         }
       }
 
-      return DefaultCachePolicy.GetPolicy( context, handler, cacheItem );
+      return DefaultCachePolicy.GetPolicy( context, cacheItem );
     }
 
 

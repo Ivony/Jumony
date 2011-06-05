@@ -18,7 +18,7 @@ namespace Ivony.Html.Web
 
     string GetCacheKey( HttpContextBase context );
 
-    HtmlCachePolicy GetPolicy( HttpContextBase context, IHtmlHandler handler, RawResponse cacheItem );
+    HtmlCachePolicy GetPolicy( HttpContextBase context, RawResponse cacheItem );
 
   }
 
@@ -113,10 +113,9 @@ namespace Ivony.Html.Web
     /// 获取默认缓存策略
     /// </summary>
     /// <param name="context">请求上下文</param>
-    /// <param name="handler">请求处理程序</param>
     /// <param name="cacheItem">缓存项</param>
     /// <returns>默认缓存策略</returns>
-    public static HtmlCachePolicy GetPolicy( HttpContextBase context, IHtmlHandler handler, RawResponse cacheItem )
+    public static HtmlCachePolicy GetPolicy( HttpContextBase context, RawResponse cacheItem )
     {
       return new HtmlCachePolicy() { Duration = CacheDuration };
     }

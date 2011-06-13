@@ -263,7 +263,7 @@ namespace Ivony.Html.Web
       if ( contentResult.CacheKey != null && result.DomProvider != null )//如果可以缓存
       {
         var key = contentResult.CacheKey;
-        var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, key );
+        var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, contentResult.ContentUri.AbsoluteUri );
 
         var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 

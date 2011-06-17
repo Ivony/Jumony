@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Forms.Validation
 {
+
+  /// <summary>
+  /// 定义一个 HTML 输入值验证器
+  /// </summary>
   public interface IHtmlValueValidator
   {
 

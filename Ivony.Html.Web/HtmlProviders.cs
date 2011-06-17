@@ -363,7 +363,7 @@ namespace Ivony.Html.Web
     /// <param name="cacheItem">需要被缓存的响应信息</param>
     /// <returns>缓存策略</returns>
     /// <remarks>缓存策略决定了缓存时间和缓存依赖项</remarks>
-    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, RawResponse cacheItem )
+    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cacheItem )
     {
       lock ( _cachePoliciesSync )
       {

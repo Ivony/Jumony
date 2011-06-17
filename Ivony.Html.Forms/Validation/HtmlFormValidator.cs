@@ -91,16 +91,30 @@ namespace Ivony.Html.Forms.Validation
     private List<GenericFieldValidator> _validators = new List<GenericFieldValidator>();
 
 
+    /// <summary>
+    /// 派生类重写此方法查找显示指定输入控件验证错误信息的容器
+    /// </summary>
+    /// <param name="input">要显示错误信息的输入控件</param>
+    /// <returns>显示错误信息的容器</returns>
     protected virtual IHtmlElement FailedMessageContainer( IHtmlInputControl input )
     {
       return null;
     }
 
+    /// <summary>
+    /// 派生类重写此方法查找显示验证失败摘要信息的容器
+    /// </summary>
+    /// <returns>显示验证失败摘要信息的容器</returns>
     protected virtual IHtmlElement FailedSummaryContainer()
     {
       return null;
     }
 
+    /// <summary>
+    /// 派生类重写此方法查找显示指定输入控件验证描述信息的容器
+    /// </summary>
+    /// <param name="input">要显示描述信息的输入控件</param>
+    /// <returns>显示描述信息的容器</returns>
     protected virtual IHtmlElement FieldDescrptionContainer( IHtmlInputControl input )
     {
       return null;
@@ -108,7 +122,9 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-
+    /// <summary>
+    /// 派生类重写此方法自定义验证失败信息的显示逻辑
+    /// </summary>
     protected virtual void ShowFailedMessage()
     {
       var failedDalidators = _validators.Where( v => !v.IsValid );
@@ -143,6 +159,11 @@ namespace Ivony.Html.Forms.Validation
     }
 
 
+    /// <summary>
+    /// 派生类重写此方法在指定容器呈现指定信息
+    /// </summary>
+    /// <param name="container"></param>
+    /// <param name="messages"></param>
     protected virtual void RenderMessages( IHtmlElement container, string[] messages )
     {
 
@@ -165,6 +186,10 @@ namespace Ivony.Html.Forms.Validation
       container.InnerText( string.Join( "\n", messages ) );
     }
 
+
+    /// <summary>
+    /// 派生类重写此方法自定义验证描述信息展现过程
+    /// </summary>
     protected virtual void ShowFieldDescription()
     {
       foreach ( var field in _validators )
@@ -191,7 +216,11 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-
+    /// <summary>
+    /// 确保指定的 HTML 元素是一个列表元素，若不是则在末尾加上一个列表
+    /// </summary>
+    /// <param name="container"></param>
+    /// <returns></returns>
     protected IHtmlElement EnsureList( IHtmlElement container )
     {
       if ( HtmlSpecification.listElements.Contains( container.Name.ToLowerInvariant() ) )

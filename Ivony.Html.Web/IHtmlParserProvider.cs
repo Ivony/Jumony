@@ -65,9 +65,5 @@ namespace Ivony.Html.Web
       internal set;
     }
 
-
-
   }
-
-
 }

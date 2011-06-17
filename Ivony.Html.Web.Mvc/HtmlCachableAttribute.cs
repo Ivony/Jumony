@@ -7,7 +7,6 @@ using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
-  /*
   /// <summary>
   /// 用于指定 Action 或 Controller 应缓存输出结果。
   /// </summary>
@@ -18,17 +17,21 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-    public override void OnActionExecuted( ActionExecutedContext filterContext )
-    {
 
+    /// <summary>
+    /// 重写此方法使得操作结果执行完毕后，更新缓存信息
+    /// </summary>
+    /// <param name="filterContext"></param>
+    public override void OnResultExecuted( ResultExecutedContext filterContext )
+    {
       var result = filterContext.Result;
 
-      var cache = GetCachedResult( result );
+      var cachedResponse = GetCachedResponse( result );
 
-      if ( cache != null )
-        UpdateCache( cache, filterContext.HttpContext );
+      if ( cachedResponse != null )
+        UpdateCache( cachedResponse, filterContext );
 
-      base.OnActionExecuted( filterContext );
+      base.OnResultExecuted( filterContext );
     }
 
     protected IHtmlCachePolicyProvider CachePolicyProvider
@@ -38,52 +41,64 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected void UpdateCache( ActionResult cache, HttpContextBase httpContext )
+    /// <summary>
+    /// 尝试更新缓存
+    /// </summary>
+    /// <param name="cached">用于缓存的响应信息</param>
+    /// <param name="httpContext">当前 Controller 上下文</param>
+    protected void UpdateCache( ICachedResponse cached, ControllerContext context )
     {
 
-      throw new NotImplementedException();
+      //对于子请求不予缓存。
+      if ( context.IsChildAction )
+        return;
+
 
       string cacheKey;
       HtmlCachePolicy cachePolicy;
 
-      if ( CachePolicyProvider != null )
-      {
-        cacheKey = CachePolicyProvider.GetCacheKey( httpContext );
-      }
-      else
-      {
-        cacheKey = HtmlProviders.GetCacheKey( httpContext );
-      }
+      var httpContext = context.HttpContext;
 
-      
+      cacheKey = HtmlProviders.GetCacheKey( httpContext );
+      if ( cacheKey == null )
+        return;
+
+      cachePolicy = HtmlProviders.GetCachePolicy( httpContext, cached );
 
 
-
-
+      UpdateCache( cached, cacheKey, cachePolicy );
     }
 
-    protected ActionResult GetCachedResult( ActionResult result )
+    protected void UpdateCache( ICachedResponse cached, string cacheKey, HtmlCachePolicy cachePolicy )
+    {
+      throw new NotImplementedException();
+    }
+
+
+
+    protected ICachedResponse GetCachedResponse( ActionResult result )
     {
 
-      var cache = result as ICachableResult;
-      if ( cache != null )
-        return cache.GetCachedResult();
+      var cachable = result as ICachableResult;
+      if ( cachable != null )
+        return cachable.GetCachedResponse();
 
       var view = result as ViewResult;
-      cache = view.View as ICachableResult;
-      if ( cache != null )
-        return cache.GetCachedResult();
+      cachable = view.View as ICachableResult;
+      if ( cachable != null )
+        return cachable.GetCachedResponse();
 
       var content = result as ContentResult;
       if ( content != null )
-        return content;
-
-
+        return CreateCachedResponse( content );
 
       return null;
 
     }
-  }
 
-  */
+    private ICachedResponse CreateCachedResponse( ContentResult content )
+    {
+      throw new NotImplementedException();
+    }
+  }
 }

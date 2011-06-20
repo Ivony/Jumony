@@ -60,10 +60,10 @@ namespace Ivony.Html
 
 
     /// <summary>匹配 CSS 样式设置</summary>
-    public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"\s*(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);\s*", quoteTextPattern );
+    public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);", quoteTextPattern );
 
     /// <summary>匹配 CSS 样式规则</summary>
-    public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(?<styleSetting>{1})*}}", cssSelectorPatternNoGroup, styleSettingPattern );
+    public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(\s*(?<styleSetting>{1}))*\s*}}", cssSelectorPatternNoGroup, styleSettingPattern );
     /// <summary>匹配 CSS 样式表</summary>
     public static readonly string styleSheetPattern = string.Format( CultureInfo.InvariantCulture, @"^((\s*(?<styleRule>{0})\s*)+|\s*)$", styleRulePattern );
 

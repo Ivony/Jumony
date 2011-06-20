@@ -45,23 +45,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 对元素设置指定样式
-    /// </summary>
-    /// <typeparam name="T">元素实例类型</typeparam>
-    /// <param name="element">要设置样式的元素</param>
-    /// <param name="styleExpression">样式表达式</param>
-    /// <returns>设置了样式的元素</returns>
-    /// <remarks>此方法等效于element.SetAttribute( "style", styleExpression )</remarks>
-    public static T Style<T>( this T element, string styleExpression ) where T : IHtmlElement
-    {
-      element.SetAttribute( "style", styleExpression );
-
-      return element;
-    }
-
-
-
-    /// <summary>
     /// 获取元素集合的样式对象，用于方便的操纵一组元素的样式
     /// </summary>
     /// <param name="elements">要操纵样式的元素集合</param>

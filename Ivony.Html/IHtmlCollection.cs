@@ -143,32 +143,53 @@ namespace Ivony.Html
 
     void ICollection<IHtmlNode>.Clear()
     {
-
+      _nodeCollection.Clear();
     }
 
+    /// <summary>
+    /// 判断某个节点是否包含在收集器内
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     public bool Contains( IHtmlNode item )
     {
-      throw new NotImplementedException();
+      return item.IsDescendantOf( this );
     }
 
+    /// <summary>
+    /// 不支持此方法
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="arrayIndex"></param>
     public void CopyTo( IHtmlNode[] array, int arrayIndex )
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 不支持此属性
+    /// </summary>
     public int Count
     {
-      get { throw new NotImplementedException(); }
+      get { throw new NotSupportedException(); }
     }
 
+    /// <summary>
+    /// 此属性永远返回true
+    /// </summary>
     public bool IsReadOnly
     {
-      get { throw new NotImplementedException(); }
+      get { return false; }
     }
 
+    /// <summary>
+    /// 尝试从收集器中移除一个节点
+    /// </summary>
+    /// <param name="item">要移除的节点</param>
+    /// <returns>是否移除成功，若节点不是顶层收纳节点，则不会成功</returns>
     public bool Remove( IHtmlNode item )
     {
-      throw new NotImplementedException();
+      return _nodeCollection.Remove( item );
     }
 
     #endregion
@@ -177,7 +198,7 @@ namespace Ivony.Html
 
     public IEnumerator<IHtmlNode> GetEnumerator()
     {
-      throw new NotImplementedException();
+      return Nodes().GetEnumerator();
     }
 
     #endregion
@@ -186,7 +207,7 @@ namespace Ivony.Html
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-      throw new NotImplementedException();
+      return GetEnumerator();
     }
 
     #endregion

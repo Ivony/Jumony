@@ -167,7 +167,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 确保节点是已分配在一个固定的文档上
+    /// 确保节点是已分配在一个固定的文档上（未从 DOM 移除，也不是以碎片形式存在）
     /// </summary>
     /// <param name="node">要检查的节点</param>
     /// <exception cref="System.InvalidOperationException">如果节点没有被分配在一个固定的文档。</exception>
@@ -184,7 +184,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 确定节点被分配在一个固定的文档上（并非游离状态）
+    /// 确定节点被分配在一个固定的文档上（未从 DOM 移除，也不是以碎片形式存在）
     /// </summary>
     /// <param name="node">要确定的节点</param>
     /// <returns>是否被分配在一个固定的文档上</returns>

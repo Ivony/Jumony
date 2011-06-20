@@ -17,11 +17,14 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 获取节点的容器
     /// </summary>
+    /// <remarks>
+    /// 若节点已从 DOM 移除，则此属性返回null
+    /// </remarks>
     public virtual IHtmlContainer Container
     {
       get
       {
-        CheckDisposed();
+        //CheckDisposed(); 若节点已从 DOM 移除，则此属性返回null。
 
         return _container;
       }

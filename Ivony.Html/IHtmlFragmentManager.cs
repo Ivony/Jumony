@@ -7,7 +7,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 文档碎片管理器，用于分析和创建文档碎片
+  /// 定义文档碎片管理器，用于分析和创建文档碎片
   /// </summary>
   public interface IHtmlFragmentManager
   {

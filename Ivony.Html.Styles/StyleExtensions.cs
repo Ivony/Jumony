@@ -24,10 +24,25 @@ namespace Ivony.Html
     public static T Style<T>( this T element, string styleExpression ) where T : IHtmlElement
     {
 
+      var match = styleExpressionRegex.Match( styleExpression );
+      if ( !match.Success )
+        throw new FormatException();
 
+      var style = element.Style();
 
+      foreach ( Capture capture in match.Groups["class"].Captures )
+      {
+        style.AddClass( capture.FindCaptures( match.Groups["className"] ).Single().Value );
+      }
 
-      throw new NotImplementedException();
+      foreach ( Capture capture in match.Groups["setting"].Captures )
+      {
+        var name = capture.FindCaptures( match.Groups["name"] ).Single().Value;
+        var value = capture.FindCaptures( match.Groups["value"] ).Single().Value;
+
+        style.Set( name, value );
+      }
+
 
       return element;
     }

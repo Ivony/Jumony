@@ -41,7 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlTemplate.cs" />
+    <Compile Include="IHtmlTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
+      <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
+      <Name>Ivony.Html</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

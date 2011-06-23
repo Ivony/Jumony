@@ -87,5 +87,41 @@ namespace Ivony.Html
       }
     }
 
+
+    public static IHtmlFragment MakeCopy( this IHtmlFragmentManager manager, IHtmlNode node )
+    {
+      if ( manager == null )
+        throw new ArgumentNullException( "manager" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
+      var fragment = manager.CreateFragment();
+
+      fragment.AddCopy( node );
+
+      return fragment;
+    }
+
+
+    public static IHtmlFragment MakeCopy( this IHtmlFragmentManager manager, IEnumerable<IHtmlNode> nodes )
+    {
+      if ( manager == null )
+        throw new ArgumentNullException( "manager" );
+
+      if ( nodes == null )
+        throw new ArgumentNullException( "nodes" );
+
+
+      var fragment = manager.CreateFragment();
+
+      foreach ( var n in nodes )
+        fragment.AddCopy( n );
+
+      return fragment;
+    }
+
+
   }
 }

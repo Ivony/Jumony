@@ -29,6 +29,9 @@ namespace Ivony.Html.Web.Mvc
 
       public CachedResponseResult( ICachedResponse cachedResponse )
       {
+        if ( cachedResponse == null )
+          throw new ArgumentNullException( "cachedResponse" );
+
         _cachedResponse = cachedResponse;
       }
 
@@ -46,7 +49,12 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>用于输出缓存的 ActionResult</returns>
     public static ActionResult GetCachedResult( this ICachableResult cachable )
     {
-      return new CachedResponseResult( cachable.GetCachedResponse() );
+      var cache = cachable.GetCachedResponse();
+      if ( cache == null )
+        return null;
+
+
+      return new CachedResponseResult( cache );
     }
 
 

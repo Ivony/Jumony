@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using Ivony.Fluent;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Ivony.Html
 {
@@ -173,6 +175,44 @@ namespace Ivony.Html
           return false;
       }
     }
+
+
+
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
+
+    private static object _sync = new object();
+
+    public static readonly Regex tagNameRegex = new Regex( @"^[\w:\.]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
+
+    /// <summary>
+    /// 获取匹配指定结束标签的正则表达式对象
+    /// </summary>
+    /// <param name="tagName">标签名</param>
+    /// <returns>匹配指定结束标签的正则表达式对象</returns>
+    public static Regex GetEndTagRegex( string tagName )
+    {
+      if ( !tagNameRegex.IsMatch( tagName ) )
+        throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "\"{0}\" 不是一个合法有效的 HTML 元素名称", tagName ), "tagName" );
+
+
+      tagName = tagName.ToLowerInvariant();
+
+      lock ( _sync )
+      {
+        Regex regex;
+
+        if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
+          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
+
+        return regex;
+      }
+    }
+
+
+
+
 
 
     internal static readonly IDictionary<string, char> entities = new Dictionary<string, char> 

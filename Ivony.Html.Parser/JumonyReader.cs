@@ -75,32 +75,6 @@ namespace Ivony.Html.Parser
     }
 
 
-    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
-
-    private static object _sync = new object();
-
-
-    /// <summary>
-    /// 获取匹配指定结束标签的正则表达式对象
-    /// </summary>
-    /// <param name="tagName">标签名</param>
-    /// <returns>匹配指定结束标签的正则表达式对象</returns>
-    protected Regex GetEndTagRegex( string tagName )
-    {
-      tagName = tagName.ToLowerInvariant();
-
-      lock ( _sync )
-      {
-        Regex regex;
-
-        if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
-          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
-
-        return regex;
-      }
-    }
-
-
 
     /// <summary>
     /// 枚举读取到的每一个内容元素
@@ -119,7 +93,7 @@ namespace Ivony.Html.Parser
         if ( CDataElement != null )//如果在CData标签内。
         {
 
-          Regex endTagRegex = GetEndTagRegex( CDataElement );
+          Regex endTagRegex = HtmlSpecification.GetEndTagRegex( CDataElement );
           var endTagMatch = endTagRegex.Match( HtmlText, Index );
 
 

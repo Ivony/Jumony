@@ -29,7 +29,7 @@ namespace MhtCreator
       smtp.PickupDirectoryLocation = path;
 
       var parser = new JumonyParser();
-      var document = parser.LoadDocument( "http://www.cnblogs.com" );
+      var document = parser.LoadDocument( "http://blog.sina.com.cn/s/blog_4701280b010183ny.html" );
 
       MailMessage message = CreateMail( document );
 

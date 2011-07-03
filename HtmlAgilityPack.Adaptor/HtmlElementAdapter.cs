@@ -32,12 +32,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return _node.Attributes.Select( attribute => attribute.AsAttribute() );
     }
 
-    public IHtmlAttribute AddAttribute( string attributeName )
-    {
-      _node.Attributes.Add( attributeName, null );
-      return this.Attribute( attributeName );
-    }
-
 
     #region IHtmlNode 成员
 

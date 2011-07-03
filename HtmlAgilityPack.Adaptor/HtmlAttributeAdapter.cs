@@ -31,7 +31,6 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
     public string AttributeValue
     {
       get { return _attribute.Value; }
-      set { _attribute.Value = value; }
     }
 
 

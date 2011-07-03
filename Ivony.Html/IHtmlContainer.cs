@@ -17,6 +17,17 @@ namespace Ivony.Html
     /// </summary>
     /// <returns>容器的子节点</returns>
     IEnumerable<IHtmlNode> Nodes();
+
+
+    /// <summary>
+    /// 获取用于同步的对象
+    /// </summary>
+    object SyncRoot
+    {
+      get;
+    }
+
+
   }
 
 }

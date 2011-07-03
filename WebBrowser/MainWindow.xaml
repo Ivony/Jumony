@@ -1,0 +1,14 @@
+﻿<Window x:Class="WebBrowser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="35" />
+      <RowDefinition Height="276*" />
+    </Grid.RowDefinitions>
+    <TextBox Margin="12,12,58,0" Name="Address" />
+    <WebBrowser Grid.Row="1" Margin="12,12,12,12" Name="WebBrowser" LoadCompleted="OnLoadCompleted" />
+    <Button Content="Go" Margin="451,11,12,0" Name="GoButton" Click="Go" />
+  </Grid>
+</Window>

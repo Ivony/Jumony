@@ -46,7 +46,7 @@ namespace Ivony.Html
       get { return Document.Document; }
     }
 
-    object IHtmlDomObject.SyncRoot
+    object IHtmlContainer.SyncRoot
     {
       get { return Document.SyncRoot; }
     }

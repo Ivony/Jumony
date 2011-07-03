@@ -41,6 +41,11 @@ namespace Ivony.Html
       return Element.Nodes();
     }
 
+    object IHtmlContainer.SyncRoot
+    {
+      get { return Element.SyncRoot; }
+    }
+
     #endregion
 
     /// <summary>

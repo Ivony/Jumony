@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AdapterExtension.cs" />
     <Compile Include="ConvertExtension.cs" />
+    <Compile Include="DomModifier.cs" />
     <Compile Include="HtmlAttributeAdapter.cs" />
     <Compile Include="HtmlCommentNodeAdapter.cs" />
     <Compile Include="HtmlContainerAdapter.cs" />

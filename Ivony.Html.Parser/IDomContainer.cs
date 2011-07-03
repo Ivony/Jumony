@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// 定义特定于 Jumony Parser 的 IHtmlContainer 实现规范。
+  /// </summary>
   public interface IDomContainer : IHtmlContainer
   {
     DomNodeCollection NodeCollection

@@ -43,8 +43,11 @@ namespace Ivony.Html.Parser
 
     public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
     {
-      //UNDONE
-      throw new NotSupportedException();
+      var specialNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomSpecial( html ) );
+
+      //UNDONE 未确定special node具体是什么
+
+      return specialNode;
     }
 
     public void RemoveNode( IHtmlNode node )

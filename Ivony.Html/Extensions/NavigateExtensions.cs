@@ -13,6 +13,14 @@ namespace Ivony.Html
   {
 
 
+    private static void EnsureAvaliable( IHtmlNode node )
+    {
+      if ( node.Container == null )
+        throw new InvalidOperationException( "无法对不存在于 DOM 上的节点进行操作" );
+    }
+
+
+
     /// <summary>
     /// 获取父元素
     /// </summary>
@@ -20,30 +28,35 @@ namespace Ivony.Html
     /// <returns>父元素</returns>
     public static IHtmlElement Parent( this IHtmlNode node )
     {
+
+      EnsureAvaliable( node );
+
       return node.Container as IHtmlElement;
     }
+
+
 
 
     /// <summary>
     /// 获取容器所有子元素
     /// </summary>
-    /// <param name="node">要获取子元素的容器</param>
+    /// <param name="container">要获取子元素的容器</param>
     /// <returns>容器的所有子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container )
     {
-      return node.Nodes().OfType<IHtmlElement>();
+      return container.Nodes().OfType<IHtmlElement>();
     }
 
 
     /// <summary>
     /// 获取容器符合条件的子元素
     /// </summary>
-    /// <param name="node">要获取子元素的容器</param>
+    /// <param name="container">要获取子元素的容器</param>
     /// <param name="selector">用来筛选子元素的元素选择器</param>
     /// <returns>符合条件的子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer node, string selector )
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, string selector )
     {
-      return CssElementSelector.Create( selector ).Filter( Elements( node ) );
+      return CssElementSelector.Create( selector ).Filter( Elements( container ) );
     }
 
     /// <summary>
@@ -53,6 +66,8 @@ namespace Ivony.Html
     /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node )
     {
+
+      EnsureAvaliable( node );
 
       while ( true )
       {
@@ -88,6 +103,9 @@ namespace Ivony.Html
     /// <returns>元素的所有父代元素和自身的集合</returns>
     public static IEnumerable<IHtmlElement> AncestorsAndSelf( this IHtmlElement element )
     {
+
+      EnsureAvaliable( element );
+
       while ( true )
       {
         if ( element == null )
@@ -152,14 +170,14 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要获取兄弟节点的节点</param>
     /// <returns>所有的兄弟节点</returns>
+    /// <exception cref="System.InvalidOperationException">如果节点不属于任何 HTML 容器</exception>
     public static IEnumerable<IHtmlNode> SiblingNodes( this IHtmlNode node )
     {
-      var parent = node.Container;
 
-      if ( parent == null )
-        return new IHtmlNode[] { node };
+      EnsureAvaliable( node );
 
-      return parent.Nodes();
+      return node.Container.Nodes();
+
     }
 
     /// <summary>
@@ -328,7 +346,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要获取序号的元素</param>
     /// <returns>顺序位置</returns>
-    public static int IndexOfSelf( this IHtmlElement element )
+    public static int ElementsIndexOfSelf( this IHtmlElement element )
     {
       var siblings = element.Siblings();
       return siblings.ToList().IndexOf( element );
@@ -359,9 +377,6 @@ namespace Ivony.Html
       return selector.Filter( document.Descendants() );
 
     }
-
-
-
 
 
   }

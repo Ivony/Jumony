@@ -64,6 +64,9 @@ namespace Ivony.Html
     /// 层叠选择器已经被重写以适应更多情况，范畴限定也已经被包装为一个ICssSelector对象，作为左选择器而存在。所以范畴限定等同于，仅选择这个容器子元素的选择器。
     /// 为此还约定了一个特殊关系运算符：null，这个关系运算符表示被考察的元素本身必须同时满足左选择器。换言之A null .class其实等同于A.class
     /// 在范畴限定的ICssSelector对象实现中，容器的所有子代都会被认为符合条件，从而实现了范畴限定。
+    /// 那么，为什么不能使用子代关系符来创建选择器呢？譬如说使得左选择器选择范畴容器，而关系符则是子代""？
+    /// 这是因为容器是IHtmlContainer类型，但CSS选择器（左右选择器）要求只能选择IHtmlElement对象。
+    /// 当然我们可以使得IHtmlContainer是一个Element，或者使得CSS选择器可以选择IHtmlContainer对象，但无论哪一种，都使得整个选择器模型变得很不自然。
     /// </remarks>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {

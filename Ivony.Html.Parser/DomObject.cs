@@ -27,17 +27,6 @@ namespace Ivony.Html.Parser
     }
 
 
-    private readonly object _sync = new ReaderWriterLockSlim();
-
-    /// <summary>
-    /// 获取用于同步的对象
-    /// </summary>
-    public object SyncRoot
-    {
-      get { return _sync; }
-    }
-
-
     /// <summary>
     /// 获取原始的HTML
     /// </summary>

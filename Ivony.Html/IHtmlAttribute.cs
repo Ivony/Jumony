@@ -14,7 +14,7 @@ namespace Ivony.Html
   /// 这是因为IHtmlNode被定义为位置敏感的DOM对象，而Attribute是非位置敏感的（在元素中定义的顺序无关紧要）。
   /// 这与LINQ to XML的模型是一致的。
   /// </remarks>
-  public interface IHtmlAttribute
+  public interface IHtmlAttribute : IHtmlDomObject
   {
 
     /// <summary>
@@ -39,7 +39,6 @@ namespace Ivony.Html
     string AttributeValue
     {
       get;
-      set;
     }
 
   }

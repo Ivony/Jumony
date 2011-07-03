@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// IHtmlFragmentManager 的实现
+  /// </summary>
   public class DomFragmentManager : IHtmlFragmentManager
   {
 
@@ -18,6 +22,10 @@ namespace Ivony.Html.Parser
     private DomDocument _document;
     private IList<DomFragment> _fragments;
 
+    /// <summary>
+    /// 构造 DomFragmentManager 对象
+    /// </summary>
+    /// <param name="document">FragmentManager 对象所属的文档</param>
     public DomFragmentManager( DomDocument document )
     {
       lock ( document.SyncRoot )
@@ -31,11 +39,17 @@ namespace Ivony.Html.Parser
       }
     }
 
+    /// <summary>
+    /// FragmentManager 对象所属的文档
+    /// </summary>
     public IHtmlDocument Document
     {
       get { return _document; }
     }
 
+    /// <summary>
+    /// 获取所有的文档碎片
+    /// </summary>
     public IEnumerable<IHtmlFragment> AllFragments
     {
       get
@@ -44,17 +58,30 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+    /// <summary>
+    /// 创建一个文档碎片
+    /// </summary>
     public IHtmlFragment CreateFragment()
     {
       return new DomFragment( this );
     }
 
+
+    /// <summary>
+    /// 分析一段 HTML 成为一个文档碎片
+    /// </summary>
     public IHtmlFragment ParseFragment( string html )
     {
       return new DomFragment( this, html );
     }
 
-    public void Allocated( DomFragment fragment )
+
+    /// <summary>
+    /// 当文档碎片被分配到文档上时被调用，用于释放碎片。
+    /// </summary>
+    /// <param name="fragment"></param>
+    internal void Allocated( DomFragment fragment )
     {
       lock ( SyncRoot )
       {

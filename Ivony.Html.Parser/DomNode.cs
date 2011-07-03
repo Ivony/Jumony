@@ -31,29 +31,26 @@ namespace Ivony.Html.Parser
 
       internal set
       {
-        lock ( SyncRoot )
+        CheckDisposed();
+
+
+        if ( _container is DomFragment && value == null )//从碎片中移除的逻辑
         {
-          CheckDisposed();
-
-
-          if ( _container is DomFragment && value == null )//从碎片中移除的逻辑
-          {
-            _container = null;
-            return;
-          }
-
-          if ( _container != null )
-            throw new InvalidOperationException();
-
-
-          var domContainer = value as IDomContainer;
-
-          if ( domContainer == null )
-            throw new InvalidOperationException();
-
-          _container = domContainer;
-
+          _container = null;
+          return;
         }
+
+        if ( _container != null )
+          throw new InvalidOperationException();
+
+
+        var domContainer = value as IDomContainer;
+
+        if ( domContainer == null )
+          throw new InvalidOperationException();
+
+        _container = domContainer;
+
       }
     }
 
@@ -65,7 +62,7 @@ namespace Ivony.Html.Parser
     /// </remarks>
     public virtual void Remove()
     {
-      lock ( SyncRoot )
+      lock ( _sync )
       {
         if ( removed )
           return;
@@ -73,11 +70,19 @@ namespace Ivony.Html.Parser
         if ( Container == null )
           throw new InvalidOperationException();
 
-        _container.NodeCollection.Remove( this );
-        _container = null;
-        removed = true;
+        lock ( Container )
+        {
+
+          _container.NodeCollection.Remove( this );
+          _container = null;
+          removed = true;
+
+        }
       }
     }
+
+    private object _sync = new object();
+
 
     /// <summary>
     /// 获取节点所属的文档

@@ -71,6 +71,23 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       return Element.GetHashCode() ^ Name.ToLowerInvariant().GetHashCode() ^ AttributeValue.GetHashCode();
     }
 
+
+
+    object IHtmlDomObject.RawObject
+    {
+      get { return NodeObject; }
+    }
+
+    string IHtmlDomObject.RawHtml
+    {
+      get { return null; }
+    }
+
+    IHtmlDocument IHtmlDomObject.Document
+    {
+      get { return Element.Document; }
+    }
+
   }
 }
 

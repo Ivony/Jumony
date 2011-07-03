@@ -13,7 +13,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       get { return Node.InnerText; }
     }
 
-    public HtmlTextNodeAdapter( AP.HtmlNode node )
+    public HtmlTextNodeAdapter( AP.HtmlTextNode node )
       : base( node )
     {
     }

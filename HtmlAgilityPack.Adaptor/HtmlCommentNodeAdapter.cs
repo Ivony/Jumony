@@ -17,7 +17,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     #endregion
 
-    public HtmlCommentNodeAdapter( AP.HtmlNode node )
+    public HtmlCommentNodeAdapter( AP.HtmlCommentNode node )
       : base( node )
     {
     }

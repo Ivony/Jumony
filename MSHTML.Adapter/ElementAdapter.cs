@@ -54,5 +54,10 @@ namespace Ivony.Html.MSHTMLAdapter
     }
 
     #endregion
+
+    public override string RawHtml
+    {
+      get { return _element.outerHTML; }
+    }
   }
 }

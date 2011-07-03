@@ -8,7 +8,7 @@ using mshtml;
 
 namespace Ivony.Html.MSHTMLAdapter
 {
-  public class NodeAdapter : IHtmlNode
+  public abstract class NodeAdapter : IHtmlNode
   {
 
     private IHTMLDOMNode _node;

@@ -17,7 +17,7 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
       : base( node )
     {
       if ( node.NodeType != AP.HtmlNodeType.Element )
-        throw new ArgumentException( "只能从NodeType为Element的HtmlNode转换为HtmlElement", "node" );
+        throw new ArgumentException( "只能从 NodeType 为 Element 的 HtmlNode 转换为 HtmlElement", "node" );
 
       _node = node;
     }

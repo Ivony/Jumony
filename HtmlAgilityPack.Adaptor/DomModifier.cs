@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HtmlAgilityPack;
+using HAP = HtmlAgilityPack;
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
 {
   internal class DomModifier : IHtmlDomModifier
   {
 
-    private HtmlDocument _document;
+    private HAP.HtmlDocument _document;
 
-    public DomModifier( HtmlDocument document )
+    public DomModifier( HAP.HtmlDocument document )
     {
       _document = document;
     }
 
 
 
-    private HtmlNode AddNode( IHtmlContainer container, int index, HtmlNode node )
+    private HAP.HtmlNode AddNode( IHtmlContainer container, int index, HAP.HtmlNode node )
     {
-      var containerNode = container.RawObject as HtmlNode;
+      var containerNode = container.RawObject as HAP.HtmlNode;
 
       if ( containerNode == null )
         throw new InvalidOperationException();
@@ -35,40 +35,68 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
 
     public IHtmlElement AddElement( IHtmlContainer container, int index, string name )
     {
-      var node = new HtmlNode( HtmlNodeType.Element, _document, index );
-      AddNode( container, index, node );
+      var element = _document.CreateElement( name );
+      AddNode( container, index, element );
 
-      return node.AsElement();
+      return element.AsElement();
     }
 
     public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
     {
-      throw new NotImplementedException();
+      var node = _document.CreateTextNode( htmlText );
+
+      AddNode( container, index, node );
+
+      return node.AsTextNode();
     }
 
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
-      throw new NotImplementedException();
+      var node = _document.CreateComment( comment );
+
+      AddNode( container, index, node );
+
+      return node.AsComment();
+
     }
 
     public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException();
     }
 
     public void RemoveNode( IHtmlNode node )
     {
-      throw new NotImplementedException();
+      var _node = node.RawObject as HAP.HtmlNode;
+
+      if ( _node == null )
+        throw new ArgumentException( "node" );
+
+      _node.Remove();
     }
 
     public IHtmlAttribute AddAttribute( IHtmlElement element, string name, string value )
     {
-      throw new NotImplementedException();
+      var attribute = _document.CreateAttribute( name, value );
+
+      var elementNode = element.RawObject as HAP.HtmlNode;
+      if ( elementNode == null )
+        throw new ArgumentException( "element" );
+
+      elementNode.Attributes.Add( attribute );
+
+      return attribute.AsAttribute();
     }
 
     public void RemoveAttribute( IHtmlAttribute attribute )
     {
-      throw new NotImplementedException();
+
+      var htmlAttribute = attribute.RawObject as HAP.HtmlAttribute;
+
+      if ( htmlAttribute == null )
+        throw new ArgumentException( "attribute" );
+
+      htmlAttribute.Remove();
     }
 
     #endregion

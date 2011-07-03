@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AP = HtmlAgilityPack;
+using Ivony.Fluent;
 
 
 namespace Ivony.Html.HtmlAgilityPackAdaptor
@@ -17,9 +18,9 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         case AP.HtmlNodeType.Element:
           return new HtmlElementAdapter( node );
         case AP.HtmlNodeType.Text:
-          return new HtmlTextNodeAdapter( node );
+          return node.CastTo<AP.HtmlTextNode>().AsTextNode();
         case AP.HtmlNodeType.Comment:
-          return new HtmlCommentNodeAdapter( node );
+          return node.CastTo<AP.HtmlCommentNode>().AsComment();
         default:
           throw new NotSupportedException();
       }
@@ -58,6 +59,16 @@ namespace Ivony.Html.HtmlAgilityPackAdaptor
         default:
           throw new ArgumentException( "只能从NodeType为Element的HtmlNode转换", "node" );
       }
+    }
+
+    public static IHtmlTextNode AsTextNode( this AP.HtmlTextNode node )
+    {
+      return new HtmlTextNodeAdapter( node );
+    }
+
+    public static IHtmlComment AsComment( this AP.HtmlCommentNode node )
+    {
+      return new HtmlCommentNodeAdapter( node );
     }
 
 

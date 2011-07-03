@@ -29,16 +29,12 @@ namespace Ivony.Html.Parser
     protected override void InsertItem( int index, DomNode item )
     {
 
-      lock ( item.SyncRoot )
-      {
+      if ( item.Container != null )
+        throw new InvalidOperationException();
 
-        if ( item.Container != null )
-          throw new InvalidOperationException();
+      base.InsertItem( index, item );
 
-        base.InsertItem( index, item );
-
-        item.Container = Container;
-      }
+      item.Container = Container;
 
     }
 

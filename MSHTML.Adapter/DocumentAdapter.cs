@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mshtml;
+using System.Collections;
 
 namespace Ivony.Html.MSHTMLAdapter
 {
@@ -10,25 +11,26 @@ namespace Ivony.Html.MSHTMLAdapter
   {
 
     private Uri _documentUri;
-    private object _document;
+    private object _raw;
+    private IHTMLDocument _document;
     private IHTMLDocument2 _document2;
     private IHTMLDocument3 _document3;
     private IHTMLDocument4 _document4;
     private IHTMLDocument5 _document5;
 
-    public DocumentAdapter( HTMLDocument document, Uri documentUri )
+    public DocumentAdapter( object document, Uri documentUri )
     {
-      _document = document;
       _documentUri = documentUri;
 
+      _raw = document;
+
+      _document = document as IHTMLDocument;
       _document2 = document as IHTMLDocument2;
       _document3 = document as IHTMLDocument3;
       _document4 = document as IHTMLDocument4;
       _document5 = document as IHTMLDocument5;
     }
 
-
-    #region IHtmlDocument 成员
 
     public Uri DocumentUri
     {
@@ -60,13 +62,10 @@ namespace Ivony.Html.MSHTMLAdapter
       get { throw new NotImplementedException(); }
     }
 
-    #endregion
-
-    #region IHtmlContainer 成员
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      throw new NotImplementedException();
+      return ((IEnumerable) _document3.childNodes).Cast<object>().Select( o => new NodeAdapter( o ) );
     }
 
     public object SyncRoot
@@ -74,13 +73,9 @@ namespace Ivony.Html.MSHTMLAdapter
       get { return null; }
     }
 
-    #endregion
-
-    #region IHtmlDomObject 成员
-
     public object RawObject
     {
-      get { return _document; }
+      get { return _raw; }
     }
 
     public string RawHtml
@@ -99,7 +94,5 @@ namespace Ivony.Html.MSHTMLAdapter
     {
       get { return this; }
     }
-
-    #endregion
   }
 }

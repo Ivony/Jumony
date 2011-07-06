@@ -11,27 +11,28 @@ namespace Ivony.Html.MSHTMLAdapter
   public abstract class NodeAdapter : IHtmlNode
   {
 
+    private object _raw;
     private IHTMLDOMNode _node;
+    private IHTMLDOMNode2 _node2;
 
-    public NodeAdapter( IHTMLDOMNode node )
+    public NodeAdapter( object node )
     {
-      _node = node;
+      _raw = node;
+
+      _node = node as IHTMLDOMNode;
+      _node2 = node as IHTMLDOMNode2;
     }
 
-    #region IHtmlNode 成员
 
     public IHtmlContainer Container
     {
       get { throw new NotImplementedException(); }
     }
 
-    #endregion
-
-    #region IHtmlDomObject 成员
 
     public object RawObject
     {
-      get { return _node; }
+      get { return _raw; }
     }
 
     public abstract string RawHtml
@@ -44,6 +45,5 @@ namespace Ivony.Html.MSHTMLAdapter
       get { throw new NotImplementedException(); }
     }
 
-    #endregion
   }
 }

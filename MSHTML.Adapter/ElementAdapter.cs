@@ -10,24 +10,25 @@ namespace Ivony.Html.MSHTMLAdapter
   {
 
 
+    private object _raw;
     private IHTMLElement _element;
     private IHTMLElement2 _element2;
     private IHTMLElement3 _element3;
     private IHTMLElement4 _element4;
 
 
-    public ElementAdapter( IHTMLElement element )
-      : base( (IHTMLDOMNode) element )
+    public ElementAdapter( object element )
+      : base( element )
     {
-      _element = element;
 
+      _raw = element;
+
+      _element = element as IHTMLElement;
       _element2 = element as IHTMLElement2;
       _element3 = element as IHTMLElement3;
       _element4 = element as IHTMLElement4;
     }
 
-
-    #region IHtmlElement 成员
 
     public string Name
     {
@@ -39,9 +40,6 @@ namespace Ivony.Html.MSHTMLAdapter
       throw new NotImplementedException();
     }
 
-    #endregion
-
-    #region IHtmlContainer 成员
 
     public IEnumerable<IHtmlNode> Nodes()
     {
@@ -53,7 +51,6 @@ namespace Ivony.Html.MSHTMLAdapter
       get { throw new NotImplementedException(); }
     }
 
-    #endregion
 
     public override string RawHtml
     {

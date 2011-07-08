@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.MSHTMLAdapter
 {
-  class ConvertExtensions
+  public static class ConvertExtensions
   {
   }
 }

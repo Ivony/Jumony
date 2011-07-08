@@ -127,7 +127,10 @@ namespace Ivony.Html.Forms
     /// <returns></returns>
     internal HtmlLabel[] FindLabels( string elementId )
     {
-      return (HtmlLabel[]) labelsTable[elementId];
+      if ( elementId == null )
+        return new HtmlLabel[0];
+
+      return labelsTable[elementId].CastTo<HtmlLabel[]>().IfNull( new HtmlLabel[0] );
     }
 
   }

@@ -22,21 +22,7 @@ public class index_html : JumonyHandler
   protected override void ProcessDocument()
   {
 
-    var formElement = Document.FindSingle( "form" );
-    formElement.SetAttribute( "action", Request.Url.AbsoluteUri );//设置表单回发
-
-    if ( Request.HttpMethod.EqualsIgnoreCase( "post" ) )
-    {
-      var form = formElement.AsForm();
-      form.Submit( Request.Form );
-      
-      var validator = new MyFormValidator( form );
-      validator.Validate();
-
-      if ( !validator.IsValid )
-        return;
-      
-    }
+    Document.Find( "form" ).SetAttribute( "action", Request.Url.AbsoluteUri );//设置表单回发
 
 
 
@@ -74,6 +60,9 @@ public class index_html : JumonyHandler
             {
               Document.FindSingle( ".todos" ).Remove();
               Document.FindSingle( ".post h2" ).InnerText( "编辑" );
+              Document.FindSingle( "input[name=content]" ).SetAttribute( "value", task.Content );
+              
+              return;
             }
             break;
 

@@ -111,23 +111,4 @@ public class index_html : JumonyHandler
       taskElement.Find( "a[href*=restore]" ).Remove();
     }
   }
-
-
-  private class MyFormValidator : HtmlFormValidator
-  {
-
-    public MyFormValidator( HtmlForm form )
-      : base( form )
-    {
-      AddFieldValidation( "content", new RequiredValidator() );
-    }
-
-    protected override IHtmlElement FailedMessageContainer( IHtmlInputControl input )
-    {
-      return input.CastTo<HtmlInputText>().Element.Parent().FindSingle( ".tips" );
-    }
-  }
-
-
-
 }

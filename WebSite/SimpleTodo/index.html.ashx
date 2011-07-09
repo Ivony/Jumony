@@ -29,6 +29,16 @@ public class index_html : JumonyHandler
     using ( var context = new DatabaseEntities() )
     {
 
+
+      var items = Document.FindSingle( "ul > li" ).Repeat( context.Tasks.Count() );//绑定数据
+
+      context.Tasks.BindTo( items, BindTaskItem );
+
+      
+      
+
+
+
       var _taskId = Request.QueryString["task"];
 
       if ( _taskId != null )
@@ -61,31 +71,23 @@ public class index_html : JumonyHandler
               Document.FindSingle( ".todos" ).Remove();
               Document.FindSingle( ".post h2" ).InnerText( "编辑" );
               Document.FindSingle( "input[name=content]" ).SetAttribute( "value", task.Content );
-              
+
               return;
             }
             break;
 
         }
 
-        context.SaveChanges();
-        Response.Redirect( "index.html" );
-
-
       }
+      
       else if ( Request.HttpMethod.EqualsIgnoreCase( "post" ) )//POST提交，表示添加
       {
         context.Tasks.AddObject( new Task() { Content = Request.Form["content"], Completed = false } );
         context.SaveChanges();
       }
 
-
-
-
-      var items = Document.FindSingle( "ul > li" ).Repeat( context.Tasks.Count() );
-
-      context.Tasks.BindTo( items, BindTaskItem );
-
+      context.SaveChanges();
+      Response.Redirect( "index.html" );
       return;
 
 

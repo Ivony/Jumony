@@ -11,16 +11,30 @@ namespace Ivony.Html.Web.Mvc
   public class MvcFormValidator : HtmlFormValidator
   {
 
+
+    private ModelStateDictionary _modelStates;
+
     public MvcFormValidator( HtmlForm form, ModelStateDictionary modelStates )
       : base( form )
-    { 
-
+    {
+      _modelStates = modelStates;
     }
 
 
-    protected override void ExecuteValidate()
+    protected override bool ExecuteValidate()
     {
 
+      if ( _modelStates.IsValid )
+        return true;
+
+
+      foreach ( var key in _modelStates.Keys )
+      {
+        var state = _modelStates[key];
+
+      }
+
+      return false;
 
 
     }

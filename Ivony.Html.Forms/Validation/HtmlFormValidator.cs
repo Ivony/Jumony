@@ -48,7 +48,7 @@ namespace Ivony.Html.Forms.Validation
     private bool validated = false;
 
 
-    protected virtual void ExecuteValidate()
+    protected void Validate()
     {
 
       if ( Form.SubmittedValues == null )
@@ -58,20 +58,25 @@ namespace Ivony.Html.Forms.Validation
         throw new InvalidOperationException( "表单已执行验证，无法再次执行" );
 
 
-      _validators.ForAll( v => v.Validate() );
-
-
+      valid = ExecuteValidate();
 
       validated = true;
-
-
-
-      valid = _validators.All( v => v.IsValid );
 
       if ( valid )
         OnSuccessful();
       else
         OnFailed();
+
+    }
+
+
+    protected virtual bool ExecuteValidate()
+    {
+
+      _validators.ForAll( v => v.Validate() );
+
+
+      return _validators.All( v => v.IsValid );
 
     }
 
@@ -81,9 +86,9 @@ namespace Ivony.Html.Forms.Validation
       {
 
         if ( !validated )
-          ExecuteValidate();
+          Validate();
 
-        return (bool) valid;
+        return valid;
       }
     }
 
@@ -128,9 +133,9 @@ namespace Ivony.Html.Forms.Validation
     /// </summary>
     protected virtual void ShowFailedMessage()
     {
-      var failedDalidators = _validators.Where( v => !v.IsValid );
+      var failedValidators = _validators.Where( v => !v.IsValid );
 
-      foreach ( var v in failedDalidators )
+      foreach ( var v in failedValidators )
       {
         var messageContainer = FailedMessageContainer( v.InputControl );
         if ( messageContainer != null )
@@ -148,7 +153,7 @@ namespace Ivony.Html.Forms.Validation
 
         list = EnsureList( summaryContainer );
 
-        foreach ( var v in failedDalidators )
+        foreach ( var v in failedValidators )
         {
           var messages = v.FailedMessage();
 

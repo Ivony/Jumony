@@ -72,6 +72,7 @@
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
     <Compile Include="JumonyFilterAttribute.cs" />
+    <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PageView.cs" />
     <Compile Include="SimpleRoutingTable.cs" />
     <Compile Include="ViewBase.cs" />
@@ -93,6 +94,10 @@
     <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
       <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
       <Name>Ivony.Html.Binding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
+      <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>
+      <Name>Ivony.Html.Forms</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
       <Project>{6CE7336E-D881-40B2-9495-C06CF9A61AC6}</Project>

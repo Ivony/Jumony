@@ -48,7 +48,7 @@ namespace Ivony.Html.Forms.Validation
     private bool validated = false;
 
 
-    public virtual void Validate()
+    protected virtual void ExecuteValidate()
     {
 
       if ( Form.SubmittedValues == null )
@@ -72,6 +72,7 @@ namespace Ivony.Html.Forms.Validation
         OnSuccessful();
       else
         OnFailed();
+
     }
 
     public bool IsValid
@@ -80,7 +81,7 @@ namespace Ivony.Html.Forms.Validation
       {
 
         if ( !validated )
-          Validate();
+          ExecuteValidate();
 
         return (bool) valid;
       }

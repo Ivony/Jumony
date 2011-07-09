@@ -26,7 +26,7 @@ public class Test1 : JumonyHandler
     {
       form.Submit( Request.Form );
 
-      validator.Validate();
+      validator.ExecuteValidate();
 
       form.ApplySubmittedValue();
     }

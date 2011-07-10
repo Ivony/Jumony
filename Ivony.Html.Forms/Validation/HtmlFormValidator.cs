@@ -51,7 +51,7 @@ namespace Ivony.Html.Forms.Validation
     /// <summary>
     /// 进行验证
     /// </summary>
-    protected void Validate()
+    public void Validate()
     {
 
       if ( Form.SubmittedValues == null )
@@ -218,6 +218,8 @@ namespace Ivony.Html.Forms.Validation
 
           var rules = field.RuleDescription();
 
+          if ( rules == null )
+            continue;
 
           var list = EnsureList( container );
 
@@ -249,6 +251,9 @@ namespace Ivony.Html.Forms.Validation
 
 
 
+    /// <summary>
+    /// 当验证失败时，引发Failed事件
+    /// </summary>
     protected virtual void OnFailed()
     {
       ShowFailedMessage();
@@ -263,6 +268,9 @@ namespace Ivony.Html.Forms.Validation
 
 
 
+    /// <summary>
+    /// 当验证成功时，引发Successful事件
+    /// </summary>
     protected virtual void OnSuccessful()
     {
       if ( Successful != null )
@@ -273,6 +281,11 @@ namespace Ivony.Html.Forms.Validation
 
 
 
+    /// <summary>
+    /// 尝试获取字段名
+    /// </summary>
+    /// <param name="input">输入控件</param>
+    /// <returns></returns>
     protected virtual string GetFieldName( IHtmlInputControl input )
     {
 

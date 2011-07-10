@@ -246,6 +246,24 @@ namespace Ivony.Fluent
     }
 
 
+    /// <summary>
+    /// 指示指定的序列是否为 null 或者为空。
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要检测的序列</param>
+    /// <returns>是否为 null 或者为空</returns>
+    public static bool IsNullOrEmpty<T>( this IEnumerable<T> source )
+    {
+      if ( source == null )
+        return false;
+
+      return !source.Any();
+
+      string.Isnu
+    }
+
+
+
 
 
 
@@ -312,7 +330,7 @@ namespace Ivony.Fluent
     /// <returns>源集合</returns>
     public static IEnumerable<TSource> BindTo<TSource, TTarget>( this IEnumerable<TSource> source, IEnumerable<TTarget> targets, TSource defaultValue, Action<TSource, TTarget> binder )
     {
-      
+
       if ( source == null )
         throw new ArgumentNullException( "source" );
 
@@ -347,7 +365,7 @@ namespace Ivony.Fluent
       if ( binder == null )
         throw new ArgumentNullException( "binder" );
 
-      
+
       BindCore( source, targets, defaultValue, binder );
 
       return source;
@@ -377,7 +395,7 @@ namespace Ivony.Fluent
       if ( binder == null )
         throw new ArgumentNullException( "binder" );
 
-      
+
       return BindFrom( targets, source, ( s, t, i ) => binder( s, t ) );
     }
 
@@ -429,7 +447,7 @@ namespace Ivony.Fluent
       if ( binder == null )
         throw new ArgumentNullException( "binder" );
 
-      
+
       return BindFrom( targets, source, defaultValue, ( s, t, i ) => binder( s, t ) );
     }
 
@@ -455,7 +473,7 @@ namespace Ivony.Fluent
       if ( binder == null )
         throw new ArgumentNullException( "binder" );
 
-      
+
       BindCore( source, targets, defaultValue, binder );
 
       return targets;

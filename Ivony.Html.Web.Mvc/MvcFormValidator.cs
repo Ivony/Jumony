@@ -8,6 +8,10 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 配合ASP.NET MVC验证模型使用的表单验证器基类
+  /// </summary>
   public class MvcFormValidator : HtmlFormValidator
   {
 
@@ -18,26 +22,52 @@ namespace Ivony.Html.Web.Mvc
       : base( form )
     {
       _modelStates = modelStates;
-    }
 
 
-    protected override bool ExecuteValidate()
-    {
-
-      if ( _modelStates.IsValid )
-        return true;
-
-
-      foreach ( var key in _modelStates.Keys )
+      foreach ( var pair in _modelStates )
       {
-        var state = _modelStates[key];
 
+        var input = form.InputElement( pair.Key );
+        var fieldName = GetFieldName( input );
+
+        var state = pair.Value;
+
+        AddFieldValidator( new MvcFieldValidator( input, fieldName, state ) );
       }
 
-      return false;
-
-
     }
+
+
+    protected class MvcFieldValidator : HtmlFieldValidator
+    {
+
+      ModelState _state;
+
+
+      public MvcFieldValidator( IHtmlInputControl input, string fieldName, ModelState state )
+        : base( input, fieldName )
+      {
+        _state = state;
+      }
+
+
+
+      protected override bool ExecuteValidate( string value )
+      {
+        return !_state.Errors.Any();
+      }
+
+      public override string[] FailedMessage()
+      {
+        return _state.Errors.Select( error => error.ErrorMessage ).ToArray();
+      }
+
+      public override string[] RuleDescription()
+      {
+        return null;
+      }
+    }
+
 
   }
 }

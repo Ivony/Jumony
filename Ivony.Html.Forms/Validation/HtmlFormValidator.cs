@@ -48,6 +48,9 @@ namespace Ivony.Html.Forms.Validation
     private bool validated = false;
 
 
+    /// <summary>
+    /// 进行验证
+    /// </summary>
     protected void Validate()
     {
 
@@ -70,6 +73,10 @@ namespace Ivony.Html.Forms.Validation
     }
 
 
+    /// <summary>
+    /// 派生类重写此方法实现具体的验证过程
+    /// </summary>
+    /// <returns></returns>
     protected virtual bool ExecuteValidate()
     {
 
@@ -80,6 +87,10 @@ namespace Ivony.Html.Forms.Validation
 
     }
 
+
+    /// <summary>
+    /// 表单是否能够通过验证
+    /// </summary>
     public bool IsValid
     {
       get
@@ -94,7 +105,7 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-    private List<GenericFieldValidator> _validators = new List<GenericFieldValidator>();
+    private List<HtmlFieldValidator> _validators = new List<HtmlFieldValidator>();
 
 
     /// <summary>
@@ -275,12 +286,34 @@ namespace Ivony.Html.Forms.Validation
     }
 
 
+
+    /// <summary>
+    /// 添加一个字段验证器
+    /// </summary>
+    /// <param name="validator"></param>
+    protected void AddFieldValidator( HtmlFieldValidator validator )
+    {
+      _validators.Add( validator );
+    }
+
+
+    /// <summary>
+    /// 添加一个字段验证规则
+    /// </summary>
+    /// <param name="inputName">输入控件名</param>
+    /// <param name="validators">值验证器</param>
     protected void AddFieldValidation( string inputName, params IHtmlValueValidator[] validators )
     {
       AddFieldValidation( inputName, null, validators );
     }
 
 
+    /// <summary>
+    /// 添加一个字段验证规则
+    /// </summary>
+    /// <param name="inputName">输入控件名</param>
+    /// <param name="fieldName">字段名</param>
+    /// <param name="validators">值验证器</param>
     protected void AddFieldValidation( string inputName, string fieldName, params IHtmlValueValidator[] validators )
     {
 
@@ -295,6 +328,12 @@ namespace Ivony.Html.Forms.Validation
       AddFieldValidation( input, fieldName, validators );
     }
 
+    /// <summary>
+    /// 添加一个字段验证规则
+    /// </summary>
+    /// <param name="input">输入控件</param>
+    /// <param name="fieldName">字段名</param>
+    /// <param name="validators">值验证器</param>
     protected void AddFieldValidation( IHtmlInputControl input, string fieldName, params IHtmlValueValidator[] validators )
     {
       if ( input == null )
@@ -309,11 +348,13 @@ namespace Ivony.Html.Forms.Validation
         fieldName = GetFieldName( input );
 
       var fieldValidator = new GenericFieldValidator( input, fieldName, validators );
-      _validators.Add( fieldValidator );
+      AddFieldValidator( fieldValidator );
     }
 
 
-
+    /// <summary>
+    /// 一般字段验证器
+    /// </summary>
     protected class GenericFieldValidator : HtmlFieldValidator
     {
 

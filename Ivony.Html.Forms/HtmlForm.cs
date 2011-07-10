@@ -62,19 +62,33 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 尝试提交表单
+    /// </summary>
+    /// <param name="data">提交的数据</param>
+    /// <returns>被提交的表单</returns>
     public HtmlForm Submit( NameValueCollection data )
     {
       return Submit( data, true );
     }
 
 
+    /// <summary>
+    /// 尝试提交表单
+    /// </summary>
+    /// <param name="data">提交的数据</param>
+    /// <param name="validateInputs">指示是否应当验证表单提交的数据是否与表单吻合</param>
+    /// <returns>被提交的表单</returns>
     public HtmlForm Submit( NameValueCollection data, bool validateInputs )
     {
       if ( SubmittedValues != null )
         throw new InvalidOperationException( "表单已经被提交过一次了" );
 
-      if ( validateInputs && !data.Keys.Cast<string>().All( key => InputControls.Any( input => input.Name == key ) ) )
-        throw new InvalidOperationException();
+
+      var inputControlNames = InputControls.Select( input => input.Name ).ToArray();
+
+      if ( validateInputs && data.AllKeys.Any( key => !inputControlNames.Contains( key ) ) )
+        throw new InvalidOperationException();//如果表单尚有一些控件没有提交值，那么这是错误的。
 
       SubmittedValues = data;
 
@@ -82,7 +96,9 @@ namespace Ivony.Html.Forms
     }
 
 
-
+    /// <summary>
+    /// 获取表单提交的值，若表单尚未提交，则为 null
+    /// </summary>
     public NameValueCollection SubmittedValues
     {
       get;
@@ -91,11 +107,20 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 获取表单所有的输入控件
+    /// </summary>
     public IEnumerable<IHtmlInputControl> InputControls
     {
       get { return controlsTable.Values.Cast<IHtmlInputControl>(); }
     }
 
+
+    /// <summary>
+    /// 获取指定名称的输入控件
+    /// </summary>
+    /// <param name="name">输入控件名</param>
+    /// <returns>输入控件</returns>
     public IHtmlInputControl this[string name]
     {
       get { return controlsTable[name].CastTo<IHtmlInputControl>(); }
@@ -111,7 +136,7 @@ namespace Ivony.Html.Forms
     }
 
     /// <summary>
-    /// 所有输入控件组
+    /// 所有组合输入控件
     /// </summary>
     private IHtmlGroupControl[] GroupInputs
     {

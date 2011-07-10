@@ -27,7 +27,7 @@ namespace Ivony.Html.Web.Mvc
       foreach ( var pair in _modelStates )
       {
 
-        var input = form.InputElement( pair.Key );
+        var input = form[pair.Key];
         var fieldName = GetFieldName( input );
 
         var state = pair.Value;
@@ -64,7 +64,7 @@ namespace Ivony.Html.Web.Mvc
 
       public override string[] RuleDescription()
       {
-        return null;
+        return new string[0];
       }
     }
 

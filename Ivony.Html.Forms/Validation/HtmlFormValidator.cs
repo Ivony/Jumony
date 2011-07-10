@@ -51,14 +51,14 @@ namespace Ivony.Html.Forms.Validation
     /// <summary>
     /// 进行验证
     /// </summary>
-    public void Validate()
+    public virtual void Validate()
     {
-
-      if ( Form.SubmittedValues == null )
-        throw new InvalidOperationException( "表单尚未提交，无法进行验证" );
 
       if ( validated )
         throw new InvalidOperationException( "表单已执行验证，无法再次执行" );
+
+      if ( Form.SubmittedValues == null )
+        throw new InvalidOperationException( "表单尚未提交，无法进行验证" );
 
 
       valid = ExecuteValidate();
@@ -333,7 +333,7 @@ namespace Ivony.Html.Forms.Validation
       if ( inputName == null )
         throw new ArgumentNullException( "inputName" );
 
-      var input = Form.InputElement( inputName );
+      var input = Form[inputName];
 
       if ( input == null )
         throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "未能找到 \"name\" 属性为 \"{0}\" 的输入控件", inputName ), "inputName" );

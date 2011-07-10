@@ -219,7 +219,7 @@ namespace Ivony.Fluent
 
 
     /// <summary>
-    /// 确定序列是否却是有且只有一个元素
+    /// 确定序列是否确实有且只有一个元素
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -255,11 +255,9 @@ namespace Ivony.Fluent
     public static bool IsNullOrEmpty<T>( this IEnumerable<T> source )
     {
       if ( source == null )
-        return false;
+        return true;
 
       return !source.Any();
-
-      string.Isnu
     }
 
 

@@ -29,23 +29,6 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
-    /// 根据名称获取输入元素
-    /// </summary>
-    /// <param name="form">要查找元素的表单</param>
-    /// <param name="name">元素名</param>
-    /// <returns>输入元素</returns>
-    public static IHtmlInputControl InputElement( this HtmlForm form, string name )
-    {
-      if ( form == null )
-        throw new ArgumentNullException( "form" );
-
-      if ( name == null )
-        throw new ArgumentNullException( "name" );
-
-      return form.InputControls.Where( control => control.Name == name ).SingleOrDefault();
-    }
-
-    /// <summary>
     /// 获取输入组当前所有选中的值
     /// </summary>
     /// <param name="group">输入组</param>

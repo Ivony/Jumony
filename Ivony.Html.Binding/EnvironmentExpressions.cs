@@ -30,6 +30,11 @@ namespace Ivony.Html.Binding
       }
     }
 
+
+    /// <summary>
+    /// 注册一个环境变量提供程序
+    /// </summary>
+    /// <param name="provider"></param>
     public static void RegisterProvider( IEnvironmentVariableProvider provider )
     {
       if ( provider == null )
@@ -38,6 +43,12 @@ namespace Ivony.Html.Binding
       _providers.Add( provider );
     }
 
+
+    /// <summary>
+    /// 注册一个环境变量提供程序
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="evaluator"></param>
     public static void RegisterProvider( string name, Func<string, object> evaluator )
     {
 

@@ -18,7 +18,7 @@ namespace Ivony.Html.Binding
     void BindData( IHtmlElement element, object data );
   }
 
-  public class HtmlElementBinder : IHtmlElementBinder
+  public class DefaultElementBinder : IHtmlElementBinder
   {
 
     public void BindData( IHtmlElement element, object data )

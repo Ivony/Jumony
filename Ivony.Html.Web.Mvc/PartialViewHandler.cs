@@ -21,6 +21,16 @@ namespace Ivony.Html.Web.Mvc
     {
       throw new HttpException( 404, "不能直接访问部分视图处理程序" );
     }
+
+
+
+    internal void Initialize( string virtualPath )
+    {
+      VirtualPath = virtualPath;
+    }
+
+
+
   }
 
   public abstract class PartialViewHandler<T> : PartialViewHandler

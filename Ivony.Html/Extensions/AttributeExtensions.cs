@@ -44,7 +44,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为null时不会抛出异常
+    /// 获取属性值，与 AttributeValue 属性不同，Value 方法在属性对象为 null 时不会抛出异常
     /// </summary>
     /// <param name="attribute">属性对象</param>
     /// <returns>属性值，如果属性对象为null，则返回null</returns>

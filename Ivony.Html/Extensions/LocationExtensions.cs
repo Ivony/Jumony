@@ -91,7 +91,7 @@ namespace Ivony.Html
     /// 获取元素相对于指定元素的路径表达
     /// </summary>
     /// <param name="element">要获取路径的文档</param>
-    /// <param name="ancestor">计算路径的起始元素</param>
+    /// <param name="ancestor">计算路径的起始对象</param>
     /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element, IHtmlContainer ancestor )
     {

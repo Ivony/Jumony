@@ -46,20 +46,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    internal void Initialize( string virtualPath )
-    {
-      VirtualPath = virtualPath;
-    }
-
-
-    internal void Initialize( IHtmlContainer container )
-    {
-      Container = container;
-    }
-
-
-
-
     protected virtual IHtmlContainer LoadContainer()
     {
       var document = HtmlProviders.LoadDocument( HttpContext, VirtualPath );

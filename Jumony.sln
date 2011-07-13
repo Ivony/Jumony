@@ -57,7 +57,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBrowser", "WebBrowser\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSHTML.Adapter", "MSHTML.Adapter\MSHTML.Adapter.csproj", "{150787A5-84FE-49EB-ACAD-B04838DF6B25}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SimpleTodo", "WebSite\SimpleTodo\", "{8345BB93-26A6-4571-AECA-8DD79F5BC3B2}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SimpleTodo", "WebSite\SimpleTodo", "{8345BB93-26A6-4571-AECA-8DD79F5BC3B2}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = "{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{1B363540-4F50-48CC-93C8-19EB85024AC2}|Ivony.Html.Templates.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}|Ivony.Html.Binding.dll;{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}|Ivony.Html.Styles.dll;"
@@ -79,6 +79,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SimpleTodo", "WebSite\Simpl
 		VWDDynamicPort = "false"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSimpleTodo", "MvcSimpleTodo\MvcSimpleTodo.csproj", "{E23977AE-5D32-43DF-8149-8917FD8BBFA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -280,6 +282,16 @@ Global
 		{8345BB93-26A6-4571-AECA-8DD79F5BC3B2}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{8345BB93-26A6-4571-AECA-8DD79F5BC3B2}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{8345BB93-26A6-4571-AECA-8DD79F5BC3B2}.Release|x86.ActiveCfg = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E23977AE-5D32-43DF-8149-8917FD8BBFA3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

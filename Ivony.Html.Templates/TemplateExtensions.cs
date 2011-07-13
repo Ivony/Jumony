@@ -49,5 +49,67 @@ namespace Ivony.Html.Templates
       }
     }
 
+
+    /// <summary>
+    /// 以选择器选择的结果当作模版项，调整模版项重复数量
+    /// </summary>
+    /// <param name="container">应被视为模版根的容器</param>
+    /// <param name="selector">CSS选择器，用于选择模版项</param>
+    /// <param name="count">模版项的重复数量</param>
+    /// <returns>调整数量后的模版项集合</returns>
+    public static IEnumerable<IHtmlElement> Repeat( this IHtmlContainer container, string selector, int count )
+    {
+      var items = container.Find( selector ).ToArray();
+
+      IHtmlElement lastItem = null;
+
+      foreach ( var i in items )
+      {
+        if ( lastItem == null )
+        {
+          lastItem = i;
+          continue;
+        }
+
+        if ( i.IsDescendantOf( lastItem ) )
+          throw new InvalidOperationException( "模版项不能相互包含，请检查所提供的选择器" );
+
+      }
+
+
+      if ( items.Length == count )
+        return items;
+
+      lock ( container.SyncRoot )
+      {
+
+        if ( items.Length < count )
+        {
+
+          var availableItems = items.Take( count ).ToArray();
+
+          List<IHtmlNode> toRemoves = new List<IHtmlNode>();
+          IHtmlElement lastItemsContainer = null;
+
+          foreach ( var node in container.Nodes() )
+          {
+            var element = node as IHtmlElement;
+
+
+
+            if ( items.Any( i => i.IsDescendantOf( element ) ) )
+            {
+              lastItemsContainer = element;
+
+
+
+            }
+
+
+          }
+        }
+      }
+    }
+
   }
 }

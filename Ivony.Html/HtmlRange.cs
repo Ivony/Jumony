@@ -9,8 +9,25 @@ namespace Ivony.Html
   {
     public void AddNode( IHtmlNode node )
     {
-      throw new NotImplementedException();
+      throw new InvalidOperationException();
     }
+
+
+    private IHtmlNode beginNode;
+    private IHtmlNode EndNode;
+    private bool inclusiveBegin;
+    private bool inclusiveEnd;
+
+
+    public HtmlRange( IHtmlNode node1, IHtmlNode node2, bool inclusiveNode1, bool inclusiveNode2 )
+    {
+      if ( node1.Container == null || !node1.Container.Equals( node2.Container ) )
+        throw new InvalidOperationException();
+
+
+    }
+
+
 
     public IEnumerable<IHtmlNode> Nodes()
     {

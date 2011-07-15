@@ -61,58 +61,74 @@ namespace Ivony.Html.Templates
     {
       var items = container.Find( selector ).ToArray();
 
-      IHtmlElement lastItem = null;
-
-      foreach ( var i in items )
       {
-        if ( lastItem == null )
+        IHtmlElement lastItem = null;
+
+        foreach ( var i in items )
         {
+          if ( lastItem != null && i.IsDescendantOf( lastItem ) )
+            throw new InvalidOperationException( "模版项不能相互包含，请检查所提供的选择器" );
+
           lastItem = i;
-          continue;
         }
-
-        if ( i.IsDescendantOf( lastItem ) )
-          throw new InvalidOperationException( "模版项不能相互包含，请检查所提供的选择器" );
-
       }
-
-
-      if ( items.Length == count )
-        return items;
 
       lock ( container.SyncRoot )
       {
 
-        if ( items.Length < count )
+        var firstItem = items.First();
+        var firstContainer = container.Elements().First( e => e.IsAncestorOf( firstItem ) || e.Equals( firstItem ) );
+
+        var lastItem = items.Last();
+        var lastContainer = container.Elements().First( e => e.IsAncestorOf( lastItem ) || e.Equals( lastItem ) );
+
+        var firstContainerIndex = firstContainer.NodesIndexOfSelf();
+        var lastContainerIndex = lastContainer.NodesIndexOfSelf();
+
+
+        while ( true )
         {
 
-          var availableItems = items.Take( count ).ToArray();
+          if ( items.Length == count )
+            return items;
 
-          List<IHtmlNode> toRemoves = new List<IHtmlNode>();
-          IHtmlElement lastItemsContainer = null;
+          if ( items.Length > count )
+            break;
 
-          foreach ( var node in container.Nodes() )
-          {
-            var element = node as IHtmlElement;
+          for ( int i = firstContainerIndex; i <= lastContainerIndex; i++ )
+            container.AddCopy( container.Nodes().ElementAt( i ) );
 
-
-
-            if ( items.Any( i => i.IsDescendantOf( element ) ) )
-            {
-              lastItemsContainer = element;
-
-
-
-            }
-
-
-          }
         }
+
+
+
+
+
+        var availableItems = items.Take( count ).ToArray();
+
+        if ( items.Length > count )
+        {
+          var firstUnavailableItem = items[count + 1];
+          var firstUnavailableContainer = container.Elements().First( e => e.IsAncestorOf( firstUnavailableItem ) || e.Equals( firstUnavailableItem ) );
+
+
+          container.Nodes()
+            .SkipWhile( n => !n.Equals( firstUnavailableContainer ) )
+            .TakeWhile( n => !n.Equals( lastContainer ) )
+            .Remove();
+
+        }
+
       }
 
 
       throw new NotImplementedException();
 
+    }
+
+    private static bool ContainsAnyOf( this IHtmlContainer container, IEnumerable<IHtmlNode> nodes )
+    {
+      return nodes.Any( n => n.IsDescendantOf( container ) || n.Equals( container ) );
     }
 
   }

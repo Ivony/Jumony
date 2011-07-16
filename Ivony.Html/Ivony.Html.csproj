@@ -74,6 +74,7 @@
     <Compile Include="Extensions\LocationExtensions.cs" />
     <Compile Include="Extensions\ParserExtension.cs" />
     <Compile Include="Html5DraftSpecification.cs" />
+    <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlEncoding.cs" />
     <Compile Include="HtmlRange.cs" />
     <Compile Include="IHtmlAdapter.cs" />

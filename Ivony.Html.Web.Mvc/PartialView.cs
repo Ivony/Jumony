@@ -37,7 +37,7 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessActionLinks( Container );
 
-      if ( VirtualPath != null )
+      if ( VirtualPath != null )//若不是内嵌部分视图，则应当转换URL。
         ResolveUri( Container, Container.Document.DocumentUri );
     }
 
@@ -64,10 +64,8 @@ namespace Ivony.Html.Web.Mvc
       var writer = new StringWriter();
 
 
-      Container.AddComment( string.Format( "partial url: {0}", HttpContext.Request.Url.AbsoluteUri ) );
-
       foreach ( var node in Container.Nodes() )
-        node.Render( writer, RenderAdapter );
+        node.Render( writer, RenderAdapters.ToArray() );
 
 
       return writer.ToString();

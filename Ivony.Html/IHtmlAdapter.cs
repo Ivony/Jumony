@@ -8,7 +8,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 定义一种 HTML 转换器，其可以将 HTML 文档转换为文本。
+  /// 定义一种 HTML 转换器，其可以自定义 HTML 节点的渲染规则。
   /// </summary>
   public interface IHtmlAdapter
   {
@@ -16,9 +16,12 @@ namespace Ivony.Html
     /// <summary>
     /// 尝试呈现指定的节点
     /// </summary>
-    /// <param name="node">要呈现的节点</param>
-    /// <param name="writer">用于处理呈现结果的文本编写器</param>
-    /// <returns>是否进行了自定义呈现，若返回false，则使用默认呈现</returns>
+    /// <param name="node">要渲染的节点</param>
+    /// <param name="writer">用于处理渲染结果的文本编写器</param>
+    /// <returns>是否进行了自定义渲染，若返回false，则使用默认渲染</returns>
+    /// <remarks>
+    /// 若返回值为 false ，则系统其后会自行渲染这个节点，所以不应对 writer 写入一些东西后返回 false。
+    /// </remarks>
     bool Render( IHtmlNode node, TextWriter writer );
 
   }

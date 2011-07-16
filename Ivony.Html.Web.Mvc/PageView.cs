@@ -39,7 +39,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected override string RenderContent()
     {
-      return Document.Render( RenderAdapter );
+      return Document.Render( RenderAdapters.ToArray() );
     }
 
 

@@ -11,15 +11,26 @@ using System.Web.Mvc.Html;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+
+  /// <summary>
+  /// 所有 HTML 视图处理程序的基类，实现 IView 接口，并提供内置的 HTML 扩展功能以及视图结果的缓存。
+  /// </summary>
   public abstract class ViewBase : IView, ICachableResult
   {
 
+    /// <summary>
+    /// 派生类调用创建 ViewBase 的具体实例。
+    /// </summary>
     protected ViewBase()
     {
-      RenderAdapter = new PartialRenderAdapter( this );
+      RenderAdapters = new List<IHtmlAdapter>() { new PartialRenderAdapter( this ) };
     }
 
 
+    /// <summary>
+    /// 获取或设置 HTML 视图的虚拟路径，此属性必须在处理视图前进行初始化
+    /// </summary>
     protected string VirtualPath
     {
       get;
@@ -27,48 +38,75 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取视图上下文
+    /// </summary>
     protected ViewContext ViewContext
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 获取视图模型
+    /// </summary>
     protected object ViewModel
     {
       get { return ViewContext.ViewData.Model; }
     }
 
+    /// <summary>
+    /// 获取视图数据
+    /// </summary>
     protected ViewDataDictionary ViewData
     {
       get { return ViewContext.ViewData; }
     }
 
+    /// <summary>
+    /// 获取 HTTP 上下文
+    /// </summary>
     protected HttpContextBase HttpContext
     {
       get { return ViewContext.HttpContext; }
     }
 
+    /// <summary>
+    /// 获取请求上下文
+    /// </summary>
     protected RequestContext RequestContext
     {
       get { return ViewContext.RequestContext; }
     }
 
+    /// <summary>
+    /// 获取路由信息
+    /// </summary>
     protected RouteData RouteData
     {
       get { return ViewContext.RouteData; }
     }
 
+    /// <summary>
+    /// 获取 TempData
+    /// </summary>
     protected TempDataDictionary TempData
     {
       get { return ViewContext.TempData; }
     }
 
+    /// <summary>
+    /// 获取缓存提供对象
+    /// </summary>
     protected Cache Cache
     {
       get { return HttpContext.Cache; }
     }
 
 
+    /// <summary>
+    /// 获取 Url 帮助器
+    /// </summary>
     protected UrlHelper Url
     {
       get;
@@ -77,7 +115,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 获取原始的（顶层的）视图上下文
+    /// </summary>
     protected ViewContext RawViewContext
     {
       get;
@@ -85,6 +125,11 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 渲染视图
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    /// <param name="writer">文本编写器</param>
     public virtual void Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
@@ -104,11 +149,15 @@ namespace Ivony.Html.Web.Mvc
       var content = RenderContent();
 
       UpdateCache( content );
-      
+
       writer.Write( content );
     }
 
 
+    /// <summary>
+    /// 更新缓存
+    /// </summary>
+    /// <param name="content">渲染结果</param>
     protected virtual void UpdateCache( string content )
     {
       var response = new RawResponse();
@@ -119,6 +168,9 @@ namespace Ivony.Html.Web.Mvc
       CachedResponse = response;
     }
 
+    /// <summary>
+    /// 缓存结果
+    /// </summary>
     public ICachedResponse CachedResponse
     {
       get;
@@ -134,13 +186,22 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 派生类实现此方法完成对 HTML 文档的处理工作
+    /// </summary>
     protected abstract void ProcessMain();
 
+    /// <summary>
+    /// 派生类重写此方法渲染 HTML 内容。
+    /// </summary>
+    /// <returns></returns>
     protected abstract string RenderContent();
 
 
-    protected virtual IHtmlAdapter RenderAdapter
+    /// <summary>
+    /// 自定义渲染过程的 HTML 转换器
+    /// </summary>
+    protected virtual IList<IHtmlAdapter> RenderAdapters
     {
       get;
       private set;
@@ -155,46 +216,53 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var actionLink in links )
       {
-        var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
-        var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
-        var routeValues = new RouteValueDictionary();
-
-        routeValues["action"] = action;
-        routeValues["controller"] = controller;
-
-
-        foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+        lock ( actionLink )
         {
 
-          var key = attribute.Name.Substring( 1 );
-          var value = attribute.Value();
+          var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
+          var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
 
-          routeValues.Remove( key );
+          var routeValues = new RouteValueDictionary();
 
-          routeValues.Add( key, value );
-          attribute.Remove();
+          routeValues["action"] = action;
+          routeValues["controller"] = controller;
+
+
+          foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+          {
+
+            var key = attribute.Name.Substring( 1 );
+            var value = attribute.Value();
+
+            routeValues.Remove( key );
+
+            routeValues.Add( key, value );
+            attribute.Remove();
+          }
+
+
+          actionLink.Attribute( "action" ).Remove();
+
+          var controllerAttribute = actionLink.Attribute( "controller" );
+          if ( controllerAttribute != null )
+            controllerAttribute.Remove();
+
+
+
+
+          var href = Url.RouteUrl( routeValues );
+
+          if ( href == null )
+            actionLink.Attribute( "href" ).Remove();
+
+          else
+            actionLink.SetAttribute( "href", href );
+        
         }
 
 
-        actionLink.Attribute( "action" ).Remove();
-
-        var controllerAttribute = actionLink.Attribute( "controller" );
-        if ( controllerAttribute != null )
-          controllerAttribute.Remove();
-
-
-
-
-        var href = Url.RouteUrl( routeValues );
-
-        if ( href == null )
-          actionLink.Attribute( "href" ).Remove();
-
-        else
-          actionLink.SetAttribute( "href", href );
       }
-
 
     }
 
@@ -311,7 +379,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public class PartialRenderAdapter : IHtmlAdapter
+    public class PartialRenderAdapter : HtmlElementAdapter
     {
 
       private ViewBase _view;
@@ -321,20 +389,14 @@ namespace Ivony.Html.Web.Mvc
         _view = view;
       }
 
-      public bool Render( IHtmlNode node, TextWriter writer )
+      protected override string CssSelector
       {
-        var element = node as IHtmlElement;
+        get { return "partial"; }
+      }
 
-        if ( element == null )
-          return false;
-
-        if ( element.Name != "partial" )
-          return false;
-
-
+      public override void Render( IHtmlElement element, TextWriter writer )
+      {
         _view.RenderPartial( element, writer );
-        return true;
-
       }
     }
 

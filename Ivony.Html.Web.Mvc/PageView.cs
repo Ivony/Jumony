@@ -51,7 +51,7 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessActionLinks( Document );
 
-      ResolveUri( Document, Document.DocumentUri );
+      ResolveUri( Document );
 
       AddGeneratorMetaData();
 

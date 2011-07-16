@@ -37,8 +37,8 @@ namespace Ivony.Html.Web.Mvc
 
       ProcessActionLinks( Container );
 
-      if ( VirtualPath != null )//若不是内嵌部分视图，则应当转换URL。
-        ResolveUri( Container, Container.Document.DocumentUri );
+      if ( VirtualPath != null )//若不是内嵌部分视图，则应当进行 URL 转换。
+        ResolveUri( Container );
     }
 
     protected abstract void ProcessContainer();

@@ -209,7 +209,10 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 处理 Action 链接
+    /// </summary>
+    /// <param name="container"></param>
     protected void ProcessActionLinks( IHtmlContainer container )
     {
       var links = container.Find( "a[action]" );
@@ -258,7 +261,7 @@ namespace Ivony.Html.Web.Mvc
 
           else
             actionLink.SetAttribute( "href", href );
-        
+
         }
 
 
@@ -267,6 +270,21 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    /// <summary>
+    /// 转换容器中所有 URI 与当前请求匹配。
+    /// </summary>
+    /// <param name="container">确定要转换 URI 范围的容器</param>
+    protected virtual void ResolveUri( IHtmlContainer container )
+    {
+      ResolveUri( container, container.Document.DocumentUri );
+    }
+
+    /// <summary>
+    /// 根据文档基准 URI 转换容器中所有 URI 与当前请求匹配。
+    /// </summary>
+    /// <param name="container">确定要转换 URI 范围的容器</param>
+    /// <param name="baseUri">文档的基准 URI</param>
     protected virtual void ResolveUri( IHtmlContainer container, Uri baseUri )
     {
       if ( baseUri == null )
@@ -292,13 +310,19 @@ namespace Ivony.Html.Web.Mvc
           continue;
 
 
-        attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
+        uri = uri.MakeRelativeUri( HttpContext.Request.Url );
+
+        attribute.Element.SetAttribute( attribute.Name, uri.ToString() );
 
       }
     }
 
 
-
+    /// <summary>
+    /// 渲染部分视图
+    /// </summary>
+    /// <param name="partialElement"></param>
+    /// <param name="writer"></param>
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
     {
 

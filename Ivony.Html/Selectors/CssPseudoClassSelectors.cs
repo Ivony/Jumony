@@ -104,14 +104,14 @@ namespace Ivony.Html
         case "last-child":
         case "first-of-type":
         case "last-of-type":
-          return new NthPseudoClass( name, args, expression );
+          return new NthPseudoClass( name, args );
 
         case "only-child":
         case "only-of-type":
         case "empty":
           if ( args != null )
             throw new FormatException( string.Format( CultureInfo.InvariantCulture, "{0} 伪类不能有参数", name ) );
-          return new CountPseudoClass( name, args, expression );
+          return new CountPseudoClass( name );
 
         default:
           var provider = _providers[name] as ICssPseudoClassProvider;
@@ -132,7 +132,6 @@ namespace Ivony.Html
 
       private string _name;
       private string _args;
-      private string exp;
 
       private int multiplier;
       private int augend;
@@ -143,7 +142,7 @@ namespace Ivony.Html
       private bool nth;
 
 
-      public NthPseudoClass( string name, string args, string expression )
+      public NthPseudoClass( string name, string args )
       {
 
         _name = name.ToLowerInvariant();
@@ -164,8 +163,6 @@ namespace Ivony.Html
 
         if ( args != null )
           _args = args.Trim().ToLowerInvariant();
-
-        exp = expression;
 
         if ( !nth )//没有 nth 前缀说明获取第一个
         {
@@ -303,31 +300,19 @@ namespace Ivony.Html
 
 
       private readonly string _name;
-      private readonly string _args;
-      private readonly string _expression;
 
 
       private static readonly string[] correctNames = new[] { "only-child", "only-of-type", "empty" };
 
 
 
-      public CountPseudoClass( string name, string args, string expression )
+      public CountPseudoClass( string name )
       {
         _name = name.ToLowerInvariant();
 
 
         if ( !correctNames.Contains( _name ) )
           throw new InvalidOperationException();
-
-
-        if ( args != null )
-          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "{0} 伪类不能有参数", name ) );
-
-
-
-        _args = args;
-        _expression = expression;
-
 
       }
 
@@ -351,6 +336,13 @@ namespace Ivony.Html
           default:
             throw new InvalidOperationException();
         }
+      }
+
+
+
+      public override string ToString()
+      {
+        return ":" + _name;
       }
 
     }

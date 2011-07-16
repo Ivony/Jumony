@@ -40,7 +40,7 @@ namespace Ivony.Html
         var name = capture.FindCaptures( match.Groups["name"] ).Single().Value;
         var value = capture.FindCaptures( match.Groups["value"] ).Single().Value;
 
-        style.Set( name, value );
+        style.SetValue( name, value );
       }
 
 

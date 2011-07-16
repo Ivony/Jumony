@@ -75,6 +75,10 @@ namespace Ivony.Html
     /// <remarks>此方法用于将字符串中的转义字符如"\t"替换为转义后的形式，例如"  "（跳格）。</remarks>
     public static string ResolveEscape( string str )
     {
+
+      if ( str == null )
+        return null;
+
       return str.Replace( "\\n", "\n" ).Replace( "\\r", "\r" ).Replace( "\\t", "\t" ).Replace( "\\\"", "\"" ).Replace( "\\\'", "\'" );
     }
 

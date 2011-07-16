@@ -134,6 +134,14 @@ namespace Ivony.Html
     /// <returns>是否需要立即关闭</returns>
     public static bool ImmediatelyClose( string openTag, string nextTag )
     {
+
+      if ( openTag == null )
+        throw new ArgumentNullException("openTag");
+
+      if ( nextTag == null )
+        throw new ArgumentNullException("nextTag");
+
+
       openTag = openTag.ToLowerInvariant();
       nextTag = nextTag.ToLowerInvariant();
 

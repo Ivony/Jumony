@@ -9,7 +9,7 @@ namespace Ivony.Html
   /// <summary>
   /// 提供 HTML 编码和解码。
   /// </summary>
-  public class HtmlEncoding
+  public static class HtmlEncoding
   {
 
     /// <summary>

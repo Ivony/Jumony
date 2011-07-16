@@ -17,7 +17,7 @@ namespace Ivony.Html.Styles
 
     public static CssStyle Visibility( this CssStyle style, VisibilityValue value )
     {
-      style.Set( name, value.ValueString );
+      style.SetValue( name, value.ValueString );
       return style;
     }
   }

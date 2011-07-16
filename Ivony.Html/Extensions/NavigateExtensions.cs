@@ -29,6 +29,10 @@ namespace Ivony.Html
     public static IHtmlElement Parent( this IHtmlNode node )
     {
 
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
       EnsureAvaliable( node );
 
       return node.Container as IHtmlElement;
@@ -44,6 +48,9 @@ namespace Ivony.Html
     /// <returns>容器的所有子元素</returns>
     public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
       return container.Nodes().OfType<IHtmlElement>();
     }
 
@@ -56,6 +63,13 @@ namespace Ivony.Html
     /// <returns>符合条件的子元素</returns>
     public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, string selector )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( selector == null )
+        throw new ArgumentNullException( "selector" );
+
+
       return CssElementSelector.Create( selector ).Filter( Elements( container ) );
     }
 
@@ -173,6 +187,9 @@ namespace Ivony.Html
     /// <exception cref="System.InvalidOperationException">如果节点不属于任何 HTML 容器</exception>
     public static IEnumerable<IHtmlNode> SiblingNodes( this IHtmlNode node )
     {
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
 
       EnsureAvaliable( node );
 

@@ -18,7 +18,7 @@ namespace Ivony.Html.Styles
 
     public static CssStyle Display( this CssStyle style, DisplayValue value )
     {
-      style.Set( name, value.ValueString );
+      style.SetValue( name, value.ValueString );
       return style;
     }
   }

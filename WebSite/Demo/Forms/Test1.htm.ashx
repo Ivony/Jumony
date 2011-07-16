@@ -16,7 +16,7 @@ public class Test1 : JumonyHandler
   protected override void ProcessDocument()
   {
 
-    Find( "table tr td:nth-child(1)" ).Where( e => e.Attribute( "style" ) == null ).ForAll( e => e.Style().Set( "text-align", "right" ) );
+    Find( "table tr td:nth-child(1)" ).Where( e => e.Attribute( "style" ) == null ).ForAll( e => e.Style().SetValue( "text-align", "right" ) );
 
 
     var form = new HtmlForm( Document.FindSingle( "form" ) );

@@ -39,7 +39,7 @@ namespace Ivony.Html
     public static T Style<T>( this T element, string name, string value ) where T : IHtmlElement
     {
       var style = element.Style();
-      style.Set( name, value );
+      style.SetValue( name, value );
 
       return element;
     }
@@ -99,7 +99,7 @@ namespace Ivony.Html.Styles
     /// </summary>
     /// <param name="name">样式名</param>
     /// <returns>样式设置值</returns>
-    public virtual string Get( string name )
+    public virtual string GetValue( string name )
     {
       return (string) settings[name];
     }
@@ -110,7 +110,7 @@ namespace Ivony.Html.Styles
     /// <param name="name">样式名</param>
     /// <param name="value">样式值</param>
     /// <returns>样式管理器自身</returns>
-    public virtual CssStyle Set( string name, string value )
+    public virtual CssStyle SetValue( string name, string value )
     {
       settings[name] = value;
 
@@ -155,7 +155,7 @@ namespace Ivony.Html.Styles
     /// </summary>
     /// <param name="styleSettings">样式设置</param>
     /// <returns>样式表达式</returns>
-    protected string GetStyleExpression( Hashtable styleSettings )
+    protected static string GetStyleExpression( Hashtable styleSettings )
     {
       var builder = new StringBuilder();
 
@@ -265,14 +265,14 @@ namespace Ivony.Html.Styles
       _elements = elements;
     }
 
-    public override string Get( string name )
+    public override string GetValue( string name )
     {
       throw new NotSupportedException( "CssStyle 对象在表示元素集的时候，不支持 Get 方法。" );
     }
 
-    public override CssStyle Set( string name, string value )
+    public override CssStyle SetValue( string name, string value )
     {
-      _elements.ForAll( e => e.Style().Set( name, value ) );
+      _elements.ForAll( e => e.Style().SetValue( name, value ) );
 
       return this;
     }

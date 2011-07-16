@@ -131,7 +131,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "reader" );
 
       if ( uri == null )
-        throw new ArgumentNullException( "url" );
+        throw new ArgumentNullException( "uri" );
 
 
       var html = reader.ReadToEnd();
@@ -152,6 +152,10 @@ namespace Ivony.Html
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument Parse( this IHtmlParser parser, string html )
     {
+
+      if ( parser == null )
+        throw new ArgumentNullException( "parser" );
+
       return parser.Parse( html, null );
     }
 

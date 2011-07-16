@@ -219,17 +219,17 @@ namespace Ivony.Html
 
     public string css( string propertyName )
     {
-      return ForFirstOrNull( e => e.Style().Get( propertyName ) );
+      return ForFirstOrNull( e => e.Style().GetValue( propertyName ) );
     }
 
     public jQuery css( string propertyName, string value )
     {
-      return ForAll( e => e.Style().Set( propertyName, value ) );
+      return ForAll( e => e.Style().SetValue( propertyName, value ) );
     }
 
     public jQuery css( string propertyName, Func<int, string, string> evaluator )
     {
-      return ForAll( ( e, i ) => e.Style().Set( propertyName, evaluator( i, e.Style().Get( propertyName ) ) ) );
+      return ForAll( ( e, i ) => e.Style().SetValue( propertyName, evaluator( i, e.Style().GetValue( propertyName ) ) ) );
     }
 
     public jQuery css( object map )
@@ -245,7 +245,7 @@ namespace Ivony.Html
         {
           foreach ( var pair in map )
           {
-            e.Style().Set( pair.Key, pair.Value );
+            e.Style().SetValue( pair.Key, pair.Value );
           }
         }
       }

@@ -214,13 +214,13 @@ namespace Ivony.Html.Binding
           case BindingNullBehavior.Ignore:
             break;
           case BindingNullBehavior.Hidden:
-            BindingContext.Action( element, e => e.Style().Set( "visibility", "hidden" ) );
+            BindingContext.Action( element, e => e.Style().SetValue( "visibility", "hidden" ) );
             break;
           case BindingNullBehavior.Remove:
             BindingContext.Action( element, e => e.Remove() );
             break;
           case BindingNullBehavior.DisplayNone:
-            BindingContext.Action( element, e => e.Style().Set( "display", "none" ) );
+            BindingContext.Action( element, e => e.Style().SetValue( "display", "none" ) );
             break;
           default:
             throw new NotSupportedException();

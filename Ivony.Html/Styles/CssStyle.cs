@@ -157,6 +157,10 @@ namespace Ivony.Html.Styles
     /// <returns>样式表达式</returns>
     protected static string GetStyleExpression( Hashtable styleSettings )
     {
+
+      if ( styleSettings == null )
+        throw new ArgumentNullException( "styleSettings" );
+
       var builder = new StringBuilder();
 
       foreach ( DictionaryEntry entry in styleSettings )

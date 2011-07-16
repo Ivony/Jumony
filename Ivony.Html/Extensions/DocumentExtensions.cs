@@ -544,17 +544,15 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Callvirt, CreateDocument );
 
-        int index = 0;
-
         il.Emit( OpCodes.Dup );
         il.Emit( OpCodes.Stloc_0 );// set container;
 
         foreach ( var node in document.Nodes() )
-          EmitCreateNode( il, node, index++ );
+          EmitCreateNode( il, node );
 
       }
 
-      private static void EmitCreateNode( ILGenerator il, IHtmlNode node, int index )
+      private static void EmitCreateNode( ILGenerator il, IHtmlNode node )
       {
 
         il.Emit( OpCodes.Ldarg_0 );       //ld provider
@@ -609,9 +607,8 @@ namespace Ivony.Html
           il.Emit( OpCodes.Dup );
           il.Emit( OpCodes.Stloc_0 );// set container;
 
-          int childIndex = 0;
           foreach ( var childNode in element.Nodes() )
-            EmitCreateNode( il, childNode, childIndex++ );
+            EmitCreateNode( il, childNode );
 
           il.Emit( OpCodes.Pop );    //pop element
           il.Emit( OpCodes.Dup );

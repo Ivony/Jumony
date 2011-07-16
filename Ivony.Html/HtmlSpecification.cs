@@ -66,6 +66,10 @@ namespace Ivony.Html
     public static bool IsUriValue( IHtmlAttribute attribute )
     {
 
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+
       var elementName = attribute.Element.Name;
 
       switch ( attribute.Name.ToLowerInvariant() )
@@ -136,10 +140,10 @@ namespace Ivony.Html
     {
 
       if ( openTag == null )
-        throw new ArgumentNullException("openTag");
+        throw new ArgumentNullException( "openTag" );
 
       if ( nextTag == null )
-        throw new ArgumentNullException("nextTag");
+        throw new ArgumentNullException( "nextTag" );
 
 
       openTag = openTag.ToLowerInvariant();

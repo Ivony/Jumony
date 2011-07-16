@@ -95,6 +95,9 @@ namespace Ivony.Html
     /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element )
     {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
       element.EnsureAllocated();
 
       return PathOf( element, element.Document );
@@ -109,6 +112,12 @@ namespace Ivony.Html
     /// <returns>路径表达式</returns>
     public static string PathOf( this IHtmlElement element, IHtmlContainer ancestor )
     {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( ancestor == null )
+        throw new ArgumentNullException( "ancestor" );
+
 
       element.EnsureAllocated();
 

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Parser
 {
+ 
   public class DomDocumentType : DomNode, IHtmlSpecial
   {
 

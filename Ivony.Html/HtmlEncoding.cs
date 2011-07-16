@@ -17,13 +17,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="text">要编码的字符串</param>
     /// <returns>编码后的字符串</returns>
-    public static string HtmlEncode(string text)
+    public static string HtmlEncode( string text )
     {
 
 #if dotnet4
       return System.Net.WebUtility.HtmlEncode( text );
 #else
-      using ( StringWriter writer = new StringWriter() )
+      using ( StringWriter writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
         HtmlEncode( text, writer );
 
@@ -38,7 +38,7 @@ namespace Ivony.Html
     /// <param name="text">要编码的字符串</param>
     /// <param name="writer">用于写入编码后字符串的文本写入器</param>
     /// <remarks>注意！空白字符不会被自动编码</remarks>
-    public static void HtmlEncode(string text, TextWriter writer)
+    public static void HtmlEncode( string text, TextWriter writer )
     {
 #if dotnet4
       System.Net.WebUtility.HtmlEncode( text, writer );
@@ -72,10 +72,10 @@ namespace Ivony.Html
             continue;
         }
 
-        if ( ( ch >= '\x00a0' ) && ( ch < '\x0100' ) )
+        if ( (ch >= '\x00a0') && (ch < '\x0100') )
         {
           writer.Write( "&#" );
-          writer.Write( ( (int) ch ).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
+          writer.Write( ((int) ch).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
           writer.Write( ';' );
         }
         else
@@ -91,13 +91,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="htmlText">要解码的字符串</param>
     /// <returns>解码后的字符串</returns>
-    public static string HtmlDecode(string htmlText)
+    public static string HtmlDecode( string htmlText )
     {
 #if dotnet4
       return System.Net.WebUtility.HtmlDecode( htmlText );
 #else
 
-      using ( StringWriter writer = new StringWriter() )
+      using ( StringWriter writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
         HtmlDecode( htmlText, writer );
 
@@ -142,14 +142,14 @@ namespace Ivony.Html
         {
           int entityEnds = htmlText.IndexOfAny( new[] { ';', '&' }, i + 1 );
 
-          if ( ( entityEnds > 0 ) && ( htmlText[entityEnds] == ';' ) )
+          if ( (entityEnds > 0) && (htmlText[entityEnds] == ';') )
           {
             string entity = htmlText.Substring( i + 1, entityEnds - i - 1 );
 
             if ( entity.StartsWith( "#" ) )//以#开头
             {
               ushort charCode;
-              if ( ( entity[1] == 'x' ) || ( entity[1] == 'X' ) )
+              if ( (entity[1] == 'x') || (entity[1] == 'X') )
                 ushort.TryParse( entity.Substring( 2 ), NumberStyles.AllowHexSpecifier, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
               else
                 ushort.TryParse( entity.Substring( 1 ), NumberStyles.Integer, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
@@ -194,9 +194,9 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="text">要编码的字符串</param>
     /// <returns>编码后的字符串</returns>
-    public static string HtmlAttributeEncode(string text)
+    public static string HtmlAttributeEncode( string text )
     {
-      using ( StringWriter writer = new StringWriter() )
+      using ( StringWriter writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
         HtmlAttributeEncode( text, writer );
 

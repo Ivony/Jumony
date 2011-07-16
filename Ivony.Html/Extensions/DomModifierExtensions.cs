@@ -79,7 +79,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "container" );
 
       if ( comment == null )
-        throw new ArgumentNullException( "htmlText" );
+        throw new ArgumentNullException( "comment" );
 
       lock ( container.SyncRoot )
       {
@@ -88,6 +88,12 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 创建指定节点的副本
+    /// </summary>
+    /// <param name="manager">HTML 碎片管理器，用来创建碎片</param>
+    /// <param name="node">要创建副本的节点</param>
+    /// <returns>节点的游离副本（ HTML 碎片形式）</returns>
     public static IHtmlFragment MakeCopy( this IHtmlFragmentManager manager, IHtmlNode node )
     {
       if ( manager == null )
@@ -100,24 +106,6 @@ namespace Ivony.Html
       var fragment = manager.CreateFragment();
 
       fragment.AddCopy( node );
-
-      return fragment;
-    }
-
-
-    public static IHtmlFragment MakeCopy( this IHtmlFragmentManager manager, IEnumerable<IHtmlNode> nodes )
-    {
-      if ( manager == null )
-        throw new ArgumentNullException( "manager" );
-
-      if ( nodes == null )
-        throw new ArgumentNullException( "nodes" );
-
-
-      var fragment = manager.CreateFragment();
-
-      foreach ( var n in nodes )
-        fragment.AddCopy( n );
 
       return fragment;
     }

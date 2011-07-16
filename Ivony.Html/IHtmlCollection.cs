@@ -196,7 +196,7 @@ namespace Ivony.Html
 
     #region IEnumerable<IHtmlNode> 成员
 
-    public IEnumerator<IHtmlNode> GetEnumerator()
+    IEnumerator<IHtmlNode> IEnumerable<IHtmlNode>.GetEnumerator()
     {
       return Nodes().GetEnumerator();
     }
@@ -207,7 +207,7 @@ namespace Ivony.Html
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-      return GetEnumerator();
+      return Nodes().GetEnumerator();
     }
 
     #endregion

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Ivony.Fluent;
+using System.Globalization;
 
 
 namespace Ivony.Html
@@ -68,7 +69,7 @@ namespace Ivony.Html.Styles
   public class CssStyle
   {
 
-    private static readonly Regex styleSettingsRegex = new Regex( string.Format( @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    private static readonly Regex styleSettingsRegex = new Regex( string.Format( CultureInfo.InvariantCulture, @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.OrdinalIgnoreCase ) );
@@ -257,7 +258,7 @@ namespace Ivony.Html.Styles
   internal class CssStyleSetSetter : CssStyle
   {
 
-    private IEnumerable<IHtmlElement>  _elements;
+    private IEnumerable<IHtmlElement> _elements;
 
     public CssStyleSetSetter( IEnumerable<IHtmlElement> elements )
     {

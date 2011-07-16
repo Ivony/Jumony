@@ -134,7 +134,7 @@ namespace Ivony.Html
     /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
-      return string.Format( "{0}{1}{2}", elementType.ToUpper(), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
+      return string.Format( CultureInfo.InvariantCulture, "{0}{1}{2}", elementType.ToUpper( CultureInfo.InvariantCulture ), string.Join( "", attributeSelectors.Select( a => a.ToString() ).ToArray() ), string.Join( "", pseudoClassSelectors.Select( p => p.ToString() ).ToArray() ) );
     }
 
 

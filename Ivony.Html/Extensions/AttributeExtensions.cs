@@ -231,7 +231,7 @@ namespace Ivony.Html
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string oldValue, string newValue )
     {
       if ( elements == null )
-        throw new ArgumentNullException( "element" );
+        throw new ArgumentNullException( "elements" );
 
       if ( attributeName == null )
         throw new ArgumentNullException( "attributeName" );

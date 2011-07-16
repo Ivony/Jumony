@@ -14,7 +14,7 @@ namespace Ivony.Html
   /// </summary>
   public static class CssPseudoClassSelectors
   {
-    
+
     private static readonly Regex pseudoClassRegex = new Regex( "^" + Regulars.pseudoClassPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
     /// <summary>
@@ -199,11 +199,11 @@ namespace Ivony.Html
           if ( _multiplier == "-" )//如果只有一个负号
             multiplier = -1;//那意味着负1
           else
-            multiplier = int.Parse( match.Groups["multiplier"].Value );
+            multiplier = int.Parse( match.Groups["multiplier"].Value, CultureInfo.InvariantCulture );
         }
 
         if ( match.Groups["augend"].Success )
-          augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ) );//这里的正则用于去掉符号与数字之间的空白
+          augend = int.Parse( Regex.Replace( match.Groups["augend"].Value, @"\p{Zs}", "" ), CultureInfo.InvariantCulture );//这里的正则用于去掉符号与数字之间的空白
       }
 
 
@@ -267,7 +267,7 @@ namespace Ivony.Html
         }
 
 
-        throw new Exception( "分析nth伪类时出现了一个其他未知情况" );
+        throw new FormatException( "分析nth伪类时出现了一个其他未知情况" );
 
       }
 
@@ -286,12 +286,12 @@ namespace Ivony.Html
           else
             argsExp += "+";
 
-          argsExp += Math.Abs( augend ).ToString();
+          argsExp += Math.Abs( augend ).ToString( CultureInfo.InvariantCulture );
         }
         else
-          argsExp = augend.ToString();
+          argsExp = augend.ToString( CultureInfo.InvariantCulture );
 
-        return string.Format( CultureInfo.InvariantCulture, ":nth-child({1})", argsExp );
+        return string.Format( CultureInfo.InvariantCulture, ":nth-child({0})", argsExp );
       }
 
     }

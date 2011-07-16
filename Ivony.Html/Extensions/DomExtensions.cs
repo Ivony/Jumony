@@ -715,7 +715,7 @@ namespace Ivony.Html
 
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
-          
+
           modifier.AddTextNode( element, text );
         }
         else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) || !encodeWhiteSpaces )
@@ -727,11 +727,11 @@ namespace Ivony.Html
 
           var encoded = HtmlEncoding.HtmlEncode( text );
 
-          encoded.Replace( "  ", "&nbsp; " );
+          encoded = encoded.Replace( "  ", "&nbsp; " );
 
           encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
 
-          encoded.Replace( "\n", "<br />" );
+          encoded = encoded.Replace( "\n", "<br />" );
 
 
           element.Document.ParseFragment( encoded ).Into( element, 0 );

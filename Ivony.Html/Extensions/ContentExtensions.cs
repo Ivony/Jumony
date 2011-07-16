@@ -346,7 +346,7 @@ namespace Ivony.Html
     /// <returns>呈现的 HTML</returns>
     public static string Render( this IHtmlNode node )
     {
-      using ( var writer = new StringWriter() )
+      using ( var writer = new StringWriter( CultureInfo.InvariantCulture) )
       {
         Render( node, writer );
 

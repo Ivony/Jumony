@@ -182,6 +182,9 @@ namespace Ivony.Html
 
     private static object _sync = new object();
 
+    /// <summary>
+    /// 用于匹配元素标签名的正则
+    /// </summary>
     public static readonly Regex tagNameRegex = new Regex( @"^[\w:\.]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
@@ -193,6 +196,10 @@ namespace Ivony.Html
     /// <returns>匹配指定结束标签的正则表达式对象</returns>
     public static Regex GetEndTagRegex( string tagName )
     {
+
+      if ( tagName == null )
+        throw new ArgumentNullException( "tagName" );
+
       if ( !tagNameRegex.IsMatch( tagName ) )
         throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "\"{0}\" 不是一个合法有效的 HTML 元素名称", tagName ), "tagName" );
 

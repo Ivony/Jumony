@@ -300,6 +300,13 @@ namespace Ivony.Html
     {
       ResolveUriToAbsoluate( document, false );
     }
+
+
+    /// <summary>
+    /// 将文档中所有的uri属性转换为绝对的uri。
+    /// </summary>
+    /// <param name="document">要执行转换的文档</param>
+    /// <param name="resolveInternalReference">是否转换页内 uri</param>
     public static void ResolveUriToAbsoluate( this IHtmlDocument document, bool resolveInternalReference )
     {
       if ( document == null )

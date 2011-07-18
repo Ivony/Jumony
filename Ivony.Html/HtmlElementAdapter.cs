@@ -20,7 +20,7 @@ namespace Ivony.Html
       if ( element == null )
         return false;
 
-      if ( IsEligible( element ) )
+      if ( !IsEligible( element ) )
         return false;
 
       Render( element, writer );

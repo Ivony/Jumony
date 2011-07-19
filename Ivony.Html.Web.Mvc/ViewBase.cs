@@ -171,10 +171,10 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 缓存结果
     /// </summary>
-    public ICachedResponse CachedResponse
+    protected ICachedResponse CachedResponse
     {
       get;
-      protected set;
+      set;
     }
 
 
@@ -210,7 +210,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 处理 Action 链接
+    /// 派生类调用此方法处理 Action 链接
     /// </summary>
     /// <param name="container"></param>
     protected void ProcessActionLinks( IHtmlContainer container )
@@ -220,7 +220,7 @@ namespace Ivony.Html.Web.Mvc
       foreach ( var actionLink in links )
       {
 
-        lock ( actionLink )
+        lock ( actionLink )//锁住元素不被修改
         {
 
           var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];

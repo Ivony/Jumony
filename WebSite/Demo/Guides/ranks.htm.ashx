@@ -8,6 +8,7 @@ using Ivony.Html;
 using Ivony.Html.Binding;
 using Ivony.Html.Parser;
 using Ivony.Html.Web;
+using Ivony.Html.Templates;
 
 public class ranks : JumonyHandler
 {
@@ -21,7 +22,14 @@ public class ranks : JumonyHandler
         new { Name = "Ivony", Votes = 40, Url = "http://Ivony.cnblogs.com/" },
       };
 
-    var rankItems = Find( ".ranks > tr" );
+
+
+    var container = Document.FindSingle( "body > table" );
+
+    container.Repeat( "tr.item", 10 );
+
+
+    /*var rankItems = Find( ".ranks > tr" );
 
     data.BindTo( rankItems, ( dataItem, element ) =>
       {
@@ -36,6 +44,6 @@ public class ranks : JumonyHandler
         linkContainer.SetAttribute( "href", dataItem.Url );
 
       } );
-
+    */
   }
 }

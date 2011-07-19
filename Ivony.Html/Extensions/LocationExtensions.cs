@@ -55,6 +55,9 @@ namespace Ivony.Html
           return true;
 
         node = node.Container as IHtmlNode;
+
+        if ( node == null )
+          return false;
       }
     }
 

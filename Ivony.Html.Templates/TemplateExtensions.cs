@@ -97,12 +97,17 @@ namespace Ivony.Html.Templates
           if ( items.Length > count )
             break;
 
-          for ( int i = firstContainerIndex; i <= lastContainerIndex; i++ )
-            container.AddCopy( container.Nodes().ElementAt( i ) );
+          for ( int i = lastContainerIndex; i > firstContainerIndex; i-- )
+            container.AddCopy( lastContainerIndex + 1, container.Nodes().ElementAt( i ) );
+
+
+          items = container.Find( selector ).ToArray();
 
         }
 
 
+        lastItem = items.Last();
+        lastContainer = container.Elements().First( e => e.IsAncestorOf( lastItem ) || e.Equals( lastItem ) );
 
 
 
@@ -110,21 +115,20 @@ namespace Ivony.Html.Templates
 
         if ( items.Length > count )
         {
-          var firstUnavailableItem = items[count + 1];
-          var firstUnavailableContainer = container.Elements().First( e => e.IsAncestorOf( firstUnavailableItem ) || e.Equals( firstUnavailableItem ) );
+          var lastAvailableItem = items[count - 1];//因为数组下标从0开始，故此处不必+1。
+          var lastAvailableContainer = container.Elements().First( e => e.IsAncestorOf( lastAvailableItem ) || e.Equals( lastAvailableItem ) );
 
 
           container.Nodes()
-            .SkipWhile( n => !n.Equals( firstUnavailableContainer ) )
+            .SkipWhile( n => !n.Equals( lastAvailableContainer ) )
             .TakeWhile( n => !n.Equals( lastContainer ) )
             .Remove();
 
         }
 
+        return availableItems;
+
       }
-
-
-      throw new NotImplementedException();
 
     }
 #endif

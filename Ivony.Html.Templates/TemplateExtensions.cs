@@ -50,6 +50,8 @@ namespace Ivony.Html.Templates
     }
 
 
+
+#if DEBUG
     /// <summary>
     /// 以选择器选择的结果当作模版项，调整模版项重复数量
     /// </summary>
@@ -125,6 +127,9 @@ namespace Ivony.Html.Templates
       throw new NotImplementedException();
 
     }
+#endif
+
+
 
     private static bool ContainsAnyOf( this IHtmlContainer container, IEnumerable<IHtmlNode> nodes )
     {

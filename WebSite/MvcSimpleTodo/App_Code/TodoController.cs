@@ -4,10 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DatabaseModel;
+using System.ComponentModel.DataAnnotations;
 
-/// <summary>
-///TodoController 的摘要说明
-/// </summary>
 public class TodoController : Controller
 {
 
@@ -55,6 +53,27 @@ public class TodoController : Controller
   public ActionResult Remove( int taskId )
   {
     Entities.DeleteObject( Entities.Tasks.First( t => t.ID == taskId ) );
+
+    return RedirectToAction( "Index" );
+  }
+
+  [HttpGet]
+  public ActionResult Modify( int taskId )
+  {
+
+    return View( "modify", Entities.Tasks.First( t => t.ID == taskId ) );
+
+  }
+
+  [HttpPost]
+  public ActionResult Modify( int taskId, string title )
+  {
+
+    if ( !ViewData.ModelState.IsValid )
+      return View( "Index" );
+
+
+    Entities.Tasks.First( t => t.ID == taskId ).Title = title;
 
     return RedirectToAction( "Index" );
   }

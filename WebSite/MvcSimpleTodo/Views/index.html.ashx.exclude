@@ -1,0 +1,51 @@
+﻿<%@ WebHandler Language="C#" Class="index_html" %>
+
+using System;
+using System.Web;
+using System.Linq;
+
+using Ivony.Fluent;
+using Ivony.Html;
+using Ivony.Html.Web;
+using Ivony.Html.Styles;
+using Ivony.Html.Forms;
+using Ivony.Html.Forms.Validation;
+using Ivony.Html.Web.Mvc;
+using Ivony.Html.Templates;
+
+using DatabaseModel;
+
+
+public class index_html : ViewHandler<IQueryable<Task>>
+{
+
+  protected override void ProcessDocument()
+  {
+
+
+    var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
+
+    ViewModel.BindTo( items, BindTaskItem );
+
+
+  }
+
+
+
+  private void BindTaskItem( Task task, IHtmlElement taskElement )
+  {
+    taskElement.Elements( "span" ).Single().InnerText( task.Content );
+
+    taskElement.Find( "a" ).SetAttribute( "href", url => url + "&task=" + task.ID );
+
+    if ( task.Completed )
+    {
+      taskElement.Style( ".finished;" );
+      taskElement.Find( "a[href*=complete]" ).Remove();
+    }
+    else
+    {
+      taskElement.Find( "a[href*=restore]" ).Remove();
+    }
+  }
+}

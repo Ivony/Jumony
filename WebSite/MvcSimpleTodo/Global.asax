@@ -9,7 +9,7 @@
 
 
     MvcEnvironment.SimpleRoutingTable
-      .MapAction( "~/", "Todo1", "Index" )
+      .MapAction( "~/", "Todo", "Index" )
       .MapAction( "~/add", "Todo", "Add" )
       .MapAction( "~/modify/{taskId}", "Todo", "Modify" )
       .MapAction( "~/complete/{taskId}", "Todo", "Complete" )

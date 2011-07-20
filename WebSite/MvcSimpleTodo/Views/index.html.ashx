@@ -21,7 +21,7 @@ public class index_html : ViewHandler<IQueryable<Task>>
 
   protected override void ProcessDocument()
   {
-
+    Document.FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 
     var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
 
@@ -34,18 +34,18 @@ public class index_html : ViewHandler<IQueryable<Task>>
 
   private void BindTaskItem( Task task, IHtmlElement taskElement )
   {
-    taskElement.Elements( "span" ).Single().InnerText( task.Content );
+    taskElement.Elements( "span" ).Single().InnerText( task.Title );
 
-    taskElement.Find( "a" ).SetAttribute( "href", url => url + "&task=" + task.ID );
+    taskElement.Find( "a" ).SetAttribute( "_taskId", task.ID.ToString() );
 
     if ( task.Completed )
     {
       taskElement.Style( ".finished;" );
-      taskElement.Find( "a[href*=complete]" ).Remove();
+      taskElement.Find( "a[action=complete]" ).Remove();
     }
     else
     {
-      taskElement.Find( "a[href*=restore]" ).Remove();
+      taskElement.Find( "a[action=revert]" ).Remove();
     }
   }
 }

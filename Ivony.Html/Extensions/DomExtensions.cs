@@ -502,6 +502,76 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 添加节点集合的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="node">要创作副本的节点集合</param>
+    /// <returns>添加后的节点集合</returns>
+    public static IEnumerable<IHtmlNode> AddCopy( this IHtmlContainer container, IEnumerable<IHtmlNode> node )
+    {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+
+
+      lock ( container.SyncRoot )
+      {
+        return AddCopy( container, container.Nodes().Count(), node );
+      }
+    }
+
+
+    /// <summary>
+    /// 添加节点集合的副本
+    /// </summary>
+    /// <param name="container">要添加副本的容器</param>
+    /// <param name="index">要添加的位置</param>
+    /// <param name="nodes">要创作副本的节点集合</param>
+    /// <returns>添加后的节点集合</returns>
+    public static IEnumerable<IHtmlNode> AddCopy( this IHtmlContainer container, int index, IEnumerable<IHtmlNode> nodes )
+    {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      if ( nodes == null )
+        throw new ArgumentNullException( "nodes" );
+
+
+      List<IHtmlNode> result = new List<IHtmlNode>( nodes.Count() );
+
+
+      lock ( container.SyncRoot )
+      {
+
+        foreach ( var node in nodes.Reverse() )
+        {
+          var textNode = node as IHtmlTextNode;
+          if ( textNode != null )
+            result.Add( AddCopy( container, index, textNode ) );
+
+          var comment = node as IHtmlComment;
+          if ( comment != null )
+            result.Add( AddCopy( container, index, comment ) );
+
+          var element = node as IHtmlElement;
+          if ( element != null )
+            result.Add( AddCopy( container, index, element ) );
+
+          throw new NotSupportedException();
+        }
+
+        return result.ToArray();
+      }
+    }
+
+
+
+
+
+    /// <summary>
     /// 创建碎片的副本
     /// </summary>
     /// <param name="fragment">要创建副本的碎片</param>

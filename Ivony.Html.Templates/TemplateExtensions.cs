@@ -135,6 +135,7 @@ namespace Ivony.Html.Templates
 
 
 
+
     private static bool ContainsAnyOf( this IHtmlContainer container, IEnumerable<IHtmlNode> nodes )
     {
       return nodes.Any( n => n.IsDescendantOf( container ) || n.Equals( container ) );

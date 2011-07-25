@@ -664,7 +664,11 @@ namespace Ivony.Html.Web.Mvc
 
 
       foreach ( var key in queryString.AllKeys )
-        values.Add( key, queryString[key] );
+      {
+        var v = queryString[key];
+        if ( v != null )
+          values.Add( key, v );
+      }
 
 
       return values;

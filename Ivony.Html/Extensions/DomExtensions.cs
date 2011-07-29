@@ -471,6 +471,120 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 在自己后面添加一个文档碎片
+    /// </summary>
+    /// <param name="node">要在其后添加碎片的节点</param>
+    /// <param name="elementName">要添加 HTML 碎片</param>
+    /// <returns>添加后的节点集</returns>
+    public static IEnumerable<IHtmlNode> AddFragmentAfterSelf( this IHtmlNode node, IHtmlFragment fragment )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddFragment( node.NodesIndexOfSelf() + 1, fragment );
+      }
+    }
+
+
+
+
+    /// <summary>
+    /// 在自己前面添加一个文档碎片
+    /// </summary>
+    /// <param name="node">要在其前面添加碎片的节点</param>
+    /// <param name="elementName">要添加 HTML 碎片</param>
+    /// <returns>添加后的节点集</returns>
+    public static IEnumerable<IHtmlNode> AddFragmentBeforeSelf( this IHtmlNode node, IHtmlFragment fragment )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( fragment == null )
+        throw new ArgumentNullException( "fragment" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddFragment( node.NodesIndexOfSelf(), fragment );
+      }
+    }
+
+
+
+
+    /// <summary>
+    /// 在自己后面添加一个文档碎片
+    /// </summary>
+    /// <param name="node">要在其后添加碎片的节点</param>
+    /// <param name="elementName">要分析成碎片的 HTML 文本</param>
+    /// <returns>添加后的节点集</returns>
+    public static IEnumerable<IHtmlNode> AddFragmentAfterSelf( this IHtmlNode node, string html )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddFragment( node.NodesIndexOfSelf(), html );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 在自己前面添加一个文档碎片
+    /// </summary>
+    /// <param name="node">要在其前面添加碎片的节点</param>
+    /// <param name="elementName">要分析成碎片的 HTML 文本</param>
+    /// <returns>添加后的节点集</returns>
+    public static IEnumerable<IHtmlNode> AddFragmentBeforeSelf( this IHtmlNode node, string html )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( html == null )
+        throw new ArgumentNullException( "html" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddFragment( node.NodesIndexOfSelf(), html );
+      }
+    }
+
+
+
 
 
     /// <summary>
@@ -928,9 +1042,9 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要替换内容的元素</param>
     /// <param name="text">文本内容</param>
-    public static void InnerText( this IHtmlElement element, string text )
+    public static T InnerText<T>( this T element, string text ) where T : IHtmlElement
     {
-      InnerText( element, text, false );
+      return InnerText( element, text, false );
     }
 
     /// <summary>
@@ -939,7 +1053,7 @@ namespace Ivony.Html
     /// <param name="element">要替换内容的元素</param>
     /// <param name="text">文本内容</param>
     /// <param name="encodeWhiteSpaces">是否编码空白字符</param>
-    public static void InnerText( this IHtmlElement element, string text, bool encodeWhiteSpaces )
+    public static T InnerText<T>( this T element, string text, bool encodeWhiteSpaces ) where T: IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -976,6 +1090,8 @@ namespace Ivony.Html
         }
       }
 
+      return element;
+
     }
 
 
@@ -985,7 +1101,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要替换内容的元素</param>
     /// <param name="html">要替换的HTML代码</param>
-    public static void InnerHtml( this IHtmlElement element, string html )
+    public static T InnerHtml<T>( this T element, string html ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -1008,6 +1124,8 @@ namespace Ivony.Html
           fragment.Into( element, 0 );
         }
       }
+
+      return element;
     }
 
 

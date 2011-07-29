@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
 
     private readonly string raw;
 
-    public DomTextNode(  string rawHtml )
+    public DomTextNode( string rawHtml )
     {
       raw = rawHtml;
     }

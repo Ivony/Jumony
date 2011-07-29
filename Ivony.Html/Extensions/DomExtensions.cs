@@ -121,6 +121,60 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 在自己后面添加一个元素
+    /// </summary>
+    /// <param name="node">要在其后添加元素的节点</param>
+    /// <param name="elementName">添加的元素名</param>
+    /// <returns>添加的元素</returns>
+    public static IHtmlElement AddElementAfterSelf( this IHtmlNode node, string elementName )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( elementName == null )
+        throw new ArgumentNullException( "elementName" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddElement( node.NodesIndexOfSelf() + 1, elementName );
+      }
+    }
+
+
+    /// <summary>
+    /// 在自己前面添加一个元素
+    /// </summary>
+    /// <param name="node">要在其前面添加元素的节点</param>
+    /// <param name="elementName">添加的元素名</param>
+    /// <returns>添加的元素</returns>
+    public static IHtmlElement AddElementBeforeSelf( this IHtmlNode node, string elementName )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( elementName == null )
+        throw new ArgumentNullException( "elementName" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container )
+      {
+        return container.AddElement( node.NodesIndexOfSelf(), elementName );
+      }
+    }
+
+
+    /// <summary>
     /// 尝试为容器添加一个文本节点
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
@@ -164,6 +218,64 @@ namespace Ivony.Html
 
       return modifier.AddTextNode( container, index, htmlText );
     }
+
+
+
+    /// <summary>
+    /// 在自己后面添加一个文本节点
+    /// </summary>
+    /// <param name="node">要在其后添加文本的节点</param>
+    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <returns>添加的文本节点</returns>
+    public static IHtmlTextNode AddTextNodeAfterSelf( this IHtmlNode node, string htmlText )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( htmlText == null )
+        throw new ArgumentNullException( "htmlText" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddTextNode( node.NodesIndexOfSelf() + 1, htmlText );
+      }
+    }
+
+
+    /// <summary>
+    /// 在自己前面添加一个文本节点
+    /// </summary>
+    /// <param name="node">要在其前面添加文本的节点</param>
+    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <returns>添加的文本节点</returns>
+    public static IHtmlTextNode AddTextNodeBeforSelf( this IHtmlNode node, string htmlText )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( htmlText == null )
+        throw new ArgumentNullException( "htmlText" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container )
+      {
+        return container.AddTextNode( node.NodesIndexOfSelf(), htmlText );
+      }
+    }
+
+
+
 
 
     /// <summary>
@@ -210,6 +322,62 @@ namespace Ivony.Html
 
       return modifier.AddComment( container, index, comment );
     }
+
+
+    /// <summary>
+    /// 在自己后面添加一个注释
+    /// </summary>
+    /// <param name="node">要在其后添加注释的节点</param>
+    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <returns>添加的注释节点</returns>
+    public static IHtmlComment AddCommentAfterSelf( this IHtmlNode node, string comment )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddComment( node.NodesIndexOfSelf() + 1, comment );
+      }
+    }
+
+
+    /// <summary>
+    /// 在自己后面添加一个注释
+    /// </summary>
+    /// <param name="node">要在其前面添加注释的节点</param>
+    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <returns>添加的注释节点</returns>
+    public static IHtmlComment AddCommentBeforeSelf( this IHtmlNode node, string comment )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( comment == null )
+        throw new ArgumentNullException( "comment" );
+
+      var container = node.Container;
+
+
+      if ( container == null )
+        throw new InvalidOperationException();
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddComment( node.NodesIndexOfSelf(), comment );
+      }
+    }
+
+
 
 
     /// <summary>

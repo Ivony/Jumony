@@ -420,7 +420,15 @@ namespace Ivony.Html.Web.Mvc
 
       public override void Render( IHtmlElement element, TextWriter writer )
       {
+
+        var partialTag = ContentExtensions.GenerateTagHtml( element, true );
+
+
+        _view.HttpContext.Trace.Write( "Begin Render Partial: {0}", partialTag );
+
         _view.RenderPartial( element, writer );
+
+        _view.HttpContext.Trace.Write( "End Render Partial: {0}", partialTag );
       }
     }
 

@@ -45,13 +45,25 @@ namespace Ivony.Html.Web.Mvc
 
     protected override void ProcessMain()
     {
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin LoadDocument" );
       Document = LoadDocument();
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End LoadDocument" );
 
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessDocument" );
       ProcessDocument();
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessDocument" );
 
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionLinks" );
       ProcessActionLinks( Document );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionLinks" );
 
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
       ResolveUri( Document );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
+
 
       AddGeneratorMetaData();
 

@@ -144,9 +144,14 @@ namespace Ivony.Html.Web.Mvc
 
       Url = new UrlHelper( RequestContext );
 
+      HttpContext.Trace.Write( "Begin Process" );
       ProcessMain();
+      HttpContext.Trace.Write( "End Process" );
 
+
+      HttpContext.Trace.Write( "Begin Render" );
       var content = RenderContent();
+      HttpContext.Trace.Write( "End Render" );
 
       UpdateCache( content );
 
@@ -424,11 +429,11 @@ namespace Ivony.Html.Web.Mvc
         var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
 
-        _view.HttpContext.Trace.Write( "Begin Render Partial: {0}", partialTag );
+        _view.HttpContext.Trace.Write( "Begin Render Partial", partialTag );
 
         _view.RenderPartial( element, writer );
 
-        _view.HttpContext.Trace.Write( "End Render Partial: {0}", partialTag );
+        _view.HttpContext.Trace.Write( "End Render Partial", partialTag );
       }
     }
 

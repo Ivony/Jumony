@@ -293,8 +293,8 @@ namespace Ivony.Html
     /// <summary>
     /// 在后面添加节点的副本
     /// </summary>
-    /// <param name="container">要添加副本的容器</param>
-    /// <param name="comment">要创作副本的节点</param>
+    /// <param name="node">要在后面添加副本的节点</param>
+    /// <param name="textNode">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
     public static IHtmlTextNode AddCopyAfterSelf( this IHtmlNode node, IHtmlTextNode textNode )
     {
@@ -318,7 +318,7 @@ namespace Ivony.Html
     /// <summary>
     /// 在前面添加节点的副本
     /// </summary>
-    /// <param name="container">要添加副本的容器</param>
+    /// <param name="node">要在前面添加副本的节点</param>
     /// <param name="textNode">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
     public static IHtmlTextNode AddCopyBeforeSelf( this IHtmlNode node, IHtmlTextNode textNode )
@@ -343,8 +343,8 @@ namespace Ivony.Html
     /// <summary>
     /// 在后面添加节点的副本
     /// </summary>
-    /// <param name="container">要添加副本的容器</param>
-    /// <param name="textNode">要创作副本的节点</param>
+    /// <param name="node">要在后面添加副本的节点</param>
+    /// <param name="comment">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
     public static IHtmlComment AddCopyAfterSelf( this IHtmlNode node, IHtmlComment comment )
     {
@@ -368,8 +368,8 @@ namespace Ivony.Html
     /// <summary>
     /// 在前面添加节点的副本
     /// </summary>
-    /// <param name="container">要添加副本的容器</param>
-    /// <param name="textNode">要创作副本的节点</param>
+    /// <param name="node">要在前面添加副本的节点</param>
+    /// <param name="comment">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
     public static IHtmlComment AddCopyBeforeSelf( this IHtmlNode node, IHtmlComment comment )
     {

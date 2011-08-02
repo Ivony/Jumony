@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.ExtendDom
 {
-  public static class ExternDomExtensions
+  public static class DomExtensions
   {
 
 

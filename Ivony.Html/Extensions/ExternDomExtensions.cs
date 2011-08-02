@@ -15,7 +15,7 @@ namespace Ivony.Html
     /// 在自己后面添加一个文档碎片
     /// </summary>
     /// <param name="node">要在其后添加碎片的节点</param>
-    /// <param name="elementName">要添加 HTML 碎片</param>
+    /// <param name="fragment">要添加 HTML 碎片</param>
     /// <returns>添加后的节点集</returns>
     public static IEnumerable<IHtmlNode> AddFragmentAfterSelf( this IHtmlNode node, IHtmlFragment fragment )
     {
@@ -44,7 +44,7 @@ namespace Ivony.Html
     /// 在自己前面添加一个文档碎片
     /// </summary>
     /// <param name="node">要在其前面添加碎片的节点</param>
-    /// <param name="elementName">要添加 HTML 碎片</param>
+    /// <param name="fragment">要添加 HTML 碎片</param>
     /// <returns>添加后的节点集</returns>
     public static IEnumerable<IHtmlNode> AddFragmentBeforeSelf( this IHtmlNode node, IHtmlFragment fragment )
     {
@@ -70,7 +70,7 @@ namespace Ivony.Html
     /// 在自己后面添加一个文档碎片
     /// </summary>
     /// <param name="node">要在其后添加碎片的节点</param>
-    /// <param name="elementName">要分析成碎片的 HTML 文本</param>
+    /// <param name="html">要分析成碎片的 HTML 文本</param>
     /// <returns>添加后的节点集</returns>
     public static IEnumerable<IHtmlNode> AddFragmentAfterSelf( this IHtmlNode node, string html )
     {
@@ -98,7 +98,7 @@ namespace Ivony.Html
     /// 在自己前面添加一个文档碎片
     /// </summary>
     /// <param name="node">要在其前面添加碎片的节点</param>
-    /// <param name="elementName">要分析成碎片的 HTML 文本</param>
+    /// <param name="html">要分析成碎片的 HTML 文本</param>
     /// <returns>添加后的节点集</returns>
     public static IEnumerable<IHtmlNode> AddFragmentBeforeSelf( this IHtmlNode node, string html )
     {
@@ -128,7 +128,7 @@ namespace Ivony.Html
     /// 在自己后面添加一个注释
     /// </summary>
     /// <param name="node">要在其后添加注释的节点</param>
-    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <param name="comment">要添加 HTML 注释内容</param>
     /// <returns>添加的注释节点</returns>
     public static IHtmlComment AddCommentAfterSelf( this IHtmlNode node, string comment )
     {
@@ -155,7 +155,7 @@ namespace Ivony.Html
     /// 在自己后面添加一个注释
     /// </summary>
     /// <param name="node">要在其前面添加注释的节点</param>
-    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <param name="comment">要添加 HTML 注释内容</param>
     /// <returns>添加的注释节点</returns>
     public static IHtmlComment AddCommentBeforeSelf( this IHtmlNode node, string comment )
     {
@@ -182,7 +182,7 @@ namespace Ivony.Html
     /// 在自己后面添加一个文本节点
     /// </summary>
     /// <param name="node">要在其后添加文本的节点</param>
-    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <param name="htmlText">要添加 HTML 文本</param>
     /// <returns>添加的文本节点</returns>
     public static IHtmlTextNode AddTextNodeAfterSelf( this IHtmlNode node, string htmlText )
     {
@@ -209,7 +209,7 @@ namespace Ivony.Html
     /// 在自己前面添加一个文本节点
     /// </summary>
     /// <param name="node">要在其前面添加文本的节点</param>
-    /// <param name="elementName">要添加 HTML 文本</param>
+    /// <param name="htmlText">要添加 HTML 文本</param>
     /// <returns>添加的文本节点</returns>
     public static IHtmlTextNode AddTextNodeBeforSelf( this IHtmlNode node, string htmlText )
     {

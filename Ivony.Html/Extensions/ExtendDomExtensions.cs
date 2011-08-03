@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.ExtendDom
+namespace Ivony.Html.ExtendDomAPI
 {
   public static class ExtendDomExtensions
   {
@@ -396,13 +396,13 @@ namespace Ivony.Html.ExtendDom
     /// <param name="node">要在其后面添加副本的节点</param>
     /// <param name="element">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
-    public static IHtmlComment AddCopyAfterSelf( this IHtmlNode node, IHtmlElement element )
+    public static IHtmlElement AddCopyAfterSelf( this IHtmlNode node, IHtmlElement element )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
       if ( element == null )
-        throw new ArgumentNullException( "comment" );
+        throw new ArgumentNullException( "element" );
 
 
       var container = node.Container;
@@ -421,13 +421,13 @@ namespace Ivony.Html.ExtendDom
     /// <param name="node">要在其前面添加副本的节点</param>
     /// <param name="element">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
-    public static IHtmlComment AddCopyBeforeSelf( this IHtmlNode node, IHtmlElement element )
+    public static IHtmlElement AddCopyBeforeSelf( this IHtmlNode node, IHtmlElement element )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
       if ( element == null )
-        throw new ArgumentNullException( "comment" );
+        throw new ArgumentNullException( "element" );
 
 
       var container = node.Container;
@@ -446,13 +446,13 @@ namespace Ivony.Html.ExtendDom
     /// <param name="node">要在其后面添加副本的节点</param>
     /// <param name="newNode">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
-    public static IHtmlComment AddCopyAfterSelf( this IHtmlNode node, IHtmlNode newNode )
+    public static IHtmlNode AddCopyAfterSelf( this IHtmlNode node, IHtmlNode newNode )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
       if ( newNode == null )
-        throw new ArgumentNullException( "comment" );
+        throw new ArgumentNullException( "newNode" );
 
 
       var container = node.Container;
@@ -471,13 +471,13 @@ namespace Ivony.Html.ExtendDom
     /// <param name="node">要在其前面添加副本的节点</param>
     /// <param name="newNode">要创作副本的节点</param>
     /// <returns>添加后的节点</returns>
-    public static IHtmlComment AddCopyBeforeSelf( this IHtmlNode node, IHtmlNode newNode )
+    public static IHtmlNode AddCopyBeforeSelf( this IHtmlNode node, IHtmlNode newNode )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
       if ( newNode == null )
-        throw new ArgumentNullException( "comment" );
+        throw new ArgumentNullException( "newNode" );
 
 
       var container = node.Container;
@@ -485,6 +485,56 @@ namespace Ivony.Html.ExtendDom
       lock ( container.SyncRoot )
       {
         return container.AddCopy( node.NodesIndexOfSelf(), newNode );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 在后面添加节点的副本
+    /// </summary>
+    /// <param name="node">要在其后面添加副本的节点</param>
+    /// <param name="newNodes">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
+    public static IEnumerable<IHtmlNode> AddCopyAfterSelf( this IHtmlNode node, IEnumerable<IHtmlNode> newNodes )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( newNodes == null )
+        throw new ArgumentNullException( "newNodes" );
+
+
+      var container = node.Container;
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddCopy( node.NodesIndexOfSelf() + 1, newNodes );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 在前面添加节点的副本
+    /// </summary>
+    /// <param name="node">要在其前面添加副本的节点</param>
+    /// <param name="newNodes">要创作副本的节点</param>
+    /// <returns>添加后的节点</returns>
+    public static IEnumerable<IHtmlNode> AddCopyBeforeSelf( this IHtmlNode node, IEnumerable<IHtmlNode> newNodes )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      if ( newNodes == null )
+        throw new ArgumentNullException( "newNodes" );
+
+
+      var container = node.Container;
+
+      lock ( container.SyncRoot )
+      {
+        return container.AddCopy( node.NodesIndexOfSelf(), newNodes );
       }
     }
 

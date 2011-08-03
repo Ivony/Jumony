@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Ivony.Html.ExpandedDomAPI;
+
 namespace Ivony.Html.Templates
 {
   public static class TemplateExtensions
@@ -97,9 +99,10 @@ namespace Ivony.Html.Templates
           if ( items.Length > count )
             break;
 
-          for ( int i = lastContainerIndex; i > firstContainerIndex; i-- )
-            container.AddCopy( lastContainerIndex + 1, container.Nodes().ElementAt( i ) );
 
+          var range = container.Nodes().SkipWhile( e => e.Equals( firstContainer ) ).TakeWhile( e => e.Equals( lastContainer ) ).ToArray();
+
+          lastContainer.AddCopyAfterSelf( range );
 
           items = container.Find( selector ).ToArray();
 

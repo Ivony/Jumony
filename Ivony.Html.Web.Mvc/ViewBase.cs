@@ -226,7 +226,7 @@ namespace Ivony.Html.Web.Mvc
       foreach ( var actionLink in links )
       {
 
-        lock ( actionLink )//锁住元素不被修改
+        lock ( actionLink.SyncRoot )//锁住元素不被修改
         {
 
           var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];

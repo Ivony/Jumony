@@ -18,9 +18,9 @@ namespace Ivony.Html.MSHTMLAdapter
     private IHTMLDocument4 _document4;
     private IHTMLDocument5 _document5;
 
-    public DocumentAdapter( object document, Uri documentUri )
+    public DocumentAdapter( object document )
     {
-      _documentUri = documentUri;
+      //_documentUri = documentUri;
 
       _raw = document;
 

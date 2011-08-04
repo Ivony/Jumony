@@ -100,7 +100,7 @@ namespace Ivony.Html.Templates
             break;
 
 
-          var range = container.Nodes().SkipWhile( e => e.Equals( firstContainer ) ).TakeWhile( e => e.Equals( lastContainer ) ).ToArray();
+          var range = container.Nodes().SkipWhile( n => !n.Equals( firstContainer.NextNode() ) ).TakeWhile( n => !n.Equals( lastContainer.NextNode() ) ).ToArray();
 
           lastContainer.AddCopyAfterSelf( range );
 
@@ -123,8 +123,8 @@ namespace Ivony.Html.Templates
 
 
           container.Nodes()
-            .SkipWhile( n => !n.Equals( lastAvailableContainer ) )
-            .TakeWhile( n => !n.Equals( lastContainer ) )
+            .SkipWhile( n => !n.Equals( lastAvailableContainer.NextNode() ) )
+            .TakeWhile( n => !n.Equals( lastContainer.NextNode() ) )
             .Remove();
 
         }

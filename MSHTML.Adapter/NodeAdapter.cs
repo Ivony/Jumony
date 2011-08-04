@@ -42,7 +42,7 @@ namespace Ivony.Html.MSHTMLAdapter
 
     public IHtmlDocument Document
     {
-      get { throw new NotImplementedException(); }
+      get { return new DocumentAdapter( _node2.ownerDocument ); }
     }
 
   }

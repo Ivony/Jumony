@@ -549,15 +549,24 @@ namespace Ivony.Html
         {
           var textNode = node as IHtmlTextNode;
           if ( textNode != null )
+          {
             result.Add( AddCopy( container, index, textNode ) );
+            continue;
+          }
 
           var comment = node as IHtmlComment;
           if ( comment != null )
+          {
             result.Add( AddCopy( container, index, comment ) );
+            continue;
+          }
 
           var element = node as IHtmlElement;
           if ( element != null )
+          {
             result.Add( AddCopy( container, index, element ) );
+            continue;
+          }
 
           throw new NotSupportedException();
         }

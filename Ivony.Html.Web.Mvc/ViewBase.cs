@@ -8,6 +8,7 @@ using System.Web.Routing;
 using System.Web.Caching;
 using System.IO;
 using System.Web.Mvc.Html;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -235,6 +236,24 @@ namespace Ivony.Html.Web.Mvc
 
           routeValues["action"] = action;
           routeValues["controller"] = controller;
+
+
+          var inherits = actionLink.Attribute( "inherits" ).Value();
+
+          if ( inherits != null )
+          {
+            foreach ( var key in inherits.Split( ',' ) )
+            {
+
+              if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
+                continue;
+
+              if ( RouteData.Values.ContainsKey( key ) )
+                routeValues.Add( key, RouteData.Values[key] );
+
+            }
+          }
+
 
 
           foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )

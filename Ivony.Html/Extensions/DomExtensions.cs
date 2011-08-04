@@ -240,7 +240,6 @@ namespace Ivony.Html
       }
     }
 
-
     /// <summary>
     /// 尝试为容器添加一个文档碎片
     /// </summary>
@@ -260,6 +259,7 @@ namespace Ivony.Html
       return fragment.Into( container, index );
 
     }
+
 
 
     /// <summary>
@@ -282,7 +282,6 @@ namespace Ivony.Html
       return AddFragment( container, fragment );
 
     }
-
 
     /// <summary>
     /// 尝试为容器添加一个文档碎片
@@ -330,7 +329,6 @@ namespace Ivony.Html
       }
     }
 
-
     /// <summary>
     /// 添加节点的副本
     /// </summary>
@@ -374,7 +372,6 @@ namespace Ivony.Html
       }
     }
 
-
     /// <summary>
     /// 添加节点的副本
     /// </summary>
@@ -394,7 +391,7 @@ namespace Ivony.Html
       return container.AddComment( index, comment.Comment );
     }
 
-
+    
 
     /// <summary>
     /// 添加节点的副本
@@ -416,7 +413,6 @@ namespace Ivony.Html
         return AddCopy( container, container.Nodes().Count(), element );
       }
     }
-
 
     /// <summary>
     /// 添加节点的副本
@@ -448,6 +444,7 @@ namespace Ivony.Html
     }
 
 
+
     /// <summary>
     /// 添加节点的副本
     /// </summary>
@@ -469,7 +466,6 @@ namespace Ivony.Html
         return AddCopy( container, container.Nodes().Count(), node );
       }
     }
-
 
     /// <summary>
     /// 添加节点的副本
@@ -526,7 +522,6 @@ namespace Ivony.Html
         return AddCopy( container, container.Nodes().Count(), node );
       }
     }
-
 
     /// <summary>
     /// 添加节点集合的副本
@@ -652,7 +647,7 @@ namespace Ivony.Html
     /// <param name="nodes">要移除的节点</param>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
     /// <exception cref="System.InvalidOperationException">若节点不是位于同一文档</exception>
-    public static void Remove<T>( this IEnumerable<T> nodes ) where T : IHtmlNode
+    public static void Remove( this IEnumerable<IHtmlNode> nodes )
     {
 
       if ( !nodes.Any() )

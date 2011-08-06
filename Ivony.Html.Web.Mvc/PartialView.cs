@@ -30,12 +30,23 @@ namespace Ivony.Html.Web.Mvc
 
     protected override void ProcessMain()
     {
+
       if ( Container == null )
+      {
+        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin LoadContainer" );
         Container = LoadContainer();
+        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End LoadContainer" );
+      }
 
+
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ProcessContaner" );
       ProcessContainer();
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ProcessContaner" );
 
+
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ProcessActionLinks" );
       ProcessActionLinks( Container );
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ProcessActionLinks" );
 
       if ( VirtualPath != null )//若不是内嵌部分视图，则应当进行 URL 转换。
         ResolveUri( Container );

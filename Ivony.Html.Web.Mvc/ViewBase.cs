@@ -198,7 +198,7 @@ namespace Ivony.Html.Web.Mvc
     protected abstract void ProcessMain();
 
     /// <summary>
-    /// 派生类重写此方法渲染 HTML 内容。
+    /// 派生类实现此方法渲染 HTML 内容。
     /// </summary>
     /// <returns></returns>
     protected abstract string RenderContent();
@@ -336,7 +336,7 @@ namespace Ivony.Html.Web.Mvc
 
         uri = uri.MakeRelativeUri( HttpContext.Request.Url );
 
-        attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
+        attribute.Element.SetAttribute( attribute.Name, uri.ToString() );
 
       }
     }
@@ -345,7 +345,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 渲染部分视图
     /// </summary>
-    /// <param name="partialElement"></param>
+    /// <param name="partialElement">partial 元素</param>
     /// <param name="writer"></param>
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
     {
@@ -382,11 +382,14 @@ namespace Ivony.Html.Web.Mvc
 
       }
 
-
-
-
     }
 
+
+
+    /// <summary>
+    /// 创建 HtmlHelper 对象
+    /// </summary>
+    /// <returns></returns>
     protected HtmlHelper MakeHelper()
     {
 
@@ -427,21 +430,38 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public class PartialRenderAdapter : HtmlElementAdapter
+    /// <summary>
+    /// 用于渲染部分视图的 HTML 渲染代理
+    /// </summary>
+    public sealed class PartialRenderAdapter : HtmlElementAdapter
     {
 
       private ViewBase _view;
 
+      /// <summary>
+      /// 创建 PartialRenderAdapter 实例
+      /// </summary>
+      /// <param name="view"></param>
       public PartialRenderAdapter( ViewBase view )
       {
         _view = view;
       }
 
+      
+      /// <summary>
+      /// 一个 CSS 选择器，用于选取 partial 标签
+      /// </summary>
       protected override string CssSelector
       {
         get { return "partial"; }
       }
 
+
+      /// <summary>
+      /// 渲染 partial 标签
+      /// </summary>
+      /// <param name="element">partial 标签</param>
+      /// <param name="writer">用于渲染的文本编写器</param>
       public override void Render( IHtmlElement element, TextWriter writer )
       {
 

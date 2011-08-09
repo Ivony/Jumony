@@ -10,7 +10,7 @@ namespace Ivony.Html.Web.Mvc
 {
 
   /// <summary>
-  /// 配合ASP.NET MVC验证模型使用的表单验证器基类
+  /// 配合 ASP.NET MVC 验证模型使用的表单验证器
   /// </summary>
   public class MvcFormValidator : HtmlFormValidator
   {
@@ -18,6 +18,11 @@ namespace Ivony.Html.Web.Mvc
 
     private ModelStateDictionary _modelStates;
 
+    /// <summary>
+    /// 创建 MvcFormValidator 的实例
+    /// </summary>
+    /// <param name="form">所针对的表单对象</param>
+    /// <param name="modelStates">表单（模型）验证信息</param>
     public MvcFormValidator( HtmlForm form, ModelStateDictionary modelStates )
       : base( form )
     {
@@ -37,7 +42,10 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-
+    
+    /// <summary>
+    /// 配合 ASP.NET MVC 验证模型使用的字段验证器
+    /// </summary>
     protected class MvcFieldValidator : HtmlFieldValidator
     {
 

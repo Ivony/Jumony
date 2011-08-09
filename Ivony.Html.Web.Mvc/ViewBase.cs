@@ -334,7 +334,7 @@ namespace Ivony.Html.Web.Mvc
           continue;
 
 
-        //uri = uri.MakeRelativeUri( HttpContext.Request.Url );
+        uri = uri.MakeRelativeUri( HttpContext.Request.Url );
 
         attribute.Element.SetAttribute( attribute.Name, uri.AbsoluteUri );
 

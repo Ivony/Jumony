@@ -13,15 +13,26 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 页面视图
+  /// </summary>
   public abstract class PageView : ViewBase
   {
+    
+    /// <summary>
+    /// 创建一个页面视图实例
+    /// </summary>
+    /// <param name="virtualPath">HTML 页面的虚拟路径</param>
     public PageView( string virtualPath )
     {
       VirtualPath = virtualPath;
     }
 
 
-
+    /// <summary>
+    /// 创建一个页面视图实例
+    /// </summary>
     protected PageView()
     {
 
@@ -30,6 +41,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 获取页面文档对象
+    /// </summary>
     protected IHtmlDocument Document
     {
       get;
@@ -37,12 +51,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 渲染输出内容
+    /// </summary>
+    /// <returns>渲染的 HTML</returns>
     protected override string RenderContent()
     {
       return Document.Render( RenderAdapters.ToArray() );
     }
 
 
+    /// <summary>
+    /// 文档主处理流程
+    /// </summary>
     protected override void ProcessMain()
     {
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin LoadDocument" );
@@ -69,12 +90,20 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 加载文档
+    /// </summary>
+    /// <returns></returns>
     protected virtual IHtmlDocument LoadDocument()
     {
       return HtmlProviders.LoadDocument( HttpContext, VirtualPath );
     }
 
 
+    /// <summary>
+    /// 派生类重写此方法自定义文档处理逻辑
+    /// </summary>
     protected abstract void ProcessDocument();
 
 

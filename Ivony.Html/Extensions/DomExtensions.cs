@@ -773,6 +773,7 @@ namespace Ivony.Html
       return InnerText( element, text, false );
     }
 
+
     /// <summary>
     /// 使用指定文本替换元素内容（警告，此方法会清除元素所有内容）
     /// </summary>

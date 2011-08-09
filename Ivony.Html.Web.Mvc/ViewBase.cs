@@ -334,7 +334,7 @@ namespace Ivony.Html.Web.Mvc
           continue;
 
 
-        uri = uri.MakeRelativeUri( HttpContext.Request.Url );
+        uri = HttpContext.Request.Url.MakeRelativeUri( uri );
 
         attribute.Element.SetAttribute( attribute.Name, uri.ToString() );
 
@@ -447,7 +447,7 @@ namespace Ivony.Html.Web.Mvc
         _view = view;
       }
 
-      
+
       /// <summary>
       /// 一个 CSS 选择器，用于选取 partial 标签
       /// </summary>

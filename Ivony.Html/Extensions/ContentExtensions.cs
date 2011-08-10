@@ -169,7 +169,7 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( HtmlSpecification.IsUriValue( attribute ) )
+          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
             builder.AppendFormat( "=\"{0}\"", attribute.AttributeValue );
           else
             builder.AppendFormat( "=\"{0}\"", HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) );
@@ -346,7 +346,7 @@ namespace Ivony.Html
     /// <returns>呈现的 HTML</returns>
     public static string Render( this IHtmlNode node )
     {
-      using ( var writer = new StringWriter( CultureInfo.InvariantCulture) )
+      using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
         Render( node, writer );
 

@@ -125,6 +125,48 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 判断一个属性值的值是否应被视为脚本。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>其值是否应被视为脚本</returns>
+    public static bool IsScriptValue( IHtmlAttribute attribute )
+    {
+            if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+
+      var elementName = attribute.Element.Name;
+
+      switch ( attribute.Name.ToLowerInvariant() )
+      {
+        case "onblur":
+        case "onchange":
+        case "onclick":
+        case "ondbclick":
+        case "onfocus":
+        case "onkeydown":
+        case "onkeypress":
+        case "onkeyup":
+        case "onload":
+        case "onmousedown":
+        case "onmousemove":
+        case "onmouseout":
+        case "onmouseover":
+        case "onmouseup":
+        case "onreset":
+        case "onselect":
+        case "onsubmit":
+        case "onunload":
+          return true;
+      }
+
+
+
+      return false;
+    }
+
+
 
 
 

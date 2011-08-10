@@ -108,8 +108,6 @@ namespace Ivony.Html
       if ( stream == null )
         throw new ArgumentNullException( "stream" );
 
-      if ( uri == null )
-        throw new ArgumentNullException( "uri" );
 
 
       return LoadDocument( parser, new StreamReader( stream, true ), uri );
@@ -129,9 +127,6 @@ namespace Ivony.Html
 
       if ( reader == null )
         throw new ArgumentNullException( "reader" );
-
-      if ( uri == null )
-        throw new ArgumentNullException( "uri" );
 
 
       var html = reader.ReadToEnd();

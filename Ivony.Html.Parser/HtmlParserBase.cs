@@ -8,6 +8,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// 协助实现 IHtmlParser 接口
+  /// </summary>
   public abstract class HtmlParserBase : IHtmlParser
   {
 
@@ -164,9 +168,10 @@ namespace Ivony.Html.Parser
     /// 处理文本节点
     /// </summary>
     /// <param name="text">HTML文本信息</param>
-    protected virtual void ProcessText( HtmlTextContent text )
+    /// <returns>处理过程中所创建的文本节点，若不支持则返回 null</returns>
+    protected virtual IHtmlTextNode ProcessText( HtmlTextContent text )
     {
-      CreateTextNode( text.Html );
+      return CreateTextNode( text.Html );
     }
 
     /// <summary>
@@ -185,7 +190,8 @@ namespace Ivony.Html.Parser
     /// 处理元素开始标签
     /// </summary>
     /// <param name="beginTag">开始标签信息</param>
-    protected virtual void ProcessBeginTag( HtmlBeginTag beginTag )
+    /// <returns>处理过程中所创建的元素对象，若不支持则返回 null</returns>
+    protected virtual IHtmlElement ProcessBeginTag( HtmlBeginTag beginTag )
     {
       string tagName = beginTag.TagName;
       bool selfClosed = beginTag.SelfClosed;
@@ -201,7 +207,7 @@ namespace Ivony.Html.Parser
 
 
 
-      //检查父标签是否可选结束标记，并作相应处理
+      //检查父级是否可选结束标记，并作相应处理
       {
         var element = CurrentContainer as IHtmlElement;
         if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
@@ -242,6 +248,9 @@ namespace Ivony.Html.Parser
         //加入容器堆栈
         if ( !selfClosed )
           ContainerStack.Push( element );
+
+
+        return element;
       }
     }
 
@@ -298,23 +307,31 @@ namespace Ivony.Html.Parser
     /// 处理结束标签
     /// </summary>
     /// <param name="match">结束标签信息</param>
-    protected virtual void ProcessEndTag( HtmlEndTag endTag )
+    /// <returns>相关的元素对象，若不支持则返回null</returns>
+    protected virtual IHtmlElement ProcessEndTag( HtmlEndTag endTag )
     {
       var tagName = endTag.TagName;
 
 
-      if ( ContainerStack.OfType<DomElement>().Select( e => e.Name ).Contains( tagName, StringComparer.OrdinalIgnoreCase ) )
+      if ( ContainerStack.OfType<IHtmlElement>().Select( e => e.Name ).Contains( tagName, StringComparer.OrdinalIgnoreCase ) )
       {
+
+        IHtmlElement element;
+
         while ( true )
         {
-          var element = ContainerStack.Pop() as DomElement;
+          element = ContainerStack.Pop() as IHtmlElement;
           if ( element.Name.EqualsIgnoreCase( tagName ) )
             break;
         }
+
+        return element;
       }
       else
       {
         ProcessEndTagMissingBeginTag( endTag );
+
+        return null;
       }
 
       //无需退出CData标签，读取器会自动退出
@@ -338,9 +355,10 @@ namespace Ivony.Html.Parser
     /// 处理 HTML 注释
     /// </summary>
     /// <param name="match">HTML 注释信息</param>
-    protected virtual void ProcessComment( HtmlCommentContent comment )
+    /// <returns>处理过程中所创建的注释对象，若不支持则返回 null</returns>
+    protected virtual IHtmlComment ProcessComment( HtmlCommentContent comment )
     {
-      CreateCommet( comment.Comment );
+      return CreateCommet( comment.Comment );
     }
 
 
@@ -360,10 +378,10 @@ namespace Ivony.Html.Parser
     /// 处理特殊节点
     /// </summary>
     /// <param name="special">特殊的 HTML 标签</param>
-    /// <returns>创建的特殊节点的匹配</returns>
-    protected virtual void ProcessSpecial( HtmlSpecialTag special )
+    /// <returns>处理过程中所创建的特殊标签节点，若不支持则返回 null</returns>
+    protected virtual IHtmlSpecial ProcessSpecial( HtmlSpecialTag special )
     {
-      CreateSpecial( special.Html );
+      return CreateSpecial( special.Html );
     }
 
     protected virtual IHtmlSpecial CreateSpecial( string html )

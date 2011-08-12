@@ -5,9 +5,21 @@ using System.Text;
 
 namespace Ivony.Html.Parser.ContentModels
 {
+
+  /// <summary>
+  /// 描述一个 HTML 开始标签
+  /// </summary>
   public sealed class HtmlBeginTag : HtmlContentFragment
   {
 
+
+    /// <summary>
+    /// 创建一个 HtmlBeginTag 对象
+    /// </summary>
+    /// <param name="fragment">内容碎片</param>
+    /// <param name="tagName">标签名</param>
+    /// <param name="selfClosed">是否自结束标签</param>
+    /// <param name="attibutes">属性设置</param>
     public HtmlBeginTag( HtmlContentFragment fragment, string tagName, bool selfClosed, IEnumerable<HtmlAttributeSetting> attibutes )
       : base( fragment )
     {
@@ -16,13 +28,19 @@ namespace Ivony.Html.Parser.ContentModels
       SelfClosed = selfClosed;
     }
 
-
+    /// <summary>
+    /// 标签名
+    /// </summary>
     public string TagName
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 是否为自结束标签
+    /// </summary>
     public bool SelfClosed
     {
       get;
@@ -30,7 +48,9 @@ namespace Ivony.Html.Parser.ContentModels
     }
 
 
-
+    /// <summary>
+    /// 标签的属性设置
+    /// </summary>
     public IEnumerable<HtmlAttributeSetting> Attributes
     {
       get;

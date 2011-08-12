@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser.ContentModels
 {
+
+  /// <summary>
+  /// 描述一个HTML标签属性
+  /// </summary>
   public sealed class HtmlAttributeSetting : HtmlContentFragment
   {
 
@@ -15,12 +19,18 @@ namespace Ivony.Html.Parser.ContentModels
       Value = value;
     }
 
+    /// <summary>
+    /// 属性名
+    /// </summary>
     public string Name
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 属性值
+    /// </summary>
     public string Value
     {
       get;

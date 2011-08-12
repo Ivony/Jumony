@@ -12,6 +12,7 @@ namespace Ivony.Html.Parser
   public abstract class DomNode : DomObject, IHtmlNode
   {
 
+
     private IDomContainer _container;
 
     /// <summary>

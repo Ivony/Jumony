@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Parser.ContentModels
 {
+  
+  /// <summary>
+  /// 描述一个 HTML 结束标签
+  /// </summary>
   public sealed class HtmlEndTag : HtmlContentFragment
   {
     public HtmlEndTag( HtmlContentFragment info, string tagName )
@@ -13,6 +17,10 @@ namespace Ivony.Html.Parser.ContentModels
       TagName = tagName;
     }
 
+
+    /// <summary>
+    /// 标签名
+    /// </summary>
     public string TagName
     {
       get;

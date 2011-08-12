@@ -174,6 +174,11 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 创建属性设置内容对象
+    /// </summary>
+    /// <param name="match">属性设置的匹配</param>
+    /// <returns>HTML 属性设置的内容对象</returns>
     protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( Match match )
     {
       foreach ( Capture capture in match.Groups["attribute"].Captures )

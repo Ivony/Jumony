@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
@@ -12,6 +13,8 @@ namespace Ivony.Html.Parser
   /// </summary>
   public abstract class DomObject : IHtmlDomObject
   {
+
+
     object IHtmlDomObject.RawObject
     {
       get { return this; }
@@ -27,12 +30,24 @@ namespace Ivony.Html.Parser
     }
 
 
+    protected virtual HtmlContentFragment ContentFragment
+    {
+      get { return null; }
+    }
+
+
     /// <summary>
     /// 获取原始的HTML
     /// </summary>
     public virtual string RawHtml
     {
-      get { return null; }
+      get
+      {
+        if ( ContentFragment == null )
+          return null;
+
+        return ContentFragment.Html;
+      }
     }
   }
 }

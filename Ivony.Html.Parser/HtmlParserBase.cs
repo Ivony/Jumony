@@ -167,11 +167,11 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理文本节点
     /// </summary>
-    /// <param name="text">HTML文本信息</param>
+    /// <param name="textContent">HTML文本信息</param>
     /// <returns>处理过程中所创建的文本节点，若不支持则返回 null</returns>
-    protected virtual IHtmlTextNode ProcessText( HtmlTextContent text )
+    protected virtual IHtmlTextNode ProcessText( HtmlTextContent textContent )
     {
-      return CreateTextNode( text.Html );
+      return CreateTextNode( textContent.Html );
     }
 
     /// <summary>
@@ -356,9 +356,9 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="match">HTML 注释信息</param>
     /// <returns>处理过程中所创建的注释对象，若不支持则返回 null</returns>
-    protected virtual IHtmlComment ProcessComment( HtmlCommentContent comment )
+    protected virtual IHtmlComment ProcessComment( HtmlCommentContent commentContent )
     {
-      return CreateCommet( comment.Comment );
+      return CreateCommet( commentContent.Comment );
     }
 
 
@@ -377,13 +377,18 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理特殊节点
     /// </summary>
-    /// <param name="special">特殊的 HTML 标签</param>
+    /// <param name="specialTag">特殊的 HTML 标签</param>
     /// <returns>处理过程中所创建的特殊标签节点，若不支持则返回 null</returns>
-    protected virtual IHtmlSpecial ProcessSpecial( HtmlSpecialTag special )
+    protected virtual IHtmlSpecial ProcessSpecial( HtmlSpecialTag specialTag )
     {
-      return CreateSpecial( special.Html );
+      return CreateSpecial( specialTag.Html );
     }
 
+    /// <summary>
+    /// 创建特殊标签节点并加入当前容器
+    /// </summary>
+    /// <param name="html">特殊标签的 HTML 内容</param>
+    /// <returns>创建的特殊标签节点</returns>
     protected virtual IHtmlSpecial CreateSpecial( string html )
     {
       return Provider.AddSpecial( CurrentContainer, html );

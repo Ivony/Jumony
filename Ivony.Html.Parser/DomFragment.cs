@@ -9,7 +9,7 @@ namespace Ivony.Html.Parser
 {
 
 
-  public class DomFragment : IHtmlFragment, IDomContainer
+  public class DomFragment : DomObject, IHtmlFragment, IDomContainer
   {
 
 
@@ -93,17 +93,12 @@ namespace Ivony.Html.Parser
       return _nodeCollection.HtmlNodes;
     }
 
-    public object RawObject
+    public override string RawHtml
     {
-      get { return this; }
+      get { return _rawHtml; }
     }
 
-    public string RawHtml
-    {
-      get { return null; }
-    }
-
-    public IHtmlDocument Document
+    public override IHtmlDocument Document
     {
       get { return _manager.Document; }
     }

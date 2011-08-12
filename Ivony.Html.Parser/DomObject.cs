@@ -30,7 +30,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    protected virtual HtmlContentFragment ContentFragment
+    protected internal virtual HtmlContentFragment ContentFragment
     {
       get;
       internal set;

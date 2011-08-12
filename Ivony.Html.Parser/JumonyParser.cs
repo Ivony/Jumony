@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
@@ -27,6 +28,36 @@ namespace Ivony.Html.Parser
     {
       //忽略多出的结束标签
     }
+
+
+    protected override IHtmlTextNode ProcessText( HtmlTextContent textContent )
+    {
+      var textNode = base.ProcessText( textContent ).CastTo<DomTextNode>();
+      textNode.ContentFragment = textContent;
+      return textNode;
+    }
+
+    protected override IHtmlComment ProcessComment( HtmlCommentContent commentContent )
+    {
+      var commentObject = base.ProcessComment( commentContent ).CastTo<DomComment>();
+      commentObject.ContentFragment = commentContent;
+      return commentObject;
+    }
+
+    protected override IHtmlSpecial ProcessSpecial( HtmlSpecialTag specialTag )
+    {
+      var specialObject = base.ProcessSpecial( specialTag ).CastTo<DomSpecial>();
+      specialObject.ContentFragment = specialTag;
+      return specialObject;
+    }
+
+    public override IHtmlDocument Parse( string html, Uri url )
+    {
+      var document = base.Parse( html, url ).CastTo<DomDocument>();
+      document.ContentFragment = new HtmlContentFragment( Reader, 0, Reader.HtmlText.Length );
+      return document;
+    }
+
 
 
 

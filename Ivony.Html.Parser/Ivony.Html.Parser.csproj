@@ -60,10 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentModels\HtmlAttributeSetting.cs" />
-    <Compile Include="ContentModels\HtmlCommentObject.cs" />
+    <Compile Include="ContentModels\HtmlCommentContent.cs" />
     <Compile Include="ContentModels\HtmlEndTag.cs" />
     <Compile Include="ContentModels\HtmlSpecialTag.cs" />
-    <Compile Include="ContentModels\HtmlTextObject.cs" />
+    <Compile Include="ContentModels\HtmlTextContent.cs" />
     <Compile Include="DomAttribute.cs" />
     <Compile Include="DomComment.cs" />
     <Compile Include="DomDocument.cs" />

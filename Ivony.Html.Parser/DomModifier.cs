@@ -60,7 +60,7 @@ namespace Ivony.Html.Parser
       var domNode = node as DomNode;
 
       if ( domNode == null )
-        throw new NotSupportedException( "只能移除特定类型节点" );
+        throw new NotSupportedException( "只能操作特定类型节点" );
 
       return domNode;
     }

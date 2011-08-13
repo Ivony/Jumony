@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Html;
 using Ivony.Fluent;
+using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
@@ -23,8 +24,6 @@ namespace Ivony.Html.Parser
     public DomFragment( DomFragmentManager manager, string html )
       : this( manager )
     {
-      _rawHtml = html;
-
 
       var parser = new FragmentParser();
 
@@ -71,6 +70,7 @@ namespace Ivony.Html.Parser
 
           ParseInternal( html );
 
+          fragment.ContentFragment = new HtmlContentFragment( Reader, 0, Reader.HtmlText.Length );
         }
       }
 
@@ -80,7 +80,6 @@ namespace Ivony.Html.Parser
     private object _sync = new object();
     private DomFragmentManager _manager;
     private DomNodeCollection _nodeCollection;
-    private string _rawHtml;
 
     public DomNodeCollection NodeCollection
     {
@@ -91,11 +90,6 @@ namespace Ivony.Html.Parser
     public IEnumerable<IHtmlNode> Nodes()
     {
       return _nodeCollection.HtmlNodes;
-    }
-
-    public override string RawHtml
-    {
-      get { return _rawHtml; }
     }
 
     public override IHtmlDocument Document

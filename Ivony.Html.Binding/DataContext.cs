@@ -14,7 +14,7 @@ namespace Ivony.Html.Binding
     }
 
 
-    private Hashtable _dataItems = new Hashtable();
+    private Hashtable _dataItems = Hashtable.Synchronized( new Hashtable() );
 
 
     public object GetData( IHtmlNode node )
@@ -31,22 +31,27 @@ namespace Ivony.Html.Binding
         return null;
 
 
-      if ( asContainer )
+
+      lock ( _dataItems.SyncRoot )
       {
-        var _container = node as IHtmlContainer;
 
-        if ( _container != null && _dataItems.Contains( _container ) )
-          return _dataItems[_container];
+        if ( asContainer )
+        {
+          var _container = node as IHtmlContainer;
+
+          if ( _container != null && _dataItems.Contains( _container ) )
+            return _dataItems[_container];
+        }
+
+
+        var container = node.Container;
+
+        if ( _dataItems.Contains( container ) )
+          return _dataItems[container];
+
+        else
+          return GetData( container as IHtmlNode, false );
       }
-
-
-      var container = node.Container;
-
-      if ( _dataItems.Contains( container ) )
-        return _dataItems[container];
-
-      else
-        return GetData( container as IHtmlNode, false );
     }
 
 

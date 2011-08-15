@@ -30,6 +30,9 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 分析器所提供的内容碎片
+    /// </summary>
     protected internal virtual HtmlContentFragment ContentFragment
     {
       get;

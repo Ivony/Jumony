@@ -9,11 +9,8 @@ namespace Ivony.Html.Binding
   public class DataContext
   {
 
-    private BindingContext _bindingContext;
-
-    public DataContext( BindingContext bindingContext )
+    public DataContext()
     {
-      _bindingContext = bindingContext;
     }
 
 

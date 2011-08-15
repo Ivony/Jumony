@@ -44,10 +44,10 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        if ( ContentFragment == null )
+        //if ( ContentFragment == null )
           return null;
 
-        return ContentFragment.Html;
+        //return ContentFragment.Html;
       }
     }
   }

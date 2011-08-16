@@ -74,6 +74,7 @@
     <Compile Include="HtmlBindingSheet.cs" />
     <Compile Include="IDataSource.cs" />
     <Compile Include="EnvironmentExpressions.cs" />
+    <Compile Include="IElementBinder.cs" />
     <Compile Include="IHtmlBindingSheet.cs" />
     <Compile Include="IHtmlContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

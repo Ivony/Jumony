@@ -51,13 +51,15 @@ namespace Ivony.Html.Parser
       return specialObject;
     }
 
+
+    /*
     public override IHtmlDocument Parse( string html, Uri url )
     {
       var document = base.Parse( html, url ).CastTo<DomDocument>();
       document.ContentFragment = new HtmlContentFragment( Reader, 0, Reader.HtmlText.Length );
       return document;
     }
-
+    */
 
 
 

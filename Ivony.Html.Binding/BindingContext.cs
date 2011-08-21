@@ -120,7 +120,7 @@ namespace Ivony.Html.Binding
         return data;
 
       IHtmlElement container;
-      while ( (container = node.Parent()) != null )
+      while ( ( container = node.Parent() ) != null )
       {
         data = GetDataContextCore( container );
         if ( data != null )
@@ -223,6 +223,9 @@ namespace Ivony.Html.Binding
       _thread = Thread.CurrentThread;
 
       _exitBehavior = exitBehavior;
+
+
+      DataContext = new DataContext( this );
     }
 
     /// <summary>
@@ -567,6 +570,8 @@ namespace Ivony.Html.Binding
       }
     }
 
+
+    public DataContext DataContext { get; private set; }
   }
 
 

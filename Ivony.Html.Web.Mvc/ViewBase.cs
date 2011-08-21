@@ -369,7 +369,6 @@ namespace Ivony.Html.Web.Mvc
 
         foreach ( var attribute in partialElement.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
         {
-
           var key = attribute.Name.Substring( 1 );
           var value = attribute.Value();
 

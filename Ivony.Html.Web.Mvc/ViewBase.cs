@@ -365,7 +365,18 @@ namespace Ivony.Html.Web.Mvc
 
         var helper = MakeHelper();
 
-        writer.Write( helper.Action( actionName: action, controllerName: controller ) );
+        var routeValues = new RouteValueDictionary();
+
+        foreach ( var attribute in partialElement.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+        {
+
+          var key = attribute.Name.Substring( 1 );
+          var value = attribute.Value();
+
+          routeValues.Add( key, value );
+        }
+
+        writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
 
         return;
       }

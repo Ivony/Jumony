@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Web;
+using System.Web.Hosting;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -34,11 +35,17 @@ namespace Ivony.Html.Web.Mvc
       base.OnResultExecuted( filterContext );
     }
 
+
+
+    /// <summary>
+    /// 获取缓存策略提供程序
+    /// </summary>
     protected IHtmlCachePolicyProvider CachePolicyProvider
     {
       get;
       set;
     }
+
 
 
     /// <summary>
@@ -69,13 +76,25 @@ namespace Ivony.Html.Web.Mvc
       UpdateCache( cached, cacheKey, cachePolicy );
     }
 
-    protected void UpdateCache( ICachedResponse cached, string cacheKey, HtmlCachePolicy cachePolicy )
+
+
+    /// <summary>
+    /// 更新缓存数据
+    /// </summary>
+    /// <param name="cacheItem">可被缓存的响应数据</param>
+    /// <param name="cacheKey">缓存键</param>
+    /// <param name="cachePolicy">缓存策略</param>
+    protected void UpdateCache( ICachedResponse cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
     {
-      throw new NotImplementedException();
+      HostingEnvironment.Cache.WriteCache( cacheItem, cacheKey, cachePolicy );
     }
 
 
-
+    /// <summary>
+    /// 从执行结果中获取可被缓存的响应数据
+    /// </summary>
+    /// <param name="result">Action 执行结果</param>
+    /// <returns>可被缓存的响应数据，失败则返回 null</returns>
     protected ICachedResponse GetCachedResponse( ActionResult result )
     {
 
@@ -98,7 +117,15 @@ namespace Ivony.Html.Web.Mvc
 
     private ICachedResponse CreateCachedResponse( ContentResult content )
     {
-      throw new NotImplementedException();
+      var response = new RawResponse()
+      {
+        Content = content.Content,
+        ContentEncoding = content.ContentEncoding,
+      };
+
+      response.Headers.Add( "ContentType", content.ContentType );
+
+      return response;
     }
   }
 }

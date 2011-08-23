@@ -216,7 +216,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 派生类调用此方法处理 Action 链接
+    /// 派生类调用此方法处理 Action URL
     /// </summary>
     /// <param name="container"></param>
     protected void ProcessActionUrls( IHtmlContainer container )

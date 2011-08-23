@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Routing;
 using System.Web;
+using System.Web.Caching;
 
 namespace Ivony.Html.Web
 {
@@ -49,40 +50,13 @@ namespace Ivony.Html.Web
 
 
 
-    /*
-    /// <summary>
-    /// 获取 HtmlHead 对象，用于操作 &lt;head&gt; 元素
-    /// </summary>
-    /// <param name="document">要获取 &lt;head&gt; 元素的文档</param>
-    /// <returns></returns>
-    public static HtmlHead Head( this IHtmlDocument document )
+    public static void WriteCache( this Cache cache, object cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
     {
-      if ( document == null )
-        throw new ArgumentNullException( "document" );
-
-      var htmlElement = document.Elements( "html" ).SingleOrDefault();
-
-      if ( htmlElement == null )
-        return null;
-
-      var headElement = EnsureHeader( htmlElement );
-
-      return new HtmlHead( headElement );
+      cache.Insert( cacheKey, cacheItem, cachePolicy.Dependency, DateTime.UtcNow + cachePolicy.Duration, Cache.NoSlidingExpiration );
     }
 
 
 
-    private static IHtmlElement EnsureHeader( IHtmlElement htmlElement )
-    {
-      var headElement = htmlElement.Elements( "head" ).SingleOrDefault();
-      if ( headElement == null )
-      {
-        var freeHead = htmlElement.Document.GetNodeFactory().CreateElement( "head" );
-        headElement = freeHead.InsertTo( htmlElement, 0 );
-      }
-      return headElement;
-    }
-    */
 
 
 

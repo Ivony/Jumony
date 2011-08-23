@@ -219,72 +219,55 @@ namespace Ivony.Html.Web.Mvc
     /// 派生类调用此方法处理 Action 链接
     /// </summary>
     /// <param name="container"></param>
-    protected void ProcessActionLinks( IHtmlContainer container )
+    protected void ProcessActionUrls( IHtmlContainer container )
     {
-      var links = container.Find( "a[action]" );
+      var elements = container.Find( "a[action] , img[action] , form[action][controller]" );
 
-      foreach ( var actionLink in links )
+      foreach ( var actionElement in elements )
       {
 
-        lock ( actionLink.SyncRoot )//锁住元素不被修改
+        lock ( actionElement.SyncRoot )//锁住元素不被修改
         {
 
-          var action = actionLink.Attribute( "action" ).Value() ?? RouteData.Values["action"];
-          var controller = actionLink.Attribute( "controller" ).Value() ?? RouteData.Values["controller"];
+          var action = actionElement.Attribute( "action" ).Value() ?? RouteData.Values["action"].CastTo<string>();
+          var controller = actionElement.Attribute( "controller" ).Value() ?? RouteData.Values["controller"].CastTo<string>();
+
 
           var routeValues = new RouteValueDictionary();
 
-          routeValues["action"] = action;
-          routeValues["controller"] = controller;
 
+          actionElement.Attribute( "action" ).Remove();
 
-          var inherits = actionLink.Attribute( "inherits" ).Value();
-
-          if ( inherits != null )
-          {
-            foreach ( var key in inherits.Split( ',' ) )
-            {
-
-              if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
-                continue;
-
-              if ( RouteData.Values.ContainsKey( key ) )
-                routeValues.Add( key, RouteData.Values[key] );
-
-            }
-          }
-
-
-
-          foreach ( var attribute in actionLink.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
-          {
-
-            var key = attribute.Name.Substring( 1 );
-            var value = attribute.Value();
-
-            routeValues.Remove( key );
-
-            routeValues.Add( key, value );
-            attribute.Remove();
-          }
-
-
-          actionLink.Attribute( "action" ).Remove();
-
-          var controllerAttribute = actionLink.Attribute( "controller" );
+          var controllerAttribute = actionElement.Attribute( "controller" );
           if ( controllerAttribute != null )
             controllerAttribute.Remove();
 
 
+          var url = Url.Action( action, controller, routeValues );
 
 
-          var href = Url.RouteUrl( routeValues );
+          string attributeName;
+          switch ( actionElement.Name.ToLowerInvariant() )
+          { 
+            case "a":
+              attributeName = "href";
+              break;
+            case "form":
+              attributeName = "action";
+              break;
+            case "img":
+              attributeName = "src";
+              break;
 
-          if ( href == null )
-            actionLink.Attribute( "href" ).Remove();
+            default:
+              throw new Exception();//不可能出现的错误
+          }
+
+          if ( url == null )
+            actionElement.Attribute( attributeName ).Remove();
 
           else
-            actionLink.SetAttribute( "href", href );
+            actionElement.SetAttribute( attributeName, url );
 
         }
 
@@ -292,6 +275,48 @@ namespace Ivony.Html.Web.Mvc
       }
 
     }
+
+    protected RouteValueDictionary GetRouteValues( IHtmlElement element )
+    {
+
+      var routeValues = new RouteValueDictionary();
+
+      var inherits = element.Attribute( "inherits" ).Value();
+
+      if ( inherits != null )
+      {
+        foreach ( var key in inherits.Split( ',' ) )
+        {
+
+          if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
+            continue;
+
+          if ( RouteData.Values.ContainsKey( key ) )
+            routeValues.Add( key, RouteData.Values[key] );
+
+        }
+      }
+
+
+      foreach ( var attribute in element.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+      {
+
+        var key = attribute.Name.Substring( 1 );
+        var value = attribute.Value();
+
+        routeValues.Remove( key );
+
+        routeValues.Add( key, value );
+        attribute.Remove();
+      }
+
+      return routeValues;
+    }
+
+
+
+
+
 
 
 
@@ -367,13 +392,7 @@ namespace Ivony.Html.Web.Mvc
 
         var routeValues = new RouteValueDictionary();
 
-        foreach ( var attribute in partialElement.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
-        {
-          var key = attribute.Name.Substring( 1 );
-          var value = attribute.Value();
-
-          routeValues.Add( key, value );
-        }
+        GetRouteValues( partialElement, routeValues );
 
         writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
 

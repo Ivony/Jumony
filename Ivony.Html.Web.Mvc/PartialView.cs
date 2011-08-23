@@ -45,7 +45,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ProcessActionLinks" );
-      ProcessActionLinks( Container );
+      ProcessActionUrls( Container );
       HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ProcessActionLinks" );
 
       if ( VirtualPath != null )//若不是内嵌部分视图，则应当进行 URL 转换。

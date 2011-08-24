@@ -71,7 +71,6 @@
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
-    <Compile Include="JumonyFilterAttribute.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PageView.cs" />
     <Compile Include="RoutingExtensions.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="PartialView.cs" />
     <Compile Include="PartialViewHandler.cs" />
     <Compile Include="ViewHandler.cs" />
-    <Compile Include="ViewResultWrapper.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewExtensions.cs" />

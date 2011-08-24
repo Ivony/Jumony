@@ -29,11 +29,25 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 创建一个 HTML 表单对象
+    /// </summary>
+    /// <param name="element"></param>
     public HtmlForm( IHtmlElement element )
     {
       _element = element;
 
 
+      RefreshForm();
+
+    }
+
+    
+    /// <summary>
+    /// 重新扫描表单中所有控件
+    /// </summary>
+    public void RefreshForm()
+    {
       textControls =
       Element.Find( "input[type=text][name] , input[type=password][name] , input[type=hidden][name]" )
         .Select( e => new HtmlInputText( this, e ) ).Cast<IHtmlTextControl>()
@@ -56,7 +70,6 @@ namespace Ivony.Html.Forms
 
       labels.GroupBy( l => l.ForElementId ).ForAll( grouping =>
         labelsTable.Add( grouping.Key, grouping.ToArray() ) );
-
     }
 
 

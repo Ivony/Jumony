@@ -19,7 +19,6 @@ namespace Ivony.Html.Web.Mvc
 
     public HtmlCachableAttribute()
     {
-      CachePolicyProvider = new HtmlCachePolicyProviderWrapper();
     }
 
     public HtmlCachableAttribute( Type policyProviderType )
@@ -33,18 +32,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private class HtmlCachePolicyProviderWrapper : IHtmlCachePolicyProvider
-    {
-      public string GetCacheKey( HttpContextBase context )
-      {
-        return HtmlProviders.GetCacheKey( context );
-      }
-
-      public HtmlCachePolicy GetPolicy( HttpContextBase context, ICachedResponse cacheItem )
-      {
-        return HtmlProviders.GetCachePolicy( context, cacheItem );
-      }
-    }
 
 
 

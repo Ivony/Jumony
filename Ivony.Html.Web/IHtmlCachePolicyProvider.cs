@@ -33,13 +33,13 @@ namespace Ivony.Html.Web
     /// <summary>指定对于所有请求都不要缓存，即不产生任何CacheKey</summary>
     NoCache = 0,
 
-    /// <summary>指定对于所有请求，以url作为缓存依据</summary>
-    ByUrl = 1,
+    /// <summary>指定以请求的虚拟路径作为缓存依据</summary>
+    ByVirtualPath = 1,
 
-    /// <summary>指定对于所有请求，以SessionID作为依据</summary>
+    /// <summary>指定以SessionID作为依据</summary>
     BySession = 2,
 
-    /// <summary>指定对于所有请求，以Identity的Name作为依据</summary>
+    /// <summary>指定以Identity的Name作为依据</summary>
     ByIdentity = 4,
   }
 
@@ -103,8 +103,8 @@ namespace Ivony.Html.Web
           keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
       }
 
-      if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByUrl) != 0 )
-        keys.Add( context.Request.Url.AbsoluteUri );
+      if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByVirtualPath) != 0 )
+        keys.Add( context.Request.CurrentExecutionFilePath );
 
       return string.Join( ":", keys.ToArray() );
     }

@@ -49,12 +49,23 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>用于输出缓存的 ActionResult</returns>
     public static ActionResult GetCachedResult( this ICachableResult cachable )
     {
-      var cache = cachable.GetCachedResponse();
-      if ( cache == null )
+      var response = cachable.GetCachedResponse();
+      if ( response == null )
         return null;
 
 
-      return new CachedResponseResult( cache );
+      return response.ToCachedResult();
+    }
+
+
+    /// <summary>
+    /// 从缓存的输出创建一个 ActionResult
+    /// </summary>
+    /// <param name="response">已被缓存的输出</param>
+    /// <returns>用于输出缓存的 ActionResult</returns>
+    public static ActionResult ToCachedResult( this ICachedResponse response )
+    {
+      return new CachedResponseResult( response );
     }
 
 

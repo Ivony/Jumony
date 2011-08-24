@@ -5,6 +5,8 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web;
 using System.Web.Hosting;
+using Ivony.Fluent;
+
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -13,10 +15,75 @@ namespace Ivony.Html.Web.Mvc
   /// </summary>
   public class HtmlCachableAttribute : ActionFilterAttribute
   {
-    public override void OnActionExecuting( ActionExecutingContext filterContext )
+
+
+    public HtmlCachableAttribute()
     {
+      CachePolicyProvider = new HtmlCachePolicyProviderWrapper();
+    }
+
+    public HtmlCachableAttribute( Type policyProviderType )
+    {
+      if ( !policyProviderType.IsSubclassOf( typeof( IHtmlCachePolicyProvider ) ) )
+        throw new InvalidOperationException( "配置错误，类型必须从 IHtmlCachePolicyProvider 派生" );
+
+
+      CachePolicyProvider = Activator.CreateInstance( policyProviderType ).CastTo<IHtmlCachePolicyProvider>();
 
     }
+
+
+    private class HtmlCachePolicyProviderWrapper : IHtmlCachePolicyProvider
+    {
+      public string GetCacheKey( HttpContextBase context )
+      {
+        return HtmlProviders.GetCacheKey( context );
+      }
+
+      public HtmlCachePolicy GetPolicy( HttpContextBase context, ICachedResponse cacheItem )
+      {
+        return HtmlProviders.GetCachePolicy( context, cacheItem );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 重写此方法以拦截请求并输出缓存
+    /// </summary>
+    /// <param name="filterContext">筛选器上下文</param>
+    public override void OnActionExecuting( ActionExecutingContext filterContext )
+    {
+      var cacheKey = GetCacheKey( filterContext.HttpContext );
+
+      if ( cacheKey == null )
+        return;
+
+      var response = HostingEnvironment.Cache[cacheKey] as ICachedResponse;
+
+      if ( response != null )
+        filterContext.Result = response.ToCachedResult();
+
+    }
+
+
+    /// <summary>
+    /// 获取缓存键
+    /// </summary>
+    /// <param name="filterContext"></param>
+    /// <returns></returns>
+    protected virtual string GetCacheKey( HttpContextBase context )
+    {
+      if ( CachePolicyProvider != null )
+        return CachePolicyProvider.GetCacheKey( context );
+
+      else
+        return HtmlProviders.GetCacheKey( context );
+    }
+
+
+
+
 
 
     /// <summary>
@@ -70,10 +137,26 @@ namespace Ivony.Html.Web.Mvc
       if ( cacheKey == null )
         return;
 
-      cachePolicy = HtmlProviders.GetCachePolicy( httpContext, cached );
+      cachePolicy = GetCachePolicy( httpContext, cached );
 
 
       UpdateCache( cached, cacheKey, cachePolicy );
+    }
+
+
+    /// <summary>
+    /// 获取缓存策略
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="cached"></param>
+    /// <returns></returns>
+    protected virtual HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cached )
+    {
+      if ( CachePolicyProvider != null )
+        return CachePolicyProvider.GetPolicy( context, cached );
+
+      else
+        return HtmlProviders.GetCachePolicy( context, cached );
     }
 
 

@@ -6,7 +6,7 @@ using System.Text;
 namespace Ivony.Html.Web.Mvc
 {
 
-
+#if DEBUG
   public abstract class EmbbedPartialView : PartialView
   {
 
@@ -22,4 +22,5 @@ namespace Ivony.Html.Web.Mvc
     }
 
   }
+#endif
 }

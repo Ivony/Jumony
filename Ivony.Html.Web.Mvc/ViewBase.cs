@@ -233,7 +233,7 @@ namespace Ivony.Html.Web.Mvc
           var controller = actionElement.Attribute( "controller" ).Value() ?? RouteData.Values["controller"].CastTo<string>();
 
 
-          var routeValues = new RouteValueDictionary();
+          var routeValues = GetRouteValues( actionElement );
 
 
           actionElement.Attribute( "action" ).Remove();
@@ -248,7 +248,7 @@ namespace Ivony.Html.Web.Mvc
 
           string attributeName;
           switch ( actionElement.Name.ToLowerInvariant() )
-          { 
+          {
             case "a":
               attributeName = "href";
               break;
@@ -390,9 +390,7 @@ namespace Ivony.Html.Web.Mvc
 
         var helper = MakeHelper();
 
-        var routeValues = new RouteValueDictionary();
-
-        GetRouteValues( partialElement, routeValues );
+        var routeValues = GetRouteValues( partialElement );
 
         writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
 

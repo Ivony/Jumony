@@ -57,10 +57,6 @@ namespace Ivony.Html.Forms.Validation
       if ( validated )
         throw new InvalidOperationException( "表单已执行验证，无法再次执行" );
 
-      if ( Form.SubmittedValues == null )
-        throw new InvalidOperationException( "表单尚未提交，无法进行验证" );
-
-
       valid = ExecuteValidate();
 
       validated = true;
@@ -288,6 +284,9 @@ namespace Ivony.Html.Forms.Validation
     /// <returns></returns>
     protected virtual string GetFieldName( IHtmlInputControl input )
     {
+
+      if ( input == null )
+        throw new ArgumentNullException( "input" );
 
       var labels = input.Labels();
 

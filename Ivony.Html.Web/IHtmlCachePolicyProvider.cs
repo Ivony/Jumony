@@ -18,7 +18,7 @@ namespace Ivony.Html.Web
 
     string GetCacheKey( HttpContextBase context );
 
-    HtmlCachePolicy GetPolicy( HttpContextBase context, ICachedResponse cacheItem );
+    HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cacheItem );
 
   }
 

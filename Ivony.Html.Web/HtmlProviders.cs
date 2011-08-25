@@ -369,7 +369,7 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in CachePolicyProviders )
         {
-          var policy = provider.GetPolicy( context, cacheItem );
+          var policy = provider.GetCachePolicy( context, cacheItem );
           if ( policy != null )
             return policy;
         }

@@ -47,7 +47,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="filterContext">筛选器上下文</param>
     public override void OnActionExecuting( ActionExecutingContext filterContext )
     {
-      var cacheKey = GetCacheKey( filterContext.HttpContext );
+      var cacheKey = GetCacheKey( filterContext );
 
       if ( cacheKey == null )
         return;
@@ -65,13 +65,18 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="filterContext"></param>
     /// <returns></returns>
-    protected virtual string GetCacheKey( HttpContextBase context )
+    protected virtual string GetCacheKey( ControllerContext context )
     {
       if ( CachePolicyProvider != null )
-        return CachePolicyProvider.GetCacheKey( context );
+        return CachePolicyProvider.GetCacheKey( context.HttpContext );
 
-      else
-        return HtmlProviders.GetCacheKey( context );
+
+      var provider = context.Controller as IHtmlCachePolicyProvider;
+      if ( provider != null )
+        return provider.GetCacheKey( context.HttpContext );
+
+
+      return HtmlProviders.GetCacheKey( context.HttpContext );
     }
 
 
@@ -128,11 +133,11 @@ namespace Ivony.Html.Web.Mvc
 
       var httpContext = context.HttpContext;
 
-      cacheKey = HtmlProviders.GetCacheKey( httpContext );
+      cacheKey = GetCacheKey( context );
       if ( cacheKey == null )
         return;
 
-      cachePolicy = GetCachePolicy( httpContext, cached );
+      cachePolicy = GetCachePolicy( context, cached );
 
 
       UpdateCache( cached, cacheKey, cachePolicy );
@@ -140,20 +145,25 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    
+
     /// <summary>
     /// 获取缓存策略
     /// </summary>
     /// <param name="context"></param>
     /// <param name="cached"></param>
     /// <returns></returns>
-    protected virtual HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cached )
+    protected virtual HtmlCachePolicy GetCachePolicy( ControllerContext context, ICachedResponse cached )
     {
       if ( CachePolicyProvider != null )
-        return CachePolicyProvider.GetPolicy( context, cached );
+        return CachePolicyProvider.GetCachePolicy( context.HttpContext, cached );
+
+      var provider = context.Controller as IHtmlCachePolicyProvider;
+      if ( provider != null )
+        return provider.GetCachePolicy( context.HttpContext, cached );
+
 
       else
-        return HtmlProviders.GetCachePolicy( context, cached );
+        return HtmlProviders.GetCachePolicy( context.HttpContext, cached );
     }
 
 

@@ -33,6 +33,9 @@ namespace Ivony.Html.Web.Mvc
       {
 
         var input = form[pair.Key];
+        if ( input == null )
+          continue;
+
         var fieldName = GetFieldName( input );
 
         var state = pair.Value;
@@ -41,6 +44,7 @@ namespace Ivony.Html.Web.Mvc
       }
 
     }
+
 
     
     /// <summary>
@@ -57,6 +61,7 @@ namespace Ivony.Html.Web.Mvc
       {
         _state = state;
       }
+
 
 
 

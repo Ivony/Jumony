@@ -87,12 +87,14 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">表单</param>
-    public static void ApplySubmittedValue( this HtmlForm form )
+    public static HtmlForm ApplySubmittedValue( this HtmlForm form )
     {
       if ( form == null )
         throw new ArgumentNullException( "form" );
 
       form.InputControls.ForAll( control => ApplySubmittedValue( control ) );
+
+      return form;
     }
 
 
@@ -100,7 +102,7 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplySubmittedValue( this IHtmlInputControl control )
+    public static IHtmlInputControl ApplySubmittedValue( this IHtmlInputControl control )
     {
       if ( control == null )
         throw new ArgumentNullException( "control" );
@@ -112,6 +114,8 @@ namespace Ivony.Html.Forms
       var groupControl = control as IHtmlGroupControl;
       if ( groupControl != null )
         ApplySubmittedValue( groupControl );
+
+      return control;
     }
 
 
@@ -119,16 +123,18 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplySubmittedValue( this IHtmlTextControl control )
+    public static IHtmlTextControl ApplySubmittedValue( this IHtmlTextControl control )
     {
       if ( control == null )
         throw new ArgumentNullException( "control" );
 
       var value = SubmittedValue( control );
       if ( value == null )
-        return;
+        return control;
 
       control.TextValue = value;
+
+      return control;
     }
 
 
@@ -136,7 +142,7 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">输入控件</param>
-    public static void ApplySubmittedValue( this IHtmlGroupControl group )
+    public static IHtmlGroupControl ApplySubmittedValue( this IHtmlGroupControl group )
     {
 
       if ( group == null )
@@ -144,7 +150,7 @@ namespace Ivony.Html.Forms
 
       var values = SubmittedValues( group );
       if ( values == null )
-        return;
+        return group;
 
       ClearValues( group );
 
@@ -157,6 +163,8 @@ namespace Ivony.Html.Forms
         if ( !TrySetValue( group, value ) )
           throw new InvalidOperationException();
       }
+
+      return group;
     }
 
     /// <summary>

@@ -55,7 +55,13 @@ namespace Ivony.Html.Web.Mvc
       var response = HostingEnvironment.Cache[cacheKey] as ICachedResponse;
 
       if ( response != null )
+      {
         filterContext.Result = response.ToCachedResult();
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache hited" );
+      }
+
+      else
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache missed" );
 
     }
 

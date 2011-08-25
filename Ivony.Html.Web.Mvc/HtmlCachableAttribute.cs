@@ -21,6 +21,12 @@ namespace Ivony.Html.Web.Mvc
     {
     }
 
+
+
+    /// <summary>
+    /// 利用指定的缓存策略提供程序创建 HtmlCachableAttribute 对象。
+    /// </summary>
+    /// <param name="policyProviderType">缓存策略提供程序类型</param>
     public HtmlCachableAttribute( Type policyProviderType )
     {
       if ( !policyProviderType.IsSubclassOf( typeof( IHtmlCachePolicyProvider ) ) )
@@ -74,6 +80,19 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
+    /// 获取缓存策略提供程序
+    /// </summary>
+    protected IHtmlCachePolicyProvider CachePolicyProvider
+    {
+      get;
+      set;
+    }
+
+
+
+
+
+    /// <summary>
     /// 重写此方法使得操作结果执行完毕后，更新缓存信息
     /// </summary>
     /// <param name="filterContext"></param>
@@ -87,17 +106,6 @@ namespace Ivony.Html.Web.Mvc
         UpdateCache( cachedResponse, filterContext );
 
       base.OnResultExecuted( filterContext );
-    }
-
-
-
-    /// <summary>
-    /// 获取缓存策略提供程序
-    /// </summary>
-    protected IHtmlCachePolicyProvider CachePolicyProvider
-    {
-      get;
-      set;
     }
 
 
@@ -131,6 +139,8 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    
     /// <summary>
     /// 获取缓存策略
     /// </summary>
@@ -146,18 +156,6 @@ namespace Ivony.Html.Web.Mvc
         return HtmlProviders.GetCachePolicy( context, cached );
     }
 
-
-
-    /// <summary>
-    /// 更新缓存数据
-    /// </summary>
-    /// <param name="cacheItem">可被缓存的响应数据</param>
-    /// <param name="cacheKey">缓存键</param>
-    /// <param name="cachePolicy">缓存策略</param>
-    protected void UpdateCache( ICachedResponse cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
-    {
-      HostingEnvironment.Cache.WriteCache( cacheItem, cacheKey, cachePolicy );
-    }
 
 
     /// <summary>
@@ -184,6 +182,21 @@ namespace Ivony.Html.Web.Mvc
       return null;
 
     }
+
+
+    /// <summary>
+    /// 更新缓存数据
+    /// </summary>
+    /// <param name="cacheItem">可被缓存的响应数据</param>
+    /// <param name="cacheKey">缓存键</param>
+    /// <param name="cachePolicy">缓存策略</param>
+    protected void UpdateCache( ICachedResponse cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
+    {
+      HostingEnvironment.Cache.WriteCache( cacheItem, cacheKey, cachePolicy );
+    }
+
+
+
 
     private ICachedResponse CreateCachedResponse( ContentResult content )
     {

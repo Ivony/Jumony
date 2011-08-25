@@ -186,10 +186,13 @@ namespace Ivony.Html.Web.Mvc
       if ( cachable != null )
         return cachable.GetCachedResponse();
 
-      var view = result as ViewResult;
-      cachable = view.View as ICachableResult;
-      if ( cachable != null )
-        return cachable.GetCachedResponse();
+      var viewResult = result as ViewResult;
+      if ( viewResult != null )
+      {
+        cachable = viewResult.View as ICachableResult;
+        if ( cachable != null )
+          return cachable.GetCachedResponse();
+      }
 
       var content = result as ContentResult;
       if ( content != null )

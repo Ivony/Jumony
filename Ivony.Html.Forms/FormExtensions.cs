@@ -8,6 +8,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
+
+  /// <summary>
+  /// 提供一组关于表单的扩展方法
+  /// </summary>
   public static class FormExtensions
   {
 
@@ -356,11 +360,12 @@ namespace Ivony.Html.Forms
     /// <returns>绑定的 Label 的文本，如果没找到则返回null</returns>
     public static string LabelText( this IHtmlFocusableControl control )
     {
-      var label = Labels( control ).SingleOrDefault();
-      if ( label == null )
-        return null;
+      var labels = Labels( control );
+      if ( labels.IsSingle() )
+        return labels.First().Text;
 
-      return label.Text;
+      else
+        return null;
     }
 
   }

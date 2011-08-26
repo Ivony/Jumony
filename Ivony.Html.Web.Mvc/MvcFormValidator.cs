@@ -82,7 +82,7 @@ namespace Ivony.Html.Web.Mvc
 
       public bool IsValid
       {
-        get { return _state.Errors.Any(); }
+        get { return !_state.Errors.Any(); }
       }
 
       public void Validate()

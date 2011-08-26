@@ -155,9 +155,9 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取缓存策略
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="cached"></param>
-    /// <returns></returns>
+    /// <param name="context">请求上下文</param>
+    /// <param name="cached">已缓存的响应</param>
+    /// <returns>缓存策略</returns>
     protected virtual HtmlCachePolicy GetCachePolicy( ControllerContext context, ICachedResponse cached )
     {
       if ( CachePolicyProvider != null )

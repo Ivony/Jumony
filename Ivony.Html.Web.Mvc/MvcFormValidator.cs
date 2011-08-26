@@ -36,11 +36,9 @@ namespace Ivony.Html.Web.Mvc
         if ( input == null )
           continue;
 
-        var fieldName = GetFieldName( input );
-
         var state = pair.Value;
 
-        AddFieldValidator( new MvcFieldValidator( input, fieldName, state ) );
+        AddFieldValidator( new MvcFieldValidator( input, state ) );
       }
 
     }
@@ -50,34 +48,46 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 配合 ASP.NET MVC 验证模型使用的字段验证器
     /// </summary>
-    protected class MvcFieldValidator : HtmlFieldValidator
+    protected class MvcFieldValidator : IHtmlFieldValidator
     {
 
       ModelState _state;
+      IHtmlInputControl _input;
 
 
-      public MvcFieldValidator( IHtmlInputControl input, string fieldName, ModelState state )
-        : base( input, fieldName )
+      public MvcFieldValidator( IHtmlInputControl input, ModelState state )
       {
         _state = state;
+        _input = input;
       }
 
 
 
 
-      protected override bool ExecuteValidate( string value )
-      {
-        return !_state.Errors.Any();
-      }
-
-      public override string[] FailedMessage()
+      public string[] FailedMessage()
       {
         return _state.Errors.Select( error => error.ErrorMessage ).ToArray();
       }
 
-      public override string[] RuleDescription()
+      public string[] RuleDescription()
       {
         return new string[0];
+      }
+
+
+      public IHtmlInputControl InputControl
+      {
+        get { return _input; }
+      }
+
+      public bool IsValid
+      {
+        get { return _state.Errors.Any(); }
+      }
+
+      public void Validate()
+      {
+        
       }
     }
 

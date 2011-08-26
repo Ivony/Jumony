@@ -7,7 +7,7 @@ namespace Ivony.Html.Forms.Validation
 {
 
 
-  interface IHtmlFieldValidator
+  public interface IHtmlFieldValidator
   {
     string[] FailedMessage();
     IHtmlInputControl InputControl { get; }

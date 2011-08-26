@@ -101,7 +101,7 @@ namespace Ivony.Html.Forms.Validation
 
 
 
-    private List<HtmlFieldValidator> _validators = new List<HtmlFieldValidator>();
+    private List<IHtmlFieldValidator> _validators = new List<IHtmlFieldValidator>();
 
 
     /// <summary>
@@ -303,7 +303,7 @@ namespace Ivony.Html.Forms.Validation
     /// 添加一个字段验证器
     /// </summary>
     /// <param name="validator"></param>
-    protected void AddFieldValidator( HtmlFieldValidator validator )
+    protected void AddFieldValidator( IHtmlFieldValidator validator )
     {
       _validators.Add( validator );
     }

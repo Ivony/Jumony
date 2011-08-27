@@ -55,6 +55,11 @@ namespace Ivony.Html.Web.Mvc
       IHtmlInputControl _input;
 
 
+      /// <summary>
+      /// 创建 MvcFieldValidator 对象
+      /// </summary>
+      /// <param name="input"></param>
+      /// <param name="state"></param>
       public MvcFieldValidator( IHtmlInputControl input, ModelState state )
       {
         _state = state;
@@ -63,28 +68,47 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+      /// <summary>
+      /// 获取验证失败的消息
+      /// </summary>
+      /// <returns></returns>
       public string[] FailedMessage()
       {
         return _state.Errors.Select( error => error.ErrorMessage ).ToArray();
       }
 
+
+      /// <summary>
+      /// 获取验证规则的描述
+      /// </summary>
+      /// <returns></returns>
       public string[] RuleDescription()
       {
         return new string[0];
       }
 
 
+      /// <summary>
+      /// 获取验证的输入控件
+      /// </summary>
       public IHtmlInputControl InputControl
       {
         get { return _input; }
       }
 
+
+      /// <summary>
+      /// 确定是否验证通过
+      /// </summary>
       public bool IsValid
       {
         get { return !_state.Errors.Any(); }
       }
 
+      
+      /// <summary>
+      /// 执行字段验证
+      /// </summary>
       public void Validate()
       {
         

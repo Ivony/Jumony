@@ -368,5 +368,52 @@ namespace Ivony.Html.Forms
         return null;
     }
 
+
+    /// <summary>
+    /// 尝试查找最小包含指定输入控件的容器
+    /// </summary>
+    /// <param name="inputControl">输入控件</param>
+    /// <returns>找到的最小包含容器</returns>
+    public static IHtmlContainer FindContainer( this IHtmlInputControl inputControl )
+    {
+      var inputText = inputControl as HtmlInputText;
+      if ( inputText != null )
+        return inputText.Element.Container;
+
+      var textarea = inputControl as HtmlTextArea;
+      if ( textarea != null )
+        return textarea.Element.Container;
+
+      var select = inputControl as HtmlSelect;
+      if ( select != null )
+        return select.Element.Container;
+
+      var group = inputControl as HtmlButtonGroup;
+      if ( group != null )
+        return FindContainer( group );
+
+      throw new NotSupportedException();
+
+    }
+
+
+    private static IHtmlContainer FindContainer( HtmlButtonGroup group )
+    {
+      group.Items.Select( i => i.Element ).Aggregate( ( item1, item2 ) =>
+        {
+
+          if ( item1.IsDescendantOf( item2 ) )
+            return item2;
+
+          else if ( item2.IsDescendantOf( item1 ) )
+            return item1;
+
+          else return item1.
+
+        } );
+    }
+
+
+
   }
 }

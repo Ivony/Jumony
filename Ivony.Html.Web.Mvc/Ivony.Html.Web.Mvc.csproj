@@ -74,6 +74,7 @@
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PageView.cs" />
     <Compile Include="RoutingExtensions.cs" />
+    <Compile Include="ScriptManager.cs" />
     <Compile Include="SimpleRoutingTable.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

@@ -270,5 +270,15 @@ namespace Ivony.Html
         return "#elements#";
       }
     }
+
+
+    /// <summary>
+    /// 调用此方法预热选择器
+    /// </summary>
+    public static void WarmUp()
+    {
+      casecadingSelectorRegex.Match( "" );
+      CssElementSelector.WarmUp();
+    }
   }
 }

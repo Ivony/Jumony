@@ -49,12 +49,17 @@ namespace Ivony.Html
       if ( expression == null )
         throw new ArgumentNullException( "expression" );
 
+      Trace.TraceInformation( "Begin match expression" );
       var match = cssSelectorRegex.Match( expression );
+      Trace.TraceInformation( "End match expression" );
+
       if ( !match.Success )
         throw new FormatException( "无法识别的CSS选择器" );
 
 
+      Trace.TraceInformation( "Begin create casecading selectors" );
       var selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value, scope ) ).ToArray();
+      Trace.TraceInformation( "End create casecading selectors" );
 
       return new CssMultipleSelector( selectors );
     }
@@ -79,7 +84,9 @@ namespace Ivony.Html
 
       try
       {
+        Trace.TraceInformation( "Create Selector" );
         var selector = Create( expression, scope );
+        Trace.TraceInformation( "Create Selector completed" );
         return selector.Filter( scope.Descendants() );
       }
       catch ( Exception e )
@@ -101,6 +108,18 @@ namespace Ivony.Html
     {
       return source.Where( e => selector.IsEligible( e ) );
     }
+
+
+
+    /// <summary>
+    /// 调用此方法预热选择器
+    /// </summary>
+    public static void WarmUp()
+    {
+      cssSelectorRegex.Match( "" );
+      CssCasecadingSelector.WarmUp();
+    }
+
 
   }
 

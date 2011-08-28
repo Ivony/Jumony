@@ -399,18 +399,13 @@ namespace Ivony.Html.Forms
 
     private static IHtmlContainer FindContainer( HtmlButtonGroup group )
     {
-      group.Items.Select( i => i.Element ).Aggregate( ( item1, item2 ) =>
+      var container = group.Items.Select( i => i.Element ).Aggregate( ( item1, item2 ) =>
         {
-
-          if ( item1.IsDescendantOf( item2 ) )
-            return item2;
-
-          else if ( item2.IsDescendantOf( item1 ) )
-            return item1;
-
-          else return item1.
+          return item1.AncestorsAndSelf().FirstOrDefault( e => e.IsAncestorOf( item2 ) || e.Equals( item2 ) );
 
         } );
+
+      return container;//没有处理文档为公共容器的情况。
     }
 
 

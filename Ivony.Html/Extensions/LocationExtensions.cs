@@ -20,6 +20,7 @@ namespace Ivony.Html
     /// <param name="container">要判断的容器</param>
     /// <param name="node">要判断的节点</param>
     /// <returns>若节点位于容器的子代，则返回 true ，否则返回 false 。</returns>
+    /// <remarks>注意此操作和IsDescendantOf并非互逆，当两个节点没有任何关系或者为同一节点时，两者皆返回false，此方法其实只是IsDescendantOf的参数颠倒版。</remarks>
     public static bool IsAncestorOf( this IHtmlContainer container, IHtmlNode node )
     {
       return IsDescendantOf( node, container );

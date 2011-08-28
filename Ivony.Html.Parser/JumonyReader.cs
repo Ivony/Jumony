@@ -22,6 +22,17 @@ namespace Ivony.Html.Parser
     protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
+    private static bool _isWarmedUp = false;
+
+    public static void WarmUp()
+    {
+      if ( !_isWarmedUp )
+      {
+        tagRegex.Match( "" );
+        _isWarmedUp = true;
+      }
+    }
+
 
     /// <summary>
     /// 创建一个 JumonyReader对象

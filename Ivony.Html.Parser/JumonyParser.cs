@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 一个标准 HTML 解析器的实现（基于HTML 4.01规范）
   /// </summary>
-  public class JumonyParser : HtmlParserBase
+  public sealed class JumonyParser : HtmlParserBase
   {
 
     protected override IHtmlDomProvider Provider
@@ -61,7 +61,19 @@ namespace Ivony.Html.Parser
     }
     */
 
+    private static bool _isWarmedUp = false;
 
+    /// <summary>
+    /// 调用此方法通知预热 JumonyParser
+    /// </summary>
+    public static void WarmUp()
+    {
+      if ( !_isWarmedUp )
+      {
+        JumonyReader.WarmUp();
+        _isWarmedUp = true;
+      }
+    }
 
 
   }

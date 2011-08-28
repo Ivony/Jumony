@@ -20,6 +20,8 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewEngines.Engines.Add( _viewEngine );
       RouteTable.Routes.Add( _simpleRoutingTable );
+
+      CssSelector.WarmUp();
     }
 
 

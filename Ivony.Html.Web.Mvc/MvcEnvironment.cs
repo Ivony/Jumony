@@ -21,8 +21,25 @@ namespace Ivony.Html.Web.Mvc
       ViewEngines.Engines.Add( _viewEngine );
       RouteTable.Routes.Add( _simpleRoutingTable );
 
-      CssSelector.WarmUp();
+      WarmUp();
     }
+
+
+
+    private static bool _isWarmedUp = false;
+
+    /// <summary>
+    /// 调用此方法通知预热 Jumony for MVC 运行环境。
+    /// </summary>
+    public static void WarmUp()
+    {
+      if ( !_isWarmedUp )
+      {
+        CssSelector.WarmUp();
+        _isWarmedUp = true;
+      }
+    }
+
 
 
 

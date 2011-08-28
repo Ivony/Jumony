@@ -276,6 +276,12 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 从元素标签中获取所有的路由值
+    /// </summary>
+    /// <param name="element">要获取分析路由值的元素</param>
+    /// <returns>获取的路由值</returns>
     protected RouteValueDictionary GetRouteValues( IHtmlElement element )
     {
 

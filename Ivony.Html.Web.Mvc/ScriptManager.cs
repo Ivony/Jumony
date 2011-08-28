@@ -12,8 +12,33 @@ namespace Ivony.Html.Web.Mvc
   public class ScriptManager
   {
 
+    public void RegisterScriptLibrary( string name )
+    { 
+    
+    }
 
 
+    
 
+
+  }
+
+  public class ScriptLibrary
+  {
+
+    public abstract string Name
+    {
+      get;
+    }
+  
+  }
+
+  public class ScriptLibraryCollection : SynchronizedKeyedCollection<string, ScriptLibrary>
+  {
+
+    protected override string GetKeyForItem( ScriptLibrary item )
+    {
+      return item.Name;
+    }
   }
 }

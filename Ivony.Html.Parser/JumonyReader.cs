@@ -24,18 +24,21 @@ namespace Ivony.Html.Parser
 
     private static bool _isWarmedUp = false;
 
+    /// <summary>
+    /// 调用此方法通知进行预热 JumonyReader
+    /// </summary>
     public static void WarmUp()
     {
       if ( !_isWarmedUp )
       {
-        tagRegex.Match( "" );
+        tagRegex.IsMatch( "" );
         _isWarmedUp = true;
       }
     }
 
 
     /// <summary>
-    /// 创建一个 JumonyReader对象
+    /// 创建一个 JumonyReader 对象
     /// </summary>
     /// <param name="htmlText"></param>
     public JumonyReader( string htmlText )

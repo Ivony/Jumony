@@ -236,6 +236,25 @@ namespace Ivony.Html
 
     private static object _sync = new object();
 
+
+    private static bool _isWarmedUp = false;
+    public static void WarmUp()
+    {
+      if ( _isWarmedUp )
+        return;
+
+      lock ( _sync )
+      {
+        tagNameRegex.IsMatch( "" );
+
+        foreach ( var name in cdataTags )
+        {
+          GetEndTagRegex( name ).IsMatch( "" );
+        }
+      }
+    }
+
+
     /// <summary>
     /// 用于匹配元素标签名的正则
     /// </summary>

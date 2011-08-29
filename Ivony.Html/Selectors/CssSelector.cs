@@ -110,7 +110,7 @@ namespace Ivony.Html
     /// </summary>
     public static void WarmUp()
     {
-      cssSelectorRegex.Match( "" );
+      cssSelectorRegex.IsMatch( "" );
       CssCasecadingSelector.WarmUp();
     }
 

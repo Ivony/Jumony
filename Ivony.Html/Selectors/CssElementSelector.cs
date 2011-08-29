@@ -29,7 +29,7 @@ namespace Ivony.Html
     /// </summary>
     public static void WarmUp() 
     {
-      elementSelectorRegex.Match( "abc" );
+      elementSelectorRegex.IsMatch( "" );
     }
 
 

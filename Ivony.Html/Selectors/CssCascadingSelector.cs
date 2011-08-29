@@ -277,7 +277,7 @@ namespace Ivony.Html
     /// </summary>
     public static void WarmUp()
     {
-      casecadingSelectorRegex.Match( "" );
+      casecadingSelectorRegex.IsMatch( "" );
       CssElementSelector.WarmUp();
     }
   }

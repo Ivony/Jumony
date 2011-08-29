@@ -23,7 +23,7 @@ namespace Ivony.Html.Web.Mvc
 
   }
 
-  public class ScriptLibrary
+  public abstract class ScriptLibrary
   {
 
     public abstract string Name

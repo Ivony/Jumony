@@ -65,12 +65,23 @@ namespace Ivony.Html.Web.Mvc
     }
 
     /// <summary>
-    /// 获取 HTTP 上下文
+    /// 获取当前 HTTP 上下文
     /// </summary>
     protected HttpContextBase HttpContext
     {
       get { return ViewContext.HttpContext; }
     }
+
+   
+    /// <summary>
+    /// 获取当前 HTTP 响应的追踪上下文对象
+    /// </summary>
+    protected TraceContext Trace
+    {
+      get { return HttpContext.Trace; }
+    }
+
+
 
     /// <summary>
     /// 获取请求上下文
@@ -135,13 +146,13 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewContext = viewContext;
 
-
+      
       while ( viewContext.IsChildAction )
       {
-        viewContext = viewContext.ParentActionViewContext;
+        viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
       }
-
       RawViewContext = viewContext;
+
 
       Url = new UrlHelper( RequestContext );
 

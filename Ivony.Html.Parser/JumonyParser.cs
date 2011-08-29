@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 一个标准 HTML 解析器的实现（基于HTML 4.01规范）
   /// </summary>
-  public sealed class JumonyParser : HtmlParserBase
+  public class JumonyParser : HtmlParserBase
   {
 
     protected override IHtmlDomProvider Provider

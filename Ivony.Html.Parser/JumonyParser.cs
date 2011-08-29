@@ -71,6 +71,7 @@ namespace Ivony.Html.Parser
       if ( !_isWarmedUp )
       {
         JumonyReader.WarmUp();
+        HtmlSpecification.WarmUp();
         _isWarmedUp = true;
       }
     }

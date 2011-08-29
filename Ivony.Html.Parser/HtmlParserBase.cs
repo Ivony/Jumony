@@ -16,16 +16,6 @@ namespace Ivony.Html.Parser
   {
 
 
-    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
-
-
-    static HtmlParserBase()
-    {
-      foreach ( var tagName in HtmlSpecification.cdataTags )//为所有的CDATA标签准备匹配结束标记的正则表达式
-      {
-        endTagRegexes.Add( tagName, new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
-      }
-    }
 
 
     /// <summary>

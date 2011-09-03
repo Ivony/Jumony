@@ -21,7 +21,7 @@ namespace Ivony.Html.Forms.Validation
   /// <summary>
   /// HTML 表单字段验证器，承担一个表单输入字段的验证，一个表单输入字段（即 IHtmlInputControl 对象）只能有一个验证器。
   /// </summary>
-  public abstract class HtmlFieldValidator : Ivony.Html.Forms.Validation.IHtmlFieldValidator
+  public abstract class HtmlFieldValidator : IHtmlFieldValidator
   {
     private readonly IHtmlInputControl _input;
     private readonly string _fieldName;

@@ -31,6 +31,8 @@ namespace Ivony.Fluent
       if ( source == null )
         throw new ArgumentNullException( "source" );
 
+      if ( !source.Any() )
+        throw new ArgumentException( "source", "序列不能为空" );
 
       return source.ElementAt( random.Next( source.Count() ) );
     }

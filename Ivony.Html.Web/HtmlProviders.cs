@@ -270,13 +270,13 @@ namespace Ivony.Html.Web
         if ( createDocument != null )
           return createDocument( result.DomProvider );
 
-
-
+        
+        
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
         createDocument = document.Compile();
 
-        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
+        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key }, now ) );
 
         return document;
       }

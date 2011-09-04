@@ -138,9 +138,9 @@ namespace Ivony.Html.Web
     }
 
     /// <summary>
-    /// 利用指定VirtualPathProvider将虚拟路径所指向文件当作静态文件加载。
+    /// 利用指定 VirtualPathProvider 将虚拟路径所指向文件当作静态文件加载。
     /// </summary>
-    /// <param name="provider">指定的VirtualPathProvider</param>
+    /// <param name="provider">指定的 VirtualPathProvider</param>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>加载结果</returns>
     public HtmlContentResult LoadContent( HttpContextBase context, VirtualPathProvider provider, string virtualPath )
@@ -167,8 +167,10 @@ namespace Ivony.Html.Web
       if ( content == null )
       {
 
+        var now = DateTime.UtcNow;
+
         content = LoadContent( file );
-        var dependency = provider.GetCacheDependency( virtualPath, new[] { virtualPath }, DateTime.UtcNow ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
+        var dependency = provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
 
 
         Cache.Insert( key, content, dependency );

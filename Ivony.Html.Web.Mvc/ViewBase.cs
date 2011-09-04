@@ -343,7 +343,12 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container">确定要转换 URI 范围的容器</param>
     protected virtual void ResolveUri( IHtmlContainer container )
     {
-      ResolveUri( container, container.Document.DocumentUri );
+      //ResolveUri( container, container.Document.DocumentUri );
+
+      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      {
+        ResolveUri( attribute );
+      }
     }
 
     /// <summary>

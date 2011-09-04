@@ -69,7 +69,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取缓存键
     /// </summary>
-    /// <param name="filterContext"></param>
+    /// <param name="context">MVC 请求上下文</param>
     /// <returns></returns>
     protected virtual string GetCacheKey( ControllerContext context )
     {

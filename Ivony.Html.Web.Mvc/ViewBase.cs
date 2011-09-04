@@ -343,7 +343,42 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container">确定要转换 URI 范围的容器</param>
     protected virtual void ResolveUri( IHtmlContainer container )
     {
-      ResolveUri( container, container.Document.DocumentUri );
+      //ResolveUri( container, container.Document.DocumentUri );
+
+      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      {
+        ResolveUri( attribute );
+      }
+    }
+
+    protected virtual void ResolveUri( IHtmlAttribute attribute )
+    {
+      var uriValue = attribute.AttributeValue;
+
+      if ( uriValue == null )
+        return;
+
+      Uri absoluteUri;
+      if ( Uri.TryCreate( uriValue, UriKind.Absolute, out absoluteUri ) )//对于绝对 URI，不采取任何动作。
+        return;
+
+
+      if ( VirtualPathUtility.IsAbsolute( uriValue ) )//对于绝对路径，也不采取任何动作。
+        return;
+
+      if ( uriValue.StartsWith( "#" ) )//若是本路径的片段链接，也不采取任何动作。
+        return;
+
+      if ( uriValue.StartsWith( "?" ) )//若是本路径的查询链接，也不采取任何动作。
+        return;
+
+      attribute.Element.SetAttribute( attribute.Name, ResolveVirtualPath( uriValue ) );
+
+    }
+
+    protected virtual string ResolveVirtualPath( string virtualPath )
+    {
+      return null;
     }
 
     /// <summary>

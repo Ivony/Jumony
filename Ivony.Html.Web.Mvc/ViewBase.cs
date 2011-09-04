@@ -72,7 +72,7 @@ namespace Ivony.Html.Web.Mvc
       get { return ViewContext.HttpContext; }
     }
 
-   
+
     /// <summary>
     /// 获取当前 HTTP 响应的追踪上下文对象
     /// </summary>
@@ -146,7 +146,7 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewContext = viewContext;
 
-      
+
       while ( viewContext.IsChildAction )
       {
         viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
@@ -351,6 +351,10 @@ namespace Ivony.Html.Web.Mvc
       }
     }
 
+    /// <summary>
+    /// 转换 URI 与当前请求匹配
+    /// </summary>
+    /// <param name="attribute"></param>
     protected virtual void ResolveUri( IHtmlAttribute attribute )
     {
       var uriValue = attribute.AttributeValue;
@@ -378,7 +382,10 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual string ResolveVirtualPath( string virtualPath )
     {
-      return null;
+      if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
+        return VirtualPathUtility.ToAbsolute( virtualPath );
+
+      return VirtualPathUtility.Combine( VirtualPath, virtualPath );
     }
 
     /// <summary>

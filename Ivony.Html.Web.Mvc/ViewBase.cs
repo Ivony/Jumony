@@ -343,12 +343,14 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container">确定要转换 URI 范围的容器</param>
     protected virtual void ResolveUri( IHtmlContainer container )
     {
-      //ResolveUri( container, container.Document.DocumentUri );
+      ResolveUri( container, container.Document.DocumentUri );
 
+      /*
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
         ResolveUri( attribute );
       }
+      */
     }
 
     /// <summary>
@@ -376,7 +378,7 @@ namespace Ivony.Html.Web.Mvc
       if ( uriValue.StartsWith( "?" ) )//若是本路径的查询链接，也不采取任何动作。
         return;
 
-      attribute.Element.SetAttribute( attribute.Name, ResolveVirtualPath( uriValue ) );
+      attribute.SetValue( ResolveVirtualPath( uriValue ) );
 
     }
 

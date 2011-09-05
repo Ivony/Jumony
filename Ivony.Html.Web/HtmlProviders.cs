@@ -276,7 +276,7 @@ namespace Ivony.Html.Web
 
         createDocument = document.Compile();
 
-        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key }, now ) );
+        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
 
         return document;
       }

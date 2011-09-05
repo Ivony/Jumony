@@ -420,9 +420,9 @@ namespace Ivony.Html.Web.Mvc
           continue;
 
 
-        uri = HttpContext.Request.Url.MakeRelativeUri( uri );
+        //uri = HttpContext.Request.Url.MakeRelativeUri( uri );
 
-        attribute.Element.SetAttribute( attribute.Name, uri.ToString() );
+        attribute.Element.SetAttribute( attribute.Name, uri.AbsolutePath );
 
       }
     }

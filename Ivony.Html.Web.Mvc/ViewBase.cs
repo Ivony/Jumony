@@ -29,13 +29,21 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    private string _virtualPath;
     /// <summary>
     /// 获取或设置 HTML 视图的虚拟路径，此属性必须在处理视图前进行初始化
     /// </summary>
     protected string VirtualPath
     {
-      get;
-      set;
+      get { return _virtualPath; }
+      set
+      {
+
+        if ( !VirtualPathUtility.IsAppRelative( value ) )
+          throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
+        _virtualPath = value;
+      }
     }
 
 
@@ -343,14 +351,15 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container">确定要转换 URI 范围的容器</param>
     protected virtual void ResolveUri( IHtmlContainer container )
     {
-      ResolveUri( container, container.Document.DocumentUri );
+      //ResolveUri( container, container.Document.DocumentUri );
 
-      /*
+
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
         ResolveUri( attribute );
       }
-      */
+
+      /**/
     }
 
     /// <summary>
@@ -384,10 +393,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual string ResolveVirtualPath( string virtualPath )
     {
-      if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
-        return VirtualPathUtility.ToAbsolute( virtualPath );
-
-      return VirtualPathUtility.Combine( VirtualPath, virtualPath );
+      return VirtualPathUtility.Combine( VirtualPathUtility.ToAbsolute( VirtualPath ), virtualPath );
     }
 
     /// <summary>

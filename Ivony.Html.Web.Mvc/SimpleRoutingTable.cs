@@ -614,7 +614,7 @@ namespace Ivony.Html.Web.Mvc
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "必须是相对于应用程序根的路径" );
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
 
       var queryKeySet = new HashSet<string>( _queryKeys );
 

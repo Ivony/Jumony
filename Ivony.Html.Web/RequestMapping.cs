@@ -19,7 +19,7 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( templatePath ) )
-        throw new ArgumentException( "模版文件路径必须是相对于应用程序根路径", "templatePath" );
+        throw new ArgumentException( "模版文件路径只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "templatePath" );
 
       TemplatePath = templatePath;
       Handler = handler;

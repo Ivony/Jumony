@@ -129,7 +129,7 @@ namespace Ivony.Html.Web
 
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径", "virtualPath" );
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
 
 
       lock ( _contentProvidersSync )
@@ -178,7 +178,7 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "virtualPath" );
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
 
 
       cacheKey = null;

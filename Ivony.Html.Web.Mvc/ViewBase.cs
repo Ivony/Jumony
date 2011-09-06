@@ -235,7 +235,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 派生类调用此方法处理 Action URL
+    /// 派生类调用此方法处理 Action 路由
     /// </summary>
     /// <param name="container"></param>
     protected void ProcessActionUrls( IHtmlContainer container )
@@ -370,15 +370,11 @@ namespace Ivony.Html.Web.Mvc
     {
       var uriValue = attribute.AttributeValue;
 
-      if ( uriValue == null )
+      if ( string.IsNullOrWhiteSpace( uriValue ) )//对于空路径暂不作处理。
         return;
 
       Uri absoluteUri;
       if ( Uri.TryCreate( uriValue, UriKind.Absolute, out absoluteUri ) )//对于绝对 URI，不采取任何动作。
-        return;
-
-
-      if ( string.IsNullOrEmpty( uriValue ) )
         return;
 
       if ( VirtualPathUtility.IsAbsolute( uriValue ) )//对于绝对路径，也不采取任何动作。

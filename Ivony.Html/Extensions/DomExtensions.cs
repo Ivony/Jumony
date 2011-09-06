@@ -391,7 +391,7 @@ namespace Ivony.Html
       return container.AddComment( index, comment.Comment );
     }
 
-    
+
 
     /// <summary>
     /// 添加节点的副本
@@ -780,7 +780,7 @@ namespace Ivony.Html
     /// <param name="element">要替换内容的元素</param>
     /// <param name="text">文本内容</param>
     /// <param name="encodeWhiteSpaces">是否编码空白字符</param>
-    public static T InnerText<T>( this T element, string text, bool encodeWhiteSpaces ) where T: IHtmlElement
+    public static T InnerText<T>( this T element, string text, bool encodeWhiteSpaces ) where T : IHtmlElement
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -790,6 +790,9 @@ namespace Ivony.Html
       lock ( element.SyncRoot )
       {
         ClearNodes( element );
+
+        if ( string.IsNullOrEmpty( text ) )//对于空输入，则只需要清空元素即可
+          return element;
 
 
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
@@ -839,6 +842,10 @@ namespace Ivony.Html
       lock ( element.SyncRoot )
       {
         ClearNodes( element );
+
+        if ( string.IsNullOrEmpty( html ) )//对于空输入，则只需要清空元素即可
+          return element;
+
 
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {

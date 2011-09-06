@@ -76,9 +76,9 @@ namespace Ivony.Html.Web.Mvc
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessDocument" );
 
 
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionLinks" );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
       ProcessActionUrls( Document );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionLinks" );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
 
 
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );

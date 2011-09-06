@@ -279,10 +279,7 @@ namespace Ivony.Html.Web
         var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
         if ( createDocument != null )
-        {
-          Trace.Write( "Jumony for ASP.NET", "Document cache hited" );
           return createDocument( result.DomProvider );
-        }
 
         Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
 

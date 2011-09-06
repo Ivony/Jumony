@@ -378,6 +378,9 @@ namespace Ivony.Html.Web.Mvc
         return;
 
 
+      if ( string.IsNullOrEmpty( uriValue ) )
+        return;
+
       if ( VirtualPathUtility.IsAbsolute( uriValue ) )//对于绝对路径，也不采取任何动作。
         return;
 

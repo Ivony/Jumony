@@ -236,6 +236,17 @@ namespace Ivony.Html.Web
     }
 
 
+    private static HttpContext Context
+    {
+      get { return HttpContext.Current; }
+    }
+
+    private static TraceContext Trace
+    {
+      get { return Context.Trace; }
+    }
+
+
 
     private const string DocumentCacheKey = "HtmlProviders_HtmlDocumentCache_{0}";
 
@@ -268,10 +279,16 @@ namespace Ivony.Html.Web
         var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
         if ( createDocument != null )
+        {
+          Trace.Write( "Jumony for ASP.NET", "Document cache hited" );
           return createDocument( result.DomProvider );
+        }
 
-        
-        
+        Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
+
+
+
+
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
         createDocument = document.Compile();

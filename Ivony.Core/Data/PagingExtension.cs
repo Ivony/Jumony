@@ -352,7 +352,10 @@ namespace Ivony.Data
 
       public IEnumerable<Q> GetPage( int pageIndex )
       {
-        return _dataSource.Take( pageIndex * PageSize ).Skip( (pageIndex - 1) * PageSize );
+        if ( pageIndex < 1 )
+          throw new ArgumentOutOfRangeException( "pageIndex" );
+
+        return _dataSource.Skip( (pageIndex - 1) * PageSize ).Take( PageSize );
       }
 
       IEnumerable IPagingData.GetPage( int pageIndex )
@@ -416,7 +419,10 @@ namespace Ivony.Data
 
       public IEnumerable<Q> GetPage( int pageIndex )
       {
-        return _queryable.Take( pageIndex * PageSize ).Skip( (pageIndex - 1) * PageSize );
+        if ( pageIndex < 1 )
+          throw new ArgumentOutOfRangeException( "pageIndex" );
+
+        return _queryable.Skip( (pageIndex - 1) * PageSize ).Take( PageSize );
       }
 
       IEnumerable IPagingData.GetPage( int pageIndex )

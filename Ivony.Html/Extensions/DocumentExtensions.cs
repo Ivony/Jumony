@@ -470,6 +470,24 @@ namespace Ivony.Html
     private static class DocumentCompiler
     {
 
+
+      private class DynamicMethodHandler<T>
+      {
+
+        private DynamicMethod _method;
+        public DynamicMethodHandler( DynamicMethod method )
+        {
+          _method = method;
+          Method = method.CreateDelegate( typeof( T ) ).CastTo<T>();
+        }
+
+        public T Method
+        {
+          get;
+          private set;
+        }
+      }
+
       public static Func<IHtmlDomProvider, IHtmlDocument> Compile( IHtmlDocument document )
       {
         var method = new DynamicMethod( "", typeof( IHtmlDocument ), new[] { typeof( IHtmlDomProvider ) } );
@@ -491,7 +509,7 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ret );
 
-        return (Func<IHtmlDomProvider, IHtmlDocument>) method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) );
+        return new DynamicMethodHandler<Func<IHtmlDomProvider, IHtmlDocument>>( method ).Method;
       }
 
 

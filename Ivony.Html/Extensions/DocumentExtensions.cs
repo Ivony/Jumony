@@ -471,20 +471,20 @@ namespace Ivony.Html
     {
 
 
-      private class DynamicMethodHandler<T>
+      private class DynamicMethodHandler
       {
 
         private DynamicMethod _method;
+        private Func<IHtmlDomProvider, IHtmlDocument> _delegate;
         public DynamicMethodHandler( DynamicMethod method )
         {
           _method = method;
-          Method = method.CreateDelegate( typeof( T ) ).CastTo<T>();
+          _delegate = method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) ).CastTo<Func<IHtmlDomProvider, IHtmlDocument>>();
         }
 
-        public T Method
+        public IHtmlDocument Invoke(IHtmlDomProvider provider )
         {
-          get;
-          private set;
+          return _delegate( provider );
         }
       }
 
@@ -509,7 +509,7 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ret );
 
-        return new DynamicMethodHandler<Func<IHtmlDomProvider, IHtmlDocument>>( method ).Method;
+        return new DynamicMethodHandler( method ).Invoke;
       }
 
 

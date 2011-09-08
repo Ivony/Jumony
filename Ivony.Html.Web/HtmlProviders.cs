@@ -254,8 +254,7 @@ namespace Ivony.Html.Web
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">请求的虚拟路径</param>
-    /// <param name="result">文档加载结果</param>
+    /// <param name="contentResult">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, HtmlContentResult contentResult )
     {
@@ -279,7 +278,11 @@ namespace Ivony.Html.Web
         var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
         if ( createDocument != null )
-          return createDocument( result.DomProvider );
+        {
+          var provider = result.DomProvider;
+          Trace.Write( "Test", "Begin Invoke DynamicMethod" );
+          return createDocument( provider );
+        }
 
         Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
 
@@ -289,6 +292,7 @@ namespace Ivony.Html.Web
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
         createDocument = document.Compile();
+        new Action( delegate { createDocument( result.DomProvider ); } ).BeginInvoke( null, null );//立即在新线程预热此方法
 
         Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
 

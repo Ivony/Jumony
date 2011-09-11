@@ -292,9 +292,14 @@ namespace Ivony.Html.Web
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
         createDocument = document.Compile();
-        new Action( delegate { createDocument( result.DomProvider ); } ).BeginInvoke( null, null );//立即在新线程预热此方法
+        new Action( delegate 
+          { 
+            createDocument( result.DomProvider );
+            Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
+          } 
+          ).BeginInvoke( null, null );//立即在新线程预热此方法
 
-        Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
+        
 
         return document;
       }

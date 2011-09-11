@@ -32,7 +32,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取文档碎片的提供程序，如不支持，请抛出 NotSupportedException 异常
+    /// 获取文档碎片的管理器，如不支持文档碎片，请返回 null 。
     /// </summary>
     IHtmlFragmentManager FragmentManager
     {
@@ -41,7 +41,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取修改 DOM 结构的修改器，如不支持修改 DOM 结构，请返回null。
+    /// 获取修改 DOM 结构的修改器，如不支持修改 DOM 结构，请返回 null 。
     /// </summary>
     IHtmlDomModifier DomModifier
     {

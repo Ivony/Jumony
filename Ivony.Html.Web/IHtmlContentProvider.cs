@@ -96,7 +96,7 @@ namespace Ivony.Html.Web
     }
 
     /// <summary>
-    /// 获取的内容的绝对Uri
+    /// 获取的内容的绝对 Uri
     /// </summary>
     public Uri ContentUri
     {

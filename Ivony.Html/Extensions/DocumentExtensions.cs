@@ -467,10 +467,16 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 文档编译器，负责将 HTML DOM 结构编译成代码
+    /// </summary>
     private static class DocumentCompiler
     {
 
 
+      /// <summary>
+      /// 用于携带 DynamicMethod 实例的类型
+      /// </summary>
       private class DynamicMethodHandler
       {
 
@@ -482,13 +488,38 @@ namespace Ivony.Html
           _delegate = method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) ).CastTo<Func<IHtmlDomProvider, IHtmlDocument>>();
         }
 
-        public IHtmlDocument Invoke(IHtmlDomProvider provider )
+        public IHtmlDocument Invoke( IHtmlDomProvider provider )
         {
           return _delegate( provider );
         }
       }
 
+
+      public static Func<IHtmlDocument> Compile( IHtmlDocument document, IHtmlDomProvider provider )
+      {
+        var method = CompileDynamicMethod( document );
+        return method.CreateDelegate( typeof( Func<IHtmlDocument> ), provider ).CastTo<Func<IHtmlDocument>>();
+
+      }
+
+      /// <summary>
+      /// 将一个文档编译成一个方法
+      /// </summary>
+      /// <param name="document">要编译的文档</param>
+      /// <returns>编译好的方法，文档可以透过此方法复原</returns>
       public static Func<IHtmlDomProvider, IHtmlDocument> Compile( IHtmlDocument document )
+      {
+        var method = CompileDynamicMethod( document );
+        return new DynamicMethodHandler( method ).Invoke;
+      }
+
+
+      /// <summary>
+      /// 将文档编译成一个动态方法，为下一步转换成委托做准备。
+      /// </summary>
+      /// <param name="document">要编译的文档</param>
+      /// <returns>编译好的动态方法</returns>
+      private static DynamicMethod CompileDynamicMethod( IHtmlDocument document )
       {
         var method = new DynamicMethod( "", typeof( IHtmlDocument ), new[] { typeof( IHtmlDomProvider ) } );
 
@@ -509,8 +540,49 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Ret );
 
-        return new DynamicMethodHandler( method ).Invoke;
+        return method;
       }
+
+
+      /// <summary>
+      /// 将文档碎片编译成一个动态方法，为下一步转换成委托做准备。
+      /// </summary>
+      /// <param name="document">要编译的文档碎片</param>
+      /// <returns>编译好的动态方法</returns>
+      private static DynamicMethod CompileDynamicMethod( IHtmlFragment fragment )
+      {
+
+        throw new NotImplementedException();
+
+        var method = new DynamicMethod( "", typeof( IHtmlFragment ), new[] { typeof( IHtmlFragmentManager ) } );
+
+        var il = method.GetILGenerator();
+
+
+        il.DeclareLocal( typeof( IHtmlContainer ) );
+
+        il.Emit( OpCodes.Ldarg_0 );                         //ld manager         manager
+
+
+        EmitCreateFragment( il, fragment );                 //create fragment    manager fragment
+
+
+        il.Emit( OpCodes.Callvirt, CompleteDocument );      //complete document  document
+
+
+        il.Emit( OpCodes.Ret );
+
+        return method;
+      }
+
+      private static void EmitCreateFragment( ILGenerator il, IHtmlFragment fragment )
+      {
+
+        throw new NotImplementedException();
+
+        il.Emit( OpCodes.Callvirt, CreateFragment );        //create fragment manager fragment
+      }
+
 
 
       private static void EmitCreateDocument( ILGenerator il, IHtmlDocument document )
@@ -637,6 +709,7 @@ namespace Ivony.Html
 
       private static readonly ConstructorInfo NewUri = typeof( Uri ).GetConstructor( new[] { typeof( string ) } );
       private static readonly MethodInfo CreateDocument = typeof( IHtmlDomProvider ).GetMethod( "CreateDocument" );
+      private static readonly MethodInfo CreateFragment = typeof( IHtmlFragmentManager ).GetMethod( "CreateFragment" );
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );

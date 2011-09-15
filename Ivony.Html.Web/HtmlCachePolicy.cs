@@ -14,6 +14,11 @@ namespace Ivony.Html.Web
   {
 
     /// <summary>
+    /// 是否启用客户端缓存
+    /// </summary>
+    public bool EnableClientCache { get; set; }
+
+    /// <summary>
     /// 缓存依赖项
     /// </summary>
     public CacheDependency Dependency { get; set; }

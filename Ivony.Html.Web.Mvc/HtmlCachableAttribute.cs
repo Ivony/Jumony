@@ -13,6 +13,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 用于指定 Action 或 Controller 应缓存输出结果。
   /// </summary>
+  [AttributeUsage( AttributeTargets.Class | AttributeTargets.Method, Inherited = true )]
   public class HtmlCachableAttribute : ActionFilterAttribute
   {
 

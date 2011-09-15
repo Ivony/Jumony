@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.IO;
+using System.Web.Hosting;
+using System.Security.Cryptography;
 
 namespace Ivony.Html.Web
 {

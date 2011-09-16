@@ -6,13 +6,14 @@ using System.Web;
 using System.IO;
 using System.Web.Hosting;
 using System.Security.Cryptography;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
   /// <summary>
   /// 提供 HTTP 客户端缓存的一些帮助功能
   /// </summary>
-  public class HttpCacheHelper
+  public class CacheHelper
   {
 
 
@@ -87,6 +88,27 @@ namespace Ivony.Html.Web
       {
         return hashProvider.ComputeHash( Encoding.UTF8.GetBytes( data ) );
       }
+    }
+
+
+    public static string GenerateCacheKey( RouteValueDictionary routeValues )
+    {
+
+      StringBuilder builder = new StringBuilder();
+
+      foreach ( string key in routeValues.Keys )
+      {
+        var _key = key.Replace( "=", "==" ).Replace( ";", ";;" );
+        builder.Append( _key + "=" );
+
+        object value = routeValues[key];
+        if ( value == null )
+          builder.Append( "@;" );
+        else
+          builder.Append( value.ToString().Replace( "=", "==" ).Replace( ";", ";;" ).Replace( "@", "@@" ) + ";" );
+      }
+
+      return builder.ToString();
     }
 
 

@@ -280,20 +280,17 @@ namespace Ivony.Html.Web
         if ( createDocument != null )
         {
           var provider = result.DomProvider;
-          Trace.Write( "Test", "Begin Invoke DynamicMethod" );
           return createDocument( provider );
         }
 
         Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
 
 
-
-
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
-        createDocument = document.Compile();
         new Action( delegate 
-          { 
+          {
+            createDocument = document.Compile();
             createDocument( result.DomProvider );
             Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
           } 

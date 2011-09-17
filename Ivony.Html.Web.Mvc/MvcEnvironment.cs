@@ -100,9 +100,24 @@ namespace Ivony.Html.Web.Mvc
 
     private static  MvcConfiguration _configuration = new MvcConfiguration();
 
+    /// <summary>
+    /// 获取 Jumony for MVC 配置对象，可以对 Jumony for MVC 行为进行调整。
+    /// </summary>
     public static MvcConfiguration Configuration
     {
       get { return _configuration; }
+    }
+
+
+    /// <summary>
+    /// 当任何一个 JumonyViewEngine 对象成功创建了视图时发生。
+    /// </summary>
+    public static event EventHandler<JumonyViewEventArgs> ViewCreated;
+
+    internal static void OnViewCreated( object sender, JumonyViewEventArgs e )
+    {
+      if ( ViewCreated != null )
+        ViewCreated( sender, e );
     }
 
 

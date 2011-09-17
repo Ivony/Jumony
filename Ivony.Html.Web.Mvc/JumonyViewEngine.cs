@@ -80,22 +80,6 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 加载 HTML 文件
-    /// </summary>
-    /// <param name="context"></param>
-    /// <param name="virtualPath"></param>
-    /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
-    {
-      var content = new StaticFileLoader().LoadContent( context, VirtualPathProvider, virtualPath );//UNDONE 不应每次创建一个实例
-
-      return HtmlProviders.ParseDocument( context, content );
-    }
-
-
-
-
-    /// <summary>
     /// 创建视图对象
     /// </summary>
     /// <param name="context"></param>
@@ -154,6 +138,13 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    /// <summary>
+    /// 创建带有指定处理器的页面视图
+    /// </summary>
+    /// <param name="virtualPath">视图虚拟路径</param>
+    /// <param name="handlerPath">处理器虚拟路径</param>
+    /// <returns></returns>
     protected static ViewBase CreateHandledPageView( string virtualPath, string handlerPath )
     {
       try
@@ -177,7 +168,12 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-
+    /// <summary>
+    /// 创建带有指定处理器的部分视图
+    /// </summary>
+    /// <param name="virtualPath">视图虚拟路径</param>
+    /// <param name="handlerPath">处理器虚拟路径</param>
+    /// <returns></returns>
     protected static ViewBase CreateHandledPartialView( string virtualPath, string handlerPath )
     {
       try
@@ -242,6 +238,8 @@ namespace Ivony.Html.Web.Mvc
     {
       if ( ViewCreated != null )
         ViewCreated( this, e );
+
+      MvcEnvironment.OnViewCreated( this, e );
     }
 
 
@@ -263,7 +261,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 获取创建视图对象的 ViewProvider
+    /// 获取创建视图对象的 ViewProvider ，若不是由自定义视图提供程序创建，则为 null
     /// </summary>
     public IViewProvider ViewProvider
     {

@@ -26,6 +26,14 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 忽略部分视图渲染异常，继续渲染页面其它部分，默认为 false 。
+    /// </summary>
+    public bool IgnorePartialRenderException
+    {
+      get;
+      set;
+    }
 
   }
 }

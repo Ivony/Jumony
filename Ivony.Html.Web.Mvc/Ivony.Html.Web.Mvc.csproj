@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -69,6 +70,7 @@
     <Compile Include="EmbbedPartialView.cs" />
     <Compile Include="HtmlCachableAttribute.cs" />
     <Compile Include="ICachableResult.cs" />
+    <Compile Include="IPartialRenderAdapter.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
     <Compile Include="MvcConfiguration.cs" />

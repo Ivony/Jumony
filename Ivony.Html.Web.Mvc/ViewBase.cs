@@ -483,7 +483,15 @@ namespace Ivony.Html.Web.Mvc
 
         var routeValues = GetRouteValues( partialElement );
 
-        writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
+        try
+        {
+          writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
+        }
+        catch ( Exception e )
+        {
+          if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
+            writer.Write( "<!--parital view render failed-->" );
+        }
 
         return;
       }
@@ -494,7 +502,15 @@ namespace Ivony.Html.Web.Mvc
 
         var helper = MakeHelper();
 
-        writer.Write( helper.Partial( partialViewName: view ) );
+        try
+        {
+          writer.Write( helper.Partial( partialViewName: view ) );
+        }
+        catch ( Exception e )
+        {
+          if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
+            writer.Write( "<!--parital view render failed-->" );
+        }
 
         return;
 

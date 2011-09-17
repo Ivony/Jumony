@@ -35,5 +35,14 @@ namespace Ivony.Html.Web.Mvc
       set;
     }
 
+    /// <summary>
+    /// 获取或设置部分视图的渲染超时时间，设置为任何小于等于零的时间都等于没有渲染超时。默认为零
+    /// </summary>
+    public TimeSpan PartialRenderTimeout
+    {
+      get;
+      set;
+    }
+
   }
 }

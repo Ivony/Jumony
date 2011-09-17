@@ -601,7 +601,6 @@ namespace Ivony.Html.Web.Mvc
 
         var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-
         _view.HttpContext.Trace.Write( "Jumony for MVC", string.Format( "Begin Render Partial: {0}", partialTag ) );
         _view.RenderPartial( element, writer );
         _view.HttpContext.Trace.Write( "Jumony for MVC", string.Format( "End Render Partial: {0}", partialTag ) );

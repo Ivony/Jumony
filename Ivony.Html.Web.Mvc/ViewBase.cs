@@ -466,13 +466,14 @@ namespace Ivony.Html.Web.Mvc
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
     {
 
+      writer.Write( RenderPartial( partialElement ) );
+    }
+
+
+    protected virtual string RenderPartial( IHtmlElement partialElement )
+    {
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();
-      var handler = partialElement.Attribute( "handler" ).Value();
-
-      if ( action != null && view != null )
-        throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
-
 
       if ( action != null )
       {
@@ -485,15 +486,13 @@ namespace Ivony.Html.Web.Mvc
 
         try
         {
-          writer.Write( helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ) );
+          return helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ).ToString();
         }
         catch ( Exception e )
         {
           if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
-            writer.Write( "<!--parital view render failed-->" );
+            return "<!--parital view render failed-->";
         }
-
-        return;
       }
 
 
@@ -504,17 +503,17 @@ namespace Ivony.Html.Web.Mvc
 
         try
         {
-          writer.Write( helper.Partial( partialViewName: view ) );
+          return helper.Partial( partialViewName: view ).ToString();
         }
         catch ( Exception e )
         {
           if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
-            writer.Write( "<!--parital view render failed-->" );
+            return "<!--parital view render failed-->";
         }
 
-        return;
-
       }
+
+      throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
 
     }
 

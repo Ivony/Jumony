@@ -27,13 +27,24 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 忽略部分视图渲染异常，继续渲染页面其它部分，默认为 false 。
+    /// 忽略部分视图渲染异常，继续渲染页面其它部分，默认为 false
     /// </summary>
     public bool IgnorePartialRenderException
     {
       get;
       set;
     }
+
+
+    /// <summary>
+    /// 是否允许并行进行部分视图渲染，默认值为 false
+    /// </summary>
+    public bool EnableParallelPartialRender
+    {
+      get;
+      set;
+    }
+
 
     /// <summary>
     /// 获取或设置部分视图的渲染超时时间，设置为任何小于等于零的时间都等于没有渲染超时。默认为零

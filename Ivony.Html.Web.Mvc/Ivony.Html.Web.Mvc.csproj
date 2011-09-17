@@ -71,6 +71,7 @@
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
+    <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PageView.cs" />
     <Compile Include="RoutingExtensions.cs" />

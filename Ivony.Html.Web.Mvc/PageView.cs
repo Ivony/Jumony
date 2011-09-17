@@ -57,7 +57,25 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>渲染的 HTML</returns>
     protected override string RenderContent()
     {
+
+      EnsurePageView();
+
       return Document.Render( RenderAdapters.ToArray() );
+    }
+
+
+    /// <summary>
+    /// 确保当前确实是在渲染一个页面
+    /// </summary>
+    protected virtual void EnsurePageView()
+    {
+
+      if ( MvcEnvironment.Configuration.EnablePageViewRenderPartial )
+        return;
+
+      if ( ViewContext.IsChildAction )
+        throw new InvalidOperationException( "当前设置禁止使用 PageView 来渲染部分视图！" );
+
     }
 
 
@@ -87,7 +105,6 @@ namespace Ivony.Html.Web.Mvc
 
 
       AddGeneratorMetaData();
-
     }
 
 

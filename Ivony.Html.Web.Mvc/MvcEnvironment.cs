@@ -97,6 +97,15 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    private static  MvcConfiguration _configuration = new MvcConfiguration();
+
+    public static MvcConfiguration Configuration
+    {
+      get { return _configuration; }
+    }
+
+
   }
 
 }

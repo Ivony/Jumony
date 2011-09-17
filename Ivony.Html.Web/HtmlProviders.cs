@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 提供Jumony Web所有提供程序的管理和注册的静态类
+  /// 提供 Jumony Web 所有提供程序的管理和注册的静态类
   /// </summary>
   public static class HtmlProviders
   {

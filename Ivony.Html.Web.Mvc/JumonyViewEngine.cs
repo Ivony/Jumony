@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Compilation;
 using System.Web;
+using System.Web.Hosting;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -42,6 +43,9 @@ namespace Ivony.Html.Web.Mvc
 
 
     }
+
+
+
 
 
 
@@ -105,46 +109,52 @@ namespace Ivony.Html.Web.Mvc
       {
         foreach ( var provider in ViewProviders )
         {
-          var view = provider.TryCreateView( context, virtualPath, isPartial );
+          var view = provider.TryCreateView( context, VirtualPathProvider, virtualPath, isPartial );
           if ( view != null )
+          {
+            OnViewCreated( new JumonyViewEventArgs() { View = view, ViewProvider = provider } );
             return view;
-        }
-      }
-
-      var handlerPath = virtualPath + ".ashx";
-      if ( VirtualPathProvider.FileExists( handlerPath ) )
-      {
-
-        if ( isPartial )
-        {
-
-          var view = CreateHandledPartialView( virtualPath, handlerPath );
-          if ( view != null )
-            return view;
-
-        }
-        else
-        {
-
-          var view = CreateHandledPageView( virtualPath, handlerPath );
-          if ( view != null )
-            return view;
-
+          }
         }
       }
 
 
+      {//默认处理策略
+        var handlerPath = virtualPath + ".ashx";
 
-      if ( isPartial )
-        return new GenericPartialView( virtualPath );
+        ViewBase view = null;
 
-      else
-        return new GenericPageView( virtualPath );
+        if ( VirtualPathProvider.FileExists( handlerPath ) )
+        {
+
+          if ( isPartial )
+          {
+            view = CreateHandledPartialView( virtualPath, handlerPath );
+          }
+          else
+          {
+            view = CreateHandledPageView( virtualPath, handlerPath );
+          }
+        }
+
+
+        if ( view == null )
+        {
+          if ( isPartial )
+            view = new GenericPartialView( virtualPath );
+          else
+            view = new GenericPageView( virtualPath );
+        }
+
+
+        OnViewCreated( new JumonyViewEventArgs() { View = view } );
+        return view;
+      }
 
     }
 
 
-    private static IView CreateHandledPageView( string virtualPath, string handlerPath )
+    protected static ViewBase CreateHandledPageView( string virtualPath, string handlerPath )
     {
       try
       {
@@ -168,7 +178,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private static IView CreateHandledPartialView( string virtualPath, string handlerPath )
+    protected static ViewBase CreateHandledPartialView( string virtualPath, string handlerPath )
     {
       try
       {
@@ -194,6 +204,10 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+
+
+
+
     static JumonyViewEngine()
     {
       ViewProviders = new SynchronizedCollection<IViewProvider>( _providersSync );
@@ -212,5 +226,51 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+
+
+
+    /// <summary>
+    /// 当视图被成功创建时发生
+    /// </summary>
+    public event EventHandler<JumonyViewEventArgs> ViewCreated;
+
+    /// <summary>
+    /// 引发 ViewCreated 事件
+    /// </summary>
+    /// <param name="e"></param>
+    protected virtual void OnViewCreated( JumonyViewEventArgs e )
+    {
+      if ( ViewCreated != null )
+        ViewCreated( this, e );
+    }
+
+
   }
+
+
+  public class JumonyViewEventArgs : EventArgs
+  {
+
+
+    /// <summary>
+    /// 获取创建的视图对象
+    /// </summary>
+    public ViewBase View
+    {
+      get;
+      internal set;
+    }
+
+
+    /// <summary>
+    /// 获取创建视图对象的 ViewProvider
+    /// </summary>
+    public IViewProvider ViewProvider
+    {
+      get;
+      internal set;
+    }
+
+  }
+
 }

@@ -165,18 +165,43 @@ namespace Ivony.Html.Web.Mvc
       Url = new UrlHelper( RequestContext );
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Process" );
+      OnPreProcess( this );
       ProcessMain();
+      OnPostProcess( this );
       HttpContext.Trace.Write( "Jumony for MVC", "End Process" );
 
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Render" );
+      OnPreRender( this, writer );
       var content = RenderContent();
+      OnPostRender( this, writer );
       HttpContext.Trace.Write( "Jumony for MVC", "End Render" );
 
       UpdateCache( content );
 
       writer.Write( content );
     }
+
+    private void OnPreProcess( ViewBase viewBase )
+    {
+      throw new NotImplementedException();
+    }
+
+    private void OnPostProcess( ViewBase viewBase )
+    {
+      throw new NotImplementedException();
+    }
+
+    private void OnPreRender( ViewBase viewBase, TextWriter writer )
+    {
+      throw new NotImplementedException();
+    }
+
+    protected virtual void OnPostRender( ViewBase viewBase, TextWriter writer )
+    {
+      throw new NotImplementedException();
+    }
+
 
 
     /// <summary>

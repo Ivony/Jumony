@@ -42,16 +42,21 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    private static readonly string CacheKeyToken = "JumonyforMVC_CacheControl_CacheKey";
+
+
     /// <summary>
     /// 重写此方法以拦截请求并输出缓存
     /// </summary>
     /// <param name="filterContext">筛选器上下文</param>
     public override void OnActionExecuting( ActionExecutingContext filterContext )
     {
-      var cacheKey = GetCacheKey( filterContext );
+      var cacheKey = GetCacheKey( filterContext, filterContext.ActionDescriptor );
 
       if ( cacheKey == null )
         return;
+
+      filterContext.RouteData.DataTokens["JumonyforMVC_CacheControl_CacheKey"] = cacheKey;
 
       var response = HostingEnvironment.Cache[cacheKey] as ICachedResponse;
 
@@ -72,7 +77,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">MVC 请求上下文</param>
     /// <returns></returns>
-    protected virtual string GetCacheKey( ControllerContext context )
+    protected virtual string GetCacheKey( ControllerContext context, ActionDescriptor action )
     {
       if ( CachePolicyProvider != null )
         return CachePolicyProvider.GetCacheKey( context.HttpContext );
@@ -83,7 +88,7 @@ namespace Ivony.Html.Web.Mvc
         return provider.GetCacheKey( context.HttpContext );
 
 
-      return HtmlProviders.GetCacheKey( context.HttpContext );
+      return MvcEnvironment.GetCacheKey( context, action );
     }
 
 
@@ -140,11 +145,11 @@ namespace Ivony.Html.Web.Mvc
 
       var httpContext = context.HttpContext;
 
-      cacheKey = GetCacheKey( context );
+      cacheKey = context.RouteData.DataTokens[CacheKeyToken] as string;
       if ( cacheKey == null )
         return;
 
-      cachePolicy = GetCachePolicy( context, cached );
+      cachePolicy = GetCachePolicy( context, cacheKey, cached );
 
 
       UpdateCache( cached, cacheKey, cachePolicy );
@@ -159,7 +164,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="context">请求上下文</param>
     /// <param name="cached">已缓存的响应</param>
     /// <returns>缓存策略</returns>
-    protected virtual HtmlCachePolicy GetCachePolicy( ControllerContext context, ICachedResponse cached )
+    protected virtual HtmlCachePolicy GetCachePolicy( ControllerContext context, string cacheKey, ICachedResponse cached )
     {
       if ( CachePolicyProvider != null )
         return CachePolicyProvider.GetCachePolicy( context.HttpContext, cached );
@@ -170,7 +175,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       else
-        return HtmlProviders.GetCachePolicy( context.HttpContext, cached );
+        return MvcEnvironment.GetCachePolicy( context, cacheKey, cached );
     }
 
 

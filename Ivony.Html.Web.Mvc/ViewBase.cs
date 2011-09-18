@@ -184,24 +184,20 @@ namespace Ivony.Html.Web.Mvc
       writer.Write( content );
     }
 
-    private void OnPreProcess( ViewBase viewBase )
+    protected virtual void OnPreProcess( ViewBase viewBase )
     {
-      throw new NotImplementedException();
     }
 
-    private void OnPostProcess( ViewBase viewBase )
+    protected virtual void OnPostProcess( ViewBase viewBase )
     {
-      throw new NotImplementedException();
     }
 
-    private void OnPreRender( ViewBase viewBase, TextWriter writer )
+    protected virtual void OnPreRender( ViewBase viewBase, TextWriter writer )
     {
-      throw new NotImplementedException();
     }
 
     protected virtual void OnPostRender( ViewBase viewBase, TextWriter writer )
     {
-      throw new NotImplementedException();
     }
 
 
@@ -474,14 +470,20 @@ namespace Ivony.Html.Web.Mvc
       if ( timeout > TimeSpan.Zero )
       {
 
-        var task = new Task<string>( () => RenderPartial( partialElement ) );
+
+        var cancellationSource = new CancellationTokenSource();
+
+        var task = new Task<string>( () => RenderPartial( partialElement ), cancellationSource.Token );
 
         task.Start();
         if ( task.Wait( timeout ) )
           writer.Write( task.Result );
-        else
-          writer.Write( "<!--Render partial timeout-->" );
 
+        else
+        {
+          cancellationSource.Cancel( true );
+          writer.Write( "<!--Render partial timeout-->" );
+        }
       }
       else
         writer.Write( RenderPartial( partialElement ) );

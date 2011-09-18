@@ -236,17 +236,6 @@ namespace Ivony.Html.Web
     }
 
 
-    private static HttpContext Context
-    {
-      get { return HttpContext.Current; }
-    }
-
-    private static TraceContext Trace
-    {
-      get { return Context.Trace; }
-    }
-
-
 
     private const string DocumentCacheKey = "HtmlProviders_HtmlDocumentCache_{0}";
 
@@ -283,20 +272,20 @@ namespace Ivony.Html.Web
           return createDocument( provider );
         }
 
-        Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
+        context.Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
 
 
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
 
-        new Action( delegate 
+        new Action( delegate
           {
             createDocument = document.Compile();
             createDocument( result.DomProvider );
             Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
-          } 
+          }
           ).BeginInvoke( null, null );//立即在新线程预热此方法
 
-        
+
 
         return document;
       }

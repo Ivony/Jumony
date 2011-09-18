@@ -27,6 +27,8 @@
 
     MvcEnvironment.JumonyViewEngine.ViewLocationFormats = new string[] { "~/Views/{0}.html" };
 
+    MvcEnvironment.Configuration.PartialRenderTimeout = TimeSpan.FromMilliseconds( 50 );
+
   }
 
 </script>

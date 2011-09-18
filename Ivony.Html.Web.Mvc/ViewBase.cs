@@ -470,18 +470,17 @@ namespace Ivony.Html.Web.Mvc
       if ( timeout > TimeSpan.Zero )
       {
 
+        string result = null;
 
-        var cancellationSource = new CancellationTokenSource();
+        var thread = new Thread( () => result = RenderPartial( partialElement ) );
 
-        var task = new Task<string>( () => RenderPartial( partialElement ), cancellationSource.Token );
-
-        task.Start();
-        if ( task.Wait( timeout ) )
-          writer.Write( task.Result );
+        thread.Start();
+        if ( thread.Join( timeout ) )
+          writer.Write( result );
 
         else
         {
-          cancellationSource.Cancel( true );
+          thread.Abort();
           writer.Write( "<!--Render partial timeout-->" );
         }
       }

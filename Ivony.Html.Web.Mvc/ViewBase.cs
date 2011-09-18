@@ -9,6 +9,8 @@ using System.Web.Caching;
 using System.IO;
 using System.Web.Mvc.Html;
 using Ivony.Fluent;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -466,7 +468,23 @@ namespace Ivony.Html.Web.Mvc
     protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
     {
 
-      writer.Write( RenderPartial( partialElement ) );
+
+      var timeout = MvcEnvironment.Configuration.PartialRenderTimeout;
+
+      if ( timeout > TimeSpan.Zero )
+      {
+
+        var task = new Task<string>( () => RenderPartial( partialElement ) );
+
+        task.Start();
+        if ( task.Wait( timeout ) )
+          writer.Write( task.Result );
+        else
+          writer.Write( "<!--Render partial timeout-->" );
+
+      }
+      else
+        writer.Write( RenderPartial( partialElement ) );
     }
 
 

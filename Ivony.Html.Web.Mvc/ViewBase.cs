@@ -470,52 +470,47 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 渲染部分视图
+    /// </summary>
+    /// <param name="partialElement"></param>
+    /// <returns></returns>
     protected virtual string RenderPartial( IHtmlElement partialElement )
     {
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();
 
-      if ( action != null )
+
+      var helper = MakeHelper();
+
+
+      try
       {
-
-        var controller = partialElement.Attribute( "controller" ).Value() ?? (string) RouteData.Values["controller"];
-
-        var helper = MakeHelper();
-
-        var routeValues = GetRouteValues( partialElement );
-
-        try
+        if ( action != null )
         {
+          var controller = partialElement.Attribute( "controller" ).Value() ?? (string) RouteData.Values["controller"];
+          var routeValues = GetRouteValues( partialElement );
+
           return helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ).ToString();
         }
-        catch ( Exception e )
-        {
-          if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
-            return "<!--parital view render failed-->";
-        }
-      }
-
-
-      if ( view != null )
-      {
-
-        var helper = MakeHelper();
-
-        try
+        else if ( view != null )
         {
           return helper.Partial( partialViewName: view ).ToString();
         }
-        catch ( Exception e )
-        {
-          if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
-            return "<!--parital view render failed-->";
-        }
 
+      }
+      catch //若渲染时发生错误
+      {
+        if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
+          return "<!--parital view render failed-->";
+        else
+          throw;
       }
 
       throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
 
     }
+
 
 
 

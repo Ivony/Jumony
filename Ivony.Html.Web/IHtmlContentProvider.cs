@@ -137,6 +137,9 @@ namespace Ivony.Html.Web
       return LoadContent( context, HostingEnvironment.VirtualPathProvider, virtualPath );
     }
 
+
+    private static readonly Uri baseUri = new Uri( "virtualpath://" + Guid.NewGuid().ToString( "N" ) + "/" );
+
     /// <summary>
     /// 利用指定 VirtualPathProvider 将虚拟路径所指向文件当作静态文件加载。
     /// </summary>
@@ -177,7 +180,7 @@ namespace Ivony.Html.Web
       }
 
 
-      return new HtmlContentResult( this, content, new Uri( context.Request.Url, VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
+      return new HtmlContentResult( this, content, new Uri( baseUri, VirtualPathUtility.ToAbsolute( virtualPath ) ), key );
     }
 
 

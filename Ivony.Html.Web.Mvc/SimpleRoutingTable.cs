@@ -35,7 +35,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       if ( routeData != null )
-        return routeData;
+        return CloneRouteData( routeData );
 
 
       var data = _rules
@@ -60,9 +60,9 @@ namespace Ivony.Html.Web.Mvc
 
       routeData.DataTokens["RoutingRuleName"] = data.Rule.Name;
 
-      HostingEnvironment.Cache.Insert( cacheKey, CloneRouteData( routeData ) );
+      HostingEnvironment.Cache.Insert( cacheKey, routeData );
 
-      return routeData;
+      return CloneRouteData( routeData );
 
     }
 

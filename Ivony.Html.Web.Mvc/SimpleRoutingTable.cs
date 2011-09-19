@@ -60,11 +60,31 @@ namespace Ivony.Html.Web.Mvc
 
       routeData.DataTokens["RoutingRuleName"] = data.Rule.Name;
 
-      HostingEnvironment.Cache.Insert( cacheKey, routeData );
+      HostingEnvironment.Cache.Insert( cacheKey, CloneRouteData( routeData ) );
 
       return routeData;
 
     }
+
+
+
+    public static RouteData CloneRouteData( RouteData routeData )
+    {
+      var clone = new RouteData( routeData.Route, routeData.RouteHandler );
+
+      foreach ( var key in routeData.Values.Keys )
+      {
+        clone.Values.Add( key, routeData.Values[key] );
+      }
+
+      foreach ( var key in routeData.DataTokens.Keys )
+      {
+        clone.DataTokens.Add( key, routeData.DataTokens[key] );
+      }
+
+      return clone;
+    }
+
 
 
 

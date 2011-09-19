@@ -276,11 +276,11 @@ namespace Ivony.Html.Web
 
 
         var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
-        createDocument = document.Compile();
+        createDocument = document.Compile();//必须同步编译文档，否则文档对象可能被修改。
 
         new Action( delegate
           {
-            createDocument( result.DomProvider );
+            createDocument( result.DomProvider );//可以异步预热，预热后再存入缓存。
             Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
           }
           ).BeginInvoke( null, null );//立即在新线程预热此方法

@@ -409,12 +409,17 @@ namespace Ivony.Html.Web.Mvc
       if ( uriValue.StartsWith( "?" ) )//若是本路径的查询链接，也不采取任何动作。
         return;
 
+
+
       attribute.SetValue( ResolveVirtualPath( uriValue ) );
 
     }
 
     protected virtual string ResolveVirtualPath( string virtualPath )
     {
+      if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
+        return VirtualPathUtility.ToAbsolute( virtualPath );
+
       return VirtualPathUtility.Combine( VirtualPathUtility.ToAbsolute( VirtualPath ), virtualPath );
     }
 

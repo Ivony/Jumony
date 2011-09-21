@@ -415,6 +415,12 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 转换虚拟路径
+    /// </summary>
+    /// <param name="virtualPath"></param>
+    /// <returns></returns>
     protected virtual string ResolveVirtualPath( string virtualPath )
     {
       if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
@@ -476,12 +482,18 @@ namespace Ivony.Html.Web.Mvc
       {
 
         string result = null;
+        Exception exception = null;
 
-        var thread = new Thread( () => result = RenderPartial( partialElement ) );
+        var thread = new Thread( () => result = RenderPartialAsync( partialElement, out exception ) );
 
         thread.Start();
         if ( thread.Join( timeout ) )
+        {
+          if ( exception != null )
+            throw new HttpException( "渲染 Partial 时发生错误，详见内部异常", exception );
+
           writer.Write( result );
+        }
 
         else
         {
@@ -495,9 +507,37 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
+    /// 异步渲染部分视图
+    /// </summary>
+    /// <param name="partialElement">partial 元素</param>
+    /// <param name="exception">渲染过程中产生的异常</param>
+    /// <returns></returns>
+    [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]//捕获任何异常
+    protected string RenderPartialAsync( IHtmlElement partialElement, out Exception exception )
+    {
+      try
+      {
+        exception = null;
+        return RenderPartial( partialElement );
+      }
+      catch ( ThreadAbortException )
+      {
+        exception = null;
+        return null;
+      }
+      catch ( Exception e )
+      {
+        exception = e;
+        return null;
+      }
+    }
+
+
+
+    /// <summary>
     /// 渲染部分视图
     /// </summary>
-    /// <param name="partialElement"></param>
+    /// <param name="partialElement">partial 元素</param>
     /// <returns></returns>
     protected virtual string RenderPartial( IHtmlElement partialElement )
     {

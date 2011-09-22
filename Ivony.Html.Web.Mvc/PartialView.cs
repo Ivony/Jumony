@@ -22,7 +22,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    protected IHtmlContainer Container
+    public IHtmlContainer Container
     {
       get;
       private set;

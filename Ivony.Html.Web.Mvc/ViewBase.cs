@@ -167,16 +167,16 @@ namespace Ivony.Html.Web.Mvc
       Url = new UrlHelper( RequestContext );
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Process" );
-      OnPreProcess( this );
+      OnPreProcess();
       ProcessMain();
-      OnPostProcess( this );
+      OnPostProcess();
       HttpContext.Trace.Write( "Jumony for MVC", "End Process" );
 
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Render" );
-      OnPreRender( this, writer );
+      OnPreRender( writer );
       var content = RenderContent();
-      OnPostRender( this, writer );
+      OnPostRender( writer );
       HttpContext.Trace.Write( "Jumony for MVC", "End Render" );
 
       UpdateCache( content );
@@ -184,20 +184,39 @@ namespace Ivony.Html.Web.Mvc
       writer.Write( content );
     }
 
-    protected virtual void OnPreProcess( ViewBase viewBase )
+
+    public event EventHandler PreProcess;
+
+    protected virtual void OnPreProcess()
     {
+      if ( PreProcess != null )
+        PreProcess( this, EventArgs.Empty );
     }
 
-    protected virtual void OnPostProcess( ViewBase viewBase )
+
+    public event EventHandler PostProcess;
+
+    protected virtual void OnPostProcess()
     {
+      if ( PostProcess != null )
+        PostProcess( this, EventArgs.Empty );
     }
 
-    protected virtual void OnPreRender( ViewBase viewBase, TextWriter writer )
+
+    public event EventHandler PreRender;
+
+    protected virtual void OnPreRender( TextWriter writer )
     {
+      if ( PreRender != null )
+        PreRender( this, EventArgs.Empty );
     }
 
-    protected virtual void OnPostRender( ViewBase viewBase, TextWriter writer )
+
+    public event EventHandler PostRender;
+    protected virtual void OnPostRender( TextWriter writer )
     {
+      if ( PostRender != null )
+        PostRender( this, EventArgs.Empty );
     }
 
 

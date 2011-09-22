@@ -44,7 +44,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取页面文档对象
     /// </summary>
-    protected IHtmlDocument Document
+    public IHtmlDocument Document
     {
       get;
       private set;

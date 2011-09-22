@@ -445,43 +445,13 @@ namespace Ivony.Html.Web.Mvc
       if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
         return VirtualPathUtility.ToAbsolute( virtualPath );
 
-      return VirtualPathUtility.Combine( VirtualPathUtility.ToAbsolute( VirtualPath ), virtualPath );
-    }
-
-    /// <summary>
-    /// 根据文档基准 URI 转换容器中所有 URI 与当前请求匹配。
-    /// </summary>
-    /// <param name="container">确定要转换 URI 范围的容器</param>
-    /// <param name="baseUri">文档的基准 URI</param>
-    protected virtual void ResolveUri( IHtmlContainer container, Uri baseUri )
-    {
-      if ( baseUri == null )
-        throw new ArgumentNullException( "baseUri" );
-
-      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      try
       {
-
-        var value = attribute.Value();
-        if ( string.IsNullOrEmpty( value ) )
-          continue;
-
-
-        if ( value.StartsWith( "~/" ) )
-          value = VirtualPathUtility.ToAbsolute( value );
-
-        Uri uri;
-
-        if ( !Uri.TryCreate( baseUri, value, out uri ) )
-          continue;
-
-        if ( uri.Equals( baseUri ) )
-          continue;
-
-
-        //uri = HttpContext.Request.Url.MakeRelativeUri( uri );
-
-        attribute.Element.SetAttribute( attribute.Name, uri.AbsolutePath );
-
+        return VirtualPathUtility.Combine( VirtualPathUtility.ToAbsolute( VirtualPath ), virtualPath );
+      }
+      catch
+      {
+        return virtualPath;
       }
     }
 

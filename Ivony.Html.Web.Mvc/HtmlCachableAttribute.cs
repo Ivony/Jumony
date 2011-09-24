@@ -42,7 +42,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static readonly string CacheKeyToken = "JumonyforMVC_CacheControl_CacheKey";
+    private static readonly string CachePolicyToken = "JumonyforMVC_CacheControl_CachePolicy";
 
 
     /// <summary>
@@ -51,14 +51,14 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="filterContext">筛选器上下文</param>
     public override void OnActionExecuting( ActionExecutingContext filterContext )
     {
-      var cacheKey = GetCacheKey( filterContext, filterContext.ActionDescriptor );
+      CachePolicy = GetCachePolicy( filterContext, filterContext.ActionDescriptor );
 
-      if ( cacheKey == null )
+      if ( CachePolicy == null )
         return;
 
-      filterContext.RouteData.DataTokens["JumonyforMVC_CacheControl_CacheKey"] = cacheKey;
+      filterContext.RouteData.DataTokens[CachePolicyToken] = CachePolicy;
 
-      var response = HostingEnvironment.Cache[cacheKey] as ICachedResponse;
+      var response = filterContext.HttpContext.Cache.GetCachedResponse( CachePolicy.CacheToken );
 
       if ( response != null )
       {
@@ -72,23 +72,25 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    protected CachePolicy CachePolicy
+    {
+      get;
+      private set;
+    }
+
     /// <summary>
-    /// 获取缓存键
+    /// 获取缓存标示
     /// </summary>
     /// <param name="context">MVC 请求上下文</param>
     /// <returns></returns>
-    protected virtual string GetCacheKey( ControllerContext context, ActionDescriptor action )
+    protected virtual CachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor action )
     {
-      if ( CachePolicyProvider != null )
-        return CachePolicyProvider.GetCacheKey( context.HttpContext );
+
+      return MvcEnvironment.GetCachePolicy( context, action );
 
 
-      var provider = context.Controller as IHtmlCachePolicyProvider;
-      if ( provider != null )
-        return provider.GetCacheKey( context.HttpContext );
 
-
-      return MvcEnvironment.GetCacheKey( context, action );
     }
 
 
@@ -140,43 +142,17 @@ namespace Ivony.Html.Web.Mvc
         return;
 
 
-      string cacheKey;
-      HtmlCachePolicy cachePolicy;
-
       var httpContext = context.HttpContext;
 
-      cacheKey = context.RouteData.DataTokens[CacheKeyToken] as string;
-      if ( cacheKey == null )
+      var cacheToken = context.RouteData.DataTokens[CachePolicyToken] as CacheToken;
+      if ( cacheToken == null )
         return;
 
-      cachePolicy = GetCachePolicy( context, cacheKey, cached );
-
-
-      UpdateCache( cached, cacheKey, cachePolicy );
+      UpdateCache( cached, context, CachePolicy );
     }
 
 
 
-
-    /// <summary>
-    /// 获取缓存策略
-    /// </summary>
-    /// <param name="context">请求上下文</param>
-    /// <param name="cached">已缓存的响应</param>
-    /// <returns>缓存策略</returns>
-    protected virtual HtmlCachePolicy GetCachePolicy( ControllerContext context, string cacheKey, ICachedResponse cached )
-    {
-      if ( CachePolicyProvider != null )
-        return CachePolicyProvider.GetCachePolicy( context.HttpContext, cached );
-
-      var provider = context.Controller as IHtmlCachePolicyProvider;
-      if ( provider != null )
-        return provider.GetCachePolicy( context.HttpContext, cached );
-
-
-      else
-        return MvcEnvironment.GetCachePolicy( context, cacheKey, cached );
-    }
 
 
 
@@ -212,12 +188,13 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 更新缓存数据
     /// </summary>
-    /// <param name="cacheItem">可被缓存的响应数据</param>
-    /// <param name="cacheKey">缓存键</param>
-    /// <param name="cachePolicy">缓存策略</param>
-    protected void UpdateCache( ICachedResponse cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
+    /// <param name="cachedResponse">可被缓存的响应数据</param>
+    /// <param name="context">MVC 请求上下文</param>
+    /// <param name="policy">缓存策略</param>
+    protected void UpdateCache( ICachedResponse cachedResponse, ControllerContext context, CachePolicy policy )
     {
-      HostingEnvironment.Cache.WriteCache( cacheItem, cacheKey, cachePolicy );
+      var cacheItem = policy.CreateCacheItem( cachedResponse );
+      context.HttpContext.Cache.InsertCacheItem( cacheItem );
     }
 
 

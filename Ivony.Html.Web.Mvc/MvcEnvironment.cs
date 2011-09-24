@@ -68,36 +68,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    /// <summary>
-    /// 获取缓存键
-    /// </summary>
-    /// <param name="context">控制器上下文</param>
-    /// <param name="actionDescriptor">调用的 Action</param>
-    /// <returns>需要使用的缓存键</returns>
-    public static string GetCacheKey( ControllerContext context, ActionDescriptor actionDescriptor )
-    {
-
-      return HtmlProviders.GetCacheKey( context.HttpContext );
-
-    }
-
-
-
-    /// <summary>
-    /// 获取缓存策略
-    /// </summary>
-    /// <param name="context">控制器上下文</param>
-    /// <param name="actionDescriptor">调用的 Action</param>
-    /// <param name="cacheItem">需要被缓存的结果</param>
-    /// <returns>缓存策略</returns>
-    public static HtmlCachePolicy GetCachePolicy( ControllerContext context, string cacheKey, ICachedResponse cacheItem )
-    {
-
-      return HtmlProviders.GetCachePolicy( context.HttpContext, null );
-
-    }
-
-
     private static  MvcConfiguration _configuration = new MvcConfiguration();
 
     /// <summary>
@@ -121,6 +91,17 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取当前请求的缓存策略
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public static CachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor action )
+    {
+
+      return HtmlProviders.GetCachePolicy( context.HttpContext );
+    }
   }
 
 }

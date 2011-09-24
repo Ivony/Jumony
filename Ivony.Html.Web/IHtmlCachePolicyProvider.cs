@@ -16,9 +16,7 @@ namespace Ivony.Html.Web
   public interface IHtmlCachePolicyProvider
   {
 
-    string GetCacheKey( HttpContextBase context );
-
-    HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cacheItem );
+    CachePolicy GetCachePolicy( HttpContextBase context );
 
   }
 
@@ -47,7 +45,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 用于设置和获取默认缓存策略
   /// </summary>
-  public static class DefaultCachePolicy
+  public class DefaultCachePolicy : CachePolicy
   {
 
 
@@ -76,12 +74,51 @@ namespace Ivony.Html.Web
       set;
     }
 
+
     /// <summary>
-    /// 获取默认缓存键
+    /// 获取默认的缓存策略
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public static CachePolicy GetCachePolicy( HttpContextBase context )
+    {
+      var token = GetCacheToken( context );
+
+      if ( token == null )
+        return null;
+
+
+      return new DefaultCachePolicy( context, token );
+    }
+
+    private DefaultCachePolicy( HttpContextBase context, CacheToken token )
+      : base( context, token, null )
+    {
+
+    }
+
+    /// <summary>
+    /// 创建缓存项
+    /// </summary>
+    /// <param name="cachedResponse"></param>
+    /// <returns></returns>
+    public override CacheItem CreateCacheItem( ICachedResponse cachedResponse )
+    {
+      return new CacheItem( null, CacheToken, cachedResponse, CacheDuration );
+    }
+
+
+
+
+
+
+
+    /// <summary>
+    /// 按照设置的默认规则获取缓存标记
     /// </summary>
     /// <param name="context">请求上下文</param>
-    /// <returns>默认缓存键，根据缓存键依据设置而产生</returns>
-    public static string GetCacheKey( HttpContextBase context )
+    /// <returns></returns>
+    public static CacheToken GetCacheToken( HttpContextBase context )
     {
       if ( StringComparer.OrdinalIgnoreCase.Equals( "post", context.Request.HttpMethod ) )
         return null;
@@ -89,35 +126,24 @@ namespace Ivony.Html.Web
       if ( CacheKeyPolicy == Web.CacheKeyPolicy.NoCache )
         return null;
 
-      var keys = new List<string>();
+      CacheToken token = null;
 
       if ( (CacheKeyPolicy & Web.CacheKeyPolicy.BySession) != 0 )
       {
         if ( !context.Session.IsCookieless && !context.Session.IsNewSession )
-          keys.Add( context.Session.SessionID );
+          token += CacheToken.FromSessionID( context );
       }
 
       if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByIdentity) != 0 )
       {
         if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
-          keys.Add( context.User.Identity.Name.Replace( ":", "::" ) );
+          token += CacheToken.From( context.Request.Cookies );
       }
 
       if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByVirtualPath) != 0 )
-        keys.Add( context.Request.CurrentExecutionFilePath );
+        token += CacheToken.FromVirtualPath( context );
 
-      return string.Join( ":", keys.ToArray() );
-    }
-
-    /// <summary>
-    /// 获取默认缓存策略
-    /// </summary>
-    /// <param name="context">请求上下文</param>
-    /// <param name="cacheItem">缓存项</param>
-    /// <returns>默认缓存策略</returns>
-    public static HtmlCachePolicy GetPolicy( HttpContextBase context, ICachedResponse cacheItem )
-    {
-      return new HtmlCachePolicy() { Duration = CacheDuration };
+      return token;
     }
   }
 

@@ -344,48 +344,22 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>
-    /// 获取缓存键（依据）
-    /// </summary>
-    /// <param name="context">当前HTTP请求信息</param>
-    /// <returns>缓存键，对于可能产生同一结果的请求，应产生同一缓存键</returns>
-    public static string GetCacheKey( HttpContextBase context )
-    {
-      lock ( _cachePoliciesSync )
-      {
-        foreach ( var policy in CachePolicyProviders )
-        {
-          string cacheKey = policy.GetCacheKey( context );
-          if ( cacheKey != null )
-            return cacheKey;
-        }
-      }
-
-      return DefaultCachePolicy.GetCacheKey( context );
-
-    }
-
-    /// <summary>
-    /// 获取缓存策略
-    /// </summary>
-    /// <param name="context">当前HTTP请求信息</param>
-    /// <param name="cacheItem">需要被缓存的响应信息</param>
-    /// <returns>缓存策略</returns>
-    /// <remarks>缓存策略决定了缓存时间和缓存依赖项</remarks>
-    public static HtmlCachePolicy GetCachePolicy( HttpContextBase context, ICachedResponse cacheItem )
+    public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
       lock ( _cachePoliciesSync )
       {
         foreach ( var provider in CachePolicyProviders )
         {
-          var policy = provider.GetCachePolicy( context, cacheItem );
+          CachePolicy policy = provider.GetCachePolicy( context );
           if ( policy != null )
             return policy;
         }
+
       }
 
-      return DefaultCachePolicy.GetPolicy( context, cacheItem );
+      return DefaultCachePolicy.GetCachePolicy( context );
     }
+
 
 
 

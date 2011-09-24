@@ -76,10 +76,10 @@ namespace Ivony.Html.Web
     }
 
 
-    protected virtual RawResponse ProcessRequestCore( HttpContextBase context )
+    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context )
     {
 
-      RawResponse response;
+      ICachedResponse response;
 
 
       {
@@ -158,23 +158,28 @@ namespace Ivony.Html.Web
     }
 
 
+
+    protected CachePolicy CachePolicy
+    {
+      get;
+      private set;
+    }
+
     /// <summary>
     /// 尝试获取缓存的输出
     /// </summary>
     /// <returns>缓存的输出</returns>
-    protected virtual RawResponse ResolveCache()
+    protected virtual ICachedResponse ResolveCache()
     {
 
-      var key = HtmlProviders.GetCacheKey( Context );
+      var policy = HtmlProviders.GetCachePolicy( Context );
 
-      if ( key == null )
+      if ( policy == null )
         return null;
 
-      var cacheItem = Cache.Get( key ) as RawResponse;
-      if ( cacheItem == null )
-        return null;
 
-      return cacheItem;
+      CachePolicy = policy;
+      return Cache.GetCachedResponse( policy.CacheToken );
     }
 
 
@@ -182,19 +187,14 @@ namespace Ivony.Html.Web
     /// 刷新输出缓存
     /// </summary>
     /// <param name="cachedResponse">响应的缓存</param>
-    protected virtual void UpdateCache( RawResponse cachedResponse )
+    protected virtual void UpdateCache( ICachedResponse cachedResponse )
     {
 
-      var key = HtmlProviders.GetCacheKey( Context );
-
-      if ( key == null )
+      if ( CachePolicy == null )
         return;
 
 
-      var policy = HtmlProviders.GetCachePolicy( Context, cachedResponse );
-
-
-      Cache.WriteCache( cachedResponse, key, policy );
+      Cache.InsertCacheItem( CachePolicy.CreateCacheItem( cachedResponse ) );
 
     }
 
@@ -214,7 +214,7 @@ namespace Ivony.Html.Web
     /// 派生类重写此方法自定义输出响应的逻辑
     /// </summary>
     /// <param name="responseData">响应信息</param>
-    protected virtual void OutputResponse( RawResponse responseData )
+    protected virtual void OutputResponse( ICachedResponse responseData )
     {
       responseData.Apply( Response );
     }

@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 提供 HTTP 客户端缓存的一些帮助功能
   /// </summary>
-  public class CacheHelper
+  public static class CacheHelper
   {
 
 
@@ -118,6 +118,36 @@ namespace Ivony.Html.Web
       return HostingEnvironment.MapPath( virtualPath );
     }
 
+
+
+
+
+    /// <summary>
+    /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="cachePolicy"></param>
+    public static void SetMaxAge( this CacheItem item, HttpCachePolicyBase cachePolicy )
+    {
+      item.SetMaxAge( cachePolicy, TimeSpan.FromMinutes( 2 ) );
+    }
+
+
+    /// <summary>
+    /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="cachePolicy"></param>
+    public static void SetMaxAge( this CacheItem item, HttpCachePolicyBase cachePolicy, TimeSpan shake )
+    {
+      var random = new Random( DateTime.Now.Millisecond );
+
+      var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake.TotalMilliseconds );
+
+      var age = item.Expiration - DateTime.UtcNow + offset;
+      cachePolicy.SetMaxAge( age );
+
+    }
 
 
   }

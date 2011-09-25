@@ -5,8 +5,8 @@
 
   void Application_Start( object sender, EventArgs e )
   {
-    DefaultCachePolicy.CacheKeyPolicy = CacheKeyPolicy.ByVirtualPath;
-    DefaultCachePolicy.CacheDuration = new TimeSpan( 0, 1, 0 );
+    DefaultCachePolicyProvider.CacheKeyPolicy = CacheKeyPolicy.ByVirtualPath;
+    DefaultCachePolicyProvider.CacheDuration = new TimeSpan( 0, 1, 0 );
 
   }
 

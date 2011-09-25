@@ -7,6 +7,8 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
+
+
   /// <summary>
   /// 定义缓存项，缓存项包括缓存的响应和策略。
   /// </summary>
@@ -137,13 +139,10 @@ namespace Ivony.Html.Web
     /// <param name="cachePolicy"></param>
     public void TrySetETag( HttpCachePolicyBase cachePolicy )
     {
-      var clientCachable = CachedResponse as IClientCacheableResponse;
-      if ( clientCachable == null )
+      if ( ETag == null )
         return;
 
-      var etag = clientCachable.CreateETag();
-
-      cachePolicy.SetETag( etag );
+      cachePolicy.SetETag( ETag );
     }
 
 
@@ -159,7 +158,31 @@ namespace Ivony.Html.Web
 
 
 
+    private bool _etagCreated = false;
+    private string _etag;
 
+    /// <summary>
+    /// 获取缓存项的 ETag 标识
+    /// </summary>
+    public string ETag
+    {
+      get
+      {
+        if ( _etagCreated )
+          return _etag;
+
+        var clientCachable = CachedResponse as IClientCacheableResponse;
+
+        if ( clientCachable == null )
+          _etag = null;
+
+        else
+          _etag = clientCachable.CreateETag();
+
+        _etagCreated = true;
+        return _etag;
+      }
+    }
   }
 
 

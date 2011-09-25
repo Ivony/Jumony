@@ -29,7 +29,7 @@ namespace Ivony.Html.Web
 
     private string _tokenString;
 
-    private override void EnsureTokenString()
+    private void EnsureTokenString()
     {
       if ( _tokenString == null )
       {
@@ -93,11 +93,11 @@ namespace Ivony.Html.Web
 
       private string _tokenString;
 
-      private virtual void EnsureTokenString()
+      private void EnsureTokenString()
       {
         if ( _tokenString == null )
         {
-          _tokenString = _type.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ) );
+          _tokenString = TypeName.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ) );
           _tokenString = _tokenString.Replace( "+", "@+" );
 
         }

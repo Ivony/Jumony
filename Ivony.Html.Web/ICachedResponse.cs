@@ -24,7 +24,7 @@ namespace Ivony.Html.Web
 
   public interface IClientCacheableResponse : ICachedResponse
   {
-    public string CreateETag();
+    string CreateETag();
   }
 
 }

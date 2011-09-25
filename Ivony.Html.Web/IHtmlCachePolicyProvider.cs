@@ -45,15 +45,27 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 用于设置和获取默认缓存策略
   /// </summary>
-  public class DefaultCachePolicy : CachePolicy
+  public class DefaultCachePolicyProvider : IHtmlCachePolicyProvider
   {
 
 
-    static DefaultCachePolicy()
+
+    public static DefaultCachePolicyProvider Instance
+    {
+      get;
+      private set;
+    }
+
+
+    static DefaultCachePolicyProvider()
     {
       CacheKeyPolicy = CacheKeyPolicy.NoCache;
       CacheDuration = new TimeSpan( 0 );
+      Instance = new DefaultCachePolicyProvider();
     }
+
+    private DefaultCachePolicyProvider() { }
+
 
     /// <summary>
     /// 设置默认缓存键的产生依据
@@ -73,44 +85,6 @@ namespace Ivony.Html.Web
       get;
       set;
     }
-
-
-    /// <summary>
-    /// 获取默认的缓存策略
-    /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public static CachePolicy GetCachePolicy( HttpContextBase context )
-    {
-      var token = GetCacheToken( context );
-
-      if ( token == null )
-        return null;
-
-
-      return new DefaultCachePolicy( context, token );
-    }
-
-    private DefaultCachePolicy( HttpContextBase context, CacheToken token )
-      : base( context, token, null )
-    {
-
-    }
-
-    /// <summary>
-    /// 创建缓存项
-    /// </summary>
-    /// <param name="cachedResponse"></param>
-    /// <returns></returns>
-    public override CacheItem CreateCacheItem( ICachedResponse cachedResponse )
-    {
-      return new CacheItem( null, CacheToken, cachedResponse, CacheDuration );
-    }
-
-
-
-
-
 
 
     /// <summary>
@@ -144,6 +118,21 @@ namespace Ivony.Html.Web
         token += CacheToken.FromVirtualPath( context );
 
       return token;
+    }
+
+
+    /// <summary>
+    /// 获取默认缓存策略
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public CachePolicy GetCachePolicy( HttpContextBase context )
+    {
+      var token = GetCacheToken( context );
+      if ( token == null )
+        return null;
+
+      return new StandardCachePolicy( context, token, this, CacheDuration, true );
     }
   }
 

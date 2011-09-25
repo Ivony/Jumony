@@ -7,6 +7,21 @@ using System.Web;
 namespace Ivony.Html.Web
 {
 
+
+
+  /// <summary>
+  /// 实现此接口完成客户端缓存策略
+  /// </summary>
+  public interface IClientCachablePolicy
+  {
+
+    bool ResolveClientCache( HttpContextBase context );
+
+    void ApplyClientCachePolicy( HttpCachePolicyBase policy );
+
+  }
+
+
   /// <summary>
   /// 缓存策略
   /// </summary>
@@ -85,7 +100,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 标准缓存策略
   /// </summary>
-  public class StandardCachePolicy : CachePolicy
+  public class StandardCachePolicy : CachePolicy, IClientCachablePolicy
   {
     public StandardCachePolicy( HttpContextBase context, CacheToken token, IHtmlCachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
       : base( context, token, provider )
@@ -102,6 +117,25 @@ namespace Ivony.Html.Web
       EnableClientCache = enableClientCache;
     }
 
+
+
+    public bool ResolveClientCache( HttpContextBase context )
+    {
+      if ( !EnableClientCache )
+        return false;
+
+      var cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
+      if ( cacheItem == null )
+        return false;
+
+      return CacheHelper.IsNotModified( context, cacheItem.ETag );
+    }
+
+
+    /// <summary>
+    /// 应用客户端缓存策略
+    /// </summary>
+    /// <param name="clientCachePolicy"></param>
     public override void ApplyClientCachePolicy( HttpCachePolicyBase clientCachePolicy )
     {
       if ( !EnableClientCache )
@@ -110,12 +144,18 @@ namespace Ivony.Html.Web
       var cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
 
       if ( cacheItem != null )
-        cacheItem.SetMaxAge( clientCachePolicy );
+        cacheItem.ApplyClientCachePolicy( clientCachePolicy );
 
       else
         clientCachePolicy.SetMaxAge( Duration );
     }
 
+
+    /// <summary>
+    /// 创建缓存项
+    /// </summary>
+    /// <param name="cachedResponse"></param>
+    /// <returns></returns>
     public override CacheItem CreateCacheItem( ICachedResponse cachedResponse )
     {
       return new CacheItem( Provider, CacheToken, cachedResponse, Duration );

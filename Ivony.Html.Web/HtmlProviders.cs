@@ -357,7 +357,7 @@ namespace Ivony.Html.Web
 
       }
 
-      return DefaultCachePolicy.GetCachePolicy( context );
+      return DefaultCachePolicyProvider.Instance.GetCachePolicy( context );
     }
 
 

@@ -350,14 +350,14 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in CachePolicyProviders )
         {
-          CachePolicy policy = provider.GetCachePolicy( context );
+          CachePolicy policy = provider.CreateCachePolicy( context );
           if ( policy != null )
             return policy;
         }
 
       }
 
-      return DefaultCachePolicyProvider.Instance.GetCachePolicy( context );
+      return DefaultCachePolicyProvider.Instance.CreateCachePolicy( context );
     }
 
 

@@ -16,7 +16,7 @@ namespace Ivony.Html.Web
   public interface IHtmlCachePolicyProvider
   {
 
-    CachePolicy GetCachePolicy( HttpContextBase context );
+    CachePolicy CreateCachePolicy( HttpContextBase context );
 
   }
 
@@ -126,7 +126,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
-    public CachePolicy GetCachePolicy( HttpContextBase context )
+    public CachePolicy CreateCachePolicy( HttpContextBase context )
     {
       var token = GetCacheToken( context );
       if ( token == null )

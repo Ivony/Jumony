@@ -51,28 +51,59 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="filterContext">筛选器上下文</param>
     public override void OnActionExecuting( ActionExecutingContext filterContext )
     {
+
+      if ( ResolveCache( filterContext ) )
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache hited" );
+      else
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache missed" );
+
+    }
+
+    
+    /// <summary>
+    /// 尝试输出缓存
+    /// </summary>
+    /// <param name="filterContext"></param>
+    /// <returns></returns>
+    protected virtual bool ResolveCache( ActionExecutingContext filterContext )
+    {
+
       CachePolicy = GetCachePolicy( filterContext, filterContext.ActionDescriptor );
 
       if ( CachePolicy == null )
-        return;
+        return false;
 
+      
       filterContext.RouteData.DataTokens[CachePolicyToken] = CachePolicy;
+
+
+      var cachable = CachePolicy as IClientCachablePolicy;
+      if ( cachable != null )
+      {
+        if ( cachable.ResolveClientCache( filterContext.HttpContext ) )
+        {
+          filterContext.Result = new EmptyResult();
+          return true;
+        }
+
+      }
 
       var response = filterContext.HttpContext.Cache.GetCachedResponse( CachePolicy.CacheToken );
 
       if ( response != null )
       {
         filterContext.Result = response.ToCachedResult();
-        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache hited" );
+        return true;
       }
-
-      else
-        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache missed" );
-
+      
+      
+      return false;
     }
 
 
-
+    /// <summary>
+    /// 当前请求所采用的缓存策略
+    /// </summary>
     protected CachePolicy CachePolicy
     {
       get;

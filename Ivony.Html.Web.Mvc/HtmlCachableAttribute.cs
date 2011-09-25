@@ -90,6 +90,13 @@ namespace Ivony.Html.Web.Mvc
       filterContext.RouteData.DataTokens[CachePolicyToken] = cachePolicy;
 
 
+      var requestCacheControl = filterContext.HttpContext.Request.Headers["cache-control"];
+      if ( requestCacheControl.EqualsIgnoreCase( "no-cache" ) )
+        return false;
+
+
+
+
       var cachable = cachePolicy as IClientCachablePolicy;
       if ( cachable != null )
       {

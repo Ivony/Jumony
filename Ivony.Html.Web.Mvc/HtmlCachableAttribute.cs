@@ -50,6 +50,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     private static readonly string CachePolicyToken = "JumonyforMVC_CacheControl_CachePolicy";
+    private static readonly string CacheHitToken = "JumonyforMVC_CacheControl_CacheHit";
 
 
     /// <summary>
@@ -60,7 +61,10 @@ namespace Ivony.Html.Web.Mvc
     {
 
       if ( ResolveCache( filterContext ) )
-        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache hited" );
+      {
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache hitted" );
+        filterContext.RouteData.DataTokens[CacheHitToken] = "Hitted";
+      }
       else
         filterContext.HttpContext.Trace.Write( "Jumony for MVC", "OutputCache missed" );
 
@@ -75,16 +79,17 @@ namespace Ivony.Html.Web.Mvc
     protected virtual bool ResolveCache( ActionExecutingContext filterContext )
     {
 
-      CachePolicy = GetCachePolicy( filterContext, filterContext.ActionDescriptor );
+      var cachePolicy = GetCachePolicy( filterContext, filterContext.ActionDescriptor );
 
-      if ( CachePolicy == null )
+      if ( cachePolicy == null )
         return false;
 
 
-      filterContext.RouteData.DataTokens[CachePolicyToken] = CachePolicy;
+
+      filterContext.RouteData.DataTokens[CachePolicyToken] = cachePolicy;
 
 
-      var cachable = CachePolicy as IClientCachablePolicy;
+      var cachable = cachePolicy as IClientCachablePolicy;
       if ( cachable != null )
       {
         if ( cachable.ResolveClientCache( filterContext.HttpContext ) )
@@ -92,10 +97,10 @@ namespace Ivony.Html.Web.Mvc
           filterContext.Result = new EmptyResult();
           return true;
         }
-
       }
 
-      var response = filterContext.HttpContext.Cache.GetCachedResponse( CachePolicy.CacheToken );
+
+      var response = filterContext.HttpContext.Cache.GetCachedResponse( cachePolicy.CacheToken );
 
       if ( response != null )
       {
@@ -108,14 +113,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    /// <summary>
-    /// 当前请求所采用的缓存策略
-    /// </summary>
-    protected CachePolicy CachePolicy
-    {
-      get;
-      private set;
-    }
 
     /// <summary>
     /// 获取缓存策略
@@ -149,7 +146,7 @@ namespace Ivony.Html.Web.Mvc
         if ( policy != null )
           return policy;
       }
-      
+
 
       return MvcEnvironment.GetCachePolicy( context, action );
 
@@ -173,6 +170,32 @@ namespace Ivony.Html.Web.Mvc
       set;
     }
 
+
+
+    public override void OnResultExecuting( ResultExecutingContext filterContext )
+    {
+
+      ApplyClientCachePolicy( filterContext );
+
+    }
+
+    protected void ApplyClientCachePolicy( ResultExecutingContext filterContext )
+    {
+      //对于子请求不采取客户端缓存。
+      if ( filterContext.IsChildAction )
+        return;
+
+      var dataTokens = filterContext.RouteData.DataTokens;
+
+      //若已命中缓存，则不再应用客户端缓存策略
+      if ( dataTokens[CacheHitToken] != null )
+        return;
+
+
+      var cachePolicy = dataTokens[CachePolicyToken] as CachePolicy;
+
+      cachePolicy.ApplyClientCachePolicy( filterContext.HttpContext.Response.Cache );
+    }
 
 
 
@@ -210,11 +233,11 @@ namespace Ivony.Html.Web.Mvc
 
       var httpContext = context.HttpContext;
 
-      var cacheToken = context.RouteData.DataTokens[CachePolicyToken] as CacheToken;
-      if ( cacheToken == null )
+      var cachePolicy = context.RouteData.DataTokens[CachePolicyToken] as CachePolicy;
+      if ( cachePolicy == null )
         return;
 
-      UpdateCache( cached, context, CachePolicy );
+      UpdateCache( cached, context, cachePolicy );
     }
 
 

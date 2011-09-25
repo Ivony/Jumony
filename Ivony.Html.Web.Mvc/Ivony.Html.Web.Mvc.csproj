@@ -70,6 +70,7 @@
     <Compile Include="EmbbedPartialView.cs" />
     <Compile Include="HtmlCachableAttribute.cs" />
     <Compile Include="ICachableResult.cs" />
+    <Compile Include="IMvcCachePolicyProvider.cs" />
     <Compile Include="IPartialRenderAdapter.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />

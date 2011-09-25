@@ -30,12 +30,19 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="policyProviderType">缓存策略提供程序类型</param>
     public HtmlCachableAttribute( Type policyProviderType )
     {
-      if ( !policyProviderType.IsSubclassOf( typeof( IHtmlCachePolicyProvider ) ) )
-        throw new InvalidOperationException( "配置错误，类型必须从 IHtmlCachePolicyProvider 派生" );
+      if ( policyProviderType.IsSubclassOf( typeof( IMvcCachePolicyProvider ) ) )
+      {
+        CachePolicyProvider = Activator.CreateInstance( policyProviderType ).CastTo<IMvcCachePolicyProvider>();
+        return;
+      }
 
+      else if ( policyProviderType.IsSubclassOf( typeof( IHtmlCachePolicyProvider ) ) )
+      {
+        CachePolicyProvider = new MvcCachePolicyProvider( Activator.CreateInstance( policyProviderType ).CastTo<IHtmlCachePolicyProvider>() );
+        return;
+      }
 
-      CachePolicyProvider = Activator.CreateInstance( policyProviderType ).CastTo<IHtmlCachePolicyProvider>();
-
+      throw new InvalidOperationException( "配置错误，类型必须从 IHtmlCachePolicyProvider 或 IMvcCachePolicyProvider 派生" );
     }
 
 
@@ -59,7 +66,7 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-    
+
     /// <summary>
     /// 尝试输出缓存
     /// </summary>
@@ -73,7 +80,7 @@ namespace Ivony.Html.Web.Mvc
       if ( CachePolicy == null )
         return false;
 
-      
+
       filterContext.RouteData.DataTokens[CachePolicyToken] = CachePolicy;
 
 
@@ -95,8 +102,8 @@ namespace Ivony.Html.Web.Mvc
         filterContext.Result = response.ToCachedResult();
         return true;
       }
-      
-      
+
+
       return false;
     }
 
@@ -111,18 +118,46 @@ namespace Ivony.Html.Web.Mvc
     }
 
     /// <summary>
-    /// 获取缓存标示
+    /// 获取缓存策略
     /// </summary>
     /// <param name="context">MVC 请求上下文</param>
     /// <returns></returns>
     protected virtual CachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor action )
     {
 
+      if ( CachePolicyProvider != null )
+      {
+        var policy = CachePolicyProvider.GetCachePolicy( context, action );
+
+        if ( policy != null )
+          return policy;
+      }
+
+      else
+      {
+
+        var provider = context.Controller as IMvcCachePolicyProvider;
+        if ( provider == null )
+        {
+          var _provider = context.Controller as IHtmlCachePolicyProvider;
+          if ( _provider != null )
+            provider = new MvcCachePolicyProvider( _provider );
+        }
+
+        var policy = provider.GetCachePolicy( context, action );
+
+        if ( policy != null )
+          return policy;
+      }
+      
+
       return MvcEnvironment.GetCachePolicy( context, action );
 
-
-
     }
+
+
+
+
 
 
 
@@ -132,7 +167,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取缓存策略提供程序
     /// </summary>
-    protected IHtmlCachePolicyProvider CachePolicyProvider
+    protected IMvcCachePolicyProvider CachePolicyProvider
     {
       get;
       set;

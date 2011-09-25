@@ -129,6 +129,7 @@ namespace Ivony.Html.Web
       var age = Expiration - DateTime.UtcNow + offset;
       cachePolicy.SetMaxAge( age );
 
+
     }
 
 
@@ -137,12 +138,13 @@ namespace Ivony.Html.Web
     /// 尝试设置 ETag 标签
     /// </summary>
     /// <param name="cachePolicy"></param>
-    public void TrySetETag( HttpCachePolicyBase cachePolicy )
+    public bool TrySetETag( HttpCachePolicyBase cachePolicy )
     {
       if ( ETag == null )
-        return;
+        return false;
 
       cachePolicy.SetETag( ETag );
+      return true;
     }
 
 
@@ -152,8 +154,10 @@ namespace Ivony.Html.Web
     /// <param name="cachePolicy"></param>
     public void ApplyClientCachePolicy( HttpCachePolicyBase cachePolicy )
     {
-      SetMaxAge( cachePolicy );
+      cachePolicy.SetCacheability( HttpCacheability.Public );
+
       TrySetETag( cachePolicy );
+      SetMaxAge( cachePolicy );
     }
 
 

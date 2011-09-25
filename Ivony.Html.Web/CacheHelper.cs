@@ -59,6 +59,7 @@ namespace Ivony.Html.Web
     {
       context.Response.StatusCode = 304;
       context.Response.StatusDescription = "Not Modified";
+      context.Response.Cache.SetCacheability( HttpCacheability.Public );
       context.Response.End();
     }
 

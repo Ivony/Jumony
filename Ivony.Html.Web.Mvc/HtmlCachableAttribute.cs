@@ -164,7 +164,7 @@ namespace Ivony.Html.Web.Mvc
     /// 尝试更新缓存
     /// </summary>
     /// <param name="cached">用于缓存的响应信息</param>
-    /// <param name="httpContext">当前 Controller 上下文</param>
+    /// <param name="context">当前 Controller 上下文</param>
     protected void UpdateCache( ICachedResponse cached, ControllerContext context )
     {
 

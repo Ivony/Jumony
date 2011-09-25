@@ -27,11 +27,14 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>路由数据</returns>
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
+
+      
+
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
 
       var cacheKey = RouteUrlCacheKeyPrefix + httpContext.Request.Url.AbsoluteUri;
 
-      var routeData = HostingEnvironment.Cache.Get( cacheKey ) as RouteData;
+      var routeData = httpContext.Cache.Get( cacheKey ) as RouteData;
 
 
       if ( routeData != null )
@@ -60,7 +63,7 @@ namespace Ivony.Html.Web.Mvc
 
       routeData.DataTokens["RoutingRuleName"] = data.Rule.Name;
 
-      HostingEnvironment.Cache.Insert( cacheKey, routeData );
+      httpContext.Cache.Insert( cacheKey, routeData );
 
       return CloneRouteData( routeData );
 
@@ -97,12 +100,14 @@ namespace Ivony.Html.Web.Mvc
     public override VirtualPathData GetVirtualPath( RequestContext requestContext, RouteValueDictionary values )
     {
 
+      var cache = requestContext.HttpContext.Cache;
+
 
       var _values = values.ToDictionary( pair => pair.Key, pair => pair.Value == null ? null : pair.Value.ToString(), StringComparer.OrdinalIgnoreCase );
 
       var cacheKey = CreateCacheKey( _values );
 
-      var virtualPath = HostingEnvironment.Cache.Get( cacheKey ) as string;
+      var virtualPath = cache.Get( cacheKey ) as string;
 
       if ( virtualPath != null )
         return new VirtualPathData( this, virtualPath );
@@ -129,7 +134,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      HostingEnvironment.Cache.Insert( cacheKey, virtualPath );
+      cache.Insert( cacheKey, virtualPath );
 
 
       var data = new VirtualPathData( this, virtualPath );

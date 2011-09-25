@@ -19,7 +19,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 所有 HTML 视图处理程序的基类，实现 IView 接口，并提供内置的 HTML 扩展功能以及视图结果的缓存。
   /// </summary>
-  public abstract class ViewBase : IView, ICachableResult
+  public abstract class ViewBase : IView, ICacheableResult
   {
 
     /// <summary>
@@ -245,7 +245,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    ICachedResponse ICachableResult.GetCachedResponse()
+    ICachedResponse ICacheableResult.GetCachedResponse()
     {
       return CachedResponse;
     }

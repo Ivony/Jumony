@@ -9,31 +9,10 @@ namespace Ivony.Html.Web.Mvc
   public interface IMvcCachePolicyProvider
   {
 
-    CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action );
+    CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters );
 
   }
 
-  public class MvcCachePolicyProvider : IMvcCachePolicyProvider
-  {
-
-    private ICachePolicyProvider _provider;
-    
-    public MvcCachePolicyProvider( ICachePolicyProvider provider )
-    {
-      _provider = provider;
-    }
-
-
-    CachePolicy IMvcCachePolicyProvider.CreateCachePolicy( ControllerContext context, ActionDescriptor action )
-    {
-      if ( context.IsChildAction )
-        return null;
-      
-      return _provider.CreateCachePolicy( context.HttpContext );
-    }
-
-
-  }
 
 
 }

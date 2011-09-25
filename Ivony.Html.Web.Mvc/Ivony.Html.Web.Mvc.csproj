@@ -67,13 +67,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheFilterBase.cs" />
     <Compile Include="EmbbedPartialView.cs" />
-    <Compile Include="HtmlCachableAttribute.cs" />
+    <Compile Include="GlobalCacheFilter.cs" />
+    <Compile Include="CachableAttribute.cs" />
     <Compile Include="ICachableResult.cs" />
+    <Compile Include="IMvcCachePolicy.cs" />
     <Compile Include="IMvcCachePolicyProvider.cs" />
     <Compile Include="IPartialRenderAdapter.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
+    <Compile Include="MvcCachePolicyProviderWrapper.cs" />
+    <Compile Include="MvcCacheProlicyProvider.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PageView.cs" />

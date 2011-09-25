@@ -22,6 +22,10 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewEngines.Engines.Add( _viewEngine );
       RouteTable.Routes.Add( _simpleRoutingTable );
+
+      CachePolicyProviders = new SynchronizedCollection<IMvcCachePolicyProvider>( _cachePolicyProvidersSync );
+      GlobalCacheFilter = new GlobalCacheFilter();
+
     }
 
 
@@ -91,20 +95,52 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    /// <summary>
-    /// 获取当前请求的缓存策略
-    /// </summary>
-    /// <param name="context"></param>
-    /// <param name="action"></param>
-    /// <returns></returns>
-    public static CachePolicy GetCachePolicy( ControllerContext context, ActionDescriptor action )
-    {
 
-      return HtmlProviders.GetCachePolicy( context.HttpContext );
+
+    private static object _cachePolicyProvidersSync = new object();
+
+    public static ICollection<IMvcCachePolicyProvider> CachePolicyProviders
+    {
+      get;
+      private set;
     }
 
 
-    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new MvcCachePolicyProvider( HtmlProviders.DefaultCachePolicyProvider );
+    /// <summary>
+    /// 获取当前请求的缓存策略
+    /// </summary>
+    /// <param name="context">当前请求的 MVC 上下文</param>
+    /// <param name="action">请求的 Action</param>
+    /// <param name="parameters">Action 的参数信息</param>
+    /// <returns></returns>
+    public static CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
+    {
+      lock ( _cachePolicyProvidersSync )
+      {
+        foreach ( var provider in CachePolicyProviders )
+        {
+          var policy = provider.CreateCachePolicy( context, action, parameters );
+          if ( policy != null )
+            return policy;
+        }
+
+        return DefaultCachePolicyProvider.CreateCachePolicy( context, action, parameters );
+      }
+    }
+
+
+    /// <summary>
+    /// 全局缓存筛选器，在 ASP.NET MVC 3 中，将此过滤器加入全局过滤器集合中，即可对所有请求执行输出缓存。
+    /// </summary>
+    public static GlobalCacheFilter GlobalCacheFilter
+    {
+      get;
+      private set;
+    }
+
+
+
+    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new MvcCachePolicyProviderWrapper( HtmlProviders.DefaultCachePolicyProvider );
 
     public static IMvcCachePolicyProvider DefaultCachePolicyProvider
     {

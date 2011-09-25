@@ -10,7 +10,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 定义可被缓存的 ActionResult
   /// </summary>
-  public interface ICachableResult
+  public interface ICacheableResult
   {
 
     ICachedResponse GetCachedResponse();
@@ -19,7 +19,7 @@ namespace Ivony.Html.Web.Mvc
 
 
   /// <summary>
-  /// 提供 ICachableResult 的一些扩展
+  /// 提供 ICacheableResult 的一些扩展
   /// </summary>
   public static class CacheableResultHelper
   {
@@ -47,7 +47,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="cachable">已被缓存的响应信息</param>
     /// <returns>用于输出缓存的 ActionResult</returns>
-    public static ActionResult GetCachedResult( this ICachableResult cachable )
+    public static ActionResult GetCachedResult( this ICacheableResult cachable )
     {
       var response = cachable.GetCachedResponse();
       if ( response == null )

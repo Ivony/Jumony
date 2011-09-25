@@ -12,7 +12,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 实现此接口完成客户端缓存策略
   /// </summary>
-  public interface IClientCachablePolicy
+  public interface IClientCacheablePolicy
   {
 
     bool ResolveClientCache( HttpContextBase context );
@@ -78,17 +78,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 应用客户端缓存策略
-    /// </summary>
-    /// <param name="clientCachePolicy"></param>
-    public virtual void ApplyClientCachePolicy( HttpCachePolicyBase clientCachePolicy )
-    {
-
-    }
-
-
-
-    /// <summary>
     /// 创建缓存项
     /// </summary>
     /// <returns></returns>
@@ -100,8 +89,16 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 标准缓存策略
   /// </summary>
-  public class StandardCachePolicy : CachePolicy, IClientCachablePolicy
+  public class StandardCachePolicy : CachePolicy, IClientCacheablePolicy
   {
+    /// <summary>
+    /// 创建一个标准缓存策略
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <param name="token">缓存标示</param>
+    /// <param name="provider">缓存策略提供程序</param>
+    /// <param name="duration">缓存持续时间</param>
+    /// <param name="enableClientCache">是否启用客户端缓存</param>
     public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
       : base( context, token, provider )
     {
@@ -119,7 +116,12 @@ namespace Ivony.Html.Web
 
 
 
-    public bool ResolveClientCache( HttpContextBase context )
+    /// <summary>
+    /// 尝试输出客户端缓存
+    /// </summary>
+    /// <param name="context">当前请求上下文</param>
+    /// <returns>是否成功</returns>
+    public virtual bool ResolveClientCache( HttpContextBase context )
     {
       if ( !EnableClientCache )
         return false;
@@ -135,8 +137,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 应用客户端缓存策略
     /// </summary>
-    /// <param name="clientCachePolicy"></param>
-    public override void ApplyClientCachePolicy( HttpCachePolicyBase clientCachePolicy )
+    /// <param name="clientCachePolicy">客户端缓存策略</param>
+    public virtual void ApplyClientCachePolicy( HttpCachePolicyBase clientCachePolicy )
     {
       if ( !EnableClientCache )
         return;

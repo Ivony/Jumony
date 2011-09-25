@@ -66,16 +66,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 缓存依赖项
-    /// </summary>
-    public CacheDependency Dependency
-    {
-      get;
-      private set;
-    }
-
-
-    /// <summary>
     /// 缓存过期时间
     /// </summary>
     public DateTime Expiration
@@ -175,13 +165,13 @@ namespace Ivony.Html.Web
         if ( _etagCreated )
           return _etag;
 
-        var clientCachable = CachedResponse as IClientCacheableResponse;
+        var clientCacheable = CachedResponse as IClientCacheableResponse;
 
-        if ( clientCachable == null )
+        if ( clientCacheable == null )
           _etag = null;
 
         else
-          _etag = clientCachable.CreateETag();
+          _etag = clientCacheable.CreateETag();
 
         _etagCreated = true;
         return _etag;
@@ -200,7 +190,7 @@ namespace Ivony.Html.Web
     /// <param name="item"></param>
     public static void InsertCacheItem( this Cache cache, CacheItem item )
     {
-      cache.Insert( item.CacheToken.CacheKey(), item, item.Dependency, item.Expiration, Cache.NoSlidingExpiration );
+      cache.Insert( item.CacheToken.CacheKey(), item, null, item.Expiration, Cache.NoSlidingExpiration );
     }
 
 

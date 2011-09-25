@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Routing;
 using Ivony.Fluent;
 using System.Web;
+using System.Collections.Specialized;
 
 namespace Ivony.Html.Web
 {
@@ -21,7 +22,7 @@ namespace Ivony.Html.Web
     {
       if ( tokens.GroupBy( t => t.TypeName ).Any( g => g.Count() > 1 ) )
         throw new Exception( "不能合并包含相同类型的 CacheToken" );
-       
+
       _tokens = tokens;
     }
 
@@ -185,8 +186,70 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+
+    public static CacheToken From( string typeName, NameValueCollection values )
+    {
+      if ( typeName == null )
+        throw new ArgumentNullException( "typeName" );
+
+      if ( values == null )
+        throw new ArgumentNullException( "values" );
+
+
+      return From( typeName, values, null );
+    }
+
+
+
+    public static CacheToken From( string typeName, NameValueCollection values, string[] names )
+    {
+      if ( typeName == null )
+        throw new ArgumentNullException( "typeName" );
+
+      if ( values == null )
+        throw new ArgumentNullException( "values" );
+
+
+
+      List<string> list = new List<string>();
+
+      string[] keys;
+
+      if ( names.IsNullOrEmpty() )
+        keys = values.AllKeys;
+
+      else
+        keys = values.AllKeys.Intersect( names, StringComparer.OrdinalIgnoreCase ).ToArray();
+
+
+      return CreateToken( typeName, keys.Select( k => string.Format( "{0}={1}", k.Replace( "=", "@=" ), values.Get( k ) ) ).ToArray() );
+
+    }
+
+
     /// <summary>
-    /// 从当前路由值中产生缓存标记
+    /// 创建 CacheToken
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <param name="tokens"></param>
+    /// <returns></returns>
+    public static CacheToken CreateToken( string typeName, string[] tokens )
+    {
+      if ( typeName == null )
+        throw new ArgumentNullException( "typeName" );
+
+      if ( tokens == null )
+        throw new ArgumentNullException( "tokens" );
+
+      return new CacheTokenItem( typeName, tokens );
+    }
+
+
+
+    /// <summary>
+    /// 从路由值中产生缓存标记
     /// </summary>
     /// <param name="routeValues">路由值</param>
     /// <returns></returns>
@@ -197,13 +260,17 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 从当前路由值中产生缓存标记
+    /// 从路由值中产生缓存标记
     /// </summary>
     /// <param name="routeValues">路由值</param>
     /// <param name="keys">需要产生缓存标记的路由键</param>
     /// <returns></returns>
     public static CacheToken From( RouteValueDictionary routeValues, params string[] keys )
     {
+
+      if ( routeValues == null )
+        throw new ArgumentNullException( "routeValues" );
+
       IEnumerable<KeyValuePair<string,object>> values = routeValues;
 
       if ( !keys.IsNullOrEmpty() )
@@ -212,7 +279,7 @@ namespace Ivony.Html.Web
       else
         values = routeValues;
 
-      return new CacheTokenItem( "RouteValue", values.Select( pair => string.Format( "{0}={1}", pair.Key.Replace( "=", "@=" ), pair.Value ) ).ToArray() );
+      return CreateToken( "RouteValue", values.Select( pair => string.Format( "{0}={1}", pair.Key.Replace( "=", "@=" ), pair.Value ) ).ToArray() );
     }
 
 
@@ -223,14 +290,30 @@ namespace Ivony.Html.Web
     /// <param name="cookies"></param>
     /// <param name="names"></param>
     /// <returns></returns>
+    public static CacheToken From( HttpCookieCollection cookies )
+    {
+      return From( cookies, null );
+    }
+
+
+    /// <summary>
+    /// 从 Cookies 中产生缓存标记
+    /// </summary>
+    /// <param name="cookies"></param>
+    /// <param name="names"></param>
+    /// <returns></returns>
     public static CacheToken From( HttpCookieCollection cookies, params string[] names )
     {
+
+      if ( cookies == null )
+        throw new ArgumentNullException( "cookies" );
+
       IEnumerable<HttpCookie> _cookies = cookies.Cast<HttpCookie>();
 
       if ( !names.IsNullOrEmpty() )
         _cookies = _cookies.Where( c => names.Contains( c.Name, StringComparer.OrdinalIgnoreCase ) );
 
-      return new CacheTokenItem( "Cookies", _cookies.Select( c => string.Format( "{0}={1}", c.Name.Replace( "=", "@=" ), c.Value ) ).ToArray() );
+      return CreateToken( "Cookies", _cookies.Select( c => string.Format( "{0}={1}", c.Name.Replace( "=", "@=" ), c.Value ) ).ToArray() );
     }
 
 
@@ -267,12 +350,37 @@ namespace Ivony.Html.Web
 
     public static CacheToken FromSessionID( HttpContextBase context )
     {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
       return new CacheTokenItem( "SessionID", context.Session.SessionID );
     }
 
     public static CacheToken FromVirtualPath( HttpContextBase context )
     {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
       return new CacheTokenItem( "VirtualPath", context.Request.AppRelativeCurrentExecutionFilePath );
     }
+
+    public static CacheToken FromQueryString( HttpContextBase context )
+    {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      return FromQueryString( context, null );
+    }
+
+    public static CacheToken FromQueryString( HttpContextBase context, string[] keys )
+    {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+      return From( "QueryString", context.Request.QueryString, keys );
+    }
+
+
+
   }
 }

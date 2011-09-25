@@ -10,89 +10,153 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 表示一个缓存标记，缓存标记可以从当前请求的特征中产生，并变换为唯一的 CacheKey 或是 ETag 标记
+  /// 表示一个缓存标记，缓存标记可以从当前请求的特征中产生，并变换为唯一的 CacheKey
   /// </summary>
-  public class CacheToken
+  public sealed class CacheToken
   {
 
-    private string _type;
-    private string[] _tokens;
+    private CacheTokenItem[] _tokens;
 
-
-
-    private CacheToken()
+    private CacheToken( params CacheTokenItem[] tokens )
     {
+      if ( tokens.GroupBy( t => t.TypeName ).Any( g => g.Count() > 1 ) )
+        throw new Exception( "不能合并包含相同类型的 CacheToken" );
+       
+      _tokens = tokens;
+    }
 
+
+
+    private string _tokenString;
+
+    private override void EnsureTokenString()
+    {
+      if ( _tokenString == null )
+      {
+        _tokenString = string.Join( "+", _tokens.Select( t => t.ToString() ) );
+      }
+    }
+
+
+
+    /// <summary>
+    /// 获取缓存标记的字符串表达形式
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+      EnsureTokenString();
+
+      return _tokenString;
     }
 
 
     /// <summary>
-    /// 创建 CacheToken 的实例
+    /// 比较两个缓存标记项
     /// </summary>
-    /// <param name="type">CacheToken 的类别</param>
-    /// <param name="tokens">一些特征字符串</param>
-    public CacheToken( string type, params string[] tokens )
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public override bool Equals( object obj )
     {
-      _type = type;
-      _tokens = tokens;
-    }
+      var _token = obj as CacheToken;
+      if ( _token == null )
+        return false;
 
-    private string _tokenString;
-
-    private virtual void EnsureTokenString()
-    {
-      if ( _tokenString == null )
-      {
-        _tokenString = _type.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ) );
-        _tokenString = _tokenString.Replace( "+", "@+" );
-
-      }
+      return ToString().Equals( _token.ToString(), StringComparison.Ordinal );
     }
 
 
-    private sealed class MultipleCacheToken : CacheToken
+    /// <summary>
+    /// 计算哈希值
+    /// </summary>
+    /// <returns></returns>
+    public override int GetHashCode()
+    {
+      return ToString().GetHashCode();
+    }
+
+
+
+
+
+    private sealed class CacheTokenItem
     {
 
-      private CacheToken[] _tokens;
+      private string[] _tokens;
 
-      public MultipleCacheToken( params CacheToken[] tokens )
+
+      public CacheTokenItem( string type, params string[] tokens )
       {
-
-        List<CacheToken> list = new List<CacheToken>();
-
-        foreach ( var t in tokens )
-        {
-        }
-
-
-        _tokens = list.ToArray();
+        TypeName = type;
+        _tokens = tokens;
       }
 
+      private string _tokenString;
 
-
-      private static void AddToken( IList<CacheToken> list, CacheToken token )
-      {
-        var multiple = token as MultipleCacheToken;
-        
-        if ( multiple != null )
-          multiple._tokens.ForAll( t => AddToken( list, t ) );
-
-        else
-
-          list.Add( token );
-      }
-
-
-
-      private override void EnsureTokenString()
+      private virtual void EnsureTokenString()
       {
         if ( _tokenString == null )
         {
-          _tokenString = string.Join( "+", _tokens.Select( t => t.ToString() ) );
+          _tokenString = _type.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ) );
+          _tokenString = _tokenString.Replace( "+", "@+" );
+
         }
       }
 
+
+      public string TypeName
+      {
+        get;
+        private set;
+      }
+
+
+      /// <summary>
+      /// 获取缓存标记项的字符串表达形式
+      /// </summary>
+      /// <returns></returns>
+      public override string ToString()
+      {
+        EnsureTokenString();
+        return _tokenString;
+      }
+
+
+      /// <summary>
+      /// 计算哈希值
+      /// </summary>
+      /// <returns></returns>
+      public override int GetHashCode()
+      {
+        return ToString().GetHashCode();
+      }
+
+
+      /// <summary>
+      /// 比较两个缓存标记项
+      /// </summary>
+      /// <param name="obj"></param>
+      /// <returns></returns>
+      public override bool Equals( object obj )
+      {
+        var _token = obj as CacheTokenItem;
+        if ( _token == null )
+          return false;
+
+        return ToString().Equals( _token.ToString(), StringComparison.Ordinal );
+      }
+
+
+
+
+      public static implicit operator CacheToken( CacheTokenItem item )
+      {
+        return new CacheToken( item );
+      }
+
     }
+
+
 
 
 
@@ -106,25 +170,7 @@ namespace Ivony.Html.Web
       return ToString();
     }
 
-    /// <summary>
-    /// 从缓存标记产生 ETag 标记
-    /// </summary>
-    /// <returns></returns>
-    public string ETag()
-    {
-      return HttpServerUtility.UrlTokenEncode( CacheHelper.ComputeHash( ToString() ) );
-    }
 
-
-    /// <summary>
-    /// 获取缓存标记的字符串表达形式
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString()
-    {
-      EnsureTokenString();
-      return _tokenString;
-    }
 
 
     /// <summary>
@@ -166,7 +212,7 @@ namespace Ivony.Html.Web
       else
         values = routeValues;
 
-      return new CacheToken( "RouteValue", values.Select( pair => string.Format( "{0}={1}", pair.Key.Replace( "=", "@=" ), pair.Value ) ).ToArray() );
+      return new CacheTokenItem( "RouteValue", values.Select( pair => string.Format( "{0}={1}", pair.Key.Replace( "=", "@=" ), pair.Value ) ).ToArray() );
     }
 
 
@@ -184,7 +230,7 @@ namespace Ivony.Html.Web
       if ( !names.IsNullOrEmpty() )
         _cookies = _cookies.Where( c => names.Contains( c.Name, StringComparer.OrdinalIgnoreCase ) );
 
-      return new CacheToken( "Cookies", _cookies.Select( c => string.Format( "{0}={1}", c.Name.Replace( "=", "@=" ), c.Value ) ).ToArray() );
+      return new CacheTokenItem( "Cookies", _cookies.Select( c => string.Format( "{0}={1}", c.Name.Replace( "=", "@=" ), c.Value ) ).ToArray() );
     }
 
 
@@ -214,18 +260,19 @@ namespace Ivony.Html.Web
       if ( tokens.IsSingle() )
         return tokens.Single();
 
-      return new MultipleCacheToken( tokens.ToArray() );
+      return new CacheToken( tokens.SelectMany( t => t._tokens ).ToArray() );
+
     }
 
 
     public static CacheToken FromSessionID( HttpContextBase context )
     {
-      return new CacheToken( "SessionID", context.Session.SessionID );
+      return new CacheTokenItem( "SessionID", context.Session.SessionID );
     }
 
     public static CacheToken FromVirtualPath( HttpContextBase context )
     {
-      return new CacheToken( "VirtualPath", context.Request.AppRelativeCurrentExecutionFilePath );
+      return new CacheTokenItem( "VirtualPath", context.Request.AppRelativeCurrentExecutionFilePath );
     }
   }
 }

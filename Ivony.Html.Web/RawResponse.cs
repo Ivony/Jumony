@@ -8,12 +8,12 @@ using System.IO;
 
 namespace Ivony.Html.Web
 {
- 
-  
+
+
   /// <summary>
   /// 定义响应内容，用于缓存
   /// </summary>
-  public class RawResponse : ICachedResponse
+  public class RawResponse : IClientCacheableResponse, ICachedResponse
   {
 
     /// <summary>
@@ -89,6 +89,16 @@ namespace Ivony.Html.Web
 
       response.Write( Content );
 
+    }
+
+    public string CreateETag()
+    {
+
+      if ( string.IsNullOrEmpty( Content ) || StatusCode != 200 )
+        return null;
+
+
+      return HttpServerUtility.UrlTokenEncode( CacheHelper.ComputeHash( ContentEncoding.ToString() + "\n" + Content ) );
     }
   }
 }

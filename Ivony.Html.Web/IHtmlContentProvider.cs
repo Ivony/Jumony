@@ -112,11 +112,6 @@ namespace Ivony.Html.Web
   public class StaticFileLoader : IHtmlContentProvider
   {
 
-    protected static Cache Cache
-    {
-      get { return HostingEnvironment.Cache; }
-    }
-
 
     private static readonly ICollection<string> allowsExtensions = new ReadOnlyCollection<string>( new[] { ".html", ".htm" } );
 
@@ -164,7 +159,7 @@ namespace Ivony.Html.Web
 
       var key = provider.GetCacheKey( virtualPath ) ?? "StaticFile_" + virtualPath;
 
-      var content = Cache.Get( key ) as string;
+      var content = context.Cache.Get( key ) as string;
 
 
       if ( content == null )
@@ -176,7 +171,7 @@ namespace Ivony.Html.Web
         var dependency = provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
 
 
-        Cache.Insert( key, content, dependency );
+        context.Cache.Insert( key, content, dependency );
       }
 
 

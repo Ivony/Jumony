@@ -20,4 +20,11 @@ namespace Ivony.Html.Web
     void Apply( HttpResponseBase response );
 
   }
+
+
+  public interface IClientCacheableResponse : ICachedResponse
+  {
+    public string CreateETag();
+  }
+
 }

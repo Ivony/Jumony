@@ -77,6 +77,12 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+
+
+
+
     /// <summary>
     /// 计算字符串的哈希值
     /// </summary>
@@ -91,63 +97,17 @@ namespace Ivony.Html.Web
     }
 
 
-    public static string GenerateCacheKey( RouteValueDictionary routeValues )
-    {
 
-      StringBuilder builder = new StringBuilder();
-
-      foreach ( string key in routeValues.Keys )
-      {
-        var _key = key.Replace( "=", "==" ).Replace( ";", ";;" );
-        builder.Append( _key + "=" );
-
-        object value = routeValues[key];
-        if ( value == null )
-          builder.Append( "@;" );
-        else
-          builder.Append( value.ToString().Replace( "=", "==" ).Replace( ";", ";;" ).Replace( "@", "@@" ) + ";" );
-      }
-
-      return builder.ToString();
-    }
-
-
-
+    /// <summary>
+    /// 映射物理路径
+    /// </summary>
+    /// <param name="virtualPath"></param>
+    /// <returns></returns>
     public static string MapPath( string virtualPath )
     {
       return HostingEnvironment.MapPath( virtualPath );
     }
 
-
-
-
-
-    /// <summary>
-    /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
-    /// </summary>
-    /// <param name="item"></param>
-    /// <param name="cachePolicy"></param>
-    public static void SetMaxAge( this CacheItem item, HttpCachePolicyBase cachePolicy )
-    {
-      item.SetMaxAge( cachePolicy, TimeSpan.FromMinutes( 2 ) );
-    }
-
-
-    /// <summary>
-    /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
-    /// </summary>
-    /// <param name="item"></param>
-    /// <param name="cachePolicy"></param>
-    public static void SetMaxAge( this CacheItem item, HttpCachePolicyBase cachePolicy, TimeSpan shake )
-    {
-      var random = new Random( DateTime.Now.Millisecond );
-
-      var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake.TotalMilliseconds );
-
-      var age = item.Expiration - DateTime.UtcNow + offset;
-      cachePolicy.SetMaxAge( age );
-
-    }
 
 
   }

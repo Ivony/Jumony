@@ -23,7 +23,7 @@ namespace Ivony.Html.Web
     /// <param name="token">缓存项的缓存依据</param>
     /// <param name="cached">缓存的数据</param>
     /// <param name="duration">最大缓存时间</param>
-    public CacheItem( IHtmlCachePolicyProvider provider, CacheToken token, ICachedResponse cached, TimeSpan duration )
+    public CacheItem( ICachePolicyProvider provider, CacheToken token, ICachedResponse cached, TimeSpan duration )
     {
       CacheToken = token;
       CachedResponse = cached;
@@ -37,7 +37,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建缓存项的缓存策略提供程序
     /// </summary>
-    public IHtmlCachePolicyProvider Provider
+    public ICachePolicyProvider Provider
     {
       get;
       private set;

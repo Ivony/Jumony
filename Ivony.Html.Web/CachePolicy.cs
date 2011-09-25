@@ -36,7 +36,7 @@ namespace Ivony.Html.Web
     /// <param name="context"></param>
     /// <param name="token"></param>
     /// <param name="provider"></param>
-    public CachePolicy( HttpContextBase context, CacheToken token, IHtmlCachePolicyProvider provider )
+    public CachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider )
     {
       HttpContext = context;
       CacheToken = token;
@@ -69,7 +69,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 缓存策略提供程序
     /// </summary>
-    public IHtmlCachePolicyProvider Provider
+    public ICachePolicyProvider Provider
     {
       get;
       private set;
@@ -102,7 +102,7 @@ namespace Ivony.Html.Web
   /// </summary>
   public class StandardCachePolicy : CachePolicy, IClientCachablePolicy
   {
-    public StandardCachePolicy( HttpContextBase context, CacheToken token, IHtmlCachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
+    public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
       : base( context, token, provider )
     {
 

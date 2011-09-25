@@ -23,7 +23,7 @@ namespace Ivony.Html.Web
       ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
       ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
       RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
-      CachePolicyProviders = new SynchronizedCollection<IHtmlCachePolicyProvider>( _cachePoliciesSync );
+      CachePolicyProviders = new SynchronizedCollection<ICachePolicyProvider>( _cachePoliciesSync );
 
 
       ContentProviders.Add( new StaticFileLoader() );
@@ -74,11 +74,18 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 所有缓存策略提供程序
     /// </summary>
-    public static ICollection<IHtmlCachePolicyProvider> CachePolicyProviders
+    public static ICollection<ICachePolicyProvider> CachePolicyProviders
     {
       get;
       private set;
     }
+
+
+    public static ICachePolicyProvider DefaultCachePolicyProvider
+    {
+      get { return Web.DefaultCachePolicyProvider.Instance; }
+    }
+
 
 
     /// <summary>
@@ -357,7 +364,7 @@ namespace Ivony.Html.Web
 
       }
 
-      return DefaultCachePolicyProvider.Instance.CreateCachePolicy( context );
+      return Web.DefaultCachePolicyProvider.Instance.CreateCachePolicy( context );
     }
 
 

@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 定义缓存策略提供程序
   /// </summary>
-  public interface IHtmlCachePolicyProvider
+  public interface ICachePolicyProvider
   {
 
     CachePolicy CreateCachePolicy( HttpContextBase context );
@@ -45,7 +45,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 用于设置和获取默认缓存策略
   /// </summary>
-  public class DefaultCachePolicyProvider : IHtmlCachePolicyProvider
+  public class DefaultCachePolicyProvider : ICachePolicyProvider
   {
 
 

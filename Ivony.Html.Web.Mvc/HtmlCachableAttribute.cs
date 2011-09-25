@@ -51,6 +51,7 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly string CachePolicyToken = "JumonyforMVC_CacheControl_CachePolicy";
     private static readonly string CacheHitToken = "JumonyforMVC_CacheControl_CacheHit";
+    private static readonly string ClientCacheResolved = "JumonyforMVC_CacheControl_ClientCacheResolved";
 
 
     /// <summary>
@@ -95,6 +96,7 @@ namespace Ivony.Html.Web.Mvc
         if ( cachable.ResolveClientCache( filterContext.HttpContext ) )
         {
           filterContext.Result = new EmptyResult();
+          filterContext.RouteData.DataTokens[ClientCacheResolved] = "Resolved";
           return true;
         }
       }
@@ -188,7 +190,7 @@ namespace Ivony.Html.Web.Mvc
       var dataTokens = filterContext.RouteData.DataTokens;
 
       //若已命中缓存，则不再应用客户端缓存策略
-      if ( dataTokens[CacheHitToken] != null )
+      if ( dataTokens[ClientCacheResolved] != null )
         return;
 
 
@@ -206,6 +208,16 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="filterContext"></param>
     public override void OnResultExecuted( ResultExecutedContext filterContext )
     {
+      UpdateCache( filterContext );
+    }
+
+
+    private void UpdateCache( ResultExecutedContext filterContext )
+    {
+      //若已命中缓存，则不再更新缓存
+      if ( filterContext.RouteData.DataTokens[CacheHitToken] != null )
+        return;
+
       var result = filterContext.Result;
 
       var cachedResponse = GetCachedResponse( result );

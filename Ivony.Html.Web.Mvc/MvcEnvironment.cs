@@ -102,6 +102,16 @@ namespace Ivony.Html.Web.Mvc
 
       return HtmlProviders.GetCachePolicy( context.HttpContext );
     }
+
+
+    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new MvcCachePolicyProvider( HtmlProviders.DefaultCachePolicyProvider );
+
+    public static IMvcCachePolicyProvider DefaultCachePolicyProvider
+    {
+      get { return _defaultCachePolicyProvider; }
+    }
+
+
   }
 
 }

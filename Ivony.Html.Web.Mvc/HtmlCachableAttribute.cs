@@ -36,9 +36,9 @@ namespace Ivony.Html.Web.Mvc
         return;
       }
 
-      else if ( policyProviderType.IsSubclassOf( typeof( IHtmlCachePolicyProvider ) ) )
+      else if ( policyProviderType.IsSubclassOf( typeof( ICachePolicyProvider ) ) )
       {
-        CachePolicyProvider = new MvcCachePolicyProvider( Activator.CreateInstance( policyProviderType ).CastTo<IHtmlCachePolicyProvider>() );
+        CachePolicyProvider = new MvcCachePolicyProvider( Activator.CreateInstance( policyProviderType ).CastTo<ICachePolicyProvider>() );
         return;
       }
 
@@ -140,7 +140,7 @@ namespace Ivony.Html.Web.Mvc
         var provider = context.Controller as IMvcCachePolicyProvider;
         if ( provider == null )
         {
-          var _provider = context.Controller as IHtmlCachePolicyProvider;
+          var _provider = context.Controller as ICachePolicyProvider;
           if ( _provider != null )
             provider = new MvcCachePolicyProvider( _provider );
         }

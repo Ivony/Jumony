@@ -90,11 +90,6 @@ namespace Ivony.Html.Web.Mvc
       filterContext.RouteData.DataTokens[CachePolicyToken] = cachePolicy;
 
 
-      var requestCacheControl = filterContext.HttpContext.Request.Headers["cache-control"];
-      if ( requestCacheControl.EqualsIgnoreCase( "no-cache" ) )
-        return false;
-
-
 
 
       var cachable = cachePolicy as IClientCachablePolicy;
@@ -133,7 +128,7 @@ namespace Ivony.Html.Web.Mvc
 
       if ( CachePolicyProvider != null )
       {
-        var policy = CachePolicyProvider.GetCachePolicy( context, action );
+        var policy = CachePolicyProvider.CreateCachePolicy( context, action );
 
         if ( policy != null )
           return policy;
@@ -150,7 +145,7 @@ namespace Ivony.Html.Web.Mvc
             provider = new MvcCachePolicyProvider( _provider );
         }
 
-        var policy = provider.GetCachePolicy( context, action );
+        var policy = provider.CreateCachePolicy( context, action );
 
         if ( policy != null )
           return policy;

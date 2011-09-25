@@ -24,7 +24,6 @@ namespace Ivony.Html.Web.Mvc
 
       controllerName = type.Name.Substring( 0, type.Name.Length - typeNamePostfix.Length );
 
-
     }
 
     private Type type;

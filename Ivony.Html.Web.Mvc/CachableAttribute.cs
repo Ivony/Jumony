@@ -57,37 +57,31 @@ namespace Ivony.Html.Web.Mvc
     {
 
       if ( CachePolicyProvider != null )
+        return CachePolicyProvider.CreateCachePolicy( context, action, parameters );
+
+
+
+      var httpMethod = context.HttpContext.Request.HttpMethod;
+      if ( !httpMethod.EqualsIgnoreCase( "get" ) && !httpMethod.EqualsIgnoreCase( "header" ) )//如果不是GET或Header请求，都不予缓存。
+        return null;
+
+
+      var provider = context.Controller as IMvcCachePolicyProvider;
+      if ( provider == null )
       {
-        var policy = CachePolicyProvider.CreateCachePolicy( context, action, parameters );
-
-        if ( policy != null )
-          return policy;
+        var _provider = context.Controller as ICachePolicyProvider;
+        if ( _provider != null )
+          provider = new MvcCachePolicyProviderWrapper( _provider );
       }
-      else
-      {
 
-        var httpMethod = context.HttpContext.Request.HttpMethod;
-        if ( !httpMethod.EqualsIgnoreCase( "get" ) && !httpMethod.EqualsIgnoreCase( "header" ) )//如果不是GET或Header请求，都不予缓存。
-          return null;
+      var policy = provider.CreateCachePolicy( context, action, parameters );
 
-
-        var provider = context.Controller as IMvcCachePolicyProvider;
-        if ( provider == null )
-        {
-          var _provider = context.Controller as ICachePolicyProvider;
-          if ( _provider != null )
-            provider = new MvcCachePolicyProviderWrapper( _provider );
-        }
-
-        var policy = provider.CreateCachePolicy( context, action, parameters );
-
-        if ( policy != null )
-          return policy;
+      if ( policy != null )
+        return policy;
 
 
 
-        return MvcEnvironment.CreateCachePolicy( context, action, parameters );
-      }
+      return MvcEnvironment.CreateCachePolicy( context, action, parameters );
 
     }
 

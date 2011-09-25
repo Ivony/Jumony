@@ -63,9 +63,13 @@ namespace Ivony.Html.Web.Mvc
         if ( policy != null )
           return policy;
       }
-
       else
       {
+
+        var httpMethod = context.HttpContext.Request.HttpMethod;
+        if ( !httpMethod.EqualsIgnoreCase( "get" ) && !httpMethod.EqualsIgnoreCase( "header" ) )//如果不是GET或Header请求，都不予缓存。
+          return null;
+
 
         var provider = context.Controller as IMvcCachePolicyProvider;
         if ( provider == null )
@@ -79,10 +83,11 @@ namespace Ivony.Html.Web.Mvc
 
         if ( policy != null )
           return policy;
+
+
+
+        return MvcEnvironment.CreateCachePolicy( context, action, parameters );
       }
-
-
-      return MvcEnvironment.CreateCachePolicy( context, action, parameters );
 
     }
 

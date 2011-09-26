@@ -13,6 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 定义响应内容，用于缓存
   /// </summary>
+  [Serializable]
   public class RawResponse : IClientCacheableResponse, ICachedResponse
   {
 

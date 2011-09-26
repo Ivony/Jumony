@@ -13,6 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 表示一个缓存标记，缓存标记可以从当前请求的特征中产生，并变换为唯一的 CacheKey
   /// </summary>
+  [Serializable]
   public sealed class CacheToken
   {
 

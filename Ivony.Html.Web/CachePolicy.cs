@@ -82,6 +82,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <returns></returns>
     public abstract CacheItem CreateCacheItem( ICachedResponse cachedResponse );
+
   }
 
 

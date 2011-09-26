@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Web.Caching;
 using System.Web;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Web.Hosting;
+using System.Web.Compilation;
+using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Web
 {
@@ -12,6 +17,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 定义缓存项，缓存项包括缓存的响应和策略。
   /// </summary>
+  [Serializable]
   public sealed class CacheItem
   {
 
@@ -27,20 +33,23 @@ namespace Ivony.Html.Web
     {
       CacheToken = token;
       CachedResponse = cached;
-      Provider = provider;
+      _provider = provider;
       Expiration = DateTime.UtcNow + duration;
       DurationFromCreated = duration;
     }
 
 
 
+    [NonSerialized]
+    private ICachePolicyProvider _provider;
+
     /// <summary>
     /// 创建缓存项的缓存策略提供程序
     /// </summary>
     public ICachePolicyProvider Provider
     {
-      get;
-      private set;
+      get { return _provider; }
+      internal set { _provider = value; }
     }
 
 
@@ -96,7 +105,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
     /// </summary>
-    /// <param name="item"></param>
     /// <param name="cachePolicy"></param>
     public void SetMaxAge( HttpCachePolicyBase cachePolicy )
     {
@@ -108,8 +116,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
     /// </summary>
-    /// <param name="item"></param>
     /// <param name="cachePolicy"></param>
+    /// <param name="shake"></param>
     public void SetMaxAge( HttpCachePolicyBase cachePolicy, TimeSpan shake )
     {
       var random = new Random( DateTime.Now.Millisecond );
@@ -221,6 +229,87 @@ namespace Ivony.Html.Web
       else
         return cacheItem.CachedResponse;
     }
+
+
+
+
+    public static void SerializeTo( this CacheItem cacheItem, string filepath )
+    {
+      Directory.CreateDirectory( Path.GetDirectoryName( filepath ) );
+      using ( var stream = File.OpenWrite( filepath ) )
+      {
+        SerializeTo( cacheItem, stream );
+      }
+    }
+
+    
+    public static void SerializeTo( this CacheItem cacheItem, Stream stream )
+    {
+
+      var fomatter = new BinaryFormatter();
+      fomatter.Serialize( stream, cacheItem );
+
+    }
+
+
+
+    public static CacheItem DeserializeFrom(ICachePolicyProvider provider, string filepath)
+    {
+      using ( var stream = File.OpenRead( filepath ) )
+      {
+        return DeserializeFrom(provider, stream);
+      }
+    }
+
+    public static CacheItem DeserializeFrom(ICachePolicyProvider provider, Stream stream)
+    {
+
+      var fomatter = new BinaryFormatter();
+
+      CacheItem item;
+      item = (CacheItem) fomatter.Deserialize( stream );
+
+      item.Provider = provider;
+      return item;
+    }
+
+
+
+    private static readonly string cachedFilePrefix = "JumonyForMvc_Cached_";
+
+    public static void SerializeToFile( this CacheItem cacheItem )
+    { 
+      var filename = cacheItem.CacheToken.CreateFilename();
+      using ( var stream = BuildManager.CreateCachedFile( cachedFilePrefix + filename ) )
+      {
+        SerializeTo( cacheItem, stream );
+      }
+    }
+
+
+    public static CacheItem DeserializeFromFile( ICachePolicyProvider provider, CacheToken token )
+    { 
+      var filename = token.CreateFilename();
+      using ( var stream = BuildManager.ReadCachedFile( cachedFilePrefix + filename ) )
+      {
+        return DeserializeFrom( provider, stream );
+      }
+    }
+
+
+    private static readonly Regex invalidPathCharactor = new Regex( @"\W+", RegexOptions.Compiled );
+
+
+    public static string CreateFilename( this CacheToken token )
+    {
+      var cacheKey = token.CacheKey();
+      return invalidPathCharactor.Replace( token.CacheKey(), "" ) + "_" + cacheKey.GetHashCode();
+
+
+    }
+
+
+
 
 
 

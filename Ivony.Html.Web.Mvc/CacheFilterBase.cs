@@ -108,6 +108,8 @@ namespace Ivony.Html.Web.Mvc
 
 
       var cachePolicy = dataTokens[CachePolicyToken] as IClientCacheablePolicy;
+      if ( cachePolicy == null )
+        return;
 
       cachePolicy.ApplyClientCachePolicy( filterContext.HttpContext.Response.Cache );
     }

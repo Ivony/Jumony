@@ -27,6 +27,8 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual void ResolveCache( ActionExecutingContext filterContext )
     {
+      filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Resolve Cache" );
+
 
       var result = ResolveCache( filterContext, filterContext.ActionDescriptor, filterContext.ActionParameters );
 
@@ -37,7 +39,7 @@ namespace Ivony.Html.Web.Mvc
         filterContext.RouteData.DataTokens[CacheHitToken] = "Hitted";
       }
       else
-        filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache COntrol", "OutputCache missed" );
+        filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "OutputCache missed" );
 
       ;
     }
@@ -59,6 +61,8 @@ namespace Ivony.Html.Web.Mvc
       {
         if ( cachable.ResolveClientCache( context.HttpContext ) )
         {
+          context.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Resolve Client Cache Success" );
+
           context.RouteData.DataTokens[ClientCacheResolved] = "Resolved";
           return new EmptyResult();
         }
@@ -115,6 +119,8 @@ namespace Ivony.Html.Web.Mvc
       if ( cachePolicy == null )
         return;
 
+      filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Apply Client Cache Policy" );
+
       cachePolicy.ApplyClientCachePolicy( filterContext.HttpContext.Response.Cache );
     }
 
@@ -140,6 +146,10 @@ namespace Ivony.Html.Web.Mvc
       var cachePolicy = filterContext.RouteData.DataTokens[CachePolicyToken] as CachePolicy;
       if ( cachePolicy == null )
         return;
+
+
+      filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Update Cache" );
+
 
       var mvcCachePolicy = cachePolicy as IMvcCachePolicy;
       if ( mvcCachePolicy != null )

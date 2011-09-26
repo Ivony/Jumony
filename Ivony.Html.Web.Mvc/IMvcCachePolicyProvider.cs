@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public interface IMvcCachePolicyProvider
+  public interface IMvcCachePolicyProvider : ICachePolicyProvider
   {
 
     CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters );

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -30,5 +31,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    CachePolicy ICachePolicyProvider.CreateCachePolicy( HttpContextBase context )
+    {
+      return _provider.CreateCachePolicy( context );
+    }
   }
 }

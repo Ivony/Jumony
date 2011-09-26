@@ -235,7 +235,7 @@ namespace Ivony.Html.Web
     /// <param name="typeName"></param>
     /// <param name="tokens"></param>
     /// <returns></returns>
-    public static CacheToken CreateToken( string typeName, string[] tokens )
+    public static CacheToken CreateToken( string typeName, params string[] tokens )
     {
       if ( typeName == null )
         throw new ArgumentNullException( "typeName" );

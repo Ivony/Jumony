@@ -50,6 +50,10 @@ namespace Ivony.Html.Web.Mvc
       if ( policy == null )
         return null;
 
+
+      context.RouteData.DataTokens[CachePolicyToken] = policy;
+
+
       var cachable = policy as IClientCacheablePolicy;//尝试输出客户端缓存
       if ( cachable != null )
       {

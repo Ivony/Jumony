@@ -325,7 +325,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public static CacheToken Combine( params CacheToken[] tokens )
     {
-      return Combine( tokens );
+      return Combine( tokens.AsEnumerable() );
     }
 
     /// <summary>

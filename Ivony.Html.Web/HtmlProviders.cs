@@ -121,6 +121,19 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
+    /// 分析文档内容
+    /// </summary>
+    /// <param name="parser">分析器</param>
+    /// <param name="content">文档内容加载结果</param>
+    /// <returns></returns>
+    public static IHtmlDocument Parse( this IHtmlParser parser, HtmlContentResult content )
+    {
+      return parser.Parse( content.Content, content.ContentUri );
+    }
+
+
+
+    /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
     /// <param name="virtualPath">文档的虚拟路径</param>
@@ -369,12 +382,5 @@ namespace Ivony.Html.Web
 
 
 
-
-
-
-
-
-
   }
-
 }

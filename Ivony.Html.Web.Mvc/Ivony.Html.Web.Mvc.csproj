@@ -81,6 +81,7 @@
     <Compile Include="MvcCachePolicyProvider.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormValidator.cs" />
+    <Compile Include="MvcParser.cs" />
     <Compile Include="PageView.cs" />
     <Compile Include="RoutingExtensions.cs" />
     <Compile Include="ScriptManager.cs" />
@@ -106,6 +107,10 @@
     <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
       <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>
       <Name>Ivony.Html.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
+      <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
+      <Name>Ivony.Html.Parser</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
       <Project>{6CE7336E-D881-40B2-9495-C06CF9A61AC6}</Project>

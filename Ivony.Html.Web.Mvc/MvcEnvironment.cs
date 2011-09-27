@@ -129,6 +129,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+
+    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
+    {
+      var content = HtmlProviders.LoadContent( context, virtualPath );
+      var parser = new MvcParser();
+      var document = parser.Parse( content );
+
+
+    }
+
+
+
     /// <summary>
     /// 全局缓存筛选器，在 ASP.NET MVC 3 中，将此过滤器加入全局过滤器集合中，即可对所有请求执行输出缓存。
     /// </summary>

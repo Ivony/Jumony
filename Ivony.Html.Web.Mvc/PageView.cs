@@ -130,7 +130,7 @@ namespace Ivony.Html.Web.Mvc
       var modifier = Document.DomModifier;
       if ( modifier != null )
       {
-        var header = Document.Find( "html head" ).FirstOrDefault();
+        var header = Document.Find( "head" ).FirstOrDefault();
 
         if ( header != null )
         {

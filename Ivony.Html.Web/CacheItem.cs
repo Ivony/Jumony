@@ -261,6 +261,9 @@ namespace Ivony.Html.Web
 
     public static CacheItem DeserializeFrom( ICachePolicyProvider provider, string filepath )
     {
+      if ( !File.Exists( filepath ) )
+        return null;
+
       using ( var stream = File.OpenRead( filepath ) )
       {
         return DeserializeFrom( provider, stream );
@@ -315,7 +318,7 @@ namespace Ivony.Html.Web
     public static string CreateFilename( this CacheToken token )
     {
       var cacheKey = token.CacheKey();
-      return invalidPathCharactor.Replace( token.CacheKey(), "" ) + "_" + cacheKey.GetHashCode();
+      return invalidPathCharactor.Replace( token.CacheKey(), "" ).Substring( 0, 50 ) + "_" + cacheKey.GetHashCode();
 
 
     }

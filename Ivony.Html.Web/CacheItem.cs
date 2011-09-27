@@ -34,7 +34,13 @@ namespace Ivony.Html.Web
       CacheToken = token;
       CachedResponse = cached;
       _provider = provider;
-      Expiration = DateTime.UtcNow + duration;
+
+      var shake =  Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
+      var random = new Random( DateTime.Now.Millisecond );
+      var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake );
+
+      Expiration = DateTime.UtcNow + duration + offset;
+
       DurationFromCreated = duration;
     }
 
@@ -120,8 +126,8 @@ namespace Ivony.Html.Web
     /// <param name="shake"></param>
     public void SetMaxAge( HttpCachePolicyBase cachePolicy, TimeSpan shake )
     {
-      var random = new Random( DateTime.Now.Millisecond );
 
+      var random = new Random( DateTime.Now.Millisecond );
       var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake.TotalMilliseconds );
 
       var age = Expiration - DateTime.UtcNow + offset;
@@ -242,7 +248,7 @@ namespace Ivony.Html.Web
       }
     }
 
-    
+
     public static void SerializeTo( this CacheItem cacheItem, Stream stream )
     {
 
@@ -253,15 +259,15 @@ namespace Ivony.Html.Web
 
 
 
-    public static CacheItem DeserializeFrom(ICachePolicyProvider provider, string filepath)
+    public static CacheItem DeserializeFrom( ICachePolicyProvider provider, string filepath )
     {
       using ( var stream = File.OpenRead( filepath ) )
       {
-        return DeserializeFrom(provider, stream);
+        return DeserializeFrom( provider, stream );
       }
     }
 
-    public static CacheItem DeserializeFrom(ICachePolicyProvider provider, Stream stream)
+    public static CacheItem DeserializeFrom( ICachePolicyProvider provider, Stream stream )
     {
 
       var fomatter = new BinaryFormatter();
@@ -278,7 +284,7 @@ namespace Ivony.Html.Web
     private static readonly string cachedFilePrefix = "JumonyForMvc_Cached_";
 
     public static void SerializeToFile( this CacheItem cacheItem )
-    { 
+    {
       var filename = cacheItem.CacheToken.CreateFilename();
       using ( var stream = BuildManager.CreateCachedFile( cachedFilePrefix + filename ) )
       {
@@ -288,10 +294,13 @@ namespace Ivony.Html.Web
 
 
     public static CacheItem DeserializeFromFile( ICachePolicyProvider provider, CacheToken token )
-    { 
+    {
       var filename = token.CreateFilename();
       using ( var stream = BuildManager.ReadCachedFile( cachedFilePrefix + filename ) )
       {
+        if ( stream == null )
+          return null;
+
         return DeserializeFrom( provider, stream );
       }
     }

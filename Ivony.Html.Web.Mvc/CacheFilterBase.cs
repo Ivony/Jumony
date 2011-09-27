@@ -70,10 +70,10 @@ namespace Ivony.Html.Web.Mvc
 
 
       //输出缓存
-      var response = context.HttpContext.Cache.GetCachedResponse( policy.CacheToken );
+      var cacheItem = policy.GetCacheItem();
 
-      if ( response != null )
-        return response.ToCachedResult();
+      if ( cacheItem != null )
+        return cacheItem.CachedResponse.ToCachedResult();
 
 
       return null;

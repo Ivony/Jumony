@@ -179,7 +179,7 @@ namespace Ivony.Html.Web
 
 
       CachePolicy = policy;
-      return Cache.GetCachedResponse( policy.CacheToken );
+      return policy.GetCacheItem().CachedResponse;
     }
 
 

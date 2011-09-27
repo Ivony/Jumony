@@ -83,6 +83,22 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public abstract CacheItem CreateCacheItem( ICachedResponse cachedResponse );
 
+
+    /// <summary>
+    /// 获取缓存项
+    /// </summary>
+    /// <returns></returns>
+    public CacheItem GetCacheItem()
+    {
+      var cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
+
+      if ( cacheItem != null )
+        return cacheItem;
+
+      return CacheExtensions.DeserializeFromFile( Provider, CacheToken );
+    }
+
+
   }
 
 
@@ -127,7 +143,7 @@ namespace Ivony.Html.Web
       if ( !EnableClientCache )
         return false;
 
-      var cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
+      var cacheItem = GetCacheItem();
       if ( cacheItem == null )
         return false;
 

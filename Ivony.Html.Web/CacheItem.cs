@@ -275,6 +275,9 @@ namespace Ivony.Html.Web
       CacheItem item;
       item = (CacheItem) fomatter.Deserialize( stream );
 
+      if ( item.Expiration < DateTime.UtcNow )//缓存已过期
+        return null;
+
       item.Provider = provider;
       return item;
     }

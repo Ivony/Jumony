@@ -5,6 +5,8 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Ivony.Html.Parser;
+using System.Web.Hosting;
 
 
 
@@ -26,6 +28,8 @@ namespace Ivony.Html.Web.Mvc
       CachePolicyProviders = new SynchronizedCollection<IMvcCachePolicyProvider>( _cachePolicyProvidersSync );
       GlobalCacheFilter = new GlobalCacheFilter();
 
+
+      CacheStorageProvider = new WebCacheStorageProvider( HostingEnvironment.Cache );
     }
 
 
@@ -99,6 +103,9 @@ namespace Ivony.Html.Web.Mvc
 
     private static object _cachePolicyProvidersSync = new object();
 
+    /// <summary>
+    /// 全局缓存策略提供程序
+    /// </summary>
     public static ICollection<IMvcCachePolicyProvider> CachePolicyProviders
     {
       get;
@@ -131,14 +138,30 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 使用 MvcParser 分析加载文档。
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <returns>加载的文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
       var content = HtmlProviders.LoadContent( context, virtualPath );
-      var parser = new MvcParser();
-      var document = parser.Parse( content );
 
-
+      return HtmlProviders.ParseDocument( context, content, new HtmlParserResult() { DomProvider = new DomProvider(), Parser = new MvcParser() } );
     }
+
+
+
+
+
+    public static ICacheStorageProvider CacheStorageProvider
+    {
+      get;
+      set;
+    }
+
+
 
 
 

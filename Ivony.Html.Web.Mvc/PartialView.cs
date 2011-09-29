@@ -63,7 +63,7 @@ namespace Ivony.Html.Web.Mvc
 
     protected virtual IHtmlContainer LoadContainer()
     {
-      var document = HtmlProviders.LoadDocument( HttpContext, VirtualPath );
+      var document = LoadDocument();
 
       var body = document.Find( "body" ).SingleOrDefault();
 

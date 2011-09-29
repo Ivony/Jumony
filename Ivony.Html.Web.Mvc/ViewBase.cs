@@ -265,6 +265,17 @@ namespace Ivony.Html.Web.Mvc
     protected abstract string RenderContent();
 
 
+
+    /// <summary>
+    /// 派生类调用此方法加载虚拟路径处的文档
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IHtmlDocument LoadDocument()
+    {
+      return MvcEnvironment.LoadDocument( HttpContext, VirtualPath );
+    }
+
+
     /// <summary>
     /// 自定义渲染过程的 HTML 转换器
     /// </summary>

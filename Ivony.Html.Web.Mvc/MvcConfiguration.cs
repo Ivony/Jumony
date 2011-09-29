@@ -11,15 +11,15 @@ namespace Ivony.Html.Web.Mvc
     internal MvcConfiguration() 
     {
 
-      EnablePageViewRenderPartial = false;
+      EnablePageViewRenderChildAction = false;
 
     }
 
 
     /// <summary>
-    /// 是否允许 PageView 渲染部分视图，默认为 false
+    /// 是否允许 PageView 渲染子请求，默认为 false
     /// </summary>
-    public bool EnablePageViewRenderPartial
+    public bool EnablePageViewRenderChildAction
     {
       get;
       set;

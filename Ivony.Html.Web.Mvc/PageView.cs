@@ -70,11 +70,11 @@ namespace Ivony.Html.Web.Mvc
     protected virtual void EnsurePageView()
     {
 
-      if ( MvcEnvironment.Configuration.EnablePageViewRenderPartial )
+      if ( MvcEnvironment.Configuration.EnablePageViewRenderChildAction )
         return;
 
       if ( ViewContext.IsChildAction )
-        throw new InvalidOperationException( "当前设置禁止使用 PageView 来渲染部分视图！" );
+        throw new InvalidOperationException( "当前设置禁止使用 PageView 来渲染子请求！" );
 
     }
 
@@ -105,16 +105,6 @@ namespace Ivony.Html.Web.Mvc
 
 
       AddGeneratorMetaData();
-    }
-
-
-    /// <summary>
-    /// 加载文档
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument()
-    {
-      return HtmlProviders.LoadDocument( HttpContext, VirtualPath );
     }
 
 

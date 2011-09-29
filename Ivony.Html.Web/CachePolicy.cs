@@ -123,7 +123,7 @@ namespace Ivony.Html.Web
 
 
     public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
-      : this( context, token, provider, duration, enableClientCache, null ) { }
+      : this( context, token, provider, duration, enableClientCache, null, true ) { }
 
 
     /// <summary>
@@ -134,7 +134,7 @@ namespace Ivony.Html.Web
     /// <param name="provider">缓存策略提供程序</param>
     /// <param name="duration">缓存持续时间</param>
     /// <param name="enableClientCache">是否启用客户端缓存</param>
-    public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache, string localcacheVirtualPath )
+    public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache, string localcacheVirtualPath, bool enableMemoryCache )
       : base( context, token, provider )
     {
 
@@ -147,7 +147,8 @@ namespace Ivony.Html.Web
 
       Duration = duration;
       EnableClientCache = enableClientCache;
-      LocalcacheVirtualPath = VirtualPathUtility.AppendTrailingSlash( localcacheVirtualPath );
+      LocalCacheVirtualPath = VirtualPathUtility.AppendTrailingSlash( localcacheVirtualPath );
+      EnableMemoryCache = enableMemoryCache;
     }
 
 
@@ -213,7 +214,13 @@ namespace Ivony.Html.Web
       private set;
     }
 
-    public string LocalcacheVirtualPath
+    public string LocalCacheVirtualPath
+    {
+      get;
+      private set;
+    }
+
+    public bool EnableMemoryCache
     {
       get;
       private set;
@@ -222,7 +229,7 @@ namespace Ivony.Html.Web
     public override CacheItem GetCacheItem()
     {
       var cacheItem = base.GetCacheItem();
-      if ( cacheItem != null || LocalcacheVirtualPath == null )
+      if ( cacheItem != null || LocalCacheVirtualPath == null )
         return cacheItem;
 
       var physicalPath = GetCacheFilepath( CacheToken );
@@ -233,7 +240,7 @@ namespace Ivony.Html.Web
     private string GetCacheFilepath( CacheToken token )
     {
       var filename = token.CreateFilename();
-      var virtualPath = VirtualPathUtility.Combine( LocalcacheVirtualPath, filename );
+      var virtualPath = VirtualPathUtility.Combine( LocalCacheVirtualPath, filename );
 
       var physicalPath = HttpContext.Server.MapPath( virtualPath );
       return physicalPath;
@@ -242,15 +249,22 @@ namespace Ivony.Html.Web
 
     public override CacheItem InsertToCache( ICachedResponse cachedResponse )
     {
-      var cacheItem = base.InsertToCache( cachedResponse );
 
-      if ( Duration > TimeSpan.FromMinutes( 2 ) )
-        cacheItem.SerializeTo( GetCacheFilepath( cacheItem.CacheToken ) );
+      var cacheItem = CreateCacheItem( cachedResponse );
+
+      if ( LocalCacheVirtualPath == null || EnableMemoryCache )
+      {
+        cacheItem = base.InsertToCache( cachedResponse );
+      }
+
+      if ( LocalCacheVirtualPath != null )
+      {
+        if ( Duration > TimeSpan.FromMinutes( 2 ) )
+          cacheItem.SerializeTo( GetCacheFilepath( cacheItem.CacheToken ) );
+      }
 
       return cacheItem;
     }
-
-
 
 
 

@@ -279,7 +279,20 @@ namespace Ivony.Html.Web
       var result = GetParser( context, contentResult.ContentUri, contentResult.Content );
 
 
-      if ( contentResult.CacheKey != null && result.DomProvider != null )//如果可以缓存
+      return ParseDocument( context, contentResult, result );
+    }
+
+
+    /// <summary>
+    /// 分析 HTML 文档，此方法会根据情况缓存文档模型
+    /// </summary>
+    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="contentResult">文档加载结果</param>
+    /// <param name="parserResult">解析器选择结果</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument ParseDocument( HttpContextBase context, HtmlContentResult contentResult, HtmlParserResult parserResult )
+    {
+      if ( contentResult.CacheKey != null && parserResult.DomProvider != null )//如果可以缓存
       {
         var key = contentResult.CacheKey;
         var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, contentResult.ContentUri.AbsoluteUri );
@@ -288,21 +301,21 @@ namespace Ivony.Html.Web
 
         if ( createDocument != null )
         {
-          var provider = result.DomProvider;
+          var provider = parserResult.DomProvider;
           return createDocument( provider );
         }
 
         context.Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
 
 
-        var document = ParseDocument( result, contentResult.Content, contentResult.ContentUri );
+        var document = ParseDocument( parserResult, contentResult.Content, contentResult.ContentUri );
         createDocument = document.Compile();//必须同步编译文档，否则文档对象可能被修改。
 
         new Action( delegate
-          {
-            createDocument( result.DomProvider );//可以异步预热，预热后再存入缓存。
-            Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
-          }
+        {
+          createDocument( parserResult.DomProvider );//可以异步预热，预热后再存入缓存。
+          Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
+        }
           ).BeginInvoke( null, null );//立即在新线程预热此方法
 
 
@@ -312,7 +325,7 @@ namespace Ivony.Html.Web
 
       else
 
-        return ParseDocument( result, contentResult.Content, contentResult.ContentUri );
+        return ParseDocument( parserResult, contentResult.Content, contentResult.ContentUri );
     }
 
 

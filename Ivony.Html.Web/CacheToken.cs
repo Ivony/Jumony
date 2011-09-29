@@ -80,7 +80,7 @@ namespace Ivony.Html.Web
 
 
 
-
+    [Serializable]
     private sealed class CacheTokenItem
     {
 

@@ -318,7 +318,13 @@ namespace Ivony.Html.Web
     public static string CreateFilename( this CacheToken token )
     {
       var cacheKey = token.CacheKey();
-      return invalidPathCharactor.Replace( token.CacheKey(), "" ).Substring( 0, 50 ) + "_" + cacheKey.GetHashCode();
+      var name = invalidPathCharactor.Replace( token.CacheKey(), "" );
+
+      if ( name.Length > 50 )
+        name = name.Substring( 0, 50 );
+
+      
+      return name + "_" + cacheKey.GetHashCode() + ".cache";
 
 
     }

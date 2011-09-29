@@ -404,15 +404,10 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container">确定要转换 URI 范围的容器</param>
     protected virtual void ResolveUri( IHtmlContainer container )
     {
-      //ResolveUri( container, container.Document.DocumentUri );
-
-
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
         ResolveUri( attribute );
       }
-
-      /**/
     }
 
     /// <summary>
@@ -543,6 +538,8 @@ namespace Ivony.Html.Web.Mvc
     {
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();
+      var path = partialElement.Attribute( "path" ).Value();
+      var handler = partialElement.Attribute( "handler" ).Value();
 
 
       var helper = MakeHelper();
@@ -550,22 +547,33 @@ namespace Ivony.Html.Web.Mvc
 
       try
       {
-        if ( action != null )
+        if ( action != null )//Action 部分视图
         {
           var controller = partialElement.Attribute( "controller" ).Value() ?? (string) RouteData.Values["controller"];
           var routeValues = GetRouteValues( partialElement );
 
           return helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ).ToString();
         }
+
         else if ( view != null )
         {
           return helper.Partial( partialViewName: view ).ToString();
         }
 
+        else if ( path != null )
+        {
+          if ( !VirtualPathUtility.IsAppRelative( path ) )
+            throw new FormatException( "path 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
+
+          var content = HtmlProviders.LoadContent( HttpContext, path );
+          if ( content != null )
+            return content.Content;
+        }
+
       }
       catch //若渲染时发生错误
       {
-        if ( MvcEnvironment.Configuration.IgnorePartialRenderException )
+        if ( MvcEnvironment.Configuration.IgnorePartialRenderException || partialElement.Attribute( "ignoreError" ) != null )
           return "<!--parital view render failed-->";
         else
           throw;

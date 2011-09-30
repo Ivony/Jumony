@@ -119,7 +119,8 @@ namespace Ivony.Html.Web.Mvc
       var candidateRules = _rules
         .Where( r => keySet.IsSupersetOf( r.RouteKeys ) )                      //所有路由键都必须匹配
         .Where( r => keySet.IsSubsetOf( r.AllKeys ) || !r.LimitedQueries )     //所有路由键和查询字符串键必须能涵盖要设置的键。
-        .Where( r => r.IsMatch( _values ) );                                   //必须满足路由规则所定义的路由数据。
+        .Where( r => r.IsMatch( _values ) )                                    //必须满足路由规则所定义的路由数据。
+        .ToArray();
 
       if ( !candidateRules.Any() )
         return null;

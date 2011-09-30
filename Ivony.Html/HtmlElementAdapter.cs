@@ -38,9 +38,21 @@ namespace Ivony.Html
       if ( CssSelector == null )
         return false;
 
-      var selector = Ivony.Html.CssSelector.Create( CssSelector );
-      return selector.IsEligible( element );
+      if ( _selectorExpression == CssSelector )
+        return _selectorCache.IsEligible( element );
+
+      _selectorExpression = CssSelector;
+      _selectorCache = Ivony.Html.CssSelector.Create( CssSelector );
+
+
+      return _selectorCache.IsEligible( element );
     }
+
+
+    private string _selectorExpression;
+    private ICssSelector _selectorCache;
+
+
 
     /// <summary>
     /// 派生类重写此属性使用一个选择器来确定元素是否需要重写渲染规则

@@ -232,24 +232,21 @@ namespace Ivony.Html.Web.Mvc
 
 
       //满足最多静态值的被优先考虑
-      var maxConstraints = candidateRules.Max( r => r.StaticRouteValues.Count );
-      candidateRules = candidateRules.Where( r => r.StaticRouteValues.Count == maxConstraints );
+      candidateRules = candidateRules.GroupBy( r => r.StaticRouteValues.Count ).OrderByDescending( group => group.Key ).First();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;
 
 
       //拥有最多路由键的被优先考虑
-      var maxRouteKeys = candidateRules.Max( r => r.RouteKeys.Length );
-      candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );
+      candidateRules = candidateRules.GroupBy( r => r.RouteKeys.Length ).OrderByDescending( group => group.Key ).First();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;
 
 
       //拥有最少动态参数的被优先考虑
-      var minDynamics = candidateRules.Min( p => p.DynamicRouteKyes.Length );
-      candidateRules = candidateRules.Where( r => r.DynamicRouteKyes.Length == minDynamics );
+      candidateRules = candidateRules.GroupBy( p => p.DynamicRouteKyes.Length ).OrderBy( group => group.Key ).First();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;

@@ -158,7 +158,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "element" );
 
 
-      var builder = new StringBuilder();
+      var builder = new StringBuilder( 20 );
 
       builder.Append( "<" );
       builder.Append( element.Name );
@@ -170,9 +170,9 @@ namespace Ivony.Html
         if ( attribute.AttributeValue != null )
         {
           if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
-            builder.AppendFormat( "=\"{0}\"", attribute.AttributeValue );
+            builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
-            builder.AppendFormat( "=\"{0}\"", HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) );
+            builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
         }
       }
 

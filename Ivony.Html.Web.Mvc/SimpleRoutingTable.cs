@@ -28,7 +28,7 @@ namespace Ivony.Html.Web.Mvc
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
 
-      
+
 
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
 
@@ -227,28 +227,31 @@ namespace Ivony.Html.Web.Mvc
     private SimpleRoutingRule BestRule( IEnumerable<SimpleRoutingRule> candidateRules )
     {
 
+      SimpleRoutingRule bestRule;
+
+
       //满足最多静态值的被优先考虑
       var maxConstraints = candidateRules.Max( r => r.StaticRouteValues.Count );
       candidateRules = candidateRules.Where( r => r.StaticRouteValues.Count == maxConstraints );
 
-      if ( candidateRules.IsSingle() )
-        return candidateRules.Single();
+      if ( candidateRules.IsSingle( out bestRule ) )
+        return bestRule;
 
 
       //拥有最多路由键的被优先考虑
       var maxRouteKeys = candidateRules.Max( r => r.RouteKeys.Length );
       candidateRules = candidateRules.Where( r => r.RouteKeys.Length == maxRouteKeys );
 
-      if ( candidateRules.IsSingle() )
-        return candidateRules.Single();
+      if ( candidateRules.IsSingle( out bestRule ) )
+        return bestRule;
 
 
       //拥有最少动态参数的被优先考虑
       var minDynamics = candidateRules.Min( p => p.DynamicRouteKyes.Length );
       candidateRules = candidateRules.Where( r => r.DynamicRouteKyes.Length == minDynamics );
 
-      if ( candidateRules.IsSingle() )
-        return candidateRules.Single();
+      if ( candidateRules.IsSingle( out bestRule ) )
+        return bestRule;
 
       else
         return null;

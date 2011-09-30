@@ -223,11 +223,26 @@ namespace Ivony.Fluent
     /// <summary>
     /// 确定序列是否确实有且只有一个元素
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="source"></param>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要检测的序列</param>
     /// <returns></returns>
     public static bool IsSingle<T>( this IEnumerable<T> source )
     {
+      T obj;
+      return IsSingle( source, out obj );
+    }
+
+
+    /// <summary>
+    /// 确定序列是否确实有且只有一个元素
+    /// </summary>
+    /// <typeparam name="T">序列元素类型</typeparam>
+    /// <param name="source">要检测的序列</param>
+    /// <returns></returns>
+    public static bool IsSingle<T>( this IEnumerable<T> source, out T element )
+    {
+
+      element = default( T );
 
       if ( source == null )
         throw new ArgumentNullException( "source" );
@@ -241,6 +256,7 @@ namespace Ivony.Fluent
           return false;
 
         onlyone = true;
+        element = item;
       }
 
       return onlyone;

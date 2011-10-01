@@ -314,7 +314,7 @@ namespace Ivony.Html.Web
         new Action( delegate
         {
           createDocument( parserResult.DomProvider );//可以异步预热，预热后再存入缓存。
-          Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ) );
+          Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ), CacheItemPriority.High );
         }
           ).BeginInvoke( null, null );//立即在新线程预热此方法
 

@@ -571,6 +571,10 @@ namespace Ivony.Html.Web.Mvc
         }
 
       }
+      catch ( ThreadAbortException )
+      { 
+      
+      }
       catch //若渲染时发生错误
       {
         if ( MvcEnvironment.Configuration.IgnorePartialRenderException || partialElement.Attribute( "ignoreError" ) != null )

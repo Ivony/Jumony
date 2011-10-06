@@ -210,7 +210,7 @@ namespace Ivony.Html.Web
         if ( provider != null )
           return provider.CreateDocument();
       }
-      catch ( FileNotFoundException )
+      catch
       { 
       
       }

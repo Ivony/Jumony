@@ -146,15 +146,15 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>加载的文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
     {
-      var content = HtmlProviders.LoadContent( context, virtualPath );
-
-      return HtmlProviders.ParseDocument( context, content, new HtmlParserResult() { DomProvider = new DomProvider(), Parser = new MvcParser() } );
+      return HtmlProviders.LoadDocument( context, virtualPath );
     }
 
 
 
 
-
+    /// <summary>
+    /// 获取默认的缓存储存提供程序
+    /// </summary>
     public static ICacheStorageProvider CacheStorageProvider
     {
       get;

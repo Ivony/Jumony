@@ -248,12 +248,16 @@ namespace Ivony.Html.Web
 
 
       //默认行为
-      return new HtmlParserResult()
-      {
-        Parser = new JumonyParser(),
-        DomProvider = new DomProvider(),
-      };
+      return DefaultParserProvider.GetParser( context, contentUri, htmlContent );
     }
+
+
+    private static IHtmlParserProvider _defaultParserProvider = new DefaultParserProvider();
+    public static IHtmlParserProvider DefaultParserProvider
+    {
+      get { return _defaultParserProvider; }
+    }
+
 
 
 

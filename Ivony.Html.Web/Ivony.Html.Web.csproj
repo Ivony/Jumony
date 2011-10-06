@@ -71,11 +71,13 @@
     <Compile Include="CachePolicy.cs" />
     <Compile Include="CacheToken.cs" />
     <Compile Include="HtmlBindingModule.cs" />
+    <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="CacheHelper.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICacheStorageProvider.cs" />
+    <Compile Include="IHtmlDocumentProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlCachePolicyProvider.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="MultipleTextWrietr.cs" />
+    <Compile Include="WebParser.cs" />
     <Compile Include="NoResponseHttpContext.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />

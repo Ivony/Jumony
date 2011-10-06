@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Ivony.Html.Parser;
 
 namespace Ivony.Html.Web
 {
@@ -66,4 +67,36 @@ namespace Ivony.Html.Web
     }
 
   }
+
+
+
+  public class DefaultParserProvider : IHtmlParserProvider
+  {
+
+    
+
+
+    public HtmlParserResult GetParser()
+    {
+      return new HtmlParserResult()
+      {
+        Parser = new WebParser(),
+        DomProvider = new DomProvider(),
+        Provider = this
+      };
+    }
+
+
+
+    HtmlParserResult IHtmlParserProvider.GetParser( HttpContextBase context, Uri contentUri, string htmlContent )
+    {
+      return GetParser();
+    }
+
+    void IHtmlParserProvider.ReleaseParser( IHtmlParser parser )
+    {
+    }
+  }
+
+
 }

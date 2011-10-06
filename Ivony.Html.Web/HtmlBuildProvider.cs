@@ -7,6 +7,7 @@ using System.Web;
 using System.CodeDom;
 using System.Text.RegularExpressions;
 using Ivony.Html.Parser;
+using System.Collections;
 
 namespace Ivony.Html.Web
 {
@@ -14,10 +15,9 @@ namespace Ivony.Html.Web
   public class HtmlBuildProvider : BuildProvider
   {
 
-    protected override CodeCompileUnit GetCodeCompileUnit( out System.Collections.IDictionary linePragmasTable )
-    {
-      linePragmasTable = null;
 
+    public override void GenerateCode( AssemblyBuilder assemblyBuilder )
+    {
 
       if ( _type == null )
       {
@@ -30,15 +30,25 @@ namespace Ivony.Html.Web
       var unit = new CodeCompileUnit();
       unit.Namespaces.Add( @namespace );
 
-      return unit;
+      assemblyBuilder.AddCodeCompileUnit( this, unit );
+      assemblyBuilder.AddAssemblyReference( GetType().Assembly );
+      assemblyBuilder.AddAssemblyReference( typeof( DomProvider ).Assembly );
 
+    }
+
+    public override CompilerType CodeCompilerType
+    {
+      get
+      {
+        return GetDefaultCompilerTypeForLanguage( "C#" );
+      }
     }
 
 
     public override Type GetGeneratedType( System.CodeDom.Compiler.CompilerResults results )
     {
       var typeName = CreateName();
-      return results.CompiledAssembly.GetType( typeName );
+      return results.CompiledAssembly.GetType( "HTML." + typeName );
     }
 
 
@@ -62,9 +72,10 @@ namespace Ivony.Html.Web
 
       var createDocument = new CodeMemberMethod();
       createDocument.Name = "CreateDocument";
+      createDocument.ReturnType = new CodeTypeReference( typeof( IHtmlDocument ) );
 
       var createDomProvider = new CodeObjectCreateExpression( new CodeTypeReference( typeof( DomProvider ) ) );
-      var invokeCreateDocument = new CodeMethodInvokeExpression( new CodeMethodReferenceExpression( new CodeThisReferenceExpression(), "CreateDocument" ), createDomProvider );
+      var invokeCreateDocument = new CodeMethodInvokeExpression( new CodeMethodReferenceExpression( null, "CreateDocument" ), createDomProvider );
       createDocument.Statements.Add( new CodeMethodReturnStatement( invokeCreateDocument ) );
 
       createDocument.PrivateImplementationType = new CodeTypeReference( typeof( IHtmlDocumentProvider ) );

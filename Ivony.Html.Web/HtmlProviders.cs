@@ -8,6 +8,7 @@ using System.Web;
 using System.IO;
 using System.Web.Caching;
 using System.Globalization;
+using System.Web.Compilation;
 
 namespace Ivony.Html.Web
 {
@@ -202,6 +203,18 @@ namespace Ivony.Html.Web
 
 
       cacheKey = null;
+
+      try
+      {
+        var provider = BuildManager.CreateInstanceFromVirtualPath( virtualPath, typeof( IHtmlDocumentProvider ) ) as IHtmlDocumentProvider;
+        if ( provider != null )
+          return provider.CreateDocument();
+      }
+      catch ( FileNotFoundException )
+      { 
+      
+      }
+
 
       var content = LoadContent( context, virtualPath );
       if ( content == null )

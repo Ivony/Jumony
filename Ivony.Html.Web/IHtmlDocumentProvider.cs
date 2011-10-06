@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
   public interface IHtmlDocumentProvider
   {
 
-    public IHtmlDocument CreateDocument();
+    IHtmlDocument CreateDocument();
 
   }
 

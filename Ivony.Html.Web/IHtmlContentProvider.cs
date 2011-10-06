@@ -135,8 +135,6 @@ namespace Ivony.Html.Web
 
     private static readonly Uri baseUri = new Uri( "virtualpath://" + Guid.NewGuid().ToString( "N" ) + "/" );
 
-    public static Uri StaticDocumentBaseUri { get { return baseUri; } };
-
 
     /// <summary>
     /// 利用指定 VirtualPathProvider 将虚拟路径所指向文件当作静态文件加载。

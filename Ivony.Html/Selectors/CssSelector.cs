@@ -68,7 +68,7 @@ namespace Ivony.Html
         selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value ) ).ToArray();
       }
 
-      return new CssMultipleSelector( selectors.Select( s => CssCasecadingSelector.Create( s, scope ) ) );
+      return new CssMultipleSelector( selectors.Select( s => CssCasecadingSelector.Create( s, scope ) ).ToArray() );
     }
 
 

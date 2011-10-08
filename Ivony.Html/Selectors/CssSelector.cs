@@ -36,7 +36,7 @@ namespace Ivony.Html
     }
 
 
-
+    private static Dictionary<string, ICssSelector[]> _selectorCaches = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
 
     /// <summary>
     /// 创建一个CSS选择器
@@ -46,18 +46,29 @@ namespace Ivony.Html
     /// <returns></returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
+
       if ( expression == null )
         throw new ArgumentNullException( "expression" );
 
-      var match = cssSelectorRegex.Match( expression );
 
-      if ( !match.Success )
-        throw new FormatException( "无法识别的CSS选择器" );
+      ICssSelector[] selectors;
+
+      if ( _selectorCaches.ContainsKey( expression ) )
+        selectors = _selectorCaches[expression];
+
+      else
+      {
 
 
-      var selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value, scope ) ).ToArray();
+        var match = cssSelectorRegex.Match( expression );
 
-      return new CssMultipleSelector( selectors );
+        if ( !match.Success )
+          throw new FormatException( "无法识别的CSS选择器" );
+
+        selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value ) ).ToArray();
+      }
+
+      return new CssMultipleSelector( selectors.Select( s => CssCasecadingSelector.Create( s, scope ) ) );
     }
 
 

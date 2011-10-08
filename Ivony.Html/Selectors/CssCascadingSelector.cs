@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -25,6 +26,9 @@ namespace Ivony.Html
 
 
 
+    //选择器缓存
+    private static Dictionary<string, ICssSelector> selectorCache = new Dictionary<string, ICssSelector>( StringComparer.Ordinal );
+
 
     /// <summary>
     /// 创建选择器
@@ -33,6 +37,10 @@ namespace Ivony.Html
     /// <returns>选择器实例</returns>
     public static ICssSelector Create( string expression )
     {
+
+      if ( selectorCache.ContainsKey( expression ) )
+        return selectorCache[expression];
+
       var match = casecadingSelectorRegex.Match( expression );
       if ( !match.Success )
         throw new FormatException();
@@ -49,6 +57,7 @@ namespace Ivony.Html
 
       }
 
+      selectorCache[expression] = selector;
 
       return selector;
     }
@@ -72,12 +81,27 @@ namespace Ivony.Html
     {
       var selector = Create( expression );
 
+      return Create( selector, scope );
+    }
+
+    /// <summary>
+    /// 创建范畴限定选择器
+    /// </summary>
+    /// <param name="selector">选择器</param>
+    /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
+    /// <returns>>带范畴限定的层叠选择器</returns>
+    public static ICssSelector Create( ICssSelector selector, IHtmlContainer scope )
+    {
+
+      if ( selector == null )
+        throw new ArgumentNullException( "selector" );
+
       if ( scope == null )
         return selector;
 
       return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
-
     }
+
 
 
 
@@ -238,6 +262,9 @@ namespace Ivony.Html
     {
       var rightSelector = Create( expression );
 
+      if ( elements.IsNullOrEmpty() )
+        return rightSelector;
+
       return new CssCasecadingSelector( rightSelector, "", new CssElementsRestrictionSelector( elements ) );
     }
 
@@ -280,5 +307,6 @@ namespace Ivony.Html
       casecadingSelectorRegex.IsMatch( "" );
       CssElementSelector.WarmUp();
     }
+
   }
 }

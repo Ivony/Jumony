@@ -67,6 +67,21 @@ namespace Ivony.Fluent
     }
 
 
+    /// <summary>
+    /// 将数组复制一份
+    /// </summary>
+    /// <typeparam name="T">数组元素类型</typeparam>
+    /// <param name="array">源数组</param>
+    /// <returns>复制的数组</returns>
+    public static T[] Copy<T>( this T[] array )
+    {
+      T[] result = new T[array.Length];
+      array.CopyTo( result, 0 );
+      return result;
+    }
+
+
+
 
     /// <summary>
     /// 对序列每一项执行指定操作

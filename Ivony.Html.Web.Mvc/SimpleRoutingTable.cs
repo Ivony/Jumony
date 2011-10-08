@@ -135,7 +135,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      cache.Insert( cacheKey, virtualPath );
+      cache.Insert( cacheKey, virtualPath, CacheItemPriority.AboveNormal );
 
 
       var data = new VirtualPathData( this, virtualPath );
@@ -232,21 +232,21 @@ namespace Ivony.Html.Web.Mvc
 
 
       //满足最多静态值的被优先考虑
-      candidateRules = candidateRules.GroupBy( r => r.StaticRouteValues.Count ).OrderByDescending( group => group.Key ).First();
+      candidateRules = candidateRules.GroupBy( r => r.StaticRouteValues.Count ).OrderByDescending( group => group.Key ).First().ToArray();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;
 
 
       //拥有最多路由键的被优先考虑
-      candidateRules = candidateRules.GroupBy( r => r.RouteKeys.Length ).OrderByDescending( group => group.Key ).First();
+      candidateRules = candidateRules.GroupBy( r => r.RouteKeys.Length ).OrderByDescending( group => group.Key ).First().ToArray();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;
 
 
       //拥有最少动态参数的被优先考虑
-      candidateRules = candidateRules.GroupBy( p => p.DynamicRouteKyes.Length ).OrderBy( group => group.Key ).First();
+      candidateRules = candidateRules.GroupBy( p => p.DynamicRouteKyes.Length ).OrderBy( group => group.Key ).First().ToArray();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;
@@ -377,6 +377,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 路由规则的名称
+    /// </summary>
     public string Name
     {
       get;
@@ -384,7 +387,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 是否限制查询键不超过指定范围
+    /// </summary>
     public bool LimitedQueries
     {
       get;
@@ -399,7 +404,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     public string[] Paragraphes
     {
-      get { return _paragraphes.ToArray(); }
+      get { return _paragraphes.Copy(); }
     }
 
 
@@ -633,6 +638,11 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+
+    private static Regex multipleSlashRegex = new Regex( "/+", RegexOptions.Compiled );
+
+
     public virtual IDictionary<string, string> GetRouteValues( string virtualPath, NameValueCollection queryString )
     {
 
@@ -648,7 +658,7 @@ namespace Ivony.Html.Web.Mvc
         return null;
 
 
-      virtualPath = Regex.Replace( virtualPath, "/+", "/" );//将连续的/替换成单独的/
+      virtualPath = multipleSlashRegex.Replace( virtualPath, "/" );//将连续的/替换成单独的/
 
       virtualPath = virtualPath.Substring( 2 );
 

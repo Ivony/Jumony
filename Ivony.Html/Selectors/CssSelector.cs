@@ -37,6 +37,7 @@ namespace Ivony.Html
 
 
     private static Dictionary<string, ICssSelector[]> _selectorCaches = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
+    private static object _cacheSync = new Object();
 
     /// <summary>
     /// 创建一个CSS选择器
@@ -67,6 +68,12 @@ namespace Ivony.Html
 
         selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value ) ).ToArray();
       }
+
+      lock ( _cacheSync )
+      {
+        _selectorCaches[expression] = selectors;
+      }
+
 
       return new CssMultipleSelector( selectors.Select( s => CssCasecadingSelector.Create( s, scope ) ).ToArray() );
     }

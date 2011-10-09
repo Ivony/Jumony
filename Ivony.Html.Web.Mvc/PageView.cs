@@ -19,7 +19,7 @@ namespace Ivony.Html.Web.Mvc
   /// </summary>
   public abstract class PageView : ViewBase
   {
-    
+
     /// <summary>
     /// 创建一个页面视图实例
     /// </summary>
@@ -103,8 +103,8 @@ namespace Ivony.Html.Web.Mvc
       ResolveUri( Document );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
 
-
-      AddGeneratorMetaData();
+      if ( !MvcEnvironment.Configuration.DisableGeneratorTag )
+        AddGeneratorMetaData();
     }
 
 

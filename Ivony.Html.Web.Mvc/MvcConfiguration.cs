@@ -55,5 +55,16 @@ namespace Ivony.Html.Web.Mvc
       set;
     }
 
+
+    /// <summary>
+    /// 指示是否禁止生成generator的meta标签，默认是 false 。
+    /// </summary>
+    public bool DisableGeneratorTag
+    {
+      get;
+      set;
+    }
+
+
   }
 }

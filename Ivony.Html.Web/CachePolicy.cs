@@ -187,6 +187,8 @@ namespace Ivony.Html.Web
 
       else
         clientCachePolicy.SetMaxAge( Duration );
+
+      clientCachePolicy.SetCacheability( HttpCacheability.Public );
     }
 
 

@@ -76,8 +76,8 @@ namespace Ivony.Html.Web
     {
       response.Clear();
 
-      response.ContentEncoding = ContentEncoding;
 
+      response.HeaderEncoding = HeaderEncoding;
 
       foreach ( var key in Headers.AllKeys )
       {
@@ -88,9 +88,29 @@ namespace Ivony.Html.Web
       }
 
 
+      response.ContentEncoding = ContentEncoding;
       response.Write( Content );
 
+
     }
+
+
+    public void WriteTo( Stream stream )
+    {
+      var headerWriter = new StreamWriter( stream, HeaderEncoding );
+
+      headerWriter.NewLine = "\r\n";
+
+      foreach ( var key in Headers.AllKeys )
+        headerWriter.WriteLine( "{0}: {1}", key, Headers.Get( key ) );
+
+      headerWriter.WriteLine();
+
+
+      var contentWriter = new StreamWriter( stream, ContentEncoding );
+      contentWriter.Write( Content );
+    }
+
 
     public string CreateETag()
     {

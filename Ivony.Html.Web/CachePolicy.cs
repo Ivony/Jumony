@@ -121,7 +121,14 @@ namespace Ivony.Html.Web
   {
 
 
-
+    /// <summary>
+    /// 创建一个标准缓存策略
+    /// </summary>
+    /// <param name="context">请求上下文</param>
+    /// <param name="token">缓存标示</param>
+    /// <param name="provider">缓存策略提供程序</param>
+    /// <param name="duration">缓存持续时间</param>
+    /// <param name="enableClientCache">是否启用客户端缓存</param>
     public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache )
       : this( context, token, provider, duration, enableClientCache, null, true ) { }
 
@@ -180,6 +187,8 @@ namespace Ivony.Html.Web
       if ( !EnableClientCache )
         return;
 
+      clientCachePolicy.SetCacheability( HttpCacheability.Public );
+
       var cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
 
       if ( cacheItem != null )
@@ -187,8 +196,6 @@ namespace Ivony.Html.Web
 
       else
         clientCachePolicy.SetMaxAge( Duration );
-
-      clientCachePolicy.SetCacheability( HttpCacheability.Public );
     }
 
 
@@ -203,31 +210,47 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 缓存持续时间
+    /// </summary>
     public TimeSpan Duration
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 是否启用客户端缓存
+    /// </summary>
     public bool EnableClientCache
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 本地静态缓存路径
+    /// </summary>
     public string LocalCacheVirtualPath
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 是否启用内存缓存
+    /// </summary>
     public bool EnableMemoryCache
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 获取 CacheItem
+    /// </summary>
+    /// <returns></returns>
     public override CacheItem GetCacheItem()
     {
       var cacheItem = base.GetCacheItem();
@@ -249,6 +272,11 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 插入缓存
+    /// </summary>
+    /// <param name="cachedResponse"></param>
+    /// <returns></returns>
     public override CacheItem InsertToCache( ICachedResponse cachedResponse )
     {
 

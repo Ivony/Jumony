@@ -59,7 +59,7 @@ namespace Ivony.Html.Web.Mvc
       var cachable = policy as IClientCacheablePolicy;//尝试输出客户端缓存
       if ( cachable != null )
       {
-        if ( cachable.ResolveClientCache( context.HttpContext ) )
+        if ( cachable.ResolveClientCache() )
         {
           context.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Resolve Client Cache Success" );
 
@@ -102,6 +102,11 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 在输出任何内容前，应用客户端缓存
+    /// </summary>
+    /// <param name="filterContext"></param>
     protected void ApplyClientCachePolicy( ResultExecutingContext filterContext )
     {
       //对于子请求不采取客户端缓存。
@@ -121,7 +126,7 @@ namespace Ivony.Html.Web.Mvc
 
       filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Apply Client Cache Policy" );
 
-      cachePolicy.ApplyClientCachePolicy( filterContext.HttpContext.Response.Cache );
+      cachePolicy.ApplyClientCachePolicy();
     }
 
     /// <summary>

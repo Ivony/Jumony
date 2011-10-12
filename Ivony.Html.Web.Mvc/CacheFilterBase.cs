@@ -57,7 +57,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       var cachable = policy as IClientCacheablePolicy;//尝试输出客户端缓存
-      if ( cachable != null )
+      if ( cachable != null && !context.IsChildAction )//对于子请求不尝试客户端缓存。
       {
         if ( cachable.ResolveClientCache() )
         {
@@ -98,7 +98,8 @@ namespace Ivony.Html.Web.Mvc
     public override void OnResultExecuting( ResultExecutingContext filterContext )
     {
 
-      ApplyClientCachePolicy( filterContext );
+      if ( !filterContext.IsChildAction )//对于子请求不执行客户端缓存策略。
+        ApplyClientCachePolicy( filterContext );
 
     }
 

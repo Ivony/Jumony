@@ -120,10 +120,16 @@ namespace Ivony.Html.Web
   /// </summary>
   public class StaticFileCacheStorageProvider : PersistentCacheStorageProvider
   {
-    public StaticFileCacheStorageProvider( string physicalPath, bool useMemoryCache )
+    
+    /// <summary>
+    /// 创建静态文件缓存储存提供程序
+    /// </summary>
+    /// <param name="physicalPath">静态缓存储存的物理路径位置</param>
+    /// <param name="enableMemoryCache">是否同时启用基于内存的 WebCache 缓存</param>
+    public StaticFileCacheStorageProvider( string physicalPath, bool enableMemoryCache )
     {
       PhysicalPath = physicalPath;
-      UseMemoryCache = useMemoryCache;
+      EnableMemoryCache = enableMemoryCache;
     }
 
 
@@ -140,29 +146,42 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 是否使用内存缓存
     /// </summary>
-    public bool UseMemoryCache
+    public bool EnableMemoryCache
     {
       get;
       private set;
     }
 
 
-
+    /// <summary>
+    /// 插入缓存项
+    /// </summary>
+    /// <param name="cacheItem"></param>
     public override void InsertCacheItem( CacheItem cacheItem )
     {
-      if ( UseMemoryCache )
+      if ( EnableMemoryCache )
         HttpRuntime.Cache.InsertCacheItem( cacheItem );
 
       SaveCacheItem( cacheItem );
     }
 
 
+    /// <summary>
+    /// 创建持久化输入流
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     protected override Stream CreateLoadStream( CacheToken token )
     {
       var path = Path.Combine( PhysicalPath, token.CreateFilename() );
       return File.OpenRead( path );
     }
 
+    /// <summary>
+    /// 创建持久化输出流
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     protected override Stream CreateSaveStream( CacheToken token )
     {
       var path = Path.Combine( PhysicalPath, token.CreateFilename() );

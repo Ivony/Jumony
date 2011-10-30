@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Ivony.Fluent;
 using System.Web;
 using System.Collections.Specialized;
+using System.Web.Caching;
 
 namespace Ivony.Html.Web
 {
@@ -25,6 +26,14 @@ namespace Ivony.Html.Web
         throw new Exception( "不能合并包含相同类型的 CacheToken" );
 
       _tokens = tokens;
+    }
+
+
+
+
+    public CacheDependency[] Dependencies
+    {
+      get { return new CacheDependency[0]; }
     }
 
 
@@ -106,6 +115,9 @@ namespace Ivony.Html.Web
       }
 
 
+      /// <summary>
+      /// 类型名
+      /// </summary>
       public string TypeName
       {
         get;

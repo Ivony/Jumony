@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Caching;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Web;
 
 namespace Ivony.Html.Web
 {
@@ -64,6 +67,10 @@ namespace Ivony.Html.Web
       return _cache.GetCacheItem( token );
     }
   }
+
+
+
+
 
 
 }

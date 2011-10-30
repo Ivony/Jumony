@@ -36,6 +36,7 @@ namespace Ivony.Html
     }
 
 
+    //选择器缓存
     private static Dictionary<string, ICssSelector[]> _selectorCaches = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
     private static object _cacheSync = new Object();
 

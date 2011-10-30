@@ -10,7 +10,7 @@ namespace Ivony.Html.Web
 
 
   /// <summary>
-  /// 实现此接口完成客户端缓存策略
+  /// 实现此接口以实现客户端缓存策略
   /// </summary>
   public interface IClientCacheablePolicy
   {
@@ -111,10 +111,6 @@ namespace Ivony.Html.Web
       HttpContext.Cache.InsertCacheItem( cacheItem );
       return cacheItem;
     }
-
-
-
-
   }
 
 }

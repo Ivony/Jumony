@@ -8,6 +8,10 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// 持久化缓存提供程序
+  /// </summary>
   public abstract class PersistentCacheStorageProvider : ICacheStorageProvider
   {
     /// <summary>
@@ -110,6 +114,10 @@ namespace Ivony.Html.Web
   }
 
 
+
+  /// <summary>
+  /// 静态文件缓存提供程序
+  /// </summary>
   public class StaticFileCacheStorageProvider : PersistentCacheStorageProvider
   {
     public StaticFileCacheStorageProvider( string physicalPath, bool useMemoryCache )
@@ -118,12 +126,20 @@ namespace Ivony.Html.Web
       UseMemoryCache = useMemoryCache;
     }
 
+
+    /// <summary>
+    /// 静态文件路径
+    /// </summary>
     public string PhysicalPath
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 是否使用内存缓存
+    /// </summary>
     public bool UseMemoryCache
     {
       get;

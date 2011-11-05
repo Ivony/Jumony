@@ -14,12 +14,19 @@ namespace Ivony.Html.Web
   {
 
 
-    private HttpResponseBase _response;
+    private HttpContextBase _context;
 
 
-    internal ClientCachePolicy( HttpResponseBase response )
+    internal ClientCachePolicy( HttpContextBase context )
     {
-      _response = response;
+      _context = context;
+
+      _context.ApplicationInstance.PreSendRequestHeaders += new EventHandler( PreSendRequestHeaders );
+    }
+
+    private void PreSendRequestHeaders( object sender, EventArgs e )
+    {
+      ApplyClientCachePolicy();
     }
 
 
@@ -28,7 +35,9 @@ namespace Ivony.Html.Web
     /// </summary>
     public void ApplyClientCachePolicy()
     {
+      var response = _context.Response;
 
+    
     }
 
 

@@ -111,5 +111,20 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+    private string[] _varyHeaders;
+
+    /// <summary>
+    /// 设置 Vary 标头，指定哪些 HTTP 头可能引起缓存结果失效
+    /// </summary>
+    /// <param name="headers"></param>
+    public void SetVary( string[] headers )
+    {
+      _varyHeaders = headers;
+    }
+
+
+
   }
 }

@@ -30,7 +30,9 @@ namespace Ivony.Html.Web
 
 
 
-
+    /// <summary>
+    /// 获取缓存依赖项
+    /// </summary>
     public CacheDependency[] Dependencies
     {
       get { return new CacheDependency[0]; }

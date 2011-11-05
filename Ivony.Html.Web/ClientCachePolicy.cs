@@ -66,6 +66,10 @@ namespace Ivony.Html.Web
 
     private HttpCacheability _cacheability;
 
+    /// <summary>
+    /// 设置 cache-control 标头为 HttpCacheability 值之一
+    /// </summary>
+    /// <param name="cacheability">缓存可用性</param>
     public void SetCachability( HttpCacheability cacheability )
     {
       switch ( cacheability )
@@ -80,6 +84,31 @@ namespace Ivony.Html.Web
       }
     }
 
+
+
+    private DateTimeOffset? _expires = null;
+
+    /// <summary>
+    /// 设置缓存绝对过期时间
+    /// </summary>
+    /// <param name="expiresDate">缓存绝对过期时间</param>
+    public void SetExpires( DateTimeOffset expiresDate )
+    {
+      _expires = expiresDate;
+    }
+
+
+
+    private DateTimeOffset? _lastModified = null;
+
+    /// <summary>
+    /// 设置请求内容最后一次被修改的时间
+    /// </summary>
+    /// <param name="lastModified">请求内容最后一次被修改的时间</param>
+    public void SetLastModified( DateTimeOffset lastModified )
+    {
+      _lastModified = lastModified;
+    }
 
 
   }

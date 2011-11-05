@@ -61,7 +61,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 设置代理服务器缓存过期时间
     /// </summary>
-    /// <param name="delta"></param>
+    /// <param name="delta">从当前开始最大的过期时间</param>
     public void SetProxyMaxAge( TimeSpan delta )
     {
 

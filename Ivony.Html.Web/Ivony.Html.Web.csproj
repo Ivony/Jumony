@@ -70,6 +70,7 @@
     <Compile Include="CacheItem.cs" />
     <Compile Include="CachePolicy.cs" />
     <Compile Include="CacheToken.cs" />
+    <Compile Include="ClientCachePolicy.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="CacheHelper.cs" />

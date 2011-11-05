@@ -72,7 +72,6 @@
     <Compile Include="CacheToken.cs" />
     <Compile Include="HtmlBindingModule.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
-    <Compile Include="HtmlCachePolicy.cs" />
     <Compile Include="CacheHelper.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="ICachedResponse.cs" />
@@ -80,7 +79,7 @@
     <Compile Include="IHtmlDocumentProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
-    <Compile Include="IHtmlCachePolicyProvider.cs" />
+    <Compile Include="ICachePolicyProvider.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />

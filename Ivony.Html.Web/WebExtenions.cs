@@ -50,15 +50,5 @@ namespace Ivony.Html.Web
 
 
 
-    public static void WriteCache( this Cache cache, object cacheItem, string cacheKey, HtmlCachePolicy cachePolicy )
-    {
-      cache.Insert( cacheKey, cacheItem, cachePolicy.Dependency, DateTime.UtcNow + cachePolicy.Duration, Cache.NoSlidingExpiration );
-    }
-
-
-
-
-
-
   }
 }

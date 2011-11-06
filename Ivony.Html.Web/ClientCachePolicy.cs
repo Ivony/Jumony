@@ -135,5 +135,33 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 重置 cache-control 设置
+    /// </summary>
+    public void ResetCacheControl()
+    {
+    
+    }
+
+
+    /// <summary>
+    /// 重置 Last-Modified、ETag 等设置
+    /// </summary>
+    public void ResetEntitySettings()
+    { 
+    
+    }
+
+
+    /// <summary>
+    /// 指定是否禁用绝对过期
+    /// </summary>
+    public void DisableAbsoluteExpiration
+    {
+      get;
+      set;
+      ]
+
+
   }
 }

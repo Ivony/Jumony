@@ -156,7 +156,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 指定是否禁用绝对过期
     /// </summary>
-    public void DisableAbsoluteExpiration
+    public bool DisableAbsoluteExpiration
     {
       get;
       set;

@@ -37,7 +37,7 @@ namespace Ivony.Html.Web
     {
       var response = _context.Response;
 
-    
+
     }
 
 
@@ -140,7 +140,7 @@ namespace Ivony.Html.Web
     /// </summary>
     public void ResetCacheControl()
     {
-    
+
     }
 
 
@@ -148,8 +148,8 @@ namespace Ivony.Html.Web
     /// 重置 Last-Modified、ETag 等设置
     /// </summary>
     public void ResetEntitySettings()
-    { 
-    
+    {
+
     }
 
 
@@ -160,8 +160,6 @@ namespace Ivony.Html.Web
     {
       get;
       set;
-      ]
-
-
+    }
   }
 }

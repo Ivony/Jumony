@@ -12,6 +12,9 @@ namespace Ivony.Html.Forms
   {
     private IHtmlElement _element;
 
+    /// <summary>
+    /// 表单元素
+    /// </summary>
     public IHtmlElement Element
     {
       get { return _element; }

@@ -82,6 +82,14 @@ namespace Ivony.Html
   }
 
 
+
+  public class INotifyDomChanged
+  {
+    event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
+  }
+
+
+
   /// <summary>
   /// 为 HTML DOM 节点事件提供参数
   /// </summary>
@@ -105,4 +113,20 @@ namespace Ivony.Html
       private set;
     }
   }
+
+
+  public enum HtmlDomChangedAction 
+  {
+    /// <summary>
+    /// 节点被新增
+    /// </summary>
+    Add,
+    /// <summary>
+    /// 节点被移除
+    /// </summary>
+    Remove
+  }
+
+
+
 }

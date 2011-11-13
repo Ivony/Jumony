@@ -85,6 +85,9 @@ namespace Ivony.Html.Parser
 
 
     private DomFragmentManager _manager;
+    /// <summary>
+    /// 文档碎片管理器
+    /// </summary>
     public IHtmlFragmentManager FragmentManager
     {
       get { return _manager; }
@@ -92,6 +95,9 @@ namespace Ivony.Html.Parser
 
 
     private DomModifier _modifier;
+    /// <summary>
+    /// 文档模型修改器
+    /// </summary>
     public IHtmlDomModifier DomModifier
     {
       get { return _modifier; }
@@ -101,6 +107,9 @@ namespace Ivony.Html.Parser
 
     private object _sync = new object();
 
+    /// <summary>
+    /// 用于同步操作的同步对象
+    /// </summary>
     public object SyncRoot
     {
       get { return _sync; }
@@ -108,7 +117,9 @@ namespace Ivony.Html.Parser
 
 
 
-
+    /// <summary>
+    /// 当文档任何部分被修改时会引发的事件。
+    /// </summary>
     public event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
 
     protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )

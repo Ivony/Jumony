@@ -20,6 +20,9 @@ namespace Ivony.Html.Parser
     {
       _uri = uri;
       _manager = new DomFragmentManager( this );
+      _modifier = new DomModifier();
+
+      _modifier.HtmlDomChanged += OnDomChanged;
     }
 
 
@@ -88,7 +91,7 @@ namespace Ivony.Html.Parser
     }
 
 
-    private DomModifier _modifier = new DomModifier();
+    private DomModifier _modifier;
     public IHtmlDomModifier DomModifier
     {
       get { return _modifier; }
@@ -111,15 +114,11 @@ namespace Ivony.Html.Parser
     protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )
     {
       if ( HtmlDomChanged != null )
-        HtmlDomChanged( sender, e );
+      {
+        if ( object.Equals( this, e.Node.Document ) )
+          HtmlDomChanged( sender, e );
+      }
     }
-
-    internal void OnDomChanged( DomModifier modifier, HtmlNodeEventArgs e )
-    {
-      OnDomChanged( modifier, e );
-    }
-
-
 
 
   }

@@ -6,7 +6,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
-  public class DomModifier : IHtmlDomModifier
+  public class DomModifier : IHtmlDomModifier, INotifyDomChanged
   {
 
     public void ResolveUri( IHtmlDocument document, Uri uri )
@@ -25,7 +25,7 @@ namespace Ivony.Html.Parser
     {
       var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
-      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( element, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlNodeEventArgs( element, HtmlDomChangedAction.Add ) );
 
       return element;
     }
@@ -34,7 +34,7 @@ namespace Ivony.Html.Parser
     {
       var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
 
-      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( textNode, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlNodeEventArgs( textNode, HtmlDomChangedAction.Add ) );
 
       return textNode;
     }
@@ -43,7 +43,7 @@ namespace Ivony.Html.Parser
     {
       var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
 
-      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( commentNode, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlNodeEventArgs( commentNode, HtmlDomChangedAction.Add ) );
 
       return commentNode;
     }
@@ -54,18 +54,16 @@ namespace Ivony.Html.Parser
 
       //UNDONE 未确定special node具体是什么
 
-      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( specialNode, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlNodeEventArgs( specialNode, HtmlDomChangedAction.Add ) );
 
       return specialNode;
     }
 
     public void RemoveNode( IHtmlNode node )
     {
-      var document = node.Document.CastTo<DomDocument>();
-
       EnsureDomNode( node ).Remove();
 
-      document.OnDomChanged( this, new HtmlNodeEventArgs( node, HtmlDomChangedAction.Remove ) );
+      OnDomChanged( this, new HtmlNodeEventArgs( node, HtmlDomChangedAction.Remove ) );
     }
 
     private DomNode EnsureDomNode( IHtmlNode node )
@@ -98,5 +96,13 @@ namespace Ivony.Html.Parser
       domAttribute.Remove();
     }
 
+
+    protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )
+    {
+      if ( HtmlDomChanged != null )
+        HtmlDomChanged( sender, e );
+    }
+
+    public event EventHandler<HtmlNodeEventArgs>  HtmlDomChanged;
   }
 }

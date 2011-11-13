@@ -83,7 +83,7 @@ namespace Ivony.Html
 
 
 
-  public interface INotifyDomChanged : IHtmlContainer
+  public interface INotifyDomChanged
   {
     event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
   }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
@@ -24,6 +25,8 @@ namespace Ivony.Html.Parser
     {
       var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
+      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( element, HtmlDomChangedAction.Add ) );
+
       return element;
     }
 
@@ -31,12 +34,16 @@ namespace Ivony.Html.Parser
     {
       var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
 
+      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( textNode, HtmlDomChangedAction.Add ) );
+
       return textNode;
     }
 
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
       var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
+
+      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( commentNode, HtmlDomChangedAction.Add ) );
 
       return commentNode;
     }
@@ -47,12 +54,18 @@ namespace Ivony.Html.Parser
 
       //UNDONE 未确定special node具体是什么
 
+      container.Document.CastTo<DomDocument>().OnDomChanged( this, new HtmlNodeEventArgs( specialNode, HtmlDomChangedAction.Add ) );
+
       return specialNode;
     }
 
     public void RemoveNode( IHtmlNode node )
     {
+      var document = node.Document.CastTo<DomDocument>();
+
       EnsureDomNode( node ).Remove();
+
+      document.OnDomChanged( this, new HtmlNodeEventArgs( node, HtmlDomChangedAction.Remove ) );
     }
 
     private DomNode EnsureDomNode( IHtmlNode node )

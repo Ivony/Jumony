@@ -83,7 +83,7 @@ namespace Ivony.Html
 
 
 
-  public class INotifyDomChanged
+  public interface INotifyDomChanged : IHtmlContainer
   {
     event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
   }
@@ -99,9 +99,10 @@ namespace Ivony.Html
     /// 构建 HtmlNodeEventArgs 对象
     /// </summary>
     /// <param name="node"></param>
-    public HtmlNodeEventArgs( IHtmlNode node )
+    public HtmlNodeEventArgs( IHtmlNode node, HtmlDomChangedAction action )
     {
       Node = node;
+      Action = action;
     }
 
     /// <summary>
@@ -112,10 +113,21 @@ namespace Ivony.Html
       get;
       private set;
     }
+
+
+    /// <summary>
+    /// 对节点的操作
+    /// </summary>
+    public HtmlDomChangedAction Action
+    {
+      get;
+      private set;
+    }
+
   }
 
 
-  public enum HtmlDomChangedAction 
+  public enum HtmlDomChangedAction
   {
     /// <summary>
     /// 节点被新增

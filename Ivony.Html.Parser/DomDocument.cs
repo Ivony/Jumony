@@ -9,7 +9,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlDocument 的实现
   /// </summary>
-  public class DomDocument : DomObject, IHtmlDocument, IDomContainer
+  public class DomDocument : DomObject, IHtmlDocument, IDomContainer, INotifyDomChanged
   {
 
     /// <summary>
@@ -102,6 +102,23 @@ namespace Ivony.Html.Parser
     {
       get { return _sync; }
     }
+
+
+
+
+    public event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
+
+    protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )
+    {
+      if ( HtmlDomChanged != null )
+        HtmlDomChanged( sender, e );
+    }
+
+    internal void OnDomChanged( DomModifier modifier, HtmlNodeEventArgs e )
+    {
+      OnDomChanged( modifier, e );
+    }
+
 
 
 

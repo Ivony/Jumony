@@ -85,7 +85,7 @@ namespace Ivony.Html
 
   public interface INotifyDomChanged
   {
-    event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
+    event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
   }
 
 
@@ -93,13 +93,13 @@ namespace Ivony.Html
   /// <summary>
   /// 为 HTML DOM 节点事件提供参数
   /// </summary>
-  public class HtmlNodeEventArgs : EventArgs
+  public class HtmlDomChangedEventArgs : EventArgs
   {
     /// <summary>
     /// 构建 HtmlNodeEventArgs 对象
     /// </summary>
     /// <param name="node"></param>
-    public HtmlNodeEventArgs( IHtmlNode node, IHtmlContainer container, HtmlDomChangedAction action )
+    public HtmlDomChangedEventArgs( IHtmlNode node, IHtmlContainer container, HtmlDomChangedAction action )
     {
       Node = node;
       Container = container;
@@ -125,7 +125,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 对节点的操作
+    /// 对节点或对象的操作
     /// </summary>
     public HtmlDomChangedAction Action
     {
@@ -138,13 +138,9 @@ namespace Ivony.Html
 
   public enum HtmlDomChangedAction
   {
-    /// <summary>
-    /// 节点被新增
-    /// </summary>
+    /// <summary>节点或对象被新增</summary>
     Add,
-    /// <summary>
-    /// 节点被移除
-    /// </summary>
+    /// <summary>节点或对象被移除</summary>
     Remove
   }
 

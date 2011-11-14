@@ -120,9 +120,9 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 当文档任何部分被修改时会引发的事件。
     /// </summary>
-    public event EventHandler<HtmlNodeEventArgs> HtmlDomChanged;
+    public event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
 
-    protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )
+    protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
       if ( HtmlDomChanged != null )
       {

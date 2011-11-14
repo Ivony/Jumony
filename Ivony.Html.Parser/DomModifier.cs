@@ -25,7 +25,7 @@ namespace Ivony.Html.Parser
     {
       var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
-      OnDomChanged( this, new HtmlNodeEventArgs( element, container, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( element, container, HtmlDomChangedAction.Add ) );
 
       return element;
     }
@@ -34,7 +34,7 @@ namespace Ivony.Html.Parser
     {
       var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
 
-      OnDomChanged( this, new HtmlNodeEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
 
       return textNode;
     }
@@ -43,7 +43,7 @@ namespace Ivony.Html.Parser
     {
       var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
 
-      OnDomChanged( this, new HtmlNodeEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
 
       return commentNode;
     }
@@ -54,7 +54,7 @@ namespace Ivony.Html.Parser
 
       //UNDONE 未确定special node具体是什么
 
-      OnDomChanged( this, new HtmlNodeEventArgs( specialNode, container, HtmlDomChangedAction.Add ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( specialNode, container, HtmlDomChangedAction.Add ) );
 
       return specialNode;
     }
@@ -65,7 +65,7 @@ namespace Ivony.Html.Parser
 
       EnsureDomNode( node ).Remove();
 
-      OnDomChanged( this, new HtmlNodeEventArgs( node, container, HtmlDomChangedAction.Remove ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( node, container, HtmlDomChangedAction.Remove ) );
     }
 
     private DomNode EnsureDomNode( IHtmlNode node )
@@ -99,12 +99,12 @@ namespace Ivony.Html.Parser
     }
 
 
-    protected virtual void OnDomChanged( object sender, HtmlNodeEventArgs e )
+    protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
       if ( HtmlDomChanged != null )
         HtmlDomChanged( sender, e );
     }
 
-    public event EventHandler<HtmlNodeEventArgs>  HtmlDomChanged;
+    public event EventHandler<HtmlDomChangedEventArgs>  HtmlDomChanged;
   }
 }

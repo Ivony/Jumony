@@ -10,6 +10,12 @@ namespace Ivony.Html
 
     public abstract bool IsCDataElement( string elementName );
 
+    public abstract bool IsOptionalEndTag( string elementName );
+
+    public abstract bool IsForbiddenEndTag( string elementName );
+
+    public abstract bool ImmediatelyClose( string openTag, string nextTag );
+
 
   }
 }

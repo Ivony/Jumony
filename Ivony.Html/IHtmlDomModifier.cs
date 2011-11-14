@@ -99,9 +99,10 @@ namespace Ivony.Html
     /// 构建 HtmlNodeEventArgs 对象
     /// </summary>
     /// <param name="node"></param>
-    public HtmlNodeEventArgs( IHtmlNode node, HtmlDomChangedAction action )
+    public HtmlNodeEventArgs( IHtmlNode node, IHtmlContainer container, HtmlDomChangedAction action )
     {
       Node = node;
+      Container = container;
       Action = action;
     }
 
@@ -113,6 +114,14 @@ namespace Ivony.Html
       get;
       private set;
     }
+
+
+    public IHtmlContainer Container
+    {
+      get;
+      private set;
+    }
+
 
 
     /// <summary>

@@ -5,16 +5,36 @@ using System.Text;
 
 namespace Ivony.Html
 {
-  public class DomDependency : IDisposable
+  public class HtmlDomDependency : IDisposable
   {
 
-    internal DomDependency( IHtmlContainer container )
+    internal HtmlDomDependency( IHtmlContainer container )
     {
       Container = container;
 
       AddDomChangedEventHandler( container );
 
     }
+
+    private INotifyDomChanged FindDomChangedNotifier( IHtmlContainer container )
+    {
+
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+      var result = container as INotifyDomChanged;
+      if ( result != null )
+        return result;
+
+      result = container.Document as INotifyDomChanged;
+      if ( result != null )
+        return null;
+
+
+      return container.Document.DomModifier as INotifyDomChanged;
+
+    }
+
 
     private void AddDomChangedEventHandler( IHtmlContainer container )
     {

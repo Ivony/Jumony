@@ -8,68 +8,42 @@ namespace Ivony.Html
   public class HtmlDomDependency : IDisposable
   {
 
-    internal HtmlDomDependency( IHtmlContainer container )
+    internal HtmlDomDependency( IHtmlContainer container, INotifyDomChanged notifier )
     {
       Container = container;
+      Notifier = notifier;
 
-      AddDomChangedEventHandler( container );
-
+      Notifier.HtmlDomChanged += this.DomChanged;
     }
 
-    private INotifyDomChanged FindDomChangedNotifier( IHtmlContainer container )
-    {
 
+    /// <summary>
+    /// 创建一个 DOM 依赖项，当 DOM 结构发生更改时将会被标记为已过时。
+    /// </summary>
+    /// <param name="container"></param>
+    /// <returns></returns>
+    public static bool TryCreateDependency( IHtmlContainer container, out HtmlDomDependency dependency )
+    {
+      dependency = null;
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      var result = container as INotifyDomChanged;
-      if ( result != null )
-        return result;
+      var notifier = container.Document.DomModifier as INotifyDomChanged;
+      if ( notifier == null )
+        return false;
 
-      result = container.Document as INotifyDomChanged;
-      if ( result != null )
-        return null;
+      dependency = new HtmlDomDependency( container, notifier );
 
-
-      return container.Document.DomModifier as INotifyDomChanged;
-
+      return true;
     }
 
 
-    private void AddDomChangedEventHandler( IHtmlContainer container )
-    {
-      EventRaiser = container as INotifyDomChanged;
-      if ( EventRaiser != null )
-      {
-        EventRaiser.HtmlDomChanged += DomChanged;
-        return;
-      }
-
-      EventRaiser = container.Document as INotifyDomChanged;
-      if ( EventRaiser != null )
-      {
-        EventRaiser.HtmlDomChanged += DomChanged;
-        return;
-      }
-
-
-      EventRaiser = container.Document.DomModifier as INotifyDomChanged;
-      if ( EventRaiser != null )
-      {
-        EventRaiser.HtmlDomChanged += DomChanged;
-        return;
-      }
-
-      throw new NotSupportedException();
-    }
-
-
-
-    private INotifyDomChanged EventRaiser
+    private INotifyDomChanged Notifier
     {
       get;
       set;
     }
+
 
     private void DomChanged( object sender, HtmlDomChangedEventArgs e )
     {

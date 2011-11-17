@@ -26,7 +26,15 @@ namespace Ivony.Html.MSHTMLAdapter
 
     public IHtmlContainer Container
     {
-      get { throw new NotImplementedException(); }
+      get
+      {
+        var parent = _node.parentNode;
+        if ( parent != null )
+          return new ElementAdapter( _node.parentNode );
+
+        else
+          return Document;
+      }
     }
 
 

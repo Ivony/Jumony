@@ -8,12 +8,13 @@ namespace Ivony.Html
   public class HtmlDomDependency : IDisposable
   {
 
-    internal HtmlDomDependency( IHtmlContainer container, INotifyDomChanged notifier )
-    {
-      Container = container;
-      Notifier = notifier;
 
-      Notifier.HtmlDomChanged += this.DomChanged;
+
+    private EventHandler<HtmlDomChangedEventArgs> Handler;
+
+    private HtmlDomDependency()
+    {
+      Handler = new EventHandler<HtmlDomChangedEventArgs>( DomChanged );
     }
 
 
@@ -32,7 +33,12 @@ namespace Ivony.Html
       if ( notifier == null )
         return false;
 
-      dependency = new HtmlDomDependency( container, notifier );
+      dependency = new HtmlDomDependency();
+
+      dependency.Notifier = notifier;
+      dependency.Container = container;
+
+      dependency.Notifier.HtmlDomChanged += dependency.Handler;
 
       return true;
     }
@@ -48,7 +54,7 @@ namespace Ivony.Html
     private void DomChanged( object sender, HtmlDomChangedEventArgs e )
     {
       HasChanged = true;
-      EventRaiser.HtmlDomChanged -= DomChanged;
+      Notifier.HtmlDomChanged -= Handler;
     }
 
 
@@ -62,6 +68,12 @@ namespace Ivony.Html
     {
       get;
       private set;
+    }
+
+    public void Reset()
+    {
+      HasChanged = false;
+      Notifier.HtmlDomChanged += Handler;
     }
 
 

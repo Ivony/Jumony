@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Ivony.Html
 {
+
+
+  /// <summary>
+  /// HTML DOM 结构依赖项
+  /// </summary>
   public class HtmlDomDependency : IDisposable
   {
 
@@ -16,6 +21,11 @@ namespace Ivony.Html
     {
       Handler = new EventHandler<HtmlDomChangedEventArgs>( DomChanged );
     }
+
+
+    private object _sync = new object();
+
+    private bool _disposed = false;
 
 
     /// <summary>
@@ -53,34 +63,66 @@ namespace Ivony.Html
 
     private void DomChanged( object sender, HtmlDomChangedEventArgs e )
     {
-      HasChanged = true;
-      Notifier.HtmlDomChanged -= Handler;
+      lock ( _sync )
+      {
+        if ( e.Node.IsDescendantOf( Container ) )
+        {
+          HasChanged = true;
+          Notifier.HtmlDomChanged -= Handler;
+        }
+      }
     }
 
 
-    public IHtmlContainer Container
+    private IHtmlContainer Container
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 自创建或上次重置以来 DOM 结构是否已被更改
+    /// </summary>
     public bool HasChanged
     {
       get;
       private set;
     }
 
+
+
+    /// <summary>
+    /// 重置修改状态
+    /// </summary>
     public void Reset()
     {
-      HasChanged = false;
-      Notifier.HtmlDomChanged += Handler;
+      lock ( _sync )
+      {
+        if ( _disposed )
+          throw new ObjectDisposedException( "DomDependency" );
+
+        HasChanged = false;
+        Notifier.HtmlDomChanged += Handler;
+      }
     }
 
 
 
+    /// <summary>
+    /// 销毁依赖项
+    /// </summary>
     public void Dispose()
     {
-      throw new NotImplementedException();
+      lock ( _sync )
+      {
+
+        if ( _disposed )
+          return;
+
+        if ( !HasChanged )
+          Notifier.HtmlDomChanged -= Handler;
+        _disposed = true;
+      }
     }
   }
 }

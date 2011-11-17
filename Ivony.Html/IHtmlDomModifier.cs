@@ -116,6 +116,9 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 节点所属的容器
+    /// </summary>
     public IHtmlContainer Container
     {
       get;

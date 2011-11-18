@@ -349,6 +349,8 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+
     /// <summary>
     /// 从元素标签中获取所有的路由值
     /// </summary>
@@ -363,16 +365,12 @@ namespace Ivony.Html.Web.Mvc
 
       if ( inherits != null )
       {
-        foreach ( var key in inherits.Split( ',' ) )
-        {
 
-          if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
-            continue;
+        var inheritsKeys = GetInheritsKeys( inherits ).Distinct( StringComparer.OrdinalIgnoreCase );
 
-          if ( RouteData.Values.ContainsKey( key ) )
-            routeValues.Add( key, RouteData.Values[key] );
+        foreach ( var key in inheritsKeys )
+          routeValues.Add( key, RouteData.Values[key] );
 
-        }
       }
 
 
@@ -389,6 +387,43 @@ namespace Ivony.Html.Web.Mvc
       }
 
       return routeValues;
+    }
+
+
+    private static readonly string wildcardCharacter = "*";
+
+    private IEnumerable<string> GetInheritsKeys( string inherits )
+    {
+      foreach ( var key in inherits.Split( ',' ) )
+      {
+
+        if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
+          continue;
+
+
+        if ( key.StartsWith( wildcardCharacter ) )
+        {
+          foreach ( var k in RouteData.Values.Keys )
+          {
+            if ( k.EndsWith( key.Substring( wildcardCharacter.Length ) ) )
+              yield return k;
+          }
+        }
+
+        if ( key.EndsWith( wildcardCharacter ) )
+        {
+          foreach ( var k in RouteData.Values.Keys )
+          {
+            if ( k.StartsWith( key.Substring( 0, key.Length - wildcardCharacter.Length ) ) )
+              yield return k;
+          }
+        }
+
+
+        if ( RouteData.Values.ContainsKey( key ) )
+          yield return key;
+
+      }
     }
 
 
@@ -572,8 +607,8 @@ namespace Ivony.Html.Web.Mvc
 
       }
       catch ( ThreadAbortException )
-      { 
-      
+      {
+
       }
       catch //若渲染时发生错误
       {

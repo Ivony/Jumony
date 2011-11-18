@@ -77,7 +77,7 @@ namespace Ivony.Html
     private IHtmlContainer Container
     {
       get;
-      private set;
+      set;
     }
 
     /// <summary>

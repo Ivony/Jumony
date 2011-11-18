@@ -378,7 +378,7 @@ namespace Ivony.Html.Web.Mvc
       {
 
         var key = attribute.Name.Substring( 1 );
-        var value = attribute.Value();
+        var value = attribute.Value() ?? RouteData.Values[key];
 
         routeValues.Remove( key );
 

@@ -31,22 +31,22 @@ namespace Ivony.Html
     /// <summary>
     /// 创建一个 DOM 依赖项，当 DOM 结构发生更改时将会被标记为已过时。
     /// </summary>
-    /// <param name="container"></param>
+    /// <param name="scope">要监视 DOM 修改的范围</param>
     /// <returns></returns>
-    public static bool TryCreateDependency( IHtmlContainer container, out HtmlDomDependency dependency )
+    public static bool TryCreateDependency( IHtmlContainer scope, out HtmlDomDependency dependency )
     {
       dependency = null;
-      if ( container == null )
+      if ( scope == null )
         throw new ArgumentNullException( "container" );
 
-      var notifier = container.Document.DomModifier as INotifyDomChanged;
+      var notifier = scope.Document.DomModifier as INotifyDomChanged;
       if ( notifier == null )
         return false;
 
       dependency = new HtmlDomDependency();
 
       dependency.Notifier = notifier;
-      dependency.Container = container;
+      dependency.Container = scope;
 
       dependency.Notifier.HtmlDomChanged += dependency.Handler;
 

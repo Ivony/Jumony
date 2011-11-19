@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Ivony.Html;
+using Ivony.Html.MSHTMLAdapter;
 
 namespace WebBrowser
 {
@@ -26,11 +28,15 @@ namespace WebBrowser
 
     private void Go( object sender, RoutedEventArgs e )
     {
-      WebBrowser.Navigate( Address.Text );
+      var url = new Uri( Address.Text );
+      WebBrowser.Navigate( url );
     }
 
     private void OnLoadCompleted( object sender, NavigationEventArgs e )
     {
+      var document = ConvertExtensions.AsDocument( WebBrowser.Document );
+
+      document.InnerHtml( true );
     }
   }
 }

@@ -12,8 +12,8 @@ namespace Ivony.Html.MSHTMLAdapter
   {
 
     private object _raw;
-    private IHTMLDOMNode _node;
-    private IHTMLDOMNode2 _node2;
+    protected readonly IHTMLDOMNode _node;
+    protected readonly IHTMLDOMNode2 _node2;
 
     public NodeAdapter( object node )
     {

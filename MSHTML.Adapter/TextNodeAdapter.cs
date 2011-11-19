@@ -18,8 +18,13 @@ namespace Ivony.Html.MSHTMLAdapter
     {
       _textNode = node as IHTMLDOMTextNode;
       _textNode2 = node as IHTMLDOMTextNode2;
-    
+
     }
 
+
+    public override string RawHtml
+    {
+      get { return null; }
+    }
   }
 }

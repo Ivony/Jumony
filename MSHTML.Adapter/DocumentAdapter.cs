@@ -66,8 +66,7 @@ namespace Ivony.Html.MSHTMLAdapter
     public IEnumerable<IHtmlNode> Nodes()
     {
 
-      throw new NotImplementedException();
-      //return ((IEnumerable) _document3.childNodes).Cast<object>().Select( o => new NodeAdapter( o ) );
+      return ( (IEnumerable) _document3.childNodes ).Cast<object>().Select( o => ConvertExtensions.AsNode( o ) );
     }
 
     public object SyncRoot

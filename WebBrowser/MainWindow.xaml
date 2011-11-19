@@ -7,8 +7,8 @@
       <RowDefinition Height="35" />
       <RowDefinition Height="276*" />
     </Grid.RowDefinitions>
-    <TextBox Margin="12,12,58,0" Name="Address" />
+    <TextBox Margin="12,12,58,0" Name="Address" Text="http://www.cnblogs.com/" />
     <WebBrowser Grid.Row="1" Margin="12,12,12,12" Name="WebBrowser" LoadCompleted="OnLoadCompleted" />
-    <Button Content="Go" Margin="451,11,12,0" Name="GoButton" Click="Go" />
+    <Button Content="Go" Margin="0,11,12,0" Name="GoButton" Click="Go" HorizontalAlignment="Right" Width="40" />
   </Grid>
 </Window>

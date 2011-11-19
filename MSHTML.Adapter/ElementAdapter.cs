@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using mshtml;
+using System.Collections;
 
 namespace Ivony.Html.MSHTMLAdapter
 {
@@ -16,6 +17,9 @@ namespace Ivony.Html.MSHTMLAdapter
     private IHTMLElement3 _element3;
     private IHTMLElement4 _element4;
 
+    private IHTMLAttributeCollection _attributes;
+    private IHTMLAttributeCollection2 _attributes2;
+
 
     public ElementAdapter( object element )
       : base( element )
@@ -27,6 +31,9 @@ namespace Ivony.Html.MSHTMLAdapter
       _element2 = element as IHTMLElement2;
       _element3 = element as IHTMLElement3;
       _element4 = element as IHTMLElement4;
+
+      _attributes = _node.attributes as IHTMLAttributeCollection;
+      _attributes2 = _node.attributes as IHTMLAttributeCollection2;
     }
 
 
@@ -37,18 +44,21 @@ namespace Ivony.Html.MSHTMLAdapter
 
     public IEnumerable<IHtmlAttribute> Attributes()
     {
-      throw new NotImplementedException();
+      return _attributes.Cast<object>().Select( o => ConvertExtensions.AsAttribute( o, this ) );
     }
 
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      throw new NotImplementedException();
+      return ( (IEnumerable) _element.children ).Cast<object>().Select( o => ConvertExtensions.AsNode( o ) );
     }
+
+
+    private object _sync = new object();
 
     public object SyncRoot
     {
-      get { throw new NotImplementedException(); }
+      get { return _sync; }
     }
 
 

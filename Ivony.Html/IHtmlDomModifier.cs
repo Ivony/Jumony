@@ -82,7 +82,9 @@ namespace Ivony.Html
   }
 
 
-
+  /// <summary>
+  /// HTML DOM 的实现通过实现此接口使得可以监视 HTML DOM 的变化。
+  /// </summary>
   public interface INotifyDomChanged
   {
     event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
@@ -93,27 +95,55 @@ namespace Ivony.Html
   /// <summary>
   /// 为 HTML DOM 节点事件提供参数
   /// </summary>
-  public class HtmlDomChangedEventArgs : EventArgs
+  public sealed class HtmlDomChangedEventArgs : EventArgs
   {
     /// <summary>
-    /// 构建 HtmlNodeEventArgs 对象
+    /// 构建 HtmlDomChangedEventArgs 对象
     /// </summary>
-    /// <param name="node"></param>
+    /// <param name="node">发生变化的节点</param>
+    /// <param name="container">节点所属的容器</param>
+    /// <param name="action">节点所发生的操作</param>
     public HtmlDomChangedEventArgs( IHtmlNode node, IHtmlContainer container, HtmlDomChangedAction action )
     {
-      Node = node;
+      DomObject = node;
       Container = container;
       Action = action;
     }
+
+
+    /// <summary>
+    /// 引发事件的 DOM 对象
+    /// </summary>
+    private IHtmlDomObject DomObject
+    {
+      get;
+      private set;
+    }
+
 
     /// <summary>
     /// 引发事件的节点
     /// </summary>
     public IHtmlNode Node
     {
-      get;
-      private set;
+      get
+      {
+        if ( Attribute != null )
+          return Attribute.Element;
+
+        return (IHtmlNode) DomObject;
+      }
     }
+
+
+    /// <summary>
+    /// 引发事件的属性，如果是因为属性所引发事件。
+    /// </summary>
+    public IHtmlAttribute Attribute
+    {
+      get { return DomObject as IHtmlAttribute; }
+    }
+
 
 
     /// <summary>

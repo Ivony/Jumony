@@ -95,7 +95,7 @@ namespace Ivony.Html
   /// <summary>
   /// 为 HTML DOM 节点事件提供参数
   /// </summary>
-  public sealed class HtmlDomChangedEventArgs : EventArgs
+  public class HtmlDomChangedEventArgs : EventArgs
   {
     /// <summary>
     /// 构建 HtmlDomChangedEventArgs 对象
@@ -105,19 +105,25 @@ namespace Ivony.Html
     /// <param name="action">节点所发生的操作</param>
     public HtmlDomChangedEventArgs( IHtmlNode node, IHtmlContainer container, HtmlDomChangedAction action )
     {
-      DomObject = node;
+      IsAttributeChanged = false;
+      Node = node;
       Container = container;
       Action = action;
     }
 
 
     /// <summary>
-    /// 引发事件的 DOM 对象
+    /// 构建 HtmlDomChangedEventArgs 对象
     /// </summary>
-    private IHtmlDomObject DomObject
+    /// <param name="attribute">发生变化的属性</param>
+    /// <param name="element">属性所属的元素</param>
+    /// <param name="action">属性所发生的操作</param>
+    public HtmlDomChangedEventArgs( IHtmlAttribute attribute, IHtmlElement element, HtmlDomChangedAction action )
     {
-      get;
-      private set;
+      IsAttributeChanged = true;
+      Attribute = attribute;
+      Container = element;
+      Action = action;
     }
 
 
@@ -126,13 +132,8 @@ namespace Ivony.Html
     /// </summary>
     public IHtmlNode Node
     {
-      get
-      {
-        if ( Attribute != null )
-          return Attribute.Element;
-
-        return (IHtmlNode) DomObject;
-      }
+      get;
+      private set;
     }
 
 
@@ -141,14 +142,31 @@ namespace Ivony.Html
     /// </summary>
     public IHtmlAttribute Attribute
     {
-      get { return DomObject as IHtmlAttribute; }
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 确认是否由属性修改所引发的事件
+    /// </summary>
+    public bool IsAttributeChanged
+    {
+      get;
+      private set;
     }
 
 
 
+
     /// <summary>
-    /// 节点所属的容器
+    /// 节点被移除前，节点所属的容器。
     /// </summary>
+    /// <remarks>
+    /// 根据引发事件的是节点还是属性，Container 属性和 Node 属性的取值如下：
+    /// 若引发事件的是节点，则 Node 属性引用引发事件的节点， Container 属性引用引发事件之前节点所属的容器；
+    /// 若引发事件的是属性，则 Node 属性和 Container 属性都引用引发事件之前属性所属的元素。
+    /// </remarks>
     public IHtmlContainer Container
     {
       get;

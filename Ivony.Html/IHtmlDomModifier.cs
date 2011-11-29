@@ -187,6 +187,9 @@ namespace Ivony.Html
   }
 
 
+  /// <summary>
+  /// DOM 对象所发生的操作
+  /// </summary>
   public enum HtmlDomChangedAction
   {
     /// <summary>节点或对象被新增</summary>

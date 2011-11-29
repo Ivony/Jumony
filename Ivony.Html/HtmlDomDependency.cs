@@ -32,8 +32,10 @@ namespace Ivony.Html
     /// 创建一个 DOM 依赖项，当 DOM 结构发生更改时将会被标记为已过时。
     /// </summary>
     /// <param name="scope">要监视 DOM 修改的范围</param>
+    /// <param name="inclusive">是否监视自身的修改</param>
+    /// <param name="dependency">创建的依赖项</param>
     /// <returns></returns>
-    public static bool TryCreateDependency( IHtmlContainer scope, out HtmlDomDependency dependency )
+    public static bool TryCreateDependency( IHtmlContainer scope, bool inclusive, out HtmlDomDependency dependency )
     {
       dependency = null;
       if ( scope == null )

@@ -600,6 +600,95 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 创建文档的副本
+    /// </summary>
+    /// <param name="provider">用于创建副本文档的 IHtmlDomProvider 对象</param>
+    /// <param name="document">要创建副本的文档</param>
+    /// <returns>文档的副本</returns>
+    public static IHtmlDocument MakeCopy( this IHtmlDomProvider provider, IHtmlDocument document )
+    {
+      var copy = provider.CreateDocument( document.DocumentUri );
+
+
+      copy.AddCopy( provider, document.Nodes() );
+
+      return copy;
+
+    }
+
+
+    private static IHtmlContainer AddCopy( this IHtmlContainer container, IHtmlDomProvider provider, IEnumerable<IHtmlNode> nodes )
+    {
+      foreach ( var node in nodes )
+      {
+
+        if ( node is IHtmlSpecial )
+          throw new NotSupportedException();
+
+
+        var element = node as IHtmlElement;
+
+        if ( element != null )
+        {
+          var attributes = element.Attributes() as IDictionary<string, string>;
+          if ( attributes == null )
+            attributes = element.Attributes().ToDictionary( a => a.Name, a => a.AttributeValue );
+
+          var copy = provider.AddElement( container, element.Name, attributes );
+
+          copy.AddCopy( provider, element.Nodes() );
+
+          continue;
+
+        }
+
+        var textNode = node as IHtmlTextNode;
+
+        if ( textNode != null )
+        {
+          provider.AddTextNode( container, textNode.RawHtml ?? textNode.HtmlText );
+
+          continue;
+        }
+
+        var comment = node as IHtmlComment;
+
+        if ( comment != null )
+        {
+          provider.AddComment( container, comment.Comment );
+
+          continue;
+        }
+
+
+        var special = node as IHtmlSpecial;
+        if ( special != null )
+        {
+          var html = special.RawHtml;
+          if ( html == null )
+            throw new InvalidOperationException();
+
+          provider.AddSpecial( container, html );
+
+          continue;
+        }
+
+        throw new NotSupportedException();
+
+
+
+
+
+
+
+      }
+
+      return container;
+    }
+
+
+
 
 
 

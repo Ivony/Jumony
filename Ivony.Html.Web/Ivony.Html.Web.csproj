@@ -102,10 +102,6 @@
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
-      <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
-      <Name>Ivony.Html.Binding</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
       <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
       <Name>Ivony.Html.Parser</Name>

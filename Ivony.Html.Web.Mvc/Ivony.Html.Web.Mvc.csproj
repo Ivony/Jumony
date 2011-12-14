@@ -90,6 +90,7 @@
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="PartialView.cs" />
     <Compile Include="PartialViewHandler.cs" />
+    <Compile Include="ViewElementAdapter.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,10 +100,6 @@
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
-      <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
-      <Name>Ivony.Html.Binding</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
       <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>

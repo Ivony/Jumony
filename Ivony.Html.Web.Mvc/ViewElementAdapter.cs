@@ -45,7 +45,7 @@ namespace Ivony.Html.Web.Mvc
         bindValue = DataBinder.Eval( dataObject, path, format ?? "{0}" );
 
 
-      var attribute = element.Attribute( "attribute" ).Value();
+      var attribute = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
       if ( attribute != null )
       {
         element.NextElement().SetAttribute( attribute, bindValue );

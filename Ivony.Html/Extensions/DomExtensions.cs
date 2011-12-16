@@ -737,6 +737,18 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 移除指定名称的属性
+    /// </summary>
+    /// <param name="element">要移除属性的元素</param>
+    /// <param name="attributeName">要移除的属性</param>
+    public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
+    {
+      var attribute = element.Attribute( attributeName );
+      return element;
+    }
+
+
 
     /// <summary>
     /// 尝试从 DOM 中移除指定节点

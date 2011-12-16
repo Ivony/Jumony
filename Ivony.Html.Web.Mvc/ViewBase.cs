@@ -157,6 +157,9 @@ namespace Ivony.Html.Web.Mvc
       ViewContext = viewContext;
 
 
+      RenderAdapters.Add( new ViewElementAdapter( viewContext ) );
+
+
       while ( viewContext.IsChildAction )
       {
         viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
@@ -394,14 +397,14 @@ namespace Ivony.Html.Web.Mvc
 
     private IEnumerable<string> GetInheritsKeys( string inherits )
     {
+
       foreach ( var key in inherits.Split( ',' ) )
       {
 
         if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
           continue;
 
-
-        if ( key.StartsWith( wildcardCharacter ) )
+        if ( key.StartsWith( wildcardCharacter ) )//以星号开头
         {
           foreach ( var k in RouteData.Values.Keys )
           {
@@ -410,7 +413,7 @@ namespace Ivony.Html.Web.Mvc
           }
         }
 
-        if ( key.EndsWith( wildcardCharacter ) )
+        if ( key.EndsWith( wildcardCharacter ) )//以星号结尾
         {
           foreach ( var k in RouteData.Values.Keys )
           {
@@ -531,6 +534,7 @@ namespace Ivony.Html.Web.Mvc
           writer.Write( "<!--Render partial timeout-->" );
         }
       }
+
       else
         writer.Write( RenderPartial( partialElement ) );
     }

@@ -8,6 +8,10 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 用于渲染 view 标签的元素渲染代理
+  /// </summary>
   public class ViewElementAdapter : HtmlElementAdapter
   {
 
@@ -28,14 +32,14 @@ namespace Ivony.Html.Web.Mvc
     {
 
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
-      
+
       object dataObject;
       if ( key != null )
         _context.ViewData.TryGetValue( key, out dataObject );
       else
         dataObject = _context.ViewData.Model;
 
-      
+
       if ( dataObject == null )
         return;
 

@@ -22,18 +22,25 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 渲染 view 标签
     /// </summary>
-    /// <param name="element"></param>
-    /// <param name="writer"></param>
+    /// <param name="element">view 标签元素</param>
+    /// <param name="writer">HTML 编写器</param>
     public override void Render( IHtmlElement element, TextWriter writer )
     {
 
-      var key = element.Attribute( "key" ).Value();
-      var dataObject = _context.ViewData[key];
+      var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
+      
+      object dataObject;
+      if ( key != null )
+        _context.ViewData.TryGetValue( key, out dataObject );
+      else
+        dataObject = _context.ViewData.Model;
 
-      string bindValue = null;
-
+      
       if ( dataObject == null )
         return;
+
+
+      string bindValue = null;
 
       var path = element.Attribute( "path" ).Value();
       var format = element.Attribute( "format" ).Value();
@@ -57,6 +64,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 用于匹配 view 标签的 CSS 选择器
+    /// </summary>
     protected override string CssSelector
     {
       get { return "view"; }

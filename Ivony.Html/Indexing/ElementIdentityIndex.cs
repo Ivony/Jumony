@@ -17,9 +17,9 @@ namespace Ivony.Html.Indexing
   /// <summary>
   /// 文档的 ID 索引
   /// </summary>
-  public class CssSelectorIdentityIndex : IDictionary<string, IHtmlElement>, IElementIndexer
+  public class ElementIdentityIndex : IDictionary<string, IHtmlElement>
   {
-    internal CssSelectorIdentityIndex( IHtmlDocument document )
+    internal ElementIdentityIndex( IHtmlDocument document )
     {
 
     }
@@ -28,7 +28,29 @@ namespace Ivony.Html.Indexing
     private Dictionary<string, IHtmlElement> data = new Dictionary<string, IHtmlElement>();
 
 
-    void IElementIndexer.IndexElement( IHtmlElement element )
+
+    /// <summary>
+    /// 索引编写器
+    /// </summary>
+    public class Indexer : IElementIndexer
+    {
+
+      private ElementIdentityIndex _index;
+
+      private Indexer( ElementIdentityIndex index )
+      {
+        _index = index;
+      }
+
+      void IElementIndexer.IndexElement( IHtmlElement element )
+      {
+        _index.IndexElement( element );
+      }
+    }
+
+
+
+    private void IndexElement( IHtmlElement element )
     {
       var id = element.Attribute( "id" ).Value();
       if ( id == null )
@@ -41,6 +63,17 @@ namespace Ivony.Html.Indexing
 
       data.Add( id, element );
     }
+
+
+    private void RemoveElement( IHtmlElement element )
+    {
+      var id = element.Attribute( "id" ).Value();
+      if ( id == null )
+        return;
+
+      data.Remove( id );
+    }
+
 
 
 
@@ -92,7 +125,7 @@ namespace Ivony.Html.Indexing
 
     bool ICollection<KeyValuePair<string, IHtmlElement>>.Contains( KeyValuePair<string, IHtmlElement> item )
     {
-      return data.CastTo<IDictionary<string, IHtmlElement>>().Contains( item );
+      return data.Contains( item );
     }
 
     void ICollection<KeyValuePair<string, IHtmlElement>>.CopyTo( KeyValuePair<string, IHtmlElement>[] array, int arrayIndex )

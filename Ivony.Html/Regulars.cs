@@ -59,6 +59,11 @@ namespace Ivony.Html
     public static readonly string decimalPattern = string.Format( CultureInfo.InvariantCulture, @"({0}(\.[0-9]*[1-9]))", integerPattern );
 
 
+    /// <summary>匹配空白字符用于分割的正则表达式</summary>
+    public static readonly Regex whiteSpaceSeparatorRegex = new Regex( @"\p{Zs}", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
+
     /// <summary>匹配 CSS 样式设置</summary>
     public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);", quoteTextPattern );
 

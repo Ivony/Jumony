@@ -24,7 +24,6 @@ namespace Ivony.Html
     private readonly string value;
 
 
-    private static readonly Regex whiteSpaceSeparatorRegex = new Regex( @"\p{Zs}", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
     private delegate bool ValueMatcher( string exp, string value );
@@ -34,7 +33,7 @@ namespace Ivony.Html
         { "^=", ( exp, value ) => value != null && value.StartsWith( exp, StringComparison.Ordinal ) },
         { "$=", ( exp, value ) => value != null && value.EndsWith( exp, StringComparison.Ordinal ) },
         { "*=", ( exp, value ) => value != null && value.Contains( exp ) },
-        { "~=", ( exp, value ) => value != null && whiteSpaceSeparatorRegex.Split( value ).Contains( exp,StringComparer.Ordinal ) },
+        { "~=", ( exp, value ) => value != null && Regulars.whiteSpaceSeparatorRegex.Split( value ).Contains( exp,StringComparer.Ordinal ) },
         { "!=", ( exp, value ) => value != exp },
         { "=",  ( exp, value ) => value == exp }
       };

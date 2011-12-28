@@ -162,11 +162,9 @@ namespace Ivony.Html.Parser
     }
 
 
-    private object _sync = new object();
-
     public object SyncRoot
     {
-      get { return _sync; }
+      get { return Document.SyncRoot; }
     }
 
   }

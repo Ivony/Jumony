@@ -21,7 +21,8 @@ namespace Ivony.Html.Web
     public virtual void InsertCacheItem( CacheItem cacheItem )
     {
 
-      HttpRuntime.Cache.InsertCacheItem( cacheItem );
+      if ( cacheItem.Expiration < DateTime.UtcNow )//缓存已过期
+        return;
 
       SaveCacheItem( cacheItem );
     }
@@ -34,11 +35,12 @@ namespace Ivony.Html.Web
     public virtual CacheItem GetCacheItem( CacheToken token )
     {
 
-      var cacheItem = HttpRuntime.Cache.GetCacheItem( token );
-      if ( cacheItem != null )
+      var cacheItem = LoadCacheItem( token );
+
+      if ( cacheItem != null && cacheItem.Expiration >= DateTime.UtcNow )//检查缓存是否已过期
         return cacheItem;
 
-      return LoadCacheItem( token );
+      return null;
 
     }
 
@@ -62,9 +64,19 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected virtual CacheItem LoadCacheItem( CacheToken token )
     {
+
       using ( var stream = CreateLoadStream( token ) )
       {
-        return Deserialize( stream );
+
+        if ( stream == null )
+          return null;
+
+        var cacheItem = Deserialize( stream );
+
+        if ( cacheItem != null && cacheItem.Expiration >= DateTime.UtcNow )
+          return cacheItem;
+        else
+          return null;
       }
     }
 
@@ -88,6 +100,10 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected virtual CacheItem Deserialize( Stream stream )
     {
+
+      if ( stream == null )
+        return null;
+
       var formatter = new BinaryFormatter();
       var cacheItem = formatter.Deserialize( stream ) as CacheItem;
       if ( cacheItem == null )
@@ -120,7 +136,7 @@ namespace Ivony.Html.Web
   /// </summary>
   public class StaticFileCacheStorageProvider : PersistentCacheStorageProvider
   {
-    
+
     /// <summary>
     /// 创建静态文件缓存储存提供程序
     /// </summary>
@@ -162,8 +178,34 @@ namespace Ivony.Html.Web
       if ( EnableMemoryCache )
         HttpRuntime.Cache.InsertCacheItem( cacheItem );
 
-      SaveCacheItem( cacheItem );
+      base.InsertCacheItem( cacheItem );
     }
+
+
+    /// <summary>
+    /// 获取缓存项
+    /// </summary>
+    /// <param name="token">缓存标识</param>
+    /// <returns></returns>
+    public override CacheItem GetCacheItem( CacheToken token )
+    {
+      if ( EnableMemoryCache )
+      {
+        var cacheItem = HttpRuntime.Cache.GetCacheItem( token );
+
+        if ( cacheItem != null )
+        {
+          if ( cacheItem.Expiration < DateTime.UtcNow )//缓存已过期
+            return null;
+
+          return cacheItem;
+        }
+      }
+
+
+      return base.GetCacheItem( token );
+    }
+
 
 
     /// <summary>
@@ -174,7 +216,10 @@ namespace Ivony.Html.Web
     protected override Stream CreateLoadStream( CacheToken token )
     {
       var path = Path.Combine( PhysicalPath, token.CreateFilename() );
-      return File.OpenRead( path );
+      if ( File.Exists( path ) )
+        return File.OpenRead( path );
+      else
+        return null;
     }
 
     /// <summary>
@@ -184,6 +229,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected override Stream CreateSaveStream( CacheToken token )
     {
+      Directory.CreateDirectory( PhysicalPath );
       var path = Path.Combine( PhysicalPath, token.CreateFilename() );
       return File.OpenWrite( path );
     }

@@ -166,10 +166,12 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+      /*
       //对于子请求不予缓存。
       if ( filterContext.IsChildAction )
         return;
+      */
+
 
       var cachedResponse = GetCachedResponse( result );
       if ( cachedResponse == null )

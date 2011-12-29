@@ -178,6 +178,9 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new MvcCachePolicyProviderWrapper( HtmlProviders.DefaultCachePolicyProvider );
 
+    /// <summary>
+    /// 默认的缓存策略，由 HtmlProviders.
+    /// </summary>
     public static IMvcCachePolicyProvider DefaultCachePolicyProvider
     {
       get { return _defaultCachePolicyProvider; }

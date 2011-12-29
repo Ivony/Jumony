@@ -127,12 +127,21 @@ namespace Ivony.Html.Web
     public void SetMaxAge( HttpCachePolicyBase cachePolicy, TimeSpan shake )
     {
 
+
+      var now = DateTime.UtcNow;
+
+      if ( Expiration < now )
+      {
+        cachePolicy.SetMaxAge( TimeSpan.Zero );
+        return;
+      }
+
+
       var random = new Random( DateTime.Now.Millisecond );
       var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake.TotalMilliseconds );
 
       var age = Expiration - DateTime.UtcNow + offset;
       cachePolicy.SetMaxAge( age );
-
 
     }
 
@@ -158,7 +167,7 @@ namespace Ivony.Html.Web
     /// <param name="cachePolicy"></param>
     public void ApplyClientCachePolicy( HttpCachePolicyBase cachePolicy )
     {
-      cachePolicy.SetCacheability( HttpCacheability.Public );
+      //cachePolicy.SetCacheability( HttpCacheability.Public );
 
       TrySetETag( cachePolicy );
       SetMaxAge( cachePolicy );

@@ -8,35 +8,64 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 定义 HTTP 客户端缓存策略
+  /// 定义和协助应用 HTTP 客户端缓存策略
   /// </summary>
   public class ClientCachePolicy
   {
 
 
-    private HttpContextBase _context;
-
-
     internal ClientCachePolicy( HttpContextBase context )
     {
-      _context = context;
-
-      _context.ApplicationInstance.PreSendRequestHeaders += new EventHandler( PreSendRequestHeaders );
-    }
-
-    private void PreSendRequestHeaders( object sender, EventArgs e )
-    {
-      ApplyClientCachePolicy();
     }
 
 
     /// <summary>
     /// 应用客户端缓存策略
     /// </summary>
-    public void ApplyClientCachePolicy()
+    public void ApplyClientCachePolicy( HttpResponseBase response )
     {
-      var response = _context.Response;
 
+      string cacheControl;
+
+      switch ( _cacheability )
+      {
+        case HttpCacheability.NoCache:
+          cacheControl = "no-cache";
+          break;
+
+        case HttpCacheability.Public:
+          cacheControl = "public";
+          break;
+
+        default:
+        case HttpCacheability.Private:
+          cacheControl = "private";
+          break;
+      }
+
+
+      if ( cacheControl != "no-cache" )
+      {
+        if ( _maxAge != null )
+          cacheControl += ",max-age=" + (int) _maxAge.TotalSeconds;
+
+        if ( _sMaxAge != null )
+          cacheControl += ",s-maxage=" + (int) _sMaxAge.TotalSeconds;
+      }
+
+      response.AppendHeader( "Cache-Control", cacheControl );
+
+
+      if ( _expires != null )
+        response.AppendHeader( "Expires", _expires.Value.ToString( "R" ) );
+
+
+      if ( _lastModified != null )
+        response.AppendHeader( "Last-Modified", _lastModified.Value.ToString( "R" ) );
+
+
+      if ( _etag != null )
+        response.AppendHeader( "ETag", _etag );
 
     }
 
@@ -121,8 +150,27 @@ namespace Ivony.Html.Web
 
 
 
+    private string _etag;
+
+    /// <summary>
+    /// 设置内容标识
+    /// </summary>
+    /// <param name="etag">用于标识内容的哈希值</param>
+    public void SetETag( string etag )
+    {
+      if ( etag == null )
+        throw new ArgumentNullException( "etag" );
+
+      _etag = etag;
+    }
+
+
+
+
 
     private string[] _varyHeaders;
+
+    internal static string Token = "Jumony_ClientCachePolicy";
 
     /// <summary>
     /// 设置 Vary 标头，指定哪些 HTTP 头可能引起缓存结果失效

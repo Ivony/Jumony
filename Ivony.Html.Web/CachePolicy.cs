@@ -91,13 +91,7 @@ namespace Ivony.Html.Web
     /// 获取缓存项
     /// </summary>
     /// <returns></returns>
-    public virtual CacheItem GetCacheItem()
-    {
-      if ( _cacheItem != null )
-        return _cacheItem;
-
-      return _cacheItem = HttpContext.Cache.GetCacheItem( CacheToken );
-    }
+    public abstract CacheItem GetCacheItem();
 
 
     /// <summary>

@@ -41,6 +41,9 @@ namespace Ivony.Html.Web
 
     private Cache _cache;
 
+    public WebCacheStorageProvider() : this( HttpRuntime.Cache ) { }
+
+
     public WebCacheStorageProvider( Cache cache )
     {
       _cache = cache;

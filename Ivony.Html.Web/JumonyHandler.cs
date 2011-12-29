@@ -111,7 +111,7 @@ namespace Ivony.Html.Web
       }
 
 
-      ((IHtmlHandler) this).ProcessDocument( Context, Document );
+      ( (IHtmlHandler) this ).ProcessDocument( Context, Document );
 
 
       {
@@ -179,7 +179,11 @@ namespace Ivony.Html.Web
 
 
       CachePolicy = policy;
-      return policy.GetCacheItem().CachedResponse;
+      var cacheItem =  policy.GetCacheItem();
+      if ( cacheItem == null )
+        return null;
+
+      return cacheItem.CachedResponse;
     }
 
 

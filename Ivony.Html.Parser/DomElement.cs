@@ -52,8 +52,6 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        CheckDisposed();
-
         return _name;
       }
     }
@@ -65,8 +63,6 @@ namespace Ivony.Html.Parser
     /// <returns>所有属性对象</returns>
     public IEnumerable<IHtmlAttribute> Attributes()
     {
-      CheckDisposed();
-
       return _attributes.Cast<IHtmlAttribute>().AsReadOnly();
     }
 
@@ -81,8 +77,6 @@ namespace Ivony.Html.Parser
     {
       lock ( SyncRoot )
       {
-        CheckDisposed();
-
         if ( _attributes.Contains( name ) )//容器自身会执行不区分大小写的查找
           throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", name ) );
 

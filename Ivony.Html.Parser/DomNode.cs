@@ -88,11 +88,14 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 获取节点所属的文档
     /// </summary>
+    /// <remarks>若节点已从 DOM 移除，则返回 null</remarks>
     public override IHtmlDocument Document
     {
       get
       {
-        CheckDisposed();
+        if ( Container == null )
+          return null;
+
 
         return Container.Document;
       }
@@ -126,8 +129,6 @@ namespace Ivony.Html.Parser
     /// <returns>节点的 HTML 表达形式</returns>
     public override string ToString()
     {
-      CheckDisposed();
-
       return this.OuterHtml();
     }
 

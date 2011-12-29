@@ -103,6 +103,7 @@
     <Compile Include="IHtmlRenderable.cs" />
     <Compile Include="IHtmlSpecial.cs" />
     <Compile Include="IHtmlTextNode.cs" />
+    <Compile Include="Indexing\ElementClassIndex.cs" />
     <Compile Include="Indexing\ElementIdentityIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />

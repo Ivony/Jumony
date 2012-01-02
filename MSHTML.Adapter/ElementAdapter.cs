@@ -32,6 +32,7 @@ namespace Ivony.Html.MSHTMLAdapter
       _element3 = element as IHTMLElement3;
       _element4 = element as IHTMLElement4;
 
+
       _attributes = _node.attributes as IHTMLAttributeCollection;
       _attributes2 = _node.attributes as IHTMLAttributeCollection2;
     }
@@ -50,7 +51,7 @@ namespace Ivony.Html.MSHTMLAdapter
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      return ( (IEnumerable) _element.children ).Cast<object>().Select( o => ConvertExtensions.AsNode( o ) );
+      return ( (IEnumerable) _node.childNodes ).Cast<object>().Select( o => ConvertExtensions.AsNode( o ) );
     }
 
 

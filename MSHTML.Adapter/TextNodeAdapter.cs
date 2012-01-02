@@ -6,7 +6,7 @@ using mshtml;
 
 namespace Ivony.Html.MSHTMLAdapter
 {
-  public class TextNodeAdapter : NodeAdapter
+  public class TextNodeAdapter : NodeAdapter, IHtmlTextNode
   {
 
 
@@ -25,6 +25,11 @@ namespace Ivony.Html.MSHTMLAdapter
     public override string RawHtml
     {
       get { return null; }
+    }
+
+    public string HtmlText
+    {
+      get { return _textNode.data; }
     }
   }
 }

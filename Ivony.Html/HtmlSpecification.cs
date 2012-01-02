@@ -52,7 +52,8 @@ namespace Ivony.Html
     /// <summary>所有文本流元素</summary>
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
 
-
+    /// <summary>所有非显示文本元素</summary>
+    public static readonly ICollection<string> NonTextElement = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
 
 
 
@@ -132,7 +133,7 @@ namespace Ivony.Html
     /// <returns>其值是否应被视为脚本</returns>
     public static bool IsScriptValue( IHtmlAttribute attribute )
     {
-            if ( attribute == null )
+      if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
 
 

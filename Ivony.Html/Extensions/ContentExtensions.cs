@@ -169,7 +169,7 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
+          if ( ( HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute ) ) && !attribute.AttributeValue.Contains( '"' ) )
             builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
             builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
@@ -186,8 +186,6 @@ namespace Ivony.Html
 
 
 
-
-    private static readonly string[] noTextElements = new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" };
 
     private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
@@ -226,7 +224,7 @@ namespace Ivony.Html
         if ( element.Name.EqualsIgnoreCase( "br" ) )
           return Environment.NewLine;
 
-        else if ( noTextElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( HtmlSpecification.NonTextElement.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
           return null;
       }
 
@@ -254,7 +252,6 @@ namespace Ivony.Html
       else
         return false;
     }
-
 
     /// <summary>
     /// 将文档呈现为 HTML

@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Ivony.Html;
 using Ivony.Html.MSHTMLAdapter;
+using System.Collections.ObjectModel;
+using Ivony.Fluent;
 
 namespace WebBrowser
 {
@@ -24,6 +26,9 @@ namespace WebBrowser
     public MainWindow()
     {
       InitializeComponent();
+
+
+      DataView.ItemsSource = new ObservableCollection<Term>();
     }
 
     private void Go( object sender, RoutedEventArgs e )
@@ -34,9 +39,16 @@ namespace WebBrowser
 
     private void OnLoadCompleted( object sender, NavigationEventArgs e )
     {
-      var document = ConvertExtensions.AsDocument( WebBrowser.Document );
+      var document = Ivony.Html.MSHTMLAdapter.ConvertExtensions.AsDocument( WebBrowser.Document );
 
-      document.InnerHtml( true );
+      var textNodes = document.DescendantNodes().OfType<IHtmlTextNode>().Where( t => !t.IsWhiteSpace() && t.InnerText() != null );
+
+      var data = DataView.ItemsSource.CastTo<ObservableCollection<Term>>();
+
+      textNodes.ForAll( text => data.Add( new Term() { SourceTerm = text.HtmlText, TranslatedTerm = text.HtmlText } ) );
+
+
     }
+
   }
 }

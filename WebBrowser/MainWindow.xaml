@@ -1,14 +1,24 @@
 ﻿<Window x:Class="WebBrowser.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="350" d:DesignWidth="714" SizeToContent="WidthAndHeight">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="35" />
-      <RowDefinition Height="276*" />
+      <RowDefinition Height="176*" />
+      <RowDefinition Height="200" />
     </Grid.RowDefinitions>
-    <TextBox Margin="12,12,58,0" Name="Address" Text="http://www.cnblogs.com/" />
-    <WebBrowser Grid.Row="1" Margin="12,12,12,12" Name="WebBrowser" LoadCompleted="OnLoadCompleted" />
+    <TextBox Margin="12,12,58,0" Name="Address" Text="http://www.cnblogs.com/" Grid.ColumnSpan="2" />
     <Button Content="Go" Margin="0,11,12,0" Name="GoButton" Click="Go" HorizontalAlignment="Right" Width="40" />
+    <WebBrowser Grid.Row="1" Margin="12,12,12,0" Name="WebBrowser" LoadCompleted="OnLoadCompleted" />
+    <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" DataContext="{Binding}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="源文本" Binding="{Binding Path=SourceTerm}" />
+        <DataGridTextColumn CanUserResize="False" Header="翻译后" Binding="{Binding Path=TranslatedTerm}" />
+      </DataGrid.Columns>
+    </DataGrid>
   </Grid>
 </Window>

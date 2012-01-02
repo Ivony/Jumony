@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections;
 namespace Ivony.Html
 {
 
@@ -40,4 +41,14 @@ namespace Ivony.Html
 
 
   }
+
+
+  /// <summary>
+  /// HTML DOM 模型的对象实现此接口声明自己可以保存一些额外的数据，一般而言，原生的 DOM 模型都应实现此接口以支持一些额外的功能。
+  /// </summary>
+  public interface IDataContainer : IHtmlDomObject
+  {
+    IDictionary Data { get; }
+  }
+
 }

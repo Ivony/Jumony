@@ -16,7 +16,7 @@ using Ivony.Html.MSHTMLAdapter;
 using System.Collections.ObjectModel;
 using Ivony.Fluent;
 
-namespace WebBrowser
+namespace HtmlTranslator
 {
   /// <summary>
   /// MainWindow.xaml 的交互逻辑
@@ -27,8 +27,7 @@ namespace WebBrowser
     {
       InitializeComponent();
 
-
-      DataView.ItemsSource = new ObservableCollection<Term>();
+      DataView.ItemsSource = Data;
     }
 
     private void Go( object sender, RoutedEventArgs e )
@@ -37,18 +36,19 @@ namespace WebBrowser
       WebBrowser.Navigate( url );
     }
 
+    private readonly ObservableCollection<TranslationTerm> Data = new ObservableCollection<TranslationTerm>();
+
+
     private void OnLoadCompleted( object sender, NavigationEventArgs e )
     {
       var document = Ivony.Html.MSHTMLAdapter.ConvertExtensions.AsDocument( WebBrowser.Document );
 
       var textNodes = document.DescendantNodes().OfType<IHtmlTextNode>().Where( t => !t.IsWhiteSpace() && t.InnerText() != null );
 
-      var data = DataView.ItemsSource.CastTo<ObservableCollection<Term>>();
+      Data.Clear();
 
-      textNodes.ForAll( text => data.Add( new Term() { SourceTerm = text.HtmlText, TranslatedTerm = text.HtmlText } ) );
-
+      textNodes.ForAll( text => Data.Add( new TranslationTerm( text ) ) );
 
     }
-
   }
 }

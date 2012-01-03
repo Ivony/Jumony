@@ -8,6 +8,10 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Indexing
 {
+
+  /// <summary>
+  /// 样式类索引
+  /// </summary>
   public class ElementClassIndex
   {
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Ivony.Html.Parser.ContentModels;
+using System.Collections;
 
 namespace Ivony.Html.Parser
 {
@@ -11,7 +12,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 对 IHtmlDomObject 的实现
   /// </summary>
-  public abstract class DomObject : IHtmlDomObject
+  public abstract class DomObject : IHtmlDomObject, IDataContainer
   {
 
 
@@ -48,10 +49,18 @@ namespace Ivony.Html.Parser
       get
       {
         //if ( ContentFragment == null )
-          return null;
+        return null;
 
         //return ContentFragment.Html;
       }
+    }
+
+
+    public Hashtable _data = Hashtable.Synchronized( new Hashtable() );
+
+    public IDictionary Data
+    {
+      get { return _data; }
     }
   }
 }

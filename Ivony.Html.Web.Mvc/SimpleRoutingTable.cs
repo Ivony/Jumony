@@ -701,6 +701,9 @@ namespace Ivony.Html.Web.Mvc
 
       foreach ( var key in queryString.AllKeys )
       {
+        if ( key == null )
+          continue;//因某些未知原因会导致 AllKeys 包含空键值。
+
         var v = queryString[key];
         if ( v != null )
           values.Add( key, v );

@@ -332,9 +332,16 @@ namespace Ivony.Html
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
       try
       {
         return Find( container, expression ).Single();
+      }
+      catch ( InvalidOperationException e )
+      {
+        throw new InvalidOperationException( string.Format( "未找到符合选择器 \"{0}\" 的元素或结果集不唯一", expression ), e );
       }
       catch ( Exception e )
       {

@@ -5,13 +5,16 @@ using System.Text;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 保存 Jumony for MVC 的一些配置信息
+  /// </summary>
   public sealed class MvcConfiguration
   {
 
     internal MvcConfiguration() 
     {
 
-      EnablePageViewRenderChildAction = false;
 
     }
 

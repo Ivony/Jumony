@@ -9,35 +9,24 @@ namespace Ivony.Html.Indexing
 
 
 
-  public interface IElementIndexer
-  {
-    void IndexElement( IHtmlElement element );
-  }
-
 
   /// <summary>
   /// 文档的 ID 索引
   /// </summary>
-  public class ElementIdentityIndex
+  public class ElementIdentityIndex : ElementIndex
   {
 
 
-    private IHtmlDocument _document;
-
-    internal ElementIdentityIndex( IHtmlDocument document )
-    {
-      _document = document;
-    }
+    internal ElementIdentityIndex( IHtmlDocument document ) : base( document ) { }
 
 
     private Dictionary<string, IHtmlElement> data = new Dictionary<string, IHtmlElement>();
 
 
-    public void Rebuild()
+
+    protected override void InitializeData()
     {
       data = new Dictionary<string, IHtmlElement>();
-
-      _document.Descendants().ForAll( element => IndexElement( element ) );
     }
 
 
@@ -47,11 +36,7 @@ namespace Ivony.Html.Indexing
     }
 
 
-
-
-
-
-    private void IndexElement( IHtmlElement element )
+    protected override void AddElement( IHtmlElement element )
     {
       var id = element.Attribute( "id" ).Value();
       if ( id == null )
@@ -66,7 +51,7 @@ namespace Ivony.Html.Indexing
     }
 
 
-    private void RemoveElement( IHtmlElement element )
+    protected override void RemoveElement( IHtmlElement element )
     {
       var id = element.Attribute( "id" ).Value();
       if ( id == null )
@@ -74,7 +59,6 @@ namespace Ivony.Html.Indexing
 
       data.Remove( id );
     }
-
 
 
 

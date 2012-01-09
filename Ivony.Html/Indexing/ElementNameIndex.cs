@@ -11,7 +11,7 @@ namespace Ivony.Html.Indexing
   /// <summary>
   /// 元素名称的索引
   /// </summary>
-  public class ElementNameIndex
+  public class ElementNameIndex : ElementIndex
   {
 
 
@@ -21,31 +21,27 @@ namespace Ivony.Html.Indexing
     /// 创建元素名称的索引
     /// </summary>
     /// <param name="document"></param>
-    public ElementNameIndex( IHtmlDocument document )
-    {
-      _document = document;
-    }
+    public ElementNameIndex( IHtmlDocument document ) : base( document ) { }
 
 
     private IDictionary<string,List<IHtmlElement>> data;
 
 
-    public void Rebuild()
+
+    protected override void InitializeData()
     {
       data = new Dictionary<string, List<IHtmlElement>>();
-
-      _document.Descendants().ForAll( element => IndexElement( element ) );
-
     }
 
-    private void IndexElement( IHtmlElement element )
+
+
+
+    protected override void AddElement( IHtmlElement element )
     {
       var name = element.Name;
 
       IndexElement( name, element );
-
     }
-
 
 
     private void IndexElement( string name, IHtmlElement element )
@@ -57,5 +53,11 @@ namespace Ivony.Html.Indexing
       set.Add( element );
     }
 
+
+
+    protected override void RemoveElement( IHtmlElement element )
+    {
+      throw new NotImplementedException();
+    }
   }
 }

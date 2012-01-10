@@ -83,7 +83,11 @@ namespace Ivony.Html.Indexing
 
     protected abstract void RemoveElement( IHtmlElement element );
 
-    protected abstract void UpdateElement( IHtmlElement element, IHtmlAttribute attribute, HtmlDomChangedAction action );
+    protected abstract void AddAttribute( IHtmlElement element, IHtmlAttribute attribute );
+
+    protected abstract void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute );
+
+
 
 
     private void OnHtmlDomChanged( object sender, HtmlDomChangedEventArgs e )
@@ -108,7 +112,21 @@ namespace Ivony.Html.Indexing
     /// <param name="attribute"></param>
     protected virtual void OnAttributeChanged( object sender, HtmlDomChangedAction action, IHtmlAttribute attribute, IHtmlElement element )
     {
-      UpdateElement( element, attribute, action );
+
+      switch ( action )
+      {
+
+        case HtmlDomChangedAction.Add:
+          AddAttribute( element, attribute );
+          break;
+
+        case HtmlDomChangedAction.Remove:
+          RemoveAttribute( element, attribute );
+          break;
+
+        default:
+          throw new InvalidOperationException( "未知的 DOM 结构变化" );
+      }
     }
 
 

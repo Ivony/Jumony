@@ -53,7 +53,12 @@ namespace Ivony.Html.Indexing
 
     protected override void RemoveElement( IHtmlElement element )
     {
-      var id = element.Attribute( "id" ).Value();
+      RemoveElement( element, element.Attribute( "id" ) );
+    }
+
+    private void RemoveElement( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      var id = attribute.Value();
       if ( id == null )
         return;
 
@@ -62,5 +67,15 @@ namespace Ivony.Html.Indexing
 
 
 
+
+    protected override void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      AddElement( element );
+    }
+
+    protected override void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      RemoveElement( element, attribute );
+    }
   }
 }

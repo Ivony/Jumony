@@ -62,9 +62,14 @@ namespace Ivony.Html.Indexing
     }
 
 
-    protected override void UpdateElement( IHtmlElement element )
+
+
+    protected override void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
     }
 
+    protected override void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    {
+    }
   }
 }

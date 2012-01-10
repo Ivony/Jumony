@@ -57,7 +57,36 @@ namespace Ivony.Html.Indexing
 
     protected override void RemoveElement( IHtmlElement element )
     {
-      throw new NotImplementedException();
+      RemoveElement( element, element.Attribute( "class" ) );
+    }
+
+    private void RemoveElement( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      var classes = attribute.Value();
+      if ( !string.IsNullOrEmpty( classes ) )
+        Regulars.whiteSpaceSeparatorRegex.Split( classes ).ForAll( c => RemoveElement( c, element ) );
+    }
+
+    protected void RemoveElement( string className, IHtmlElement element )
+    {
+      var set = data[className] as List<IHtmlElement>;
+      set.Remove( element );
+    }
+
+    protected override void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      if ( !attribute.Name.EqualsIgnoreCase( "class" ) )
+        return;
+
+      AddElement( element );
+    }
+
+    protected override void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    {
+      if ( !attribute.Name.EqualsIgnoreCase( "class" ) )
+        return;
+
+      RemoveElement( element, attribute );
     }
   }
 }

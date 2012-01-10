@@ -60,6 +60,9 @@ namespace Ivony.Html.Indexing
     }
 
 
+    /// <summary>
+    /// 重建索引
+    /// </summary>
     public void Rebuild()
     {
 
@@ -80,6 +83,8 @@ namespace Ivony.Html.Indexing
 
     protected abstract void RemoveElement( IHtmlElement element );
 
+    protected abstract void UpdateElement( IHtmlElement element, IHtmlAttribute attribute, HtmlDomChangedAction action );
+
 
     private void OnHtmlDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
@@ -87,8 +92,25 @@ namespace Ivony.Html.Indexing
       if ( element == null )//如果引发修改事件的不是元素，则忽略。
         return;
 
-      OnElementChanged( sender, element, e );
+      if ( !e.IsAttributeChanged )
+        OnElementChanged( sender, e.Action, element );
+      else
+        OnAttributeChanged( sender, e.Action, e.Attribute, element );
     }
+
+
+
+    /// <summary>
+    /// 当属性被修改
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="action"></param>
+    /// <param name="attribute"></param>
+    protected virtual void OnAttributeChanged( object sender, HtmlDomChangedAction action, IHtmlAttribute attribute, IHtmlElement element )
+    {
+      UpdateElement( element, attribute, action );
+    }
+
 
 
     /// <summary>
@@ -97,10 +119,27 @@ namespace Ivony.Html.Indexing
     /// <param name="sender"></param>
     /// <param name="element"></param>
     /// <param name="e"></param>
-    private void OnElementChanged( object sender, IHtmlElement element, HtmlDomChangedEventArgs e )
+    protected virtual void OnElementChanged( object sender, HtmlDomChangedAction action, IHtmlElement element )
     {
-      throw new NotImplementedException();
+      switch ( action )
+      {
+
+        case HtmlDomChangedAction.Add:
+          AddElement( element );
+          break;
+
+        case HtmlDomChangedAction.Remove:
+          RemoveElement( element );
+          break;
+
+        default:
+          throw new InvalidOperationException( "未知的 DOM 结构变化" );
+      }
     }
+
+
+
+
 
   }
 }

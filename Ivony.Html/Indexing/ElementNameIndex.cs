@@ -40,11 +40,11 @@ namespace Ivony.Html.Indexing
     {
       var name = element.Name;
 
-      IndexElement( name, element );
+      AddElement( name, element );
     }
 
 
-    private void IndexElement( string name, IHtmlElement element )
+    private void AddElement( string name, IHtmlElement element )
     {
       var set = data[name] as List<IHtmlElement>;
       if ( set == null )
@@ -57,7 +57,14 @@ namespace Ivony.Html.Indexing
 
     protected override void RemoveElement( IHtmlElement element )
     {
-      throw new NotImplementedException();
+      var set = data[element.Name] as List<IHtmlElement>;
+      set.Remove( element );
     }
+
+
+    protected override void UpdateElement( IHtmlElement element )
+    {
+    }
+
   }
 }

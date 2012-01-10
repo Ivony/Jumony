@@ -63,7 +63,11 @@ namespace Ivony.Html
         throw new ArgumentNullException( "domObject" );
 
 
-      var modifier = domObject.Document.DomModifier;
+      var document = domObject.Document;
+      if ( document == null )
+        throw new InvalidOperationException( "无法修改不在 DOM 上的节点" );
+
+      var modifier = document.DomModifier;
       if ( modifier == null )
         throw new NotSupportedException( "文档不支持修改 DOM 结构" );
 

@@ -311,11 +311,9 @@ namespace Ivony.Html.Web.Mvc
           var routeValues = GetRouteValues( actionElement );
 
 
-          actionElement.Attribute( "action" ).Remove();
-
-          var controllerAttribute = actionElement.Attribute( "controller" );
-          if ( controllerAttribute != null )
-            controllerAttribute.Remove();
+          actionElement.RemoveAttribute( "action" );
+          actionElement.RemoveAttribute( "controller" );
+          actionElement.RemoveAttribute( "inherits" );
 
 
           var url = Url.Action( action, controller, routeValues );

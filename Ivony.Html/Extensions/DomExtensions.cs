@@ -748,8 +748,16 @@ namespace Ivony.Html
     /// <param name="attributeName">要移除的属性</param>
     public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
     {
-      var attribute = element.Attribute( attributeName );
-      return element;
+      lock ( element.SyncRoot )
+      {
+
+        var attribute = element.Attribute( attributeName );
+
+        if ( attribute != null )
+          attribute.Remove();
+
+        return element;
+      }
     }
 
 

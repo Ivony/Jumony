@@ -64,11 +64,11 @@ namespace Ivony.Html.Indexing
 
 
 
-    protected override void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    protected override void OnAddAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
     }
 
-    protected override void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    protected override void OnRemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
     }
   }

@@ -92,7 +92,7 @@ namespace Ivony.Html.Indexing
     /// </summary>
     /// <param name="element"></param>
     /// <param name="attribute"></param>
-    protected override void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    protected override void OnAddAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
       if ( !attribute.Name.EqualsIgnoreCase( "class" ) )
         return;
@@ -106,7 +106,7 @@ namespace Ivony.Html.Indexing
     /// </summary>
     /// <param name="element"></param>
     /// <param name="attribute"></param>
-    protected override void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
+    protected override void OnRemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
       if ( !attribute.Name.EqualsIgnoreCase( "class" ) )
         return;

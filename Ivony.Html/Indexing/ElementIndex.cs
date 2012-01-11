@@ -79,13 +79,32 @@ namespace Ivony.Html.Indexing
 
 
 
+    /// <summary>
+    /// 添加一个元素到索引
+    /// </summary>
+    /// <param name="element">要添加到索引的元素</param>
     protected abstract void AddElement( IHtmlElement element );
 
+    /// <summary>
+    /// 从索引中移除一个元素
+    /// </summary>
+    /// <param name="element">要从索引中移除的元素</param>
     protected abstract void RemoveElement( IHtmlElement element );
 
-    protected abstract void AddAttribute( IHtmlElement element, IHtmlAttribute attribute );
 
-    protected abstract void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute );
+    /// <summary>
+    /// 当元素被添加属性时
+    /// </summary>
+    /// <param name="element">添加属性的元素</param>
+    /// <param name="attribute">被添加的属性</param>
+    protected abstract void OnAddAttribute( IHtmlElement element, IHtmlAttribute attribute );
+
+    /// <summary>
+    /// 当元素被移除属性时
+    /// </summary>
+    /// <param name="element">移除属性的元素</param>
+    /// <param name="attribute">被移除的属性</param>
+    protected abstract void OnRemoveAttribute( IHtmlElement element, IHtmlAttribute attribute );
 
 
 
@@ -117,11 +136,11 @@ namespace Ivony.Html.Indexing
       {
 
         case HtmlDomChangedAction.Add:
-          AddAttribute( element, attribute );
+          OnAddAttribute( element, attribute );
           break;
 
         case HtmlDomChangedAction.Remove:
-          RemoveAttribute( element, attribute );
+          OnRemoveAttribute( element, attribute );
           break;
 
         default:

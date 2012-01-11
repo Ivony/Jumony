@@ -69,6 +69,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="controllerContext"></param>
     /// <param name="viewPath"></param>
     /// <param name="masterPath"></param>
+    /// <exception cref="System.NotSupportedException">当 masterPath 参数不为空时引发，因为 JumonyViewEngine 不支持母板页</exception>
     /// <returns></returns>
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {

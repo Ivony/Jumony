@@ -184,9 +184,24 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 添加一个路由规则
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="urlPattern"></param>
+    /// <param name="routeValues"></param>
+    /// <param name="queryKeys"></param>
+    /// <param name="limitedQueries"></param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys, limitedQueries );
+
+      if ( urlPattern == null )
+        throw new ArgumentNullException( "urlPattern" );
+
+      if ( routeValues == null )
+        throw new ArgumentNullException( "routeValues" );
+
+      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
 
       AddRule( rule );
     }

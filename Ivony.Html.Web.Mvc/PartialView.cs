@@ -6,10 +6,16 @@ using System.IO;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 部分视图
+  /// </summary>
   public abstract class PartialView : ViewBase
   {
 
-
+    /// <summary>
+    /// 创建部分视图实例
+    /// </summary>
     protected PartialView()
     {
 

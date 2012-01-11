@@ -4,6 +4,7 @@ using System;
 using Ivony.Html;
 using Ivony.Html.Parser;
 using System.Linq;
+using Ivony.Fluent;
 
 namespace ElementIndexTest
 {
@@ -80,6 +81,22 @@ namespace ElementIndexTest
 
       Assert.IsTrue( index.ClassNames.Any(), "索引为空" );
 
+      TestIndexAndSelectorConsistency( document, index );
+
+      for ( int i = 0; i < 20; i++ )
+      {
+        var element = document.Descendants().RandomElement();
+        element.Remove();
+        TestContext.WriteLine( "随机移除元素： {0}", ContentExtensions.GenerateTagHtml( element, false ) );
+      }
+
+
+      TestIndexAndSelectorConsistency( document, index );
+
+    }
+
+    private void TestIndexAndSelectorConsistency( IHtmlDocument document, ElementClassIndex index )
+    {
       foreach ( var className in index.ClassNames )
       {
         var set1 = document.Find( "." + className );
@@ -88,7 +105,6 @@ namespace ElementIndexTest
         Assert.AreEqual( set1.Intersect( set2 ).Count(), set1.Count(), "对于样式类 \"{0}\" 索引结果和选择器结果不一致", className );
         TestContext.WriteLine( "样式类 \"{0}\" 检测成功，共有 \"{1}\" 个元素", className, set1.Count() );
       }
-
     }
 
     private IHtmlDocument CreateDocument()

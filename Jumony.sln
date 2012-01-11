@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebBrowser", "WebBrowser\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSHTML.Adapter", "MSHTML.Adapter\MSHTML.Adapter.csproj", "{150787A5-84FE-49EB-ACAD-B04838DF6B25}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "WebSite\MvcSimpleTodo", "{29F93961-DF4F-4912-B376-892B62BDC93E}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "WebSite\MvcSimpleTodo\", "{29F93961-DF4F-4912-B376-892B62BDC93E}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = "{2FC154E1-E0E5-4F34-A6DB-973D5332070A}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{1B363540-4F50-48CC-93C8-19EB85024AC2}|Ivony.Html.Templates.dll;{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}|Ivony.Html.Styles.dll;"
@@ -58,7 +58,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "WebSite\Mv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Binding", "Ivony.Html.Binding\Ivony.Html.Binding.csproj", "{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "WebSite\Demo", "{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "WebSite\Demo\", "{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/Demo"
@@ -78,7 +78,19 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "WebSite\Demo", "{8A
 		VWDPort = "1570"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElementIndexTest", "ElementIndexTest\ElementIndexTest.csproj", "{39853DC7-FB98-4F81-8B2C-E3F92F024C36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{644B208C-A9E9-4D22-8254-A428D81DC7D3}"
+	ProjectSection(SolutionItems) = preProject
+		Jumony.vsmdi = Jumony.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Jumony.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -277,6 +289,16 @@ Global
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|x86.ActiveCfg = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{39853DC7-FB98-4F81-8B2C-E3F92F024C36}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

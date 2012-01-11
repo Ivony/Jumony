@@ -79,16 +79,6 @@ namespace Ivony.Html.Parser
 
 
 
-    /// <summary>
-    /// 当前所读取的位置
-    /// </summary>
-    protected int Index
-    {
-      get;
-      private set;
-    }
-
-
 
     /// <summary>
     /// 枚举读取到的每一个内容元素
@@ -97,74 +87,83 @@ namespace Ivony.Html.Parser
     public IEnumerable<HtmlContentFragment> EnumerateContent()
     {
 
-      Index = 0;
+      var index = 0;//读取指针
 
       while ( true )
       {
 
-        //CData标签处理
-
-        if ( CDataElement != null )//如果在CData标签内。
-        {
-
-          Regex endTagRegex = HtmlSpecification.GetEndTagRegex( CDataElement );
-          var endTagMatch = endTagRegex.Match( HtmlText, Index );
-
-
-          if ( !endTagMatch.Success )
-          {
-            //处理末尾的文本
-            if ( Index != HtmlText.Length )
-              yield return CreateText( HtmlText.Length );
-
-
-            yield break;
-          }
-
-          if ( endTagMatch.Index > Index )
-            yield return CreateText( endTagMatch.Index );
-
-          yield return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
-
-
-          CDataElement = null;//自动退出 CData 元素读取模式
-
-        }
-
-
-        var match = tagRegex.Match( HtmlText, Index );
-
-        if ( !match.Success )//如果不再有标签的匹配
+        var contentNode = ReadContentNode( index );
+        if ( contentNode == null )
         {
           //处理末尾的文本
-          if ( Index != HtmlText.Length )
-            yield return CreateText( HtmlText.Length );
+          if ( index != HtmlText.Length )
+            yield return CreateText( index, HtmlText.Length );
 
           yield break;
         }
 
+        else//当读取到了某个节点
+        {
+          yield return CreateText( index, contentNode.StartIndex );
 
-        //处理文本节点
-        if ( match.Index > Index )
-          yield return CreateText( match.Index );
+          yield return contentNode;
+        }
 
-
-        if ( match.Groups["beginTag"].Success )
-          yield return CreateBeginTag( match );
-
-        else if ( match.Groups["endTag"].Success )
-          yield return CreateEndTag( match );
-
-        else if ( match.Groups["comment"].Success )
-          yield return CreateComment( match );
-
-        else if ( match.Groups["special"].Success )
-          yield return CreateSpacial( match );
-
-        else
-          throw new InvalidOperationException();
+        index = contentNode.StartIndex + contentNode.Length;//推后读取指针
       }
     }
+
+
+
+    /// <summary>
+    /// 读取下一个 HTML 内容节点（开始标签、结束标签、注释或特殊节点）
+    /// </summary>
+    /// <param name="index">读取开始位置</param>
+    /// <returns>下一个内容节点，若已经达到文档尾部，则返回 null</returns>
+    protected virtual HtmlContentFragment ReadContentNode( int index )
+    {
+      //CData标签处理
+
+      if ( CDataElement != null )//如果在CData标签内。
+      {
+
+        Regex endTagRegex = HtmlSpecification.GetEndTagRegex( CDataElement );
+        var endTagMatch = endTagRegex.Match( HtmlText, index );
+
+
+        if ( !endTagMatch.Success )
+          return null;
+
+
+        CDataElement = null;//自动退出 CData 元素读取模式
+        return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
+
+      }
+
+
+      var match = tagRegex.Match( HtmlText, index );
+
+      if ( !match.Success )//如果不再有标签的匹配
+        return null;
+
+
+
+      if ( match.Groups["beginTag"].Success )
+        return CreateBeginTag( match );
+
+      else if ( match.Groups["endTag"].Success )
+        return CreateEndTag( match );
+
+      else if ( match.Groups["comment"].Success )
+        return CreateComment( match );
+
+      else if ( match.Groups["special"].Success )
+        return CreateSpacial( match );
+
+      else
+        throw new InvalidOperationException();
+    }
+
 
 
     /// <summary>
@@ -200,7 +199,7 @@ namespace Ivony.Html.Parser
         string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
         string value = capture.FindCaptures( match.Groups["attrValue"] ).Select( c => c.Value ).SingleOrDefault();
 
-        yield return new HtmlAttributeSetting( CreateFragment( capture, false ), name, value );
+        yield return new HtmlAttributeSetting( CreateFragment( capture ), name, value );
       }
     }
 
@@ -234,25 +233,16 @@ namespace Ivony.Html.Parser
 
 
 
-    protected virtual HtmlTextContent CreateText( int endIndex )
+    protected virtual HtmlTextContent CreateText( int startIndex, int endIndex )
     {
-      var text = new HtmlTextContent( new HtmlContentFragment( this, Index, endIndex - Index ) );
-      Index = endIndex;
-
+      var text = new HtmlTextContent( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
       return text;
     }
 
     protected HtmlContentFragment CreateFragment( Capture capture )
     {
-      return CreateFragment( capture, true );
-    }
-
-    protected virtual HtmlContentFragment CreateFragment( Capture capture, bool setIndex )
-    {
-      if ( setIndex )
-        Index = capture.Index + capture.Length;
-
       return new HtmlContentFragment( this, capture.Index, capture.Length );
     }
+
   }
 }

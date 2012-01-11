@@ -92,7 +92,20 @@ namespace Ivony.Html.Parser
       while ( true )
       {
 
-        var contentNode = ReadContentNode( index );
+        HtmlContentFragment contentNode;
+
+        //CData标签处理
+
+        if ( CDataElement != null )//如果在CData标签内。
+        {
+          contentNode = FindEndTag( index, CDataElement );
+          CDataElement = null;//自动退出 CData 元素读取模式
+        }
+
+        else
+          contentNode = NextContentNode( index );
+
+
         if ( contentNode == null )
         {
           //处理末尾的文本
@@ -104,7 +117,8 @@ namespace Ivony.Html.Parser
 
         else//当读取到了某个节点
         {
-          yield return CreateText( index, contentNode.StartIndex );
+          if ( index < contentNode.StartIndex )
+            yield return CreateText( index, contentNode.StartIndex );
 
           yield return contentNode;
         }
@@ -114,31 +128,34 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 查找指定元素的结束标签（用于CData元素结束位置查找）
+    /// </summary>
+    /// <param name="index">查找的开始位置</param>
+    /// <param name="elementName">元素名称</param>
+    /// <returns>找到的结束标签，若已到达文档末尾，则返回 null</returns>
+    protected virtual HtmlEndTag FindEndTag( int index, string elementName )
+    {
+
+      Regex endTagRegex = HtmlSpecification.GetEndTagRegex( elementName );
+      var endTagMatch = endTagRegex.Match( HtmlText, index );
+
+
+      if ( !endTagMatch.Success )
+        return null;
+
+
+      return new HtmlEndTag( CreateFragment( endTagMatch ), elementName );
+    }
+
 
     /// <summary>
     /// 读取下一个 HTML 内容节点（开始标签、结束标签、注释或特殊节点）
     /// </summary>
     /// <param name="index">读取开始位置</param>
-    /// <returns>下一个内容节点，若已经达到文档尾部，则返回 null</returns>
-    protected virtual HtmlContentFragment ReadContentNode( int index )
+    /// <returns>下一个内容节点，若已经达到文档末尾，则返回 null</returns>
+    protected virtual HtmlContentFragment NextContentNode( int index )
     {
-      //CData标签处理
-
-      if ( CDataElement != null )//如果在CData标签内。
-      {
-
-        Regex endTagRegex = HtmlSpecification.GetEndTagRegex( CDataElement );
-        var endTagMatch = endTagRegex.Match( HtmlText, index );
-
-
-        if ( !endTagMatch.Success )
-          return null;
-
-
-        CDataElement = null;//自动退出 CData 元素读取模式
-        return new HtmlEndTag( CreateFragment( endTagMatch ), CDataElement );
-
-      }
 
 
       var match = tagRegex.Match( HtmlText, index );

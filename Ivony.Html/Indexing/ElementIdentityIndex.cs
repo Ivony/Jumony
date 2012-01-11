@@ -17,7 +17,7 @@ namespace Ivony.Html.Indexing
   {
 
 
-    internal ElementIdentityIndex( IHtmlDocument document ) : base( document ) { }
+    public ElementIdentityIndex( IHtmlDocument document ) : base( document ) { }
 
 
     private Dictionary<string, IHtmlElement> data = new Dictionary<string, IHtmlElement>();

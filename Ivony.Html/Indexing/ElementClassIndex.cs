@@ -5,6 +5,7 @@ using System.Text;
 
 using Ivony.Fluent;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace Ivony.Html.Indexing
 {
@@ -23,13 +24,13 @@ namespace Ivony.Html.Indexing
     {
     }
 
-    private IDictionary<string,List<IHtmlElement>> data;
+    private Hashtable data;
 
 
 
     protected override void InitializeData()
     {
-      data = new Dictionary<string, List<IHtmlElement>>();
+      data = Hashtable.Synchronized( new Hashtable() );
     }
 
 
@@ -49,11 +50,14 @@ namespace Ivony.Html.Indexing
 
     private void AddElement( string className, IHtmlElement element )
     {
-      var set = data[className] as List<IHtmlElement>;
-      if ( set == null )
-        set = data[className] = new List<IHtmlElement>();
+      lock ( data.SyncRoot )
+      {
+        var set = data[className] as List<IHtmlElement>;
+        if ( set == null )
+          data[className] = set = new List<IHtmlElement>();
 
-      set.Add( element );
+        set.Add( element );
+      }
     }
 
 
@@ -112,6 +116,20 @@ namespace Ivony.Html.Indexing
         return;
 
       RemoveElement( element, attribute );
+    }
+
+
+    public IEnumerable<IHtmlElement> this[string className]
+    {
+      get
+      {
+        var set = data[className] as IList<IHtmlElement>;
+
+        if ( set.IsNullOrEmpty() )
+          return Enumerable.Empty<IHtmlElement>();
+
+        return set.AsReadOnly();
+      }
     }
   }
 }

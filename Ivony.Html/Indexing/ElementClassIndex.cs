@@ -19,6 +19,11 @@ namespace Ivony.Html.Indexing
 
     private object  _sync = new object();
 
+
+    /// <summary>
+    /// 构建索引实例
+    /// </summary>
+    /// <param name="document"></param>
     public ElementClassIndex( IHtmlDocument document )
       : base( document )
     {
@@ -37,7 +42,7 @@ namespace Ivony.Html.Indexing
     /// <summary>
     /// 新增一个元素到索引
     /// </summary>
-    /// <param name="element">文档新增的元素</param>
+    /// <param name="element">新增到索引的元素</param>
     protected override void AddElement( IHtmlElement element )
     {
       var classes = element.Attribute( "class" ).Value();
@@ -119,6 +124,11 @@ namespace Ivony.Html.Indexing
     }
 
 
+    /// <summary>
+    /// 查找具备指定样式类的元素
+    /// </summary>
+    /// <param name="className">样式类名</param>
+    /// <returns>具有此样式类的所有元素</returns>
     public IEnumerable<IHtmlElement> this[string className]
     {
       get
@@ -131,5 +141,16 @@ namespace Ivony.Html.Indexing
         return set.AsReadOnly();
       }
     }
+
+
+    /// <summary>
+    /// 文档所有的样式类名称
+    /// </summary>
+    public IEnumerable<string> ClassNames
+    {
+      get { return data.Keys.Cast<string>(); }
+    }
+
+
   }
 }

@@ -14,7 +14,7 @@ namespace Ivony.Html.Parser
   public class JumonyReader : IHtmlReader
   {
 
-    private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
+    private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern, Regulars.doctypeDeclarationPattern );
 
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象

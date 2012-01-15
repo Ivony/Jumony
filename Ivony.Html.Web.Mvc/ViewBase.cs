@@ -188,8 +188,14 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 初识化结束后，进行任何处理前引发此事件
+    /// </summary>
     public event EventHandler PreProcess;
-
+    
+    /// <summary>
+    /// 引发 PreProcess 事件
+    /// </summary>
     protected virtual void OnPreProcess()
     {
       if ( PreProcess != null )
@@ -197,8 +203,14 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 对文档的所有处理完成后引发此事件
+    /// </summary>
     public event EventHandler PostProcess;
 
+    /// <summary>
+    /// 引发 PostProcess 事件
+    /// </summary>
     protected virtual void OnPostProcess()
     {
       if ( PostProcess != null )
@@ -206,8 +218,15 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 完成所有渲染准备工作后，渲染文档之前引发此事件。
+    /// </summary>
     public event EventHandler PreRender;
 
+    /// <summary>
+    /// 引发 PreRender 事件
+    /// </summary>
+    /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPreRender( TextWriter writer )
     {
       if ( PreRender != null )
@@ -215,7 +234,15 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 文档渲染完毕后引发此事件
+    /// </summary>
     public event EventHandler PostRender;
+
+    /// <summary>
+    /// 引发 PostRender 事件
+    /// </summary>
+    /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPostRender( TextWriter writer )
     {
       if ( PostRender != null )

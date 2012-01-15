@@ -21,6 +21,11 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    /// <summary>
+    /// 创建部分视图实例
+    /// </summary>
+    /// <param name="virtualPath">部分视图的虚拟路径</param>
     protected PartialView( string virtualPath )
     {
       VirtualPath = virtualPath;

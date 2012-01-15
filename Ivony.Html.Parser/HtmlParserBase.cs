@@ -149,6 +149,10 @@ namespace Ivony.Html.Parser
         if ( special != null )
           ProcessSpecial( special );
 
+        var doctype = fragment as HtmlDoctypeDeclaration;
+        if ( doctype != null )
+          ProcessDoctypeDeclaration( doctype );
+
       }
     }
 
@@ -383,6 +387,21 @@ namespace Ivony.Html.Parser
     {
       return Provider.AddSpecial( CurrentContainer, html );
     }
+
+
+    /// <summary>
+    /// 处理文档类型声明
+    /// </summary>
+    /// <param name="doctype">文档类型声明</param>
+    /// <returns></returns>
+    protected virtual IHtmlSpecial ProcessDoctypeDeclaration( HtmlDoctypeDeclaration doctype )
+    {
+
+      return CreateSpecial( doctype.Html );
+
+    }
+
+
 
   }
 }

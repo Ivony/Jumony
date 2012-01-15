@@ -24,8 +24,9 @@ namespace Ivony.Html.Parser
 
     public static readonly string commentPattern = @"<!--(?<commentText>(.|\n)*?)-->";
 
+    public static readonly string doctypeDeclarationPattern = @"(<!(?!--)(?<specialText>(.|\n)*?)(?<!--)>)";
 
-    public static readonly string specialTagPattern = @"(<!(?!--)(?<specialText>(.|\n)*?)(?<!--)>)|(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
+    public static readonly string specialTagPattern = @"(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
 
   }
 }

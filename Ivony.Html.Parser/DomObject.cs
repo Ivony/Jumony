@@ -56,9 +56,9 @@ namespace Ivony.Html.Parser
     }
 
 
-    public Hashtable _data = Hashtable.Synchronized( new Hashtable() );
+    private Hashtable _data = Hashtable.Synchronized( new Hashtable() );
 
-    public IDictionary Data
+    IDictionary IDataContainer.Data
     {
       get { return _data; }
     }

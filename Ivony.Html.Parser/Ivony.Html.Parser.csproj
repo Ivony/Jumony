@@ -59,6 +59,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentModels\HtmlDoctypeDeclaration.cs" />
     <Compile Include="ContentModels\HtmlAttributeSetting.cs" />
     <Compile Include="ContentModels\HtmlCommentContent.cs" />
     <Compile Include="ContentModels\HtmlEndTag.cs" />

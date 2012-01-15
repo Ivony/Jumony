@@ -95,7 +95,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 存放子节点的容器
     /// </summary>
-    protected DomNodeCollection NodeCollection
+    public DomNodeCollection NodeCollection
     {
       get { return _nodeCollection; }
     }

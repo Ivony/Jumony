@@ -224,7 +224,7 @@ namespace Ivony.Html
         if ( element.Name.EqualsIgnoreCase( "br" ) )
           return Environment.NewLine;
 
-        else if ( HtmlSpecification.NonTextElement.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( HtmlSpecification.nonTextElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
           return null;
       }
 

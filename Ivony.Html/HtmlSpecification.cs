@@ -53,7 +53,7 @@ namespace Ivony.Html
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
 
     /// <summary>所有非显示文本元素</summary>
-    public static readonly ICollection<string> NonTextElement = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
+    public static readonly ICollection<string> nonTextElements = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
 
 
 

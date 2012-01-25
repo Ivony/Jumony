@@ -7,55 +7,42 @@ using System.ComponentModel;
 using Ivony.Html;
 using Ivony.Fluent;
 using mshtml;
+using System.Runtime.Serialization;
 
 namespace HtmlTranslator
 {
-  public class TranslationTerm : INotifyPropertyChanged
+  [DataContract]
+  public class TranslationTerm
   {
 
 
-    private IHtmlTextNode _textNode;
-
     public TranslationTerm( IHtmlTextNode textNode )
     {
-      _textNode = textNode;
-
-      _sourceTerm = _textNode.HtmlText;
-      _translatedTerm = _sourceTerm;
+      TextNode = textNode;
+      SourceTerm = textNode.HtmlText;
+      TranslatedTerm = textNode.HtmlText;
     }
 
-    private string _sourceTerm;
+
+    internal IHtmlTextNode TextNode
+    {
+      get;
+      set;
+    }
+
+    [DataMember]
     public string SourceTerm
     {
-      get { return _sourceTerm; }
-      set
-      {
-        _sourceTerm = value;
-        OnPropertyChanged( "SourceTerm" );
-      }
+      get;
+      private set;
     }
 
-
-    private string _translatedTerm;
+    [DataMember]
     public string TranslatedTerm
     {
-      get { return _translatedTerm; }
-      set
-      {
-        _translatedTerm = value;
-        OnPropertyChanged( "TranslatedTerm" );
-
-        _textNode.RawObject.CastTo<IHTMLDOMTextNode>().data = value;
-      }
+      get;
+      set;
     }
 
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged( string propertyName )
-    {
-      if ( PropertyChanged != null )
-        PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
-    }
   }
 }

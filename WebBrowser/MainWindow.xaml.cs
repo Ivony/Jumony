@@ -10,11 +10,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Ivony.Html;
 using Ivony.Html.MSHTMLAdapter;
 using System.Collections.ObjectModel;
 using Ivony.Fluent;
+using Microsoft.Win32;
+using System.ComponentModel;
+using Ivony.Html.Parser;
 
 namespace HtmlTranslator
 {
@@ -30,25 +32,61 @@ namespace HtmlTranslator
       DataView.ItemsSource = Data;
     }
 
-    private void Go( object sender, RoutedEventArgs e )
-    {
-      var url = new Uri( Address.Text );
-      WebBrowser.Navigate( url );
-    }
 
     private readonly ObservableCollection<TranslationTerm> Data = new ObservableCollection<TranslationTerm>();
 
 
-    private void OnLoadCompleted( object sender, NavigationEventArgs e )
+    private OpenFileDialog openFile = InitializeOpenFileDialog();
+
+    private static OpenFileDialog InitializeOpenFileDialog()
     {
-      var document = Ivony.Html.MSHTMLAdapter.ConvertExtensions.AsDocument( WebBrowser.Document );
+      var dialog = new OpenFileDialog();
 
-      var textNodes = document.DescendantNodes().OfType<IHtmlTextNode>().Where( t => !t.IsWhiteSpace() && t.InnerText() != null );
+      dialog.InitialDirectory = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
+      dialog.Filter = "HTML 文件|*.htm;*.html";
+      dialog.Multiselect = false;
 
-      Data.Clear();
+      return dialog;
+    }
 
-      textNodes.ForAll( text => Data.Add( new TranslationTerm( text ) ) );
+    private void OnChooseFile( object sender, RoutedEventArgs e )
+    {
 
+      if ( openFile.ShowDialog() ?? false )
+      {
+
+        BrowseFileButton.IsEnabled = false;
+
+
+        Open( openFile.FileName );
+
+
+        BrowseFileButton.IsEnabled = true;
+
+      }
+
+    }
+
+
+    private TranslateTask Task
+    {
+      get;
+      set;
+    }
+
+    private void Open( string filePath )
+    {
+
+      Task = TranslateTask.LoadTranslateTask( filePath );
+      WebBrowser.Navigate( Task.Translate() );
+      DataView.ItemsSource = Task.Terms;
+
+    }
+
+    private void OnSave( object sender, RoutedEventArgs e )
+    {
+
+      WebBrowser.Navigate( Task.Translate() );
     }
   }
 }

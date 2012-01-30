@@ -13,6 +13,7 @@
       <RowDefinition Height="200" />
     </Grid.RowDefinitions>
     <WebBrowser Grid.Row="1" Margin="12,12,12,0" Name="WebBrowser" />
+    <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" />
     <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" DataContext="{Binding}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsTextSearchEnabled="False">
       <DataGrid.Columns>
         <DataGridTextColumn Header="源文本" Binding="{Binding Path=SourceTerm}" CanUserSort="False" IsReadOnly="True" />

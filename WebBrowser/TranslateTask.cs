@@ -96,11 +96,7 @@ namespace HtmlTranslator
       var terms = ExtractTerms( document );
 
 
-      using ( var stream = File.Create( path ) )
-      {
-        var serializer = new DataContractJsonSerializer( typeof( TranslationTerm[] ) );
-        serializer.WriteObject( stream, terms );
-      }
+      Save( path, terms );
 
       return terms;
     }
@@ -122,8 +118,36 @@ namespace HtmlTranslator
       private set;
     }
 
+
+    public void Save()
+    {
+      var uri = document.DocumentUri;
+      if ( !uri.IsFile )
+        throw new InvalidOperationException();
+
+      var path = uri.LocalPath + ".translation";
+
+      Save( path, Terms );
+    }
+
+
+    private static void Save( string path, TranslationTerm[] terms )
+    {
+      using ( var stream = File.Create( path ) )
+      {
+        var serializer = new DataContractJsonSerializer( typeof( TranslationTerm[] ) );
+        serializer.WriteObject( stream, terms );
+      }
+    }
+
+
+
     public string Translate()
     {
+
+      Save();
+
+
       var uri = document.DocumentUri;
       if ( !uri.IsFile )
         throw new InvalidOperationException();

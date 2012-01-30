@@ -8,6 +8,7 @@ using Ivony.Html;
 using Ivony.Fluent;
 using mshtml;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace HtmlTranslator
 {
@@ -16,11 +17,22 @@ namespace HtmlTranslator
   {
 
 
+    private static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
     public TranslationTerm( IHtmlTextNode textNode )
     {
       TextNode = textNode;
-      SourceTerm = textNode.HtmlText;
-      TranslatedTerm = textNode.HtmlText;
+      if ( !textNode.Ancestors().Any( e => HtmlSpecification.preformatedElements.Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
+      {
+        SourceTerm = whitespaceRegex.Replace( textNode.HtmlText, " " );
+        TranslatedTerm = whitespaceRegex.Replace( textNode.HtmlText, " " );
+      }
+      else
+      {
+        SourceTerm = textNode.HtmlText;
+        TranslatedTerm = textNode.HtmlText;
+      }
     }
 
 

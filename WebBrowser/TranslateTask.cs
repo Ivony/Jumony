@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.Parser;
 using System.Runtime.Serialization.Json;
@@ -168,6 +169,12 @@ namespace HtmlTranslator
     private static bool IsTranslatable( IHtmlTextNode textNode )
     {
       if ( textNode.IsWhiteSpace() )
+        return false;
+      
+      if ( textNode is IHtmlSpecial )
+        return false;
+
+      if ( textNode.Ancestors().Any( e => e.Name.EqualsIgnoreCase( "partial" ) ) )
         return false;
 
       if ( textNode.Parent() != null && HtmlSpecification.nonTextElements.Contains( textNode.Parent().Name, StringComparer.OrdinalIgnoreCase ) )

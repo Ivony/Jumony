@@ -153,7 +153,7 @@ namespace HtmlTranslator
       if ( !uri.IsFile )
         throw new InvalidOperationException();
 
-      var path = Path.ChangeExtension( uri.LocalPath, "translated" ) + ".html";
+      var path = uri.LocalPath + ".translated";
 
       using ( var writer = File.CreateText( path ) )
       {
@@ -170,7 +170,7 @@ namespace HtmlTranslator
     {
       if ( textNode.IsWhiteSpace() )
         return false;
-      
+
       if ( textNode is IHtmlSpecial )
         return false;
 

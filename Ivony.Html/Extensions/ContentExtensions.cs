@@ -169,7 +169,7 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( ( HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute ) ) && !attribute.AttributeValue.Contains( '"' ) )
+          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
             builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
             builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
@@ -438,4 +438,19 @@ namespace Ivony.Html
 
 
   }
+
+
+  /// <summary>
+  /// 文本格式化选项
+  /// </summary>
+  public enum TextFormatOption
+  {
+    /// <summary>不进行任何格式化</summary>
+    None,
+    /// <summary>将换行转换为 &lt;br /&gt</summary>
+    BreakLine,
+    /// <summary>将换行转换为 &lt;br /&gt，并且保持空白字符不被合并。</summary>
+    BreakLineAndKeepWhiteSpace
+  }
+
 }

@@ -1,0 +1,29 @@
+﻿<Window x:Class="HtmlTranslator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:win32="clr-namespace:Microsoft.Win32;assembly=PresentationFramework"
+        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="400" d:DesignWidth="800">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="35" />
+      <RowDefinition Height="176*" />
+      <RowDefinition Height="200" />
+    </Grid.RowDefinitions>
+    <WebBrowser Grid.Row="1" Margin="12,12,12,0" Name="WebBrowser" />
+    <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" />
+    <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" DataContext="{Binding}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsTextSearchEnabled="False">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="源文本" Binding="{Binding Path=SourceTerm}" CanUserSort="False" IsReadOnly="True" />
+        <DataGridTextColumn Header="翻译后" Binding="{Binding Path=TranslatedTerm}" CanUserSort="False" />
+      </DataGrid.Columns>
+    </DataGrid>
+    <TextBox Height="23" Margin="55,12,380,0" Name="FilePathTextBox" VerticalAlignment="Top" />
+    <Button Content="浏览" Height="23" HorizontalAlignment="Right" Margin="0,12,299,0" Name="BrowseFileButton" VerticalAlignment="Top" Width="75" Click="OnChooseFile" />
+    <Label Content="文件:" Height="28" HorizontalAlignment="Left" Margin="12,7,0,0" Name="label1" VerticalAlignment="Top" />
+    <Button Content="保存" Height="23" Margin="0,12,218,0" Name="SaveButton" VerticalAlignment="Top" Click="OnSave" HorizontalAlignment="Right" Width="75" />
+  </Grid>
+</Window>
+

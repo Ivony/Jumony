@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4C76EF80-FBA8-4454-A2A6-B75E1D709553}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HtmlTranslator</RootNamespace>
+    <AssemblyName>HtmlTranslator</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\..\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="TranslateTask.cs" />
+    <Compile Include="TranslationTerm.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
+      <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
+      <Name>Ivony.Html.Binding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Dynamic\Ivony.Html.Dynamic.csproj">
+      <Project>{66D674F8-5C60-4A9D-9BB5-2E5C86625F90}</Project>
+      <Name>Ivony.Html.Dynamic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
+      <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>
+      <Name>Ivony.Html.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.JQuery\Ivony.Html.JQuery.csproj">
+      <Project>{12E4C636-F4CD-4E60-A13D-439C818AC279}</Project>
+      <Name>Ivony.Html.JQuery</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
+      <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
+      <Name>Ivony.Html.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Styles\Ivony.Html.Styles.csproj">
+      <Project>{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}</Project>
+      <Name>Ivony.Html.Styles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Templates\Ivony.Html.Templates.csproj">
+      <Project>{1B363540-4F50-48CC-93C8-19EB85024AC2}</Project>
+      <Name>Ivony.Html.Templates</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
+      <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
+      <Name>Ivony.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MSHTML.Adapter\MSHTML.Adapter.csproj">
+      <Project>{150787A5-84FE-49EB-ACAD-B04838DF6B25}</Project>
+      <Name>MSHTML.Adapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

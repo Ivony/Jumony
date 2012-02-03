@@ -174,7 +174,7 @@ namespace HtmlTranslator
       if ( textNode is IHtmlSpecial )
         return false;
 
-      if ( textNode.Ancestors().Any( e => e.Name.EqualsIgnoreCase( "partial" ) ) )
+      if ( textNode.Ancestors().Any( e => e.Name.EqualsIgnoreCase( "partial" ) || e.Name.EqualsIgnoreCase( "head" ) ) )
         return false;
 
       if ( textNode.Parent() != null && HtmlSpecification.nonTextElements.Contains( textNode.Parent().Name, StringComparer.OrdinalIgnoreCase ) )

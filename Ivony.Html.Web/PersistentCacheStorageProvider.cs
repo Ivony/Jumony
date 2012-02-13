@@ -104,12 +104,20 @@ namespace Ivony.Html.Web
       if ( stream == null )
         return null;
 
-      var formatter = new BinaryFormatter();
-      var cacheItem = formatter.Deserialize( stream ) as CacheItem;
-      if ( cacheItem == null )
-        return null;
+      try
+      {
+        var formatter = new BinaryFormatter();
+        var cacheItem = formatter.Deserialize( stream ) as CacheItem;
+        if ( cacheItem == null )
+          return null;
+        
+        return cacheItem;
 
-      return cacheItem;
+      }
+      catch
+      {
+        return null;
+      }
     }
 
 

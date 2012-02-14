@@ -47,6 +47,14 @@ namespace Ivony.Html
       if ( uri == null )
         throw new ArgumentNullException( "uri" );
 
+      if ( uri.IsFile )
+      {
+        using ( var stream = File.OpenRead( uri.LocalPath ) )
+        {
+          return LoadDocument( parser, stream, uri );
+        }
+      }
+
 
       var request = WebRequest.Create( uri );
       var response = request.GetResponse();
@@ -72,14 +80,17 @@ namespace Ivony.Html
 
       Encoding encoding = null;
 
-      var contentType = response.Headers[HttpResponseHeader.ContentType];
-      if ( contentType != null )
+      if ( response.Headers.HasKeys() )
       {
-        foreach ( var value in contentType.Split( ';' ) )
+        var contentType = response.Headers[HttpResponseHeader.ContentType];
+        if ( contentType != null )
         {
-          var _value = value.Trim();
-          if ( _value.StartsWith( "charset=", StringComparison.OrdinalIgnoreCase ) )
-            encoding = Encoding.GetEncoding( _value.Substring( 8 ) );
+          foreach ( var value in contentType.Split( ';' ) )
+          {
+            var _value = value.Trim();
+            if ( _value.StartsWith( "charset=", StringComparison.OrdinalIgnoreCase ) )
+              encoding = Encoding.GetEncoding( _value.Substring( 8 ) );
+          }
         }
       }
 

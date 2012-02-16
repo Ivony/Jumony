@@ -104,33 +104,9 @@
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
-      <Project>{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}</Project>
-      <Name>Ivony.Html.Binding</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Dynamic\Ivony.Html.Dynamic.csproj">
-      <Project>{66D674F8-5C60-4A9D-9BB5-2E5C86625F90}</Project>
-      <Name>Ivony.Html.Dynamic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
-      <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>
-      <Name>Ivony.Html.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.JQuery\Ivony.Html.JQuery.csproj">
-      <Project>{12E4C636-F4CD-4E60-A13D-439C818AC279}</Project>
-      <Name>Ivony.Html.JQuery</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
       <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
       <Name>Ivony.Html.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Styles\Ivony.Html.Styles.csproj">
-      <Project>{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}</Project>
-      <Name>Ivony.Html.Styles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Templates\Ivony.Html.Templates.csproj">
-      <Project>{1B363540-4F50-48CC-93C8-19EB85024AC2}</Project>
-      <Name>Ivony.Html.Templates</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>

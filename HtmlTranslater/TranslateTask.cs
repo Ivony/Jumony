@@ -153,7 +153,7 @@ namespace HtmlTranslator
       if ( !uri.IsFile )
         throw new InvalidOperationException();
 
-      var path = uri.LocalPath + ".translated";
+      var path = Path.ChangeExtension( uri.LocalPath, ".translated" ) + ".html";
 
       using ( var writer = File.CreateText( path ) )
       {

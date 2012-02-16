@@ -81,12 +81,20 @@ namespace HtmlTranslator
       WebBrowser.Navigate( Task.Translate() );
       DataView.ItemsSource = Task.Terms;
 
+      TranslationProgress.Maximum = Task.Terms.Length;
+      FilenameTextBlock.Text = filePath;
+
+      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm );
+
+
     }
 
     private void OnSave( object sender, RoutedEventArgs e )
     {
 
       WebBrowser.Navigate( Task.Translate() );
+
+      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm );
     }
   }
 }

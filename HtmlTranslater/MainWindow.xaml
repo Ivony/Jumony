@@ -20,10 +20,10 @@
         <DataGridTextColumn Header="翻译后" Binding="{Binding Path=TranslatedTerm}" CanUserSort="False" />
       </DataGrid.Columns>
     </DataGrid>
-    <TextBox Height="23" Margin="55,12,380,0" Name="FilePathTextBox" VerticalAlignment="Top" />
-    <Button Content="浏览" Height="23" HorizontalAlignment="Right" Margin="0,12,299,0" Name="BrowseFileButton" VerticalAlignment="Top" Width="75" Click="OnChooseFile" />
-    <Label Content="文件:" Height="28" HorizontalAlignment="Left" Margin="12,7,0,0" Name="label1" VerticalAlignment="Top" />
-    <Button Content="保存" Height="23" Margin="0,12,218,0" Name="SaveButton" VerticalAlignment="Top" Click="OnSave" HorizontalAlignment="Right" Width="75" />
+    <Button Content="浏览" Height="23" HorizontalAlignment="Right" Margin="0,12,93,0" Name="BrowseFileButton" VerticalAlignment="Top" Width="75" Click="OnChooseFile" />
+    <Button Content="保存" Height="23" Margin="0,12,12,0" Name="SaveButton" VerticalAlignment="Top" Click="OnSave" HorizontalAlignment="Right" Width="75" />
+    <ProgressBar Height="23" Margin="12,12,174,0" Name="TranslationProgress" VerticalAlignment="Top" />
+    <TextBlock Height="23" Margin="12,12,174,0" Name="FilenameTextBlock" Text="" VerticalAlignment="Center" Padding="5,0,3,0" />
   </Grid>
 </Window>
 

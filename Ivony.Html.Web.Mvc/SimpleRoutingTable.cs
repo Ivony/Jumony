@@ -551,7 +551,7 @@ namespace Ivony.Html.Web.Mvc
 
       bool isAppendedQueryStartSymbol = false;
 
-      var unallocatedKeys = routeValues.Keys.Except( RouteKeys );
+      var unallocatedKeys = routeValues.Keys.Except( RouteKeys, StringComparer.OrdinalIgnoreCase );
 
 
       foreach ( var key in unallocatedKeys )

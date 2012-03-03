@@ -10,11 +10,11 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 定义和协助应用 HTTP 客户端缓存策略
   /// </summary>
-  public class ClientCachePolicy
+  public sealed class ClientCachePolicy
   {
 
 
-    internal ClientCachePolicy( HttpContextBase context )
+    internal ClientCachePolicy()
     {
     }
 

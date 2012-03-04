@@ -179,11 +179,8 @@ namespace Ivony.Html.Web
 
 
       CachePolicy = policy;
-      var cacheItem =  policy.GetCacheItem();
-      if ( cacheItem == null )
-        return null;
 
-      return cacheItem.CachedResponse;
+      return CachePolicy.ResolveCache();
     }
 
 
@@ -198,7 +195,7 @@ namespace Ivony.Html.Web
         return;
 
 
-      Cache.InsertCacheItem( CachePolicy.CreateCacheItem( cachedResponse ) );
+      CachePolicy.UpdateCache( cachedResponse );
 
     }
 

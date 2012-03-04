@@ -70,10 +70,10 @@ namespace Ivony.Html.Web.Mvc
 
 
       //输出缓存
-      var cacheItem = policy.GetCacheItem();
+      var response = policy.ResolveCache();
 
-      if ( cacheItem != null )
-        return cacheItem.CachedResponse.ToCachedResult();
+      if ( response != null )
+        return response.ToCachedResult();
 
 
       return null;
@@ -205,7 +205,7 @@ namespace Ivony.Html.Web.Mvc
     protected virtual void UpdateCache( ICachedResponse cachedResponse, ControllerContext context, CachePolicy policy )
     {
 
-      policy.InsertToCache( cachedResponse );
+      policy.UpdateCache( cachedResponse );
     }
 
 

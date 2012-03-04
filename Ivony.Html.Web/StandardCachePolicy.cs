@@ -40,6 +40,8 @@ namespace Ivony.Html.Web
     /// <param name="provider">缓存策略提供程序</param>
     /// <param name="duration">缓存持续时间</param>
     /// <param name="enableClientCache">是否启用客户端缓存</param>
+    /// <param name="localcacheVirtualPath">静态文件缓存虚拟路径</param>
+    /// <param name="enableMemoryCache">是否启用内存缓存</param>
     public StandardCachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider, TimeSpan duration, bool enableClientCache, string localcacheVirtualPath, bool enableMemoryCache )
       : base( context, token, provider )
     {
@@ -108,7 +110,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 尝试输出客户端缓存
     /// </summary>
-    /// <param name="context">当前请求上下文</param>
     /// <returns>是否成功</returns>
     public virtual bool ResolveClientCache()
     {
@@ -126,7 +127,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 应用客户端缓存策略
     /// </summary>
-    /// <param name="clientCachePolicy">客户端缓存策略</param>
     public virtual void ApplyClientCachePolicy()
     {
 
@@ -152,7 +152,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="cachedResponse"></param>
     /// <returns></returns>
-    public override CacheItem CreateCacheItem( ICachedResponse cachedResponse )
+    public CacheItem CreateCacheItem( ICachedResponse cachedResponse )
     {
       return new CacheItem( Provider, CacheToken, cachedResponse, Duration );
     }
@@ -201,7 +201,7 @@ namespace Ivony.Html.Web
     /// 获取 CacheItem
     /// </summary>
     /// <returns></returns>
-    public override CacheItem GetCacheItem()
+    public  CacheItem GetCacheItem()
     {
 
       if ( _cacheItem == null )
@@ -215,12 +215,24 @@ namespace Ivony.Html.Web
 
     }
 
+
+
+    public override ICachedResponse ResolveCache()
+    {
+      var cacheItem = GetCacheItem();
+      if ( cacheItem == null )
+        return null;
+
+      return cacheItem.CachedResponse;
+    }
+
+
     /// <summary>
     /// 插入缓存
     /// </summary>
     /// <param name="cachedResponse"></param>
     /// <returns></returns>
-    public override CacheItem InsertToCache( ICachedResponse cachedResponse )
+    public override CacheItem UpdateCache( ICachedResponse cachedResponse )
     {
 
       var cacheItem = CreateCacheItem( cachedResponse );

@@ -6,13 +6,17 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public class ClientCachePolicyModule : IHttpModule
+
+  /// <summary>
+  /// 客户端缓存策略支持模块
+  /// </summary>
+  public sealed class ClientCachePolicyModule : IHttpModule
   {
-    public void Dispose()
+    void IHttpModule.Dispose()
     {
     }
 
-    public void Init( HttpApplication context )
+    void IHttpModule.Init( HttpApplication context )
     {
 
       context.BeginRequest += OnBeginRequest;
@@ -20,13 +24,13 @@ namespace Ivony.Html.Web
 
     }
 
-    public void OnBeginRequest( object sender, EventArgs e )
+    private void OnBeginRequest( object sender, EventArgs e )
     {
       var context = HttpContext.Current;
       context.Items[ClientCachePolicy.Token] = new ClientCachePolicy();
     }
 
-    public void OnPreSendRequestHeaders( object sender, EventArgs e )
+    private void OnPreSendRequestHeaders( object sender, EventArgs e )
     {
       var context = HttpContext.Current;
       var policy = context.Items[ClientCachePolicy.Token] as ClientCachePolicy;

@@ -49,7 +49,9 @@ namespace Ivony.Html.Web
   {
 
 
-
+    /// <summary>
+    /// 获取默认缓存策略提供程序的实例
+    /// </summary>
     public static DefaultCachePolicyProvider Instance
     {
       get;

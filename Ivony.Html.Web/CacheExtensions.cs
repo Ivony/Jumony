@@ -10,6 +10,10 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Web
 {
+  
+  /// <summary>
+  /// 包含 WebCache 一些扩展方法
+  /// </summary>
   public static class CacheExtensions
   {
 

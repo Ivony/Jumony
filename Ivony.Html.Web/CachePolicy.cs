@@ -15,8 +15,16 @@ namespace Ivony.Html.Web
   public interface IClientCacheablePolicy
   {
 
+    /// <summary>
+    /// 尝试输出客户端缓存
+    /// </summary>
+    /// <returns></returns>
     bool ResolveClientCache();
 
+
+    /// <summary>
+    /// 尝试应用客户端缓存策略
+    /// </summary>
     void ApplyClientCachePolicy();
 
   }
@@ -77,34 +85,27 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>
-    /// 创建缓存项
-    /// </summary>
-    /// <returns></returns>
-    public abstract CacheItem CreateCacheItem( ICachedResponse cachedResponse );
-
-
 
     private CacheItem _cacheItem;
 
-    /// <summary>
-    /// 获取缓存项
-    /// </summary>
-    /// <returns></returns>
-    public abstract CacheItem GetCacheItem();
+
 
 
     /// <summary>
-    /// 创建缓存项并插入缓存
+    /// 尝试缓存输出
     /// </summary>
-    /// <param name="cachedResponse"></param>
     /// <returns></returns>
-    public virtual CacheItem InsertToCache( ICachedResponse cachedResponse )
-    {
-      var cacheItem = CreateCacheItem( cachedResponse );
-      HttpContext.Cache.InsertCacheItem( cacheItem );
-      return cacheItem;
-    }
+    public abstract ICachedResponse ResolveCache();
+
+
+    /// <summary>
+    /// 刷新缓存
+    /// </summary>
+    /// <param name="cachedResponse">可被缓存的响应</param>
+    /// <returns>缓存项</returns>
+    public abstract CacheItem UpdateCache( ICachedResponse cachedResponse );
   }
+
+
 
 }

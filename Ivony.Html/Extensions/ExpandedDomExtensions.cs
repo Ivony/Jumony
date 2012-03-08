@@ -152,7 +152,7 @@ namespace Ivony.Html.ExpandedDomAPI
 
 
     /// <summary>
-    /// 在自己后面添加一个注释
+    /// 在自己前面添加一个注释
     /// </summary>
     /// <param name="node">要在其前面添加注释的节点</param>
     /// <param name="comment">要添加 HTML 注释内容</param>

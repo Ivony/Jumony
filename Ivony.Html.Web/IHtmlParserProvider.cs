@@ -69,13 +69,18 @@ namespace Ivony.Html.Web
   }
 
 
-
+  /// <summary>
+  /// 默认的 HTML 解析器提供程序
+  /// </summary>
   public class DefaultParserProvider : IHtmlParserProvider
   {
 
     
 
-
+    /// <summary>
+    /// 获取默认的解析器结果
+    /// </summary>
+    /// <returns>包含默认解析器的结果</returns>
     public HtmlParserResult GetParser()
     {
       return new HtmlParserResult()

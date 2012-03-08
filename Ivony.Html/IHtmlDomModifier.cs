@@ -87,6 +87,9 @@ namespace Ivony.Html
   /// </summary>
   public interface INotifyDomChanged
   {
+    /// <summary>
+    /// 当 HTML DOM 结构发生改变时引发此事件
+    /// </summary>
     event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
   }
 

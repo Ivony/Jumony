@@ -42,7 +42,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取容器所有子元素
+    /// 获取所有子元素
     /// </summary>
     /// <param name="container">要获取子元素的容器</param>
     /// <returns>容器的所有子元素</returns>
@@ -56,7 +56,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取容器符合条件的子元素
+    /// 获取符合条件的子元素
     /// </summary>
     /// <param name="container">要获取子元素的容器</param>
     /// <param name="selector">用来筛选子元素的元素选择器</param>
@@ -74,7 +74,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取节点的所有父代元素
+    /// 获取所有父代元素
     /// </summary>
     /// <param name="node">要获取父代元素集合的节点</param>
     /// <returns>节点的所有父代元素集合</returns>
@@ -100,7 +100,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取节点符合条件的父代元素
+    /// 获取符合条件的父代元素
     /// </summary>
     /// <param name="node">要获取父代元素集合的节点</param>
     /// <param name="selector">用来筛选父代元素的元素选择器</param>
@@ -111,7 +111,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取元素所有的父代元素以及元素自身
+    /// 获取所有的父代元素以及元素自身
     /// </summary>
     /// <param name="element">要获取父代元素及自身的元素</param>
     /// <returns>元素的所有父代元素和自身的集合</returns>
@@ -144,7 +144,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取所有的子代元素
+    /// 获取符合条件的子代元素
     /// </summary>
     /// <param name="container">要获取子代元素的容器对象</param>
     /// <param name="selector">用于筛选子代元素的选择器</param>
@@ -208,7 +208,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 获取所有的兄弟（同级）元素节点
+    /// 获取符合条件的兄弟（同级）元素节点
     /// </summary>
     /// <param name="node">要获取兄弟（同级）元素节点的节点</param>
     /// <param name="selector">用于筛选元素的元素选择器</param>
@@ -307,10 +307,10 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 从当前容器按照CSS3选择器搜索符合要求的元素
+    /// 从当前容器按照 CSS 选择器搜索符合要求的元素
     /// </summary>
     /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expression">CSS选择器</param>
+    /// <param name="expression">CSS 选择器</param>
     /// <returns>搜索到的符合要求的元素</returns>
     public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression )
     {
@@ -322,7 +322,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 从当前容器按照CSS3选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
+    /// 从当前容器按照 CSS 选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
     /// </summary>
     /// <param name="container">要搜索子代元素的容器</param>
     /// <param name="expression">CSS选择器</param>

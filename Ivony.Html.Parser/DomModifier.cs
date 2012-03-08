@@ -6,9 +6,19 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
 {
+
+
+  /// <summary>
+  /// DOM 结构修改器
+  /// </summary>
   public class DomModifier : IHtmlDomModifier, INotifyDomChanged
   {
 
+    /// <summary>
+    /// 修改文档的 URI
+    /// </summary>
+    /// <param name="document">要修改的文档</param>
+    /// <param name="uri">新的文档 URI</param>
     public void ResolveUri( IHtmlDocument document, Uri uri )
     {
 
@@ -98,6 +108,13 @@ namespace Ivony.Html.Parser
       domAttribute.Remove();
     }
 
+
+
+    internal void OnFragmentInto( DomFragment fragment, IHtmlContainer targetContainer, DomNode node )
+    {
+      OnDomChanged( this, new HtmlDomChangedEventArgs( node, fragment, HtmlDomChangedAction.Remove ) );
+      OnDomChanged( this, new HtmlDomChangedEventArgs( node, targetContainer, HtmlDomChangedAction.Add ) );
+    }
 
     protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {

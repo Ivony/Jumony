@@ -383,7 +383,6 @@ namespace Ivony.Data
   {
 
     private IQueryable<T> _queryable;
-    private int _pageSize;
 
     public QueryPagingSourceWrapper( IQueryable<T> queryable )
     {

@@ -15,19 +15,19 @@ namespace Ivony.Html.Indexing
   {
 
 
-    private IHtmlDocument _document;
-
     /// <summary>
     /// 创建元素名称的索引
     /// </summary>
-    /// <param name="document"></param>
+    /// <param name="document">要建立索引的文档</param>
     public ElementNameIndex( IHtmlDocument document ) : base( document ) { }
 
 
     private IDictionary<string,List<IHtmlElement>> data;
 
 
-
+    /// <summary>
+    /// 初始化索引数据
+    /// </summary>
     protected override void InitializeData()
     {
       data = new Dictionary<string, List<IHtmlElement>>();
@@ -35,7 +35,10 @@ namespace Ivony.Html.Indexing
 
 
 
-
+    /// <summary>
+    /// 向索引中添加一个元素
+    /// </summary>
+    /// <param name="element">要添加的元素</param>
     protected override void AddElement( IHtmlElement element )
     {
       var name = element.Name;
@@ -44,6 +47,11 @@ namespace Ivony.Html.Indexing
     }
 
 
+    /// <summary>
+    /// 向索引中添加一个元素
+    /// </summary>
+    /// <param name="name">元素名</param>
+    /// <param name="element">元素对象</param>
     private void AddElement( string name, IHtmlElement element )
     {
       var set = data[name] as List<IHtmlElement>;
@@ -54,7 +62,10 @@ namespace Ivony.Html.Indexing
     }
 
 
-
+    /// <summary>
+    /// 从索引中移除一个元素
+    /// </summary>
+    /// <param name="element">要移除的元素</param>
     protected override void RemoveElement( IHtmlElement element )
     {
       var set = data[element.Name] as List<IHtmlElement>;

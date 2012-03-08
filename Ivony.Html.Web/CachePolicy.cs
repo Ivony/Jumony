@@ -86,11 +86,6 @@ namespace Ivony.Html.Web
 
 
 
-    private CacheItem _cacheItem;
-
-
-
-
     /// <summary>
     /// 尝试缓存输出
     /// </summary>

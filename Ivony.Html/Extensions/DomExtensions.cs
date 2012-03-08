@@ -78,7 +78,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试为容器添加一个元素
+    /// 添加一个元素
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="elementName">元素名</param>
@@ -101,7 +101,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 尝试为容器添加一个元素
+    /// 添加一个元素
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="index">添加的位置</param>
@@ -127,9 +127,9 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试为容器添加一个文本节点
+    /// 添加一个文本节点
     /// </summary>
-    /// <param name="container">要添加元素的容器</param>
+    /// <param name="container">要添加文本节点的容器</param>
     /// <param name="htmlText">HTML 文本</param>
     /// <returns>创建并添加好的文本节点</returns>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
@@ -149,9 +149,9 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 尝试为容器添加一个文本节点
+    /// 添加一个文本节点
     /// </summary>
-    /// <param name="container">要添加元素的容器</param>
+    /// <param name="container">要添加文本节点的容器</param>
     /// <param name="index">添加的位置</param>
     /// <param name="htmlText">HTML 文本</param>
     /// <returns>创建并添加好的文本节点</returns>
@@ -174,9 +174,9 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试为容器添加一个注释节点
+    /// 添加一个注释节点
     /// </summary>
-    /// <param name="container">要添加元素的容器</param>
+    /// <param name="container">要添加注释节点的容器</param>
     /// <param name="comment">HTML 注释文本</param>
     /// <returns>创建并添加好的注释节点</returns>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
@@ -196,9 +196,9 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 尝试为容器添加一个注释节点
+    /// 添加一个注释节点
     /// </summary>
-    /// <param name="container">要添加元素的容器</param>
+    /// <param name="container">要添加注释节点的容器</param>
     /// <param name="index">添加的位置</param>
     /// <param name="comment">HTML 注释文本</param>
     /// <returns>创建并添加好的注释节点</returns>
@@ -222,7 +222,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试为容器添加一个文档碎片
+    /// 添加一个文档碎片
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="fragment">要添加的碎片</param>
@@ -245,7 +245,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 尝试为容器添加一个文档碎片
+    /// 添加一个文档碎片
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -267,7 +267,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试为容器添加一个文档碎片
+    /// 添加一个文档碎片
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="html">要分析成碎片的 HTML 文本</param>
@@ -288,7 +288,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 尝试为容器添加一个文档碎片
+    /// 添加一个文档碎片
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -356,11 +356,11 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加注释节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
-    /// <param name="comment">要创作副本的节点</param>
-    /// <returns>添加后的节点</returns>
+    /// <param name="comment">要创作副本的注释节点</param>
+    /// <returns>添加后的注释节点</returns>
     public static IHtmlComment AddCopy( this IHtmlContainer container, IHtmlComment comment )
     {
       if ( container == null )
@@ -377,12 +377,12 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加注释节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
-    /// <param name="comment">要创作副本的节点</param>
-    /// <returns>添加后的节点</returns>
+    /// <param name="comment">要创作副本的注释节点</param>
+    /// <returns>添加后的注释节点</returns>
     public static IHtmlComment AddCopy( this IHtmlContainer container, int index, IHtmlComment comment )
     {
       if ( container == null )
@@ -398,11 +398,11 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加元素的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
-    /// <param name="element">要创作副本的节点</param>
-    /// <returns>添加后的节点</returns>
+    /// <param name="element">要创作副本的元素</param>
+    /// <returns>添加后的元素</returns>
     public static IHtmlElement AddCopy( this IHtmlContainer container, IHtmlElement element )
     {
       if ( container == null )
@@ -419,12 +419,12 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加元素的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
-    /// <param name="element">要创作副本的节点</param>
-    /// <returns>添加后的节点</returns>
+    /// <param name="element">要创作副本的元素</param>
+    /// <returns>添加后的元素</returns>
     public static IHtmlElement AddCopy( this IHtmlContainer container, int index, IHtmlElement element )
     {
       if ( container == null )
@@ -742,10 +742,10 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 移除指定名称的属性
+    /// 移除指定的属性
     /// </summary>
     /// <param name="element">要移除属性的元素</param>
-    /// <param name="attributeName">要移除的属性</param>
+    /// <param name="attributeName">要移除的属性名称</param>
     public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
     {
       lock ( element.SyncRoot )
@@ -763,7 +763,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 尝试从 DOM 中移除指定节点
+    /// 尝试从 DOM 中移除这些节点
     /// </summary>
     /// <typeparam name="T">节点类型</typeparam>
     /// <param name="nodes">要移除的节点</param>

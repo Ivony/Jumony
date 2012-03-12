@@ -126,9 +126,10 @@ namespace Ivony.Html.Indexing
     /// <summary>
     /// 当属性被修改
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="action"></param>
-    /// <param name="attribute"></param>
+    /// <param name="sender">引发事件的对象</param>
+    /// <param name="action">引发事件的操作</param>
+    /// <param name="attribute">被修改的属性</param>
+    /// <param name="element">属性所属的元素</param>
     protected virtual void OnAttributeChanged( object sender, HtmlDomChangedAction action, IHtmlAttribute attribute, IHtmlElement element )
     {
 
@@ -153,9 +154,9 @@ namespace Ivony.Html.Indexing
     /// <summary>
     /// 当元素被修改
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="element"></param>
-    /// <param name="e"></param>
+    /// <param name="sender">引发事件的对象</param>
+    /// <param name="action">引发事件的操作</param>
+    /// <param name="element">属性所属的元素</param>
     protected virtual void OnElementChanged( object sender, HtmlDomChangedAction action, IHtmlElement element )
     {
       switch ( action )

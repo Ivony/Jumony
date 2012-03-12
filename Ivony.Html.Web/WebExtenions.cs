@@ -54,11 +54,15 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
-    public static ClientCachePolicy GetClientCachePolicy( this HttpContextBase context )
+    public static ClientCachePolicyBase GetClientCachePolicy( this HttpContextBase context )
     {
       var instance = context.Items[ClientCachePolicy.Token] as ClientCachePolicy;
 
-      return instance;
+      if ( instance == null )
+        return new ClientCachePolicyWrapper( context.Response.Cache );
+
+      else
+        return instance;
     }
 
   }

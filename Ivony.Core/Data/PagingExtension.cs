@@ -64,11 +64,11 @@ namespace Ivony.Data
 
 
     /// <summary>
-    /// 从IEnumerable&lt;T&gt;创建一个IPagingDataSource&lt;T&gt;。
+    /// 从 IEnumerable&lt;T&gt; 创建一个 IPagingDataSource&lt;T&gt;。
     /// </summary>
     /// <typeparam name="T">source 中的元素的类型</typeparam>
-    /// <param name="source"></param>
-    /// <returns></returns>
+    /// <param name="source">数据源</param>
+    /// <returns>分页数据源</returns>
     public static IPagingDataSource<T> ToPagingSource<T>( this IEnumerable<T> source )
     {
       if ( source == null )
@@ -90,7 +90,12 @@ namespace Ivony.Data
     }
 
 
-
+    /// <summary>
+    /// 从 IQueryable&lt;T&gt; 创建一个 IPagingDataSource&lt;T&gt;。
+    /// </summary>
+    /// <typeparam name="T">source中的元素类型</typeparam>
+    /// <param name="source">数据源</param>
+    /// <returns>分页数据源</returns>
     public static IPagingDataSource<T> ToPagingSource<T>( this IQueryable<T> source )
     {
       if ( source == null )
@@ -101,12 +106,27 @@ namespace Ivony.Data
 
 
 
-
+    /// <summary>
+    /// 对分页数据中的每一项进行指定映射操作，得到一个新的分页数据
+    /// </summary>
+    /// <typeparam name="TSource">源分页数据类型</typeparam>
+    /// <typeparam name="TResult">映射后的类型</typeparam>
+    /// <param name="source">数据源</param>
+    /// <param name="selector">映射函数</param>
+    /// <returns>执行映射操作后的分页数据</returns>
     public static IPagingData<TResult> Select<TSource, TResult>( this IPagingData<TSource> source, Func<TSource, TResult> selector )
     {
       return new PagingSelector<TSource, TResult>( source, selector );
     }
 
+    /// <summary>
+    /// 对分页数据中的每一页进行指定映射操作，得到一个新的分页数据
+    /// </summary>
+    /// <typeparam name="TSource">源分页数据类型</typeparam>
+    /// <typeparam name="TResult">映射后的类型</typeparam>
+    /// <param name="source">数据源</param>
+    /// <param name="pageSelector">映射函数</param>
+    /// <returns>执行映射操作后的分页数据</returns>
     public static IPagingData<TResult> PageSelect<TSource, TResult>( this IPagingData<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageSelector )
     {
       return new PagingSelector<TSource, TResult>( source, pageSelector );
@@ -114,11 +134,27 @@ namespace Ivony.Data
 
 
 
+    /// <summary>
+    /// 对分页数据源中的每一项进行指定映射操作，得到一个新的分页数据源
+    /// </summary>
+    /// <typeparam name="TSource">源分页数据类型</typeparam>
+    /// <typeparam name="TResult">映射后的类型</typeparam>
+    /// <param name="source">数据源</param>
+    /// <param name="selector">映射函数</param>
+    /// <returns>执行映射操作后的分页数据</returns>
     public static IPagingDataSource<TResult> Select<TSource, TResult>( this IPagingDataSource<TSource> source, Func<TSource, TResult> selector )
     {
       return new PagingSourceSelector<TSource, TResult>( source, selector );
     }
 
+    /// <summary>
+    /// 对分页数据源中的每一页进行指定映射操作，得到一个新的分页数据源
+    /// </summary>
+    /// <typeparam name="TSource">源分页数据类型</typeparam>
+    /// <typeparam name="TResult">映射后的类型</typeparam>
+    /// <param name="source">数据源</param>
+    /// <param name="pageSelector">映射函数</param>
+    /// <returns>执行映射操作后的分页数据</returns>
     public static IPagingDataSource<TResult> PageSelect<TSource, TResult>( this IPagingDataSource<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> pageSelector )
     {
       return new PagingSourceSelector<TSource, TResult>( source, pageSelector );
@@ -244,12 +280,21 @@ namespace Ivony.Data
   }
 
 
+  /// <summary>
+  /// 分页数据源包裹类型，用于将列表数据包裹为为分页数据源
+  /// </summary>
+  /// <typeparam name="T">数据项类型</typeparam>
   public class PagingSourceWrapper<T> : EnumerableWrapper<T>, IPagingDataSource<T>
   {
     private IList<T> _listSource;
 
     private IEnumerable<T> _enumerableSource;
 
+
+    /// <summary>
+    /// 从一个 IList&lt;T&gt; 列表数据源创建分页数据源
+    /// </summary>
+    /// <param name="source">列表数据源</param>
     public PagingSourceWrapper( IList<T> source )
       : base( source )
     {
@@ -259,6 +304,10 @@ namespace Ivony.Data
       _listSource = source;
     }
 
+    /// <summary>
+    /// 从一个 IEnumerable&lt;T&gt; 列表数据源创建分页数据源
+    /// </summary>
+    /// <param name="source">列表数据源</param>
     public PagingSourceWrapper( IEnumerable<T> source )
       : base( source )
     {
@@ -270,7 +319,12 @@ namespace Ivony.Data
     }
 
     #region IPagingDataSource<T> 成员
-
+    
+    /// <summary>
+    /// 创建分页数据
+    /// </summary>
+    /// <param name="pageSize">分页大小</param>
+    /// <returns>分好页的数据</returns>
     public IPagingData<T> CreatePaging( int pageSize )
     {
       if ( pageSize < 1 )

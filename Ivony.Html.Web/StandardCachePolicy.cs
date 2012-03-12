@@ -130,7 +130,7 @@ namespace Ivony.Html.Web
     public virtual void ApplyClientCachePolicy()
     {
 
-      var clientCachePolicy = HttpContext.Response.Cache;
+      var clientCachePolicy = HttpContext.GetClientCachePolicy();
 
       if ( !EnableClientCache )
         return;
@@ -201,7 +201,7 @@ namespace Ivony.Html.Web
     /// 获取 CacheItem
     /// </summary>
     /// <returns></returns>
-    public  CacheItem GetCacheItem()
+    public CacheItem GetCacheItem()
     {
 
       if ( _cacheItem == null )

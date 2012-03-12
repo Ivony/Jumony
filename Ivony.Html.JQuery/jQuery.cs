@@ -80,7 +80,7 @@ namespace Ivony.Html
 
     public jQuery removeAttr( string name )
     {
-      ForAll( e => e.Attribute( name ).Remove() );
+      ForAll( e => e.RemoveAttribute( name ) );
       return this;
     }
 

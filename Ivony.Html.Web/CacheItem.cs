@@ -35,7 +35,7 @@ namespace Ivony.Html.Web
       CachedResponse = cached;
       _provider = provider;
 
-      var shake =  Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
+      var shake = Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
       var random = new Random( DateTime.Now.Millisecond );
       var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake );
 
@@ -105,14 +105,14 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 最大可能的偏移量
     /// </summary>
-    protected static readonly TimeSpan maxShake =  TimeSpan.FromMinutes( 3 );
+    protected static readonly TimeSpan maxShake = TimeSpan.FromMinutes( 3 );
 
 
     /// <summary>
     /// 根据缓存项的设置，设置客户端的 maxage 缓存策略
     /// </summary>
     /// <param name="cachePolicy"></param>
-    public void SetMaxAge( HttpCachePolicyBase cachePolicy )
+    public void SetMaxAge( ClientCachePolicyBase cachePolicy )
     {
       var shake = Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
       SetMaxAge( cachePolicy, TimeSpan.FromMilliseconds( shake ) );
@@ -124,7 +124,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="cachePolicy"></param>
     /// <param name="shake"></param>
-    public void SetMaxAge( HttpCachePolicyBase cachePolicy, TimeSpan shake )
+    public void SetMaxAge( ClientCachePolicyBase cachePolicy, TimeSpan shake )
     {
 
 
@@ -151,7 +151,7 @@ namespace Ivony.Html.Web
     /// 尝试设置 ETag 标签
     /// </summary>
     /// <param name="cachePolicy"></param>
-    public bool TrySetETag( HttpCachePolicyBase cachePolicy )
+    public bool TrySetETag( ClientCachePolicyBase cachePolicy )
     {
       if ( ETag == null )
         return false;
@@ -165,7 +165,7 @@ namespace Ivony.Html.Web
     /// 应用客户端缓存策略
     /// </summary>
     /// <param name="cachePolicy"></param>
-    public void ApplyClientCachePolicy( HttpCachePolicyBase cachePolicy )
+    public void ApplyClientCachePolicy( ClientCachePolicyBase cachePolicy )
     {
       //cachePolicy.SetCacheability( HttpCacheability.Public );
 

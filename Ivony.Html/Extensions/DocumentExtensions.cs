@@ -545,7 +545,7 @@ namespace Ivony.Html
       /// <summary>
       /// 将文档碎片编译成一个动态方法，为下一步转换成委托做准备。
       /// </summary>
-      /// <param name="document">要编译的文档碎片</param>
+      /// <param name="fragment">要编译的文档碎片</param>
       /// <returns>编译好的动态方法</returns>
       private static DynamicMethod CompileDynamicMethod( IHtmlFragment fragment )
       {

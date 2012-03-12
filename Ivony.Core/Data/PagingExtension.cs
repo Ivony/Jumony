@@ -433,19 +433,32 @@ namespace Ivony.Data
   }
 
 
+
+  /// <summary>
+  /// 分页数据源包裹类型，用于将 IQueryable&lt;T&gt; 数据源包裹为为分页数据源
+  /// </summary>
+  /// <typeparam name="T">数据项类型</typeparam>
   public class QueryPagingSourceWrapper<T> : IPagingDataSource<T>
   {
 
     private IQueryable<T> _queryable;
 
+    /// <summary>
+    /// 从一个 IQueryable&lt;T&gt; 数据源创建分页数据源
+    /// </summary>
+    /// <param name="source">数据源</param>
     public QueryPagingSourceWrapper( IQueryable<T> queryable )
     {
       _queryable = queryable;
     }
 
 
-
-    public IPagingData<T> CreatePaging( int pageSize )
+    /// <summary>
+    /// 创建分页数据
+    /// </summary>
+    /// <param name="pageSize">分页大小</param>
+    /// <returns>分好页的数据</returns>
+    public virtual IPagingData<T> CreatePaging( int pageSize )
     {
       if ( pageSize < 1 )
         throw new ArgumentOutOfRangeException( "pageSize" );

@@ -253,6 +253,7 @@ namespace Ivony.Fluent
     /// </summary>
     /// <typeparam name="T">序列元素类型</typeparam>
     /// <param name="source">要检测的序列</param>
+    /// <param name="element">如果有，则返回唯一的元素</param>
     /// <returns></returns>
     public static bool IsSingle<T>( this IEnumerable<T> source, out T element )
     {
@@ -581,7 +582,12 @@ namespace Ivony.Fluent
       return new ReadOnlyEnumerable<T>( enumerable );
     }
 
-
+    /// <summary>
+    /// 创建只读列表封装，避免集合类型强制类型转换后被修改
+    /// </summary>
+    /// <typeparam name="T">列表元素类型</typeparam>
+    /// <param name="enumerable">要创建只读列表封装的集合</param>
+    /// <returns>只读列表封装</returns>
     public static IList<T> AsReadOnly<T>( this IList<T> list )
     {
       if ( list == null )

@@ -88,6 +88,7 @@ namespace Ivony.Html.Parser
     /// 分析 HTML 文本并创建文档
     /// </summary>
     /// <param name="html">HTML 文本</param>
+    /// <param name="url">文档的 URL</param>
     /// <returns>分析好的 HTML 文档</returns>
     public virtual IHtmlDocument Parse( string html, Uri url )
     {
@@ -300,7 +301,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理结束标签
     /// </summary>
-    /// <param name="match">结束标签信息</param>
+    /// <param name="endTag">结束标签信息</param>
     /// <returns>相关的元素对象，若不支持则返回null</returns>
     protected virtual IHtmlElement ProcessEndTag( HtmlEndTag endTag )
     {
@@ -334,7 +335,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理丢失了开始标签的结束标签
     /// </summary>
-    /// <param name="match">结束标签信息</param>
+    /// <param name="endTag">结束标签信息</param>
     protected virtual void ProcessEndTagMissingBeginTag( HtmlEndTag endTag )
     {
       //如果堆栈中没有对应的开始标签，则将这个结束标签解释为文本
@@ -348,7 +349,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 处理 HTML 注释
     /// </summary>
-    /// <param name="match">HTML 注释信息</param>
+    /// <param name="commentContent">HTML 注释信息</param>
     /// <returns>处理过程中所创建的注释对象，若不支持则返回 null</returns>
     protected virtual IHtmlComment ProcessComment( HtmlCommentContent commentContent )
     {

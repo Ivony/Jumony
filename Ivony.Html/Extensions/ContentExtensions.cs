@@ -447,9 +447,9 @@ namespace Ivony.Html
   {
     /// <summary>不进行任何格式化</summary>
     None,
-    /// <summary>将换行转换为 &lt;br /&gt</summary>
+    /// <summary>将换行转换为 &lt;br /&gt;</summary>
     BreakLine,
-    /// <summary>将换行转换为 &lt;br /&gt，并且保持空白字符不被合并。</summary>
+    /// <summary>将换行转换为 &lt;br /&gt;并且保持空白字符不被合并。</summary>
     BreakLineAndKeepWhiteSpace
   }
 

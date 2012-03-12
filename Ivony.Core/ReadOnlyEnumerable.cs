@@ -14,6 +14,11 @@ namespace Ivony
   {
     private IEnumerable<T> _enumerable;
 
+
+    /// <summary>
+    /// 创建只读枚举器的实例
+    /// </summary>
+    /// <param name="enumerable">要包装的枚举器</param>
     public ReadOnlyEnumerable( IEnumerable<T> enumerable )
     {
       _enumerable = enumerable;

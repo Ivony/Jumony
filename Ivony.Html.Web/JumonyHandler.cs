@@ -385,21 +385,27 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>在加载文档前引发此事件</summary>
     public event EventHandler PreLoadDocument;
+    /// <summary>在加载文档后引发此事件</summary>
     public event EventHandler PostLoadDocument;
 
     protected virtual void OnPreLoadDocument() { if ( PreLoadDocument != null ) PreLoadDocument( this, EventArgs.Empty ); }
     protected virtual void OnPostLoadDocument() { if ( PostLoadDocument != null ) PostLoadDocument( this, EventArgs.Empty ); }
 
 
+    /// <summary>在处理文档前引发此事件</summary>
     public event EventHandler PreProcessDocument;
+    /// <summary>在处理文档后引发此事件</summary>
     public event EventHandler PostProcessDocument;
 
     protected virtual void OnPreProcessDocument() { if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty ); }
     protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
 
 
+    /// <summary>在渲染文档前引发此事件</summary>
     public event EventHandler PreRender;
+    /// <summary>在渲染文档后引发此事件</summary>
     public event EventHandler PostRender;
 
     protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
@@ -407,13 +413,14 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>在尝试缓存输出前引发此事件</summary>
     public event EventHandler PreResolveCache;
+    /// <summary>在缓存未命中后引发此事件</summary>
     public event EventHandler PostResolveCache;
 
-    /// <summary>引发PreResolveCache事件</summary>
+    /// <summary>引发 PreResolveCache 事件</summary>
     protected virtual void OnPreResolveCache() { if ( PreResolveCache != null ) PreResolveCache( this, EventArgs.Empty ); }
-
-    /// <summary>引发PostResolveCache事件</summary>
+    /// <summary>引发 PostResolveCache 事件</summary>
     protected virtual void OnPostResolveCache() { if ( PostResolveCache != null ) PostResolveCache( this, EventArgs.Empty ); }
 
 

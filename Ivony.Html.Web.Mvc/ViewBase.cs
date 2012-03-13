@@ -192,7 +192,7 @@ namespace Ivony.Html.Web.Mvc
     /// 初识化结束后，进行任何处理前引发此事件
     /// </summary>
     public event EventHandler PreProcess;
-    
+
     /// <summary>
     /// 引发 PreProcess 事件
     /// </summary>
@@ -323,7 +323,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="container"></param>
     protected void ProcessActionUrls( IHtmlContainer container )
     {
-      var elements = container.Find( "a[action] , img[action] , form[action][controller]" );
+      var elements = container.Find( "a[action] , img[action] , form[action][controller] , script[action]" );
 
       foreach ( var actionElement in elements )
       {
@@ -356,6 +356,7 @@ namespace Ivony.Html.Web.Mvc
               attributeName = "action";
               break;
             case "img":
+            case "script":
               attributeName = "src";
               break;
 

@@ -39,6 +39,9 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+    /// <summary>
+    /// 部分视图主处理流程
+    /// </summary>
     protected override void ProcessMain()
     {
 

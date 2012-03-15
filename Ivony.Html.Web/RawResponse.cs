@@ -32,12 +32,18 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// HTTP 响应状态码，如 200
+    /// </summary>
     public int StatusCode
     {
       get;
       set;
     }
 
+    /// <summary>
+    /// HTTP 响应状态说明，如 OK
+    /// </summary>
     public string Status
     {
       get;
@@ -45,25 +51,37 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// HTTP 响应头集合
+    /// </summary>
     public NameValueCollection Headers
     {
       get;
       set;
     }
 
+
+    /// <summary>
+    /// HTTP 响应内容
+    /// </summary>
     public string Content
     {
       get;
       set;
     }
 
-
+    /// <summary>
+    /// 响应头的编码
+    /// </summary>
     public Encoding HeaderEncoding
     {
       get;
       set;
     }
 
+    /// <summary>
+    /// 响应内容的编码
+    /// </summary>
     public Encoding ContentEncoding
     {
       get;
@@ -71,7 +89,10 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 将响应直接输出
+    /// </summary>
+    /// <param name="response">HttpResponse 对象，用于输出响应</param>
     public virtual void Apply( HttpResponseBase response )
     {
       response.Clear();
@@ -95,6 +116,10 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 将响应写入响应输出流
+    /// </summary>
+    /// <param name="stream">输出流</param>
     public void WriteTo( Stream stream )
     {
       var headerWriter = new StreamWriter( stream, HeaderEncoding );
@@ -112,6 +137,10 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 创建响应的 ETag 标识
+    /// </summary>
+    /// <returns>ETag 标识</returns>
     public string CreateETag()
     {
 

@@ -216,7 +216,10 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 尝试获取缓存的输出
+    /// </summary>
+    /// <returns>可用的已被缓存的输出</returns>
     public override ICachedResponse ResolveCache()
     {
       var cacheItem = GetCacheItem();
@@ -230,8 +233,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 插入缓存
     /// </summary>
-    /// <param name="cachedResponse"></param>
-    /// <returns></returns>
+    /// <param name="cachedResponse">可被缓存的响应数据</param>
+    /// <returns>缓存项</returns>
     public override CacheItem UpdateCache( ICachedResponse cachedResponse )
     {
 

@@ -158,7 +158,9 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 获取当前请求的缓存策略
+    /// </summary>
     protected CachePolicy CachePolicy
     {
       get;

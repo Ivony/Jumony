@@ -17,6 +17,12 @@ namespace Ivony.Html.Web
   public interface IHtmlContentProvider
   {
 
+    /// <summary>
+    /// 加载 HTML 内容
+    /// </summary>
+    /// <param name="context">当前请求上下文</param>
+    /// <param name="virtualPath">要加载内容的虚拟路径</param>
+    /// <returns>加载的 HTML 内容</returns>
     HtmlContentResult LoadContent( HttpContextBase context, string virtualPath );
 
   }
@@ -107,7 +113,7 @@ namespace Ivony.Html.Web
 
 
   /// <summary>
-  /// 静态文件内容加载器，用于从静态文件中加载HTML内容，会自动缓存
+  /// 静态文件内容加载器，用于从静态文件中加载 HTML 内容，会自动缓存
   /// </summary>
   public class StaticFileLoader : IHtmlContentProvider
   {
@@ -115,6 +121,12 @@ namespace Ivony.Html.Web
 
     private static readonly ICollection<string> allowsExtensions = new ReadOnlyCollection<string>( new[] { ".html", ".htm" } );
 
+    /// <summary>
+    /// 从静态文件中加载 HTML 内容
+    /// </summary>
+    /// <param name="context">当前请求上下文</param>
+    /// <param name="virtualPath">静态文件的虚拟路径</param>
+    /// <returns>加载的内容结果</returns>
     public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
     {
 
@@ -139,6 +151,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 利用指定 VirtualPathProvider 将虚拟路径所指向文件当作静态文件加载。
     /// </summary>
+    /// <param name="context">当前请求上下文</param>
     /// <param name="provider">指定的 VirtualPathProvider</param>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>加载结果</returns>

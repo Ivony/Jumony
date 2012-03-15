@@ -7,6 +7,10 @@ using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
+  
+  /// <summary>
+  /// HTML 文档处理程序
+  /// </summary>
   public interface IHtmlHandlerProvider
   {
 

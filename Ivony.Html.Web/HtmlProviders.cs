@@ -82,6 +82,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取默认的缓存策略提供程序
+    /// </summary>
     public static ICachePolicyProvider DefaultCachePolicyProvider
     {
       get { return Web.DefaultCachePolicyProvider.Instance; }
@@ -266,6 +269,10 @@ namespace Ivony.Html.Web
 
 
     private static IHtmlParserProvider _defaultParserProvider = new DefaultParserProvider();
+    
+    /// <summary>
+    /// 获取默认的 HTML 解析器
+    /// </summary>
     public static IHtmlParserProvider DefaultParserProvider
     {
       get { return _defaultParserProvider; }
@@ -393,7 +400,11 @@ namespace Ivony.Html.Web
 
 
 
-
+    /// <summary>
+    /// 获取当前请求的缓存策略
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求</param>
+    /// <returns>适用于当前请求的缓存策略</returns>
     public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
       lock ( _cachePoliciesSync )

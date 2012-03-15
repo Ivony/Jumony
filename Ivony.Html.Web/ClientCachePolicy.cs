@@ -55,8 +55,6 @@ namespace Ivony.Html.Web
 
 
 
-    private string _etag;
-
     /// <summary>
     /// 设置内容标识
     /// </summary>

@@ -16,6 +16,11 @@ namespace Ivony.Html.Web
   public interface ICachePolicyProvider
   {
 
+    /// <summary>
+    /// 为当前请求创建缓存策略
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求</param>
+    /// <returns>当前请求的缓存策略</returns>
     CachePolicy CreateCachePolicy( HttpContextBase context );
 
   }

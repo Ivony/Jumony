@@ -41,9 +41,16 @@ namespace Ivony.Html.Web
 
     private Cache _cache;
 
+    /// <summary>
+    /// 创建 WebCacheStorageProvider 的实例
+    /// </summary>
     public WebCacheStorageProvider() : this( HttpRuntime.Cache ) { }
 
 
+    /// <summary>
+    /// 创建 WebCacheStorageProvider 的实例
+    /// </summary>
+    /// <param name="cache">WebCache 对象</param>
     public WebCacheStorageProvider( Cache cache )
     {
       _cache = cache;

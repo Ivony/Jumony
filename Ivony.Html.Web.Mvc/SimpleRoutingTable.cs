@@ -581,6 +581,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 规则所属的简单路由表实例
+    /// </summary>
     public SimpleRoutingTable RoutingTable
     {
       get;
@@ -658,6 +661,12 @@ namespace Ivony.Html.Web.Mvc
     private static Regex multipleSlashRegex = new Regex( "/+", RegexOptions.Compiled );
 
 
+    /// <summary>
+    /// 获取路由值
+    /// </summary>
+    /// <param name="virtualPath">当前请求的虚拟路径</param>
+    /// <param name="queryString">当前请求的查询数据</param>
+    /// <returns></returns>
     public virtual IDictionary<string, string> GetRouteValues( string virtualPath, NameValueCollection queryString )
     {
 
@@ -667,9 +676,10 @@ namespace Ivony.Html.Web.Mvc
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
 
-      var queryKeySet = new HashSet<string>( _queryKeys );
+      var queryKeySet = new HashSet<string>( _queryKeys, StringComparer.OrdinalIgnoreCase );
+      var requestQueryKeySet = new HashSet<string>( queryString.AllKeys, StringComparer.OrdinalIgnoreCase );
 
-      if ( LimitedQueries && !queryKeySet.IsSupersetOf( queryString.AllKeys ) )//如果限制了查询键并且查询键集合没有完全涵盖所有传进来的QueryString键的话，即存在有一个QueryString键不在查询键集合中，则这条规则不适用。
+      if ( LimitedQueries && !queryKeySet.IsSupersetOf( requestQueryKeySet ) )//如果限制了查询键并且查询键集合没有完全涵盖所有传进来的QueryString键的话，即存在有一个QueryString键不在查询键集合中，则这条规则不适用。
         return null;
 
 
@@ -716,8 +726,12 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      if ( !LimitedQueries && queryString.AllKeys.Any( k => _routeKeys.Contains( k ) ) )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
-        return null;                                                                    //因为如果限制了查询键，则上面会确保路由键不超出限制的范围，也就不可能存在冲突。
+      if ( !LimitedQueries )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
+      {                     //因为如果限制了查询键，则上面会确保路由键不超出限制的范围，也就不可能存在冲突。
+        requestQueryKeySet.IntersectWith( _routeKeys );
+        if ( requestQueryKeySet.Any() )
+          return null;
+      }
 
 
       foreach ( var key in queryString.AllKeys )

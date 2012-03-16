@@ -101,7 +101,7 @@ namespace Ivony.Html.Web
         return cacheItem.CachedResponse;
     }
 
-
+#if false
 
     /// <summary>
     /// 将 CacheItem 对象序列化到指定文件路径
@@ -137,6 +137,7 @@ namespace Ivony.Html.Web
     /// 将 CacheItem 对象从指定文件路径反序列化还原
     /// </summary>
     /// <param name="provider">创建此 CacheItem 对象的 ICachePolicyProvider</param>
+    /// <param name="filepath">文件路径</param>
     public static CacheItem DeserializeFrom( this ICachePolicyProvider provider, string filepath )
     {
       if ( !File.Exists( filepath ) )
@@ -153,6 +154,7 @@ namespace Ivony.Html.Web
     /// 将 CacheItem 对象从指定流反序列化还原
     /// </summary>
     /// <param name="provider">创建此 CacheItem 对象的 ICachePolicyProvider</param>
+    /// <param name="stream">用于反序列化的读取流</param>
     public static CacheItem DeserializeFrom( this ICachePolicyProvider provider, Stream stream )
     {
 
@@ -168,6 +170,7 @@ namespace Ivony.Html.Web
       return item;
     }
 
+#endif
 
 
     private static readonly Regex invalidPathCharactor = new Regex( @"\W+", RegexOptions.Compiled );

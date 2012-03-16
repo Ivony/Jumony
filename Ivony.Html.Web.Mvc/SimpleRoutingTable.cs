@@ -669,8 +669,9 @@ namespace Ivony.Html.Web.Mvc
 
       var queryKeySet = new HashSet<string>( _queryKeys );
 
-      if ( LimitedQueries && !queryKeySet.IsSupersetOf( queryString.AllKeys ) )
+      if ( LimitedQueries && !queryKeySet.IsSupersetOf( queryString.AllKeys ) )//如果限制了查询键并且查询键集合没有完全涵盖所有传进来的QueryString键的话，即存在有一个QueryString键不在查询键集合中，则这条规则不适用。
         return null;
+
 
 
       virtualPath = multipleSlashRegex.Replace( virtualPath, "/" );//将连续的/替换成单独的/
@@ -712,6 +713,11 @@ namespace Ivony.Html.Web.Mvc
           values.Add( name, pathParagraphs[i] );
         }
       }
+
+
+
+      if ( !LimitedQueries && queryString.AllKeys.Any( k => _routeKeys.Contains( k ) ) )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
+        return null;                                                                    //因为如果限制了查询键，则上面会确保路由键不超出限制的范围，也就不可能存在冲突。
 
 
       foreach ( var key in queryString.AllKeys )

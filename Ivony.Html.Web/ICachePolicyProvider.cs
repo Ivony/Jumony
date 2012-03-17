@@ -118,7 +118,7 @@ namespace Ivony.Html.Web
       if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByIdentity) != 0 )
       {
         if ( context.User != null && context.User.Identity != null && context.User.Identity.Name != null )
-          token += CacheToken.FromCookies( context.Request.Cookies );
+          token += CacheToken.FromCookies( context );
       }
 
       if ( (CacheKeyPolicy & Web.CacheKeyPolicy.ByVirtualPath) != 0 )

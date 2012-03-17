@@ -154,7 +154,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public CacheItem CreateCacheItem( ICachedResponse cachedResponse )
     {
-      return new CacheItem( Provider, CacheToken, cachedResponse, Duration );
+      return new CacheItem( CacheToken, cachedResponse, Duration );
     }
 
 

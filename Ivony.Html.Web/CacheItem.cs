@@ -25,15 +25,13 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建一个缓存项
     /// </summary>
-    /// <param name="provider">创建该缓存项的提供程序</param>
     /// <param name="token">缓存项的缓存依据</param>
     /// <param name="cached">缓存的数据</param>
     /// <param name="duration">最大缓存时间</param>
-    public CacheItem( ICachePolicyProvider provider, CacheToken token, ICachedResponse cached, TimeSpan duration )
+    public CacheItem( CacheToken token, ICachedResponse cached, TimeSpan duration )
     {
       CacheToken = token;
       CachedResponse = cached;
-      _provider = provider;
 
       var shake = Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
       var random = new Random( DateTime.Now.Millisecond );
@@ -44,19 +42,6 @@ namespace Ivony.Html.Web
       DurationFromCreated = duration;
     }
 
-
-
-    [NonSerialized]
-    private ICachePolicyProvider _provider;
-
-    /// <summary>
-    /// 创建缓存项的缓存策略提供程序
-    /// </summary>
-    public ICachePolicyProvider Provider
-    {
-      get { return _provider; }
-      internal set { _provider = value; }
-    }
 
 
 

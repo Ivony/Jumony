@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Collections;
 using Ivony.Fluent;
 using System.Diagnostics;
@@ -17,7 +16,6 @@ namespace Ivony.Html
   /// </summary>
   public static class CssSelector
   {
-
 
     private static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 

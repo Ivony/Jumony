@@ -188,10 +188,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="mvcCachePolicy"></param>
     protected virtual void UpdateCache( ControllerContext context, ActionResult result, IMvcCachePolicy mvcCachePolicy )
     {
-      var cacheItem = mvcCachePolicy.CreateCacheItem( context, result );
-
-      if ( cacheItem != null )
-        context.HttpContext.Cache.InsertCacheItem( cacheItem );
+      mvcCachePolicy.UpdateCache( context, result );
     }
 
 

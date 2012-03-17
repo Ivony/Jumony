@@ -76,7 +76,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static  MvcConfiguration _configuration = new MvcConfiguration();
+    private static MvcConfiguration _configuration = new MvcConfiguration();
 
     /// <summary>
     /// 获取 Jumony for MVC 配置对象，可以对 Jumony for MVC 行为进行调整。
@@ -176,15 +176,32 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new MvcCachePolicyProviderWrapper( HtmlProviders.DefaultCachePolicyProvider );
+    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new HtmlCachePolicyProvider();
 
     /// <summary>
-    /// 默认的缓存策略，由 HtmlProviders.DefaultCachePolicyProvider 提供
+    /// 默认的缓存策略，由 HtmlProviders 提供
     /// </summary>
     public static IMvcCachePolicyProvider DefaultCachePolicyProvider
     {
       get { return _defaultCachePolicyProvider; }
     }
+
+
+
+    private class HtmlCachePolicyProvider : IMvcCachePolicyProvider
+    {
+      public CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
+      {
+        return CreateCachePolicy( context.HttpContext );
+      }
+
+      public CachePolicy CreateCachePolicy( HttpContextBase context )
+      {
+        return HtmlProviders.GetCachePolicy( context );
+      }
+    }
+
+
 
 
   }

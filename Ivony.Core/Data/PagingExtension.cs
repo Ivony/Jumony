@@ -447,9 +447,9 @@ namespace Ivony.Data
     /// 从一个 IQueryable&lt;T&gt; 数据源创建分页数据源
     /// </summary>
     /// <param name="source">数据源</param>
-    public QueryPagingSourceWrapper( IQueryable<T> queryable )
+    public QueryPagingSourceWrapper( IQueryable<T> source )
     {
-      _queryable = queryable;
+      _queryable = source;
     }
 
 

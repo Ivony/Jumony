@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
@@ -26,13 +27,14 @@ namespace Ivony.Html.Web
 
     private void OnBeginRequest( object sender, EventArgs e )
     {
-      var context = HttpContext.Current;
+
+      var context = sender.CastTo<HttpApplication>().Context;
       context.Items[ClientCachePolicy.Token] = new ClientCachePolicy();
     }
 
     private void OnPreSendRequestHeaders( object sender, EventArgs e )
     {
-      var context = HttpContext.Current;
+      var context = sender.CastTo<HttpApplication>().Context;
       var policy = context.Items[ClientCachePolicy.Token] as ClientCachePolicy;
 
       if ( policy != null )

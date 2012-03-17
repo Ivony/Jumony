@@ -20,7 +20,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="context">当前 MVC 上下文</param>
     /// <param name="result">要缓存的执行结果</param>
     /// <returns></returns>
-    CacheItem CreateCacheItem( ControllerContext context, ActionResult result );
+    void UpdateCache( ControllerContext context, ActionResult result );
 
   }
 }

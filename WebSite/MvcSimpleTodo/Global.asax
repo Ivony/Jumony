@@ -30,6 +30,23 @@
 
     MvcEnvironment.Configuration.PartialRenderTimeout = TimeSpan.FromMilliseconds( 500 );
 
+    HtmlProviders.CachePolicyProviders.Add( new MyCachePolicyProvider() );
+
+    GlobalFilters.Filters.Add( MvcEnvironment.GlobalCacheFilter );
+
   }
+
+
+
+  public class MyCachePolicyProvider : ICachePolicyProvider
+  {
+
+    public CachePolicy CreateCachePolicy( HttpContextBase context )
+    {
+      return new StandardCachePolicy( context, CacheToken.FromVirtualPath( context ), this, TimeSpan.FromMinutes( 5 ), true, "~/StaticCaches", true );
+    }
+  }
+
+  
 
 </script>

@@ -6,6 +6,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
+
+  /// <summary>
+  /// 定义一个文本输入框元素
+  /// </summary>
   public class HtmlInputText : IHtmlTextControl
   {
 
@@ -31,21 +35,36 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 输入框所属的表单
+    /// </summary>
     public HtmlForm Form
     {
       get { return _form; }
     }
 
+
+    /// <summary>
+    /// 描述输入框的元素
+    /// </summary>
     public IHtmlElement Element
     {
       get { return _element; }
     }
 
+
+    /// <summary>
+    /// 输入框的名称
+    /// </summary>
     public string Name
     {
       get { return _element.Attribute( "name" ).AttributeValue; }
     }
 
+
+    /// <summary>
+    /// 输入框的文本值
+    /// </summary>
     public string TextValue
     {
       get { return _element.Attribute( "value" ).Value(); }

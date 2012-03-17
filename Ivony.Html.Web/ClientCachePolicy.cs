@@ -99,7 +99,7 @@ namespace Ivony.Html.Web
     public override void SetCachability( HttpCacheability cacheability )
     {
 
-      switch (cacheability)
+      switch ( cacheability )
       {
         case HttpCacheability.NoCache:
         case HttpCacheability.Private:
@@ -158,7 +158,7 @@ namespace Ivony.Html.Web
 
       string cacheControl;
 
-      switch (_cacheability)
+      switch ( _cacheability )
       {
         case HttpCacheability.NoCache:
           cacheControl = "no-cache";
@@ -175,33 +175,33 @@ namespace Ivony.Html.Web
       }
 
 
-      if (cacheControl != "no-cache")
+      if ( cacheControl != "no-cache" )
       {
-        if (_maxAge != null)
+        if ( _maxAge != TimeSpan.MinValue )
           cacheControl += ",max-age=" + (int) _maxAge.TotalSeconds;
 
-        if (_sMaxAge != null)
+        if ( _sMaxAge != TimeSpan.MinValue )
           cacheControl += ",s-maxage=" + (int) _sMaxAge.TotalSeconds;
       }
 
       response.AppendHeader( "Cache-Control", cacheControl );
 
 
-      if (_expires != null)
+      if ( _expires != null )
         response.AppendHeader( "Expires", _expires.Value.ToString( "R" ) );
 
 
-      if (_lastModified != null)
+      if ( _lastModified != null )
         response.AppendHeader( "Last-Modified", _lastModified.Value.ToString( "R" ) );
 
 
-      if (_etag != null)
+      if ( _etag != null )
         response.AppendHeader( "ETag", _etag );
 
     }
 
 
-    private TimeSpan _maxAge;
+    private TimeSpan _maxAge = TimeSpan.MinValue;
 
     /// <summary>
     /// 设置缓存过期时间
@@ -209,14 +209,14 @@ namespace Ivony.Html.Web
     /// <param name="delta">从当前开始最大的过期时间</param>
     public override void SetMaxAge( TimeSpan delta )
     {
-      if (delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ))
+      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ) )
         throw new ArgumentOutOfRangeException( "delta" );
 
       _maxAge = delta;
     }
 
 
-    private TimeSpan _sMaxAge;
+    private TimeSpan _sMaxAge = TimeSpan.MinValue;
 
     /// <summary>
     /// 设置代理服务器缓存过期时间
@@ -225,7 +225,7 @@ namespace Ivony.Html.Web
     public override void SetProxyMaxAge( TimeSpan delta )
     {
 
-      if (delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ))
+      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ) )
         throw new ArgumentOutOfRangeException( "delta" );
 
       _sMaxAge = delta;
@@ -241,7 +241,7 @@ namespace Ivony.Html.Web
     /// <param name="cacheability">缓存可用性</param>
     public override void SetCachability( HttpCacheability cacheability )
     {
-      switch (cacheability)
+      switch ( cacheability )
       {
         case HttpCacheability.NoCache:
         case HttpCacheability.Private:
@@ -289,7 +289,7 @@ namespace Ivony.Html.Web
     /// <param name="etag">用于标识内容的哈希值</param>
     public override void SetETag( string etag )
     {
-      if (etag == null)
+      if ( etag == null )
         throw new ArgumentNullException( "etag" );
 
       _etag = etag;

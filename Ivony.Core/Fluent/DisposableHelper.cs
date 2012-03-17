@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Ivony.Fluent
 {
+  /// <summary>
+  /// 为自动销毁对象逻辑提供流畅的写法的扩展方法
+  /// </summary>
   public static class DisposableHelper
   {
     public static DisposableWrapper<T> AsDisposable<T>( this T obj, Action<T> disposeMethod )

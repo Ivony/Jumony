@@ -140,6 +140,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 内容加载结果</returns>
     public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
@@ -175,7 +176,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
-    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )

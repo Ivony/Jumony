@@ -586,7 +586,7 @@ namespace Ivony.Fluent
     /// 创建只读列表封装，避免集合类型强制类型转换后被修改
     /// </summary>
     /// <typeparam name="T">列表元素类型</typeparam>
-    /// <param name="enumerable">要创建只读列表封装的集合</param>
+    /// <param name="list">要创建只读列表封装的集合</param>
     /// <returns>只读列表封装</returns>
     public static IList<T> AsReadOnly<T>( this IList<T> list )
     {

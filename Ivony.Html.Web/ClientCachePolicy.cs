@@ -177,11 +177,11 @@ namespace Ivony.Html.Web
 
       if ( cacheControl != "no-cache" )
       {
-        if ( _maxAge != TimeSpan.MinValue )
-          cacheControl += ",max-age=" + (int) _maxAge.TotalSeconds;
+        if ( _maxAge != null )
+          cacheControl += ",max-age=" + (int) _maxAge.Value.TotalSeconds;
 
-        if ( _sMaxAge != TimeSpan.MinValue )
-          cacheControl += ",s-maxage=" + (int) _sMaxAge.TotalSeconds;
+        if ( _sMaxAge != null )
+          cacheControl += ",s-maxage=" + (int) _sMaxAge.Value.TotalSeconds;
       }
 
       response.AppendHeader( "Cache-Control", cacheControl );
@@ -201,7 +201,7 @@ namespace Ivony.Html.Web
     }
 
 
-    private TimeSpan _maxAge = TimeSpan.MinValue;
+    private TimeSpan? _maxAge;
 
     /// <summary>
     /// 设置缓存过期时间
@@ -216,7 +216,7 @@ namespace Ivony.Html.Web
     }
 
 
-    private TimeSpan _sMaxAge = TimeSpan.MinValue;
+    private TimeSpan? _sMaxAge;
 
     /// <summary>
     /// 设置代理服务器缓存过期时间

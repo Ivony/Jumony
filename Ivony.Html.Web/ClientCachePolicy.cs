@@ -96,7 +96,7 @@ namespace Ivony.Html.Web
       _cachePolicy.SetProxyMaxAge( delta );
     }
 
-    public override void SetCachability( HttpCacheability cacheability )
+    public override void SetCacheability( HttpCacheability cacheability )
     {
 
       switch ( cacheability )
@@ -239,7 +239,7 @@ namespace Ivony.Html.Web
     /// 设置 cache-control 标头为 HttpCacheability 值之一
     /// </summary>
     /// <param name="cacheability">缓存可用性</param>
-    public override void SetCachability( HttpCacheability cacheability )
+    public override void SetCacheability( HttpCacheability cacheability )
     {
       switch ( cacheability )
       {

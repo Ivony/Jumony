@@ -152,8 +152,6 @@ namespace Ivony.Html.Web
     /// <param name="cachePolicy"></param>
     public void ApplyClientCachePolicy( ClientCachePolicyBase cachePolicy )
     {
-      cachePolicy.SetCacheability( HttpCacheability.Public );
-
       TrySetETag( cachePolicy );
       SetMaxAge( cachePolicy );
     }

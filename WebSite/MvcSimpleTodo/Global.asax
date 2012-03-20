@@ -43,7 +43,7 @@
 
     public CachePolicy CreateCachePolicy( HttpContextBase context )
     {
-      return new StandardCachePolicy( context, CacheToken.FromVirtualPath( context ), this, TimeSpan.FromMinutes( 5 ), true, "~/StaticCaches", true );
+      return new StandardCachePolicy( context, CacheToken.FromVirtualPath( context ), this, TimeSpan.FromMinutes( 0.5 ), true, "~/StaticCaches", true );
     }
   }
 

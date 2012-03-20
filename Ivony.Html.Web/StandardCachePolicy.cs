@@ -135,7 +135,7 @@ namespace Ivony.Html.Web
       if ( !EnableClientCache )
         return;
 
-      //clientCachePolicy.SetCacheability( HttpCacheability.Public );
+      clientCachePolicy.SetCacheability( HttpCacheability.Public );
 
       var cacheItem = GetCacheItem();
 

@@ -56,7 +56,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取视图上下文
     /// </summary>
-    protected ViewContext ViewContext
+    public ViewContext ViewContext
     {
       get;
       private set;

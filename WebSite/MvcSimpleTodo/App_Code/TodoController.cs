@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using DatabaseModel;
 using System.ComponentModel.DataAnnotations;
 
+using Ivony.Html;
+using Ivony.Html.Web.Mvc;
+
 public class TodoController : Controller
 {
 
@@ -23,6 +26,23 @@ public class TodoController : Controller
   }
 
 
+  private class MyViewFilter : ViewFilterAttribute
+  {
+
+    public override void OnPreRender( ViewContext context, ViewBase view )
+    {
+      var pageView = view as PageView;
+
+      if ( pageView == null )
+        return;
+
+      pageView.Document.Find( "title" ).First().InnerHtml( "Test" );
+
+    }
+
+  }
+
+  [MyViewFilter]
   public ActionResult Index()
   {
     return View( "index", Entities.Tasks );

@@ -45,7 +45,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 表示所有视图筛选器特性的基类
   /// </summary>
-  public class JumonyFilterProvider : ActionFilterAttribute, IViewFilter
+  public class ViewFilterAttribute : ActionFilterAttribute, IViewFilter
   {
     /// <summary>
     /// 重写 OnActionExecuting 方法，不进行任何操作

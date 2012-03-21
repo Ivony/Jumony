@@ -76,6 +76,7 @@
     <Compile Include="IMvcCachePolicy.cs" />
     <Compile Include="IMvcCachePolicyProvider.cs" />
     <Compile Include="IPartialRenderAdapter.cs" />
+    <Compile Include="IViewFilter.cs" />
     <Compile Include="IViewProvider.cs" />
     <Compile Include="JumonyController.cs" />
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />

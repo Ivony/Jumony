@@ -22,6 +22,10 @@ namespace Ivony.Html.Web.Mvc
   public abstract class ViewBase : IView, ICacheableResult
   {
 
+
+    internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
+
+
     /// <summary>
     /// 派生类调用创建 ViewBase 的具体实例。
     /// </summary>
@@ -156,6 +160,9 @@ namespace Ivony.Html.Web.Mvc
     {
       ViewContext = viewContext;
 
+      //获取视图筛选器
+      Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+
 
       RenderAdapters.Add( new ViewElementAdapter( viewContext ) );
 
@@ -188,6 +195,14 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    protected IEnumerable<IViewFilter> Filters
+    {
+      get;
+      private set;
+    }
+
+
     /// <summary>
     /// 初识化结束后，进行任何处理前引发此事件
     /// </summary>
@@ -198,6 +213,16 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     protected virtual void OnPreProcess()
     {
+
+      foreach ( var filter in Filters )
+      {
+        try
+        {
+          filter.OnPreRender( ViewContext, this );
+        }
+        catch { }
+      }
+
       if ( PreProcess != null )
         PreProcess( this, EventArgs.Empty );
     }
@@ -213,6 +238,15 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     protected virtual void OnPostProcess()
     {
+      foreach ( var filter in Filters.Reverse() )
+      {
+        try
+        {
+          filter.OnPostProcess( ViewContext, this );
+        }
+        catch { }
+      }
+
       if ( PostProcess != null )
         PostProcess( this, EventArgs.Empty );
     }
@@ -229,6 +263,15 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPreRender( TextWriter writer )
     {
+      foreach ( var filter in Filters )
+      {
+        try
+        {
+          filter.OnPreRender( ViewContext, this );
+        }
+        catch { }
+      }
+
       if ( PreRender != null )
         PreRender( this, EventArgs.Empty );
     }
@@ -245,6 +288,15 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPostRender( TextWriter writer )
     {
+      foreach ( var filter in Filters.Reverse() )
+      {
+        try
+        {
+          filter.OnPostRender( ViewContext, this );
+        }
+        catch { }
+      }
+
       if ( PostRender != null )
         PostRender( this, EventArgs.Empty );
     }

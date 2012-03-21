@@ -40,10 +40,10 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取或设置 HTML 视图的虚拟路径，此属性必须在处理视图前进行初始化
     /// </summary>
-    protected string VirtualPath
+    public string VirtualPath
     {
       get { return _virtualPath; }
-      set
+      protected set
       {
 
         if ( !VirtualPathUtility.IsAppRelative( value ) )

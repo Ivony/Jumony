@@ -42,10 +42,12 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+
+
   /// <summary>
   /// 表示所有视图筛选器特性的基类
   /// </summary>
-  public class ViewFilterAttribute : ActionFilterAttribute, IViewFilter
+  public abstract class ViewFilterAttribute : ActionFilterAttribute, IViewFilter
   {
     /// <summary>
     /// 重写 OnActionExecuting 方法，不进行任何操作
@@ -70,7 +72,7 @@ namespace Ivony.Html.Web.Mvc
     public sealed override void OnResultExecuting( ResultExecutingContext filterContext )
     {
 
-      var viewResult = filterContext.Result as ViewResult;
+      var viewResult = filterContext.Result as ViewResultBase;
       if ( viewResult == null )
         return;
 
@@ -91,18 +93,38 @@ namespace Ivony.Html.Web.Mvc
     {
     }
 
+    /// <summary>
+    /// 在处理 HTML 文档之前由 Jumony 框架调用
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <param name="view">正在负责处理的视图对象</param>
     public virtual void OnPreProcess( ViewContext context, ViewBase view )
     {
     }
 
+    /// <summary>
+    /// 在处理 HTML 文档之后由 Jumony 框架调用
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <param name="view">正在负责处理的视图对象</param>
     public virtual void OnPostProcess( ViewContext context, ViewBase view )
     {
     }
 
+    /// <summary>
+    /// 在渲染 HTML 文档之前由 Jumony 框架调用
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <param name="view">正在负责处理的视图对象</param>
     public virtual void OnPreRender( ViewContext context, ViewBase view )
     {
     }
 
+    /// <summary>
+    /// 在渲染 HTML 文档之后由 Jumony 框架调用
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <param name="view">正在负责处理的视图对象</param>
     public virtual void OnPostRender( ViewContext context, ViewBase view )
     {
     }

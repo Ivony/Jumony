@@ -14,6 +14,10 @@ namespace Ivony.Html.Web.Mvc
   public abstract class CacheFilterBase : ActionFilterAttribute
   {
 
+    /// <summary>
+    /// 重写此方法以输出缓存
+    /// </summary>
+    /// <param name="filterContext"></param>
     public override void OnActionExecuting( ActionExecutingContext filterContext )
     {
       ResolveCache( filterContext );
@@ -25,6 +29,10 @@ namespace Ivony.Html.Web.Mvc
     private static readonly string ClientCacheResolved = "JumonyforMVC_CacheControl_ClientCacheResolved";
 
 
+    /// <summary>
+    /// 尝试输出缓存
+    /// </summary>
+    /// <param name="filterContext"></param>
     protected virtual void ResolveCache( ActionExecutingContext filterContext )
     {
       filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Resolve Cache" );

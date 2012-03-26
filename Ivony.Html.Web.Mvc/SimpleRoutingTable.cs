@@ -60,6 +60,8 @@ namespace Ivony.Html.Web.Mvc
       foreach ( var pair in data.Values )
         routeData.Values.Add( pair.Key, pair.Value );
 
+      foreach ( var pair in data.Rule.DataTokens )
+        routeData.DataTokens.Add( pair.Key, pair.Value );
 
       routeData.DataTokens["RoutingRuleName"] = data.Rule.Name;
 
@@ -70,7 +72,11 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 创建 RouteData 的副本
+    /// </summary>
+    /// <param name="routeData">要创建副本的 RouteData</param>
+    /// <returns>创建的副本</returns>
     public static RouteData CloneRouteData( RouteData routeData )
     {
       var clone = new RouteData( routeData.Route, routeData.RouteHandler );
@@ -140,11 +146,20 @@ namespace Ivony.Html.Web.Mvc
 
       var data = new VirtualPathData( this, virtualPath );
 
+
+      foreach ( var pair in bestRule.DataTokens )
+        data.DataTokens.Add( pair.Key, pair.Value );
+
       data.DataTokens["RoutingRuleName"] = bestRule.Name;
 
       return data;
     }
 
+    /// <summary>
+    /// 创建缓存键
+    /// </summary>
+    /// <param name="values">要创建缓存键的字典</param>
+    /// <returns>创建的缓存键</returns>
     protected virtual string CreateCacheKey( Dictionary<string, string> values )
     {
 
@@ -173,11 +188,10 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 添加一个路由规则
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="urlPattern"></param>
-    /// <param name="routeValues"></param>
-    /// <param name="defaultValues"></param>
-    /// <param name="queryKeys"></param>
+    /// <param name="name">规则名称</param>
+    /// <param name="urlPattern">URL 模式</param>
+    /// <param name="routeValues">静态/默认路由值</param>
+    /// <param name="queryKeys">可用于 QueryString 的参数</param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
       AddRule( name, urlPattern, routeValues, queryKeys, false );
@@ -187,11 +201,11 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 添加一个路由规则
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="urlPattern"></param>
-    /// <param name="routeValues"></param>
-    /// <param name="queryKeys"></param>
-    /// <param name="limitedQueries"></param>
+    /// <param name="name">规则名称</param>
+    /// <param name="urlPattern">URL 模式</param>
+    /// <param name="routeValues">静态/默认路由值</param>
+    /// <param name="queryKeys">可用于 QueryString 的参数</param>
+    /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
     public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
 
@@ -212,7 +226,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="rule">路由规则</param>
     protected void AddRule( SimpleRoutingRule rule )
     {
-
+      //验证 GetVirtualPath 时可能的冲突
       {
         var conflictRule = _rules
           .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
@@ -224,7 +238,7 @@ namespace Ivony.Html.Web.Mvc
           throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
       }
 
-
+      //验证 GetRouteData 时可能的冲突
       {
         var conflictRule = _rules
           .Where( r => r.Paragraphes.Length == rule.Paragraphes.Length )                //若路径段长度一致
@@ -353,6 +367,8 @@ namespace Ivony.Html.Web.Mvc
 
       LimitedQueries = limitedQueries;
 
+      DataTokens = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+
 
 
       var match = urlPatternRegex.Match( urlPattern );
@@ -403,7 +419,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 是否限制查询键不超过指定范围
+    /// 是否限制产生的 QueryString 不超过指定范围（查询键）
     /// </summary>
     public bool LimitedQueries
     {
@@ -526,6 +542,11 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 根据路由值创建虚拟路径
+    /// </summary>
+    /// <param name="routeValues">路由值</param>
+    /// <returns>创建的虚拟路径</returns>
     public string CreateVirtualPath( IDictionary<string, string> routeValues )
     {
 
@@ -753,6 +774,15 @@ namespace Ivony.Html.Web.Mvc
     {
       return UrlPattern;
     }
+
+
+    public IDictionary<string, string> DataTokens
+    {
+      get;
+      private set;
+    }
+
+
 
   }
 }

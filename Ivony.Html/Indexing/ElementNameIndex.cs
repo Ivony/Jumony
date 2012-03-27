@@ -39,7 +39,7 @@ namespace Ivony.Html.Indexing
     /// 向索引中添加一个元素
     /// </summary>
     /// <param name="element">要添加的元素</param>
-    protected override void AddElement( IHtmlElement element )
+    protected override void OnAddElement( IHtmlElement element )
     {
       var name = element.Name;
 
@@ -66,7 +66,7 @@ namespace Ivony.Html.Indexing
     /// 从索引中移除一个元素
     /// </summary>
     /// <param name="element">要移除的元素</param>
-    protected override void RemoveElement( IHtmlElement element )
+    protected override void OnRemoveElement( IHtmlElement element )
     {
       var set = data[element.Name] as List<IHtmlElement>;
       set.Remove( element );

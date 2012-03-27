@@ -107,6 +107,7 @@
     <Compile Include="Indexing\ElementIdentityIndex.cs" />
     <Compile Include="Indexing\ElementIndex.cs" />
     <Compile Include="Indexing\ElementNameIndex.cs" />
+    <Compile Include="Indexing\IndexManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
     <Compile Include="Selectors\CssCascadingSelector.cs" />

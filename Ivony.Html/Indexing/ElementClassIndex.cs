@@ -43,7 +43,7 @@ namespace Ivony.Html.Indexing
     /// 新增一个元素到索引
     /// </summary>
     /// <param name="element">新增到索引的元素</param>
-    protected override void AddElement( IHtmlElement element )
+    protected override void OnAddElement( IHtmlElement element )
     {
       var classes = element.Attribute( "class" ).Value();
 
@@ -72,7 +72,7 @@ namespace Ivony.Html.Indexing
     /// 从索引中移除一个元素
     /// </summary>
     /// <param name="element"></param>
-    protected override void RemoveElement( IHtmlElement element )
+    protected override void OnRemoveElement( IHtmlElement element )
     {
       RemoveElement( element, element.Attribute( "class" ) );
     }
@@ -106,7 +106,7 @@ namespace Ivony.Html.Indexing
       if ( !attribute.Name.EqualsIgnoreCase( "class" ) )
         return;
 
-      AddElement( element );
+      OnAddElement( element );
     }
 
 

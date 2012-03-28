@@ -17,66 +17,20 @@ namespace Ivony.Html.Indexing
     /// 创建元素索引实例
     /// </summary>
     /// <param name="document">所依附的文档</param>
-    protected ElementIndex( IHtmlDocument document )
+    protected ElementIndex( IndexManager manager )
     {
-      Document = document;
-
-      var dataContainer = document as IDataContainer;
-
-      if ( dataContainer == null )
-        throw new NotSupportedException();
-
-      var data = dataContainer.Data;
-
-      lock ( data.SyncRoot )
-      {
-
-        var key = GetType();
-
-        if ( dataContainer.Data.Contains( key ) )
-          throw new InvalidOperationException( "索引已创建，无法重复创建" );
-
-
-        data.Add( key, this );
-
-      }
-
-      var notifyChanged = document as INotifyDomChanged;
-
-      if ( notifyChanged == null )
-        throw new NotSupportedException();
-
-      notifyChanged.HtmlDomChanged += OnHtmlDomChanged;
+      Manager = manager;
     }
 
 
     /// <summary>
     /// 索引所依附的文档
     /// </summary>
-    public IHtmlDocument Document
+    public IndexManager Manager
     {
       get;
       private set;
     }
-
-
-    /// <summary>
-    /// 重建索引
-    /// </summary>
-    public void Rebuild()
-    {
-
-      InitializeData();
-
-      Document.Descendants().ForAll( element => OnAddElement( element ) );
-
-    }
-
-
-    protected virtual void InitializeData()
-    {
-    }
-
 
 
 
@@ -126,79 +80,6 @@ namespace Ivony.Html.Indexing
     /// <param name="element">移除属性的元素</param>
     /// <param name="attribute">被移除的属性</param>
     protected abstract void OnRemoveAttribute( IHtmlElement element, IHtmlAttribute attribute );
-
-
-
-
-    private void OnHtmlDomChanged( object sender, HtmlDomChangedEventArgs e )
-    {
-      var element = e.Node as IHtmlElement;
-      if ( element == null )//如果引发修改事件的不是元素，则忽略。
-        return;
-
-      if ( !e.IsAttributeChanged )
-        OnElementChanged( sender, e.Action, element );
-      else
-        OnAttributeChanged( sender, e.Action, e.Attribute, element );
-    }
-
-
-
-    /// <summary>
-    /// 当属性被修改
-    /// </summary>
-    /// <param name="sender">引发事件的对象</param>
-    /// <param name="action">引发事件的操作</param>
-    /// <param name="attribute">被修改的属性</param>
-    /// <param name="element">属性所属的元素</param>
-    protected virtual void OnAttributeChanged( object sender, HtmlDomChangedAction action, IHtmlAttribute attribute, IHtmlElement element )
-    {
-
-      switch ( action )
-      {
-
-        case HtmlDomChangedAction.Add:
-          OnAddAttribute( element, attribute );
-          break;
-
-        case HtmlDomChangedAction.Remove:
-          OnRemoveAttribute( element, attribute );
-          break;
-
-        default:
-          throw new InvalidOperationException( "未知的 DOM 结构变化" );
-      }
-    }
-
-
-
-    /// <summary>
-    /// 当元素被修改
-    /// </summary>
-    /// <param name="sender">引发事件的对象</param>
-    /// <param name="action">引发事件的操作</param>
-    /// <param name="element">属性所属的元素</param>
-    protected virtual void OnElementChanged( object sender, HtmlDomChangedAction action, IHtmlElement element )
-    {
-      switch ( action )
-      {
-
-        case HtmlDomChangedAction.Add:
-          OnAddElement( element );
-          break;
-
-        case HtmlDomChangedAction.Remove:
-          OnRemoveElement( element );
-          break;
-
-        default:
-          throw new InvalidOperationException( "未知的 DOM 结构变化" );
-      }
-    }
-
-
-
-
 
   }
 }

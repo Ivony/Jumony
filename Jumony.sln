@@ -74,10 +74,50 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "WebSite\Mv
 		VWDPort = "1888"
 		VWDVirtualPath = "/"
 	EndProjectSection
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
+		ProjectReferences = "{2FC154E1-E0E5-4F34-A6DB-973D5332070A}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{1B363540-4F50-48CC-93C8-19EB85024AC2}|Ivony.Html.Templates.dll;{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}|Ivony.Html.Styles.dll;"
+		Release.AspNetCompiler.Debug = "False"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		VWDDynamicPort = "false"
+		VWDPort = "1888"
+		VWDVirtualPath = "/"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Binding", "Ivony.Html.Binding\Ivony.Html.Binding.csproj", "{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "WebSite\Demo\", "{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.PhysicalPath = "WebSite\Demo\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Demo\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.VirtualPath = "/Demo"
+		ProjectReferences = "{bf0b37e7-2d93-4a3d-ad6d-0b51b66f5b21}|Ivony.Core.dll;{e775b408-605f-4b66-87b6-98596069b703}|Ivony.Html.dll;{d05d58d3-5c3a-41bd-ba9e-2aa532a3b1be}|Ivony.Html.Parser.dll;{6ce7336e-d881-40b2-9495-c06cf9a61ac6}|Ivony.Html.Web.dll;{1b363540-4f50-48cc-93c8-19eb85024ac2}|Ivony.Html.Templates.dll;{297cf6f8-cddb-4bd6-acf8-e7a2e4d9e804}|Ivony.Html.Styles.dll;{1dab4b96-d944-46fe-bc73-7b618dee169f}|Ivony.Html.Forms.dll;{563e1240-78f7-4b65-9c9d-cbdcef06d2b0}|Ivony.Html.Binding.dll;{12e4c636-f4cd-4e60-a13d-439c818ac279}|Ivony.Html.JQuery.dll;"
+		Release.AspNetCompiler.Debug = "False"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.PhysicalPath = "WebSite\Demo\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Demo\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.VirtualPath = "/Demo"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		VWDPort = "1570"
+	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Debug.AspNetCompiler.FixedNames = "false"
@@ -126,6 +166,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlTranslater", "HtmlTranslater\HtmlTranslater.csproj", "{4C76EF80-FBA8-4454-A2A6-B75E1D709553}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{920EAE78-803D-4A40-8692-0F93DB3AA82D}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -309,6 +351,16 @@ Global
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{8A8FF9B5-F983-4F89-84F1-4E01ED3644CF}.Release|x86.ActiveCfg = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{920EAE78-803D-4A40-8692-0F93DB3AA82D}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

@@ -85,9 +85,9 @@
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcParser.cs" />
     <Compile Include="PageView.cs" />
-    <Compile Include="RoutingExtensions.cs" />
+    <Compile Include="RouteExtensions.cs" />
     <Compile Include="ScriptManager.cs" />
-    <Compile Include="SimpleRoutingTable.cs" />
+    <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="PartialView.cs" />

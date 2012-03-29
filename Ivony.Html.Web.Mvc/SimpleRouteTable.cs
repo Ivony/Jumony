@@ -12,7 +12,7 @@ using System.Web.Hosting;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class SimpleRoutingTable : RouteBase
+  public class SimpleRouteTable : RouteBase
   {
 
 
@@ -215,7 +215,7 @@ namespace Ivony.Html.Web.Mvc
       if ( routeValues == null )
         throw new ArgumentNullException( "routeValues" );
 
-      var rule = new SimpleRoutingRule( this, name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
+      var rule = new SimpleRouteRule( this, name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
 
       AddRule( rule );
     }
@@ -224,14 +224,14 @@ namespace Ivony.Html.Web.Mvc
     /// 添加一个路由规则
     /// </summary>
     /// <param name="rule">路由规则</param>
-    protected void AddRule( SimpleRoutingRule rule )
+    protected void AddRule( SimpleRouteRule rule )
     {
       //验证 GetVirtualPath 时可能的冲突
       {
         var conflictRule = _rules
           .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
           .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
-          .Where( r => !SimpleRoutingRule.Mutex( r, rule ) )                            //若与现存规则不互斥
+          .Where( r => !SimpleRouteRule.Mutex( r, rule ) )                            //若与现存规则不互斥
           .FirstOrDefault();
 
         if ( conflictRule != null )
@@ -254,10 +254,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private SimpleRoutingRule BestRule( IEnumerable<SimpleRoutingRule> candidateRules )
+    private SimpleRouteRule BestRule( IEnumerable<SimpleRouteRule> candidateRules )
     {
 
-      SimpleRoutingRule bestRule;
+      SimpleRouteRule bestRule;
 
 
       //满足最多静态值的被优先考虑
@@ -292,7 +292,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="handler"></param>
     /// <param name="mvcCompatible"></param>
-    public SimpleRoutingTable( IRouteHandler handler, bool mvcCompatible )
+    public SimpleRouteTable( IRouteHandler handler, bool mvcCompatible )
     {
       Handler = handler;
       MvcCompatible = mvcCompatible;
@@ -315,12 +315,12 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private ICollection<SimpleRoutingRule> _rules = new List<SimpleRoutingRule>();
+    private ICollection<SimpleRouteRule> _rules = new List<SimpleRouteRule>();
 
     /// <summary>
     /// 路由表中定义的路由规则
     /// </summary>
-    public SimpleRoutingRule[] Rules
+    public SimpleRouteRule[] Rules
     {
       get
       {
@@ -340,7 +340,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 简单路由规则
   /// </summary>
-  public class SimpleRoutingRule
+  public class SimpleRouteRule
   {
 
     public const string staticParagraphPattern = @"(?<paragraph>[\p{Lu}\p{Ll}\p{Nd}-.]+)";
@@ -359,7 +359,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues"></param>
     /// <param name="defaultValues"></param>
     /// <param name="queryKeys"></param>
-    internal SimpleRoutingRule( SimpleRoutingTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    internal SimpleRouteRule( SimpleRouteTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
       RoutingTable = routingTable;
 
@@ -605,7 +605,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 规则所属的简单路由表实例
     /// </summary>
-    public SimpleRoutingTable RoutingTable
+    public SimpleRouteTable RoutingTable
     {
       get;
       private set;
@@ -646,7 +646,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="rule1">路由规则1</param>
     /// <param name="rule2">路由规则2</param>
     /// <returns></returns>
-    public static bool Mutex( SimpleRoutingRule rule1, SimpleRoutingRule rule2 )
+    public static bool Mutex( SimpleRouteRule rule1, SimpleRouteRule rule2 )
     {
 
       var KeySet = new HashSet<string>( rule1.StaticRouteValues.Keys, StringComparer.OrdinalIgnoreCase );
@@ -663,7 +663,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="rule">要比较的路由规则</param>
     /// <returns>两个规则的约束是否一致</returns>
-    public bool EqualsConstraints( SimpleRoutingRule rule )
+    public bool EqualsConstraints( SimpleRouteRule rule )
     {
 
       if ( rule == null )

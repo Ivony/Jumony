@@ -58,7 +58,7 @@ namespace Ivony.Html.Web.Mvc
     {
       lock ( RouteTable.Routes )
       {
-        var index = RouteTable.Routes.IndexOf( SimpleRoutingTable );
+        var index = RouteTable.Routes.IndexOf( SimpleRouteTable );
         if ( index == -1 )
           RouteTable.Routes.Add( route );
 
@@ -81,12 +81,12 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private static SimpleRoutingTable _simpleRoutingTable = new SimpleRoutingTable( new MvcRouteHandler(), true );
+    private static SimpleRouteTable _simpleRoutingTable = new SimpleRouteTable( new MvcRouteHandler(), true );
 
     /// <summary>
     /// 获取简单路由表的默认实例
     /// </summary>
-    public static SimpleRoutingTable SimpleRoutingTable
+    public static SimpleRouteTable SimpleRouteTable
     {
       get { return _simpleRoutingTable; }
     }

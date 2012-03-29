@@ -24,10 +24,7 @@ namespace Ivony.Html.Indexing
     /// 构建索引实例
     /// </summary>
     /// <param name="document"></param>
-    public ElementClassIndex( IHtmlDocument document )
-      : base( document )
-    {
-    }
+    public ElementClassIndex( IndexManager manager ) : base( manager ) { }
 
     private Hashtable data;
 

@@ -20,6 +20,8 @@ namespace Ivony.Html.Indexing
     protected ElementIndex( IndexManager manager )
     {
       Manager = manager;
+
+      InitializeData();
     }
 
 
@@ -32,6 +34,9 @@ namespace Ivony.Html.Indexing
       private set;
     }
 
+
+
+    protected abstract void InitializeData();
 
 
     internal void AddElement( IHtmlElement element )

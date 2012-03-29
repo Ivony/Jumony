@@ -19,7 +19,7 @@ namespace Ivony.Html.Indexing
     /// 创建元素名称的索引
     /// </summary>
     /// <param name="document">要建立索引的文档</param>
-    public ElementNameIndex( IHtmlDocument document ) : base( document ) { }
+    public ElementNameIndex( IndexManager manager ) : base( manager ) { }
 
 
     private IDictionary<string,List<IHtmlElement>> data;

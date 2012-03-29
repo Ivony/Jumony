@@ -8,13 +8,13 @@
     routes.IgnoreRoute( "{resource}.axd/{*pathInfo}" );
 
 
-    MvcEnvironment.SimpleRoutingTable
-      .MapAction( "~/", "Todo", "Index" )
-      .MapAction( "~/add", "Todo", "Add" )
-      .MapAction( "~/modify/{taskId}", "Todo", "Modify" )
-      .MapAction( "~/complete/{taskId}", "Todo", "Complete" )
-      .MapAction( "~/revert/{taskId}", "Todo", "Revert" )
-      .MapAction( "~/remove/{taskId}", "Todo", "Remove" );
+    MvcEnvironment.SimpleRouteTable
+      .MapAction( "~/", "Index", "Todo" )
+      .MapAction( "~/add", "Add", "Todo" )
+      .MapAction( "~/modify/{taskId}", "Modify", "Todo" )
+      .MapAction( "~/complete/{taskId}", "Complete", "Todo" )
+      .MapAction( "~/revert/{taskId}", "Revert", "Todo" )
+      .MapAction( "~/remove/{taskId}", "Remove", "Todo" );
 
   }
 

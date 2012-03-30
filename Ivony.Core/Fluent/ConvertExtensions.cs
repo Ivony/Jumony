@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -73,6 +74,30 @@ namespace Ivony.Fluent
         return defaultValue;
       else
         return value;
+    }
+
+
+    /// <summary>
+    /// 将对象所有属性转换为对象图
+    /// </summary>
+    /// <param name="obj">要转换为对象图的对象</param>
+    /// <returns>对象图</returns>
+    public static IDictionary<string, string> ToPropertiesMap( this object obj )
+    {
+      var dictionary = new Dictionary<string, string>();
+
+      foreach ( PropertyDescriptor property in TypeDescriptor.GetProperties( obj ) )
+      {
+        var key = property.Name;
+        var _value = property.GetValue( obj );
+
+        string value = null;
+
+        if ( _value != null )
+          value = _value.ToString();
+      }
+
+      return dictionary;
     }
 
 

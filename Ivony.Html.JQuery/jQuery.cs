@@ -63,7 +63,7 @@ namespace Ivony.Html
 
     public jQuery attr( object properties )
     {
-      return attr( properties.ToPropertyDictionary() );
+      return attr( properties.ToPropertiesMap() );
     }
 
 
@@ -234,7 +234,7 @@ namespace Ivony.Html
 
     public jQuery css( object map )
     {
-      return css( map.ToPropertyDictionary() );
+      return css( map.ToPropertiesMap() );
     }
 
     public jQuery css( IDictionary<string, string> map )
@@ -297,32 +297,6 @@ namespace Ivony.Html
 
       return evaluator( first );
     }
-
-
-  }
-
-
-  public static class Extensions
-  {
-    internal static IDictionary<string, string> ToPropertyDictionary( this object properties )
-    {
-      var dictionary = new Dictionary<string, string>();
-
-      foreach ( PropertyDescriptor property in TypeDescriptor.GetProperties( properties ) )
-      {
-        var key = property.Name;
-        var _value = property.GetValue( properties );
-
-        string value = null;
-
-        if ( _value != null )
-          value = _value.ToString();
-      }
-
-      return dictionary;
-    }
-
-
 
 
   }

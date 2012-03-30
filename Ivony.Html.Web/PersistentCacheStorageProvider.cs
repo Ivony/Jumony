@@ -37,7 +37,7 @@ namespace Ivony.Html.Web
 
       var cacheItem = LoadCacheItem( token );
 
-      if ( cacheItem != null && cacheItem.Expiration >= DateTime.UtcNow )//检查缓存是否已过期
+      if ( cacheItem != null && cacheItem.CacheToken == token && cacheItem.Expiration >= DateTime.UtcNow )//检查缓存是否已过期
         return cacheItem;
 
       return null;
@@ -73,7 +73,7 @@ namespace Ivony.Html.Web
 
         var cacheItem = Deserialize( stream );
 
-        if ( cacheItem != null && cacheItem.Expiration >= DateTime.UtcNow )
+        if ( cacheItem != null && cacheItem.CacheToken == token && cacheItem.Expiration >= DateTime.UtcNow )
           return cacheItem;
         else
           return null;
@@ -110,7 +110,7 @@ namespace Ivony.Html.Web
         var cacheItem = formatter.Deserialize( stream ) as CacheItem;
         if ( cacheItem == null )
           return null;
-        
+
         return cacheItem;
 
       }

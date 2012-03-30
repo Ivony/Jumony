@@ -54,7 +54,7 @@ namespace Ivony.Html.Web.Mvc
     /// 调用此方法确保路由在简单路由表实例前注册。
     /// </summary>
     /// <param name="route"></param>
-    public static void RegisterRouteBeforeSimpleRoutingTable( RouteBase route )
+    public static void RegisterRouteBeforeSimpleRouteTable( RouteBase route )
     {
       lock ( RouteTable.Routes )
       {

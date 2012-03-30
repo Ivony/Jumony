@@ -192,9 +192,9 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
-    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      AddRule( name, urlPattern, routeValues, queryKeys, false );
+      return AddRule( name, urlPattern, routeValues, queryKeys, false );
     }
 
 
@@ -206,7 +206,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
     /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
-    public void AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    public SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
 
       if ( urlPattern == null )
@@ -217,14 +217,14 @@ namespace Ivony.Html.Web.Mvc
 
       var rule = new SimpleRouteRule( this, name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
 
-      AddRule( rule );
+      return AddRule( rule );
     }
 
     /// <summary>
     /// 添加一个路由规则
     /// </summary>
     /// <param name="rule">路由规则</param>
-    protected void AddRule( SimpleRouteRule rule )
+    protected SimpleRouteRule AddRule( SimpleRouteRule rule )
     {
       //验证 GetVirtualPath 时可能的冲突
       {
@@ -251,6 +251,8 @@ namespace Ivony.Html.Web.Mvc
       }
 
       _rules.Add( rule );
+
+      return rule;
     }
 
 
@@ -367,7 +369,7 @@ namespace Ivony.Html.Web.Mvc
 
       LimitedQueries = limitedQueries;
 
-      DataTokens = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+      DataTokens = new RouteValueDictionary();
 
 
 
@@ -776,7 +778,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    public IDictionary<string, string> DataTokens
+    public RouteValueDictionary DataTokens
     {
       get;
       private set;

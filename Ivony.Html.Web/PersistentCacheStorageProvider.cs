@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
+using System.Text.RegularExpressions;
+using System.Web.Security;
 
 namespace Ivony.Html.Web
 {
@@ -241,6 +243,31 @@ namespace Ivony.Html.Web
       var path = Path.Combine( PhysicalPath, token.CreateFilename() );
       return File.OpenWrite( path );
     }
+
+
+    /// <summary>
+    /// 匹配非文件名组成字符的正则表达式
+    /// </summary>
+    protected static readonly Regex invalidPathCharactor = new Regex( @"\W+", RegexOptions.Compiled );
+
+    /// <summary>
+    /// 根据缓存标识创建静态缓存的文件名
+    /// </summary>
+    /// <param name="token">缓存标识</param>
+    /// <returns></returns>
+    protected virtual string CreateFilename( CacheToken token )
+    {
+      var cacheKey = token.CacheKey();
+      var name = invalidPathCharactor.Replace( token.CacheKey(), "" );
+
+      if ( name.Length > 30 )
+        name = name.Substring( 0, 30 );
+
+      FormsAuthentication.HashPasswordForStoringInConfigFile( cacheKey, "SHA1" );
+
+      return name + "_" + unchecked( (uint) cacheKey.GetHashCode() ) + ".cache";
+    }
+
 
   }
 

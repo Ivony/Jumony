@@ -260,7 +260,11 @@ namespace Ivony.Html.Indexing
 
     private void InitializeIndexes()
     {
-      throw new NotImplementedException();
+      _indexes.Add( new ElementNameIndex( this ) );
+      _indexes.Add( new ElementClassIndex( this ) );
+      _indexes.Add( new ElementIdentityIndex( this ) );
+
+      //UNDONE
     }
 
 

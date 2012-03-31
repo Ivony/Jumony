@@ -16,7 +16,7 @@ namespace Ivony.Html.Indexing
     /// <summary>
     /// 创建元素索引实例
     /// </summary>
-    /// <param name="document">所依附的文档</param>
+    /// <param name="manager">所属的管理器</param>
     protected ElementIndex( IndexManager manager )
     {
       Manager = manager;
@@ -35,8 +35,13 @@ namespace Ivony.Html.Indexing
     }
 
 
-
-    protected abstract void InitializeData();
+    /// <summary>
+    /// 派生类重写此方法初始化数据
+    /// </summary>
+    protected virtual void InitializeData()
+    { 
+    
+    }
 
 
     internal void AddElement( IHtmlElement element )

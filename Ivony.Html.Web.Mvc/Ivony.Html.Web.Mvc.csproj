@@ -87,6 +87,7 @@
     <Compile Include="PageView.cs" />
     <Compile Include="RouteExtensions.cs" />
     <Compile Include="ScriptManager.cs" />
+    <Compile Include="SimpleRouteRule.cs" />
     <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

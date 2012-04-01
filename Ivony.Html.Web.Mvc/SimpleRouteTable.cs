@@ -13,11 +13,21 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 简单路由表，提供简单的路由服务
+  /// </summary>
   public class SimpleRouteTable : RouteBase
   {
 
 
+    /// <summary>
+    /// 定义通过路由值获取虚拟路径的缓存键前缀。
+    /// </summary>
     protected const string RouteValuesCacheKeyPrefix = "RouteValues_";
+    /// <summary>
+    /// 定义通过虚拟路径获取路由值的缓存键前缀。
+    /// </summary>
     protected const string RouteUrlCacheKeyPrefix = "RouteVirtualPath_";
 
 
@@ -207,7 +217,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
     /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
-    public SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    public virtual SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
 
       if ( urlPattern == null )
@@ -216,7 +226,7 @@ namespace Ivony.Html.Web.Mvc
       if ( routeValues == null )
         throw new ArgumentNullException( "routeValues" );
 
-      var rule = new SimpleRouteRule( this, name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
+      var rule = new SimpleRouteRule( name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
 
       return AddRule( rule );
     }
@@ -225,7 +235,26 @@ namespace Ivony.Html.Web.Mvc
     /// 添加一个路由规则
     /// </summary>
     /// <param name="rule">路由规则</param>
-    protected SimpleRouteRule AddRule( SimpleRouteRule rule )
+    protected virtual SimpleRouteRule AddRule( SimpleRouteRule rule )
+    {
+
+      var conflictRule = CheckConflict( rule );
+      if ( conflictRule != null )
+        throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+
+      _rules.Add( rule );
+
+      rule.SimpleRouteTable = this;
+
+      return rule;
+    }
+
+    /// <summary>
+    /// 检查指定规则是否与简单路由表现存的任何规则冲突，若有冲突，返回与其冲突的规则。
+    /// </summary>
+    /// <param name="rule">要检查冲突的规则</param>
+    /// <returns>如果现存规则与检查的规则存在一个冲突，则返回冲突的规则。</returns>
+    public SimpleRouteRule CheckConflict( SimpleRouteRule rule )
     {
       //验证 GetVirtualPath 时可能的冲突
       {
@@ -236,7 +265,7 @@ namespace Ivony.Html.Web.Mvc
           .FirstOrDefault();
 
         if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+          return conflictRule;
       }
 
       //验证 GetRouteData 时可能的冲突
@@ -248,12 +277,10 @@ namespace Ivony.Html.Web.Mvc
 
 
         if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+          return conflictRule;
       }
 
-      _rules.Add( rule );
-
-      return rule;
+      return null;
     }
 
 
@@ -332,13 +359,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 处理路由请求的对象
+    /// </summary>
     public IRouteHandler Handler { get; private set; }
 
+    /// <summary>
+    /// 获取 URL 默认编码格式
+    /// </summary>
     public Encoding UrlEncoding { get; private set; }
 
 
-    internal SimpleRouteTable() : this ( new MvcRouteHandler(), true )
+    internal SimpleRouteTable()
+      : this( new MvcRouteHandler(), true )
     {
       IsBuiltIn = true;
     }
@@ -347,453 +380,31 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
-
   /// <summary>
-  /// 简单路由规则
+  /// 用于 MVC 的简单区域路由表，提供某一区域的简单路由服务
   /// </summary>
-  public class SimpleRouteRule
+  public sealed class SimpleAreaRouteTable : SimpleRouteTable, IRouteWithArea
   {
-
-    public const string staticParagraphPattern = @"(?<paragraph>[\p{Lu}\p{Ll}\p{Nd}-.]+)";
-    public const string dynamicParagraphPattern = @"(?<paragraph>\{[\p{Lu}\p{Ll}\p{Nd}]+\})";
-    public static readonly string urlPattern = @"(^~/$)|(^~((/{static}(/{static})*(/{dynamic})*)|((/{dynamic})+))$)".Replace( "{static}", staticParagraphPattern ).Replace( "{dynamic}", dynamicParagraphPattern );
-
-    private static readonly Regex urlPatternRegex = new Regex( urlPattern, RegexOptions.Compiled );
-
-
     /// <summary>
-    /// 创建一个简单路由规则
+    /// 构建简单区域路由表对象
     /// </summary>
-    /// <param name="routingTable"></param>
-    /// <param name="name"></param>
-    /// <param name="urlPattern"></param>
-    /// <param name="routeValues"></param>
-    /// <param name="defaultValues"></param>
-    /// <param name="queryKeys"></param>
-    internal SimpleRouteRule( SimpleRouteTable routingTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    /// <param name="areaName">区域名</param>
+    internal SimpleAreaRouteTable( string areaName )
+      : base( new MvcRouteHandler(), true )
     {
-      RoutingTable = routingTable;
-
-      Name = name;
-
-      LimitedQueries = limitedQueries;
-
-      DataTokens = new RouteValueDictionary();
-
-
-
-      var match = urlPatternRegex.Match( urlPattern );
-
-      if ( !match.Success )
-        throw new FormatException( "URL模式格式不正确" );
-
-      _paragraphes = match.Groups["paragraph"].Captures.Cast<Capture>().Select( c => c.Value ).ToArray();
-
-      _urlPattern = urlPattern;
-      _staticValues = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
-
-
-      _routeKeys = new HashSet<string>( _staticValues.Keys, StringComparer.OrdinalIgnoreCase );
-
-      _dynamics = new HashSet<string>( _paragraphes.Where( p => p.StartsWith( "{" ) && p.EndsWith( "}" ) ).Select( p => p.Substring( 1, p.Length - 2 ) ), StringComparer.OrdinalIgnoreCase );
-
-
-
-      foreach ( var key in _dynamics )
-      {
-        if ( _routeKeys.Contains( key ) )
-          throw new FormatException( "URL模式格式不正确，包含重复的动态参数名或动态参数名与预设路由键重复" );
-
-
-        _routeKeys.Add( key );
-      }
-
-      if ( _routeKeys.Intersect( queryKeys, StringComparer.OrdinalIgnoreCase ).Any() )
-        throw new FormatException( "URL模式格式不正确，动态参数或预设路由键与可选查询字符串名重复" );
-
-      _queryKeys = new HashSet<string>( queryKeys, StringComparer.OrdinalIgnoreCase );
-
-      _allKeys = new HashSet<string>( _routeKeys, StringComparer.OrdinalIgnoreCase );
-      _allKeys.UnionWith( _queryKeys );
-
+      Area = areaName;
     }
 
-
     /// <summary>
-    /// 路由规则的名称
+    /// 获取路由表所适用的区域名
     /// </summary>
-    public string Name
+    public string Area
     {
       get;
       private set;
     }
-
-
-    /// <summary>
-    /// 是否限制产生的 QueryString 不超过指定范围（查询键）
-    /// </summary>
-    public bool LimitedQueries
-    {
-      get;
-      private set;
-    }
-
-
-    private string[] _paragraphes;
-
-    /// <summary>
-    /// 获取所有路径段
-    /// </summary>
-    public string[] Paragraphes
-    {
-      get { return _paragraphes.Copy(); }
-    }
-
-
-    private HashSet<string> _routeKeys;
-
-    /// <summary>
-    /// 获取所有路由键（包括静态和动态的）
-    /// </summary>
-    /// <remarks>
-    /// 路由键的值会作为虚拟路径的一部分
-    /// </remarks>
-    public string[] RouteKeys
-    {
-      get { return _routeKeys.ToArray(); }
-    }
-
-
-
-    private HashSet<string> _queryKeys;
-
-    /// <summary>
-    /// 获取所有查询键
-    /// </summary>
-    /// <remarks>
-    /// 构造虚拟路径时，查询键都是可选的。
-    /// 查询键的值会被产生为查询字符串。
-    /// </remarks>
-    public string[] QueryKeys
-    {
-      get { return _queryKeys.ToArray(); }
-    }
-
-
-    private HashSet<string> _allKeys;
-
-    /// <summary>
-    /// 获取所有键（包括路由键和查询键）
-    /// </summary>
-    public string[] AllKeys
-    {
-      get
-      {
-        return _allKeys.ToArray();
-      }
-    }
-
-
-    private HashSet<string> _dynamics;
-
-    /// <summary>
-    /// 获取所有动态路由键
-    /// </summary>
-    /// <remarks>
-    /// 动态路由键的值不能包含特殊字符
-    /// </remarks>
-    public string[] DynamicRouteKyes
-    {
-      get { return _dynamics.ToArray(); }
-    }
-
-
-    private string _prefix;
-
-    /// <summary>
-    /// 获取URL模式的静态前缀
-    /// </summary>
-    public string StaticPrefix
-    {
-      get
-      {
-        if ( _prefix == null )
-        {
-          var dynamicStarts = _urlPattern.IndexOf( '{' );
-          if ( dynamicStarts < 0 )
-            _prefix = _urlPattern;
-          else
-            _prefix = _urlPattern.Substring( 0, dynamicStarts - 1 );
-        }
-
-        return _prefix;
-      }
-    }
-
-
-    private string _urlPattern;
-
-    /// <summary>
-    /// 获取整个URL模式
-    /// </summary>
-    public string UrlPattern
-    {
-      get { return _urlPattern; }
-    }
-
-
-    private IDictionary<string, string> _staticValues;
-
-    /// <summary>
-    /// 获取所有的静态值
-    /// </summary>
-    public IDictionary<string, string> StaticRouteValues
-    {
-      get { return new Dictionary<string, string>( _staticValues ); }
-    }
-
-
-    /// <summary>
-    /// 根据路由值创建虚拟路径
-    /// </summary>
-    /// <param name="routeValues">路由值</param>
-    /// <returns>创建的虚拟路径</returns>
-    public string CreateVirtualPath( IDictionary<string, string> routeValues )
-    {
-
-      var builder = new StringBuilder( StaticPrefix );
-
-      foreach ( var key in DynamicRouteKyes )
-      {
-        var value = routeValues[key];
-
-        if ( string.IsNullOrEmpty( value ) )
-          throw new ArgumentException( "作为动态路径的路由值不能包含空引用或空字符串", "routeValues" );
-
-
-        if ( value.Contains( '/' ) )
-          throw new ArgumentException( "作为动态路径的路由值不能包含路径分隔符 '/'", "routeValues" );
-
-        //value = HttpUtility.UrlEncode( value, RoutingTable.UrlEncoding );
-
-        builder.Append( "/" + value );
-
-      }
-
-
-      bool isAppendedQueryStartSymbol = false;
-
-      var unallocatedKeys = routeValues.Keys.Except( RouteKeys, StringComparer.OrdinalIgnoreCase );
-
-
-      foreach ( var key in unallocatedKeys )
-      {
-
-        if ( QueryKeys.Contains( key, StringComparer.OrdinalIgnoreCase ) || !LimitedQueries )
-        {
-
-          var value = routeValues[key];
-
-          if ( !isAppendedQueryStartSymbol )
-            builder.Append( '?' );
-          else
-            builder.Append( '&' );
-
-          isAppendedQueryStartSymbol = true;
-
-          builder.Append( HttpUtility.UrlEncode( key ) );
-          builder.Append( '=' );
-          builder.Append( HttpUtility.UrlEncode( routeValues[key] ) );
-
-        }
-      }
-
-
-      return builder.ToString();
-    }
-
-
-    /// <summary>
-    /// 规则所属的简单路由表实例
-    /// </summary>
-    public SimpleRouteTable RoutingTable
-    {
-      get;
-      private set;
-    }
-
-
-    /// <summary>
-    /// 检查指定的路由值是否满足约束
-    /// </summary>
-    /// <param name="values">路由值</param>
-    /// <returns>是否满足路由规则的约束</returns>
-    public bool IsMatch( IDictionary<string, string> values )
-    {
-
-      if ( values == null )
-        throw new ArgumentNullException( "values" );
-
-
-      foreach ( var key in _staticValues.Keys )
-      {
-        string val;
-
-        if ( !values.TryGetValue( key, out val ) )
-          return false;
-
-        if ( !_staticValues[key].EqualsIgnoreCase( val ) )
-          return false;
-      }
-
-      return true;
-    }
-
-
-
-    /// <summary>
-    /// 检查两个路由规则是否互斥。
-    /// </summary>
-    /// <param name="rule1">路由规则1</param>
-    /// <param name="rule2">路由规则2</param>
-    /// <returns></returns>
-    public static bool Mutex( SimpleRouteRule rule1, SimpleRouteRule rule2 )
-    {
-
-      var KeySet = new HashSet<string>( rule1.StaticRouteValues.Keys, StringComparer.OrdinalIgnoreCase );
-      var KeySet2 = new HashSet<string>( rule2.StaticRouteValues.Keys, StringComparer.OrdinalIgnoreCase );
-
-      KeySet.IntersectWith( KeySet2 );
-
-      return KeySet.Any( key => !rule1.StaticRouteValues[key].EqualsIgnoreCase( rule2.StaticRouteValues[key] ) );
-    }
-
-
-    /// <summary>
-    /// 比较两个路由规则约束是否一致
-    /// </summary>
-    /// <param name="rule">要比较的路由规则</param>
-    /// <returns>两个规则的约束是否一致</returns>
-    public bool EqualsConstraints( SimpleRouteRule rule )
-    {
-
-      if ( rule == null )
-        throw new ArgumentNullException( "rule" );
-
-
-      if ( rule.StaticRouteValues.Count != StaticRouteValues.Count )
-        return false;
-
-      return IsMatch( rule.StaticRouteValues );
-
-    }
-
-
-
-    private static Regex multipleSlashRegex = new Regex( "/+", RegexOptions.Compiled );
-
-
-    /// <summary>
-    /// 获取路由值
-    /// </summary>
-    /// <param name="virtualPath">当前请求的虚拟路径</param>
-    /// <param name="queryString">当前请求的查询数据</param>
-    /// <returns></returns>
-    public virtual IDictionary<string, string> GetRouteValues( string virtualPath, NameValueCollection queryString )
-    {
-
-      if ( virtualPath == null )
-        throw new ArgumentNullException( "virtualPath" );
-
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
-
-      var queryKeySet = new HashSet<string>( _queryKeys, StringComparer.OrdinalIgnoreCase );
-      var requestQueryKeySet = new HashSet<string>( queryString.AllKeys, StringComparer.OrdinalIgnoreCase );
-
-      if ( LimitedQueries && !queryKeySet.IsSupersetOf( requestQueryKeySet ) )//如果限制了查询键并且查询键集合没有完全涵盖所有传进来的QueryString键的话，即存在有一个QueryString键不在查询键集合中，则这条规则不适用。
-        return null;
-
-
-
-      virtualPath = multipleSlashRegex.Replace( virtualPath, "/" );//将连续的/替换成单独的/
-
-      virtualPath = virtualPath.Substring( 2 );
-
-
-
-      var pathParagraphs = virtualPath.Split( '/' );
-
-      if ( virtualPath == "" )
-        pathParagraphs = new string[0];
-
-
-      if ( pathParagraphs.Length != Paragraphes.Length )
-        return null;
-
-
-      var values = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
-
-
-
-      foreach ( var pair in _staticValues )
-        values.Add( pair.Key, pair.Value );
-
-      for ( int i = 0; i < pathParagraphs.Length; i++ )
-      {
-
-        var paragraph = Paragraphes[i];
-
-        if ( !paragraph.StartsWith( "{" ) )
-        {
-          if ( !pathParagraphs[i].EqualsIgnoreCase( paragraph ) )
-            return null;
-        }
-        else
-        {
-          var name = paragraph.Substring( 1, paragraph.Length - 2 );
-          values.Add( name, pathParagraphs[i] );
-        }
-      }
-
-
-
-      if ( !LimitedQueries )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
-      {                     //因为如果限制了查询键，则上面会确保路由键不超出限制的范围，也就不可能存在冲突。
-        requestQueryKeySet.IntersectWith( _routeKeys );
-        if ( requestQueryKeySet.Any() )
-          return null;
-      }
-
-
-      foreach ( var key in queryString.AllKeys )
-      {
-        if ( key == null )
-          continue;//因某些未知原因会导致 AllKeys 包含空键值。
-
-        var v = queryString[key];
-        if ( v != null )
-          values.Add( key, v );
-      }
-
-
-      return values;
-    }
-
-
-    public override string ToString()
-    {
-      return UrlPattern;
-    }
-
-
-    public RouteValueDictionary DataTokens
-    {
-      get;
-      private set;
-    }
-
-
-
   }
+
+
+
 }

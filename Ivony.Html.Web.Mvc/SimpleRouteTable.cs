@@ -39,8 +39,6 @@ namespace Ivony.Html.Web.Mvc
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
 
-
-
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
 
       var cacheKey = RouteUrlCacheKeyPrefix + httpContext.Request.Url.AbsoluteUri;
@@ -203,19 +201,6 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
-    public SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
-    {
-      return AddRule( name, urlPattern, routeValues, queryKeys, false );
-    }
-
-
-    /// <summary>
-    /// 添加一个路由规则
-    /// </summary>
-    /// <param name="name">规则名称</param>
-    /// <param name="urlPattern">URL 模式</param>
-    /// <param name="routeValues">静态/默认路由值</param>
-    /// <param name="queryKeys">可用于 QueryString 的参数</param>
     /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
     public virtual SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
     {
@@ -238,9 +223,20 @@ namespace Ivony.Html.Web.Mvc
     protected virtual SimpleRouteRule AddRule( SimpleRouteRule rule )
     {
 
-      var conflictRule = CheckConflict( rule );
-      if ( conflictRule != null )
-        throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+      lock ( Routes )
+      {
+        if ( Routes != null && !Routes.Contains( this ) )
+          Routes = null;
+
+        if ( Routes == null )
+          throw new InvalidOperationException( "简单路由表实例并未被正确的注册在一个路由集合中，无法检测与路由集合中其他简单路由表是否存在冲突，所以不能添加简单路由规则" );
+
+        var conflictRule = Routes.CheckConflict( rule );
+
+        if ( conflictRule != null )
+          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+      }
+
 
       _rules.Add( rule );
 
@@ -316,20 +312,49 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取简单路由表实例名称
+    /// </summary>
+    public string Name
+    {
+      get;
+      private set;
+    }
+
+
+
+    /// <summary>
+    /// 获取简单路由表所属的路由集合
+    /// </summary>
+    public RouteCollection Routes
+    {
+      get;
+      internal set;
+    }
+
 
     /// <summary>
     /// 创建一个简单路由表实例
     /// </summary>
     /// <param name="handler"></param>
     /// <param name="mvcCompatible"></param>
-    public SimpleRouteTable( IRouteHandler handler, bool mvcCompatible )
+    public SimpleRouteTable( string name, IRouteHandler handler, bool mvcCompatible )
     {
+      Name = name;
       Handler = handler;
       MvcCompatible = mvcCompatible;
       UrlEncoding = Encoding.UTF8;
-
-
     }
+
+
+    internal SimpleRouteTable()
+      : this( "BuiltIn", new MvcRouteHandler(), true )
+    {
+      IsBuiltIn = true;
+    }
+
+    internal bool IsBuiltIn { get; set; }
+
 
 
 
@@ -370,13 +395,6 @@ namespace Ivony.Html.Web.Mvc
     public Encoding UrlEncoding { get; private set; }
 
 
-    internal SimpleRouteTable()
-      : this( new MvcRouteHandler(), true )
-    {
-      IsBuiltIn = true;
-    }
-
-    internal bool IsBuiltIn { get; set; }
   }
 
 
@@ -385,26 +403,129 @@ namespace Ivony.Html.Web.Mvc
   /// </summary>
   public sealed class SimpleAreaRouteTable : SimpleRouteTable, IRouteWithArea
   {
+
+
     /// <summary>
     /// 构建简单区域路由表对象
     /// </summary>
     /// <param name="areaName">区域名</param>
-    internal SimpleAreaRouteTable( string areaName )
-      : base( new MvcRouteHandler(), true )
+    internal SimpleAreaRouteTable( string areaName, string[] namespaces, bool useNamespaceFallback )
+      : base( "Area_" + areaName, new MvcRouteHandler(), true )
     {
-      Area = areaName;
+      AreaName = areaName;
+      Namespaces = namespaces;
+      UseNamespaceFallback = useNamespaceFallback;
     }
 
     /// <summary>
     /// 获取路由表所适用的区域名
     /// </summary>
-    public string Area
+    public string AreaName
     {
       get;
       private set;
     }
+
+    string IRouteWithArea.Area
+    {
+      get { return AreaName; }
+    }
+
+
+
+    /// <summary>
+    /// 区域所要搜索的命名空间
+    /// </summary>
+    public string[] Namespaces
+    {
+      get;
+      private set;
+    }
+
+
+
+    public bool UseNamespaceFallback
+    {
+      get;
+      private set;
+    }
+
+
+
+
+    /// <summary>
+    /// 添加一个路由规则
+    /// </summary>
+    /// <param name="name">规则名称</param>
+    /// <param name="urlPattern">URL 模式</param>
+    /// <param name="routeValues">静态/默认路由值</param>
+    /// <param name="queryKeys">可用于 QueryString 的参数</param>
+    /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
+    /// <returns>创建的简单路由规则</returns>
+    /// <remarks>
+    /// 简单区域路由表会自动为路由规则增加一个静态路由值 area 保存当前区域名。
+    /// </remarks>
+    public override SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    {
+
+      var _routeValues = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
+
+      if ( _routeValues.ContainsKey( "area" ) )
+        throw new InvalidOperationException( "静态路由值不能包含 area" );
+
+      _routeValues.Add( "area", AreaName );
+
+      return base.AddRule( name, urlPattern, _routeValues, queryKeys, limitedQueries );
+    }
+
+
+    /// <summary>
+    /// 获取请求的路由数据
+    /// </summary>
+    /// <param name="httpContext">HTTP 请求</param>
+    /// <returns>路由数据</returns>
+    /// <remarks>
+    /// 简单区域路由表获取路由数据后会自动设置区域所需的 DataTokens
+    /// </remarks>
+    public override RouteData GetRouteData( HttpContextBase httpContext )
+    {
+      var routeData = base.GetRouteData( httpContext );
+
+      if ( routeData != null )
+      {
+        routeData.Values.Remove( "area" );
+        routeData.DataTokens["area"] = AreaName;
+        routeData.DataTokens["Namespaces"] = Namespaces;
+        routeData.DataTokens["UseNamespaceFallback"] = UseNamespaceFallback;
+      }
+
+      return routeData;
+    }
+
+
+
+    /// <summary>
+    /// 尝试从路由值创建虚拟路径
+    /// </summary>
+    /// <param name="requestContext">当前请求上下文</param>
+    /// <param name="values">路由值</param>
+    /// <remarks>
+    /// 简单区域路由表获取路由数据后会自动设置区域所需的 DataTokens
+    /// </remarks>
+    public override VirtualPathData GetVirtualPath( RequestContext requestContext, RouteValueDictionary values )
+    {
+      values["area"] = AreaName;
+
+      var data = base.GetVirtualPath( requestContext, values );
+      
+      if ( data != null )
+      {
+        data.DataTokens["area"] = AreaName;
+        data.DataTokens["Namespaces"] = Namespaces;
+        data.DataTokens["UseNamespaceFallback"] = UseNamespaceFallback;
+      }
+
+      return data;
+    }
   }
-
-
-
 }

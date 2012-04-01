@@ -22,105 +22,25 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="controller">Controller 名称</param>
     /// <param name="action">Action 名称</param>
-    /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapAction( this SimpleRouteTable routeTable, string urlPattern, string controller, string action )
-    {
-      return MapAction( routeTable, urlPattern, controller, action, null );
-    }
-
-
-    /// <summary>
-    /// 映射一个 Action 路由
-    /// </summary>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <param name="urlPattern">URL 模式</param>
-    /// <param name="controller">Controller 名称</param>
-    /// <param name="action">Action 名称</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapAction( this SimpleRouteTable routeTable, string urlPattern, string controller, string action, string[] queryKeys )
+    public static SimpleRouteTable MapAction( this SimpleRouteTable routeTable, string urlPattern, string controller, string action, string[] queryKeys = null, bool limitedQueries = false )
     {
-      AddRule( routeTable, urlPattern, controller, action, queryKeys );
-
+      routeTable.AddRule( urlPattern, urlPattern, new Dictionary<string, string>() { { "action", action }, { "controller", controller } }, queryKeys ?? new string[0], limitedQueries );
       return routeTable;
     }
 
 
     /// <summary>
-    /// 映射一个 Action 路由
+    /// 添加一个路由规则
     /// </summary>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <param name="context">路由区域信息</param>
+    /// <param name="name">规则名称</param>
     /// <param name="urlPattern">URL 模式</param>
-    /// <param name="controller">Controller 名称</param>
-    /// <param name="action">Action 名称</param>
-    /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapAction( this SimpleRouteTable routeTable, AreaRegistrationContext context, string urlPattern, string controller, string action )
+    /// <param name="routeValues">静态/默认路由值</param>
+    /// <param name="queryKeys">可用于 QueryString 的参数</param>
+    public static SimpleRouteRule AddRule( this SimpleRouteTable routeTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
-      return routeTable.MapAction( context, urlPattern, controller, action, null );
-    }
-
-
-    /// <summary>
-    /// 映射一个 Action 路由
-    /// </summary>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <param name="context">路由区域信息</param>
-    /// <param name="urlPattern">URL 模式</param>
-    /// <param name="controller">Controller 名称</param>
-    /// <param name="action">Action 名称</param>
-    /// <param name="queryKeys">可用于 QueryString 的路由值</param>
-    /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapAction( this SimpleRouteTable routeTable, AreaRegistrationContext context, string urlPattern, string controller, string action, string[] queryKeys )
-    {
-      var rule = AddRule( routeTable, urlPattern, controller, action, queryKeys );
-
-      var namespaces = context.Namespaces.ToArray();
-
-      rule.DataTokens["Namespaces"] = namespaces;
-      rule.DataTokens["area"] = context.AreaName;
-      bool flag = namespaces == null || namespaces.Length == 0;
-      rule.DataTokens["UseNamespaceFallback"] = flag;
-
-      return routeTable;
-    }
-
-
-
-    private static SimpleRouteRule AddRule( SimpleRouteTable routeTable, string urlPattern, string controller, string action, string[] queryKeys )
-    {
-      return AddRule( routeTable, urlPattern, urlPattern, new Dictionary<string, string>() { { "action", action }, { "controller", controller } }, queryKeys );
-    }
-
-
-    private static SimpleRouteRule AddRule( SimpleRouteTable routeTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
-    {
-      return routeTable.AddRule( name ?? urlPattern, urlPattern, routeValues, queryKeys ?? new string[0] );
-    }
-
-
-    /// <summary>
-    /// 映射一个路由规则
-    /// </summary>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <param name="urlPattern">URL 模式</param>
-    /// <param name="routeValues">默认/静态路由值</param>
-    /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues )
-    {
-      return MapRoute( routeTable, urlPattern, routeValues.ToPropertiesMap(), null );
-    }
-
-    /// <summary>
-    /// 映射一个路由规则
-    /// </summary>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <param name="urlPattern">URL 模式</param>
-    /// <param name="routeValues">默认/静态路由值</param>
-    /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, IDictionary<string, string> routeValues )
-    {
-      return MapRoute( routeTable, urlPattern, routeValues, null );
+      return routeTable.AddRule( name, urlPattern, routeValues, queryKeys ?? new string[0], false );
     }
 
 
@@ -134,7 +54,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues, string[] queryKeys )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
       return MapRoute( routeTable, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
     }
@@ -147,7 +67,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
       return MapRoute( routeTable, null, urlPattern, routeValues, queryKeys );
     }
@@ -163,7 +83,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, object routeValues, string[] queryKeys )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, object routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
       return MapRoute( routeTable, name, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
     }
@@ -177,9 +97,22 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
-      AddRule( routeTable, name, urlPattern, routeValues, queryKeys );
+      if ( routeTable == null )
+        throw new ArgumentNullException( "routeTable" );
+
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
+      if ( urlPattern == null )
+        throw new ArgumentNullException( "urlPattern" );
+
+      if ( routeValues == null )
+        throw new ArgumentNullException( "routeValues" );
+
+
+      routeTable.AddRule( name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
       return routeTable;
     }
 
@@ -191,11 +124,14 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>内建的简单路由表实例</returns>
     public static SimpleRouteTable SimpleRouteTable( this RouteCollection routes )
     {
+      if ( routes == null )
+        throw new ArgumentNullException( "routes" );
+
       lock ( routes )
       {
         var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.IsBuiltIn );
         if ( routeTable == null )
-          routes.Add( routeTable = new SimpleRouteTable() );
+          routes.RegisterSimpleRouteTable( routeTable = new SimpleRouteTable() );
         return routeTable;
       }
     }
@@ -206,19 +142,77 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routes">系统路由集合</param>
     /// <param name="areaName">区域名</param>
     /// <returns>内建的简单路由表实例</returns>
-    public static SimpleAreaRouteTable SimpleAreaRouteTable( this RouteCollection routes, string areaName )
+    public static SimpleAreaRouteTable SimpleAreaRouteTable( this AreaRegistrationContext context )
     {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+
+      var routes = context.Routes;
+      var areaName = context.AreaName;
+      var namespaces = context.Namespaces.ToArray();
+      var useNamespaceFallback = namespaces == null || namespaces.Length == 0;
+
       lock ( routes )
       {
-        var routeTable = routes.OfType<SimpleAreaRouteTable>().FirstOrDefault( route => route.Area.EqualsIgnoreCase( areaName ) );
+        var routeTable = routes.OfType<SimpleAreaRouteTable>().FirstOrDefault( route => route.AreaName.EqualsIgnoreCase( areaName ) );
         if ( routeTable == null )
-          routes.Add( routeTable = new SimpleAreaRouteTable( areaName ) );
+          routes.RegisterSimpleRouteTable( routeTable = new SimpleAreaRouteTable( areaName, namespaces, useNamespaceFallback ) );
         return routeTable;
       }
     }
 
 
+    /// <summary>
+    /// 检查规则是否与任何简单路由表冲突
+    /// </summary>
+    /// <param name="routes">路由集合</param>
+    /// <param name="rule">要检查的简单路由规则</param>
+    /// <returns>如果有冲突，返回冲突的规则</returns>
+    public static SimpleRouteRule CheckConflict( this RouteCollection routes, SimpleRouteRule rule )
+    {
 
+      if ( routes == null )
+        throw new ArgumentNullException( "routes" );
+
+      if ( rule == null )
+        throw new ArgumentNullException( "rule" );
+
+
+      lock ( routes )
+      {
+        return routes.OfType<SimpleRouteTable>().Select( routeTable => routeTable.CheckConflict( rule ) ).NotNull().FirstOrDefault();
+      }
+    }
+
+
+    /// <summary>
+    /// 向路由集合中注册一个简单路由表实例
+    /// </summary>
+    /// <param name="routes">路由集合</param>
+    /// <param name="routeTable">简单路由表实例</param>
+    /// <returns>路由集合</returns>
+    public static RouteCollection RegisterSimpleRouteTable( this RouteCollection routes, SimpleRouteTable routeTable )
+    {
+
+      if ( routes == null )
+        throw new ArgumentNullException( "routes" );
+
+      if ( routeTable == null )
+        throw new ArgumentNullException( "routeTable" );
+
+
+      lock ( routes )
+      {
+        if ( routeTable.Routes == routes )
+          return routes;
+
+        routes.Add( routeTable );
+        routeTable.Routes = routes;
+      }
+
+      return routes;
+    }
 
   }
 }

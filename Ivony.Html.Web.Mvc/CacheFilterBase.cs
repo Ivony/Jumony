@@ -53,6 +53,13 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 尝试输出缓存
+    /// </summary>
+    /// <param name="context">当前请求上下文</param>
+    /// <param name="action">当前请求的 Action</param>
+    /// <param name="parameters">Action 的参数值</param>
+    /// <returns>若可以缓存输出，则返回输出缓存的 ActionResult</returns>
     protected virtual ActionResult ResolveCache( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
       var policy = CreateCachePolicy( context, action, parameters );

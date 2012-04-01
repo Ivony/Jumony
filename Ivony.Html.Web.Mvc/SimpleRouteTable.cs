@@ -9,6 +9,7 @@ using Ivony.Fluent;
 using System.Collections.Specialized;
 using System.Web.Caching;
 using System.Web.Hosting;
+using System.Web.Mvc;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -335,6 +336,14 @@ namespace Ivony.Html.Web.Mvc
     public IRouteHandler Handler { get; private set; }
 
     public Encoding UrlEncoding { get; private set; }
+
+
+    internal SimpleRouteTable() : this ( new MvcRouteHandler(), true )
+    {
+      IsBuiltIn = true;
+    }
+
+    internal bool IsBuiltIn { get; set; }
   }
 
 

@@ -184,6 +184,24 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取内建的简单路由表实例，如果没有则创建一个。
+    /// </summary>
+    /// <param name="routes">系统路由集合</param>
+    /// <returns>内建的简单路由表实例</returns>
+    public static SimpleRouteTable SimpleRouteTable( this RouteCollection routes )
+    {
+      lock ( routes )
+      {
+        var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.IsBuiltIn );
+        if ( routeTable == null )
+          routes.Add( routeTable = new SimpleRouteTable() );
+        return routeTable;
+      }
+    }
+
+
+
 
   }
 }

@@ -23,7 +23,6 @@ namespace Ivony.Html.Web.Mvc
     public static void Initialize()
     {
       ViewEngines.Engines.Add( _viewEngine );
-      RouteTable.Routes.Add( _simpleRoutingTable );
 
       CachePolicyProviders = new SynchronizedCollection<IMvcCachePolicyProvider>( _cachePolicyProvidersSync );
       GlobalCacheFilter = new GlobalCacheFilter();
@@ -81,14 +80,12 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private static SimpleRouteTable _simpleRoutingTable = new SimpleRouteTable( new MvcRouteHandler(), true );
-
     /// <summary>
-    /// 获取简单路由表的默认实例
+    /// 获取简单路由表的默认内建实例
     /// </summary>
     public static SimpleRouteTable SimpleRouteTable
     {
-      get { return _simpleRoutingTable; }
+      get { return RouteTable.Routes.SimpleRouteTable(); }
     }
 
 

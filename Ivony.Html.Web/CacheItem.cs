@@ -113,9 +113,9 @@ namespace Ivony.Html.Web
     {
 
 
-      var now = DateTime.UtcNow;
+      var delta = Expiration - DateTime.UtcNow;
 
-      if ( Expiration < now )
+      if ( delta <= TimeSpan.Zero )
       {
         cachePolicy.SetMaxAge( TimeSpan.Zero );
         return;
@@ -125,7 +125,7 @@ namespace Ivony.Html.Web
       var random = new Random( DateTime.Now.Millisecond );
       var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake.TotalMilliseconds );
 
-      var age = Expiration - DateTime.UtcNow + offset;
+      var age = delta + offset;
       cachePolicy.SetMaxAge( age );
 
     }

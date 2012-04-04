@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
@@ -21,13 +22,15 @@ namespace Ivony.Html.Parser
     /// <param name="uri">新的文档 URI</param>
     public void ResolveUri( IHtmlDocument document, Uri uri )
     {
+      lock ( _sync )
+      {
+        var domDocument = document as DomDocument;
 
-      var domDocument = document as DomDocument;
+        if ( domDocument == null )
+          throw new InvalidOperationException();
 
-      if ( domDocument == null )
-        throw new InvalidOperationException();
-
-      domDocument.DocumentUri = uri;
+        domDocument.DocumentUri = uri;
+      }
     }
 
     /// <summary>
@@ -39,11 +42,14 @@ namespace Ivony.Html.Parser
     /// <returns>添加好的元素</returns>
     public IHtmlElement AddElement( IHtmlContainer container, int index, string name )
     {
-      var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
+      lock ( _sync )
+      {
+        var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
-      OnDomChanged( this, new HtmlDomChangedEventArgs( element, container, HtmlDomChangedAction.Add ) );
+        OnDomChanged( this, new HtmlDomChangedEventArgs( element, container, HtmlDomChangedAction.Add ) );
 
-      return element;
+        return element;
+      }
     }
 
 
@@ -56,11 +62,14 @@ namespace Ivony.Html.Parser
     /// <returns>添加好的文本节点</returns>
     public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
     {
-      var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
+      lock ( _sync )
+      {
+        var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
 
-      OnDomChanged( this, new HtmlDomChangedEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
+        OnDomChanged( this, new HtmlDomChangedEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
 
-      return textNode;
+        return textNode;
+      }
     }
 
     /// <summary>
@@ -72,11 +81,14 @@ namespace Ivony.Html.Parser
     /// <returns>添加好的注释节点</returns>
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
-      var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
+      lock ( _sync )
+      {
+        var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
 
-      OnDomChanged( this, new HtmlDomChangedEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
+        OnDomChanged( this, new HtmlDomChangedEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
 
-      return commentNode;
+        return commentNode;
+      }
     }
 
     /// <summary>
@@ -88,13 +100,16 @@ namespace Ivony.Html.Parser
     /// <returns>添加好的特殊节点</returns>
     public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
     {
-      var specialNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomSpecial( html ) );
+      lock ( _sync )
+      {
+        var specialNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomSpecial( html ) );
 
-      //UNDONE 未确定special node具体是什么
+        //UNDONE 未确定special node具体是什么
 
-      OnDomChanged( this, new HtmlDomChangedEventArgs( specialNode, container, HtmlDomChangedAction.Add ) );
+        OnDomChanged( this, new HtmlDomChangedEventArgs( specialNode, container, HtmlDomChangedAction.Add ) );
 
-      return specialNode;
+        return specialNode;
+      }
     }
 
     /// <summary>
@@ -103,22 +118,28 @@ namespace Ivony.Html.Parser
     /// <param name="node">要移除的节点</param>
     public void RemoveNode( IHtmlNode node )
     {
-      var container = node.Container;
+      lock ( _sync )
+      {
+        var container = node.Container;
 
-      EnsureDomNode( node ).Remove();
+        EnsureDomNode( node ).Remove();
 
-      OnDomChanged( this, new HtmlDomChangedEventArgs( node, container, HtmlDomChangedAction.Remove ) );
+        OnDomChanged( this, new HtmlDomChangedEventArgs( node, container, HtmlDomChangedAction.Remove ) );
+      }
     }
 
 
     private DomNode EnsureDomNode( IHtmlNode node )
     {
-      var domNode = node as DomNode;
+      lock ( _sync )
+      {
+        var domNode = node as DomNode;
 
-      if ( domNode == null )
-        throw new NotSupportedException( "只能操作特定类型节点" );
+        if ( domNode == null )
+          throw new NotSupportedException( "只能操作特定类型节点" );
 
-      return domNode;
+        return domNode;
+      }
     }
 
 
@@ -131,11 +152,14 @@ namespace Ivony.Html.Parser
     /// <returns>添加好的属性</returns>
     public IHtmlAttribute AddAttribute( IHtmlElement element, string name, string value )
     {
-      var domElement = element as DomElement;
-      if ( domElement == null )
-        throw new InvalidOperationException();
+      lock ( _sync )
+      {
+        var domElement = element as DomElement;
+        if ( domElement == null )
+          throw new InvalidOperationException();
 
-      return domElement.AddAttribute( name, value );
+        return domElement.AddAttribute( name, value );
+      }
     }
 
 
@@ -145,11 +169,14 @@ namespace Ivony.Html.Parser
     /// <param name="attribute">要移除的属性</param>
     public void RemoveAttribute( IHtmlAttribute attribute )
     {
-      var domAttribute = attribute as DomAttribute;
-      if ( domAttribute == null )
-        throw new InvalidOperationException();
+      lock ( _sync )
+      {
+        var domAttribute = attribute as DomAttribute;
+        if ( domAttribute == null )
+          throw new InvalidOperationException();
 
-      domAttribute.Remove();
+        domAttribute.Remove();
+      }
     }
 
 
@@ -176,5 +203,19 @@ namespace Ivony.Html.Parser
     /// 当 HTML DOM 结构发生改变时引发此事件
     /// </summary>
     public event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
+
+
+
+    private readonly object _sync = new object();
+
+    public object SyncRoot
+    {
+      get { return _sync; }
+    }
+
+
+
+    private int _version = 0;
+
   }
 }

@@ -95,10 +95,19 @@ namespace Ivony.Html.Parser
 
 
     private DomModifier _modifier;
+
     /// <summary>
     /// 文档模型修改器
     /// </summary>
-    public IHtmlDomModifier DomModifier
+    public DomModifier DomModifier
+    {
+      get { return _modifier; }
+    }
+
+    /// <summary>
+    /// 文档模型修改器
+    /// </summary>
+    IHtmlDomModifier IHtmlDocument.DomModifier
     {
       get { return _modifier; }
     }

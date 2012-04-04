@@ -27,7 +27,7 @@ namespace Ivony.Html.Parser
       _nodeCollection = new DomNodeCollection( this );
     }
 
-    
+
     /// <summary>
     /// 从指定 HTML 创建一个 DomFragment 实例
     /// </summary>
@@ -154,26 +154,28 @@ namespace Ivony.Html.Parser
 
       lock ( SyncRoot )
       {
-
-        _manager.Allocated( this );
-
-
-        var nodeList = NodeCollection.ToArray();
-
-        lock ( container.SyncRoot )
+        lock ( _manager.DomModifier.SyncRoot )
         {
-          foreach ( var node in nodeList.Reverse() )
+
+          _manager.Allocated( this );
+
+
+          var nodeList = NodeCollection.ToArray();
+
+          lock ( container.SyncRoot )
           {
-            node.Container = null;
-            NodeCollection.Remove( node );
+            foreach ( var node in nodeList.Reverse() )
+            {
+              node.Container = null;
+              NodeCollection.Remove( node );
 
-            domContainer.NodeCollection.Insert( index, node );
+              domContainer.NodeCollection.Insert( index, node );
+            }
           }
+
+
+          return nodeList.Cast<IHtmlNode>();
         }
-
-
-        return nodeList.Cast<IHtmlNode>();
-
       }
     }
   }

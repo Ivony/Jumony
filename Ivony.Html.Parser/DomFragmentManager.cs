@@ -14,7 +14,7 @@ namespace Ivony.Html.Parser
 
 
     private object _sync = new object();
-    
+
     /// <summary>
     /// 用于同步的对象
     /// </summary>
@@ -92,5 +92,14 @@ namespace Ivony.Html.Parser
         _fragments.Remove( fragment );
       }
     }
+
+    /// <summary>
+    /// 文档模型修改器
+    /// </summary>
+    public DomModifier DomModifier
+    {
+      get { return _document.DomModifier; }
+    }
+
   }
 }

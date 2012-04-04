@@ -12,7 +12,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 提供一系列静态和扩展方法来辅助使用CSS选择器。
+  /// 提供一系列静态和扩展方法来辅助使用 CSS 选择器。
   /// </summary>
   public static class CssSelector
   {
@@ -21,10 +21,10 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建一个CSS选择器
+    /// 创建一个 CSS 选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
-    /// <returns></returns>
+    /// <returns>CSS 选择器</returns>
     public static ICssSelector Create( string expression )
     {
       if ( expression == null )
@@ -39,11 +39,11 @@ namespace Ivony.Html
     private static object _cacheSync = new Object();
 
     /// <summary>
-    /// 创建一个CSS选择器
+    /// 创建一个 CSS 选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定</param>
-    /// <returns></returns>
+    /// <returns>选择器</returns>
     public static ICssSelector Create( string expression, IHtmlContainer scope )
     {
 
@@ -131,8 +131,5 @@ namespace Ivony.Html
       CssCasecadingSelector.WarmUp();
     }
 
-
   }
-
-
 }

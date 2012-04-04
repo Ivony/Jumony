@@ -22,8 +22,6 @@ namespace Ivony.Html
 
     public static readonly Regex casecadingSelectorRegex = new Regex( "^" + Regulars.cssCasecadingSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
-    //public static readonly Regex extraRegex = new Regex( "^" + Regulars.extraExpressionPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
 
 
     //选择器缓存
@@ -215,18 +213,25 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 定义范畴限定选择器
+    /// </summary>
     private class CssScopeRestrictionSelector : ICssSelector
     {
 
       private readonly IHtmlContainer _scope;
 
+
+      /// <summary>
+      /// 创建范畴限定选择器实例
+      /// </summary>
+      /// <param name="scope"></param>
       public CssScopeRestrictionSelector( IHtmlContainer scope )
       {
         if ( scope == null )
           throw new ArgumentNullException( "scope" );
 
         _scope = scope;
-
       }
 
       public bool IsEligible( IHtmlElement element )

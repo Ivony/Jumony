@@ -87,15 +87,27 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+    /// <summary>
+    /// 元素属性容器
+    /// </summary>
     protected class DomAttributeCollection : SynchronizedKeyedCollection<string, DomAttribute>
     {
 
+      /// <summary>
+      /// 创建 DomAttributeCollection 实例
+      /// </summary>
+      /// <param name="element">所属的元素对象</param>
       public DomAttributeCollection( DomElement element )
         : base( element.SyncRoot, StringComparer.OrdinalIgnoreCase )
       {
       }
 
-
+      /// <summary>
+      /// 获取元素属性的 Key ，即 AttributeName
+      /// </summary>
+      /// <param name="item">元素属性</param>
+      /// <returns>属性的 Key ，即属性名</returns>
       protected override string GetKeyForItem( DomAttribute item )
       {
         return item.Name.ToLowerInvariant();
@@ -139,7 +151,9 @@ namespace Ivony.Html.Parser
     }
 
 
-
+    /// <summary>
+    /// 移除这个元素
+    /// </summary>
     public override void Remove()
     {
       this.ClearNodes();
@@ -158,6 +172,9 @@ namespace Ivony.Html.Parser
 
     private object _sync = new object();
 
+    /// <summary>
+    /// 获取用于同步的对象
+    /// </summary>
     public object SyncRoot
     {
       get { return _sync; }

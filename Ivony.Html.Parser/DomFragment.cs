@@ -120,6 +120,13 @@ namespace Ivony.Html.Parser
     }
 
 
+    public DomFragmentManager Manager
+    {
+      get { return _manager; }
+    }
+
+
+
     /// <summary>
     /// 用于同步的对象
     /// </summary>
@@ -152,9 +159,11 @@ namespace Ivony.Html.Parser
       if ( domContainer == null )
         throw new InvalidOperationException();
 
+      var modifier = _manager.DomModifier;
+
       lock ( SyncRoot )
       {
-        lock ( _manager.DomModifier.SyncRoot )
+        lock ( modifier.SyncRoot )
         {
 
           _manager.Allocated( this );
@@ -170,6 +179,8 @@ namespace Ivony.Html.Parser
               NodeCollection.Remove( node );
 
               domContainer.NodeCollection.Insert( index, node );
+
+              modifier.OnFragmentInto( this, container, node );
             }
           }
 

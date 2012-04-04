@@ -280,7 +280,7 @@ namespace Ivony.Html
     private class CssElementsRestrictionSelector : ICssSelector
     {
 
-      private readonly IEnumerable<IHtmlElement> _elements;
+      private readonly HashSet<IHtmlElement> _elements;
 
       public CssElementsRestrictionSelector( IEnumerable<IHtmlElement> elements )
       {
@@ -288,7 +288,7 @@ namespace Ivony.Html
         if ( elements == null )
           throw new ArgumentNullException( "elements" );
 
-        _elements = elements;
+        _elements = new HashSet<IHtmlElement>( elements );
 
       }
 

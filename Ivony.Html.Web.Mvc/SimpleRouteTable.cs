@@ -234,7 +234,7 @@ namespace Ivony.Html.Web.Mvc
         var conflictRule = Routes.CheckConflict( rule );
 
         if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表中已经存在一条可能冲突的规则：\"{1}\"", rule.Name, conflictRule.Name ) );
+          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表 \"{1}\" 中已经存在一条可能冲突的规则：\"{2}\"", rule.Name, conflictRule.SimpleRouteTable.Name, conflictRule.Name ) );
       }
 
 
@@ -257,7 +257,7 @@ namespace Ivony.Html.Web.Mvc
         var conflictRule = _rules
           .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
           .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
-          .Where( r => !SimpleRouteRule.Mutex( r, rule ) )                            //若与现存规则不互斥
+          .Where( r => !SimpleRouteRule.Mutex( r, rule ) )                              //若与现存规则不互斥
           .FirstOrDefault();
 
         if ( conflictRule != null )
@@ -336,8 +336,9 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 创建一个简单路由表实例
     /// </summary>
-    /// <param name="handler"></param>
-    /// <param name="mvcCompatible"></param>
+    /// <param name="name">简单路由表名称</param>
+    /// <param name="handler">处理路由请求的对象</param>
+    /// <param name="mvcCompatible">是否产生MVC兼容的虚拟路径（去除~/）</param>
     public SimpleRouteTable( string name, IRouteHandler handler, bool mvcCompatible )
     {
       Name = name;
@@ -409,12 +410,14 @@ namespace Ivony.Html.Web.Mvc
     /// 构建简单区域路由表对象
     /// </summary>
     /// <param name="areaName">区域名</param>
+    /// <param name="namespaces">区域所要搜索的命名空间</param>
+    /// <param name="useNamespaceFallback"></param>
     internal SimpleAreaRouteTable( string areaName, string[] namespaces, bool useNamespaceFallback )
       : base( "Area_" + areaName, new MvcRouteHandler(), true )
     {
       AreaName = areaName;
       Namespaces = namespaces;
-      UseNamespaceFallback = useNamespaceFallback;
+      UseNamespaceFallback = useNamespaceFallback || true;
     }
 
     /// <summary>
@@ -517,7 +520,7 @@ namespace Ivony.Html.Web.Mvc
       values["area"] = AreaName;
 
       var data = base.GetVirtualPath( requestContext, values );
-      
+
       if ( data != null )
       {
         data.DataTokens["area"] = AreaName;

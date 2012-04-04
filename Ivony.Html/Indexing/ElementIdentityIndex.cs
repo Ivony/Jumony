@@ -17,6 +17,10 @@ namespace Ivony.Html.Indexing
   {
 
 
+    /// <summary>
+    /// 创建索引实例
+    /// </summary>
+    /// <param name="manager">索引管理器</param>
     public ElementIdentityIndex( IndexManager manager ) : base( manager ) { }
 
 
@@ -24,12 +28,20 @@ namespace Ivony.Html.Indexing
 
 
 
+    /// <summary>
+    /// 初始化索引数据
+    /// </summary>
     protected override void InitializeData()
     {
       data = new Dictionary<string, IHtmlElement>();
     }
 
 
+    /// <summary>
+    /// 根据元素 ID 查找元素
+    /// </summary>
+    /// <param name="id">元素 ID</param>
+    /// <returns>找到的元素</returns>
     public IHtmlElement this[string id]
     {
       get { return data[id]; }

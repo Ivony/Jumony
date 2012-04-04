@@ -50,15 +50,40 @@ namespace Ivony.Html.Indexing
     {
       InitializeIndexes();
 
+      lock ( SyncRoot )
+      {
 
-      Container.Descendants()
-        .ForAll( element =>
-          {
-            AddElement( element );
-          }
-        );
+        Container.Descendants()
+          .ForAll( element =>
+            {
+              AddElement( element );
+            }
+          );
+      }
     }
 
+    /// <summary>
+    /// 对指定索引对象重建索引
+    /// </summary>
+    /// <param name="index">指定的索引对象</param>
+    protected void Rebuild( ElementIndex index )
+    {
+      lock ( SyncRoot )
+      {
+        _elements.ForAll( e => index.AddElement( e ) );
+      }
+    }
+
+
+
+    private readonly object _sync = new object();
+    /// <summary>
+    /// 用于同步的对象
+    /// </summary>
+    protected object SyncRoot
+    {
+      get { return _sync; }
+    }
 
 
     private const string DataKey = "Jumony_IndexManager";
@@ -100,32 +125,35 @@ namespace Ivony.Html.Indexing
     private void OnHtmlDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
 
-      if ( !InScope( e.Node ) )//不在索引范围内的节点忽略。
-        return;
-
-
-      var textNode = e.Node as IHtmlTextNode;
-      if ( textNode != null )
+      lock ( SyncRoot )
       {
-        _textNodes.Add( textNode );
-        return;
-      }
+        if ( !InScope( e.Node ) )//不在索引范围内的节点忽略。
+          return;
 
-      var comment = e.Node as IHtmlComment;
-      if ( comment != null )
-      {
-        _comments.Add( comment );
-        return;
-      }
 
-      var element = e.Node as IHtmlElement;
-      if ( element != null )
-      {
+        var textNode = e.Node as IHtmlTextNode;
+        if ( textNode != null )
+        {
+          _textNodes.Add( textNode );
+          return;
+        }
 
-        if ( !e.IsAttributeChanged )
-          OnElementChanged( sender, e.Action, element );
-        else
-          OnAttributeChanged( sender, e.Action, e.Attribute, element );
+        var comment = e.Node as IHtmlComment;
+        if ( comment != null )
+        {
+          _comments.Add( comment );
+          return;
+        }
+
+        var element = e.Node as IHtmlElement;
+        if ( element != null )
+        {
+
+          if ( !e.IsAttributeChanged )
+            OnElementChanged( sender, e.Action, element );
+          else
+            OnAttributeChanged( sender, e.Action, e.Attribute, element );
+        }
       }
     }
 
@@ -204,20 +232,20 @@ namespace Ivony.Html.Indexing
 
 
     /// <summary>
-    /// 
+    /// 索引内的元素添加一个属性
     /// </summary>
-    /// <param name="element"></param>
-    /// <param name="attribute"></param>
+    /// <param name="element">被添加属性的元素</param>
+    /// <param name="attribute">添加的属性</param>
     protected void AddAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
       ElementIndexes.ForAll( index => index.AddAttribute( element, attribute ) );
     }
 
     /// <summary>
-    /// 
+    /// 索引内的元素移除一个属性
     /// </summary>
-    /// <param name="element"></param>
-    /// <param name="attribute"></param>
+    /// <param name="element">被移除属性的元素</param>
+    /// <param name="attribute">移除的属性</param>
     protected void RemoveAttribute( IHtmlElement element, IHtmlAttribute attribute )
     {
       ElementIndexes.ForAll( index => index.RemoveAttribute( element, attribute ) );
@@ -232,6 +260,10 @@ namespace Ivony.Html.Indexing
     private HashSet<IHtmlComment> _comments = new HashSet<IHtmlComment>();
     private HashSet<IHtmlElement> _elements = new HashSet<IHtmlElement>();
 
+
+    /// <summary>
+    /// 容器所有子代元素
+    /// </summary>
     protected ICollection<IHtmlElement> DescendantElements
     {
       get { return _elements; }
@@ -245,27 +277,72 @@ namespace Ivony.Html.Indexing
     public bool InScope( IHtmlNode node )
     {
 
-      if ( node == null )
-        throw new ArgumentNullException( "node" );
+      lock ( SyncRoot )
+      {
+        if ( node == null )
+          throw new ArgumentNullException( "node" );
 
-      if ( node.Container.Equals( Container ) )
-        return true;
+        if ( node.Container.Equals( Container ) )
+          return true;
 
-      var element = node.Container as IHtmlElement;
-      if ( element == null )
-        return false;
+        var element = node.Container as IHtmlElement;
+        if ( element == null )
+          return false;
 
-      return DescendantElements.Contains( element );
+        return DescendantElements.Contains( element );
+      }
     }
 
     private void InitializeIndexes()
     {
+
       _indexes.Add( new ElementNameIndex( this ) );
       _indexes.Add( new ElementClassIndex( this ) );
       _indexes.Add( new ElementIdentityIndex( this ) );
-
       //UNDONE
     }
+
+
+    /// <summary>
+    /// 获取指定类型的元素索引
+    /// </summary>
+    /// <typeparam name="T">索引类型</typeparam>
+    /// <returns>该类型元素索引</returns>
+    public T ElementIndex<T>() where T : ElementIndex
+    {
+      return ElementIndex<T>( false );
+    }
+
+    /// <summary>
+    /// 获取指定类型的元素索引
+    /// </summary>
+    /// <typeparam name="T">索引类型</typeparam>
+    /// <param name="create">当该类型索引不存在时是否应当创建该类型索引</param>
+    /// <returns>该类型元素索引</returns>
+    public T ElementIndex<T>( bool create ) where T : ElementIndex
+    {
+      var index = _indexes.OfType<T>().FirstOrDefault();
+      if ( index == null && create )
+      {
+        index = CreateIndex<T>();
+        Rebuild( index );
+      }
+
+      return index;
+    }
+
+
+
+    /// <summary>
+    /// 创建指定类型的元素索引
+    /// </summary>
+    /// <typeparam name="T">元素索引类型</typeparam>
+    /// <returns></returns>
+    protected T CreateIndex<T>()
+    {
+      return Activator.CreateInstance( typeof( T ) ).CastTo<T>();
+    }
+
 
 
 
@@ -274,6 +351,13 @@ namespace Ivony.Html.Indexing
     {
       notify.HtmlDomChanged -= OnHtmlDomChanged;
       dataContainer.Data.Remove( DataKey );
+
+      foreach ( var index in _indexes )
+      {
+        var disposable = index as IDisposable;
+        if ( disposable != null )
+          disposable.Dispose();
+      }
     }
   }
 }

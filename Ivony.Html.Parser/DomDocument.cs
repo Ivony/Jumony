@@ -131,6 +131,11 @@ namespace Ivony.Html.Parser
     /// </summary>
     public event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
 
+    /// <summary>
+    /// 引发 HtmlDomChanged 事件
+    /// </summary>
+    /// <param name="sender">引发事件的事件源</param>
+    /// <param name="e">HtmlDomChanged 事件参数</param>
     protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
       if ( HtmlDomChanged != null )
@@ -139,7 +144,5 @@ namespace Ivony.Html.Parser
           HtmlDomChanged( sender, e );
       }
     }
-
-
   }
 }

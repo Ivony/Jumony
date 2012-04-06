@@ -149,9 +149,10 @@ namespace Ivony.Html
         _relative = relative.Trim();
 
       _left = leftSelector;
+
+      _relativeHandler = CreateRelativeHandler( relative, _left );
+
     }
-
-
 
     /// <summary>
     /// 检查元素是否符合选择条件
@@ -177,20 +178,44 @@ namespace Ivony.Html
         return LeftSelector.IsEligible( element );
 
 
+      return _relativeHandler( element );
+
+    }
+
+
+    /// <summary>
+    /// 定义关系处理程序委托
+    /// </summary>
+    /// <param name="element">要处理的元素</param>
+    /// <returns>元素是否符合左选择器的关系约束</returns>
+    private delegate bool RelativeHandler( IHtmlElement element );
+
+    private RelativeHandler _relativeHandler;
+
+    /// <summary>
+    /// 创建关系处理程序
+    /// </summary>
+    /// <param name="relative">关系</param>
+    /// <param name="leftSelector">左选择器</param>
+    /// <returns>关系处理程序</returns>
+    private RelativeHandler CreateRelativeHandler( string relative, ICssSelector leftSelector )
+    {
+      if ( relative == null )
+        return element => leftSelector.IsEligible( element );
+
       else if ( Relative == ">" )
-        return LeftSelector.IsEligible( element.Parent() );
+        return element => leftSelector.IsEligible( element.Parent() );
 
       else if ( Relative == "" )
-        return element.Ancestors().Any( e => LeftSelector.IsEligible( e ) );
+        return element => element.Ancestors().Any( e => leftSelector.IsEligible( e ) );
 
       else if ( Relative == "+" )
-        return LeftSelector.IsEligible( element.PreviousElement() );
+        return element => leftSelector.IsEligible( element.PreviousElement() );
 
       else if ( Relative == "~" )
-        return element.SiblingsBeforeSelf().Any( e => LeftSelector.IsEligible( e ) );
+        return element => element.SiblingsBeforeSelf().Any( e => leftSelector.IsEligible( e ) );
 
-      else
-        throw new NotSupportedException( string.Format( CultureInfo.InvariantCulture, "不支持的关系选择符 \"{0}\"", Relative ) );
+      return null;
     }
 
 

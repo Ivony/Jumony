@@ -35,7 +35,7 @@ namespace Ivony.Html
 
 
     //选择器缓存
-    private static Dictionary<string, ICssSelector[]> _selectorCaches = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
+    private static Dictionary<string, ICssSelector[]> _selectorCache = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
     private static object _cacheSync = new Object();
 
     /// <summary>
@@ -53,8 +53,8 @@ namespace Ivony.Html
 
       ICssSelector[] selectors;
 
-      if ( _selectorCaches.ContainsKey( expression ) )
-        selectors = _selectorCaches[expression];
+      if ( _selectorCache.ContainsKey( expression ) )
+        selectors = _selectorCache[expression];
 
       else
       {
@@ -70,7 +70,7 @@ namespace Ivony.Html
 
       lock ( _cacheSync )
       {
-        _selectorCaches[expression] = selectors;
+        _selectorCache[expression] = selectors;
       }
 
 

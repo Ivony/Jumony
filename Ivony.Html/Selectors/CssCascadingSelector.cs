@@ -143,6 +143,13 @@ namespace Ivony.Html
     /// <param name="leftSelector">左选择器</param>
     public CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
     {
+
+      if ( rightSelector == null )
+        throw new ArgumentNullException( "rightSelector" );
+
+      if ( leftSelector == null )
+        throw new ArgumentNullException( "leftSelector" );
+
       _right = rightSelector;
 
       if ( relative != null )

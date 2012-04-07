@@ -27,7 +27,7 @@ namespace Ivony.Html
     /// <summary>
     /// 调用此方法预热选择器
     /// </summary>
-    public static void WarmUp() 
+    public static void WarmUp()
     {
       elementSelectorRegex.IsMatch( "" );
     }
@@ -37,7 +37,7 @@ namespace Ivony.Html
     /// 创建一个CSS元素选择器
     /// </summary>
     /// <param name="expression">元素选择表达式</param>
-    public static CssElementSelector Create( string expression )
+    public static ICssSelector Create( string expression )
     {
       string tagName;
 

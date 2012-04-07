@@ -67,7 +67,7 @@ namespace ElementIndexTest
     //
     #endregion
 
-
+    /*
     /// <summary>
     ///ElementClassIndex 构造函数 的测试
     ///</summary>
@@ -111,6 +111,6 @@ namespace ElementIndexTest
     {
       return new JumonyParser().LoadDocument( "http://www.qq.com/" );
     }
-
+    */
   }
 }

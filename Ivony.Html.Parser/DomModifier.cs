@@ -12,7 +12,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// DOM 结构修改器
   /// </summary>
-  public class DomModifier : IHtmlDomModifier, INotifyDomChanged
+  public class DomModifier : IHtmlDomModifier, INotifyDomChanged, IVersionControl
   {
 
     /// <summary>
@@ -24,6 +24,9 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+
+        unchecked { _version++; }
+        
         var domDocument = document as DomDocument;
 
         if ( domDocument == null )
@@ -44,6 +47,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
         OnDomChanged( this, new HtmlDomChangedEventArgs( element, container, HtmlDomChangedAction.Add ) );
@@ -64,6 +69,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
 
         OnDomChanged( this, new HtmlDomChangedEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
@@ -83,6 +90,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
 
         OnDomChanged( this, new HtmlDomChangedEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
@@ -102,6 +111,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var specialNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomSpecial( html ) );
 
         //UNDONE 未确定special node具体是什么
@@ -120,6 +131,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var container = node.Container;
 
         EnsureDomNode( node ).Remove();
@@ -154,6 +167,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+
         var domElement = element as DomElement;
         if ( domElement == null )
           throw new InvalidOperationException();
@@ -171,6 +186,8 @@ namespace Ivony.Html.Parser
     {
       lock ( _sync )
       {
+        unchecked { _version++; }
+        
         var domAttribute = attribute as DomAttribute;
         if ( domAttribute == null )
           throw new InvalidOperationException();
@@ -217,5 +234,10 @@ namespace Ivony.Html.Parser
 
     private int _version = 0;
 
+
+    int IVersionControl.Version
+    {
+      get { return _version; }
+    }
   }
 }

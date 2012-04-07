@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -92,6 +93,25 @@ namespace Ivony.Html
     /// </summary>
     event EventHandler<HtmlDomChangedEventArgs> HtmlDomChanged;
   }
+
+
+  /// <summary>
+  /// 此接口用于框架，请勿在代码中使用。
+  /// </summary>
+  public interface IVersionControl : IHtmlDomModifier
+  {
+    int Version { get; }
+  }
+
+
+  /// <summary>
+  /// 此接口用于框架，请勿在代码中使用。
+  /// </summary>
+  public interface IVersionCacheContainer : IHtmlDocument
+  {
+    Hashtable CurrenctVersionCache { get; }
+  }
+
 
 
 

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Ivony.Fluent;
 
 namespace Ivony.Html.Parser
@@ -9,7 +11,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlDocument 的实现
   /// </summary>
-  public class DomDocument : DomObject, IHtmlDocument, IDomContainer, INotifyDomChanged
+  public class DomDocument : DomObject, IHtmlDocument, IDomContainer, INotifyDomChanged, IVersionCacheContainer
   {
 
     /// <summary>
@@ -138,10 +140,28 @@ namespace Ivony.Html.Parser
     /// <param name="e">HtmlDomChanged 事件参数</param>
     protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
+
+      _currentVersionCache = null;//抛弃旧的版本缓存
+      
       if ( HtmlDomChanged != null )
       {
         if ( object.Equals( this, e.Node.Document ) )
           HtmlDomChanged( sender, e );
+      }
+    }
+
+
+
+    private Hashtable _currentVersionCache;
+
+    Hashtable IVersionCacheContainer.CurrenctVersionCache
+    {
+      get
+      {
+        if ( _currentVersionCache == null )
+          Interlocked.CompareExchange( ref _currentVersionCache, new Hashtable(), null );
+
+        return _currentVersionCache;
       }
     }
   }

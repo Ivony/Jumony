@@ -85,6 +85,8 @@ namespace Ivony.Html.Parser
     private object _sync = new object();
 
 
+    private IHtmlDocument _document;
+
     /// <summary>
     /// 获取节点所属的文档
     /// </summary>
@@ -93,11 +95,11 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        if ( Container == null )
+        if ( _container == null )
           return null;
 
 
-        return Container.Document;
+        return _document ?? ( _document = Container.Document );
       }
     }
 

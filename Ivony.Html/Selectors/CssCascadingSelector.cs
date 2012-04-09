@@ -348,5 +348,83 @@ namespace Ivony.Html
       CssElementSelector.WarmUp();
     }
 
+
+
+
+    private class ParentRelativeSelector : ICssSelector
+    {
+
+      private ICssSelector _leftSelector;
+
+      public ParentRelativeSelector( ICssSelector leftSelector )
+      {
+        _leftSelector = leftSelector;
+      }
+
+      public bool IsEligible( IHtmlElement element )
+      {
+        if ( element == null )
+          return false;
+
+        return _leftSelector.IsEligibleBuffered( element.Parent() );
+      }
+    }
+
+    private class AncetorRelativeSelector : ICssSelector
+    {
+      private ICssSelector _parentRelativeSelector;
+
+      public AncetorRelativeSelector( ICssSelector leftSelector )
+      {
+        _parentRelativeSelector = leftSelector;
+      }
+
+      public bool IsEligible( IHtmlElement element )
+      {
+        if ( element == null )
+          return false;
+
+        return _parentRelativeSelector.IsEligibleBuffered( element ) || this.IsEligibleBuffered( element.Parent() );
+      }
+    }
+
+    private class PreviousRelativeSelector : ICssSelector
+    {
+      private ICssSelector _leftSelector;
+
+      public PreviousRelativeSelector( ICssSelector leftSelector )
+      {
+        _leftSelector = leftSelector;
+      }
+
+      public bool IsEligible( IHtmlElement element )
+      {
+        if ( element == null )
+          return false;
+
+        return _leftSelector.IsEligible( element.PreviousElement() );
+      }
+    }
+
+    private class SiblingsRelativeSelector : ICssSelector
+    {
+      private ICssSelector _previousRelativeSelector;
+
+      public SiblingsRelativeSelector( ICssSelector leftSelector )
+      {
+        _leftSelector = leftSelector;
+        _previousRelativeSelector = new PreviousRelativeSelector( leftSelector );
+      }
+
+      public bool IsEligible( IHtmlElement element )
+      {
+        return _previousRelativeSelector.IsEligibleBuffered( element.PreviousElement() ) || this.IsEligibleBuffered( element.PreviousElement() );
+      }
+    }
+
+
+
+
+
   }
 }

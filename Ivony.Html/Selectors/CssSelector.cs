@@ -121,6 +121,44 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 检查元素是否符合指定选择器要求，并缓存结果于元素当前文档版本
+    /// </summary>
+    /// <param name="selector">选择器</param>
+    /// <param name="element">元素</param>
+    /// <returns>是否符合选择器要求</returns>
+    public static bool IsEligibleBuffered( this ICssSelector selector, IHtmlElement element )
+    {
+      if ( element == null )
+        return selector.IsEligible( element );
+
+      var cacheContainer = element.Document as IVersionCacheContainer;
+      if ( cacheContainer == null )
+        return selector.IsEligible( element );
+
+
+      lock ( cacheContainer.SyncRoot )
+      {
+        var cache = cacheContainer.CurrenctVersionCache[selector] as Dictionary<IHtmlElement, bool>;
+
+        if ( cache != null )
+        {
+
+          bool result;
+          if ( cache.TryGetValue( element, out result ) )
+            return result;
+        }
+
+        else
+          cacheContainer.CurrenctVersionCache[selector] = cache = new Dictionary<IHtmlElement, bool>();
+
+        return cache[element] = selector.IsEligible( element );
+
+      }
+    }
+
+
+
 
     /// <summary>
     /// 调用此方法预热选择器

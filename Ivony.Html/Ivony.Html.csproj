@@ -110,7 +110,7 @@
     <Compile Include="Indexing\IndexManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
-    <Compile Include="Selectors\CacheableSelector.cs" />
+    <Compile Include="Selectors\CssCacheableSelector.cs" />
     <Compile Include="Selectors\CssCascadingSelector.cs" />
     <Compile Include="Selectors\CssAttributeSelector.cs" />
     <Compile Include="Selectors\CssMultipleSelector.cs" />

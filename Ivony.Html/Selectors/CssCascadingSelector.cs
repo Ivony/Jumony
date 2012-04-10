@@ -51,7 +51,7 @@ namespace Ivony.Html
         var relative = extraCapture.FindCaptures( match.Groups["relative"] ).Single().Value.Trim();
         var rightSelector = extraCapture.FindCaptures( match.Groups["rightSelector"] ).Single().Value.Trim();
 
-        selector = new CssCasecadingSelector( CssElementSelector.Create( rightSelector ), relative, selector );
+        selector = new CssCasecadingSelector( selector, relative, CssElementSelector.Create( rightSelector ) );
 
       }
 
@@ -100,7 +100,7 @@ namespace Ivony.Html
       if ( scope == null )
         return selector;
 
-      return new CssCasecadingSelector( selector, null, new CssScopeRestrictionSelector( scope ) );
+      return new CssCasecadingSelector( new CssScopeRestrictionSelector( scope ), null, selector );
     }
 
 
@@ -138,10 +138,10 @@ namespace Ivony.Html
     /// <summary>
     /// 创建层叠选择器
     /// </summary>
-    /// <param name="rightSelector">右选择器</param>
-    /// <param name="relative">关系选择符</param>
     /// <param name="leftSelector">左选择器</param>
-    public CssCasecadingSelector( ICssSelector rightSelector, string relative, ICssSelector leftSelector )
+    /// <param name="relative">关系选择符</param>
+    /// <param name="rightSelector">右选择器</param>
+    public CssCasecadingSelector( ICssSelector leftSelector, string relative, ICssSelector rightSelector )
     {
 
       if ( rightSelector == null )
@@ -305,7 +305,7 @@ namespace Ivony.Html
       if ( elements.IsNullOrEmpty() )
         return rightSelector;
 
-      return new CssCasecadingSelector( rightSelector, "", new CssElementsRestrictionSelector( elements ) );
+      return new CssCasecadingSelector( new CssElementsRestrictionSelector( elements ), "", rightSelector );
     }
 
 
@@ -350,7 +350,9 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 父级关系选择器
+    /// </summary>
     private class ParentRelativeSelector : ICssSelector
     {
 
@@ -370,6 +372,10 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 父代关系选择器
+    /// </summary>
     private class AncetorRelativeSelector : ICssSelector
     {
       private ICssSelector _parentRelativeSelector;
@@ -388,6 +394,10 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 毗邻关系选择器
+    /// </summary>
     private class PreviousRelativeSelector : ICssSelector
     {
       private ICssSelector _leftSelector;
@@ -406,6 +416,10 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 兄弟元素选择器
+    /// </summary>
     private class SiblingsRelativeSelector : ICssSelector
     {
       private ICssSelector _previousRelativeSelector;

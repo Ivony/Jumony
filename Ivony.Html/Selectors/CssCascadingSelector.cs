@@ -412,7 +412,6 @@ namespace Ivony.Html
 
       public SiblingsRelativeSelector( ICssSelector leftSelector )
       {
-        _leftSelector = leftSelector;
         _previousRelativeSelector = new PreviousRelativeSelector( leftSelector );
       }
 

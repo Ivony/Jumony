@@ -56,7 +56,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>返回简单路由表实例，便于链式注册</returns>
     public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
-      return MapRoute( routeTable, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
+      return MapRoute( routeTable, urlPattern, routeValues.ToPropertiesMap(), queryKeys, limitedQueries );
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>返回简单路由表实例，便于链式注册</returns>
     public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
-      return MapRoute( routeTable, null, urlPattern, routeValues, queryKeys );
+      return MapRoute( routeTable, urlPattern, urlPattern, routeValues, queryKeys, limitedQueries );
     }
 
 
@@ -85,7 +85,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>返回简单路由表实例，便于链式注册</returns>
     public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, object routeValues, string[] queryKeys = null, bool limitedQueries = false )
     {
-      return MapRoute( routeTable, name, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
+      return MapRoute( routeTable, name, urlPattern, routeValues.ToPropertiesMap(), queryKeys, limitedQueries );
     }
 
     /// <summary>

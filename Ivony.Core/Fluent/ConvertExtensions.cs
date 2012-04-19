@@ -40,20 +40,20 @@ namespace Ivony.Fluent
 
     static ConvertExtensions()
     {
-      Convertor<short>.castMethod    = Convert.ToInt16;
-      Convertor<int>.castMethod      = Convert.ToInt32;
-      Convertor<long>.castMethod     = Convert.ToInt64;
-      Convertor<byte>.castMethod     = Convert.ToByte;
-      Convertor<ushort>.castMethod   = Convert.ToUInt16;
-      Convertor<uint>.castMethod     = Convert.ToUInt32;
-      Convertor<ulong>.castMethod    = Convert.ToUInt64;
-      Convertor<sbyte>.castMethod    = Convert.ToSByte;
-      Convertor<float>.castMethod    = Convert.ToSingle;
-      Convertor<double>.castMethod   = Convert.ToDouble;
-      Convertor<decimal>.castMethod  = Convert.ToDecimal;
-      Convertor<bool>.castMethod     = Convert.ToBoolean;
+      Convertor<short>.castMethod = Convert.ToInt16;
+      Convertor<int>.castMethod = Convert.ToInt32;
+      Convertor<long>.castMethod = Convert.ToInt64;
+      Convertor<byte>.castMethod = Convert.ToByte;
+      Convertor<ushort>.castMethod = Convert.ToUInt16;
+      Convertor<uint>.castMethod = Convert.ToUInt32;
+      Convertor<ulong>.castMethod = Convert.ToUInt64;
+      Convertor<sbyte>.castMethod = Convert.ToSByte;
+      Convertor<float>.castMethod = Convert.ToSingle;
+      Convertor<double>.castMethod = Convert.ToDouble;
+      Convertor<decimal>.castMethod = Convert.ToDecimal;
+      Convertor<bool>.castMethod = Convert.ToBoolean;
       Convertor<DateTime>.castMethod = Convert.ToDateTime;
-      Convertor<string>.castMethod   = Convert.ToString;
+      Convertor<string>.castMethod = Convert.ToString;
     }
 
     private class Convertor<T>
@@ -95,6 +95,8 @@ namespace Ivony.Fluent
 
         if ( _value != null )
           value = _value.ToString();
+
+        dictionary.Add( key, value );
       }
 
       return dictionary;

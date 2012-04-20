@@ -34,11 +34,17 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
     /// <param name="limitedQueries">是否限制产生的 QueryString 不超过指定范围（查询键）</param>
-    internal SimpleRouteRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    internal SimpleRouteRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
       Name = name;
 
-      LimitedQueries = limitedQueries;
+      if ( queryKeys == null )
+      {
+        LimitedQueries = false;
+        queryKeys = new string[0];
+      }
+      else
+        LimitedQueries = true;
 
       DataTokens = new RouteValueDictionary();
 
@@ -95,6 +101,16 @@ namespace Ivony.Html.Web.Mvc
     /// 是否限制产生的 QueryString 不超过指定范围（查询键）
     /// </summary>
     public bool LimitedQueries
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 指示路由规则是否为单向的，单向路由只路由请求，不产生虚拟路径。
+    /// </summary>
+    public bool Oneway
     {
       get;
       private set;
@@ -421,7 +437,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       if ( !LimitedQueries )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
-      {                     //因为如果限制了查询键，则上面会确保路由键不超出限制的范围，也就不可能存在冲突。
+      {                     //因为如果限制了查询键，则上面会确保查询键不超出限制的范围，且查询键的范围与路由键范围不可能重合，也就不可能存在冲突。
         requestQueryKeySet.IntersectWith( _routeKeys );
         if ( requestQueryKeySet.Any() )
           return null;

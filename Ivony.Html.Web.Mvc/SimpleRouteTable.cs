@@ -132,6 +132,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       var candidateRules = _rules
+        .Where( r => !r.Oneway )                                               //不是单向路由规则
         .Where( r => keySet.IsSupersetOf( r.RouteKeys ) )                      //所有路由键都必须匹配
         .Where( r => keySet.IsSubsetOf( r.AllKeys ) || !r.LimitedQueries )     //所有路由键和查询字符串键必须能涵盖要设置的键。
         .Where( r => r.IsMatch( _values ) )                                    //必须满足路由规则所定义的路由数据。
@@ -200,9 +201,8 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="name">规则名称</param>
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="routeValues">静态/默认路由值</param>
-    /// <param name="queryKeys">可用于 QueryString 的参数</param>
-    /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
-    public virtual SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    /// <param name="queryKeys">可用于 QueryString 的参数，若为null则表示无限制</param>
+    public virtual SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
 
       if ( urlPattern == null )
@@ -211,7 +211,7 @@ namespace Ivony.Html.Web.Mvc
       if ( routeValues == null )
         throw new ArgumentNullException( "routeValues" );
 
-      var rule = new SimpleRouteRule( name, urlPattern, routeValues, queryKeys ?? new string[0], limitedQueries );
+      var rule = new SimpleRouteRule( name, urlPattern, routeValues, queryKeys );
 
       return AddRule( rule );
     }
@@ -468,7 +468,7 @@ namespace Ivony.Html.Web.Mvc
     /// <remarks>
     /// 简单区域路由表会自动为路由规则增加一个静态路由值 area 保存当前区域名。
     /// </remarks>
-    public override SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys, bool limitedQueries )
+    public override SimpleRouteRule AddRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
 
       var _routeValues = new Dictionary<string, string>( routeValues, StringComparer.OrdinalIgnoreCase );
@@ -478,7 +478,7 @@ namespace Ivony.Html.Web.Mvc
 
       _routeValues.Add( "area", AreaName );
 
-      return base.AddRule( name, urlPattern, _routeValues, queryKeys, limitedQueries );
+      return base.AddRule( name, urlPattern, _routeValues, queryKeys );
     }
 
 

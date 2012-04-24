@@ -82,7 +82,7 @@ namespace HtmlTranslator
       TranslationProgress.Maximum = Task.Terms.Length;
       FilenameTextBlock.Text = filePath;
 
-      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm );
+      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm || string.IsNullOrWhiteSpace( t.TranslatedTerm ) );
 
 
     }

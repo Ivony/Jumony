@@ -46,6 +46,20 @@ namespace HtmlTranslator
         {
           Dictionary = TranslateDictionary.Merge( Dictionary, CreateDictionary( terms ) );
           terms = ExtractTerms( _document );
+
+          foreach ( var t in terms )
+          {
+            var condidateTerms = Dictionary[t.SourceTerm];
+            
+            string translatedResult;
+            if ( condidateTerms.IsSingle( out translatedResult ) )
+              t.TranslatedTerm = translatedResult;
+
+            else
+              t.TranslatedTerm = "";
+
+          }
+
           SaveTerms( path, terms );
         }
 

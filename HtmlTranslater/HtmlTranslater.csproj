@@ -60,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CandidateTermsConverter.cs" />
+    <Compile Include="TranslateDictionary.cs" />
     <Compile Include="TranslateTask.cs" />
     <Compile Include="TranslationTerm.cs" />
     <Page Include="MainWindow.xaml">

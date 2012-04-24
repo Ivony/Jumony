@@ -28,12 +28,9 @@ namespace HtmlTranslator
     public MainWindow()
     {
       InitializeComponent();
-
-      DataView.ItemsSource = Data;
     }
 
 
-    private readonly ObservableCollection<TranslationTerm> Data = new ObservableCollection<TranslationTerm>();
 
 
     private OpenFileDialog openFile = InitializeOpenFileDialog();
@@ -79,7 +76,8 @@ namespace HtmlTranslator
 
       Task = TranslateTask.LoadTranslateTask( filePath );
       WebBrowser.Navigate( Task.Translate() );
-      DataView.ItemsSource = Task.Terms;
+      DataView.DataContext = Task;
+      DataView.Resources["CandidateTermsConverter"].CastTo<CandidateTermsConverter>().Task = Task;
 
       TranslationProgress.Maximum = Task.Terms.Length;
       FilenameTextBlock.Text = filePath;

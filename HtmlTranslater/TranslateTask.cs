@@ -7,18 +7,67 @@ using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.Parser;
 using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace HtmlTranslator
 {
   public class TranslateTask : IHtmlAdapter
   {
-    private   IHtmlDocument document;
+    private IHtmlDocument _document;
+    private string _documentPath;
 
-    public TranslateTask( IHtmlDocument document, TranslationTerm[] terms )
+
+    public TranslateTask( IHtmlDocument document )
     {
-      this.document = document;
-      Terms = terms;
+      _document = document;
     }
+
+    public void Initialize()
+    {
+      var uri = _document.DocumentUri;
+      if ( !uri.IsFile )
+        throw new InvalidOperationException();
+
+
+      _documentPath = uri.LocalPath;
+
+      {
+        var path = _documentPath + ".dictionary";
+        Dictionary = LoadDictionary( path ) ?? new TranslateDictionary();
+      }
+
+
+      {
+        var path = _documentPath + ".translation";
+
+        var terms = LoadTerms( path );
+
+        if ( !ValidateTerms( _document, terms ) )
+        {
+          Dictionary = TranslateDictionary.Merge( Dictionary, CreateDictionary( terms ) );
+          terms = ExtractTerms( _document );
+          SaveTerms( path, terms );
+        }
+
+        Terms = terms;
+      }
+    }
+
+    public TranslationTerm[] Terms
+    {
+      get;
+      private set;
+    }
+
+
+
+    public TranslateDictionary Dictionary
+    {
+      get;
+      private set;
+    }
+
+
 
     public static TranslateTask LoadTranslateTask( string filepath )
     {
@@ -32,30 +81,24 @@ namespace HtmlTranslator
 
       var document = new JumonyParser().LoadDocument( File.OpenText( filepath ), new Uri( filepath ) );
 
-      var terms = EnsureTermsData( document );
+      var task = new TranslateTask( document );
 
-      return new TranslateTask( document, terms );
+      task.Initialize();
+
+      return task;
 
     }
 
-    private static TranslationTerm[] EnsureTermsData( IHtmlDocument document )
+
+    private static TranslationTerm[] ExtractTerms( IHtmlDocument document )
     {
-      var uri = document.DocumentUri;
-      if ( !uri.IsFile )
-        throw new InvalidOperationException();
-
-      var path = uri.LocalPath + ".translation";
-
-
-
-
-      var terms = LoadTerms( path );
-
-      if ( !ValidateTerms( document, terms ) )
-        return CreateTermsData( document, path );
-
-      return terms;
+      return document.DescendantNodes()
+        .OfType<IHtmlTextNode>()
+        .Where( IsTranslatable )
+        .Select( t => new TranslationTerm( t ) )
+        .ToArray();
     }
+
 
     private static TranslationTerm[] LoadTerms( string path )
     {
@@ -69,6 +112,15 @@ namespace HtmlTranslator
       }
     }
 
+
+    private static void SaveTerms( string path, TranslationTerm[] terms )
+    {
+      using ( var stream = File.Create( path ) )
+      {
+        var serializer = new DataContractJsonSerializer( typeof( TranslationTerm[] ) );
+        serializer.WriteObject( stream, terms );
+      }
+    }
 
     private static bool ValidateTerms( IHtmlDocument document, TranslationTerm[] terms )
     {
@@ -92,53 +144,60 @@ namespace HtmlTranslator
 
     }
 
-    private static TranslationTerm[] CreateTermsData( IHtmlDocument document, string path )
+
+
+    private static TranslateDictionary LoadDictionary( string path )
     {
-      var terms = ExtractTerms( document );
+      if ( !File.Exists( path ) )
+        return null;
 
-
-      Save( path, terms );
-
-      return terms;
+      var serializer = new BinaryFormatter();
+      using ( var stream = File.OpenRead( path ) )
+      {
+        return serializer.Deserialize( stream ) as TranslateDictionary;
+      }
     }
 
-    private static TranslationTerm[] ExtractTerms( IHtmlDocument document )
+    private static void SaveDictionary( string path, TranslateDictionary dictionary )
     {
-      return document.DescendantNodes()
-        .OfType<IHtmlTextNode>()
-        .Where( IsTranslatable )
-        .Select( t => new TranslationTerm( t ) )
-        .ToArray();
+      using ( var stream = File.Create( path ) )
+      {
+        var serializer = new BinaryFormatter();
+        serializer.Serialize( stream, dictionary );
+      }
     }
 
 
 
-    public TranslationTerm[] Terms
+    private static TranslateDictionary CreateDictionary( TranslationTerm[] terms )
     {
-      get;
-      private set;
+
+      if ( terms == null )
+        return null;
+
+      var dictionary = new TranslateDictionary();
+
+      foreach ( var t in terms )
+        dictionary.AddTerm( t );
+
+      return dictionary;
     }
+
 
 
     public void Save()
     {
-      var uri = document.DocumentUri;
-      if ( !uri.IsFile )
-        throw new InvalidOperationException();
 
-      var path = uri.LocalPath + ".translation";
-
-      Save( path, Terms );
-    }
-
-
-    private static void Save( string path, TranslationTerm[] terms )
-    {
-      using ( var stream = File.Create( path ) )
       {
-        var serializer = new DataContractJsonSerializer( typeof( TranslationTerm[] ) );
-        serializer.WriteObject( stream, terms );
+        var path = _documentPath + ".translation";
+        SaveTerms( path, Terms );
       }
+
+      {
+        var path = _documentPath + ".dictionary";
+        SaveDictionary( path, Dictionary );
+      }
+
     }
 
 
@@ -149,7 +208,7 @@ namespace HtmlTranslator
       Save();
 
 
-      var uri = document.DocumentUri;
+      var uri = _document.DocumentUri;
       if ( !uri.IsFile )
         throw new InvalidOperationException();
 
@@ -157,7 +216,7 @@ namespace HtmlTranslator
 
       using ( var writer = File.CreateText( path ) )
       {
-        document.Render( writer, this );
+        _document.Render( writer, this );
       }
 
       return path;

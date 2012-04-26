@@ -16,7 +16,7 @@
     </Grid.RowDefinitions>
     <WebBrowser Grid.Row="1" Margin="12,12,12,0" Name="WebBrowser" />
     <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" />
-    <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" ItemsSource="{Binding Path=Terms}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsTextSearchEnabled="False">
+    <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" ItemsSource="{Binding Path=Terms}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsTextSearchEnabled="False" SelectionMode="Single" SelectedCellsChanged="DataView_SelectedCellsChanged" CanUserResizeRows="False" CanUserSortColumns="True" CurrentCellChanged="DataView_CurrentCellChanged">
       <DataGrid.Resources>
         <src:CandidateTermsConverter x:Key="CandidateTermsConverter" />
       </DataGrid.Resources>
@@ -26,7 +26,7 @@
         <DataGridTemplateColumn Header="Translated">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Path=TranslatedTerm}" />
+              <TextBlock Text="{Binding Path=TranslatedTerm}" Padding="3" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
           <DataGridTemplateColumn.CellEditingTemplate>

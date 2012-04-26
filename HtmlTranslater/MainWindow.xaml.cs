@@ -82,7 +82,7 @@ namespace HtmlTranslator
       TranslationProgress.Maximum = Task.Terms.Length;
       FilenameTextBlock.Text = filePath;
 
-      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm || string.IsNullOrWhiteSpace( t.TranslatedTerm ) );
+      TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm && !string.IsNullOrWhiteSpace( t.TranslatedTerm ) );
 
 
     }
@@ -94,5 +94,28 @@ namespace HtmlTranslator
 
       TranslationProgress.Value = Task.Terms.Count( t => t.SourceTerm != t.TranslatedTerm );
     }
+
+
+    private void DataView_CurrentCellChanged( object sender, EventArgs e )
+    {
+
+      var dataGrid = (DataGrid) sender;
+      if ( dataGrid.CurrentCell != null && dataGrid.CurrentCell.Column.Header.ToString() == "Translated" )
+        dataGrid.BeginEdit();
+
+    }
+
+    private void DataView_SelectedCellsChanged( object sender, SelectedCellsChangedEventArgs e )
+    {
+      var cell = e.AddedCells.Where( c => c.Column.Header.ToString() == "Translated" ).FirstOrDefault();
+      var dataGrid = (DataGrid) sender;
+
+      if ( cell != null )
+      {
+        if ( dataGrid.CurrentCell != cell )
+          dataGrid.CurrentCell = cell;
+      }
+    }
+
   }
 }

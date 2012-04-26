@@ -23,16 +23,12 @@ namespace HtmlTranslator
     public TranslationTerm( IHtmlTextNode textNode )
     {
       TextNode = textNode;
+      
       if ( !textNode.Ancestors().Any( e => HtmlSpecification.preformatedElements.Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
-      {
         SourceTerm = whitespaceRegex.Replace( textNode.HtmlText, " " );
-        TranslatedTerm = whitespaceRegex.Replace( textNode.HtmlText, " " );
-      }
+
       else
-      {
         SourceTerm = textNode.HtmlText;
-        TranslatedTerm = textNode.HtmlText;
-      }
     }
 
 

@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Ivony.Html;
-using Ivony.Html.MSHTMLAdapter;
 using System.Collections.ObjectModel;
 using Ivony.Fluent;
 using Microsoft.Win32;

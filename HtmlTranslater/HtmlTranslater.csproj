@@ -36,10 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\..\Program Files (x86)\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -113,10 +109,6 @@
     <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
       <Name>Ivony.Html</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MSHTML.Adapter\MSHTML.Adapter.csproj">
-      <Project>{150787A5-84FE-49EB-ACAD-B04838DF6B25}</Project>
-      <Name>MSHTML.Adapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

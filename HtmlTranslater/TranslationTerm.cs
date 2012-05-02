@@ -6,7 +6,6 @@ using System.Windows.Data;
 using System.ComponentModel;
 using Ivony.Html;
 using Ivony.Fluent;
-using mshtml;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 

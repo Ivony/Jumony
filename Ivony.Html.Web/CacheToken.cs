@@ -201,6 +201,31 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 确定两个缓存标记是否相等
+    /// </summary>
+    /// <param name="token1">要比较的缓存标记</param>
+    /// <param name="token2">要比较的另一个缓存标记</param>
+    /// <returns></returns>
+    public static bool operator ==( CacheToken token1, CacheToken token2 )
+    {
+
+      return Equals( token1, token2 );
+    }
+
+    /// <summary>
+    /// 确定两个缓存标记是否不相等
+    /// </summary>
+    /// <param name="token1">要比较的缓存标记</param>
+    /// <param name="token2">要比较的另一个缓存标记</param>
+    /// <returns></returns>
+    public static bool operator !=( CacheToken token1, CacheToken token2 )
+    {
+      return !Equals( token1, token2 );
+    }
+
+
+
 
 
 

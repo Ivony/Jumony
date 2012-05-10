@@ -260,12 +260,12 @@ namespace Ivony.Html.Web
       var cacheKey = token.CacheKey();
       var name = invalidPathCharactor.Replace( token.CacheKey(), "" );
 
-      if ( name.Length > 30 )
-        name = name.Substring( 0, 30 );
+      if ( name.Length > 20 )
+        name = name.Substring( 0, 20 );
 
-      FormsAuthentication.HashPasswordForStoringInConfigFile( cacheKey, "SHA1" );
+      var hash = FormsAuthentication.HashPasswordForStoringInConfigFile( cacheKey, "SHA1" );
 
-      return name + "_" + unchecked( (uint) cacheKey.GetHashCode() ) + ".cache";
+      return name + "_" + hash + ".cache";
     }
 
 

@@ -225,7 +225,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected override Stream CreateLoadStream( CacheToken token )
     {
-      var path = Path.Combine( PhysicalPath, token.CreateFilename() );
+      var path = Path.Combine( PhysicalPath, CreateFilename( token ) );
       if ( File.Exists( path ) )
         return File.OpenRead( path );
       else
@@ -240,7 +240,7 @@ namespace Ivony.Html.Web
     protected override Stream CreateSaveStream( CacheToken token )
     {
       Directory.CreateDirectory( PhysicalPath );
-      var path = Path.Combine( PhysicalPath, token.CreateFilename() );
+      var path = Path.Combine( PhysicalPath, CreateFilename( token ) );
       return File.OpenWrite( path );
     }
 

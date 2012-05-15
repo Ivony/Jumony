@@ -144,6 +144,8 @@ namespace Ivony.Html.Web
 
       else
         clientCachePolicy.SetMaxAge( Duration );
+
+      clientCachePolicy.SetVary( CacheToken.VaryHeaders );
     }
 
 

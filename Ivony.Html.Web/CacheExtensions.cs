@@ -175,27 +175,6 @@ namespace Ivony.Html.Web
 
     private static readonly Regex invalidPathCharactor = new Regex( @"\W+", RegexOptions.Compiled );
 
-    /// <summary>
-    /// 从缓存标示中创建文件名
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    public static string CreateFilename( this CacheToken token )
-    {
-      var cacheKey = token.CacheKey();
-      var name = invalidPathCharactor.Replace( token.CacheKey(), "" );
-
-      if ( name.Length > 50 )
-        name = name.Substring( 0, 50 );
-
-
-      return name + "_" + unchecked( (uint) cacheKey.GetHashCode() ) + ".cache";
-
-
-    }
-
-
-
 
 
   }

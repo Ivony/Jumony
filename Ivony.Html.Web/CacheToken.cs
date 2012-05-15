@@ -38,6 +38,15 @@ namespace Ivony.Html.Web
       get { return new CacheDependency[0]; }
     }
 
+    private List<string> _varyHeaders = new List<string>();
+
+
+    public string[] VaryHeaders
+    {
+      get { return _varyHeaders.ToArray(); }
+    }
+
+
 
 
     private string _tokenString;

@@ -131,7 +131,7 @@ namespace Ivony.Html.Web
 
     public override void SetVary( string[] headers )
     {
-      throw new NotSupportedException();
+      _cachePolicy.SetVaryByCustom( string.Join( ",", headers ) );
     }
   }
 
@@ -197,6 +197,9 @@ namespace Ivony.Html.Web
 
       if ( _etag != null )
         response.AppendHeader( "ETag", _etag );
+
+      if ( _varyHeaders != null && _varyHeaders.Any() )
+        response.AppendHeader( "Vary", string.Join( ",", _varyHeaders ) );
 
     }
 

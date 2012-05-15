@@ -413,12 +413,19 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      IEnumerable<HttpCookie> _cookies = context.Request.Cookies.Cast<HttpCookie>();
+      var cookies = context.Request.Cookies;
+
+
+      var keys = cookies.AllKeys;
 
       if ( !names.IsNullOrEmpty() )
-        _cookies = _cookies.Where( c => names.Contains( c.Name, StringComparer.OrdinalIgnoreCase ) );
+        keys = keys.Intersect( names, StringComparer.OrdinalIgnoreCase ).ToArray();
 
-      return CreateToken( "Cookies", _cookies.Select( c => string.Format( "{0}={1}", c.Name.Replace( "=", "@=" ), c.Value ) ).ToArray() );
+      var values = keys
+        .Select( key => string.Format( "{0}={1}", key.Replace( "=", "@=" ), cookies[key].Value ) )
+        .ToArray();
+
+      return CreateToken( "Cookies", values );
     }
 
 

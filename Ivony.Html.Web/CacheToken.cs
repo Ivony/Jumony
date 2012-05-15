@@ -20,7 +20,7 @@ namespace Ivony.Html.Web
 
     private CacheTokenItem[] _tokens;
 
-    private CacheToken( params CacheTokenItem[] tokens )
+    private CacheToken( CacheDependency[] dependencies, string[] varyHeaders, params CacheTokenItem[] tokens )
     {
       if ( tokens.GroupBy( t => t.TypeName ).Any( g => g.Count() > 1 ) )
         throw new Exception( "不能合并包含相同类型的 CacheToken" );
@@ -35,15 +35,14 @@ namespace Ivony.Html.Web
     /// </summary>
     public CacheDependency[] Dependencies
     {
-      get { return new CacheDependency[0]; }
+      get;
+      private set;
     }
-
-    private List<string> _varyHeaders = new List<string>();
-
 
     public string[] VaryHeaders
     {
-      get { return _varyHeaders.ToArray(); }
+      get;
+      private set;
     }
 
 
@@ -176,7 +175,7 @@ namespace Ivony.Html.Web
 
       public static implicit operator CacheToken( CacheTokenItem item )
       {
-        return new CacheToken( item );
+        return new CacheToken( new CacheDependency[0], new string[0], item );
       }
 
     }
@@ -325,7 +324,11 @@ namespace Ivony.Html.Web
       if ( tokens.IsSingle() )
         return tokens.Single();
 
-      return new CacheToken( tokens.SelectMany( t => t._tokens ).ToArray() );
+      return new CacheToken(
+        tokens.SelectMany( t => t.Dependencies ).Distinct().ToArray(),
+        tokens.SelectMany( t => t.VaryHeaders ).Distinct( StringComparer.OrdinalIgnoreCase ).ToArray(),
+        tokens.SelectMany( t => t._tokens ).ToArray()
+        );
 
     }
 

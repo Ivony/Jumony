@@ -318,18 +318,36 @@ namespace Ivony.Html.Web
     /// <returns>创建的 CacheToken</returns>
     public static CacheToken CreateToken( string typeName, params string[] tokens )
     {
-      return CreateToken( null, null, typeName, tokens );
+      return CreateToken( typeName, new CacheDependency[0], new string[0], tokens );
     }
 
     /// <summary>
     /// 创建 CacheToken
     /// </summary>
-    /// <param name="cacheDependencies">缓存依赖项</param>
-    /// <param name="vary">客户端缓存依赖头</param>
+    /// <param name="cacheDependency">缓存依赖项</param>
+    /// <param name="varyHeader">客户端缓存依赖头</param>
     /// <param name="typeName">缓存标记类别名称</param>
     /// <param name="tokens">用于标识的字符串</param>
     /// <returns>创建的 CacheToken</returns>
-    public static CacheToken CreateToken( CacheDependency[] cacheDependencies, string[] varyHeaders, string typeName, params string[] tokens )
+    public static CacheToken CreateToken( string typeName, CacheDependency cacheDependency, string varyHeader, string[] tokens )
+    {
+
+      var cacheDependencies = cacheDependency == null ? new CacheDependency[0] : new[] { cacheDependency };
+      var varyHeaders = varyHeader == null ? new string[0] : new[] { varyHeader };
+
+      return CreateToken( typeName, cacheDependencies, varyHeaders, tokens );
+    }
+
+
+    /// <summary>
+    /// 创建 CacheToken
+    /// </summary>
+    /// <param name="cacheDependencies">缓存依赖项</param>
+    /// <param name="varyHeaders">客户端缓存依赖头</param>
+    /// <param name="typeName">缓存标记类别名称</param>
+    /// <param name="tokens">用于标识的字符串</param>
+    /// <returns>创建的 CacheToken</returns>
+    public static CacheToken CreateToken( string typeName, CacheDependency[] cacheDependencies, string[] varyHeaders, string[] tokens )
     {
       if ( typeName == null )
         throw new ArgumentNullException( "typeName" );
@@ -449,7 +467,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 从 Cookies 中产生缓存标记
     /// </summary>
-    /// <param name="cookies">当前 HTTP 请求上下文</param>
+    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <returns>产生的缓存标记</returns>
     public static CacheToken FromCookies( HttpContextBase context )
     {
@@ -460,7 +478,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 从 Cookies 中产生缓存标记
     /// </summary>
-    /// <param name="cookies">当前 HTTP 请求上下文</param>
+    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="names">要产生缓存标记的 Cookie 名</param>
     /// <returns>产生的缓存标记</returns>
     public static CacheToken FromCookies( HttpContextBase context, params string[] names )
@@ -481,7 +499,7 @@ namespace Ivony.Html.Web
         .Select( key => string.Format( "{0}={1}", key.Replace( "=", "@=" ), cookies[key].Value ) )
         .ToArray();
 
-      return CreateToken( "Cookies", values );
+      return CreateToken( "Cookies", null, "Set-Cookie", values );
     }
 
 
@@ -497,7 +515,7 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      return CreateToken( "SessionID", context.Session.SessionID );
+      return CreateToken( "SessionID", null, "Set-Cookie", new[] { context.Session.SessionID } );
     }
 
 

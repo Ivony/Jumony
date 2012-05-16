@@ -23,7 +23,7 @@ namespace Ivony.Html.Indexing
     /// <summary>
     /// 构建索引实例
     /// </summary>
-    /// <param name="document"></param>
+    /// <param name="manager">文档索引管理器</param>
     public ElementClassIndex( IndexManager manager ) : base( manager ) { }
 
     private Hashtable data;

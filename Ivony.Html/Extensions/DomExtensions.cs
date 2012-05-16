@@ -765,7 +765,6 @@ namespace Ivony.Html
     /// <summary>
     /// 尝试从 DOM 中移除这些节点
     /// </summary>
-    /// <typeparam name="T">节点类型</typeparam>
     /// <param name="nodes">要移除的节点</param>
     /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
     /// <exception cref="System.InvalidOperationException">若节点不是位于同一文档</exception>

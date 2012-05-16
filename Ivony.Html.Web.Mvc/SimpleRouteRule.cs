@@ -406,7 +406,7 @@ namespace Ivony.Html.Web.Mvc
         pathParagraphs = new string[0];
 
 
-      if ( pathParagraphs.Length != Paragraphes.Length )
+      if ( pathParagraphs.Length != Paragraphes.Length )//路径段长度不一致，规则不适用
         return null;
 
 
@@ -424,7 +424,7 @@ namespace Ivony.Html.Web.Mvc
 
         if ( !paragraph.StartsWith( "{" ) )
         {
-          if ( !pathParagraphs[i].EqualsIgnoreCase( paragraph ) )
+          if ( !pathParagraphs[i].EqualsIgnoreCase( paragraph ) )//静态路径段不符，规则不适用
             return null;
         }
         else
@@ -437,7 +437,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       if ( !LimitedQueries )//如果没有限制查询键，但传进来的查询键与现有路由键有任何冲突，则这条规则不适用。
-      {                     //因为如果限制了查询键，则上面会确保查询键不超出限制的范围，且查询键的范围与路由键范围不可能重合，也就不可能存在冲突。
+      {                     //因为如果限制了查询键，则上面会确保查询键不超出限制的范围，且查询键的范围与路由键范围不可能重合（构造函数限定），也就不可能存在冲突。
         requestQueryKeySet.IntersectWith( _routeKeys );
         if ( requestQueryKeySet.Any() )
           return null;

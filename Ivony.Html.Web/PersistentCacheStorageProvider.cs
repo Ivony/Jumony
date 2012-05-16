@@ -23,7 +23,7 @@ namespace Ivony.Html.Web
     public virtual void InsertCacheItem( CacheItem cacheItem )
     {
 
-      if ( cacheItem.Expiration < DateTime.UtcNow )//缓存已过期
+      if ( !cacheItem.IsValid() )//缓存已过期
         return;
 
       SaveCacheItem( cacheItem );
@@ -39,7 +39,7 @@ namespace Ivony.Html.Web
 
       var cacheItem = LoadCacheItem( token );
 
-      if ( cacheItem != null && cacheItem.CacheToken == token && cacheItem.Expiration >= DateTime.UtcNow )//检查缓存是否已过期
+      if ( cacheItem != null && cacheItem.IsValid( token ) )//检查缓存是否已过期
         return cacheItem;
 
       return null;
@@ -75,7 +75,7 @@ namespace Ivony.Html.Web
 
         var cacheItem = Deserialize( stream );
 
-        if ( cacheItem != null && cacheItem.CacheToken == token && cacheItem.Expiration >= DateTime.UtcNow )
+        if ( cacheItem != null && cacheItem.IsValid( token ) )
           return cacheItem;
         else
           return null;
@@ -90,7 +90,7 @@ namespace Ivony.Html.Web
     /// <param name="stream"></param>
     protected virtual void Serialize( CacheItem cacheItem, Stream stream )
     {
-      var formatter  = new BinaryFormatter();
+      var formatter = new BinaryFormatter();
       formatter.Serialize( stream, cacheItem );
     }
 
@@ -205,7 +205,7 @@ namespace Ivony.Html.Web
 
         if ( cacheItem != null )
         {
-          if ( cacheItem.Expiration < DateTime.UtcNow )//缓存已过期
+          if ( !cacheItem.IsValid() )//缓存已过期
             return null;
 
           return cacheItem;

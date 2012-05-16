@@ -33,13 +33,13 @@ namespace Ivony.Html.Web
       CacheToken = token;
       CachedResponse = cached;
 
-      var shake = Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
+      var shake = Math.Min( DurationWhenCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
       var random = new Random( DateTime.Now.Millisecond );
       var offset = TimeSpan.FromMilliseconds( random.NextDouble() * shake );
 
       Expiration = DateTime.UtcNow + duration + offset;
 
-      DurationFromCreated = duration;
+      DurationWhenCreated = duration;
     }
 
 
@@ -78,12 +78,40 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建缓存项时设置的缓存持续时间
     /// </summary>
-    protected TimeSpan DurationFromCreated
+    protected TimeSpan DurationWhenCreated
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 缓存项是否还有效
+    /// </summary>
+    /// <returns>是否有效</returns>
+    public bool IsValid()
+    {
+      if ( Expiration < DateTime.UtcNow )
+        return false;
+
+      if ( CacheToken.CacheDependencies.Any( d => d.HasChanged ) )
+        return false;
+
+      return true;
+    }
+
+    /// <summary>
+    /// 缓存项是否还有效
+    /// </summary>
+    /// <param name="token">缓存标识，检查检查缓存项的标识是否与提供的一致，否则也认为缓存项无效</param>
+    /// <returns>是否有效</returns>
+    public bool IsValid( CacheToken token )
+    {
+      if ( IsValid() )
+        return CacheToken == token;
+
+      return false;
+    }
 
 
 
@@ -99,7 +127,7 @@ namespace Ivony.Html.Web
     /// <param name="cachePolicy"></param>
     public void SetMaxAge( ClientCachePolicyBase cachePolicy )
     {
-      var shake = Math.Min( DurationFromCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
+      var shake = Math.Min( DurationWhenCreated.TotalMilliseconds / 50, maxShake.TotalMilliseconds );
       SetMaxAge( cachePolicy, TimeSpan.FromMilliseconds( shake ) );
     }
 

@@ -209,7 +209,7 @@ namespace Ivony.Html.Web
       if ( _cacheItem == null )
         _cacheItem = CacheStorageProvider.GetCacheItem( CacheToken );
 
-      if ( _cacheItem != null && _cacheItem.Expiration >= DateTime.UtcNow )//确保缓存未过期
+      if ( _cacheItem != null && _cacheItem.IsValid() )//确保缓存未过期
         return _cacheItem;
 
       return null;

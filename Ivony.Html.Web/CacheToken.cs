@@ -20,12 +20,16 @@ namespace Ivony.Html.Web
 
     private CacheTokenItem[] _tokens;
 
-    private CacheToken( CacheDependency[] dependencies, string[] varyHeaders, params CacheTokenItem[] tokens )
+    private CacheToken( params CacheTokenItem[] tokens )
     {
       if ( tokens.GroupBy( t => t.TypeName ).Any( g => g.Count() > 1 ) )
         throw new Exception( "不能合并包含相同类型的 CacheToken" );
 
       _tokens = tokens;
+
+      CacheDependencies = tokens.SelectMany( t => t.CacheDependencies ).NotNull().Distinct().ToArray();
+      VaryHeaders = tokens.SelectMany( t => t.VaryHeaders ).NotNull().Distinct( StringComparer.OrdinalIgnoreCase ).ToArray();
+
     }
 
 
@@ -33,12 +37,16 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取缓存依赖项
     /// </summary>
-    public CacheDependency[] Dependencies
+    public CacheDependency[] CacheDependencies
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 获取客户端缓存依赖头
+    /// </summary>
     public string[] VaryHeaders
     {
       get;
@@ -103,13 +111,45 @@ namespace Ivony.Html.Web
     private sealed class CacheTokenItem
     {
 
+      /// <summary>
+      /// 类型名
+      /// </summary>
+      public string TypeName
+      {
+        get;
+        private set;
+      }
+
+      /// <summary>
+      /// 缓存依赖项
+      /// </summary>
+      public CacheDependency[] CacheDependencies
+      {
+        get;
+        private set;
+      }
+
+      /// <summary>
+      /// 客户端缓存依赖头
+      /// </summary>
+      public string[] VaryHeaders
+      {
+        get;
+        private set;
+      }
+
+
+
       private string[] _tokens;
 
-
-      public CacheTokenItem( string type, params string[] tokens )
+      public CacheTokenItem( string type, string[] tokens, CacheDependency[] cacheDependency, string[] varyHeaders )
       {
         TypeName = type;
         _tokens = tokens;
+
+        VaryHeaders = varyHeaders;
+        CacheDependencies = cacheDependency;
+
       }
 
       private string _tokenString;
@@ -125,14 +165,6 @@ namespace Ivony.Html.Web
       }
 
 
-      /// <summary>
-      /// 类型名
-      /// </summary>
-      public string TypeName
-      {
-        get;
-        private set;
-      }
 
 
       /// <summary>
@@ -175,7 +207,7 @@ namespace Ivony.Html.Web
 
       public static implicit operator CacheToken( CacheTokenItem item )
       {
-        return new CacheToken( new CacheDependency[0], new string[0], item );
+        return new CacheToken( item );
       }
 
     }
@@ -277,6 +309,7 @@ namespace Ivony.Html.Web
     }
 
 
+
     /// <summary>
     /// 创建 CacheToken
     /// </summary>
@@ -285,13 +318,26 @@ namespace Ivony.Html.Web
     /// <returns>创建的 CacheToken</returns>
     public static CacheToken CreateToken( string typeName, params string[] tokens )
     {
+      return CreateToken( null, null, typeName, tokens );
+    }
+
+    /// <summary>
+    /// 创建 CacheToken
+    /// </summary>
+    /// <param name="cacheDependencies">缓存依赖项</param>
+    /// <param name="vary">客户端缓存依赖头</param>
+    /// <param name="typeName">缓存标记类别名称</param>
+    /// <param name="tokens">用于标识的字符串</param>
+    /// <returns>创建的 CacheToken</returns>
+    public static CacheToken CreateToken( CacheDependency[] cacheDependencies, string[] varyHeaders, string typeName, params string[] tokens )
+    {
       if ( typeName == null )
         throw new ArgumentNullException( "typeName" );
 
       if ( tokens == null )
         throw new ArgumentNullException( "tokens" );
 
-      return new CacheTokenItem( typeName, tokens );
+      return new CacheTokenItem( typeName, tokens, cacheDependencies, varyHeaders );
     }
 
 
@@ -321,14 +367,12 @@ namespace Ivony.Html.Web
         return null;
 
       tokens = tokens.NotNull();
-      if ( tokens.IsSingle() )
-        return tokens.Single();
 
-      return new CacheToken(
-        tokens.SelectMany( t => t.Dependencies ).Distinct().ToArray(),
-        tokens.SelectMany( t => t.VaryHeaders ).Distinct( StringComparer.OrdinalIgnoreCase ).ToArray(),
-        tokens.SelectMany( t => t._tokens ).ToArray()
-        );
+      CacheToken result;
+      if ( tokens.IsSingle( out result ) )
+        return result;
+
+      return new CacheToken( tokens.SelectMany( t => t._tokens ).ToArray() );
 
     }
 
@@ -453,7 +497,7 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      return new CacheTokenItem( "SessionID", context.Session.SessionID );
+      return CreateToken( "SessionID", context.Session.SessionID );
     }
 
 
@@ -467,7 +511,7 @@ namespace Ivony.Html.Web
       if ( context == null )
         throw new ArgumentNullException( "context" );
 
-      return new CacheTokenItem( "VirtualPath", context.Request.AppRelativeCurrentExecutionFilePath );
+      return CreateToken( "VirtualPath", context.Request.AppRelativeCurrentExecutionFilePath );
     }
 
 

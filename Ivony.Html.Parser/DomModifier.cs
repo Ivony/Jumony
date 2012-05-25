@@ -12,7 +12,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// DOM 结构修改器
   /// </summary>
-  public class DomModifier : IHtmlDomModifier, INotifyDomChanged, IVersionControl
+  public class DomModifier : IHtmlDomModifier, INotifyDomChanged, IVersionControl, ISynchronizedDomModifier
   {
 
     /// <summary>

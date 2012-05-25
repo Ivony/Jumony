@@ -96,6 +96,15 @@ namespace Ivony.Html
 
 
   /// <summary>
+  /// 同步修改 DOM 结构的 DomModifier
+  /// </summary>
+  public interface ISynchronizedDomModifier : IHtmlDomModifier
+  {
+    object SyncRoot { get; }
+  }
+
+
+  /// <summary>
   /// 此接口用于框架，请勿在代码中使用。
   /// </summary>
   public interface IVersionControl : IHtmlDomModifier

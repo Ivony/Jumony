@@ -45,6 +45,7 @@
     <Compile Include="BindingManager.cs" />
     <Compile Include="ElementBinding.cs" />
     <Compile Include="IBindingProvider.cs" />
+    <Compile Include="IValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
   </ItemGroup>

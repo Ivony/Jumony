@@ -41,9 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingElement.cs" />
+    <Compile Include="BindingExpress.cs" />
     <Compile Include="BindingManager.cs" />
-    <Compile Include="IElementBinding.cs" />
+    <Compile Include="ElementBinding.cs" />
+    <Compile Include="IBindingProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

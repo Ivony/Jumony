@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Web.Binding
 {
-  
-
-  public class BindingElement
+  public interface IValueConverter
   {
 
+    object Convert( object value );
 
   }
 }

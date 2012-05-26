@@ -5,11 +5,9 @@ using System.Text;
 
 namespace Ivony.Html.Web.Binding
 {
-  
-
-  public class BindingElement
+  public interface IBindingProvider
   {
-
-
+    IBinding CreateBinding( IHtmlDomObject target, IDictionary<string, string> args );
   }
+
 }

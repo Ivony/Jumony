@@ -27,7 +27,6 @@ namespace Ivony.Html.Web
 
       _tokens = tokens;
 
-      CacheDependencies = tokens.SelectMany( t => t.CacheDependencies.IfNull( new CacheDependency[0] ) ).NotNull().Distinct().ToArray();
       VaryHeaders = tokens.SelectMany( t => t.VaryHeaders ).NotNull().Distinct( StringComparer.OrdinalIgnoreCase ).ToArray();
 
     }
@@ -37,11 +36,9 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取缓存依赖项
     /// </summary>
-    [NonSerialized]
     public CacheDependency[] CacheDependencies
     {
-      get;
-      private set;
+      get { return new CacheDependency[0]; }
     }
 
 
@@ -126,8 +123,7 @@ namespace Ivony.Html.Web
       /// </summary>
       public CacheDependency[] CacheDependencies
       {
-        get;
-        private set;
+        get { return new CacheDependency[0]; }
       }
 
       /// <summary>
@@ -149,7 +145,6 @@ namespace Ivony.Html.Web
         _tokens = tokens;
 
         VaryHeaders = varyHeaders;
-        CacheDependencies = cacheDependency;
 
       }
 

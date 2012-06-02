@@ -42,7 +42,7 @@ namespace Ivony.Html.Web.Mvc
 
     private Type type;
     private string controllerName;
-    private Dictionary<string,ActionCachePolicyProvider> actionProviders;
+    private Dictionary<string, ActionCachePolicyProvider> actionProviders;
 
 
     /// <summary>
@@ -95,12 +95,12 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static ControllerCachePolicyProvider[] _providers;
+    private static Dictionary<string, ControllerCachePolicyProvider> _providers;
     private static object _providersSync = new object();
 
 
 
-    private static ControllerCachePolicyProvider[] Providers
+    internal static IDictionary<string, ControllerCachePolicyProvider> Providers
     {
       get
       {
@@ -116,7 +116,7 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static ControllerCachePolicyProvider[] InitializeProviders()
+    private static Dictionary<string, ControllerCachePolicyProvider> InitializeProviders()
     {
       var providerBaseType = typeof( ControllerCachePolicyProvider );
 
@@ -127,13 +127,14 @@ namespace Ivony.Html.Web.Mvc
         .Where( type => type.IsSubclassOf( providerBaseType ) )
         .ToArray();
 
-      var list = new List<ControllerCachePolicyProvider>();
+      var result = new Dictionary<string, ControllerCachePolicyProvider>();
 
       types.ForAll( t =>
       {
         try
         {
-          list.Add( (ControllerCachePolicyProvider) Activator.CreateInstance( t ) );
+          var instance = (ControllerCachePolicyProvider) Activator.CreateInstance( t );
+          result.Add( instance.controllerName, instance );
         }
         catch
         {
@@ -141,53 +142,14 @@ namespace Ivony.Html.Web.Mvc
         }
       } );
 
-      return list.ToArray();
+      return result;
     }
 
-
-    /// <summary>
-    /// 获取全局缓存筛选器，在 ASP.NET 3 中，将此筛选器注册到全局范畴，即可自动应用应用程序内所有的 ControllerCacheProvider
-    /// </summary>
-    public static ActionFilterAttribute GlobalCacheFilter
-    {
-      get;
-      private set;
-    }
-
-    static ControllerCachePolicyProvider()
-    {
-      GlobalCacheFilter = new GlobalControllerCacheFilter();
-    }
 
 
 
     private delegate CachePolicy ActionCachePolicyProvider( ControllerContext context, IDictionary<string, object> parameters );
 
-    [AttributeUsage( AttributeTargets.Class | AttributeTargets.Method, Inherited = true )]
-    private class GlobalControllerCacheFilter : CacheFilterBase
-    {
-
-      /// <summary>
-      /// 创建缓存策略
-      /// </summary>
-      /// <param name="context">当前 MVC 上下文</param>
-      /// <param name="action">当前调用的 Action</param>
-      /// <param name="parameters">Action 的参数</param>
-      /// <returns></returns>
-      protected override CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
-      {
-        foreach ( var provider in Providers )
-        {
-
-          var policy = provider.CreateCachePolicy( context, action, parameters );
-          if ( policy != null )
-            return policy;
-
-        }
-
-        return null;
-      }
-    }
 
 
 

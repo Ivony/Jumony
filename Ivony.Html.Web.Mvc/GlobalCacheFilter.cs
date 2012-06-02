@@ -29,6 +29,15 @@ namespace Ivony.Html.Web.Mvc
       if ( action.GetCustomAttributes( typeof( CacheableAttribute ), true ).Any() || action.ControllerDescriptor.GetCustomAttributes( typeof( CacheableAttribute ), true ).Any() )
         return null;
 
+      ControllerCachePolicyProvider provider;
+      if ( ControllerCachePolicyProvider.Providers.TryGetValue( action.ControllerDescriptor.ControllerName, out provider ) )
+      {
+        var policy = provider.CreateCachePolicy( context, action, parameters );
+        if ( policy != null )
+          return policy;
+      }
+
+
       return MvcEnvironment.CreateCachePolicy( context, action, parameters );
     }
   }

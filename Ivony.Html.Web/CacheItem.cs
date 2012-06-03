@@ -94,7 +94,7 @@ namespace Ivony.Html.Web
       if ( Expiration < DateTime.UtcNow )
         return false;
 
-      if ( CacheToken.CacheDependencies.Any( d => d.HasChanged ) )
+      if ( CacheToken.CacheDependency.HasChanged )
         return false;
 
       return true;

@@ -27,7 +27,7 @@ namespace Ivony.Html.Web
 
       _tokens = tokens;
 
-      VaryHeaders = tokens.SelectMany( t => t.VaryHeaders ).NotNull().Distinct( StringComparer.OrdinalIgnoreCase ).ToArray();
+      VaryHeaders = tokens.Select( t => t.VaryHeader ).NotNull().Distinct( StringComparer.OrdinalIgnoreCase ).ToArray();
 
     }
 
@@ -36,9 +36,9 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取缓存依赖项
     /// </summary>
-    public CacheDependency[] CacheDependencies
+    public ICacheDependency CacheDependency
     {
-      get { return new CacheDependency[0]; }
+      get { return null; }
     }
 
 
@@ -121,15 +121,15 @@ namespace Ivony.Html.Web
       /// <summary>
       /// 缓存依赖项
       /// </summary>
-      public CacheDependency[] CacheDependencies
+      public ICacheDependency CacheDependency
       {
-        get { return new CacheDependency[0]; }
+        get { return null; }
       }
 
       /// <summary>
       /// 客户端缓存依赖头
       /// </summary>
-      public string[] VaryHeaders
+      public string VaryHeader
       {
         get;
         private set;
@@ -139,12 +139,12 @@ namespace Ivony.Html.Web
 
       private string[] _tokens;
 
-      public CacheTokenItem( string type, string[] tokens, CacheDependency[] cacheDependency, string[] varyHeaders )
+      public CacheTokenItem( string type, string[] tokens, ICacheDependency cacheDependency, string varyHeader )
       {
         TypeName = type;
         _tokens = tokens;
 
-        VaryHeaders = varyHeaders;
+        VaryHeader = varyHeader;
 
       }
 
@@ -314,7 +314,7 @@ namespace Ivony.Html.Web
     /// <returns>创建的 CacheToken</returns>
     public static CacheToken CreateToken( string typeName, params string[] tokens )
     {
-      return CreateToken( typeName, new CacheDependency[0], new string[0], tokens );
+      return CreateToken( typeName, null, null, tokens );
     }
 
     /// <summary>
@@ -325,25 +325,7 @@ namespace Ivony.Html.Web
     /// <param name="typeName">缓存标记类别名称</param>
     /// <param name="tokens">用于标识的字符串</param>
     /// <returns>创建的 CacheToken</returns>
-    public static CacheToken CreateToken( string typeName, CacheDependency cacheDependency, string varyHeader, string[] tokens )
-    {
-
-      var cacheDependencies = cacheDependency == null ? new CacheDependency[0] : new[] { cacheDependency };
-      var varyHeaders = varyHeader == null ? new string[0] : new[] { varyHeader };
-
-      return CreateToken( typeName, cacheDependencies, varyHeaders, tokens );
-    }
-
-
-    /// <summary>
-    /// 创建 CacheToken
-    /// </summary>
-    /// <param name="cacheDependencies">缓存依赖项</param>
-    /// <param name="varyHeaders">客户端缓存依赖头</param>
-    /// <param name="typeName">缓存标记类别名称</param>
-    /// <param name="tokens">用于标识的字符串</param>
-    /// <returns>创建的 CacheToken</returns>
-    public static CacheToken CreateToken( string typeName, CacheDependency[] cacheDependencies, string[] varyHeaders, string[] tokens )
+    public static CacheToken CreateToken( string typeName, ICacheDependency cacheDependency, string varyHeader, string[] tokens )
     {
       if ( typeName == null )
         throw new ArgumentNullException( "typeName" );
@@ -351,8 +333,9 @@ namespace Ivony.Html.Web
       if ( tokens == null )
         throw new ArgumentNullException( "tokens" );
 
-      return new CacheTokenItem( typeName, tokens, cacheDependencies, varyHeaders );
+      return new CacheTokenItem( typeName, tokens, cacheDependency, varyHeader );
     }
+
 
 
 
@@ -390,7 +373,7 @@ namespace Ivony.Html.Web
 
     }
 
-
+                                                      
 
 
     /// <summary>

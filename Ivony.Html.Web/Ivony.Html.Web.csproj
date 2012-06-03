@@ -75,6 +75,7 @@
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="CacheHelper.cs" />
     <Compile Include="HttpHandler.cs" />
+    <Compile Include="ICacheDependency.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICacheStorageProvider.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />

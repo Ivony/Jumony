@@ -45,7 +45,7 @@ namespace Ivony.Html.Forms
 
     }
 
-    
+
     /// <summary>
     /// 重新扫描表单中所有控件
     /// </summary>
@@ -97,9 +97,13 @@ namespace Ivony.Html.Forms
     /// <returns>被提交的表单</returns>
     public HtmlForm Submit( NameValueCollection data, bool validateInputs )
     {
+
+      if ( data == null )
+        throw new ArgumentNullException( "data" );
+
+
       if ( SubmittedValues != null )
         throw new InvalidOperationException( "表单已经被提交过一次了" );
-
 
       var inputControlNames = InputControls.Select( input => input.Name ).ToArray();
 

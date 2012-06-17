@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web.UI;
 using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Binding
@@ -74,5 +75,70 @@ namespace Ivony.Html.Web.Binding
 
 
 
+    /// <summary>
+    /// 创建 Binding 对象
+    /// </summary>
+    /// <param name="domObject">绑定的目标</param>
+    /// <param name="args">绑定参数</param>
+    /// <returns>Binding 对象</returns>
+    public IBinding CreateBinding( IHtmlDomObject domObject, IDictionary<string, string> args )
+    {
+      foreach ( var provider in BindingProviders )
+      {
+        var binding = provider.CreateBinding( this, domObject, args );
+        if ( binding != null )
+          return binding;
+      }
+
+      return CreateDefaultBinding( domObject, args );
+    }
+
+
+
+    /// <summary>
+    /// 创建默认的 binding 对象
+    /// </summary>
+    /// <param name="domObject">绑定的目标</param>
+    /// <param name="args">绑定参数</param>
+    /// <returns>Binding 对象</returns>
+    protected virtual IBinding CreateDefaultBinding( IHtmlDomObject domObject, IDictionary<string, string> args )
+    {
+
+
+      var dataContext = GetDataContext( domObject );
+
+      var path = args["path"];
+
+      var dataObject = EvalData( dataContext, path );
+
+      throw new NotImplementedException();
+
+    }
+
+    protected virtual object EvalData( object dataContext, string path )
+    {
+      return DataBinder.Eval( dataContext, path );
+    }
+
+    protected virtual object GetDataContext( IHtmlDomObject domObject )
+    {
+      
+    }
+
+
+
+
   }
+
+
+  public static class BindingExtensions
+  {
+    public static BindingManager BindingManager( this IHtmlDocument document )
+    {
+      return null;
+    }
+
+
+  }
+
 }

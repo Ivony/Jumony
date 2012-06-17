@@ -7,7 +7,7 @@ namespace Ivony.Html.Web.Binding
 {
   public interface IBindingProvider
   {
-    IBinding CreateBinding( IHtmlDomObject target, IDictionary<string, string> args );
+    IBinding CreateBinding( BindingManager manager, IHtmlDomObject targetObject, IDictionary<string, string> args );
   }
 
 }

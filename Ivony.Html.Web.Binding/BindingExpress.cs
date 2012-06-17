@@ -29,11 +29,11 @@ namespace Ivony.Html.Web.Binding
       if ( match == null || !match.Success )
         return null;
 
-      return CreateBinding( match );
+      return CreateBinding( attribute, match );
 
     }
 
-    private IBinding CreateBinding( Match match )
+    private IBinding CreateBinding( IHtmlAttribute attribute, Match match )
     {
       var args = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
@@ -45,13 +45,13 @@ namespace Ivony.Html.Web.Binding
         args[name] = value;
       }
 
-      return CreateBinding( args );
+      return CreateBinding( attribute, args );
 
     }
 
-    private IBinding CreateBinding( Dictionary<string, string> args )
+    private IBinding CreateBinding( IHtmlAttribute attribute, Dictionary<string, string> args )
     {
-      throw new NotImplementedException();
+      return attribute.Document.BindingManager().CreateBinding( attribute, args );
     }
   }
 }

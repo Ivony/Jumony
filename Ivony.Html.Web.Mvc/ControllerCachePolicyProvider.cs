@@ -86,7 +86,12 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 创建 CacheToken
+    /// </summary>
+    /// <param name="typeName">类型名，一般可以取 Action 的名称</param>
+    /// <param name="parameters">参数列表，一般可以使用 Action 的参数列表</param>
+    /// <returns>针对指定类型和参数的 CacheToken</returns>
     public static CacheToken CreateToken( string typeName, IDictionary<string, object> parameters )
     {
       return CacheToken.CreateToken( typeName, parameters.Select( pair => pair.Key + ":" + pair.Value ).ToArray() );

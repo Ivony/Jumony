@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding.cs" />
     <Compile Include="BindingElement.cs" />
     <Compile Include="BindingExpress.cs" />
     <Compile Include="BindingManager.cs" />

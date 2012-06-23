@@ -43,11 +43,18 @@ namespace Ivony.Html.Web.Binding
       }
     }
 
+    protected object DataContext
+    {
+      get;
+      set;
+    }
+
+
     private void DataBind( IHtmlDomObject obj )
     {
       var bindings = FindBindings( obj );
 
-      bindings.ForAll( b => b.DataBind() );
+      bindings.ForAll( b => b.DataBind( DataContext ) );
 
       var element = obj as IHtmlElement;
 
@@ -105,29 +112,26 @@ namespace Ivony.Html.Web.Binding
     {
 
 
-      var dataContext = GetDataContext( domObject );
+      return new Binding( this, domObject, args );
 
-      var path = args["path"];
 
-      var dataObject = EvalData( dataContext, path );
+    }
 
+
+
+
+
+
+
+    public IValueConverter GetConverter( string converterName )
+    {
       throw new NotImplementedException();
-
     }
 
-    protected virtual object EvalData( object dataContext, string path )
+    public IValueBinder GetValueBinder( IHtmlDomObject TargetObject, object value )
     {
-      return DataBinder.Eval( dataContext, path );
+      throw new NotImplementedException();
     }
-
-    protected virtual object GetDataContext( IHtmlDomObject domObject )
-    {
-      
-    }
-
-
-
-
   }
 
 

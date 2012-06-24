@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 using Ivony.Html;
 using Ivony.Html.Web.Mvc;
+using Ivony.Html.Web;
 
 public class TodoController : Controller
 {
@@ -98,4 +99,17 @@ public class TodoController : Controller
     return RedirectToAction( "Index" );
   }
 
+}
+
+
+public class TodoCachePolicyProvider : ControllerCachePolicyProvider
+{
+  public CachePolicy Index( ControllerContext context, IDictionary<string, object> args )
+  {
+
+    var token = CacheToken.FromCookies( context.HttpContext ) + CacheToken.CreateToken( "Index" );
+
+    return new StandardCachePolicy( context.HttpContext, token, this, TimeSpan.FromMinutes( 10 ), true );
+
+  }
 }

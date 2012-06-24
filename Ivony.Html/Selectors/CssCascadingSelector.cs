@@ -222,7 +222,31 @@ namespace Ivony.Html
       else if ( Relative == "~" )
         return element => element.SiblingsBeforeSelf().Any( e => leftSelector.IsEligible( e ) );
 
-      return null;
+      throw new NotSupportedException( "不支持的关系运算符" );
+    }
+
+
+    /// <summary>
+    /// 创建关系选择器
+    /// </summary>
+    /// <param name="leftSelector">左选择器</param>
+    /// <param name="relative">关系运算符</param>
+    /// <returns>关系选择器</returns>
+    private ICssSelector CreateRelativeSelector( ICssSelector leftSelector, string relative )
+    {
+      if ( Relative == ">" )
+        return new ParentRelativeSelector( leftSelector );
+
+      else if ( Relative == "" )
+        return new AncetorRelativeSelector( leftSelector );
+
+      else if ( Relative == "+" )
+        return new PreviousRelativeSelector( leftSelector );
+
+      else if ( Relative == "~" )
+        return new SiblingsRelativeSelector( leftSelector );
+
+      throw new NotSupportedException( "不支持的关系运算符" );
     }
 
 

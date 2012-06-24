@@ -21,6 +21,12 @@ namespace SelectorTest
       Document = new JumonyParser().LoadDocument( "http://www.sina.com.cn/" );
     }
 
+    [ClassInitialize]
+    public static void Initialize( TestContext context )
+    {
+      CssSelector.WarmUp();
+    }
+
 
     public TestContext TestContext { get; set; }
 

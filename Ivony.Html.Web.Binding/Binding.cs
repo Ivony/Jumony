@@ -21,11 +21,11 @@ namespace Ivony.Html.Web.Binding
     public Binding( BindingManager manager, IHtmlDomObject domObject, IDictionary<string, string> args )
     {
       BindingManager = manager;
-      TargetObject = domObject;
+      BindingHost = domObject;
       this.args = args;
     }
 
-    public IHtmlDomObject TargetObject
+    public IHtmlDomObject BindingHost
     {
       get;
       private set;
@@ -86,19 +86,19 @@ namespace Ivony.Html.Web.Binding
 
     protected virtual void BindValue( object value )
     {
-      var valueBinder = BindingManager.GetValueBinder( TargetObject, value );
+      var valueBinder = BindingManager.GetValueBinder( BindingHost, value );
 
       if ( valueBinder == null )
         DefaultBindValue( value );
 
       else
-        valueBinder.BindValue( TargetObject, value );
+        valueBinder.BindValue( BindingHost, value );
 
     }
 
     protected virtual void DefaultBindValue( object value )
     {
-      var attribute = TargetObject as IHtmlAttribute;
+      var attribute = BindingHost as IHtmlAttribute;
 
       if ( attribute != null )
         BindAttributeValue( attribute, value );

@@ -8,15 +8,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-
 namespace DatabaseModel
 {
     #region 上下文
@@ -82,6 +82,7 @@ namespace DatabaseModel
         private ObjectSet<Task> _Tasks;
 
         #endregion
+
         #region AddTo 方法
     
         /// <summary>
@@ -93,11 +94,11 @@ namespace DatabaseModel
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region 实体
     
     /// <summary>
@@ -126,6 +127,7 @@ namespace DatabaseModel
         }
 
         #endregion
+
         #region 基元属性
     
         /// <summary>
@@ -204,9 +206,11 @@ namespace DatabaseModel
         partial void OnCompletedChanged();
 
         #endregion
+
     
     }
 
     #endregion
+
     
 }

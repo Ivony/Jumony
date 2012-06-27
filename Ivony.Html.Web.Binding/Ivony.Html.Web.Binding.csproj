@@ -46,7 +46,7 @@
     <Compile Include="BindingExpress.cs" />
     <Compile Include="BindingManager.cs" />
     <Compile Include="IBindingProvider.cs" />
-    <Compile Include="IBindingTargetDescriptor.cs" />
+    <Compile Include="IBindingTarget.cs" />
     <Compile Include="IValueBinder.cs" />
     <Compile Include="IValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

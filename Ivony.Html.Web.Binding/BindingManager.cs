@@ -35,36 +35,29 @@ namespace Ivony.Html.Web.Binding
     }
 
 
-    public void DataBind()
+    public void DataBind( object dataContext = null )
     {
       lock ( SyncRoot )
       {
-        DataBind( Document );
+        DataBind( dataContext, Document );
       }
     }
 
-    protected object DataContext
-    {
-      get;
-      set;
-    }
-
-
-    private void DataBind( IHtmlDomObject obj )
+    private void DataBind( object dataContext, IHtmlDomObject obj )
     {
       var bindings = FindBindings( obj );
 
-      bindings.ForAll( b => b.DataBind( DataContext ) );
+      bindings.ForAll( b => b.DataBind( dataContext ) );
 
       var element = obj as IHtmlElement;
 
       if ( element != null )
-        element.Attributes().ForAll( a => DataBind( a ) );
+        element.Attributes().ForAll( a => DataBind( dataContext, a ) );
 
       var container = obj as IHtmlContainer;
 
       if ( container != null )
-        container.Nodes().ForAll( n => DataBind( n ) );
+        container.Nodes().ForAll( n => DataBind( dataContext, n ) );
     }
 
     private IEnumerable<IBinding> FindBindings( IHtmlDomObject obj )
@@ -97,27 +90,8 @@ namespace Ivony.Html.Web.Binding
           return binding;
       }
 
-      return CreateDefaultBinding( domObject, args );
-    }
-
-
-
-    /// <summary>
-    /// 创建默认的 binding 对象
-    /// </summary>
-    /// <param name="domObject">绑定的目标</param>
-    /// <param name="args">绑定参数</param>
-    /// <returns>Binding 对象</returns>
-    protected virtual IBinding CreateDefaultBinding( IHtmlDomObject domObject, IDictionary<string, string> args )
-    {
-
-
       return new Binding( this, domObject, args );
-
-
     }
-
-
 
 
 
@@ -128,7 +102,12 @@ namespace Ivony.Html.Web.Binding
       throw new NotImplementedException();
     }
 
-    public IValueBinder GetValueBinder( IHtmlDomObject TargetObject, object value )
+    public IValueBinder GetBinder( IHtmlDomObject bindingHost, object value )
+    {
+      throw new NotImplementedException();
+    }
+
+    public IBindingTarget GetTarget( IHtmlDomObject bindingHost, object value )
     {
       throw new NotImplementedException();
     }

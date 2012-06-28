@@ -86,54 +86,18 @@ namespace Ivony.Html.Web.Binding
 
     protected virtual void BindValue( object value )
     {
-      var valueBinder = BindingManager.GetValueBinder( BindingHost, value );
+      var valueBinder = BindingManager.GetBinder( BindingHost, value );
 
-      if ( valueBinder == null )
-        DefaultBindValue( value );
-
-      else
-        valueBinder.BindValue( BindingHost, value );
-
-    }
-
-    protected virtual void DefaultBindValue( object value )
-    {
-      var attribute = BindingHost as IHtmlAttribute;
-
-      if ( attribute != null )
-        BindAttributeValue( attribute, value );
-
-    }
-
-    protected virtual void BindAttributeValue( IHtmlAttribute attribute, object value )
-    {
-      if ( value == null )
+      if ( valueBinder != null )
       {
-        attribute.Remove();
+        valueBinder.BindValue( BindingHost, value );
         return;
       }
 
-
-      if ( value is bool )
-      {
-        if ( (bool) value )
-          attribute.SetValue( null );
-        else
-          attribute.Remove();
-      }
-
-
-      attribute.SetValue( value.ToString() );
-    }
-
-    protected virtual void BindElementValue( IHtmlElement element, object value )
-    {
-
-      throw new NotImplementedException();
+      var target = BindingManager.GetTarget( BindingHost, value );
+      target.BindValue( value );
 
     }
-
-
 
 
   }

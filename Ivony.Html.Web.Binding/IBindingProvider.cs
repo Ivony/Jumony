@@ -10,4 +10,21 @@ namespace Ivony.Html.Web.Binding
     IBinding CreateBinding( BindingManager manager, IHtmlDomObject targetObject, IDictionary<string, string> args );
   }
 
+  public interface IBindingTargetProvider
+  {
+
+    
+
+    IBindingTarget CreateTarget( BindingManager manager, IHtmlDomObject bindingHost, object value );
+  }
+
+  public enum BindingHostType
+  { 
+    Attribute,
+    Element,
+    Both
+  }
+
+
+
 }

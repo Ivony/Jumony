@@ -64,6 +64,10 @@ namespace Ivony.Html.Web.Binding
     }
   }
 
+
+  /// <summary>
+  /// 标记属性绑定目标
+  /// </summary>
   public class MarkupAttributeBidningTarget : BindingTarget<bool>
   {
     protected IHtmlAttribute TargetAttribute
@@ -83,6 +87,8 @@ namespace Ivony.Html.Web.Binding
         TargetAttribute.Remove();
     }
   }
+
+
 
 
 

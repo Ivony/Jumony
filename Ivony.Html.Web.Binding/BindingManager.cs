@@ -35,39 +35,58 @@ namespace Ivony.Html.Web.Binding
     }
 
 
-    public void DataBind( object dataContext = null )
+    public void DataBind()
     {
       lock ( SyncRoot )
       {
-        DataBind( dataContext, Document );
+        DataBind( Document );
       }
     }
 
-    private void DataBind( object dataContext, IHtmlDomObject obj )
+    protected object DataContext
     {
-      var bindings = FindBindings( obj );
-
-      bindings.ForAll( b => b.DataBind( dataContext ) );
-
-      var element = obj as IHtmlElement;
-
-      if ( element != null )
-        element.Attributes().ForAll( a => DataBind( dataContext, a ) );
-
-      var container = obj as IHtmlContainer;
-
-      if ( container != null )
-        container.Nodes().ForAll( n => DataBind( dataContext, n ) );
-    }
-
-    private IEnumerable<IBinding> FindBindings( IHtmlDomObject obj )
-    {
-      return Enumerable.Empty<IBinding>();
+      get;
+      set;
     }
 
 
+    protected virtual void DataBind( IHtmlDocument document )
+    {
+      var bindings = FindBindings( document );
 
-    public IEnumerable<IBindingProvider> BindingProviders
+      bindings.ForAll( b => b.DataBind( DataContext ) );
+
+      document.Elements().ForAll( e => DataBind( e ) );
+    }
+
+    protected virtual void DataBind( IHtmlElement element )
+    {
+      var bindings = FindBindings( element );
+
+      bindings.ForAll( b => b.DataBind( DataContext ) );
+
+      element.Elements().ForAll( e => DataBind( e ) );
+
+    }
+
+
+    private IEnumerable<IBinding> FindBindings( IHtmlDocument document )
+    {
+      throw new NotImplementedException();
+    }
+
+
+
+    private IEnumerable<IBinding> FindBindings( IHtmlElement element )
+    {
+
+      return ElementBindingProviders.SelectMany( provider => provider.CreateBindings( this, element ) );
+
+    }
+
+
+
+    public IEnumerable<IBindingProvider> ElementBindingProviders
     {
       get;
       private set;
@@ -75,23 +94,22 @@ namespace Ivony.Html.Web.Binding
 
 
 
+
+
     /// <summary>
-    /// 创建 Binding 对象
+    /// 创建默认的 binding 对象
     /// </summary>
     /// <param name="domObject">绑定的目标</param>
     /// <param name="args">绑定参数</param>
     /// <returns>Binding 对象</returns>
-    public IBinding CreateBinding( IHtmlDomObject domObject, IDictionary<string, string> args )
+    protected virtual IBinding CreateDefaultBinding( IHtmlDomObject domObject, IDictionary<string, string> args )
     {
-      foreach ( var provider in BindingProviders )
-      {
-        var binding = provider.CreateBinding( this, domObject, args );
-        if ( binding != null )
-          return binding;
-      }
 
       return new Binding( this, domObject, args );
+
     }
+
+
 
 
 
@@ -102,12 +120,13 @@ namespace Ivony.Html.Web.Binding
       throw new NotImplementedException();
     }
 
-    public IValueBinder GetBinder( IHtmlDomObject bindingHost, object value )
+    public IValueBinder GetValueBinder( IHtmlDomObject TargetObject, object value )
     {
       throw new NotImplementedException();
     }
 
-    public IBindingTarget GetTarget( IHtmlDomObject bindingHost, object value )
+
+    public void GetValue( object dataContext, IDictionary<string, string> _bindingArgs )
     {
       throw new NotImplementedException();
     }

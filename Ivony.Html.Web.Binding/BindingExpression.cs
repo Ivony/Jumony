@@ -7,18 +7,15 @@ using System.Text.RegularExpressions;
 namespace Ivony.Html.Web.Binding
 {
 
-  public class BindingExpressionBuilder
+  public class BindingExpression
   {
 
 
     private static readonly Regex bindingExpressionRegex = new Regex( "^" + Regulars.BindingExpressionPattern + "$", RegexOptions.IgnoreCase | RegexOptions.Compiled );
 
-    /// <summary>
-    /// 通过属性绑定表达式创建绑定对象
-    /// </summary>
-    /// <param name="attribute">HTML 属性对象</param>
-    /// <returns>如果属性值可以被解析为绑定表达式，返回绑定对象</returns>
-    public IBinding CreateBinding( IHtmlAttribute attribute )
+
+
+    public static IDictionary<string, string> ParseExpression( IHtmlAttribute attribute )
     {
       var expression = attribute.Value();
 
@@ -29,11 +26,12 @@ namespace Ivony.Html.Web.Binding
       if ( match == null || !match.Success )
         return null;
 
-      return CreateBinding( attribute, match );
-
+      return ParseExpression( match );
     }
 
-    private IBinding CreateBinding( IHtmlAttribute attribute, Match match )
+
+
+    private static IDictionary<string, string> ParseExpression( Match match )
     {
       var args = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
@@ -45,13 +43,8 @@ namespace Ivony.Html.Web.Binding
         args[name] = value;
       }
 
-      return CreateBinding( attribute, args );
+      return args;
 
-    }
-
-    private IBinding CreateBinding( IHtmlAttribute attribute, Dictionary<string, string> args )
-    {
-      return attribute.Document.BindingManager().CreateBinding( attribute, args );
     }
   }
 }

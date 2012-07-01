@@ -7,24 +7,54 @@ namespace Ivony.Html.Web.Binding
 {
   public interface IBindingProvider
   {
-    IBinding CreateBinding( BindingManager manager, IHtmlDomObject targetObject, IDictionary<string, string> args );
+    IEnumerable<IBinding> CreateBindings( BindingManager manager, IHtmlElement element );
   }
 
-  public interface IBindingTargetProvider
+  public class DataContextAttributeBindingProvider : IBindingProvider
   {
 
-    
+    public IEnumerable<IBinding> CreateBindings( BindingManager manager, IHtmlElement element )
+    {
+      var bindingArgs = BindingExpression.ParseExpression( element.Attribute( "datacontext" ) );
 
-    IBindingTarget CreateTarget( BindingManager manager, IHtmlDomObject bindingHost, object value );
+      var binding = CreateBinding( manager, element, bindingArgs );
+
+      if ( binding != null )
+        yield return binding;
+
+      yield break;
+    }
+
+    protected IBinding CreateBinding( BindingManager manager, IHtmlElement element, IDictionary<string, string> bindingArgs )
+    {
+      if ( bindingArgs == null )
+        return null;
+
+      return new DataContextBinding( manager, element, bindingArgs );
+    }
+
+    public class DataContextBinding : IBinding
+    {
+      private BindingManager _manager;
+      private IHtmlElement _element;
+      private IDictionary<string, string> _bindingArgs;
+
+      public DataContextBinding( BindingManager manager, IHtmlElement element, IDictionary<string, string> bindingArgs )
+      {
+        _manager = manager;
+        _element = element;
+        _bindingArgs = bindingArgs;
+      }
+
+
+      public void DataBind( object dataContext )
+      {
+        _manager.GetValue( dataContext, _bindingArgs );
+      }
+    }
+
+
   }
-
-  public enum BindingHostType
-  { 
-    Attribute,
-    Element,
-    Both
-  }
-
 
 
 }

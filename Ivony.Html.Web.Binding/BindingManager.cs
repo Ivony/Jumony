@@ -72,7 +72,7 @@ namespace Ivony.Html.Web.Binding
 
     private IEnumerable<IBinding> FindBindings( IHtmlDocument document )
     {
-      throw new NotImplementedException();
+      return Enumerable.Empty<IBinding>();
     }
 
 
@@ -127,6 +127,16 @@ namespace Ivony.Html.Web.Binding
 
 
     public void GetValue( object dataContext, IDictionary<string, string> _bindingArgs )
+    {
+      throw new NotImplementedException();
+    }
+
+    internal static IValueBinder GetBinder( IHtmlDomObject BindingHost, object value )
+    {
+      throw new NotImplementedException();
+    }
+
+    internal static IBindingTarget GetTarget( IHtmlDomObject BindingHost, object value )
     {
       throw new NotImplementedException();
     }

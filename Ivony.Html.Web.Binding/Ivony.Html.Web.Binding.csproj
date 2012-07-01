@@ -42,8 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding.cs" />
-    <Compile Include="BindingElement.cs" />
-    <Compile Include="BindingExpress.cs" />
     <Compile Include="BindingManager.cs" />
     <Compile Include="IBindingProvider.cs" />
     <Compile Include="IBindingTarget.cs" />

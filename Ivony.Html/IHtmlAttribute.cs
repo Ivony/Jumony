@@ -42,4 +42,16 @@ namespace Ivony.Html
     }
 
   }
+
+  
+  /// <summary>
+  /// 属性容器，提供 Get 和 Set 方法改善属性操作性能。
+  /// </summary>
+  public interface IHtmlAttributeCollection : IEnumerable<IHtmlAttribute>
+  {
+    IHtmlAttribute Get( string name );
+
+    IHtmlAttribute Set( string name, string value );
+  }
+
 }

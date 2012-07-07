@@ -37,7 +37,11 @@ namespace Ivony.Html
         return dictionary[name];
       */
 
-      return element.Attributes().SingleOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
+      var attributeCollection = attributes as IHtmlAttributeCollection;
+      if ( attributeCollection != null )
+        return attributeCollection.Get( name );
+
+      return attributes.SingleOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
     }
 
 
@@ -89,7 +93,7 @@ namespace Ivony.Html
     /// <returns>设置了属性的元素</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName )
     {
-      return SetAttribute( element, attributeName, value:null );
+      return SetAttribute( element, attributeName, value: null );
     }
 
 

@@ -24,9 +24,9 @@ namespace Ivony.Html
     public const string relativeExpressionPatternNoGroup = @"((\p{Zs}+~\p{Zs}+)|(\p{Zs}+\+\p{Zs}+)|(\p{Zs}+\>\p{Zs}+)|\p{Zs}+)";
 
     /// <summary>匹配CSS属性选择器的正则表达式</summary>
-    public static readonly string attributeExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"\[(?<name>\w+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^'""\]]*))?\]", quoteTextPattern );
+    public static readonly string attributeExpressionPattern = string.Format( CultureInfo.InvariantCulture, @"\[(?<name>[\w-]+)((?<separator>(\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)(?<value>{0}|[^'""\]]*))?\]", quoteTextPattern );
     /// <summary>匹配CSS属性选择器的正则表达式，这是不带分组名的版本，用于组合其他正则</summary>
-    public static readonly string attributeExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"\[\w+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^'""\]]*))?\]", quoteTextPattern );
+    public static readonly string attributeExpressionPatternNoGroup = string.Format( CultureInfo.InvariantCulture, @"\[[\w-]+(((\|=)|(\*=)|(\~=)|(\$=)|(\!=)|(\^=)|=)({0}|[^'""\]]*))?\]", quoteTextPattern );
 
     /// <summary>匹配CSS伪类选择器的正则表达式</summary>
     public static readonly string pseudoClassPattern = string.Format( CultureInfo.InvariantCulture, @":(?<name>[\w-]+)(\((?<args>{0}|([^'""\(\)]+|(?<-open>\))|(?<open>\())*)(?(open)(?!))\))?", quoteTextPattern );

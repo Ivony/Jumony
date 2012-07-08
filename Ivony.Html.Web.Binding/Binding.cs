@@ -12,8 +12,6 @@ namespace Ivony.Html.Web.Binding
   {
     void DataBind( object dataContext );
 
-    IHtmlNode Target { get; }
-
     int Priority { get; }
   }
 
@@ -106,14 +104,9 @@ namespace Ivony.Html.Web.Binding
 
 
 
-    public IHtmlNode Target
-    {
-      get { throw new NotImplementedException(); }
-    }
-
     public int Priority
     {
-      get { throw new NotImplementedException(); }
+      get { return 10000; }
     }
   }
 }

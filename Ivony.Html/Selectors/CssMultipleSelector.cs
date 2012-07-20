@@ -29,7 +29,7 @@ namespace Ivony.Html
     /// <returns>是否符合要求</returns>
     public bool IsEligible( IHtmlElement element )
     {
-      return _selectors.Any( s => s.IsEligible( element ) );
+      return _selectors.Any( s => s.IsEligibleBuffered( element ) );
     }
 
 

@@ -50,7 +50,7 @@ namespace Ivony.Html
 
       var manager = document.FragmentManager;
       if ( manager == null )
-        throw new NotSupportedException();
+        throw new NotSupportedException( "文档不支持文档碎片" );
 
       return manager.ParseFragment( html );
     }

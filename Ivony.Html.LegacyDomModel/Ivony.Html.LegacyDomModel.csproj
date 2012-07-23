@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FreeElement.cs" />
+    <Compile Include="FreeNode.cs" />
     <Compile Include="HtmlFragment.cs" />
     <Compile Include="IFreeNode.cs" />
     <Compile Include="IHtmlNodeFactory.cs" />

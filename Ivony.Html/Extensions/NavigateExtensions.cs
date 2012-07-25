@@ -56,6 +56,23 @@ namespace Ivony.Html
 
 
     /// <summary>
+    /// 获取所有子元素
+    /// </summary>
+    /// <param name="container">要获取子元素的容器</param>
+    /// <param name="action">要对子元素执行的操作</param>
+    /// <returns>容器的所有子元素</returns>
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, Action<IHtmlElement> action )
+    {
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+      return Elements( container ).ForAll( action );
+    }
+
+
+
+
+    /// <summary>
     /// 获取符合条件的子元素
     /// </summary>
     /// <param name="container">要获取子元素的容器</param>
@@ -72,6 +89,26 @@ namespace Ivony.Html
 
       return CssElementSelector.Create( selector ).Filter( Elements( container ) );
     }
+
+
+
+    /// <summary>
+    /// 获取所有子元素
+    /// </summary>
+    /// <param name="container">要获取子元素的容器</param>
+    /// <param name="selector">用来筛选子元素的元素选择器</param>
+    /// <param name="action">要对子元素执行的操作</param>
+    /// <returns>容器的所有子元素</returns>
+    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, string selector, Action<IHtmlElement> action )
+    {
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+      return Elements( container, selector ).ForAll( action );
+    }
+
+
+
 
     /// <summary>
     /// 获取所有父代元素
@@ -318,6 +355,23 @@ namespace Ivony.Html
         throw new ArgumentNullException( "container" );
 
       return CssSelector.Search( expression, container );
+    }
+
+
+    /// <summary>
+    /// 从当前容器按照 CSS 选择器搜索符合要求的元素
+    /// </summary>
+    /// <param name="container">要搜索子代元素的容器</param>
+    /// <param name="expression">CSS 选择器</param>
+    /// <param name="action">要对元素执行的操作</param>
+    /// <returns>搜索到的符合要求的元素</returns>
+    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression, Action<IHtmlElement> action )
+    {
+
+      if ( action == null )
+        throw new ArgumentNullException( "action" );
+
+      return Find( container, expression ).ForAll( action );
     }
 
 

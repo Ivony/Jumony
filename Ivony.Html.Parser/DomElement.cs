@@ -199,9 +199,9 @@ namespace Ivony.Html.Parser
       }
 
 
-      IEnumerator IEnumerable.GetEnumerator()
+      IEnumerator<IHtmlAttribute> IEnumerable<IHtmlAttribute>.GetEnumerator()
       {
-        return GetEnumerator();
+        return this.Cast<IHtmlAttribute>().GetEnumerator();
       }
     }
 

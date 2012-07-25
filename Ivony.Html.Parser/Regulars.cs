@@ -13,7 +13,7 @@ namespace Ivony.Html.Parser
   {
 
     /// <summary>用于匹配 HTML 元素标签名的正则表达式</summary>
-    public static readonly string tagNamePattern = @"(?<tagName>[\w:-\.]+)";
+    public static readonly string tagNamePattern = @"(?<tagName>[\w:\-\.]+)";
 
 
     /// <summary>用于匹配一般属性值的正则表达式</summary>

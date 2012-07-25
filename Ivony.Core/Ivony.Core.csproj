@@ -61,7 +61,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Data\IPagingData.cs" />
     <Compile Include="Data\PagingExtension.cs" />
     <Compile Include="Fluent\ConvertExtensions.cs" />

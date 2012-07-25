@@ -198,9 +198,10 @@ namespace Ivony.Html.Parser
         }
       }
 
-      public new IEnumerator<IHtmlAttribute> GetEnumerator()
+
+      IEnumerator IEnumerable.GetEnumerator()
       {
-        return this.GetEnumerator();
+        return GetEnumerator();
       }
     }
 

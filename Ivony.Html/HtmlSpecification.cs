@@ -259,7 +259,7 @@ namespace Ivony.Html
     /// <summary>
     /// 用于匹配元素标签名的正则
     /// </summary>
-    public static readonly Regex tagNameRegex = new Regex( @"^[\w:\.]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    public static readonly Regex tagNameRegex = new Regex( @"^[\w:-\.]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
 

@@ -63,7 +63,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HtmlDomDependency.cs" />
@@ -122,6 +121,7 @@
     <Compile Include="Selectors\ICssSelector.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />
     <Compile Include="Styles\CssStyle.cs" />
+    <Compile Include="SynchronizedList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

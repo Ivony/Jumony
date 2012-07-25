@@ -49,9 +49,12 @@ namespace Ivony.Html
   /// </summary>
   public interface IHtmlAttributeCollection : IEnumerable<IHtmlAttribute>
   {
+    /// <summary>
+    /// 根据属性名检索属性
+    /// </summary>
+    /// <param name="name">属性名</param>
+    /// <returns>属性对象</returns>
     IHtmlAttribute Get( string name );
-
-    IHtmlAttribute Set( string name, string value );
   }
 
 }

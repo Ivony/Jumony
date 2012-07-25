@@ -25,12 +25,20 @@ namespace Ivony.Html.Parser.ContentModels
       SpecialSymbol = speciaSymbol;
     }
 
+
+    /// <summary>
+    /// 特殊标签内容
+    /// </summary>
     public string Content
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 特殊标签标识字符
+    /// </summary>
     public string SpecialSymbol
     {
       get;

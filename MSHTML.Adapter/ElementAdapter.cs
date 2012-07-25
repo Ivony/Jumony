@@ -32,9 +32,6 @@ namespace Ivony.Html.MSHTMLAdapter
       _element3 = element as IHTMLElement3;
       _element4 = element as IHTMLElement4;
 
-
-      _attributes = _node.attributes as IHTMLAttributeCollection;
-      _attributes2 = _node.attributes as IHTMLAttributeCollection2;
     }
 
 
@@ -45,8 +42,40 @@ namespace Ivony.Html.MSHTMLAdapter
 
     public IEnumerable<IHtmlAttribute> Attributes()
     {
-      return _attributes.Cast<object>().Select( o => ConvertExtensions.AsAttribute( o, this ) );
+      return new AttributeCollection( this );
     }
+
+
+    protected class AttributeCollection : IHtmlAttributeCollection
+    {
+
+      private IHTMLAttributeCollection _attributes;
+      private IHTMLAttributeCollection2 _attributes2;
+
+      private ElementAdapter _element;
+      public AttributeCollection( ElementAdapter element )
+      {
+        _attributes = element._node.attributes as IHTMLAttributeCollection;
+        _attributes2 = element._node.attributes as IHTMLAttributeCollection2;
+      }
+
+
+      public IHtmlAttribute Get( string name )
+      {
+        return ConvertExtensions.AsAttribute( _attributes.item( name ), _element );
+      }
+
+      public IEnumerator<IHtmlAttribute> GetEnumerator()
+      {
+        return _attributes.Cast<object>().Select( o => ConvertExtensions.AsAttribute( o, _element ) ).GetEnumerator();
+      }
+
+      IEnumerator IEnumerable.GetEnumerator()
+      {
+        return GetEnumerator();
+      }
+    }
+
 
 
     public IEnumerable<IHtmlNode> Nodes()
@@ -67,5 +96,8 @@ namespace Ivony.Html.MSHTMLAdapter
     {
       get { return _element.outerHTML; }
     }
+
+
+
   }
 }

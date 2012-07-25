@@ -63,7 +63,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="index">要添加文本节点的位置</param>
-    /// <param name="name">添加的 HTML 文本</param>
+    /// <param name="htmlText">添加的 HTML 文本</param>
     /// <returns>添加好的文本节点</returns>
     public IHtmlTextNode AddTextNode( IHtmlContainer container, int index, string htmlText )
     {
@@ -84,7 +84,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="container">要添加注释的容器</param>
     /// <param name="index">要添加注释的位置</param>
-    /// <param name="name">添加注释的内容</param>
+    /// <param name="comment">添加注释的内容</param>
     /// <returns>添加好的注释节点</returns>
     public IHtmlComment AddComment( IHtmlContainer container, int index, string comment )
     {
@@ -105,7 +105,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="container">要添加特殊节点的容器</param>
     /// <param name="index">要添加特殊节点的位置</param>
-    /// <param name="name">添加特殊节点的 HTML</param>
+    /// <param name="html">添加特殊节点的 HTML</param>
     /// <returns>添加好的特殊节点</returns>
     public IHtmlSpecial AddSpecial( IHtmlContainer container, int index, string html )
     {
@@ -225,6 +225,9 @@ namespace Ivony.Html.Parser
 
     private readonly object _sync = new object();
 
+    /// <summary>
+    /// 用于强制同步修改的同步对象
+    /// </summary>
     public object SyncRoot
     {
       get { return _sync; }

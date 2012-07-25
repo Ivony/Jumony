@@ -15,7 +15,8 @@ namespace Ivony.Html.Web.Binding
 
     public IEnumerable<IBinding> CreateBindings( BindingManager manager, IHtmlElement element )
     {
-      var bindingArgs = BindingExpression.ParseExpression( element.Attribute( "datacontext" ) );
+      /*
+      var bindingArgs = BindingManager.ParseExpression( element.Attribute( "datacontext" ) );
 
       var binding = CreateBinding( manager, element, bindingArgs );
 
@@ -23,6 +24,9 @@ namespace Ivony.Html.Web.Binding
         yield return binding;
 
       yield break;
+      */
+
+      throw new NotImplementedException();
     }
 
     protected IBinding CreateBinding( BindingManager manager, IHtmlElement element, IDictionary<string, string> bindingArgs )
@@ -50,6 +54,16 @@ namespace Ivony.Html.Web.Binding
       public void DataBind( object dataContext )
       {
         _manager.GetValue( dataContext, _bindingArgs );
+      }
+
+      void IBinding.DataBind( object dataContext )
+      {
+        throw new NotImplementedException();
+      }
+
+      int IBinding.Priority
+      {
+        get { throw new NotImplementedException(); }
       }
     }
 

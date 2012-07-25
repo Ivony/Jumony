@@ -224,6 +224,11 @@ namespace Ivony.Html.Parser
       }
     }
 
+    /// <summary>
+    /// 根据匹配到的结果，创建一个结束标签
+    /// </summary>
+    /// <param name="match">正则表达式匹配结果</param>
+    /// <returns>用于描述结束标签内容的对象</returns>
     protected virtual HtmlEndTag CreateEndTag( Match match )
     {
       string tagName = match.Groups["tagName"].Value;
@@ -232,6 +237,11 @@ namespace Ivony.Html.Parser
       return new HtmlEndTag( fragment, tagName );
     }
 
+    /// <summary>
+    /// 根据匹配到的结果，创建一个注释标签
+    /// </summary>
+    /// <param name="match">正则表达式匹配结果</param>
+    /// <returns>用于描述注释标签内容的对象</returns>
     protected virtual HtmlCommentContent CreateComment( Match match )
     {
       var commentText = match.Groups["commentText"].Value;
@@ -241,6 +251,11 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 根据匹配到的结果，创建一个特殊标签
+    /// </summary>
+    /// <param name="match">正则表达式匹配结果</param>
+    /// <returns>用于描述特殊标签内容的对象</returns>
     protected virtual HtmlSpecialTag CreateSpacial( Match match )
     {
       var raw = match.ToString();
@@ -253,6 +268,11 @@ namespace Ivony.Html.Parser
 
 
 
+    /// <summary>
+    /// 根据匹配到的结果，创建一个文档声明标签
+    /// </summary>
+    /// <param name="match">正则表达式匹配结果</param>
+    /// <returns>用于描述文档声明标签内容的对象</returns>
     private HtmlContentFragment CreateDoctypeDeclaration( Match match )
     {
       var raw = match.ToString();
@@ -264,12 +284,24 @@ namespace Ivony.Html.Parser
 
 
 
+    /// <summary>
+    /// 创建一段文本内容
+    /// </summary>
+    ///<param name="startIndex">文本开始位置</param>
+    /// <param name="endIndex">文本结束位置</param>
+    /// <returns>用于描述文档声明标签内容的对象</returns>
     protected virtual HtmlTextContent CreateText( int startIndex, int endIndex )
     {
       var text = new HtmlTextContent( new HtmlContentFragment( this, startIndex, endIndex - startIndex ) );
       return text;
     }
 
+
+    /// <summary>
+    /// 创建一个文档内容片段对象
+    /// </summary>
+    /// <param name="capture">捕获到的字符串</param>
+    /// <returns>文档内容片段对象</returns>
     protected HtmlContentFragment CreateFragment( Capture capture )
     {
       return new HtmlContentFragment( this, capture.Index, capture.Length );

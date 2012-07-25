@@ -112,13 +112,15 @@ namespace Ivony.Html
       if ( attributeName == null )
         throw new ArgumentNullException( "attributeName" );
 
-      var attribute = element.Attribute( attributeName );
+      lock ( element.SyncRoot )
+      {
+        var attribute = element.Attribute( attributeName );
 
-      if ( attribute != null )
-        attribute.Remove();
+        if ( attribute != null )
+          attribute.Remove();
 
-      element.AddAttribute( attributeName, value );
-
+        element.AddAttribute( attributeName, value );
+      }
 
       return element;
     }

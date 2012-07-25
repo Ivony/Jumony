@@ -197,6 +197,11 @@ namespace Ivony.Html.Parser
             return null;
         }
       }
+
+      public new IEnumerator<IHtmlAttribute> GetEnumerator()
+      {
+        return this.GetEnumerator();
+      }
     }
 
 

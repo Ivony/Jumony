@@ -42,11 +42,39 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 判断元素是否为块级元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为块级元素</returns>
     public abstract bool IsBlockElement( IHtmlElement element );
+
+    /// <summary>
+    /// 判断元素是否为行内元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为行内元素</returns>
     public abstract bool IsInlineElement( IHtmlElement element );
+
+    /// <summary>
+    /// 判断元素是否为特殊元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为特殊元素</returns>
     public abstract bool IsSpecialElement( IHtmlElement element );
+
+    /// <summary>
+    /// 判断元素是否为表单输入元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为表单输入元素</returns>
     public abstract bool IsFormInputElement( IHtmlElement element );
+
+    /// <summary>
+    /// 判断元素是否为样式设置元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为样式设置元素</returns>
     public abstract bool IsStylingElement( IHtmlElement element );
 
 
@@ -61,11 +89,18 @@ namespace Ivony.Html
 
   }
 
+
+  /// <summary>
+  /// 文本模式
+  /// </summary>
   public enum TextMode
   {
+    /// <summary>普通，内容当作 HTML 来解释</summary>
     Normal,
+    /// <summary>CData，内容当作文本来解释</summary>
     CData,
-    Freformated
+    /// <summary>预格式化，不合并空白字符</summary>
+    Preformated
   }
 
 

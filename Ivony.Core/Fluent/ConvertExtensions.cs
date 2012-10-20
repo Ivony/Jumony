@@ -76,6 +76,45 @@ namespace Ivony.Fluent
         return value;
     }
 
+    /// <summary>
+    /// 若值是 null 则使用指定值代换
+    /// </summary>
+    /// <param name="value">原始值</param>
+    /// <param name="defaultValue">当值为 null 时用于代换的默认值</param>
+    /// <returns>原始值，当原始值不为 null 或 DBbNull，否则使用代换的默认值</returns>
+    public static object IfNull( this object value, object defaultValue )
+    {
+      if ( value == null || Convert.IsDBNull( value ) )
+        return defaultValue;
+      else
+        return value;
+    }
+
+
+    /// <summary>
+    /// 若值是 null 则使用指定值代换
+    /// </summary>
+    /// <typeparam name="TInput">值类型</typeparam>
+    /// <typeparam name="TOut">输出值类型</typeparam>
+    /// <param name="value">原始值</param>
+    /// <param name="defaultValue">当值为 null 时用于代换的默认值</param>
+    /// <param name="converter">当值不为空时，对值进行类型转换的转换器。</param>
+    /// <returns>原始值，当原始值不为 null 或 DBbNull，否则使用代换的默认值</returns>
+    public static TOut IfNull<TInput, TOut>( this TInput value, TOut defaultValue, Func<TInput, TOut> converter )
+    {
+      if ( value == null || Convert.IsDBNull( value ) )
+        return defaultValue;
+
+      else
+      {
+        if ( converter == null )
+          throw new ArgumentNullException( "converter" );
+
+        return converter( value );
+      }
+    }
+
+
 
     /// <summary>
     /// 将对象所有属性转换为对象图

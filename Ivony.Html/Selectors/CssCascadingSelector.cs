@@ -28,8 +28,11 @@ namespace Ivony.Html
     private static Dictionary<string, ICssSelector> selectorCache = new Dictionary<string, ICssSelector>( StringComparer.Ordinal );
     private static object _cacheSync = new Object();
 
+
+
+
     /// <summary>
-    /// 创建选择器
+    /// 创建关系选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <returns>选择器实例</returns>
@@ -44,23 +47,25 @@ namespace Ivony.Html
         throw new FormatException();
 
 
-      ICssSelector selector = CssElementSelector.Create( match.Groups["leftSelector"].Value );
 
-      foreach ( var extraCapture in match.Groups["extra"].Captures.Cast<Capture>() )
+      ICssSelector rightSelector = CssElementSelector.Create( match.Groups["selector"].Captures.Cast<Capture>().Last().Value.Trim() );
+      
+      foreach ( var relativeCapture in match.Groups["relativeSelector"].Captures.Cast<Capture>().Reverse() )
       {
-        var relative = extraCapture.FindCaptures( match.Groups["relative"] ).Single().Value.Trim();
-        var rightSelector = extraCapture.FindCaptures( match.Groups["rightSelector"] ).Single().Value.Trim();
+        var relative = relativeCapture.FindCaptures( match.Groups["relative"] ).Single().Value.Trim();
+        var selector = relativeCapture.FindCaptures( match.Groups["selector"] ).Single().Value.Trim();
 
-        selector = new CssCasecadingSelector( selector, relative, CssElementSelector.Create( rightSelector ) );
-
+        var relativeSelector = CreateRelativeSelector( CssElementSelector.Create( selector ), relative );
+        rightSelector = new CssCasecadingSelector( relativeSelector, rightSelector );
       }
+
 
       lock ( _cacheSync )
       {
-        selectorCache[expression] = selector;
+        selectorCache[expression] = rightSelector;
       }
 
-      return selector;
+      return rightSelector;
     }
 
 
@@ -100,65 +105,41 @@ namespace Ivony.Html
       if ( scope == null )
         return selector;
 
-      return new CssCasecadingSelector( new CssScopeRestrictionSelector( scope ), null, selector );
+      return new CssCasecadingSelector( new CssScopeRestrictionSelector( scope ), selector );
     }
 
 
 
 
-    private readonly string _relative;
     /// <summary>
-    /// 关系描述符
+    /// 关系选择器
     /// </summary>
-    public string Relative
+    public ICssSelector RelativeSelector
     {
-      get { return _relative; }
+      get;
+      private set;
     }
 
-    private readonly ICssSelector _right;
     /// <summary>
-    /// 子级选择器
+    /// 元素选择器
     /// </summary>
     public ICssSelector RightSelector
     {
-      get { return _right; }
+      get;
+      private set;
     }
-
-    private readonly ICssSelector _left;
-    /// <summary>
-    /// 父级选择器
-    /// </summary>
-    public ICssSelector LeftSelector
-    {
-      get { return _left; }
-    }
-
 
 
     /// <summary>
     /// 创建层叠选择器
     /// </summary>
-    /// <param name="leftSelector">左选择器</param>
-    /// <param name="relative">关系选择符</param>
-    /// <param name="rightSelector">右选择器</param>
-    public CssCasecadingSelector( ICssSelector leftSelector, string relative, ICssSelector rightSelector )
+    /// <param name="relativeSelector">关系选择器</param>
+    /// <param name="rightSelector">元素选择器</param>
+    public CssCasecadingSelector( ICssSelector relativeSelector, ICssSelector rightSelector )
     {
-
-      if ( rightSelector == null )
-        throw new ArgumentNullException( "rightSelector" );
-
-      if ( leftSelector == null )
-        throw new ArgumentNullException( "leftSelector" );
-
-      _right = rightSelector;
-
-      if ( relative != null )
-        _relative = relative.Trim();
-
-      _left = leftSelector;
-
-      _relativeHandler = CreateRelativeHandler( relative, _left );
-
+      // TODO: Complete member initialization
+      RelativeSelector = relativeSelector;
+      RightSelector = rightSelector;
     }
 
     /// <summary>
@@ -176,78 +157,11 @@ namespace Ivony.Html
       if ( !RightSelector.IsEligible( element ) )
         return false;
 
-      if ( _left == null )
-        return true;
-
-
-
-      if ( Relative == null )
-        return LeftSelector.IsEligible( element );
-
-
-      return _relativeHandler( element );
+      return RelativeSelector.IsEligibleBuffered( element );
 
     }
 
 
-    /// <summary>
-    /// 定义关系处理程序委托
-    /// </summary>
-    /// <param name="element">要处理的元素</param>
-    /// <returns>元素是否符合左选择器的关系约束</returns>
-    private delegate bool RelativeHandler( IHtmlElement element );
-
-    private RelativeHandler _relativeHandler;
-
-    /// <summary>
-    /// 创建关系处理程序
-    /// </summary>
-    /// <param name="relative">关系</param>
-    /// <param name="leftSelector">左选择器</param>
-    /// <returns>关系处理程序</returns>
-    private RelativeHandler CreateRelativeHandler( string relative, ICssSelector leftSelector )
-    {
-      if ( relative == null )
-        return element => leftSelector.IsEligible( element );
-
-      else if ( Relative == ">" )
-        return element => leftSelector.IsEligible( element.Parent() );
-
-      else if ( Relative == "" )
-        return element => element.Ancestors().Any( e => leftSelector.IsEligible( e ) );
-
-      else if ( Relative == "+" )
-        return element => leftSelector.IsEligible( element.PreviousElement() );
-
-      else if ( Relative == "~" )
-        return element => element.SiblingsBeforeSelf().Any( e => leftSelector.IsEligible( e ) );
-
-      throw new NotSupportedException( "不支持的关系运算符" );
-    }
-
-
-    /// <summary>
-    /// 创建关系选择器
-    /// </summary>
-    /// <param name="leftSelector">左选择器</param>
-    /// <param name="relative">关系运算符</param>
-    /// <returns>关系选择器</returns>
-    private ICssSelector CreateRelativeSelector( ICssSelector leftSelector, string relative )
-    {
-      if ( Relative == ">" )
-        return new ParentRelativeSelector( leftSelector );
-
-      else if ( Relative == "" )
-        return new AncetorRelativeSelector( leftSelector );
-
-      else if ( Relative == "+" )
-        return new PreviousRelativeSelector( leftSelector );
-
-      else if ( Relative == "~" )
-        return new SiblingsRelativeSelector( leftSelector );
-
-      throw new NotSupportedException( "不支持的关系运算符" );
-    }
 
 
 
@@ -257,14 +171,7 @@ namespace Ivony.Html
     /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
-      if ( Relative == null )
-        return RightSelector.ToString();
-
-      else if ( Relative == "" )
-        return string.Format( CultureInfo.InvariantCulture, "{0} {1}", LeftSelector, RightSelector );
-
-      else
-        return string.Format( CultureInfo.InvariantCulture, "{0} {1} {2}", LeftSelector, Relative, RightSelector );
+      return string.Format( CultureInfo.InvariantCulture, "{0} {1}", RelativeSelector, RightSelector );
     }
 
 
@@ -329,8 +236,16 @@ namespace Ivony.Html
       if ( elements.IsNullOrEmpty() )
         return rightSelector;
 
-      return new CssCasecadingSelector( new CssElementsRestrictionSelector( elements ), "", rightSelector );
+      return new CssCasecadingSelector( new CssElementsRestrictionSelector( elements ), rightSelector );
     }
+
+
+    public CssCasecadingSelector Clone()
+    {
+      throw new NotImplementedException();
+    }
+
+
 
 
     private class CssElementsRestrictionSelector : ICssSelector
@@ -374,6 +289,30 @@ namespace Ivony.Html
 
 
 
+
+    /// <summary>
+    /// 创建关系选择器
+    /// </summary>
+    /// <param name="leftSelector">左选择器</param>
+    /// <param name="relative">关系运算符</param>
+    /// <returns>关系选择器</returns>
+    private static ICssSelector CreateRelativeSelector( ICssSelector leftSelector, string relative )
+    {
+      if ( relative == ">" )
+        return new ParentRelativeSelector( leftSelector );
+
+      else if ( relative == "" )
+        return new AncetorRelativeSelector( leftSelector );
+
+      else if ( relative == "+" )
+        return new PreviousRelativeSelector( leftSelector );
+
+      else if ( relative == "~" )
+        return new SiblingsRelativeSelector( leftSelector );
+
+      throw new NotSupportedException( "不支持的关系运算符" );
+    }
+
     /// <summary>
     /// 父级关系选择器
     /// </summary>
@@ -394,6 +333,12 @@ namespace Ivony.Html
 
         return _leftSelector.IsEligibleBuffered( element.Parent() );
       }
+
+      public override string ToString()
+      {
+        return _leftSelector.ToString() + " > ";
+      }
+
     }
 
 
@@ -402,11 +347,11 @@ namespace Ivony.Html
     /// </summary>
     private class AncetorRelativeSelector : ICssSelector
     {
-      private ICssSelector _parentRelativeSelector;
+      private ICssSelector _leftSelector;
 
       public AncetorRelativeSelector( ICssSelector leftSelector )
       {
-        _parentRelativeSelector = leftSelector;
+        _leftSelector = leftSelector;
       }
 
       public bool IsEligible( IHtmlElement element )
@@ -414,7 +359,16 @@ namespace Ivony.Html
         if ( element == null )
           return false;
 
-        return _parentRelativeSelector.IsEligibleBuffered( element ) || this.IsEligibleBuffered( element.Parent() );
+        var parant = element.Parent();
+
+        //如果父级元素符合左选择器，或者父级元素符合本选择器。
+        return _leftSelector.IsEligibleBuffered( parant ) || this.IsEligibleBuffered( parant );
+      }
+
+
+      public override string ToString()
+      {
+        return _leftSelector.ToString() + " ";
       }
     }
 
@@ -436,7 +390,12 @@ namespace Ivony.Html
         if ( element == null )
           return false;
 
-        return _leftSelector.IsEligible( element.PreviousElement() );
+        return _leftSelector.IsEligibleBuffered( element.PreviousElement() );
+      }
+
+      public override string ToString()
+      {
+        return _leftSelector.ToString() + " + ";
       }
     }
 
@@ -446,16 +405,24 @@ namespace Ivony.Html
     /// </summary>
     private class SiblingsRelativeSelector : ICssSelector
     {
-      private ICssSelector _previousRelativeSelector;
+      private ICssSelector _leftSelector;
 
       public SiblingsRelativeSelector( ICssSelector leftSelector )
       {
-        _previousRelativeSelector = new PreviousRelativeSelector( leftSelector );
+        _leftSelector = new PreviousRelativeSelector( leftSelector );
       }
 
       public bool IsEligible( IHtmlElement element )
       {
-        return _previousRelativeSelector.IsEligibleBuffered( element.PreviousElement() ) || this.IsEligibleBuffered( element.PreviousElement() );
+        var previous = element.PreviousElement();
+
+        return _leftSelector.IsEligibleBuffered( previous ) || this.IsEligibleBuffered( previous );
+      }
+
+
+      public override string ToString()
+      {
+        return _leftSelector.ToString() + " ~ ";
       }
     }
 

@@ -103,8 +103,9 @@ namespace Ivony.Html.Web.Mvc
       {
         var values = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ) );
         httpContext.Trace.Write( string.Format( "RouteData: {{{0}}}", values ), "SimpleRouteTable" );
-        return CloneRouteData( routeData );
       }
+
+      return CloneRouteData( routeData );
 
     }
 

@@ -113,7 +113,7 @@ namespace Ivony.Html
         return builder.ToString();
       }
 
-      throw new InvalidOperationException();
+      throw new NotSupportedException();
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
+          if ( ( HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute ) ) && !attribute.AttributeValue.Contains( '"' ) )
             builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
             builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
@@ -196,6 +196,10 @@ namespace Ivony.Html
     /// <returns></returns>
     public static string InnerText( this IHtmlNode node )
     {
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
       var textNode = node as IHtmlTextNode;
       if ( textNode != null )
       {
@@ -230,7 +234,10 @@ namespace Ivony.Html
 
       var container = node as IHtmlContainer;
 
-      return string.Join( "", container.Nodes().Select( n => InnerText( n ) ).ToArray() );
+      if ( container != null )
+        return string.Join( "", container.Nodes().Select( n => InnerText( n ) ).ToArray() );
+
+      throw new NotSupportedException();
     }
 
 

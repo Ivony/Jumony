@@ -41,7 +41,7 @@ namespace Ivony.Html
       if ( attributeCollection != null )
         return attributeCollection.Get( name );
 
-      return attributes.SingleOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
+      return attributes.FirstOrDefault( a => a.Name.EqualsIgnoreCase( name ) );
     }
 
 

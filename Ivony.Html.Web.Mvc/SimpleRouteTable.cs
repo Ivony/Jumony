@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Web.Caching;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.IO;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -31,6 +32,16 @@ namespace Ivony.Html.Web.Mvc
     protected const string RouteUrlCacheKeyPrefix = "RouteVirtualPath_";
 
 
+
+    /// <summary>
+    /// 是否打开路由调试模式
+    /// </summary>
+    public static bool DebugMode
+    {
+      get;
+      set;
+    }
+
     /// <summary>
     /// 获取请求的路由数据
     /// </summary>
@@ -38,6 +49,9 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>路由数据</returns>
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
+
+      if ( DebugMode )
+        httpContext.Trace.Write( "Begin GetRouteData", "SimpleRouteTable" );
 
       var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
 
@@ -47,7 +61,16 @@ namespace Ivony.Html.Web.Mvc
 
 
       if ( routeData != null )
+      {
+        if ( DebugMode )
+        {
+          httpContext.Trace.Write( "Hit cache", "SimpleRouteTable" );
+          var routeValues = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ) );
+          httpContext.Trace.Write( string.Format( "RouteData: {{{0}}}", routeValues ), "SimpleRouteTable" );
+        }
+
         return CloneRouteData( routeData );
+      }
 
 
       var data = _rules
@@ -76,7 +99,12 @@ namespace Ivony.Html.Web.Mvc
 
       httpContext.Cache.Insert( cacheKey, routeData );
 
-      return CloneRouteData( routeData );
+      if ( DebugMode )
+      {
+        var values = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ) );
+        httpContext.Trace.Write( string.Format( "RouteData: {{{0}}}", values ), "SimpleRouteTable" );
+        return CloneRouteData( routeData );
+      }
 
     }
 

@@ -110,7 +110,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
     <Compile Include="Selectors\CssCacheableSelector.cs" />
-    <Compile Include="Selectors\CssCasecadingSelector.cs" />
+    <Compile Include="Selectors\CssCascadingSelector.cs" />
     <Compile Include="Selectors\CssAttributeSelector.cs" />
     <Compile Include="Selectors\CssMultipleSelector.cs" />
     <Compile Include="Selectors\CssSelector.cs" />
@@ -145,12 +145,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Selectors\CssCasecadingSelector.RelativeSelectors.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Selectors\CssCasecadingSelector.ScopeRestrict.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

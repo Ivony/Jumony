@@ -17,6 +17,5 @@ namespace Ivony.Html
     /// <param name="element">要判断的元素</param>
     /// <returns>是否符合要求</returns>
     bool IsEligible( IHtmlElement element );
-
   }
 }

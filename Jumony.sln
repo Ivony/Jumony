@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Core", "Ivony.Core\Ivony.Core.csproj", "{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html", "Ivony.Html\Ivony.Html.csproj", "{E775B408-605F-4B66-87B6-98596069B703}"
@@ -82,11 +82,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{4B94B6DA-59D9-48FB-A05E-BE25C4C7EEDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5819B631-AB5E-437C-AD43-D53F8A38086B}"
-	ProjectSection(SolutionItems) = preProject
-		Jumony.vsmdi = Jumony.vsmdi
-		Local.testsettings = Local.testsettings
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}"
 EndProject
@@ -118,6 +113,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SpeficationTest", "Speficat
 		VWDPort = "5175"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{5E0D8705-9477-4577-97BB-F4639EA8B0C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +344,16 @@ Global
 		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|x86.ActiveCfg = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -364,5 +371,6 @@ Global
 		{150787A5-84FE-49EB-ACAD-B04838DF6B25} = {AF5D7B06-51A8-4AA0-86A2-BC1FCC4D08A4}
 		{39853DC7-FB98-4F81-8B2C-E3F92F024C36} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
 		{4AA86193-4163-4451-9E7A-3A03D925E97C} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
+		{5E0D8705-9477-4577-97BB-F4639EA8B0C1} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
 	EndGlobalSection
 EndGlobal

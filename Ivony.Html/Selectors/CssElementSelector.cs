@@ -76,13 +76,19 @@ namespace Ivony.Html
     }
 
 
-    private CssElementSelector( string tagName, CssAttributeSelector[] attributes, ICssPseudoClassSelector[] pseudoClasses )
+    /// <summary>
+    /// 创建CSS元素选择器
+    /// </summary>
+    /// <param name="name">元素名</param>
+    /// <param name="attributes">属性选择器</param>
+    /// <param name="pseudoClasses">伪类选择器</param>
+    public CssElementSelector( string name, CssAttributeSelector[] attributes, ICssPseudoClassSelector[] pseudoClasses )
     {
 
-      if ( string.IsNullOrEmpty( tagName ) )
-        tagName = "*";
+      if ( string.IsNullOrEmpty( name ) )
+        name = "*";
 
-      elementType = tagName;
+      elementType = name;
       attributeSelectors = attributes;
       pseudoClassSelectors = pseudoClasses;
     }
@@ -94,6 +100,8 @@ namespace Ivony.Html
     private readonly CssAttributeSelector[] attributeSelectors;
 
     private readonly ICssPseudoClassSelector[] pseudoClassSelectors;
+    private CssAttributeSelector[] cssAttributeSelectors;
+    private ICssPseudoClassSelector[] cssPseudoClassSelectors;
 
 
     /// <summary>

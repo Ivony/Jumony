@@ -68,6 +68,13 @@ namespace Ivony.Html
 
     }
 
+    public CssAttributeSelector( string name, string comparison, string value )
+    {
+      this.name = name;
+      this.comparison = comparison;
+      this.value = value;
+    }
+
 
     /// <summary>
     /// 检查元素是否符合选择条件

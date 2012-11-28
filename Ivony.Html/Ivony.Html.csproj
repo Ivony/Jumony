@@ -40,6 +40,7 @@
     <DocumentationFile>bin\Debug\Ivony.Html.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -110,15 +111,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
     <Compile Include="Selectors\CssCacheableSelector.cs" />
-    <Compile Include="Selectors\CssCascadingSelector.cs" />
+    <Compile Include="Selectors\CssCasecadingSelector.cs" />
     <Compile Include="Selectors\CssAttributeSelector.cs" />
+    <Compile Include="Selectors\CssElementsRestrictionSelector.cs" />
     <Compile Include="Selectors\CssMultipleSelector.cs" />
+    <Compile Include="Selectors\CssParser.cs" />
     <Compile Include="Selectors\CssSelector.cs" />
     <Compile Include="Selectors\CssElementSelector.cs" />
     <Compile Include="Selectors\ICssPseudoClassProvider.cs" />
     <Compile Include="Selectors\ICssPseudoClassSelector.cs" />
     <Compile Include="Selectors\CssPseudoClassSelectors.cs" />
     <Compile Include="Selectors\ICssSelector.cs" />
+    <Compile Include="Selectors\CssRelativeSelector.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />
     <Compile Include="Styles\CssStyle.cs" />
     <Compile Include="SynchronizedCollection.cs" />

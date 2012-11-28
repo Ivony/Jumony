@@ -30,7 +30,7 @@ namespace Ivony.Html
       if ( expression == null )
         throw new ArgumentNullException( "expression" );
 
-      return Create( expression, null );
+      return CssParser.Create( expression );
     }
 
 
@@ -38,54 +38,14 @@ namespace Ivony.Html
     private static Dictionary<string, ICssSelector[]> _selectorCache = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
     private static object _cacheSync = new Object();
 
-    /// <summary>
-    /// 创建一个 CSS 选择器
-    /// </summary>
-    /// <param name="expression">选择器表达式</param>
-    /// <param name="scope">范畴限定</param>
-    /// <returns>选择器</returns>
-    public static ICssSelector Create( string expression, IHtmlContainer scope )
-    {
-
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-
-      ICssSelector[] selectors;
-
-      if ( _selectorCache.ContainsKey( expression ) )
-        selectors = _selectorCache[expression];
-
-      else
-      {
-
-
-        var match = cssSelectorRegex.Match( expression );
-
-        if ( !match.Success )
-          throw new FormatException( "无法识别的CSS选择器" );
-
-        selectors = match.Groups["selector"].Captures.Cast<Capture>().Select( c => CssCasecadingSelector.Create( c.Value ) ).ToArray();
-      }
-
-      lock ( _cacheSync )
-      {
-        _selectorCache[expression] = selectors;
-      }
-
-
-      return new CssMultipleSelector( selectors.Select( s => CssCasecadingSelector.Create( s, scope ) ).ToArray() );
-    }
-
-
 
     /// <summary>
     /// 执行CSS选择器搜索
     /// </summary>
-    /// <param name="expression">CSS选择器表达式</param>
     /// <param name="scope">CSS选择器和搜索范畴</param>
+    /// <param name="expression">CSS选择器表达式</param>
     /// <returns>搜索结果</returns>
-    public static IEnumerable<IHtmlElement> Search( string expression, IHtmlContainer scope )
+    public static IEnumerable<IHtmlElement> Search( IHtmlContainer scope, string expression )
     {
 
       if ( expression == null )
@@ -97,7 +57,7 @@ namespace Ivony.Html
 
       try
       {
-        var selector = Create( expression, scope );
+        var selector = CssParser.Create( scope, expression );
         return selector.Filter( scope.Descendants() );
       }
       catch ( Exception e )
@@ -159,15 +119,6 @@ namespace Ivony.Html
 
 
 
-
-    /// <summary>
-    /// 调用此方法预热选择器
-    /// </summary>
-    public static void WarmUp()
-    {
-      cssSelectorRegex.IsMatch( "" );
-      CssCasecadingSelector.WarmUp();
-    }
 
   }
 }

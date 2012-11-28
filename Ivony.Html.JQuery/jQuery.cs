@@ -26,7 +26,7 @@ namespace Ivony.Html
       _selectorExpression = selector;
       _scope = scope;
 
-      _selector = CssSelector.Create( selector, scope );
+      _selector = CssParser.Create( scope, selector );
       _elements = _selector.Filter( _scope.Descendants() );
 
     }

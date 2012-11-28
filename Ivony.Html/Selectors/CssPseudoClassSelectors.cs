@@ -273,7 +273,7 @@ namespace Ivony.Html
       {
 
         string argsExp = null;
-        if ( multiplier == 0 )
+        if ( multiplier != 0 )
           argsExp = multiplier + "n";
 
         if ( argsExp != null )

@@ -24,7 +24,6 @@ namespace SelectorTest
     [ClassInitialize]
     public static void Initialize( TestContext context )
     {
-      CssSelector.WarmUp();
     }
 
 

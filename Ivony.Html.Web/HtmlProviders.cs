@@ -225,9 +225,9 @@ namespace Ivony.Html.Web
           if ( provider != null )
             return provider.CreateDocument();
         }
-        else
-          failedHtmlProviders.Add( virtualPath );
 
+
+        failedHtmlProviders.Add( virtualPath );
       }
 
       var content = LoadContent( context, virtualPath );

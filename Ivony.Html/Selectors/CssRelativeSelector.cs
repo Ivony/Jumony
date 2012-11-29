@@ -57,7 +57,7 @@ namespace Ivony.Html
     {
       var restrict = leftSelector as ContainerRestrict;
       if ( restrict != null )
-        return element.IsDescendantOf( restrict.RestrictContainer );
+        return restrict.RestrictContainer.Nodes().Contains( element );
 
       return leftSelector.IsEligibleBuffered( element.Parent() );
     }
@@ -79,7 +79,7 @@ namespace Ivony.Html
 
       var restrict = leftSelector as ContainerRestrict;
       if ( restrict != null )
-        return restrict.RestrictContainer.Nodes().Contains( element );
+        return element.IsDescendantOf( restrict.RestrictContainer );
 
 
       var parant = element.Parent();

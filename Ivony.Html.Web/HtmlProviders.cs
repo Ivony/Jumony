@@ -9,6 +9,8 @@ using System.IO;
 using System.Web.Caching;
 using System.Globalization;
 using System.Web.Compilation;
+using System.Web.Configuration;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
@@ -186,6 +188,10 @@ namespace Ivony.Html.Web
       return LoadDocument( context, virtualPath, out cacheKey );
     }
 
+
+
+    private static HashSet<string> failedHtmlProviders = new HashSet<string>();
+
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
@@ -208,17 +214,21 @@ namespace Ivony.Html.Web
 
       cacheKey = null;
 
-      try
-      {
-        var provider = BuildManager.CreateInstanceFromVirtualPath( virtualPath, typeof( IHtmlDocumentProvider ) ) as IHtmlDocumentProvider;
-        if ( provider != null )
-          return provider.CreateDocument();
-      }
-      catch
-      { 
-      
-      }
 
+      if ( !failedHtmlProviders.Contains( virtualPath ) )
+      {
+
+        var section = WebConfigurationManager.GetSection( "system.web/compilation", virtualPath ) as CompilationSection;
+        if ( section != null && section.BuildProviders[VirtualPathUtility.GetExtension( virtualPath )] != null )
+        {
+          var provider = BuildManager.CreateInstanceFromVirtualPath( virtualPath, typeof( IHtmlDocumentProvider ) ) as IHtmlDocumentProvider;
+          if ( provider != null )
+            return provider.CreateDocument();
+        }
+        else
+          failedHtmlProviders.Add( virtualPath );
+
+      }
 
       var content = LoadContent( context, virtualPath );
       if ( content == null )
@@ -270,7 +280,7 @@ namespace Ivony.Html.Web
 
 
     private static IHtmlParserProvider _defaultParserProvider = new DefaultParserProvider();
-    
+
     /// <summary>
     /// 获取默认的 HTML 解析器
     /// </summary>

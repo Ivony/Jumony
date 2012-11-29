@@ -206,7 +206,7 @@ namespace Ivony.Html
     /// <returns>层叠选择器</returns>
     public static ICssSelector Create( IEnumerable<IHtmlElement> elements, string expression )
     {
-      var selector = CssParser.Create( expression );
+      var selector = CssParser.ParseSelector( expression );
 
       if ( elements.IsNullOrEmpty() )
         return selector;

@@ -12,10 +12,10 @@ namespace TestConsole
     static void Main( string[] args )
     {
 
-      var selector = CssParser.Create( "a.class[href]" );
+      var selector = CssParser.ParseSelector( "a.class[href]" );
       Console.WriteLine( selector );
 
-      selector = CssParser.Create( "a.class[href] p:nth-child( 3n - 5 ) , span >  li#pitem.kk+.k[href^=http:// ]   + \t:nth-child(3) h1[class!=\"abc'\"] a[dsh=!1j ]" );
+      selector = CssParser.ParseSelector( "a.class[href] p:nth-child( 3n - 5 ) , span >  li#pitem.kk+.k[href^=http:// ]   + \t:nth-child(3) h1[class!=\"abc'\"] a[dsh=!1j ]" );
       Console.WriteLine( selector );
 
       Console.ReadKey();

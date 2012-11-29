@@ -13,9 +13,9 @@ namespace Ivony.Html
     /// <summary>
     /// 从选择器表达式创建选择器对象
     /// </summary>
-    /// <param name="expression"></param>
+    /// <param name="expression">选择器表达式</param>
     /// <returns></returns>
-    public static ICssSelector Create( string expression )
+    public static ICssSelector ParseSelector( string expression )
     {
 
       var selector = selectorsCache[expression] as ICssSelector;
@@ -35,6 +35,21 @@ namespace Ivony.Html
 
 
 
+
+    /// <summary>
+    /// 从选择器表达式创建元素选择器
+    /// </summary>
+    /// <param name="expression">选择器表达式</param>
+    /// <returns></returns>
+    public static CssElementSelector ParseElementSelector( string expression )
+    {
+      var enumerator = new CharEnumerator( expression );
+
+      return ParseElementSelector( enumerator );
+    }
+
+
+
     /// <summary>
     /// 创建层级选择器
     /// </summary>
@@ -43,7 +58,7 @@ namespace Ivony.Html
     /// <returns>带范畴限定的层叠选择器</returns>
     public static ICssSelector Create( IHtmlContainer scope, string expression )
     {
-      return CssCasecadingSelector.Create( new CssAncetorRelativeSelector( new ContainerRestrict( scope ) ), CssParser.Create( expression ) );
+      return CssCasecadingSelector.Create( new CssAncetorRelativeSelector( new ContainerRestrict( scope ) ), CssParser.ParseSelector( expression ) );
     }
 
 
@@ -517,11 +532,5 @@ namespace Ivony.Html
     }
 
 
-    public static CssElementSelector CreateElementSelector( string expression )
-    {
-      var enumerator = new CharEnumerator( expression );
-
-      return ParseElementSelector( enumerator );
-    }
   }
 }

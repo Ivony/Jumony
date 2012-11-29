@@ -17,27 +17,6 @@ namespace Ivony.Html
   public static class CssSelector
   {
 
-    private static readonly Regex cssSelectorRegex = new Regex( "^" + Regulars.cssSelectorPattern + "$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-
-    /// <summary>
-    /// 创建一个 CSS 选择器
-    /// </summary>
-    /// <param name="expression">选择器表达式</param>
-    /// <returns>CSS 选择器</returns>
-    public static ICssSelector Create( string expression )
-    {
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-      return CssParser.Create( expression );
-    }
-
-
-    //选择器缓存
-    private static Dictionary<string, ICssSelector[]> _selectorCache = new Dictionary<string, ICssSelector[]>( StringComparer.Ordinal );
-    private static object _cacheSync = new Object();
-
 
     /// <summary>
     /// 执行CSS选择器搜索

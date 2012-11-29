@@ -34,49 +34,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建一个CSS元素选择器
-    /// </summary>
-    /// <param name="expression">元素选择表达式</param>
-    public static ICssSelector Create( string expression )
-    {
-      string tagName;
-
-      if ( string.IsNullOrEmpty( expression ) )
-        throw new ArgumentNullException( "expression" );
-
-      var match = elementSelectorRegex.Match( expression );
-      if ( !match.Success )
-        throw new FormatException( string.Format( CultureInfo.InvariantCulture, "元素选择器 \"{0}\" 格式不正确", expression ) );
-
-
-      if ( match.Groups["name"].Success )
-        tagName = match.Groups["name"].Value;
-      else
-        tagName = "*";
-
-      var _attributeSelectors = match.Groups["attributeSelector"].Captures.Cast<Capture>().Select( c => new CssAttributeSelector( c.Value ) ).ToList();
-
-      if ( match.Groups["identity"].Success )
-        _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[id={0}]", match.Groups["identity"].Value ) ) );
-
-      if ( match.Groups["class"].Success )
-      {
-
-        foreach ( Capture capture in match.Groups["class"].Captures )
-          _attributeSelectors.Add( new CssAttributeSelector( string.Format( CultureInfo.InvariantCulture, "[class~={0}]", capture.Value ) ) );
-      }
-
-
-      var attributeSelectors = _attributeSelectors.ToArray();
-
-      var pseudoClassSelectors = match.Groups["pseudoClassSelector"].Captures.Cast<Capture>().Select( c => CssPseudoClassSelectors.Create( c.Value ) ).ToArray();
-
-      return new CssElementSelector( tagName, attributeSelectors, pseudoClassSelectors );
-
-    }
-
-
-    /// <summary>
     /// 创建CSS元素选择器
     /// </summary>
     /// <param name="name">元素名</param>

@@ -42,7 +42,7 @@ namespace Ivony.Html
         return _selectorCache.IsEligible( element );
 
       _selectorExpression = CssSelector;
-      _selectorCache = Ivony.Html.CssSelector.Create( CssSelector );
+      _selectorCache = CssParser.Create( CssSelector );
 
 
       return _selectorCache.IsEligible( element );

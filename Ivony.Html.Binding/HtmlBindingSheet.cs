@@ -101,7 +101,7 @@ namespace Ivony.Html.Binding
       if ( !ruleMatch.Success )
         throw new FormatException();
 
-      Selector = CssSelector.Create( ruleMatch.Groups["selector"].Value );
+      Selector = CssParser.Create( ruleMatch.Groups["selector"].Value );
 
       foreach ( Capture settingCapture in ruleMatch.Groups["styleSetting"].Captures )
       {

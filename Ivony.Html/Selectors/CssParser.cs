@@ -516,5 +516,12 @@ namespace Ivony.Html
       }
     }
 
+
+    public static CssElementSelector CreateElementSelector( string expression )
+    {
+      var enumerator = new CharEnumerator( expression );
+
+      return ParseElementSelector( enumerator );
+    }
   }
 }

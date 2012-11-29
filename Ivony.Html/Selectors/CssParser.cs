@@ -51,7 +51,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建层级选择器
+    /// 创建带范畴限定的选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
@@ -136,7 +136,7 @@ namespace Ivony.Html
 
     private static FormatException FormatError( CharEnumerator enumerator, char desired )
     {
-      return new FormatException( string.Format( "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处，期望的字符为 '{3} '。", enumerator.Current, enumerator.ToString(), enumerator.Offset, desired ) );
+      return new FormatException( string.Format( "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处，期望的字符为 '{3}' 。", enumerator.Current, enumerator.ToString(), enumerator.Offset, desired ) );
     }
 
 

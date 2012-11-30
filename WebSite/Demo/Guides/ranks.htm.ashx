@@ -26,7 +26,6 @@ public class ranks : JumonyHandler
 
     var container = Document.FindSingle( "body > table" );
 
-    container.Repeat( "tr.item", 10 );
 
 
     /*var rankItems = Find( ".ranks > tr" );

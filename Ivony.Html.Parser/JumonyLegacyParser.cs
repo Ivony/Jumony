@@ -15,9 +15,8 @@ namespace Ivony.Html.Parser
   public class JumonyLegacyParser : IHtmlParser
   {
 
-    private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern );
 
-    private static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
+    private static readonly Regex tagRegex = new HtmlRegulars.HtmlTag();
 
 
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );

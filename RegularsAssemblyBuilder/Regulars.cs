@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Parser
+namespace RegularsAssemblyBuilder
 {
-  
+
   /// <summary>
   /// 用于分析 HTML DOM 结构的正则表达式列表
   /// </summary>
@@ -42,6 +41,9 @@ namespace Ivony.Html.Parser
 
     /// <summary>用于匹配用特殊标签的正则表达式</summary>
     public static readonly string specialTagPattern = @"(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
+
+    /// <summary>用于匹配用任意标签的正则表达式</summary>
+    public static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern, Regulars.doctypeDeclarationPattern );
 
   }
 }

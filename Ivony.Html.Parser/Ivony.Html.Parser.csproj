@@ -54,6 +54,9 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ivony.Html.Parser.HtmlRegulars">
+      <HintPath>..\Regulars\Ivony.Html.Parser.HtmlRegulars.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -87,7 +90,6 @@
     <Compile Include="JumonyLegacyParser.cs" />
     <Compile Include="JumonyReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Regulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RegularsAssemblyBuilder</RootNamespace>
     <AssemblyName>RegularsAssemblyBuilder</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,20 +44,16 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{bf0b37e7-2d93-4a3d-ad6d-0b51b66f5b21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
-      <Project>{d05d58d3-5c3a-41bd-ba9e-2aa532a3b1be}</Project>
-      <Name>Ivony.Html.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
-      <Project>{e775b408-605f-4b66-87b6-98596069b703}</Project>
-      <Name>Ivony.Html</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

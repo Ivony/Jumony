@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Ivony.Html;
 
 namespace RegularsAssemblyBuilder
 {
@@ -13,7 +11,7 @@ namespace RegularsAssemblyBuilder
     static void Main( string[] args )
     {
 
-      Regex.CompileToAssembly( GetRegexCompilationInfos(), new AssemblyName( "Ivony.Html.Regulars" ) );
+      Regex.CompileToAssembly( GetRegexCompilationInfos(), new AssemblyName( "Ivony.Html.Parser.HtmlRegulars" ) );
 
     }
 
@@ -22,11 +20,11 @@ namespace RegularsAssemblyBuilder
     {
       return new[]
       {
-        new RegexCompilationInfo( "^"+Ivony.Html.Regulars.attributeExpressionPattern+"$", RegexOptions.Compiled, "AttributeExpression", "Ivony.Html.Regulars", true ),
-        new RegexCompilationInfo( "^"+Ivony.Html.Regulars.pseudoClassPattern+"$", RegexOptions.Compiled, "PseudoClass", "Ivony.Html.Regulars", true ),
-        new RegexCompilationInfo( "^"+Ivony.Html.Regulars.elementExpressionPattern+"$", RegexOptions.Compiled, "ElementExpression", "Ivony.Html.Regulars", true ),
-        new RegexCompilationInfo( "^"+Ivony.Html.Regulars.cssCasecadingSelectorPattern+"$", RegexOptions.Compiled, "CssCasecadingSelector", "Ivony.Html.Regulars", true ),
-        new RegexCompilationInfo( "^"+Ivony.Html.Regulars.cssSelectorPattern+"$", RegexOptions.Compiled, "CssSelector", "Ivony.Html.Regulars", true ),
+        new RegexCompilationInfo( "^"+Regulars.beginTagPattern+"$", RegexOptions.Compiled, "BeginTag", "Ivony.Html.Parser.HtmlRegulars", true ),
+        new RegexCompilationInfo( "^"+Regulars.endTagPattern+"$", RegexOptions.Compiled, "EndTag", "Ivony.Html.Parser.HtmlRegulars", true ),
+        new RegexCompilationInfo( "^"+Regulars.commentPattern+"$", RegexOptions.Compiled, "CommentTag", "Ivony.Html.Parser.HtmlRegulars", true ),
+        new RegexCompilationInfo( "^"+Regulars.specialTagPattern+"$", RegexOptions.Compiled, "SpecialTag", "Ivony.Html.Parser.HtmlRegulars", true ),
+        new RegexCompilationInfo( Regulars.tagPattern, RegexOptions.Compiled, "HtmlTag", "Ivony.Html.Parser.HtmlRegulars", true ),
       };
     }
 

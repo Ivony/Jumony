@@ -14,27 +14,10 @@ namespace Ivony.Html.Parser
   public class JumonyReader : IHtmlReader
   {
 
-    private static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern, Regulars.doctypeDeclarationPattern );
-
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象
     /// </summary>
-    protected static readonly Regex tagRegex = new Regex( tagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-
-    private static bool _isWarmedUp = false;
-
-    /// <summary>
-    /// 调用此方法通知进行预热 JumonyReader
-    /// </summary>
-    public static void WarmUp()
-    {
-      if ( !_isWarmedUp )
-      {
-        tagRegex.IsMatch( "" );
-        _isWarmedUp = true;
-      }
-    }
+    protected static readonly Regex tagRegex = new HtmlRegulars.HtmlTag();
 
 
     /// <summary>

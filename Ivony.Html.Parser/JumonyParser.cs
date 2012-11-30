@@ -91,21 +91,5 @@ namespace Ivony.Html.Parser
     }
     */
 
-    private static bool _isWarmedUp = false;
-
-    /// <summary>
-    /// 调用此方法通知预热 JumonyParser
-    /// </summary>
-    public static void WarmUp()
-    {
-      if ( !_isWarmedUp )
-      {
-        JumonyReader.WarmUp();
-        HtmlSpecification.WarmUp();
-        _isWarmedUp = true;
-      }
-    }
-
-
   }
 }

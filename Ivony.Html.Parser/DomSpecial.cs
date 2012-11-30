@@ -56,9 +56,6 @@ namespace Ivony.Html.Parser
       get { return "Special Node"; }
     }
 
-
-    private static readonly Regex specialTagRegex = new Regex( Regulars.specialTagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
     #region IHtmlTextNode 成员
 
     string IHtmlTextNode.HtmlText

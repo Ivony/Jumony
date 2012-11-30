@@ -16,7 +16,7 @@ namespace Ivony.Html.Parser
   {
 
 
-    private static readonly Regex tagRegex = new HtmlRegulars.HtmlTag();
+    private static readonly Regex tagRegex = new Regulars.HtmlTag();
 
 
     private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );

@@ -17,7 +17,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象
     /// </summary>
-    protected static readonly Regex tagRegex = new HtmlRegulars.HtmlTag();
+    protected static readonly Regex tagRegex = new Regulars.HtmlTag();
 
 
     /// <summary>

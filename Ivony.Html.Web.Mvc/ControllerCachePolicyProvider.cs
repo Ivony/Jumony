@@ -100,22 +100,24 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private static Dictionary<string, ControllerCachePolicyProvider> _providers;
+    private static Dictionary<string, ControllerCachePolicyProvider> _providers = new Dictionary<string, ControllerCachePolicyProvider>();
     private static object _providersSync = new object();
 
 
 
-    internal static IDictionary<string, ControllerCachePolicyProvider> Providers
+    /// <summary>
+    /// 注册控制器缓存策略提供程序
+    /// </summary>
+    /// <param name="provider">缓存策略提供程序</param>
+    public static void RegisterCacheProvider( ControllerCachePolicyProvider provider )
     {
-      get
+      lock ( _providersSync )
       {
-        lock ( _providersSync )
-        {
-          if ( _providers == null )
-            _providers = InitializeProviders();
+        var name = provider.controllerName;
+        if ( _providers.ContainsKey( name ) )
+          throw new InvalidOperationException( string.Format( "已经为名为 \"{0}\" 的控制器注册了缓存策略提供程序", name ) );
 
-          return _providers;
-        }
+        _providers.Add( name, provider );
       }
     }
 
@@ -151,9 +153,30 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取缓存策略提供程序
+    /// </summary>
+    /// <param name="controllerName">控制器名称</param>
+    /// <returns>该控制器的缓存策略提供程序，如果有的话</returns>
+    internal static ControllerCachePolicyProvider GetProvider( string controllerName )
+    {
+      lock ( _providersSync )
+      {
+        ControllerCachePolicyProvider provider;
+
+        if ( _providers.TryGetValue( controllerName, out provider ) )
+          return provider;
+      }
+
+      return null;
+    }
+
+
+
 
 
     private delegate CachePolicy ActionCachePolicyProvider( ControllerContext context, IDictionary<string, object> parameters );
+
 
 
 

@@ -446,7 +446,7 @@ namespace Ivony.Html
       {
         var ch = enumerator.Current;
 
-        if ( ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9' || ch == '-' )
+        if ( ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9' || ch == '-' || ch == '_' )
           buffer[i++] = ch;
 
         else if ( ch == '|' )

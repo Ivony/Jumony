@@ -194,6 +194,11 @@ namespace Ivony.Html
       if ( casecadingSelector != null )
         return Combine( relativeSelector, casecadingSelector );
 
+      var multipleSelector = selector as CssMultipleSelector;
+      if ( multipleSelector != null )
+        return CssMultipleSelector.Combine( relativeSelector, multipleSelector );
+
+
       throw new NotSupportedException();
     }
 

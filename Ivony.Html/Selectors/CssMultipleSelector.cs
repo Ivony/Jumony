@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html
 {
@@ -45,5 +46,12 @@ namespace Ivony.Html
     }
 
 
+
+    public static ICssSelector Combine( CssRelativeSelector relativeSelector, CssMultipleSelector multipleSelector )
+    {
+
+      return new CssMultipleSelector( multipleSelector._selectors.Select( selector => CssCasecadingSelector.Create( relativeSelector, selector ) ).ToArray() );
+
+    }
   }
 }

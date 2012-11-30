@@ -18,20 +18,6 @@ namespace Ivony.Html
   /// </remarks>
   public sealed class CssElementSelector : ICssSelector
   {
-    /// <summary>
-    /// 匹配CSS元素选择器的正则表达式。
-    /// </summary>
-    public static readonly Regex elementSelectorRegex = new Regex( Regulars.elementExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-
-    /// <summary>
-    /// 调用此方法预热选择器
-    /// </summary>
-    public static void WarmUp()
-    {
-      elementSelectorRegex.IsMatch( "" );
-    }
-
 
     /// <summary>
     /// 创建CSS元素选择器
@@ -57,8 +43,6 @@ namespace Ivony.Html
     private readonly CssAttributeSelector[] attributeSelectors;
 
     private readonly ICssPseudoClassSelector[] pseudoClassSelectors;
-    private CssAttributeSelector[] cssAttributeSelectors;
-    private ICssPseudoClassSelector[] cssPseudoClassSelectors;
 
 
     /// <summary>

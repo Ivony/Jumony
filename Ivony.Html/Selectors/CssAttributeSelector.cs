@@ -16,14 +16,10 @@ namespace Ivony.Html
   /// </remarks>
   public sealed class CssAttributeSelector
   {
-    private static readonly Regex attributeSelectorRegex = new Regex( Regulars.attributeExpressionPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
 
     private readonly string name;
     private readonly string comparison;
     private readonly string value;
-
-
 
 
     private delegate bool ValueMatcher( string exp, string value );
@@ -40,33 +36,6 @@ namespace Ivony.Html
 
 
 
-
-    /// <summary>
-    /// 创建一个属性选择器实例
-    /// </summary>
-    /// <param name="expression">属性选择表达式（注意，不支持ID和类选择符）</param>
-    internal CssAttributeSelector( string expression )
-    {
-
-      //exp = expression;
-
-      var match = attributeSelectorRegex.Match( expression );
-
-      if ( !match.Success )
-        throw new FormatException();
-
-
-      name = match.Groups["name"].Value;
-      if ( match.Groups["separator"].Success )
-      {
-        comparison = match.Groups["separator"].Value;
-        if ( match.Groups["quoteText"].Success )
-          value = match.Groups["quoteText"].Value;
-        else
-          value = match.Groups["value"].Value;
-      }
-
-    }
 
     public CssAttributeSelector( string name, string comparison, string value )
     {

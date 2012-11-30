@@ -13,13 +13,25 @@ namespace SelectorTest
     public class CssClassSelectorTest
     {
         [TestMethod]
-        public void css_class_has_hyphen()
+        public void css_class_has_underline()
         {
             var html = "<div class=\"css_class\"></div>";
             var htmlParser = new JumonyParser();
             var doc = htmlParser.Parse(html);
 
             var css_class = doc.Find(".css_class");
+
+            Assert.AreEqual(1, css_class.Count());
+        }
+
+        [TestMethod]
+        public void css_class_has_hyphen()
+        {
+            var html = "<div class=\"css-class\"></div>";
+            var htmlParser = new JumonyParser();
+            var doc = htmlParser.Parse(html);
+
+            var css_class = doc.Find(".css-class");
 
             Assert.AreEqual(1, css_class.Count());
         }

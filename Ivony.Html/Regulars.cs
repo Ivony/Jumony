@@ -93,9 +93,13 @@ namespace Ivony.Html
     /// <remarks>这个扩展方法用于从一个大的捕获组的匹配中分离出子捕获组的匹配。</remarks>
     public static IEnumerable<Capture> FindCaptures( this Capture capture, Group group )
     {
+
+      var start = capture.Index;
+      var end = start + capture.Length;
+
       foreach ( Capture c in group.Captures )
       {
-        if ( c.Index >= capture.Index && c.Index + c.Length <= capture.Index + capture.Length )
+        if ( c.Index >= start && c.Index + c.Length <= end )
           yield return c;
       }
     }

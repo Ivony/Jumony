@@ -13,10 +13,8 @@ using Ivony.Html.Forms.Validation;
 using Ivony.Html.Web.Mvc;
 using Ivony.Html.Templates;
 
-using DatabaseModel;
 
-
-public class index_html : ViewHandler<IQueryable<Task>>
+public class index_html : ViewHandler<Task[]>
 {
 
   protected override void ProcessDocument()

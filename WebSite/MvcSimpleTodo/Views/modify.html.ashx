@@ -13,8 +13,6 @@ using Ivony.Html.Forms.Validation;
 using Ivony.Html.Web.Mvc;
 using Ivony.Html.Templates;
 
-using DatabaseModel;
-
 
 public class modify_html : ViewHandler<Task>
 {

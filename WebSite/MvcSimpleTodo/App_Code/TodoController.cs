@@ -3,29 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using DatabaseModel;
-using System.ComponentModel.DataAnnotations;
 
 using Ivony.Html;
 using Ivony.Html.Web.Mvc;
 using Ivony.Html.Web;
+using Ivony.Data;
 
 public class TodoController : Controller
 {
 
 
-  protected DatabaseEntities Entities { get; private set; }
 
-  protected override void ExecuteCore()
-  {
-    using ( Entities = new DatabaseEntities() )
-    {
-      base.ExecuteCore();
-
-      Entities.SaveChanges();
-    }
-  }
-
+  private SqlDbUtility dbUtility = SqlDbUtility.Create( "Database" );
 
   private class MyViewFilter : ViewFilterAttribute
   {
@@ -46,34 +35,35 @@ public class TodoController : Controller
   [MyViewFilter]
   public ActionResult Index()
   {
-    return View( "index", Entities.Tasks );
+    return View( "index", dbUtility.Entities<Task>( "SELECT ID, Title, Completed FROM Tasks" ) );
   }
 
 
   public ActionResult Add( string title )
   {
-    Entities.Tasks.AddObject( new Task() { Title = title, Completed = false } );
+
+    dbUtility.NonQuery( "INSERT Tasks ( Title, Completed ) VALUES ( {...} )", title, false );
 
     return RedirectToAction( "Index" );
   }
 
   public ActionResult Complete( int taskId )
   {
-    Entities.Tasks.First( t => t.ID == taskId ).Completed = true;
+    dbUtility.NonQuery( "UPDATE Tasks SET Completed = 1 WHERE ID = {0}", taskId );
 
     return RedirectToAction( "Index" );
   }
 
   public ActionResult Revert( int taskId )
   {
-    Entities.Tasks.First( t => t.ID == taskId ).Completed = false;
+    dbUtility.NonQuery( "UPDATE Tasks SET Completed = 0 WHERE ID = {0}", taskId );
 
     return RedirectToAction( "Index" );
   }
 
   public ActionResult Remove( int taskId )
   {
-    Entities.DeleteObject( Entities.Tasks.First( t => t.ID == taskId ) );
+    dbUtility.NonQuery( "DELETE Tasks WHERE ID = {0}", taskId );
 
     return RedirectToAction( "Index" );
   }
@@ -82,7 +72,7 @@ public class TodoController : Controller
   public ActionResult Modify( int taskId )
   {
 
-    return View( "modify", Entities.Tasks.First( t => t.ID == taskId ) );
+    return View( "modify", dbUtility.Entity<Task>( "SELECT TaskId, Title, Content, Completed FROM Tasks WHERE ID = {0}", taskId ) );
 
   }
 
@@ -94,7 +84,7 @@ public class TodoController : Controller
       return View( "Index" );
 
 
-    Entities.Tasks.First( t => t.ID == taskId ).Title = title;
+    dbUtility.NonQuery( "UPDATE Tasks SET Title = {1} WHERE ID = {0}", taskId, title );
 
     return RedirectToAction( "Index" );
   }

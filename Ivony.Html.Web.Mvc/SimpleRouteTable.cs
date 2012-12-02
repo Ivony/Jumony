@@ -252,20 +252,9 @@ namespace Ivony.Html.Web.Mvc
     protected virtual SimpleRouteRule AddRule( SimpleRouteRule rule )
     {
 
-      lock ( Routes )
-      {
-        if ( Routes != null && !Routes.Contains( this ) )
-          Routes = null;
-
-        if ( Routes == null )
-          throw new InvalidOperationException( "简单路由表实例并未被正确的注册在一个路由集合中，无法检测与路由集合中其他简单路由表是否存在冲突，所以不能添加简单路由规则" );
-
-        var conflictRule = Routes.CheckConflict( rule );
-
-        if ( conflictRule != null )
-          throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表 \"{1}\" 中已经存在一条可能冲突的规则：\"{2}\"", rule.Name, conflictRule.SimpleRouteTable.Name, conflictRule.Name ) );
-      }
-
+      SimpleRouteRule conflictRule;
+      if ( !AddRuleAndCheckConflict( rule, out conflictRule ) )
+        throw new InvalidOperationException( string.Format( "添加规则\"{0}\"失败，路由表 \"{1}\" 中已经存在一条可能冲突的规则：\"{2}\"", rule.Name, conflictRule.SimpleRouteTable.Name, conflictRule.Name ) );
 
       _rules.Add( rule );
 
@@ -274,38 +263,20 @@ namespace Ivony.Html.Web.Mvc
       return rule;
     }
 
+
+    private static ConflictCheckList conflictCheckList = new ConflictCheckList();
+    private static object _sync = new object();
+
+
     /// <summary>
-    /// 检查指定规则是否与简单路由表现存的任何规则冲突，若有冲突，返回与其冲突的规则。
+    /// 在冲突检测表中添加一条规则并检查冲突
     /// </summary>
-    /// <param name="rule">要检查冲突的规则</param>
-    /// <returns>如果现存规则与检查的规则存在一个冲突，则返回冲突的规则。</returns>
-    public SimpleRouteRule CheckConflict( SimpleRouteRule rule )
+    /// <param name="rule">要添加的规则</param>
+    /// <param name="conflictRule">与之相冲突的规则</param>
+    /// <returns>是否添加成功</returns>
+    public static bool AddRuleAndCheckConflict( SimpleRouteRule rule, out SimpleRouteRule conflictRule )
     {
-      //验证 GetVirtualPath 时可能的冲突
-      {
-        var conflictRule = _rules
-          .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过 RouteKey 多寡无法区分
-          .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
-          .Where( r => !SimpleRouteRule.Mutex( r, rule ) )                              //若与现存规则不互斥
-          .FirstOrDefault();
-
-        if ( conflictRule != null )
-          return conflictRule;
-      }
-
-      //验证 GetRouteData 时可能的冲突
-      {
-        var conflictRule = _rules
-          .Where( r => r.Paragraphes.Length == rule.Paragraphes.Length )                //若路径段长度一致
-          .Where( r => r.StaticPrefix.EqualsIgnoreCase( rule.StaticPrefix ) )           //若静态段也一致
-          .FirstOrDefault();
-
-
-        if ( conflictRule != null )
-          return conflictRule;
-      }
-
-      return null;
+      return conflictCheckList.AddRuleAndCheckConflict( rule, out conflictRule );
     }
 
 

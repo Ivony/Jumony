@@ -149,28 +149,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    /// <summary>
-    /// 检查规则是否与任何简单路由表冲突
-    /// </summary>
-    /// <param name="routes">路由集合</param>
-    /// <param name="rule">要检查的简单路由规则</param>
-    /// <returns>如果有冲突，返回冲突的规则</returns>
-    public static SimpleRouteRule CheckConflict( this RouteCollection routes, SimpleRouteRule rule )
-    {
-
-      if ( routes == null )
-        throw new ArgumentNullException( "routes" );
-
-      if ( rule == null )
-        throw new ArgumentNullException( "rule" );
-
-
-      lock ( routes )
-      {
-        return routes.OfType<SimpleRouteTable>().Select( routeTable => routeTable.CheckConflict( rule ) ).NotNull().FirstOrDefault();
-      }
-    }
-
 
     /// <summary>
     /// 向路由集合中注册一个简单路由表实例

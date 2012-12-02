@@ -334,7 +334,7 @@ namespace Ivony.Html.Web.Mvc
 
     private string _virtualPathDescriptor;
 
-    private string GetVirtualPathDescriptor()
+    internal string GetVirtualPathDescriptor()
     {
       lock ( _sync )
       {
@@ -348,7 +348,7 @@ namespace Ivony.Html.Web.Mvc
 
     private string _routeValuesDescriptor;
 
-    private string GetRouteValuesDescriptor()
+    internal string GetRouteValuesDescriptor()
     {
       lock ( _sync )
       {

@@ -284,7 +284,7 @@ namespace Ivony.Html.Web.Mvc
       //验证 GetVirtualPath 时可能的冲突
       {
         var conflictRule = _rules
-          .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过RouteKey多寡无法区分
+          .Where( r => r.RouteKeys.Length == rule.RouteKeys.Length )                    //若通过 RouteKey 多寡无法区分
           .Where( r => r.DynamicRouteKyes.Length == rule.DynamicRouteKyes.Length )      //若通过动态路径段多寡也无法区分
           .Where( r => !SimpleRouteRule.Mutex( r, rule ) )                              //若与现存规则不互斥
           .FirstOrDefault();

@@ -70,7 +70,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Demo", "WebSite\Demo\", "{8
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "true"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "54254"
+		VWDPort = "17841"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlTranslater", "HtmlTranslater\HtmlTranslater.csproj", "{4C76EF80-FBA8-4454-A2A6-B75E1D709553}"
@@ -108,7 +108,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SpeficationTest", "Speficat
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "54259"
+		VWDPort = "17850"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject

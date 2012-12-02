@@ -13,7 +13,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 简单路由规则，定义简单路由表的路由规则
   /// </summary>
-  public class SimpleRouteRule
+  public sealed class SimpleRouteRule
   {
 
     /// <summary>定义匹配静态路径段的正则表达式</summary>
@@ -329,6 +329,51 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    private object _sync = new object();
+
+
+    private string _virtualPathDescriptor;
+
+    private string GetVirtualPathDescriptor()
+    {
+      lock ( _sync )
+      {
+        if ( _virtualPathDescriptor != null )
+          return _virtualPathDescriptor;
+
+        return _virtualPathDescriptor = StaticPrefix + string.Join( "", Enumerable.Repeat( "/{dynamic}", DynamicRouteKyes.Length ) );
+      }
+    }
+
+
+    private string _routeValuesDescriptor;
+
+    private string GetRouteValuesDescriptor()
+    {
+      lock ( _sync )
+      {
+        if ( _routeValuesDescriptor != null )
+          return _routeValuesDescriptor;
+
+        List<string> list = new List<string>();
+
+        foreach ( var key in RouteKeys.OrderBy( k => k, StringComparer.OrdinalIgnoreCase ) )
+        {
+          string value;
+
+          if ( StaticRouteValues.TryGetValue( key, out value ) )
+            list.Add( string.Format( "<\"{0}\",\"{1}\">", key.Replace( "\"", "\\\"" ), value.Replace( "\"", "\\\"" ) ) );
+
+          else
+            list.Add( string.Format( "<\"{0}\",dynamic>", key.Replace( "\"", "\\\"" ) ) );
+        }
+
+        return _routeValuesDescriptor = string.Join( ",", list );
+      }
+    }
+
+
+
     /// <summary>
     /// 检查两个路由规则是否互斥。
     /// </summary>
@@ -377,7 +422,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="virtualPath">当前请求的虚拟路径</param>
     /// <param name="queryString">当前请求的查询数据</param>
     /// <returns></returns>
-    public virtual IDictionary<string, string> GetRouteValues( string virtualPath, NameValueCollection queryString )
+    public IDictionary<string, string> GetRouteValues( string virtualPath, NameValueCollection queryString )
     {
 
       if ( virtualPath == null )
@@ -461,7 +506,7 @@ namespace Ivony.Html.Web.Mvc
 
     public override string ToString()
     {
-      return UrlPattern;
+      return UrlPattern + " : " + "{" + GetRouteValuesDescriptor() + "}";
     }
 
 

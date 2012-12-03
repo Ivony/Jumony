@@ -580,7 +580,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 渲染部分视图
+    /// 渲染部分视图（重写此方法接管 partial 处理逻辑）。
     /// </summary>
     /// <param name="partialElement">partial 元素</param>
     /// <param name="writer"></param>
@@ -648,7 +648,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 渲染部分视图
+    /// 渲染部分视图（重写此方法以实现自定义输出 partial 元素）
     /// </summary>
     /// <param name="partialElement">partial 元素</param>
     /// <returns></returns>

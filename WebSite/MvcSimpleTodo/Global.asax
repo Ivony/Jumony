@@ -28,8 +28,6 @@
     MvcEnvironment.JumonyViewEngine.ViewLocationFormats = new string[] { "~/Views/{0}.html" };
     MvcEnvironment.JumonyViewEngine.PartialViewLocationFormats = new string[] { "~/Views/{0}.html" };
 
-    MvcEnvironment.Configuration.PartialRenderTimeout = TimeSpan.FromMilliseconds( 500 );
-
     HtmlProviders.CachePolicyProviders.Add( new MyCachePolicyProvider() );
 
     GlobalFilters.Filters.Add( MvcEnvironment.GlobalCacheFilter );

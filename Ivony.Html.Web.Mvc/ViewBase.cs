@@ -675,7 +675,7 @@ namespace Ivony.Html.Web.Mvc
 
         else if ( view != null )
         {
-          return helper.Partial( partialViewName: view ).ToString();
+          return RenderPartialView( helper, view, partialElement );
         }
 
         else if ( path != null )
@@ -704,6 +704,19 @@ namespace Ivony.Html.Web.Mvc
       throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
 
     }
+
+    /// <summary>
+    /// 渲染部分视图（重写此方法为指定名称的部分视图提供模型和数据）
+    /// </summary>
+    /// <param name="helper">HTML Helper</param>
+    /// <param name="partialViewName">部分视图名称</param>
+    /// <param name="partialElement">partial 元素</param>
+    /// <returns>渲染好的部分视图</returns>
+    protected virtual string RenderPartialView( HtmlHelper helper, string partialViewName, IHtmlElement partialElement )
+    {
+      return helper.Partial( partialViewName ).ToString();
+    }
+
 
 
 

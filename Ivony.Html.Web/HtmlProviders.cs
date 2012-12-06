@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Web.Compilation;
 using System.Web.Configuration;
 using Ivony.Fluent;
+using System.Collections.ObjectModel;
 
 namespace Ivony.Html.Web
 {
@@ -435,4 +436,78 @@ namespace Ivony.Html.Web
 
 
   }
+
+
+  public class ContentProviderCollection
+  {
+
+    Dictionary<string, IHtmlContentProvider> data = new Dictionary<string, IHtmlContentProvider>( StringComparer.OrdinalIgnoreCase );
+
+
+    /// <summary>
+    /// 所有支持的扩展名
+    /// </summary>
+    public string[] SupportedExtensions
+    {
+      get { return data.Keys.ToArray(); }
+    }
+
+    /// <summary>
+    /// 检测是否能加载指定虚拟路径的文档内容
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns></returns>
+    public bool CanLoadContent( string virtualPath )
+    {
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+
+      return SupportedExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ) );
+    }
+
+    /// <summary>
+    /// 获取指定虚拟路径的文档内容加载程序
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns></returns>
+    public IHtmlContentProvider GetProvider( string virtualPath )
+    {
+
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+
+      var extensions = VirtualPathUtility.GetExtension( virtualPath );
+      IHtmlContentProvider provider;
+      lock ( _sync )
+      {
+        if ( data.TryGetValue( extensions, out provider ) )
+          return provider;
+
+        else
+          return null;
+      }
+    }
+
+
+    /// <summary>
+    /// 加载 HTML 文档内容
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns></returns>
+    public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
+    {
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+
+      var provider = GetProvider( virtualPath );
+      return provider.LoadContent( context, virtualPath );
+    
+    }
+
+
+    private object _sync = new object();
+
+  }
+
+
 }

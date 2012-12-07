@@ -99,7 +99,7 @@ public class TodoCachePolicyProvider : ControllerCachePolicyProvider
 
     var token = CacheToken.FromCookies( context.HttpContext ) + CacheToken.CreateToken( "Index" );
 
-    return new StandardCachePolicy( context.HttpContext, token, this, TimeSpan.FromMinutes( 10 ), true );
+    return new StandardCachePolicy( context.HttpContext, token, this, TimeSpan.FromMinutes( 1 ), true );
 
   }
 }

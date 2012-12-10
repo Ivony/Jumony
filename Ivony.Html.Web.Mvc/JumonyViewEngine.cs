@@ -16,6 +16,9 @@ namespace Ivony.Html.Web.Mvc
   public class JumonyViewEngine : VirtualPathProviderViewEngine
   {
 
+    /// <summary>
+    /// 创建 JumonyViewEngine 对象
+    /// </summary>
     public JumonyViewEngine()
     {
 
@@ -246,7 +249,9 @@ namespace Ivony.Html.Web.Mvc
 
   }
 
-
+  /// <summary>
+  /// 为 Jumony 视图引擎事件提供参数
+  /// </summary>
   public class JumonyViewEventArgs : EventArgs
   {
 

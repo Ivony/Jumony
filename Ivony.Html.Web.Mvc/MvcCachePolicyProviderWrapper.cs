@@ -16,6 +16,10 @@ namespace Ivony.Html.Web.Mvc
 
     private ICachePolicyProvider _provider;
 
+    /// <summary>
+    /// 创建 MvcCachePolicyProviderWrapper 对象
+    /// </summary>
+    /// <param name="provider">需要被包装的原始的 ICachePolicyProvider 对象</param>
     public MvcCachePolicyProviderWrapper( ICachePolicyProvider provider )
     {
       _provider = provider;

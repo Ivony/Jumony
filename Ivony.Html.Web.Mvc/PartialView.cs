@@ -32,7 +32,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 需要处理的容器
+    /// </summary>
     public IHtmlContainer Container
     {
       get;
@@ -70,11 +72,16 @@ namespace Ivony.Html.Web.Mvc
       }
     }
 
+    /// <summary>
+    /// 处理部分视图
+    /// </summary>
     protected abstract void ProcessContainer();
 
 
-
-
+    /// <summary>
+    /// 加载部分视图
+    /// </summary>
+    /// <returns></returns>
     protected virtual IHtmlContainer LoadContainer()
     {
       var document = LoadDocument();
@@ -88,6 +95,10 @@ namespace Ivony.Html.Web.Mvc
         return body;
     }
 
+    /// <summary>
+    /// 渲染部分视图
+    /// </summary>
+    /// <returns>渲染结果</returns>
     protected override string RenderContent()
     {
       var writer = new StringWriter();
@@ -102,9 +113,16 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
+  /// <summary>
+  /// 标准部分视图处理程序，当没有指定部分视图处理类时使用
+  /// </summary>
   public class GenericPartialView : PartialView
   {
 
+    /// <summary>
+    /// 创建 GenericPartialView 实例
+    /// </summary>
+    /// <param name="virtualPath"></param>
     public GenericPartialView( string virtualPath )
       : base( virtualPath )
     { }
@@ -112,6 +130,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 处理部分视图
+    /// </summary>
     protected override void ProcessContainer()
     {
       return;

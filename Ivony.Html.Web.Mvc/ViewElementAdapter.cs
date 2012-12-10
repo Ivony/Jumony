@@ -17,6 +17,10 @@ namespace Ivony.Html.Web.Mvc
 
     private ViewContext _context;
 
+    /// <summary>
+    /// 创建 ViewElementAdapter 对象
+    /// </summary>
+    /// <param name="context"></param>
     public ViewElementAdapter( ViewContext context )
     {
       _context = context;

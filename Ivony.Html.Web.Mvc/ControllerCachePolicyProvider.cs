@@ -22,7 +22,9 @@ namespace Ivony.Html.Web.Mvc
 
     private static readonly string typeNamePostfix = "CachePolicyProvider";
 
-
+    /// <summary>
+    /// 创建 ControllerCachePolicyProvider 实例
+    /// </summary>
     protected ControllerCachePolicyProvider()
     {
       type = GetType();

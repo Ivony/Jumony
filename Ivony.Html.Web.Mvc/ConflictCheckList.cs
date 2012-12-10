@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Ivony.Html.Web.Mvc
 {
+  /// <summary>
+  /// 冲突检查表
+  /// </summary>
   public class ConflictCheckList
   {
 

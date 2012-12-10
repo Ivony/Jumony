@@ -13,6 +13,10 @@ namespace Ivony.Html.Web.Mvc
   public interface ICacheableResult
   {
 
+    /// <summary>
+    /// 获取缓存的响应
+    /// </summary>
+    /// <returns></returns>
     ICachedResponse GetCachedResponse();
 
   }

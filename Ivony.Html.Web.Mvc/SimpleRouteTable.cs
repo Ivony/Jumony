@@ -446,7 +446,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 是否回溯搜索无 Area 命名空间
+    /// </summary>
     public bool UseNamespaceFallback
     {
       get;
@@ -463,7 +465,6 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
-    /// <param name="limitedQueries">是否限制产生的 QueryString ，使其不产生在指定之外的路由参数</param>
     /// <returns>创建的简单路由规则</returns>
     /// <remarks>
     /// 简单区域路由表会自动为路由规则增加一个静态路由值 area 保存当前区域名。

@@ -15,6 +15,9 @@ using System.Web.Hosting;
 namespace Ivony.Html.Web.Mvc
 {
 
+  /// <summary>
+  /// 提供 Jumony for MVC 的环境支持
+  /// </summary>
   public static class MvcEnvironment
   {
     /// <summary>
@@ -30,11 +33,6 @@ namespace Ivony.Html.Web.Mvc
 
       CacheStorageProvider = new WebCacheStorageProvider( HostingEnvironment.Cache );
     }
-
-
-
-    private static bool _isWarmedUp = false;
-
 
 
 

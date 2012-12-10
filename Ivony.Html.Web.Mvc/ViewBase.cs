@@ -196,7 +196,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 获取所有视图筛选器
+    /// </summary>
     protected IEnumerable<IViewFilter> Filters
     {
       get;
@@ -734,24 +736,33 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 视图引擎调用此方法清理视图所使用的所有非托管资源
+    /// </summary>
     public virtual void Dispose()
     {
     }
 
 
+    /// <summary>
+    /// 为视图提供 ViewData 的容器类型
+    /// </summary>
     protected class ViewDataContainer : IViewDataContainer
     {
 
       private ViewBase _view;
 
+      /// <summary>
+      /// 创建 ViewDataContainer 对象
+      /// </summary>
+      /// <param name="view"></param>
       public ViewDataContainer( ViewBase view )
       {
         _view = view;
       }
 
 
-      public ViewDataDictionary ViewData
+      ViewDataDictionary IViewDataContainer.ViewData
       {
         get
         {

@@ -33,9 +33,16 @@ namespace Ivony.Html.Web.Mvc
 
   }
 
+  /// <summary>
+  /// 强类型部分视图处理程序抽象基类
+  /// </summary>
+  /// <typeparam name="T">Model 的类型</typeparam>
   public abstract class PartialViewHandler<T> : PartialViewHandler
   {
 
+    /// <summary>
+    /// 模型
+    /// </summary>
     protected new T ViewModel
     {
       get { return base.ViewModel.CastTo<T>(); }

@@ -109,7 +109,10 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 重写 OnResultExecuting 方法以应用客户端缓存策略
+    /// </summary>
+    /// <param name="filterContext">筛选器上下文</param>
     public override void OnResultExecuting( ResultExecutingContext filterContext )
     {
 
@@ -120,9 +123,9 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 在输出任何内容前，应用客户端缓存
+    /// 在输出任何内容前，应用客户端缓存策略
     /// </summary>
-    /// <param name="filterContext"></param>
+    /// <param name="filterContext">筛选器上下文</param>
     protected void ApplyClientCachePolicy( ResultExecutingContext filterContext )
     {
       //对于子请求不采取客户端缓存。
@@ -156,7 +159,10 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
+    /// <summary>
+    /// 更新缓存
+    /// </summary>
+    /// <param name="filterContext">筛选器上下文</param>
     protected virtual void UpdateCache( ResultExecutedContext filterContext )
     {
       //若已命中缓存，则不再更新缓存
@@ -181,13 +187,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-      /*
-      //对于子请求不予缓存。
-      if ( filterContext.IsChildAction )
-        return;
-      */
-
-
       var cachedResponse = GetCachedResponse( result );
       if ( cachedResponse == null )
         return;
@@ -198,9 +197,9 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 更新缓存数据
     /// </summary>
-    /// <param name="filterContext"></param>
-    /// <param name="result"></param>
-    /// <param name="mvcCachePolicy"></param>
+    /// <param name="context">控制器上下文</param>
+    /// <param name="result">Action执行结果</param>
+    /// <param name="mvcCachePolicy">MVC 缓存策略</param>
     protected virtual void UpdateCache( ControllerContext context, ActionResult result, IMvcCachePolicy mvcCachePolicy )
     {
       mvcCachePolicy.UpdateCache( context, result );

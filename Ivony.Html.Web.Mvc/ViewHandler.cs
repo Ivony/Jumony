@@ -10,6 +10,9 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Mvc
 {
+  /// <summary>
+  /// HTML 视图处理程序基类
+  /// </summary>
   public abstract class ViewHandler : PageView, IHttpHandler
   {
 
@@ -37,9 +40,16 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
+  /// <summary>
+  /// 强类型 HTML 视图处理程序的基类
+  /// </summary>
+  /// <typeparam name="T">Model 的类型</typeparam>
   public abstract class ViewHandler<T> : ViewHandler
   {
 
+    /// <summary>
+    /// 模型
+    /// </summary>
     protected new T ViewModel
     {
       get { return base.ViewModel.CastTo<T>(); }

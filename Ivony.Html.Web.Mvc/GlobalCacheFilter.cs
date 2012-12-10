@@ -17,6 +17,13 @@ namespace Ivony.Html.Web.Mvc
 
     internal GlobalCacheFilter() { }
 
+    /// <summary>
+    /// 创建缓存策略
+    /// </summary>
+    /// <param name="context">控制器上下文</param>
+    /// <param name="action">Action 信息</param>
+    /// <param name="parameters">Action 参数</param>
+    /// <returns>缓存策略</returns>
     protected override CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
 

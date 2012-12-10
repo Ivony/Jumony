@@ -33,7 +33,6 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="urlPattern">URL 模式</param>
     /// <param name="routeValues">静态/默认路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的参数</param>
-    /// <param name="limitedQueries">是否限制产生的 QueryString 不超过指定范围（查询键）</param>
     internal SimpleRouteRule( string name, string urlPattern, IDictionary<string, string> routeValues, string[] queryKeys )
     {
       Name = name;
@@ -504,12 +503,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取一个字符串，其描述了这个简单路由规则。
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
       return UrlPattern + " : " + "{" + GetRouteValuesDescriptor() + "}";
     }
 
 
+    /// <summary>
+    /// 获取简单路由规则的扩展数据标记
+    /// </summary>
     public RouteValueDictionary DataTokens
     {
       get;

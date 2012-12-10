@@ -18,6 +18,9 @@ namespace Ivony.Html.Web.Mvc
   {
 
 
+    /// <summary>
+    /// 创建 CacheableAttribute 对象
+    /// </summary>
     public CacheableAttribute()
     {
     }
@@ -52,7 +55,9 @@ namespace Ivony.Html.Web.Mvc
     /// 获取缓存策略
     /// </summary>
     /// <param name="context">MVC 请求上下文</param>
-    /// <returns></returns>
+    /// <param name="action">Action 信息</param>
+    /// <param name="parameters">Action 参数</param>
+    /// <returns>缓存策略</returns>
     protected override CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
 

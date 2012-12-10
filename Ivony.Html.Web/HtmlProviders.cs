@@ -501,8 +501,23 @@ namespace Ivony.Html.Web
 
       var provider = GetProvider( virtualPath );
       return provider.LoadContent( context, virtualPath );
-    
+
     }
+
+
+    public void RegisterContentProvider( string extension, IHtmlContentProvider provider )
+    {
+
+      lock ( _sync )
+      {
+        if ( data.ContainsKey( extension ) )
+          throw new InvalidOperationException( "该扩展名已经被注册了" );
+
+        data.Add( extension, provider );
+      }
+
+    }
+
 
 
     private object _sync = new object();

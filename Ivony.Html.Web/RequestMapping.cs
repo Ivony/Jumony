@@ -18,7 +18,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 RequestMapping 对象
     /// </summary>
-    /// 
+    /// <param name="mapper">产生此结果的映射器</param>
     /// <param name="templatePath">HTML 模版路径</param>
     /// <param name="handler">HTML 文档处理程序</param>
     public RequestMapping( IRequestMapper mapper, string templatePath, IHtmlHandler handler )

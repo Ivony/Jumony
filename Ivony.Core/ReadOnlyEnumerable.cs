@@ -27,6 +27,10 @@ namespace Ivony
 
     #region IEnumerable<T> 成员
 
+    /// <summary>
+    /// 返回一个循环访问集合的枚举器
+    /// </summary>
+    /// <returns>可用于循环访问集合的 System.Collections.Generic.IEnumerator&lt;T&gt;</returns>
     public IEnumerator<T> GetEnumerator()
     {
       return _enumerable.GetEnumerator();

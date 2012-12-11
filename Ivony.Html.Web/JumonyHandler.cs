@@ -57,7 +57,7 @@ namespace Ivony.Html.Web
     /// 处理 HTTP 请求
     /// </summary>
     /// <param name="context">HTTP 上下文信息</param>
-    protected virtual void ProcessRequest( HttpContextBase context )
+    protected void ProcessRequest( HttpContextBase context )
     {
       Context = context;
 
@@ -75,7 +75,12 @@ namespace Ivony.Html.Web
 
     }
 
-
+    
+    /// <summary>
+    /// 派生类重写此方法接管 HTTP 请求处理流程
+    /// </summary>
+    /// <param name="context">HTTP 请求上下文</param>
+    /// <returns>处理后的结果</returns>
     protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context )
     {
 
@@ -227,8 +232,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 实现IHtmlHandler接口
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="document"></param>
+    /// <param name="context">HTTP 上下文</param>
+    /// <param name="document">要处理的文档</param>
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
 
@@ -392,7 +397,9 @@ namespace Ivony.Html.Web
     /// <summary>在加载文档后引发此事件</summary>
     public event EventHandler PostLoadDocument;
 
+    /// <summary>引发 PreLoadDocument 事件</summary>
     protected virtual void OnPreLoadDocument() { if ( PreLoadDocument != null ) PreLoadDocument( this, EventArgs.Empty ); }
+    /// <summary>引发 PostLoadDocument 事件</summary>
     protected virtual void OnPostLoadDocument() { if ( PostLoadDocument != null ) PostLoadDocument( this, EventArgs.Empty ); }
 
 
@@ -401,7 +408,9 @@ namespace Ivony.Html.Web
     /// <summary>在处理文档后引发此事件</summary>
     public event EventHandler PostProcessDocument;
 
+    /// <summary>引发 PreProcessDocument 事件</summary>
     protected virtual void OnPreProcessDocument() { if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty ); }
+    /// <summary>引发 PostProcessDocument 事件</summary>
     protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
 
 
@@ -410,7 +419,9 @@ namespace Ivony.Html.Web
     /// <summary>在渲染文档后引发此事件</summary>
     public event EventHandler PostRender;
 
+    /// <summary>引发 PreRender 事件</summary>
     protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
+    /// <summary>引发 PostRender 事件</summary>
     protected virtual void OnPostRender() { if ( PostRender != null ) PostRender( this, EventArgs.Empty ); }
 
 
@@ -428,6 +439,9 @@ namespace Ivony.Html.Web
 
     #region IDisposable 成员
 
+    /// <summary>
+    /// 执行与释放或重置非托管资源相关的应用程序定义的任务
+    /// </summary>
     public virtual void Dispose()
     {
 

@@ -394,6 +394,7 @@ namespace Ivony.Html.Web
     /// 从路由值中产生缓存标记
     /// </summary>
     /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="keys">要产生缓存标记的路由键</param>
     /// <returns></returns>
     public static CacheToken FromRouteValues( RequestContext context, params string[] keys )
     {

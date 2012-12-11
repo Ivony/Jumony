@@ -369,7 +369,7 @@ namespace Ivony.Html.Web
     /// 分析 HTML 文档，此方法永不缓存
     /// </summary>
     /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="virtualPath">请求的虚拟路径</param>
+    /// <param name="contentUri">文档 URI</param>
     /// <param name="htmlContent">文档内容</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HttpContextBase context, string htmlContent, Uri contentUri )
@@ -492,6 +492,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns></returns>
     public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )

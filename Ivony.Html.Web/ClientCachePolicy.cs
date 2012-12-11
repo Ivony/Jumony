@@ -65,7 +65,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 设置 Vary 标头，指定哪些 HTTP 头可能引起缓存结果失效
     /// </summary>
-    /// <param name="headers"></param>
+    /// <param name="headers">将要引起缓存失效的 HTTP 头</param>
     public abstract void SetVary( string[] headers );
 
 
@@ -73,29 +73,47 @@ namespace Ivony.Html.Web
   }
 
 
-
+  /// <summary>
+  /// 封装 HttpCachePolicyBase 对象，使其支持客户端缓存策略。
+  /// </summary>
   public sealed class ClientCachePolicyWrapper : ClientCachePolicyBase
   {
 
 
     private HttpCachePolicyBase _cachePolicy;
 
+    /// <summary>
+    /// 创建 ClientCachePolicyWrapper 对象
+    /// </summary>
+    /// <param name="cachePolicy">要被封装的 HttpCachePolicyBase 对象</param>
     public ClientCachePolicyWrapper( HttpCachePolicyBase cachePolicy )
     {
       _cachePolicy = cachePolicy;
     }
 
 
+    /// <summary>
+    /// 设置缓存过期时间
+    /// </summary>
+    /// <param name="delta">从当前开始最大的过期时间</param>
     public override void SetMaxAge( TimeSpan delta )
     {
       _cachePolicy.SetMaxAge( delta );
     }
 
+    /// <summary>
+    /// 设置代理服务器缓存过期时间
+    /// </summary>
+    /// <param name="delta">从当前开始最大的过期时间</param>
     public override void SetProxyMaxAge( TimeSpan delta )
     {
       _cachePolicy.SetProxyMaxAge( delta );
     }
 
+    /// <summary>
+    /// 设置 cache-control 标头为 HttpCacheability 值之一
+    /// </summary>
+    /// <param name="cacheability">缓存可用性</param>
     public override void SetCacheability( HttpCacheability cacheability )
     {
 
@@ -114,21 +132,37 @@ namespace Ivony.Html.Web
 
     }
 
+    /// <summary>
+    /// 设置缓存绝对过期时间
+    /// </summary>
+    /// <param name="expiresDate">缓存绝对过期时间</param>
     public override void SetExpires( DateTimeOffset expiresDate )
     {
       _cachePolicy.SetExpires( expiresDate.UtcDateTime );
     }
 
+    /// <summary>
+    /// 设置请求内容最后一次被修改的时间
+    /// </summary>
+    /// <param name="lastModified">请求内容最后一次被修改的时间</param>
     public override void SetLastModified( DateTimeOffset lastModified )
     {
       _cachePolicy.SetLastModified( lastModified.UtcDateTime );
     }
 
+    /// <summary>
+    /// 设置内容标识
+    /// </summary>
+    /// <param name="etag">用于标识内容的哈希值</param>
     public override void SetETag( string etag )
     {
       _cachePolicy.SetETag( etag );
     }
 
+    /// <summary>
+    /// 设置 Vary 标头，指定哪些 HTTP 头可能引起缓存结果失效
+    /// </summary>
+    /// <param name="headers">将要引起缓存失效的 HTTP 头</param>
     public override void SetVary( string[] headers )
     {
       _cachePolicy.SetVaryByCustom( string.Join( ",", headers ) );
@@ -309,7 +343,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 设置 Vary 标头，指定哪些 HTTP 头可能引起缓存结果失效
     /// </summary>
-    /// <param name="headers"></param>
+    /// <param name="headers">将要引起缓存失效的 HTTP 头</param>
     public override void SetVary( string[] headers )
     {
       _varyHeaders = headers;

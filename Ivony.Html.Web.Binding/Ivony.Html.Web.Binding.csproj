@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F35F2A61-7147-43CE-8D3C-2785455064A2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ivony.Html.Web.Binding</RootNamespace>
+    <AssemblyName>Ivony.Html.Web.Binding</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Binding.cs" />
+    <Compile Include="BindingManager.cs" />
+    <Compile Include="IBindingProvider.cs" />
+    <Compile Include="IBindingTarget.cs" />
+    <Compile Include="IValueBinder.cs" />
+    <Compile Include="IValueConverter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regulars.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
+      <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
+      <Name>Ivony.Html.Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
+      <Project>{6CE7336E-D881-40B2-9495-C06CF9A61AC6}</Project>
+      <Name>Ivony.Html.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
+      <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
+      <Name>Ivony.Html</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

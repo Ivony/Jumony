@@ -1,0 +1,46 @@
+﻿<Window x:Class="HtmlTranslator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:win32="clr-namespace:Microsoft.Win32;assembly=PresentationFramework"
+        xmlns:src="clr-namespace:HtmlTranslator"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="MainWindow" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="400" d:DesignWidth="800">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="35" />
+      <RowDefinition Height="176*" />
+      <RowDefinition Height="200" />
+    </Grid.RowDefinitions>
+    <WebBrowser Grid.Row="1" Margin="12,12,12,0" Name="WebBrowser" />
+    <GridSplitter Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" />
+    <DataGrid Grid.Row="2" AutoGenerateColumns="False" Margin="12,12,12,12" Name="DataView" ItemsSource="{Binding Path=Terms}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsTextSearchEnabled="False" SelectionMode="Single" SelectedCellsChanged="DataView_SelectedCellsChanged" CanUserResizeRows="False" CanUserSortColumns="True" CurrentCellChanged="DataView_CurrentCellChanged">
+      <DataGrid.Resources>
+        <src:CandidateTermsConverter x:Key="CandidateTermsConverter" />
+      </DataGrid.Resources>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Source" Binding="{Binding Path=SourceTerm}" CanUserSort="False" IsReadOnly="True" />
+        <DataGridTemplateColumn Header="Translated">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Path=TranslatedTerm}" Padding="3" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+          <DataGridTemplateColumn.CellEditingTemplate>
+            <DataTemplate>
+              <ComboBox Text="{Binding Path=TranslatedTerm}" IsEditable="True" ItemsSource="{Binding Path=SourceTerm, Converter={StaticResource CandidateTermsConverter}}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+    <Button Content="浏览" Height="23" HorizontalAlignment="Right" Margin="0,12,93,0" Name="BrowseFileButton" VerticalAlignment="Top" Width="75" Click="OnChooseFile" />
+    <Button Content="保存" Height="23" Margin="0,12,12,0" Name="SaveButton" VerticalAlignment="Top" Click="OnSave" HorizontalAlignment="Right" Width="75" />
+    <ProgressBar Height="23" Margin="12,12,174,0" Name="TranslationProgress" VerticalAlignment="Top" />
+    <TextBlock Height="23" Margin="12,12,174,0" Name="FilenameTextBlock" Text="" VerticalAlignment="Center" Padding="5,0,3,0" />
+  </Grid>
+</Window>
+

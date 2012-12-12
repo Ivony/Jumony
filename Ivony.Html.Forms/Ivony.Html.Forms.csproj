@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ivony.Html.Forms</RootNamespace>
+    <AssemblyName>Ivony.Html.Forms</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\Ivony.Html.Forms.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormExtensions.cs" />
+    <Compile Include="HtmlForm.cs" />
+    <Compile Include="HtmlButtonGroup.cs" />
+    <Compile Include="HtmlInputText.cs" />
+    <Compile Include="HtmlLabel.cs" />
+    <Compile Include="HtmlSelect.cs" />
+    <Compile Include="HtmlTextArea.cs" />
+    <Compile Include="IHtmlFormElement.cs" />
+    <Compile Include="IHtmlGroupControl.cs" />
+    <Compile Include="IHtmlInputControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\EmailValidator.cs" />
+    <Compile Include="Validation\HtmlFormValidator.cs" />
+    <Compile Include="Validation\IHtmlValueValidator.cs" />
+    <Compile Include="Validation\HtmlFieldValidator.cs" />
+    <Compile Include="Validation\IntegerValidator.cs" />
+    <Compile Include="Validation\ISubmitValidator.cs" />
+    <Compile Include="Validation\RequiredValidator.cs" />
+    <Compile Include="Validation\ValidationRegulars.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
+      <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
+      <Name>Ivony.Html</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>SET OutDir=$(OutDir)
+SET ConfigurationName=$(ConfigurationName)
+SET ProjectName=$(ProjectName)
+SET TargetName=$(TargetName)
+SET TargetPath=$(TargetPath)
+SET ProjectPath=$(ProjectPath)
+SET ProjectFileName=$(ProjectFileName)
+SET TargetExt=$(TargetExt)
+SET TargetFileName=$(TargetFileName)
+SET DevEnvDir=$(DevEnvDir)
+SET TargetDir=$(TargetDir)
+SET ProjectDir=$(ProjectDir)
+SET SolutionFileName=$(SolutionFileName)
+SET SolutionPath=$(SolutionPath)
+SET SolutionDir=$(SolutionDir)
+SET SolutionName=$(SolutionName)
+SET PlatformName=$(PlatformName)
+SET ProjectExt=$(ProjectExt)
+SET SolutionExt=$(SolutionExt)
+
+"$(SolutionDir)PostBuild.bat"
+
+SET OutDir=
+SET ConfigurationName=
+SET ProjectName=
+SET TargetName=
+SET TargetPath=
+SET ProjectPath=
+SET ProjectFileName=
+SET TargetExt=
+SET TargetFileName=
+SET DevEnvDir=
+SET TargetDir=
+SET ProjectDir=
+SET SolutionFileName=
+SET SolutionPath=
+SET SolutionDir=
+SET SolutionName=
+SET PlatformName=
+SET ProjectExt=
+SET SolutionExt=</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>SET OutDir=$(OutDir)
+SET ConfigurationName=$(ConfigurationName)
+SET ProjectName=$(ProjectName)
+SET TargetName=$(TargetName)
+SET TargetPath=$(TargetPath)
+SET ProjectPath=$(ProjectPath)
+SET ProjectFileName=$(ProjectFileName)
+SET TargetExt=$(TargetExt)
+SET TargetFileName=$(TargetFileName)
+SET DevEnvDir=$(DevEnvDir)
+SET TargetDir=$(TargetDir)
+SET ProjectDir=$(ProjectDir)
+SET SolutionFileName=$(SolutionFileName)
+SET SolutionPath=$(SolutionPath)
+SET SolutionDir=$(SolutionDir)
+SET SolutionName=$(SolutionName)
+SET PlatformName=$(PlatformName)
+SET ProjectExt=$(ProjectExt)
+SET SolutionExt=$(SolutionExt)
+
+"$(SolutionDir)PreBuild.bat"
+
+SET OutDir=
+SET ConfigurationName=
+SET ProjectName=
+SET TargetName=
+SET TargetPath=
+SET ProjectPath=
+SET ProjectFileName=
+SET TargetExt=
+SET TargetFileName=
+SET DevEnvDir=
+SET TargetDir=
+SET ProjectDir=
+SET SolutionFileName=
+SET SolutionPath=
+SET SolutionDir=
+SET SolutionName=
+SET PlatformName=
+SET ProjectExt=
+SET SolutionExt=</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

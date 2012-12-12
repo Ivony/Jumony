@@ -1,0 +1,22 @@
+﻿#list1 li
+{
+  binding-source: $Data:Products;
+  binding-source-type: asobject;
+  binding-path: @:text;
+}
+
+#username
+{
+  binding-source: $User;
+  binding-source-path: Name;
+}
+
+#list2 li
+{
+  binding-source: [1,2,3,<null>,5,6];
+  binding-path: @:text;
+  binding-format: "lesson {0}";
+  binding-source-default: <null>;
+  binding-null-behavior: hidden;
+}
+

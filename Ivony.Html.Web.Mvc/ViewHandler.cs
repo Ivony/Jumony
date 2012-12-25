@@ -16,7 +16,7 @@ namespace Ivony.Html.Web.Mvc
   public abstract class ViewHandler : PageView, IHttpHandler
   {
 
-    
+
     #region IHttpHandler 成员
 
     bool IHttpHandler.IsReusable
@@ -32,10 +32,9 @@ namespace Ivony.Html.Web.Mvc
     #endregion
 
 
-
-    internal void Initialize( string virtualPath )
+    internal void Initialize( string virtualPath, bool isPartial )
     {
-      VirtualPath = virtualPath;
+      base.Initialize( virtualPath, isPartial );
     }
   }
 

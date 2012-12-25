@@ -72,7 +72,7 @@ public class TodoController : Controller
   public ActionResult Modify( int taskId )
   {
 
-    return View( "modify", dbUtility.Entity<Task>( "SELECT TaskId, Title, Content, Completed FROM Tasks WHERE ID = {0}", taskId ) );
+    return View( "modify", dbUtility.Entity<Task>( "SELECT ID, Title, Completed FROM Tasks WHERE ID = {0}", taskId ) );
 
   }
 

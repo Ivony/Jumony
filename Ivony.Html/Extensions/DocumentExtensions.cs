@@ -482,7 +482,7 @@ namespace Ivony.Html
         private Func<IHtmlDomProvider, IHtmlDocument> _delegate;
         public DynamicMethodHandler( DynamicMethod method )
         {
-          _method = method;
+          _method = method;//避免 method 被 GC 回收
           _delegate = method.CreateDelegate( typeof( Func<IHtmlDomProvider, IHtmlDocument> ) ).CastTo<Func<IHtmlDomProvider, IHtmlDocument>>();
         }
 

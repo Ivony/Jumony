@@ -168,6 +168,36 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 判断一个属性是否为标记属性。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>是否为标记属性</returns>
+    public static bool IsMarkupAttribute( IHtmlAttribute attribute )
+    {
+      switch ( attribute.Name )
+      {
+        case "checked":
+        case "compact":
+        case "declare":
+        case "defer":
+        case "disabled":
+        case "ismap":
+        case "multiple":
+        case "nohref":
+        case "noresize":
+        case "noshade":
+        case "nowrap":
+        case "readonly":
+        case "selected":
+          return true;
+      }
+
+      return false;
+    }
+
+
+
 
 
 

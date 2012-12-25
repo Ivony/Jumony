@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
+  <!--ahs-->
+  <style>
+    body
+    {
+      font-family: 'Consolas', 'Courier New', '微软雅黑', '宋体';
+      font-size: 11pt;
+    }
+
+    .message
+    {
+      padding: 5px 10px;
+      color: #AAAAAA;
+    }
+
+    .comment
+    {
+      color: #006400;
+    }
+
+    .tag .brackets
+    {
+      color: #0000FF;
+    }
+
+    .tag .elementName
+    {
+      color: #800000;
+    }
+
+    .tag .attributeName
+    {
+      color: #FF0000;
+    }
+
+    .selected > .tag
+    {
+      font-weight: bold;
+    }
+
+    .selected
+    {
+      background-color: #F8F8F8;
+    }
+
+      .selected .selected
+      {
+        background-color: #F0F0F0;
+      }
+
+        .selected .selected .selected
+        {
+          background-color: #E8E8E8;
+        }
+
+          .selected .selected .selected .selected
+          {
+            background-color: #E0E0E0;
+          }
+
+            .selected .selected .selected .selected .selected
+            {
+              background-color: #D8D8D8;
+            }
+
+              .selected .selected .selected .selected .selected .selected
+              {
+                background-color: #D0D0D0;
+              }
+
+                .selected .selected .selected .selected .selected .selected .selected
+                {
+                  background-color: #C8C8C8;
+                }
+
+                  .selected .selected .selected .selected .selected .selected .selected .selected
+                  {
+                    background-color: #C0C0C0;
+                  }
+
+
+    .childs
+    {
+      padding-left: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cssSelector">
+
+    <form action="ShowDomTree" controller inherits="*">
+    <label>选择器:<view key="Selector" attr="value"></view><input name="selector" size="50" /></label>
+    <input type="submit" value="测试" />
+    </form>
+
+  </div>
+
+  <hr />
+  <div class="body">
+  </div>
+  <div class="message">
+    分析文档耗时：
+    <view key="Timespan"></view>
+  </div>
+</body>
+</html>

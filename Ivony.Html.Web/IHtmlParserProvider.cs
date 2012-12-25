@@ -17,18 +17,18 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取一个 HTML 解析器
     /// </summary>
-    /// <param name="context">当前请求上下文</param>
-    /// <param name="contentUri">HTML 内容地址</param>
+    /// 
+    /// <param name="virtualPath">HTML 内容虚拟路径</param>
     /// <param name="htmlContent">HTML 内容</param>
     /// <returns>HTML 解析器结果</returns>
-    HtmlParserResult GetParser( HttpContextBase context, Uri contentUri, string htmlContent );
+    HtmlParserResult GetParser( string virtualPath, string htmlContent );
 
 
     /// <summary>
     /// 释放解析器实例
     /// </summary>
     /// <param name="parser"></param>
-    void ReleaseParser( IHtmlParser parser );
+    void ReleaseParser( HtmlParserResult parser );
 
   }
 
@@ -39,13 +39,22 @@ namespace Ivony.Html.Web
   public class HtmlParserResult
   {
 
+    public HtmlParserResult( IHtmlParser parser, IHtmlDomProvider domProvider, IHtmlParserProvider provider, string virtualPath )
+    {
+      Parser = parser;
+      DomProvider = domProvider;
+      Provider = provider;
+      VirtualPath = virtualPath;
+    }
+
+
     /// <summary>
     /// HTML 解析器实例
     /// </summary>
     public IHtmlParser Parser
     {
       get;
-      set;
+      private set;
     }
 
     /// <summary>
@@ -54,7 +63,7 @@ namespace Ivony.Html.Web
     public IHtmlDomProvider DomProvider
     {
       get;
-      set;
+      private set;
     }
 
     /// <summary>
@@ -63,7 +72,16 @@ namespace Ivony.Html.Web
     public IHtmlParserProvider Provider
     {
       get;
-      internal set;
+      private set;
+    }
+
+    /// <summary>
+    /// 所要解析内容的虚拟路径
+    /// </summary>
+    public string VirtualPath
+    {
+      get;
+      private set;
     }
 
   }
@@ -75,33 +93,26 @@ namespace Ivony.Html.Web
   public class DefaultParserProvider : IHtmlParserProvider
   {
 
-    
+
 
     /// <summary>
     /// 获取默认的解析器结果
     /// </summary>
     /// <returns>包含默认解析器的结果</returns>
-    public HtmlParserResult GetParser()
+    public HtmlParserResult GetParser( string virtualPath )
     {
-      return new HtmlParserResult()
-      {
-        Parser = new WebParser(),
-        DomProvider = new DomProvider(),
-        Provider = this
-      };
+      return new HtmlParserResult( new JumonyParser(), new DomProvider(), this, virtualPath );
     }
 
 
 
-    HtmlParserResult IHtmlParserProvider.GetParser( HttpContextBase context, Uri contentUri, string htmlContent )
+    HtmlParserResult IHtmlParserProvider.GetParser( string virtualPath, string htmlContent )
     {
-      return GetParser();
+      return GetParser( virtualPath );
     }
 
-    void IHtmlParserProvider.ReleaseParser( IHtmlParser parser )
+    void IHtmlParserProvider.ReleaseParser( HtmlParserResult parser )
     {
     }
   }
-
-
 }

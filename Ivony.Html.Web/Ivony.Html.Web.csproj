@@ -87,7 +87,6 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
-    <Compile Include="MultipleTextWrietr.cs" />
     <Compile Include="PersistentCacheStorageProvider.cs" />
     <Compile Include="StandardCachePolicy.cs" />
     <Compile Include="WebParser.cs" />

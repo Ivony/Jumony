@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -28,8 +29,40 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="virtualPath">部分视图的虚拟路径</param>
     protected PartialView( string virtualPath )
     {
-      VirtualPath = virtualPath;
+      Initialize( virtualPath );
     }
+
+
+    private bool _initialized = false;
+
+    /// <summary>
+    /// 初始化部分视图
+    /// </summary>
+    /// <param name="virtualPath"></param>
+    protected void Initialize( string virtualPath )
+    {
+      if ( _initialized )
+        throw new InvalidOperationException( "视图已经初始化" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
+
+      VirtualPath = virtualPath;
+      
+      _initialized = true;
+    }
+
+
+    public string VirtualPath
+    {
+      get;
+      private set;
+    }
+
+
 
 
     /// <summary>
@@ -47,13 +80,12 @@ namespace Ivony.Html.Web.Mvc
     protected override void ProcessMain()
     {
 
-      if ( Container == null )
-      {
-        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin LoadContainer" );
-        Container = LoadContainer();
-        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End LoadContainer" );
-      }
+      if ( !_initialized )
+        throw new InvalidOperationException( "视图尚未初始化" );
 
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin LoadContainer" );
+      Container = LoadContainer();
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End LoadContainer" );
 
       HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ProcessContaner" );
       ProcessContainer();
@@ -64,12 +96,9 @@ namespace Ivony.Html.Web.Mvc
       ProcessActionUrls( Container );
       HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ProcessActionLinks" );
 
-      if ( VirtualPath != null )//若不是内嵌部分视图，则应当进行 URL 转换。
-      {
-        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ResolveUri" );
-        ResolveUri( Container );
-        HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ResolveUri" );
-      }
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "Begin ResolveUri" );
+      ResolveUri( Container, VirtualPath );
+      HttpContext.Trace.Write( "Jumony for MVC - PartialView", "End ResolveUri" );
     }
 
     /// <summary>
@@ -84,7 +113,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns></returns>
     protected virtual IHtmlContainer LoadContainer()
     {
-      var document = LoadDocument();
+      var document = LoadDocument( VirtualPath );
 
       var body = document.Find( "body" ).SingleOrDefault();
 

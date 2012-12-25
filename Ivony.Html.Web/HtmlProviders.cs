@@ -135,7 +135,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public static IHtmlDocument Parse( this IHtmlParser parser, HtmlContentResult content )
     {
-      return parser.Parse( content.Content, content.ContentUri );
+      return parser.Parse( content.Content, CreateDocumentUri( content.VirtualPath ) );
     }
 
 
@@ -143,28 +143,25 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
-    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// 
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 内容加载结果</returns>
-    public static HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
+    public static HtmlContentResult LoadContent( string virtualPath )
     {
-
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
 
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+        throw VirtualPathFormatError( "virtualPath" );
 
 
       lock ( _contentProvidersSync )
       {
         foreach ( var provider in ContentProviders )
         {
-          var result = provider.LoadContent( context, virtualPath );
+          var result = provider.LoadContent( virtualPath );
 
           if ( result != null )
             return result;
@@ -176,17 +173,24 @@ namespace Ivony.Html.Web
     }
 
 
+    internal static Exception VirtualPathFormatError( string paramName )
+    {
+      return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );
+    }
+
+
+
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
-    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// 
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
+    public static IHtmlDocument LoadDocument( string virtualPath )
     {
       string cacheKey;
 
-      return LoadDocument( context, virtualPath, out cacheKey );
+      return LoadDocument( virtualPath, out cacheKey );
     }
 
 
@@ -196,66 +200,72 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
-    /// <param name="context">当前请求的 HttpContext 对象</param>
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <param name="cacheKey">若文档已被缓存，获取缓存键</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath, out string cacheKey )
+    public static IHtmlDocument LoadDocument( string virtualPath, out string cacheKey )
     {
-
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
 
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+        throw VirtualPathFormatError( "virtualPath" );
 
 
       cacheKey = null;
 
+      var provider = TryGetDocumentProvider( virtualPath );
+      if ( provider != null )
+        return provider.CreateDocument();
 
-      if ( !failedHtmlProviders.Contains( virtualPath ) )
-      {
-
-        var section = WebConfigurationManager.GetSection( "system.web/compilation", virtualPath ) as CompilationSection;
-        if ( section != null && section.BuildProviders[VirtualPathUtility.GetExtension( virtualPath )] != null )
-        {
-          var provider = BuildManager.CreateInstanceFromVirtualPath( virtualPath, typeof( IHtmlDocumentProvider ) ) as IHtmlDocumentProvider;
-          if ( provider != null )
-            return provider.CreateDocument();
-        }
-
-
-        failedHtmlProviders.Add( virtualPath );
-      }
-
-      var content = LoadContent( context, virtualPath );
+      var content = LoadContent( virtualPath );
       if ( content == null )
         return null;
 
       cacheKey = content.CacheKey;
 
-      return ParseDocument( context, content );
+      return ParseDocument( content );
+    }
+
+    public static IHtmlDocumentProvider TryGetDocumentProvider( string virtualPath )
+    {
+      if ( failedHtmlProviders.Contains( virtualPath ) )
+        return null;
+
+      var section = WebConfigurationManager.GetSection( "system.web/compilation", virtualPath ) as CompilationSection;
+      if ( section == null )
+        return null;
+      if ( section.BuildProviders[VirtualPathUtility.GetExtension( virtualPath )] == null )
+        return null;
+
+      try
+      {
+        var provider = BuildManager.CreateInstanceFromVirtualPath( virtualPath, typeof( IHtmlDocumentProvider ) ) as IHtmlDocumentProvider;
+        if ( provider != null )
+          return provider;
+      }
+      catch
+      {
+      }
+
+      failedHtmlProviders.Add( virtualPath );
+      return null;
+
     }
 
 
     /// <summary>
     /// 获取用于分析 HTML 文档的分析器
     /// </summary>
-    /// <param name="context">当前请求上下文</param>
-    /// <param name="contentUri">内容的地址</param>
+    /// <param name="virtualPath">内容的地址</param>
     /// <param name="htmlContent">HTML 文档内容</param>
     /// <returns>HTML 分析器相关信息</returns>
-    public static HtmlParserResult GetParser( HttpContextBase context, Uri contentUri, string htmlContent )
+    public static HtmlParserResult GetParser( HtmlContentResult contentResult )
     {
 
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
-
-      if ( contentUri != null && !contentUri.IsAbsoluteUri )
-        throw new ArgumentException( "contentUri只能为null或绝对URI", "contentUri" );
+      if ( contentResult == null )
+        throw new ArgumentNullException( "contentResult" );
 
 
 
@@ -264,19 +274,17 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ParserProviders )
         {
-          var result = provider.GetParser( context, contentUri, htmlContent );
+          var result = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
 
           if ( result != null )
-          {
-            result.Provider = provider;
             return result;
-          }
+
         }
       }
 
 
       //默认行为
-      return DefaultParserProvider.GetParser( context, contentUri, htmlContent );
+      return DefaultParserProvider.GetParser( contentResult.VirtualPath, contentResult.Content );
     }
 
 
@@ -298,40 +306,37 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
-    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// 
     /// <param name="contentResult">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, HtmlContentResult contentResult )
+    public static IHtmlDocument ParseDocument( HtmlContentResult contentResult )
     {
-
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
 
       if ( contentResult == null )
         throw new ArgumentNullException( "contentResult" );
 
 
 
-      var result = GetParser( context, contentResult.ContentUri, contentResult.Content );
+      var result = GetParser( contentResult );
 
 
-      return ParseDocument( context, contentResult, result );
+      return ParseDocument( contentResult, result );
     }
 
 
     /// <summary>
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
-    /// <param name="context">当前请求的 HttpContext 对象</param>
+    /// 
     /// <param name="contentResult">文档加载结果</param>
     /// <param name="parserResult">解析器选择结果</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, HtmlContentResult contentResult, HtmlParserResult parserResult )
+    public static IHtmlDocument ParseDocument( HtmlContentResult contentResult, HtmlParserResult parserResult )
     {
       if ( contentResult.CacheKey != null && parserResult.DomProvider != null )//如果可以缓存
       {
         var key = contentResult.CacheKey;
-        var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, contentResult.ContentUri.AbsoluteUri );
+        var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, contentResult.VirtualPath );
 
         var createDocument = Cache.Get( cacheKey ) as Func<IHtmlDomProvider, IHtmlDocument>;
 
@@ -341,10 +346,10 @@ namespace Ivony.Html.Web
           return createDocument( provider );
         }
 
-        context.Trace.Write( "Jumony for ASP.NET", "Document cache missed" );
+        Trace( "Document cache missed" );
 
 
-        var document = ParseDocument( parserResult, contentResult.Content, contentResult.ContentUri );
+        var document = ParseDocument( parserResult, contentResult.Content, contentResult.VirtualPath );
         createDocument = document.Compile();//必须同步编译文档，否则文档对象可能被修改。
 
         new Action( delegate
@@ -361,44 +366,38 @@ namespace Ivony.Html.Web
 
       else
 
-        return ParseDocument( parserResult, contentResult.Content, contentResult.ContentUri );
+        return ParseDocument( parserResult, contentResult.Content, contentResult.VirtualPath );
+    }
+
+    private static void Trace( string message )
+    {
+      HttpContext.Current.Trace.Write( "Jumony for ASP.NET", message );
     }
 
 
-    /// <summary>
-    /// 分析 HTML 文档，此方法永不缓存
-    /// </summary>
-    /// <param name="context">当前请求的 HttpContext 对象</param>
-    /// <param name="contentUri">文档 URI</param>
-    /// <param name="htmlContent">文档内容</param>
-    /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HttpContextBase context, string htmlContent, Uri contentUri )
+    private static readonly Uri baseUri = new Uri( "virtualpath://" + Guid.NewGuid().ToString( "N" ) + "/" );
+
+    private static Uri CreateDocumentUri( string virtualPath )
     {
 
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
 
-      if ( htmlContent == null )
-        throw new ArgumentNullException( "htmlContent" );
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
 
-      if ( contentUri != null && !contentUri.IsAbsoluteUri )
-        throw new ArgumentException( "contentUri只能为null或绝对URI", "contentUri" );
-
-
-      var result = GetParser( context, contentUri, htmlContent );
-
-      return ParseDocument( result, htmlContent, contentUri );
+      return new Uri( baseUri, VirtualPathUtility.ToAbsolute( virtualPath ) );
     }
 
 
-    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent, Uri url )
+    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent, string virtualPath )
     {
       var parser = result.Parser;
 
-      var document = parser.Parse( htmlContent, url );
+      var document = parser.Parse( htmlContent, CreateDocumentUri( virtualPath ) );
 
       if ( result.Provider != null )
-        result.Provider.ReleaseParser( parser );
+        result.Provider.ReleaseParser( result );
 
       return document;
     }
@@ -460,7 +459,7 @@ namespace Ivony.Html.Web
     public bool CanLoadContent( string virtualPath )
     {
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
 
       return SupportedExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ) );
     }
@@ -474,7 +473,7 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
 
       var extensions = VirtualPathUtility.GetExtension( virtualPath );
       IHtmlContentProvider provider;
@@ -492,16 +491,15 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
-    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns></returns>
-    public HtmlContentResult LoadContent( HttpContextBase context, string virtualPath )
+    public HtmlContentResult LoadContent( string virtualPath )
     {
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
 
       var provider = GetProvider( virtualPath );
-      return provider.LoadContent( context, virtualPath );
+      return provider.LoadContent( virtualPath );
 
     }
 

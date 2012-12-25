@@ -378,6 +378,45 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 移除指定的属性
+    /// </summary>
+    /// <param name="element">要移除属性的元素</param>
+    /// <param name="attributeName">要移除的属性名称</param>
+    public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
 
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      lock ( element.SyncRoot )
+      {
+
+        var attribute = element.Attribute( attributeName );
+
+        if ( attribute != null )
+          attribute.Remove();
+
+        return element;
+      }
+    }
+
+    /// <summary>
+    /// 移除指定的属性
+    /// </summary>
+    /// <param name="elements">要移除属性的元素</param>
+    /// <param name="attributeName">要移除的属性名称</param>
+    public static IEnumerable<IHtmlElement> RemoveAttribute( this IEnumerable<IHtmlElement> elements, string attributeName )
+    {
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( attributeName == null )
+        throw new ArgumentNullException( "attributeName" );
+
+      return elements.ForAll( e => e.RemoveAttribute( attributeName ) );
+    }
   }
 }

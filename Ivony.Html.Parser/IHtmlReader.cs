@@ -6,6 +6,10 @@ using Ivony.Html.Parser.ContentModels;
 
 namespace Ivony.Html.Parser
 {
+
+  /// <summary>
+  /// HTML 内容元素读取枚举器
+  /// </summary>
   public interface IHtmlReader
   {
 

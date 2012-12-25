@@ -246,7 +246,7 @@ namespace Ivony.Html.Web
     /// <param name="delta">从当前开始最大的过期时间</param>
     public override void SetMaxAge( TimeSpan delta )
     {
-      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ) )
+      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.Zero )
         throw new ArgumentOutOfRangeException( "delta" );
 
       _maxAge = delta;
@@ -262,7 +262,7 @@ namespace Ivony.Html.Web
     public override void SetProxyMaxAge( TimeSpan delta )
     {
 
-      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.FromSeconds( 1 ) )
+      if ( delta > TimeSpan.FromDays( 300 ) || delta < TimeSpan.Zero )
         throw new ArgumentOutOfRangeException( "delta" );
 
       _sMaxAge = delta;

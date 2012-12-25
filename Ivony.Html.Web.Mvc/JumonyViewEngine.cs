@@ -108,22 +108,8 @@ namespace Ivony.Html.Web.Mvc
 
 
       {//默认处理策略
-        var handlerPath = virtualPath + ".ashx";
 
-        ViewBase view = null;
-
-        if ( VirtualPathProvider.FileExists( handlerPath ) )
-        {
-
-          if ( isPartial )
-          {
-            view = CreateHandledPartialView( virtualPath, handlerPath );
-          }
-          else
-          {
-            view = CreateHandledPageView( virtualPath, handlerPath );
-          }
-        }
+        ViewBase view = TryCreateViewHandler( virtualPath, isPartial );
 
 
         if ( view == null )
@@ -141,70 +127,43 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-
-
     /// <summary>
-    /// 创建带有指定处理器的页面视图
+    /// 尝试创建自定义视图处理程序对象
     /// </summary>
     /// <param name="virtualPath">视图虚拟路径</param>
-    /// <param name="handlerPath">处理器虚拟路径</param>
-    /// <returns></returns>
-    protected static ViewBase CreateHandledPageView( string virtualPath, string handlerPath )
+    /// <param name="isPartial">是否应创建为部分视图</param>
+    /// <returns>若有自定义视图处理程序，则返回。</returns>
+    protected ViewBase TryCreateViewHandler( string virtualPath, bool isPartial )
     {
-      try
+      var handlerPath = virtualPath + ".ashx";
+
+      if ( !VirtualPathProvider.FileExists( handlerPath ) )
+        return null;
+
+      var view = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewBase ) );
+      if ( view == null )
+        return null;
+
+      var pageView = view as ViewHandler;
+      if ( pageView != null )
       {
-        var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) ) as ViewHandler;
-        if ( handler != null )
-        {
-
-          handler.Initialize( virtualPath );
-
-          return handler;
-
-        }
-      }
-      catch
-      {
-
+        pageView.Initialize( virtualPath, isPartial );
+        return pageView;
       }
 
-      return null;
 
+
+      if ( !isPartial )
+        return null;
+
+      var partialView = view as PartialViewHandler;
+      if ( partialView == null )
+        return null;
+
+      
+      partialView.Initialize( virtualPath );
+      return partialView;
     }
-
-    /// <summary>
-    /// 创建带有指定处理器的部分视图
-    /// </summary>
-    /// <param name="virtualPath">视图虚拟路径</param>
-    /// <param name="handlerPath">处理器虚拟路径</param>
-    /// <returns></returns>
-    protected static ViewBase CreateHandledPartialView( string virtualPath, string handlerPath )
-    {
-      try
-      {
-        var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( PartialViewHandler ) ) as PartialViewHandler;
-        if ( handler != null )
-        {
-
-          handler.Initialize( virtualPath );
-
-          return handler;
-
-        }
-      }
-      catch
-      {
-
-      }
-
-      return null;
-
-    }
-
-
-
-
-
 
 
 

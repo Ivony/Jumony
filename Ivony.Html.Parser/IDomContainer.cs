@@ -11,6 +11,9 @@ namespace Ivony.Html.Parser
   /// </summary>
   public interface IDomContainer : IHtmlContainer
   {
+    /// <summary>
+    /// HTML 节点容器
+    /// </summary>
     DomNodeCollection NodeCollection
     {
       get;

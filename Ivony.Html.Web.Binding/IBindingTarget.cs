@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Web.Binding
 {
+
+  /// <summary>
+  /// 定义绑定目标
+  /// </summary>
   public interface IBindingTarget
   {
     Type ValueType { get; }
@@ -13,6 +17,10 @@ namespace Ivony.Html.Web.Binding
   }
 
 
+  /// <summary>
+  /// 绑定目标抽象
+  /// </summary>
+  /// <typeparam name="T">允许绑定的值的类型</typeparam>
   public abstract class BindingTarget<T> : IBindingTarget
   {
 

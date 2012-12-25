@@ -281,11 +281,11 @@ namespace Ivony.Fluent
 
 
     /// <summary>
-    /// 指示指定的序列是否为 null 或者为空。
+    /// 检查序列是否为 null 或者为空。
     /// </summary>
     /// <typeparam name="T">序列元素类型</typeparam>
     /// <param name="source">要检测的序列</param>
-    /// <returns>是否为 null 或者为空</returns>
+    /// <returns>是否为 null 或者空序列</returns>
     public static bool IsNullOrEmpty<T>( this IEnumerable<T> source )
     {
       if ( source == null )
@@ -293,9 +293,6 @@ namespace Ivony.Fluent
 
       return !source.Any();
     }
-
-
-
 
 
 

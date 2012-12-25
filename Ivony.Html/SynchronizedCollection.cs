@@ -9,12 +9,20 @@ using Ivony.Fluent;
 namespace Ivony.Html
 {
 
+
+  /// <summary>
+  /// 实现一个线程安全的容器
+  /// </summary>
+  /// <typeparam name="T">容器项类型</typeparam>
   public class SynchronizedCollection<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable
   {
     private List<T> items;
     private object sync;
 
 
+    /// <summary>
+    /// 容器所拥有项数量
+    /// </summary>
     public int Count
     {
       get
@@ -26,6 +34,8 @@ namespace Ivony.Html
       }
     }
 
+
+
     protected List<T> Items
     {
       get
@@ -34,6 +44,10 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 用于同步的对象
+    /// </summary>
     public object SyncRoot
     {
       get
@@ -41,6 +55,8 @@ namespace Ivony.Html
         return this.sync;
       }
     }
+
+
 
     public T this[int index]
     {
@@ -65,6 +81,9 @@ namespace Ivony.Html
         }
       }
     }
+
+
+    #region ICollection 显示接口实现
     bool ICollection<T>.IsReadOnly
     {
       get
@@ -72,6 +91,8 @@ namespace Ivony.Html
         return false;
       }
     }
+    
+    
     bool ICollection.IsSynchronized
     {
       get
@@ -79,6 +100,8 @@ namespace Ivony.Html
         return true;
       }
     }
+    
+    
     object ICollection.SyncRoot
     {
       get
@@ -86,6 +109,47 @@ namespace Ivony.Html
         return this.sync;
       }
     }
+    #endregion
+
+
+    #region IList 显示接口实现
+
+    int IList.Add( object value )
+    {
+      SynchronizedCollection<T>.VerifyValueType( value );
+      int result;
+      lock ( this.sync )
+      {
+        this.Add( (T) value );
+        result = this.Count - 1;
+      }
+      return result;
+    }
+
+    bool IList.Contains( object value )
+    {
+      SynchronizedCollection<T>.VerifyValueType( value );
+      return this.Contains( (T) value );
+    }
+
+    int IList.IndexOf( object value )
+    {
+      SynchronizedCollection<T>.VerifyValueType( value );
+      return this.IndexOf( (T) value );
+    }
+
+    void IList.Insert( int index, object value )
+    {
+      SynchronizedCollection<T>.VerifyValueType( value );
+      this.Insert( index, (T) value );
+    }
+
+    void IList.Remove( object value )
+    {
+      SynchronizedCollection<T>.VerifyValueType( value );
+      this.Remove( (T) value );
+    }
+    
     object IList.this[int index]
     {
       get
@@ -98,6 +162,8 @@ namespace Ivony.Html
         this[index] = (T) value;
       }
     }
+    
+    
     bool IList.IsReadOnly
     {
       get
@@ -105,6 +171,8 @@ namespace Ivony.Html
         return false;
       }
     }
+    
+    
     bool IList.IsFixedSize
     {
       get
@@ -112,6 +180,9 @@ namespace Ivony.Html
         return false;
       }
     }
+    #endregion
+
+
 
     public SynchronizedCollection()
     {
@@ -213,6 +284,8 @@ namespace Ivony.Html
         this.InsertItem( index, item );
       }
     }
+    
+    
     private int InternalIndexOf( T item )
     {
       int count = this.items.Count;
@@ -225,6 +298,8 @@ namespace Ivony.Html
       }
       return -1;
     }
+    
+    
     public bool Remove( T item )
     {
       bool result;
@@ -243,6 +318,8 @@ namespace Ivony.Html
       }
       return result;
     }
+    
+    
     public void RemoveAt( int index )
     {
       lock ( this.sync )
@@ -254,6 +331,7 @@ namespace Ivony.Html
       }
     }
 
+    
     protected virtual void ClearItems()
     {
       this.items.Clear();
@@ -287,41 +365,6 @@ namespace Ivony.Html
       }
     }
 
-    int IList.Add( object value )
-    {
-      SynchronizedCollection<T>.VerifyValueType( value );
-      int result;
-      lock ( this.sync )
-      {
-        this.Add( (T) value );
-        result = this.Count - 1;
-      }
-      return result;
-    }
-
-    bool IList.Contains( object value )
-    {
-      SynchronizedCollection<T>.VerifyValueType( value );
-      return this.Contains( (T) value );
-    }
-
-    int IList.IndexOf( object value )
-    {
-      SynchronizedCollection<T>.VerifyValueType( value );
-      return this.IndexOf( (T) value );
-    }
-
-    void IList.Insert( int index, object value )
-    {
-      SynchronizedCollection<T>.VerifyValueType( value );
-      this.Insert( index, (T) value );
-    }
-
-    void IList.Remove( object value )
-    {
-      SynchronizedCollection<T>.VerifyValueType( value );
-      this.Remove( (T) value );
-    }
 
     private static void VerifyValueType( object value )
     {

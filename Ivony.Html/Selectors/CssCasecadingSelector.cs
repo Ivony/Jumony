@@ -23,6 +23,13 @@ namespace Ivony.Html
     public CssCasecadingSelector( CssRelativeSelector relativeSelector, ICssSelector lastSelector )
     {
 
+      if ( relativeSelector == null )
+        throw new ArgumentNullException( "relativeSelector" );
+
+      if ( lastSelector == null )
+        throw new ArgumentNullException( "lastSelector" );
+
+
       RelativeSelector = relativeSelector;
       LastSelector = lastSelector;
 
@@ -35,10 +42,17 @@ namespace Ivony.Html
     /// 创建层叠选择器实例
     /// </summary>
     /// <param name="leftSelector">左选择器</param>
-    /// <param name="combator">结合符</param>
+    /// <param name="combinator">结合符</param>
     /// <param name="rightSelector">右选择器</param>
     public static CssCasecadingSelector Create( ICssSelector leftSelector, char combinator, ICssSelector rightSelector )
     {
+      if ( leftSelector == null )
+        throw new ArgumentNullException( "leftSelector" );
+
+      if ( rightSelector == null )
+        throw new ArgumentNullException( "rightSelector" );
+
+
       var relativeSelctor = CreateRelativeSelector( leftSelector, combinator );
       var casecadingSelector = rightSelector as CssCasecadingSelector;
 
@@ -69,6 +83,14 @@ namespace Ivony.Html
     /// <returns></returns>
     public static CssRelativeSelector Combine( CssRelativeSelector left, CssRelativeSelector right )
     {
+
+      if ( left == null )
+        throw new ArgumentNullException( "left" );
+
+      if ( right == null )
+        throw new ArgumentNullException( "right" );
+
+
       var selector = right.LeftSelector;
       var combinator = right.Combinator;
 
@@ -77,12 +99,12 @@ namespace Ivony.Html
       if ( casecadingSelector != null )
         return CreateRelativeSelector( CssCasecadingSelector.Combine( left, casecadingSelector ), combinator );
 
-      
+
       var elementSelector = selector as CssElementSelector;
       if ( elementSelector != null )
         return CreateRelativeSelector( new CssCasecadingSelector( left, elementSelector ), combinator );
 
-      
+
       throw new NotSupportedException();
     }
 
@@ -154,19 +176,6 @@ namespace Ivony.Html
     }
 
 
-    /// <summary>
-    /// 在指定容器中搜索符合条件的元素
-    /// </summary>
-    /// <param name="scope">要搜索的容器</param>
-    /// <returns>符合条件的元素</returns>
-    public IEnumerable<IHtmlElement> Search( IHtmlContainer scope )
-    {
-      throw new NotImplementedException();
-    }
-
-
-
-
 
     /// <summary>
     /// 返回表示当前选择器的表达式
@@ -186,6 +195,14 @@ namespace Ivony.Html
     /// <returns></returns>
     public static ICssSelector Create( CssRelativeSelector relativeSelector, ICssSelector selector )
     {
+
+      if ( relativeSelector == null )
+        throw new ArgumentNullException( "relativeSelector" );
+
+      if ( selector == null )
+        throw new ArgumentNullException( "selector" );
+
+
       var elementSelector = selector as CssElementSelector;
       if ( elementSelector != null )
         return new CssCasecadingSelector( relativeSelector, elementSelector );
@@ -211,6 +228,13 @@ namespace Ivony.Html
     /// <returns>层叠选择器</returns>
     public static ICssSelector Create( IEnumerable<IHtmlElement> elements, string expression )
     {
+
+      if ( elements == null )
+        throw new ArgumentNullException( "elements" );
+
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
       var selector = CssParser.ParseSelector( expression );
 
       if ( elements.IsNullOrEmpty() )

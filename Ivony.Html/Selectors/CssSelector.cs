@@ -68,6 +68,9 @@ namespace Ivony.Html
     /// <returns>是否符合选择器要求</returns>
     public static bool IsEligibleBuffered( this ICssSelector selector, IHtmlElement element )
     {
+      if ( selector == null )
+        throw new ArgumentNullException( "selector" );
+
       if ( element == null )
         return selector.IsEligible( element );
 

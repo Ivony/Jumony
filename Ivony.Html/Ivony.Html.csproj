@@ -40,7 +40,7 @@
     <DocumentationFile>bin\Debug\Ivony.Html.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,7 +54,7 @@
     </NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -116,7 +116,7 @@
     <Compile Include="Selectors\CssElementSelector.cs" />
     <Compile Include="Selectors\ICssPseudoClassProvider.cs" />
     <Compile Include="Selectors\ICssPseudoClassSelector.cs" />
-    <Compile Include="Selectors\CssPseudoClassSelectors.cs" />
+    <Compile Include="Selectors\InternalPseudoClassProvider.cs" />
     <Compile Include="Selectors\ICssSelector.cs" />
     <Compile Include="Selectors\CssRelativeSelector.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />

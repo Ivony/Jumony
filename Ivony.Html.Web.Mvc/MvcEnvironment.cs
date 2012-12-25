@@ -142,14 +142,13 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 使用 MvcParser 分析加载文档。
+    /// 分析和加载文档。
     /// </summary>
-    /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>加载的文档对象</returns>
-    public static IHtmlDocument LoadDocument( HttpContextBase context, string virtualPath )
+    public static IHtmlDocument LoadDocument( string virtualPath )
     {
-      return HtmlProviders.LoadDocument( context, virtualPath );
+      return HtmlProviders.LoadDocument(virtualPath);
     }
 
 

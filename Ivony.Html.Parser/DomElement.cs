@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using Ivony.Fluent;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Ivony.Html.Parser
 {
@@ -18,15 +19,36 @@ namespace Ivony.Html.Parser
     private readonly DomAttributeCollection _attributes;
 
 
+    private static readonly Regex tagNameRegex = new Regulars.TagName();
+    private static readonly Regex attributeNameRegex = new Regulars.AttributeName();
+
+
+
     /// <summary>
     /// 创建 DomElement 实例
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="attributes"></param>
-    public DomElement( string name, IDictionary<string, string> attributes )
+    /// <param name="name">元素名</param>
+    /// <param name="attributes">属性</param>
+    public DomElement( string name, IDictionary<string, string> attributes ) : this( name, attributes, true ) { }
+
+
+    /// <summary>
+    /// 创建 DomElement 实例
+    /// </summary>
+    /// <param name="name">元素名</param>
+    /// <param name="attributes">属性</param>
+    /// <param name="argumentCheck">是否进行参数检查</param>
+    internal DomElement( string name, IDictionary<string, string> attributes, bool argumentCheck )
     {
-      if ( name == null )
-        throw new ArgumentNullException( "name" );
+      if ( argumentCheck )
+      {
+        if ( name == null )
+          throw new ArgumentNullException( "name" );
+
+        if ( !tagNameRegex.IsMatch( name ) )
+          throw new FormatException( "元素名称格式不正确" );
+      }
+
 
       _name = name;
       _attributes = new DomAttributeCollection( this );
@@ -79,6 +101,11 @@ namespace Ivony.Html.Parser
       {
         if ( _attributes.Contains( name ) )//容器自身会执行不区分大小写的查找
           throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "元素已经存在名为 \"{0}\" 的属性。", name ) );
+
+        /*
+        if ( !attributeNameRegex.IsMatch( name ) )
+          throw new FormatException( "属性名称格式不正确" );
+        */
 
         var attribute = new DomAttribute( this, name, value );
         _attributes.Add( attribute );

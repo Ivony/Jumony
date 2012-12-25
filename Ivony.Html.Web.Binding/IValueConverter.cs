@@ -10,5 +10,7 @@ namespace Ivony.Html.Web.Binding
 
     object Convert( object value );
 
+    Type ValueType { get; }
+
   }
 }

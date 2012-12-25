@@ -20,16 +20,6 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 是否允许 PageView 渲染子请求，默认为 false
-    /// </summary>
-    public bool EnablePageViewRenderChildAction
-    {
-      get;
-      set;
-    }
-
-
-    /// <summary>
     /// 忽略部分视图渲染异常，继续渲染页面其它部分，默认为 false
     /// </summary>
     public bool IgnorePartialRenderException

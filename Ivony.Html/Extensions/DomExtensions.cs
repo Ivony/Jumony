@@ -742,27 +742,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 移除指定的属性
-    /// </summary>
-    /// <param name="element">要移除属性的元素</param>
-    /// <param name="attributeName">要移除的属性名称</param>
-    public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
-    {
-      lock ( element.SyncRoot )
-      {
-
-        var attribute = element.Attribute( attributeName );
-
-        if ( attribute != null )
-          attribute.Remove();
-
-        return element;
-      }
-    }
-
-
-
-    /// <summary>
     /// 尝试从 DOM 中移除这些节点
     /// </summary>
     /// <param name="nodes">要移除的节点</param>
@@ -920,7 +899,10 @@ namespace Ivony.Html
         {
           var encoded = HtmlEncoding.HtmlEncode( text );
 
-          encoded = encoded.Replace( "  ", " &nbsp;" );
+          encoded = encoded.Replace( "  ", "&nbsp; " );
+
+          if ( encoded.EndsWith( "  " ) )
+            encoded = encoded.Substring( 0, encoded.Length - 1 ) + "&nbsp;";//如果末尾多出一个空格，则替换为&nbsp;
 
           encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
 

@@ -36,23 +36,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    private string _virtualPath;
-    /// <summary>
-    /// 获取或设置 HTML 视图的虚拟路径，此属性必须在处理视图前进行初始化
-    /// </summary>
-    public string VirtualPath
-    {
-      get { return _virtualPath; }
-      protected set
-      {
-
-        if ( !VirtualPathUtility.IsAppRelative( value ) )
-          throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
-        _virtualPath = value;
-      }
-    }
-
-
     /// <summary>
     /// 获取视图上下文
     /// </summary>
@@ -133,7 +116,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取 Url 帮助器
     /// </summary>
-    protected UrlHelper Url
+    protected JumonyUrlHelper Url
     {
       get;
       private set;
@@ -151,22 +134,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    /// <summary>
-    /// 渲染视图
-    /// </summary>
-    /// <param name="viewContext">视图上下文</param>
-    /// <param name="writer">文本编写器</param>
-    public virtual void Render( ViewContext viewContext, TextWriter writer )
+
+    void IView.Render( ViewContext viewContext, TextWriter writer )
     {
       ViewContext = viewContext;
-
-      //获取视图筛选器
-      Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      ViewData.Remove( ViewFiltersDataKey );
-
-
-      RenderAdapters.Add( new ViewElementAdapter( viewContext ) );
-
 
       while ( viewContext.IsChildAction )
       {
@@ -175,7 +146,25 @@ namespace Ivony.Html.Web.Mvc
       RawViewContext = viewContext;
 
 
-      Url = new UrlHelper( RequestContext );
+      Render( writer );
+    }
+
+
+    /// <summary>
+    /// 渲染视图
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    /// <param name="writer">文本编写器</param>
+    public virtual void Render( TextWriter writer )
+    {
+      //获取视图筛选器
+      Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      ViewData.Remove( ViewFiltersDataKey );
+
+
+      RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
+
+      Url = new JumonyUrlHelper( this );
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Process" );
       OnPreProcess();
@@ -355,9 +344,9 @@ namespace Ivony.Html.Web.Mvc
     /// 派生类调用此方法加载虚拟路径处的文档
     /// </summary>
     /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument()
+    protected virtual IHtmlDocument LoadDocument( string virtualPath )
     {
-      return MvcEnvironment.LoadDocument( HttpContext, VirtualPath );
+      return MvcEnvironment.LoadDocument( virtualPath );
     }
 
 
@@ -450,7 +439,7 @@ namespace Ivony.Html.Web.Mvc
       if ( inherits != null )
       {
 
-        var inheritsKeys = GetInheritsKeys( inherits ).Distinct( StringComparer.OrdinalIgnoreCase );
+        var inheritsKeys = GetInheritsKeys( inherits );
 
         foreach ( var key in inheritsKeys )
           routeValues.Add( key, RouteData.Values[key] );
@@ -479,18 +468,25 @@ namespace Ivony.Html.Web.Mvc
     private IEnumerable<string> GetInheritsKeys( string inherits )
     {
 
+
+      HashSet<string> result = new HashSet<string>( StringComparer.OrdinalIgnoreCase );
+
       foreach ( var key in inherits.Split( ',' ) )
       {
+        if ( key == wildcardCharacter )
+        {
+          foreach ( var k in RouteData.Values.Keys )
+            result.Add( k );
 
-        if ( key.EqualsIgnoreCase( "action" ) || key.EqualsIgnoreCase( "controller" ) )
-          continue;
+          break;
+        }
 
         if ( key.StartsWith( wildcardCharacter ) )//以星号开头
         {
           foreach ( var k in RouteData.Values.Keys )
           {
             if ( k.EndsWith( key.Substring( wildcardCharacter.Length ) ) )
-              yield return k;
+              result.Add( k );
           }
         }
 
@@ -499,15 +495,20 @@ namespace Ivony.Html.Web.Mvc
           foreach ( var k in RouteData.Values.Keys )
           {
             if ( k.StartsWith( key.Substring( 0, key.Length - wildcardCharacter.Length ) ) )
-              yield return k;
+              result.Add( k );
           }
         }
 
 
         if ( RouteData.Values.ContainsKey( key ) )
-          yield return key;
+          result.Add( key );
 
       }
+
+      result.Remove( "controller" );
+      result.Remove( "action" );
+
+      return result;
     }
 
 
@@ -521,11 +522,12 @@ namespace Ivony.Html.Web.Mvc
     /// 转换容器中所有 URI 与当前请求匹配。
     /// </summary>
     /// <param name="container">确定要转换 URI 范围的容器</param>
-    protected virtual void ResolveUri( IHtmlContainer container )
+    protected void ResolveUri( IHtmlContainer container, string baseVirtualPath )
     {
+      var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
-        ResolveUri( attribute );
+        ResolveUri( attribute, absoluteBase );
       }
     }
 
@@ -533,7 +535,7 @@ namespace Ivony.Html.Web.Mvc
     /// 转换 URI 与当前请求匹配
     /// </summary>
     /// <param name="attribute"></param>
-    protected virtual void ResolveUri( IHtmlAttribute attribute )
+    protected void ResolveUri( IHtmlAttribute attribute, string baseVirtualPath )
     {
       var uriValue = attribute.AttributeValue;
 
@@ -553,9 +555,7 @@ namespace Ivony.Html.Web.Mvc
       if ( uriValue.StartsWith( "?" ) )//若是本路径的查询链接，也不采取任何动作。
         return;
 
-
-
-      attribute.SetValue( ResolveVirtualPath( uriValue ) );
+      attribute.SetValue( ResolveVirtualPath( baseVirtualPath, uriValue ) );
 
     }
 
@@ -565,14 +565,14 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="virtualPath"></param>
     /// <returns></returns>
-    protected virtual string ResolveVirtualPath( string virtualPath )
+    protected string ResolveVirtualPath( string baseVirtualPath, string virtualPath )
     {
       if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
         return VirtualPathUtility.ToAbsolute( virtualPath );
 
       try
       {
-        return VirtualPathUtility.Combine( VirtualPathUtility.ToAbsolute( VirtualPath ), virtualPath );
+        return VirtualPathUtility.Combine( baseVirtualPath, virtualPath );
       }
       catch
       {
@@ -685,7 +685,7 @@ namespace Ivony.Html.Web.Mvc
           if ( !VirtualPathUtility.IsAppRelative( path ) )
             throw new FormatException( "path 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
 
-          var content = HtmlProviders.LoadContent( HttpContext, path );
+          var content = HtmlProviders.LoadContent( path );
           if ( content != null )
             return content.Content;
         }

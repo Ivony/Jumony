@@ -24,9 +24,13 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 初始化视图
+    /// </summary>
+    /// <param name="virtualPath"></param>
     internal void Initialize( string virtualPath )
     {
-      VirtualPath = virtualPath;
+      base.Initialize( virtualPath );
     }
 
 

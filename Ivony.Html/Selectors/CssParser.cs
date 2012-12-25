@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Fluent;
+using System.Globalization;
 
 namespace Ivony.Html
 {
@@ -18,17 +19,21 @@ namespace Ivony.Html
     public static ICssSelector ParseSelector( string expression )
     {
 
+      if ( expression == null )
+        return null;
+
       var selector = selectorsCache[expression] as ICssSelector;
       if ( selector != null )
         return selector;
 
-      var enumerator = new CharEnumerator( expression );
+      using ( var enumerator = new CharEnumerator( expression ) )
+      {
+        selector = ParseSelector( enumerator );
 
-      selector = ParseSelector( enumerator );
+        selectorsCache[expression] = selector;
 
-      selectorsCache[expression] = selector;
-
-      return selector;
+        return selector;
+      }
     }
 
     private static Hashtable selectorsCache = new Hashtable();
@@ -43,9 +48,13 @@ namespace Ivony.Html
     /// <returns></returns>
     public static CssElementSelector ParseElementSelector( string expression )
     {
-      var enumerator = new CharEnumerator( expression );
+      if ( expression == null )
+        return null;
 
-      return ParseElementSelector( enumerator );
+      using ( var enumerator = new CharEnumerator( expression ) )
+      {
+        return ParseElementSelector( enumerator );
+      }
     }
 
 
@@ -58,6 +67,12 @@ namespace Ivony.Html
     /// <returns>带范畴限定的层叠选择器</returns>
     public static ICssSelector Create( IHtmlContainer scope, string expression )
     {
+      if ( scope == null )
+        throw new ArgumentNullException( "scope" );
+
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
       return CssCasecadingSelector.Create( new CssAncetorRelativeSelector( new ContainerRestrict( scope ) ), CssParser.ParseSelector( expression ) );
     }
 
@@ -130,13 +145,13 @@ namespace Ivony.Html
 
     private static FormatException FormatError( CharEnumerator enumerator )
     {
-      return new FormatException( string.Format( "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处。", enumerator.Current, enumerator.ToString(), enumerator.Offset ) );
+      return new FormatException( string.Format( CultureInfo.InvariantCulture, "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处。", enumerator.Current, enumerator.ToString(), enumerator.Offset ) );
     }
 
 
     private static FormatException FormatError( CharEnumerator enumerator, char desired )
     {
-      return new FormatException( string.Format( "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处，期望的字符为 '{3}' 。", enumerator.Current, enumerator.ToString(), enumerator.Offset, desired ) );
+      return new FormatException( string.Format( CultureInfo.InvariantCulture, "意外的字符 '{0}' ，在分析CSS选择器表达式 \"{1}\" 第 {2} 字符处，期望的字符为 '{3}' 。", enumerator.Current, enumerator.ToString(), enumerator.Offset, desired ) );
     }
 
 
@@ -189,7 +204,7 @@ namespace Ivony.Html
     private static CssElementSelector ParseElementSelector( CharEnumerator enumerator )
     {
       var elementName = ParseName( enumerator );
-      if ( elementName == null && enumerator.Current == '*' )
+      if ( elementName.IsNullOrEmpty() && enumerator.Current == '*' )
       {
         enumerator.MoveNext();
         elementName = "*";
@@ -268,6 +283,9 @@ namespace Ivony.Html
       EnsureNext( enumerator );
 
       var attriuteName = ParseName( enumerator );
+
+      if ( attriuteName.IsNullOrEmpty() )
+        throw FormatError( enumerator );
 
       var ch = enumerator.Current;
 
@@ -361,9 +379,11 @@ namespace Ivony.Html
       var startOffset = enumerator.Offset;
 
       var name = ParseName( enumerator );
+      if ( name.IsNullOrEmpty() )
+        throw FormatError( enumerator );
 
       if ( enumerator.Current != '(' )
-        throw FormatError( enumerator, '(' );
+        return CreatePseudoClassSelector( name );
 
       var i = 1;
       var argsOffset = enumerator.Offset + 1;
@@ -381,15 +401,69 @@ namespace Ivony.Html
           enumerator.MoveNext();
 
           var args = enumerator.SubString( argsOffset, enumerator.Offset - argsOffset - 1 );
-          var expression = enumerator.SubString( startOffset, enumerator.Offset - startOffset );
 
-          return CssPseudoClassSelectors.Create( name, args, expression );
+          return CreatePseudoClassSelector( name, args );
         }
 
       }
 
       throw new FormatException( "意外的遇到字符串的结束" );
     }
+
+
+    private static ICssPseudoClassSelector CreatePseudoClassSelector( string name )
+    {
+
+      return CreatePseudoClassSelector( name, null );
+
+    }
+
+
+    private static ICssPseudoClassSelector CreatePseudoClassSelector( string name, string args )
+    {
+      ICssPseudoClassProvider provider;
+      if ( !_providers.TryGetValue( name, out provider ) )
+        throw new FormatException( string.Format( CultureInfo.InvariantCulture, "无法识别的伪类 {0} ，是否未注册伪类提供程序？", name ) );
+
+      return provider.CreateSelector( name, args );
+    }
+
+
+
+    private static readonly IDictionary<string, ICssPseudoClassProvider> _providers = new Dictionary<string, ICssPseudoClassProvider>( StringComparer.OrdinalIgnoreCase );
+    private static object _sync = new object();
+
+
+    static CssParser()
+    {
+      InternalPseudoClassProvider.RegisterInternalPseudoClasses();
+    }
+
+
+    /// <summary>
+    /// 注册自定义 CSS 伪类选择器提供程序
+    /// </summary>
+    /// <param name="name">伪类名</param>
+    /// <param name="provider">伪类选择器提供程序</param>
+    public static void RegisterPseudoClassProvider( string name, ICssPseudoClassProvider provider )
+    {
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
+      if ( provider == null )
+        throw new ArgumentNullException( "provider" );
+
+
+      lock ( _sync )
+      {
+        if ( _providers.ContainsKey( name ) )
+          throw new InvalidOperationException( string.Format( CultureInfo.InvariantCulture, "系统中已经存在提供 \"{0}\" 的伪类的提供程序", name ) );
+
+        _providers.Add( name, provider );
+      }
+    }
+
+
 
 
 
@@ -437,31 +511,39 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="enumerator"></param>
     /// <returns></returns>
-    private unsafe static string ParseName( CharEnumerator enumerator )
+    private static string ParseName( CharEnumerator enumerator )
     {
-      char* buffer = stackalloc char[100];
-      int i = 0;
+
+      bool flag = false;//标识字符串中是否存在"|"
+      int offset = enumerator.Offset;
 
       do
       {
         var ch = enumerator.Current;
 
         if ( ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch >= '0' && ch <= '9' || ch == '-' || ch == '_' )
-          buffer[i++] = ch;
+          continue;
 
         else if ( ch == '|' )
-          buffer[i++] = ':';
+        {
+          flag = true;
+          continue;
+        }
 
         else
           break;
 
       } while ( enumerator.MoveNext() );
 
-      if ( i == 0 )
+
+      if ( offset == enumerator.Offset )
         return null;
 
-      else
-        return new string( buffer, 0, i );
+      var name = enumerator.SubString( offset, enumerator.Offset - offset );
+      if ( flag )
+        name = name.Replace( '|', ':' );
+
+      return name;
     }
 
 

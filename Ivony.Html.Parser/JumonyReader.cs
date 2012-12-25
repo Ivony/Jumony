@@ -141,10 +141,21 @@ namespace Ivony.Html.Parser
     {
 
 
-      var match = tagRegex.Match( HtmlText, index );
+      Match match;
 
-      if ( !match.Success )//如果不再有标签的匹配
-        return null;
+      while ( true )
+      {
+        index = HtmlText.IndexOf( '<', index );
+        if ( index == -1 )//如果再也找不到 '<'， 则认为已经匹配结束
+          return null;
+
+
+        match = tagRegex.Match( HtmlText, index );
+        if ( match.Success )//如果找到标签匹配，继续执行
+          break;
+
+        index++;//否则从下一个字符继续搜索
+      }
 
 
 

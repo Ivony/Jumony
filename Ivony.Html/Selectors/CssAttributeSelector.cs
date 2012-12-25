@@ -39,9 +39,23 @@ namespace Ivony.Html
 
     public CssAttributeSelector( string name, string comparison, string value )
     {
+
+      if ( name == null )
+        throw new ArgumentNullException( "name" );
+
       this.name = name;
+
+      if ( comparison == null )
+      {
+        if ( value != null )
+          throw new ArgumentNullException( "comparison" );
+      }
+
+      if ( comparison != null && !matchers.ContainsKey( comparison ) )
+        throw new FormatException( "无法识别的比较运算符" );
+
       this.comparison = comparison;
-      this.value = value;
+      this.value = value ?? "";
     }
 
 

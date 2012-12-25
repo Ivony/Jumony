@@ -28,7 +28,7 @@ namespace Ivony.Html.Web
   public interface IClientCacheableResponse : ICachedResponse
   {
     /// <summary>
-    /// 创建相应的 ETag 标识
+    /// 创建响应的 ETag 标识
     /// </summary>
     /// <returns>响应的 ETag 标识</returns>
     string CreateETag();

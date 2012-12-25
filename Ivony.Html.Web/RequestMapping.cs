@@ -101,7 +101,7 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档</returns>
     protected virtual IHtmlDocument LoadDocument( out string cacheKey )
     {
-      var document = HtmlProviders.LoadDocument( new HttpContextWrapper( HttpContext.Current ), TemplatePath, out cacheKey );
+      var document = HtmlProviders.LoadDocument( TemplatePath, out cacheKey );
       return document;
     }
 

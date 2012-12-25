@@ -19,7 +19,7 @@ namespace Ivony.Html
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="uri">用于加载 HTML 文档的地址</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string uri )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string uri, bool detectEncoding = true, Encoding defaultEncoding = null )
     {
 
       if ( parser == null )
@@ -29,7 +29,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "uri" );
 
 
-      return LoadDocument( parser, new Uri( uri ) );
+      return LoadDocument( parser, new Uri( uri ), detectEncoding, defaultEncoding );
 
     }
 
@@ -39,7 +39,7 @@ namespace Ivony.Html
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="uri">用于加载 HTML 文档的地址</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri uri )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri uri, bool detectEncoding = true, Encoding defaultEncoding = null )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -51,7 +51,7 @@ namespace Ivony.Html
       {
         using ( var stream = File.OpenRead( uri.LocalPath ) )
         {
-          return LoadDocument( parser, stream, uri );
+          return LoadDocument( parser, stream, defaultEncoding, uri );
         }
       }
 
@@ -59,7 +59,7 @@ namespace Ivony.Html
       var request = WebRequest.Create( uri );
       var response = request.GetResponse();
 
-      return LoadDocument( parser, response );
+      return LoadDocument( parser, response, detectEncoding, defaultEncoding );
 
     }
 
@@ -69,7 +69,7 @@ namespace Ivony.Html
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="response">用于加载 HTML 文档的 Web 响应数据</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, WebResponse response )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, WebResponse response, bool detectEncoding = true, Encoding defaultEncoding = null )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -78,28 +78,27 @@ namespace Ivony.Html
         throw new ArgumentNullException( "response" );
 
 
-      Encoding encoding = null;
 
-      if ( response.Headers.HasKeys() )
+
+      if ( detectEncoding )
       {
-        var contentType = response.Headers[HttpResponseHeader.ContentType];
-        if ( contentType != null )
+        if ( response.Headers.HasKeys() )
         {
-          foreach ( var value in contentType.Split( ';' ) )
+          var contentType = response.Headers[HttpResponseHeader.ContentType];
+          if ( contentType != null )
           {
-            var _value = value.Trim();
-            if ( _value.StartsWith( "charset=", StringComparison.OrdinalIgnoreCase ) )
-              encoding = Encoding.GetEncoding( _value.Substring( 8 ) );
+            foreach ( var value in contentType.Split( ';' ) )
+            {
+              var _value = value.Trim();
+              if ( _value.StartsWith( "charset=", StringComparison.OrdinalIgnoreCase ) )
+                defaultEncoding = Encoding.GetEncoding( _value.Substring( 8 ) );
+            }
           }
         }
       }
 
 
-      if ( encoding != null )
-        return LoadDocument( parser, new StreamReader( response.GetResponseStream(), encoding, true ), response.ResponseUri );
-
-
-      return LoadDocument( parser, response.GetResponseStream(), response.ResponseUri );
+      return LoadDocument( parser, response.GetResponseStream(), defaultEncoding ?? Encoding.UTF8, response.ResponseUri );
     }
 
 
@@ -111,7 +110,7 @@ namespace Ivony.Html
     /// <param name="stream">用于加载 HTML 文档的流</param>
     /// <param name="uri">文档的 URL 地址</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Stream stream, Uri uri )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Stream stream, Encoding encoding, Uri uri )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -119,9 +118,12 @@ namespace Ivony.Html
       if ( stream == null )
         throw new ArgumentNullException( "stream" );
 
+      if ( encoding == null )
+        throw new ArgumentNullException( "encoding" );
 
 
-      return LoadDocument( parser, new StreamReader( stream, true ), uri );
+
+      return LoadDocument( parser, new StreamReader( stream, encoding, true ), uri );
     }
 
     /// <summary>

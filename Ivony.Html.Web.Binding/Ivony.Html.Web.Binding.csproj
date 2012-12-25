@@ -42,13 +42,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding.cs" />
+    <Compile Include="BindingContext.cs" />
+    <Compile Include="BindingExpression.cs" />
     <Compile Include="BindingManager.cs" />
+    <Compile Include="DefaultBindingProvider.cs" />
     <Compile Include="IBindingProvider.cs" />
     <Compile Include="IBindingTarget.cs" />
     <Compile Include="IValueBinder.cs" />
     <Compile Include="IValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
+    <Compile Include="TextElementBindingTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

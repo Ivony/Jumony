@@ -23,10 +23,11 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 创建一个页面视图实例
     /// </summary>
-    /// <param name="virtualPath">HTML 页面的虚拟路径</param>
-    public PageView( string virtualPath )
+    /// <param name="virtualPath">HTML 视图的虚拟路径</param>
+    /// <param name="isPartial">是否使用部分视图渲染模式</param>
+    public PageView( string virtualPath, bool isPartial = false )
     {
-      VirtualPath = virtualPath;
+      Initialize( virtualPath, isPartial );
     }
 
 
@@ -39,6 +40,49 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    private bool _initialized = false;
+
+    /// <summary>
+    /// 初始化视图，必须在处理视图之前先初始化视图
+    /// </summary>
+    /// <param name="virtualPath">HTML 视图的虚拟路径</param>
+    /// <param name="partialMode">是否启用部分视图渲染模式</param>
+    protected void Initialize( string virtualPath, bool partialMode )
+    {
+      if ( _initialized )
+        throw new InvalidOperationException( "视图已经初始化" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
+
+      VirtualPath = virtualPath;
+      PartialMode = PartialMode;
+
+      _initialized = true;
+    }
+
+
+    /// <summary>
+    /// 获取或设置 HTML 视图的虚拟路径
+    /// </summary>
+    public string VirtualPath
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 是否应当将页面当作部分视图来处理
+    /// </summary>
+    protected bool PartialMode
+    {
+      get;
+      private set;
+    }
 
 
     /// <summary>
@@ -58,25 +102,28 @@ namespace Ivony.Html.Web.Mvc
     protected override string RenderContent()
     {
 
-      EnsurePageView();
+      if ( PartialMode )
+      {
+        var body = Document.Find( "body" ).SingleOrDefault();
+
+        if ( body != null )
+        {
+          var writer = new StringWriter();
+
+          foreach ( var node in body.Nodes() )
+            node.Render( writer, RenderAdapters.ToArray() );
+
+
+          return writer.ToString();
+        }
+      }
+
 
       return Document.Render( RenderAdapters.ToArray() );
     }
 
 
-    /// <summary>
-    /// 确保当前确实是在渲染一个页面
-    /// </summary>
-    protected virtual void EnsurePageView()
-    {
 
-      if ( MvcEnvironment.Configuration.EnablePageViewRenderChildAction )
-        return;
-
-      if ( ViewContext.IsChildAction )
-        throw new InvalidOperationException( "当前设置禁止使用 PageView 来渲染子请求！" );
-
-    }
 
 
     /// <summary>
@@ -84,8 +131,12 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     protected override void ProcessMain()
     {
+
+      if ( !_initialized )
+        throw new InvalidOperationException( "视图尚未初始化" );
+
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin LoadDocument" );
-      Document = LoadDocument();
+      Document = LoadDocument( VirtualPath );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End LoadDocument" );
 
 
@@ -100,10 +151,10 @@ namespace Ivony.Html.Web.Mvc
 
 
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
-      ResolveUri( Document );
+      ResolveUri( Document, VirtualPath );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
 
-      if ( !MvcEnvironment.Configuration.DisableGeneratorTag )
+      if ( !MvcEnvironment.Configuration.DisableGeneratorTag && !PartialMode )
         AddGeneratorMetaData();
     }
 
@@ -132,8 +183,6 @@ namespace Ivony.Html.Web.Mvc
         }
       }
     }
-
-
   }
 
 

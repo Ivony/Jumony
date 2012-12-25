@@ -10,7 +10,7 @@ namespace Ivony.Html.Web.Binding
 
   public interface IBinding
   {
-    void DataBind( object dataContext );
+    void DataBind( BindingContext context );
 
     int Priority { get; }
   }
@@ -18,14 +18,14 @@ namespace Ivony.Html.Web.Binding
 
   public class Binding : IBinding
   {
-    private IDictionary<string, string> args;
+    private IDictionary<string, string> _arguments;
 
-    public Binding( BindingManager manager, IHtmlDomObject domObject, IDictionary<string, string> args )
+    public Binding( IHtmlDomObject bindingHost, IDictionary<string, string> args )
     {
-      BindingManager = manager;
-      BindingHost = domObject;
-      this.args = args;
+      BindingHost = bindingHost;
+      _arguments = args;
     }
+
 
     public IHtmlDomObject BindingHost
     {
@@ -34,34 +34,53 @@ namespace Ivony.Html.Web.Binding
     }
 
 
-    public BindingManager BindingManager
-    {
-      get;
-      private set;
-    }
-
-
-
-    public void DataBind( object dataContext )
+    public void DataBind( BindingContext context )
     {
 
       object dataObject = null;
 
+      var dataContext = context.DataContext;
+
+
       if ( dataContext != null )
       {
-        var path = args["path"];
+        string path;
 
-        if ( path == null )
-          dataObject = dataContext;
-
-        else
+        if ( _arguments.TryGetValue( "path", out path ) )
           dataObject = Eval( dataContext, path );
 
+        else
+          dataObject = dataContext;
       }
 
-      object value = ConvertValue( dataObject );
 
-      BindValue( value );
+      string converterName;
+      if ( !_arguments.TryGetValue( "converter", out converterName ) )
+        converterName = null;
+
+      string binderName;
+      if ( _arguments.TryGetValue( "binder", out binderName ) )
+      {
+        var valueBinder = context.BindingManager.GetValueBinder( BindingHost, binderName );
+
+        if ( valueBinder != null )
+        {
+
+          var value = context.BindingManager.ConvertValue( dataObject, valueBinder.ValueType, converterName );
+
+          valueBinder.BindValue( BindingHost, value );
+          return;
+        }
+      }
+
+
+
+      {
+        var target = context.BindingManager.GetTarget( BindingHost );
+
+        var value = context.BindingManager.ConvertValue( dataContext, target.ValueType, converterName );
+        target.BindValue( value );
+      }
 
     }
 
@@ -74,9 +93,9 @@ namespace Ivony.Html.Web.Binding
 
 
 
-    protected virtual object ConvertValue( object dataObject )
+    protected virtual object ConvertValue( BindingContext context, object dataObject, Type targetType )
     {
-      var converter = BindingManager.GetConverter( args["converter"] );
+      var converter = context.BindingManager.GetConverter( _arguments["converter"], targetType );
 
       if ( converter != null )
         return converter.Convert( dataObject );
@@ -84,23 +103,6 @@ namespace Ivony.Html.Web.Binding
       return dataObject;
 
     }
-
-
-    protected virtual void BindValue( object value )
-    {
-      var valueBinder = BindingManager.GetBinder( BindingHost, value );
-
-      if ( valueBinder != null )
-      {
-        valueBinder.BindValue( BindingHost, value );
-        return;
-      }
-
-      var target = BindingManager.GetTarget( BindingHost, value );
-      target.BindValue( value );
-
-    }
-
 
 
 

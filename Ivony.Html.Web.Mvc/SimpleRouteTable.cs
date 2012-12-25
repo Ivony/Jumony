@@ -411,7 +411,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="areaName">区域名</param>
     /// <param name="namespaces">区域所要搜索的命名空间</param>
-    /// <param name="useNamespaceFallback"></param>
+    /// <param name="useNamespaceFallback">是否回溯搜索无 Area 命名空间</param>
     internal SimpleAreaRouteTable( string areaName, string[] namespaces, bool useNamespaceFallback )
       : base( "Area_" + areaName, new MvcRouteHandler(), true )
     {

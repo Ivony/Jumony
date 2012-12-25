@@ -26,6 +26,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    private static readonly Type mvcCachePolicyProviderType = typeof( IMvcCachePolicyProvider );
+    private static readonly Type cachePolicyProviderType = typeof( ICachePolicyProvider );
+
 
     /// <summary>
     /// 利用指定的缓存策略提供程序创建 HtmlCacheableAttribute 对象。
@@ -33,13 +36,13 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="policyProviderType">缓存策略提供程序类型</param>
     public CacheableAttribute( Type policyProviderType )
     {
-      if ( policyProviderType.IsSubclassOf( typeof( IMvcCachePolicyProvider ) ) )
+      if ( policyProviderType.GetInterface( mvcCachePolicyProviderType.FullName ) == mvcCachePolicyProviderType )
       {
         CachePolicyProvider = Activator.CreateInstance( policyProviderType ).CastTo<IMvcCachePolicyProvider>();
         return;
       }
 
-      else if ( policyProviderType.IsSubclassOf( typeof( ICachePolicyProvider ) ) )
+      else if ( policyProviderType.GetInterface( cachePolicyProviderType.FullName ) == cachePolicyProviderType )
       {
         CachePolicyProvider = new MvcCachePolicyProviderWrapper( Activator.CreateInstance( policyProviderType ).CastTo<ICachePolicyProvider>() );
         return;

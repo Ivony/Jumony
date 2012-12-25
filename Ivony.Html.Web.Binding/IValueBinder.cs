@@ -10,21 +10,7 @@ namespace Ivony.Html.Web.Binding
 
     void BindValue( IHtmlDomObject target, object value );
 
-  }
-
-
-  public interface IAttributeValueBinder<T>
-  {
-
-    void BindValue( IHtmlAttribute target, T value );
+    Type ValueType { get; }
 
   }
-
-  public interface IElementValueBinder<T>
-  {
-
-    void BindValue( IHtmlElement target, T value );
-
-  }
-
 }

@@ -81,7 +81,7 @@ namespace Ivony.Fluent
     /// </summary>
     /// <param name="value">原始值</param>
     /// <param name="defaultValue">当值为 null 时用于代换的默认值</param>
-    /// <returns>原始值，当原始值不为 null 或 DBbNull，否则使用代换的默认值</returns>
+    /// <returns>当原始值不为 null 或 DBbNull，返回原始值，否则返回代换的默认值</returns>
     public static object IfNull( this object value, object defaultValue )
     {
       if ( value == null || Convert.IsDBNull( value ) )
@@ -99,7 +99,7 @@ namespace Ivony.Fluent
     /// <param name="value">原始值</param>
     /// <param name="defaultValue">当值为 null 时用于代换的默认值</param>
     /// <param name="converter">当值不为空时，对值进行类型转换的转换器。</param>
-    /// <returns>原始值，当原始值不为 null 或 DBbNull，否则使用代换的默认值</returns>
+    /// <returns>当原始值不为 null 或 DBbNull，返回转换后的原始值，否则返回代换的默认值</returns>
     public static TOut IfNull<TInput, TOut>( this TInput value, TOut defaultValue, Func<TInput, TOut> converter )
     {
       if ( value == null || Convert.IsDBNull( value ) )

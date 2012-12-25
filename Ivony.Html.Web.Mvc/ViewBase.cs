@@ -35,6 +35,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    #region ViewContext
 
     /// <summary>
     /// 获取视图上下文
@@ -133,42 +134,36 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+    #endregion
 
 
-    void IView.Render( ViewContext viewContext, TextWriter writer )
-    {
-      ViewContext = viewContext;
-
-      while ( viewContext.IsChildAction )
-      {
-        viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
-      }
-      RawViewContext = viewContext;
-
-
-      Render( writer );
-    }
 
 
 
     private bool _initialized = false;
 
 
-    protected void Initialize( string virtualPath, bool partialMode )
-    {
-      VirtualPath = virtualPath;
-      _initialized = true;
-    }
-
     /// <summary>
     /// 初始化视图
     /// </summary>
-    /// <returns>渲染和处理的范畴，一般情况下是 IHtmlDocument</returns>
-    protected abstract IHtmlContainer InitializeScope( string virtualPath, bool partialMode );
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <param name="partialMode">是否为部分视图模式</param>
+    protected void Initialize( string virtualPath, bool partialMode )
+    {
+      if ( _initialized )
+        throw new InvalidOperationException( "视图已经初始化" );
 
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
 
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
 
+      VirtualPath = virtualPath;
+      PartialMode = partialMode;
 
+      _initialized = true;
+    }
 
     /// <summary>
     /// 获取渲染和处理的范畴
@@ -190,6 +185,21 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    void IView.Render( ViewContext viewContext, TextWriter writer )
+    {
+      ViewContext = viewContext;
+
+      while ( viewContext.IsChildAction )
+      {
+        viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
+      }
+      RawViewContext = viewContext;
+
+      Render( writer );
+    }
+
+
+
     /// <summary>
     /// 是否为部分视图
     /// </summary>
@@ -200,6 +210,38 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    /// <summary>
+    /// 初始化视图
+    /// </summary>
+    /// <returns>渲染和处理的范畴，一般情况下是 IHtmlDocument</returns>
+    protected virtual IHtmlContainer InitializeScope( string virtualPath, bool partialMode )
+    {
+      var document = LoadDocument( virtualPath );
+
+      if ( partialMode )
+        return FindPartialScope( document );
+
+      else
+        return document;
+
+    }
+
+    /// <summary>
+    /// 查找部分视图渲染范畴
+    /// </summary>
+    /// <param name="document">加载的文档</param>
+    /// <returns>渲染范畴</returns>
+    protected virtual IHtmlContainer FindPartialScope( IHtmlDocument document )
+    {
+      var body = document.Find( "body" ).SingleOrDefault();
+
+      if ( body == null )
+        return document;
+
+      else
+        return body;
+    }
 
 
     /// <summary>
@@ -218,22 +260,69 @@ namespace Ivony.Html.Web.Mvc
 
       Url = new JumonyUrlHelper( this );
 
-      HttpContext.Trace.Write( "Jumony for MVC", "Begin Process" );
-      OnPreProcess();
-      ProcessMain();
-      OnPostProcess();
-      HttpContext.Trace.Write( "Jumony for MVC", "End Process" );
+      if ( !_initialized )
+        throw new InvalidOperationException( "视图尚未初始化" );
 
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin InitializeScope" );
+      Scope = InitializeScope( VirtualPath, PartialMode );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
+      OnPreProcess();
+      Process( Scope );
+      OnPostProcess();
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End Process" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
+      ProcessActionUrls( Scope );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
+      ResolveUri( Scope, VirtualPath );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
+
+      AddGeneratorMetaData();
 
       HttpContext.Trace.Write( "Jumony for MVC", "Begin Render" );
       OnPreRender( writer );
-      var content = RenderContent();
+      var content = RenderContent( Scope, PartialMode );
       OnPostRender( writer );
       HttpContext.Trace.Write( "Jumony for MVC", "End Render" );
 
       UpdateCache( content );
 
       writer.Write( content );
+    }
+
+
+    private void AddGeneratorMetaData()
+    {
+
+      if ( MvcEnvironment.Configuration.DisableGeneratorTag || PartialMode )
+        return;
+
+      var document = Scope as IHtmlDocument;
+      if ( document == null )
+        return;
+
+      var modifier = document.DomModifier;
+      if ( modifier == null )
+        return;
+
+
+      var header = document.Find( "head" ).FirstOrDefault();
+
+      if ( header == null )
+        return;
+
+
+      var metaElement = modifier.AddElement( header, "meta" );
+
+      metaElement.SetAttribute( "name", "generator" );
+      metaElement.SetAttribute( "content", "Jumony" );
     }
 
 
@@ -378,48 +467,36 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
     /// <summary>
-    /// 派生类实现此方法完成对 HTML 文档的处理工作
+    /// 派生类实现此方法完成对视图的处理工作
     /// </summary>
-    protected void ProcessMain()
-    {
-      if ( !_initialized )
-        throw new InvalidOperationException( "视图尚未初始化" );
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin InitializeScope" );
-      Scope = InitializeScope( VirtualPath, PartialMode );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
-      Process();
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End Process" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
-      ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
-      ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
-
-      if ( !MvcEnvironment.Configuration.DisableGeneratorTag && !PartialMode )
-        AddGeneratorMetaData();
-    }
-
-
-    protected abstract void Process();
+    protected abstract void Process( IHtmlContainer container );
 
 
 
     /// <summary>
-    /// 派生类实现此方法渲染 HTML 内容。
+    /// 渲染 HTML 内容。
     /// </summary>
     /// <returns></returns>
-    protected abstract string RenderContent();
+    protected virtual string RenderContent( IHtmlContainer scope, bool partialMode )
+    {
+
+
+      var document = scope as IHtmlDocument;
+      if ( document == null )
+      {
+        var writer = new StringWriter();
+
+        foreach ( var node in scope.Nodes() )
+          node.Render( writer, RenderAdapters.ToArray() );
+
+        return writer.ToString();
+      }
+
+      else
+        return document.Render( RenderAdapters.ToArray() );
+
+    }
 
 
 
@@ -498,10 +575,7 @@ namespace Ivony.Html.Web.Mvc
             actionElement.SetAttribute( attributeName, url );
 
         }
-
-
       }
-
     }
 
 

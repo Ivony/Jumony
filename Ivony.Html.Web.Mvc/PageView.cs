@@ -40,30 +40,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    private bool _initialized = false;
-
-    /// <summary>
-    /// 初始化视图，必须在处理视图之前先初始化视图
-    /// </summary>
-    /// <param name="virtualPath">HTML 视图的虚拟路径</param>
-    /// <param name="partialMode">是否启用部分视图渲染模式</param>
-    protected void Initialize( string virtualPath, bool partialMode )
-    {
-      if ( _initialized )
-        throw new InvalidOperationException( "视图已经初始化" );
-
-      if ( virtualPath == null )
-        throw new ArgumentNullException( "virtualPath" );
-
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
-
-      VirtualPath = virtualPath;
-      PartialMode = PartialMode;
-
-      _initialized = true;
-    }
-
 
     /// <summary>
     /// 获取或设置 HTML 视图的虚拟路径
@@ -96,92 +72,16 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 渲染输出内容
-    /// </summary>
-    /// <returns>渲染的 HTML</returns>
-    protected override string RenderContent()
-    {
-
-      if ( PartialMode )
-      {
-        var body = Document.Find( "body" ).SingleOrDefault();
-
-        if ( body != null )
-        {
-          var writer = new StringWriter();
-
-          foreach ( var node in body.Nodes() )
-            node.Render( writer, RenderAdapters.ToArray() );
-
-
-          return writer.ToString();
-        }
-      }
-
-
-      return Document.Render( RenderAdapters.ToArray() );
-    }
-
-
-
-
-
-    /// <summary>
-    /// 文档主处理流程
-    /// </summary>
-    protected override void ProcessMain()
-    {
-
-      if ( !_initialized )
-        throw new InvalidOperationException( "视图尚未初始化" );
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin LoadDocument" );
-      Document = LoadDocument( VirtualPath );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End LoadDocument" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessDocument" );
-      ProcessDocument();
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessDocument" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
-      ProcessActionUrls( Document );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
-
-
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
-      ResolveUri( Document, VirtualPath );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
-
-      if ( !MvcEnvironment.Configuration.DisableGeneratorTag && !PartialMode )
-        AddGeneratorMetaData();
-    }
-
-
-    /// <summary>
     /// 派生类重写此方法自定义文档处理逻辑
     /// </summary>
     protected abstract void ProcessDocument();
 
 
 
-    private void AddGeneratorMetaData()
+    protected override void Process( IHtmlContainer scope )
     {
-      var modifier = Document.DomModifier;
-      if ( modifier != null )
-      {
-        var header = Document.Find( "head" ).FirstOrDefault();
-
-        if ( header != null )
-        {
-
-          var metaElement = modifier.AddElement( header, "meta" );
-
-          metaElement.SetAttribute( "name", "generator" );
-          metaElement.SetAttribute( "content", "Jumony" );
-        }
-      }
+      Document = scope.Document;
+      ProcessDocument();
     }
   }
 

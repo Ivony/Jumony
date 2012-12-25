@@ -150,6 +150,58 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    private bool _initialized = false;
+
+
+    protected void Initialize( string virtualPath, bool partialMode )
+    {
+      VirtualPath = virtualPath;
+      _initialized = true;
+    }
+
+    /// <summary>
+    /// 初始化视图
+    /// </summary>
+    /// <returns>渲染和处理的范畴，一般情况下是 IHtmlDocument</returns>
+    protected abstract IHtmlContainer InitializeScope( string virtualPath, bool partialMode );
+
+
+
+
+
+    /// <summary>
+    /// 获取渲染和处理的范畴
+    /// </summary>
+    public IHtmlContainer Scope
+    {
+      get;
+      private set;
+
+    }
+
+    /// <summary>
+    /// 视图的虚拟路径
+    /// </summary>
+    public string VirtualPath
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 是否为部分视图
+    /// </summary>
+    public bool PartialMode
+    {
+      get;
+      private set;
+    }
+
+
+
+
     /// <summary>
     /// 渲染视图
     /// </summary>
@@ -330,7 +382,38 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 派生类实现此方法完成对 HTML 文档的处理工作
     /// </summary>
-    protected abstract void ProcessMain();
+    protected void ProcessMain()
+    {
+      if ( !_initialized )
+        throw new InvalidOperationException( "视图尚未初始化" );
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin InitializeScope" );
+      Scope = InitializeScope( VirtualPath, PartialMode );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
+      Process();
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End Process" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
+      ProcessActionUrls( Scope );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
+
+
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
+      ResolveUri( Scope, VirtualPath );
+      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
+
+      if ( !MvcEnvironment.Configuration.DisableGeneratorTag && !PartialMode )
+        AddGeneratorMetaData();
+    }
+
+
+    protected abstract void Process();
+
+
 
     /// <summary>
     /// 派生类实现此方法渲染 HTML 内容。

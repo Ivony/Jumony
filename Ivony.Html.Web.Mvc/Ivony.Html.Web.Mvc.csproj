@@ -70,7 +70,6 @@
   <ItemGroup>
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ConflictCheckList.cs" />
-    <Compile Include="EmbbedPartialView.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />

@@ -184,6 +184,16 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+    /// <summary>
+    /// 是否为部分视图
+    /// </summary>
+    public bool PartialMode
+    {
+      get;
+      private set;
+    }
+
+
 
     void IView.Render( ViewContext viewContext, TextWriter writer )
     {
@@ -199,15 +209,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
-    /// <summary>
-    /// 是否为部分视图
-    /// </summary>
-    public bool PartialMode
-    {
-      get;
-      private set;
-    }
 
 
 
@@ -258,7 +259,6 @@ namespace Ivony.Html.Web.Mvc
 
       RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
 
-      Url = new JumonyUrlHelper( this );
 
       if ( !_initialized )
         throw new InvalidOperationException( "视图尚未初始化" );
@@ -268,6 +268,8 @@ namespace Ivony.Html.Web.Mvc
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
 
 
+      Url = new JumonyUrlHelper( this );
+
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
       OnPreProcess();
       Process( Scope );
@@ -276,12 +278,12 @@ namespace Ivony.Html.Web.Mvc
 
 
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
-      ProcessActionUrls( Scope );
+      Url.ProcessActionUrls( Scope );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
 
 
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
-      ResolveUri( Scope, VirtualPath );
+      Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
 
       AddGeneratorMetaData();
@@ -335,6 +337,8 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
+
+    #region Events
 
     /// <summary>
     /// 初识化结束后，进行任何处理前引发此事件
@@ -434,6 +438,7 @@ namespace Ivony.Html.Web.Mvc
         PostRender( this, EventArgs.Empty );
     }
 
+    #endregion
 
 
     /// <summary>
@@ -521,221 +526,9 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    /// <summary>
-    /// 派生类调用此方法处理 Action 路由
-    /// </summary>
-    /// <param name="container"></param>
-    protected void ProcessActionUrls( IHtmlContainer container )
-    {
-      var elements = container.Find( "a[action] , img[action] , form[action][controller] , script[action]" );
 
-      foreach ( var actionElement in elements )
-      {
 
-        lock ( actionElement.SyncRoot )//锁住元素不被修改
-        {
 
-          var action = actionElement.Attribute( "action" ).Value() ?? RouteData.Values["action"].CastTo<string>();
-          var controller = actionElement.Attribute( "controller" ).Value() ?? RouteData.Values["controller"].CastTo<string>();
-
-
-          var routeValues = GetRouteValues( actionElement );
-
-
-          actionElement.RemoveAttribute( "action" );
-          actionElement.RemoveAttribute( "controller" );
-          actionElement.RemoveAttribute( "inherits" );
-
-
-          var url = Url.Action( action, controller, routeValues );
-
-
-          string attributeName;
-          switch ( actionElement.Name.ToLowerInvariant() )
-          {
-            case "a":
-              attributeName = "href";
-              break;
-            case "form":
-              attributeName = "action";
-              break;
-            case "img":
-            case "script":
-              attributeName = "src";
-              break;
-
-            default:
-              throw new Exception();//不可能出现的错误
-          }
-
-          if ( url == null )
-            actionElement.Attribute( attributeName ).Remove();
-
-          else
-            actionElement.SetAttribute( attributeName, url );
-
-        }
-      }
-    }
-
-
-
-
-    /// <summary>
-    /// 从元素标签中获取所有的路由值
-    /// </summary>
-    /// <param name="element">要获取分析路由值的元素</param>
-    /// <returns>获取的路由值</returns>
-    protected RouteValueDictionary GetRouteValues( IHtmlElement element )
-    {
-
-      var routeValues = new RouteValueDictionary();
-
-      var inherits = element.Attribute( "inherits" ).Value();
-
-      if ( inherits != null )
-      {
-
-        var inheritsKeys = GetInheritsKeys( inherits );
-
-        foreach ( var key in inheritsKeys )
-          routeValues.Add( key, RouteData.Values[key] );
-
-      }
-
-
-      foreach ( var attribute in element.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
-      {
-
-        var key = attribute.Name.Substring( 1 );
-        var value = attribute.Value() ?? RouteData.Values[key];
-
-        routeValues.Remove( key );
-
-        routeValues.Add( key, value );
-        attribute.Remove();
-      }
-
-      return routeValues;
-    }
-
-
-    private static readonly string wildcardCharacter = "*";
-
-    private IEnumerable<string> GetInheritsKeys( string inherits )
-    {
-
-
-      HashSet<string> result = new HashSet<string>( StringComparer.OrdinalIgnoreCase );
-
-      foreach ( var key in inherits.Split( ',' ) )
-      {
-        if ( key == wildcardCharacter )
-        {
-          foreach ( var k in RouteData.Values.Keys )
-            result.Add( k );
-
-          break;
-        }
-
-        if ( key.StartsWith( wildcardCharacter ) )//以星号开头
-        {
-          foreach ( var k in RouteData.Values.Keys )
-          {
-            if ( k.EndsWith( key.Substring( wildcardCharacter.Length ) ) )
-              result.Add( k );
-          }
-        }
-
-        if ( key.EndsWith( wildcardCharacter ) )//以星号结尾
-        {
-          foreach ( var k in RouteData.Values.Keys )
-          {
-            if ( k.StartsWith( key.Substring( 0, key.Length - wildcardCharacter.Length ) ) )
-              result.Add( k );
-          }
-        }
-
-
-        if ( RouteData.Values.ContainsKey( key ) )
-          result.Add( key );
-
-      }
-
-      result.Remove( "controller" );
-      result.Remove( "action" );
-
-      return result;
-    }
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// 转换容器中所有 URI 与当前请求匹配。
-    /// </summary>
-    /// <param name="container">确定要转换 URI 范围的容器</param>
-    protected void ResolveUri( IHtmlContainer container, string baseVirtualPath )
-    {
-      var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
-      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
-      {
-        ResolveUri( attribute, absoluteBase );
-      }
-    }
-
-    /// <summary>
-    /// 转换 URI 与当前请求匹配
-    /// </summary>
-    /// <param name="attribute"></param>
-    protected void ResolveUri( IHtmlAttribute attribute, string baseVirtualPath )
-    {
-      var uriValue = attribute.AttributeValue;
-
-      if ( string.IsNullOrWhiteSpace( uriValue ) )//对于空路径暂不作处理。
-        return;
-
-      Uri absoluteUri;
-      if ( Uri.TryCreate( uriValue, UriKind.Absolute, out absoluteUri ) )//对于绝对 URI，不采取任何动作。
-        return;
-
-      if ( VirtualPathUtility.IsAbsolute( uriValue ) )//对于绝对路径，也不采取任何动作。
-        return;
-
-      if ( uriValue.StartsWith( "#" ) )//若是本路径的片段链接，也不采取任何动作。
-        return;
-
-      if ( uriValue.StartsWith( "?" ) )//若是本路径的查询链接，也不采取任何动作。
-        return;
-
-      attribute.SetValue( ResolveVirtualPath( baseVirtualPath, uriValue ) );
-
-    }
-
-
-    /// <summary>
-    /// 转换虚拟路径
-    /// </summary>
-    /// <param name="virtualPath"></param>
-    /// <returns></returns>
-    protected string ResolveVirtualPath( string baseVirtualPath, string virtualPath )
-    {
-      if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
-        return VirtualPathUtility.ToAbsolute( virtualPath );
-
-      try
-      {
-        return VirtualPathUtility.Combine( baseVirtualPath, virtualPath );
-      }
-      catch
-      {
-        return virtualPath;
-      }
-    }
 
 
     /// <summary>
@@ -827,7 +620,7 @@ namespace Ivony.Html.Web.Mvc
         if ( action != null )//Action 部分视图
         {
           var controller = partialElement.Attribute( "controller" ).Value() ?? (string) RouteData.Values["controller"];
-          var routeValues = GetRouteValues( partialElement );
+          var routeValues = Url.GetRouteValues( partialElement );
 
           return helper.Action( actionName: action, controllerName: controller, routeValues: routeValues ).ToString();
         }

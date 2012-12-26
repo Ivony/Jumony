@@ -263,12 +263,11 @@ namespace Ivony.Html.Web.Mvc
       if ( !_initialized )
         throw new InvalidOperationException( "视图尚未初始化" );
 
+      Url = new JumonyUrlHelper( this );
+
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin InitializeScope" );
       Scope = InitializeScope( VirtualPath, PartialMode );
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
-
-
-      Url = new JumonyUrlHelper( this );
 
       HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
       OnPreProcess();

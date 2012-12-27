@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace SelectorTest
 {
   [TestClass]
-  public class UnitTest1
+  public class CssSelectorTest
   {
 
 
@@ -61,7 +61,7 @@ namespace SelectorTest
     [TestCategory( "选择器" )]
     public void SelectorTest1()
     {
-      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SelectorTest1.html" ) );
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "CssSelectorTest1.html" ) );
 
       SelectorAssert( document, "html", elements => elements.Count() == 1 );
       SelectorAssert( document, "body", elements => elements.Count() == 1 );

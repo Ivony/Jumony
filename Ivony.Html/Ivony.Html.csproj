@@ -121,6 +121,7 @@
     <Compile Include="Selectors\CssRelativeSelector.cs" />
     <Compile Include="Selectors\TraceEnumerable.cs" />
     <Compile Include="Styles\CssStyle.cs" />
+    <Compile Include="Styles\CssStyleParser.cs" />
     <Compile Include="SynchronizedCollection.cs" />
   </ItemGroup>
   <ItemGroup>

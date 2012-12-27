@@ -140,29 +140,12 @@ namespace Ivony.Html.Web.Mvc
       if ( !VirtualPathProvider.FileExists( handlerPath ) )
         return null;
 
-      var view = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewBase ) );
+      var view = (ViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) );
       if ( view == null )
         return null;
 
-      var pageView = view as ViewHandler;
-      if ( pageView != null )
-      {
-        pageView.Initialize( virtualPath, isPartial );
-        return pageView;
-      }
-
-
-
-      if ( !isPartial )
-        return null;
-
-      var partialView = view as PartialViewHandler;
-      if ( partialView == null )
-        return null;
-
-      
-      partialView.Initialize( virtualPath );
-      return partialView;
+      view.Initialize( virtualPath, isPartial );
+      return view;
     }
 
 

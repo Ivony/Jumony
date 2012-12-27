@@ -15,21 +15,10 @@ namespace Ivony.Html.Web.Mvc
 {
 
   /// <summary>
-  /// 页面视图
+  /// HTML 页面视图
   /// </summary>
   public abstract class PageView : ViewBase
   {
-
-    /// <summary>
-    /// 创建一个页面视图实例
-    /// </summary>
-    /// <param name="virtualPath">HTML 视图的虚拟路径</param>
-    /// <param name="isPartial">是否使用部分视图渲染模式</param>
-    public PageView( string virtualPath, bool isPartial = false )
-    {
-      Initialize( virtualPath, isPartial );
-    }
-
 
     /// <summary>
     /// 创建一个页面视图实例

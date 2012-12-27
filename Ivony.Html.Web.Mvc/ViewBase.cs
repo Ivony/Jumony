@@ -256,9 +256,9 @@ namespace Ivony.Html.Web.Mvc
 
       Url = new JumonyUrlHelper( this );
 
-      HttpContext.Trace.Write( "Jumony View Engine", "Begin InitializeScope" );
+      HttpContext.Trace.Write( "Jumony View", "Begin InitializeScope" );
       Scope = InitializeScope( VirtualPath, PartialMode );
-      HttpContext.Trace.Write( "Jumony View Engine", "End InitializeScope" );
+      HttpContext.Trace.Write( "Jumony View", "End InitializeScope" );
 
       var content = RenderCore( Scope );
 
@@ -275,29 +275,29 @@ namespace Ivony.Html.Web.Mvc
     /// <returns></returns>
     protected string RenderCore( IHtmlContainer scope )
     {
-      HttpContext.Trace.Write( "Jumony View Engine", "Begin Process" );
+      HttpContext.Trace.Write( "Jumony View", "Begin Process" );
       OnPreProcess();
       Process( Scope );
       OnPostProcess();
-      HttpContext.Trace.Write( "Jumony View Engine", "End Process" );
+      HttpContext.Trace.Write( "Jumony View", "End Process" );
 
 
-      HttpContext.Trace.Write( "Jumony View Engine", "Begin ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony View Engine", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "End ProcessActionRoutes" );
 
 
-      HttpContext.Trace.Write( "Jumony View Engine", "Begin ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony View Engine", "End ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View", "End ResolveUri" );
 
       AddGeneratorMetaData();
 
-      HttpContext.Trace.Write( "Jumony View Engine", "Begin Render" );
+      HttpContext.Trace.Write( "Jumony View", "Begin Render" );
       OnPreRender();
       var content = RenderContent( Scope, PartialMode );
       OnPostRender();
-      HttpContext.Trace.Write( "Jumony View Engine", "End Render" );
+      HttpContext.Trace.Write( "Jumony View", "End Render" );
 
       return content;
     }

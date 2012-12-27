@@ -100,6 +100,19 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    Dictionary<IHtmlElement, IDictionary<string,string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
+
+
+    /// <summary>
+    /// 为指定元素设置路由参数值，此设置会覆盖元素属性上同名路由参数的设置。
+    /// </summary>
+    /// <param name="element">要设置路由参数的元素</param>
+    /// <param name="routeValues">要设置的路由参数</param>
+    /// <exception cref="System.NotSupportedException">元素没有支持路由的属性</exception>
+    public void SetRouteValues( IHtmlElement element, IDictionary<string, string> routeValues )
+    {
+
+    }
 
 
     /// <summary>

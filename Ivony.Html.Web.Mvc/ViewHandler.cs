@@ -13,7 +13,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
-  public abstract class ViewHandler : PageView, IHttpHandler
+  public abstract class ViewHandler : ViewBase, IHttpHandler
   {
 
 
@@ -35,6 +35,32 @@ namespace Ivony.Html.Web.Mvc
     internal void Initialize( string virtualPath, bool isPartial )
     {
       base.Initialize( virtualPath, isPartial );
+    }
+
+    /// <summary>
+    /// 获取页面文档对象
+    /// </summary>
+    public IHtmlDocument Document
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 派生类重写此方法自定义文档处理逻辑
+    /// </summary>
+    protected abstract void ProcessDocument();
+
+
+    /// <summary>
+    /// 重写 Process 方法，调用 ProcessDocument 方法处理页面逻辑
+    /// </summary>
+    /// <param name="scope"></param>
+    protected sealed override void Process( IHtmlContainer scope )
+    {
+      Document = scope.Document;
+      ProcessDocument();
     }
   }
 

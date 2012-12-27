@@ -62,7 +62,7 @@ namespace Ivony.Html
 
 
     /// <summary>匹配 CSS 样式设置</summary>
-    public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @"(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";])+);", quoteTextPattern );
+    public static readonly string styleSettingPattern = string.Format( CultureInfo.InvariantCulture, @";?(?<name>[\w-]+)\s*:(?<value>({0}|[^'"";]+));", quoteTextPattern );
 
     /// <summary>匹配 CSS 样式规则</summary>
     public static readonly string styleRulePattern = string.Format( CultureInfo.InvariantCulture, @"(?<selector>{0})\s*{{(\s*(?<styleSetting>{1}))*\s*}}", cssSelectorPatternNoGroup, styleSettingPattern );

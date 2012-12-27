@@ -35,7 +35,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    #region ViewContext
 
     /// <summary>
     /// 获取视图上下文
@@ -69,7 +68,6 @@ namespace Ivony.Html.Web.Mvc
     {
       get { return ViewContext.HttpContext; }
     }
-
 
     /// <summary>
     /// 获取当前 HTTP 响应的追踪上下文对象
@@ -113,7 +111,6 @@ namespace Ivony.Html.Web.Mvc
       get { return HttpContext.Cache; }
     }
 
-
     /// <summary>
     /// 获取 Url 帮助器
     /// </summary>
@@ -122,8 +119,6 @@ namespace Ivony.Html.Web.Mvc
       get;
       private set;
     }
-
-
 
     /// <summary>
     /// 获取原始的（顶层的）视图上下文
@@ -134,7 +129,6 @@ namespace Ivony.Html.Web.Mvc
       private set;
     }
 
-    #endregion
 
 
 
@@ -163,16 +157,6 @@ namespace Ivony.Html.Web.Mvc
       PartialMode = partialMode;
 
       _initialized = true;
-    }
-
-    /// <summary>
-    /// 获取渲染和处理的范畴
-    /// </summary>
-    public IHtmlContainer Scope
-    {
-      get;
-      private set;
-
     }
 
     /// <summary>
@@ -205,12 +189,21 @@ namespace Ivony.Html.Web.Mvc
       }
       RawViewContext = viewContext;
 
-      Render( writer );
+      RenderCore( writer );
     }
 
 
 
 
+
+    /// <summary>
+    /// 获取渲染和处理的范畴
+    /// </summary>
+    public IHtmlContainer Scope
+    {
+      get;
+      private set;
+    }
 
     /// <summary>
     /// 初始化视图
@@ -250,7 +243,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="viewContext">视图上下文</param>
     /// <param name="writer">文本编写器</param>
-    public virtual void Render( TextWriter writer )
+    protected virtual void RenderCore( TextWriter writer )
     {
       //获取视图筛选器
       Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
@@ -265,35 +258,35 @@ namespace Ivony.Html.Web.Mvc
 
       Url = new JumonyUrlHelper( this );
 
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin InitializeScope" );
+      HttpContext.Trace.Write( "Jumony View Engine", "Begin InitializeScope" );
       Scope = InitializeScope( VirtualPath, PartialMode );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End InitializeScope" );
+      HttpContext.Trace.Write( "Jumony View Engine", "End InitializeScope" );
 
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin Process" );
+      HttpContext.Trace.Write( "Jumony View Engine", "Begin Process" );
       OnPreProcess();
       Process( Scope );
       OnPostProcess();
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End Process" );
+      HttpContext.Trace.Write( "Jumony View Engine", "End Process" );
 
 
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View Engine", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View Engine", "End ProcessActionRoutes" );
 
 
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "Begin ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View Engine", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony for MVC - PageView", "End ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View Engine", "End ResolveUri" );
 
       AddGeneratorMetaData();
 
-      HttpContext.Trace.Write( "Jumony for MVC", "Begin Render" );
+      HttpContext.Trace.Write( "Jumony View Engine", "Begin Render" );
       OnPreRender( writer );
       var content = RenderContent( Scope, PartialMode );
       OnPostRender( writer );
-      HttpContext.Trace.Write( "Jumony for MVC", "End Render" );
+      HttpContext.Trace.Write( "Jumony View Engine", "End Render" );
 
-      UpdateCache( content );
+      CachedResponse = UpdateCache( content );
 
       writer.Write( content );
     }
@@ -444,14 +437,14 @@ namespace Ivony.Html.Web.Mvc
     /// 更新缓存
     /// </summary>
     /// <param name="content">渲染结果</param>
-    protected virtual void UpdateCache( string content )
+    protected virtual ICachedResponse UpdateCache( string content )
     {
       var response = new RawResponse();
 
       response.Content = content;
       response.Headers.Add( "ContentType", "text/html" );
 
-      CachedResponse = response;
+      return response;
     }
 
     /// <summary>
@@ -460,7 +453,7 @@ namespace Ivony.Html.Web.Mvc
     protected ICachedResponse CachedResponse
     {
       get;
-      set;
+      private set;
     }
 
 
@@ -684,7 +677,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
     /// <summary>
     /// 视图引擎调用此方法清理视图所使用的所有非托管资源
     /// </summary>
@@ -762,9 +754,9 @@ namespace Ivony.Html.Web.Mvc
 
         var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-        _view.HttpContext.Trace.Write( "Jumony for MVC", string.Format( "Begin Render Partial: {0}", partialTag ) );
+        _view.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "Begin Render Partial: {0}", partialTag ) );
         _view.RenderPartial( element, writer );
-        _view.HttpContext.Trace.Write( "Jumony for MVC", string.Format( "End Render Partial: {0}", partialTag ) );
+        _view.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "End Render Partial: {0}", partialTag ) );
       }
     }
 

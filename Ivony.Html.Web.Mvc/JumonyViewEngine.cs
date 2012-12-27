@@ -114,10 +114,7 @@ namespace Ivony.Html.Web.Mvc
 
         if ( view == null )
         {
-          if ( isPartial )
-            view = new GenericPartialView( virtualPath );
-          else
-            view = new GenericView( virtualPath );
+            view = new GenericView( virtualPath, isPartial );
         }
 
 

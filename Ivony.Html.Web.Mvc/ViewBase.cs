@@ -271,7 +271,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 处理和渲染指定 HTML 范畴
     /// </summary>
-    /// <param name="scope"></param>
+    /// <param name="scope">要处理和渲染的范畴</param>
     /// <returns></returns>
     protected string RenderCore( IHtmlContainer scope )
     {

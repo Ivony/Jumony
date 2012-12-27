@@ -16,6 +16,12 @@ namespace Ivony.Html.Web.Mvc
 
   internal class GenericView : ViewBase
   {
+
+    public GenericView( string virtualPath, bool partialMode )
+    {
+      Initialize( virtualPath, partialMode );
+    }
+
     protected override void Process( IHtmlContainer container )
     {
     }

@@ -179,23 +179,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-    void IView.Render( ViewContext viewContext, TextWriter writer )
-    {
-      ViewContext = viewContext;
-
-      while ( viewContext.IsChildAction )
-      {
-        viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
-      }
-      RawViewContext = viewContext;
-
-      RenderCore( writer );
-    }
-
-
-
-
-
     /// <summary>
     /// 获取渲染和处理的范畴
     /// </summary>
@@ -238,8 +221,23 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    void IView.Render( ViewContext viewContext, TextWriter writer )
+    {
+      ViewContext = viewContext;
+
+      while ( viewContext.IsChildAction )
+      {
+        viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
+      }
+      RawViewContext = viewContext;
+
+      RenderCore( writer );
+    }
+
+
+
     /// <summary>
-    /// 渲染视图
+    /// 处理和渲染视图
     /// </summary>
     /// <param name="viewContext">视图上下文</param>
     /// <param name="writer">文本编写器</param>
@@ -262,6 +260,21 @@ namespace Ivony.Html.Web.Mvc
       Scope = InitializeScope( VirtualPath, PartialMode );
       HttpContext.Trace.Write( "Jumony View Engine", "End InitializeScope" );
 
+      var content = RenderCore( Scope );
+
+      CachedResponse = UpdateCache( content );
+
+      writer.Write( content );
+    }
+
+
+    /// <summary>
+    /// 处理和渲染指定 HTML 范畴
+    /// </summary>
+    /// <param name="scope"></param>
+    /// <returns></returns>
+    protected string RenderCore( IHtmlContainer scope )
+    {
       HttpContext.Trace.Write( "Jumony View Engine", "Begin Process" );
       OnPreProcess();
       Process( Scope );
@@ -281,15 +294,14 @@ namespace Ivony.Html.Web.Mvc
       AddGeneratorMetaData();
 
       HttpContext.Trace.Write( "Jumony View Engine", "Begin Render" );
-      OnPreRender( writer );
+      OnPreRender();
       var content = RenderContent( Scope, PartialMode );
-      OnPostRender( writer );
+      OnPostRender();
       HttpContext.Trace.Write( "Jumony View Engine", "End Render" );
 
-      CachedResponse = UpdateCache( content );
-
-      writer.Write( content );
+      return content;
     }
+
 
 
     private void AddGeneratorMetaData()
@@ -390,7 +402,7 @@ namespace Ivony.Html.Web.Mvc
     /// 引发 PreRender 事件
     /// </summary>
     /// <param name="writer">用于输出渲染结果的编写器</param>
-    protected virtual void OnPreRender( TextWriter writer )
+    protected virtual void OnPreRender()
     {
       foreach ( var filter in Filters )
       {
@@ -415,7 +427,7 @@ namespace Ivony.Html.Web.Mvc
     /// 引发 PostRender 事件
     /// </summary>
     /// <param name="writer">用于输出渲染结果的编写器</param>
-    protected virtual void OnPostRender( TextWriter writer )
+    protected virtual void OnPostRender()
     {
       foreach ( var filter in Filters.Reverse() )
       {

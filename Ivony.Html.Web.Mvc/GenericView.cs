@@ -14,7 +14,7 @@ using Ivony.Fluent;
 namespace Ivony.Html.Web.Mvc
 {
 
-  internal class GenericView : ViewBase
+  internal class GenericView : JumonyView
   {
 
     public GenericView( string virtualPath, bool partialMode )

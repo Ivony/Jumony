@@ -76,12 +76,12 @@ namespace Ivony.Html.Web.Mvc
       if ( viewResult == null )
         return;
 
-      var filters = viewResult.ViewData[ViewBase.ViewFiltersDataKey] as IList<IViewFilter>;
+      var filters = viewResult.ViewData[JumonyView.ViewFiltersDataKey] as IList<IViewFilter>;
       if ( filters != null )
         filters.Add( this );
 
       else
-        viewResult.ViewData[ViewBase.ViewFiltersDataKey] = new List<IViewFilter>( new[] { this } );
+        viewResult.ViewData[JumonyView.ViewFiltersDataKey] = new List<IViewFilter>( new[] { this } );
 
     }
 

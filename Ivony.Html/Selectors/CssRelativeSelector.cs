@@ -115,7 +115,6 @@ namespace Ivony.Html
   /// </summary>
   internal class CssSiblingsRelativeSelector : CssRelativeSelector
   {
-    private ICssSelector _leftSelector;
 
     public CssSiblingsRelativeSelector( ICssSelector leftSelector ) : base( leftSelector ) { }
 
@@ -123,7 +122,7 @@ namespace Ivony.Html
     {
       var previous = element.PreviousElement();
 
-      return _leftSelector.IsEligibleBuffered( previous ) || this.IsEligibleBuffered( previous );
+      return leftSelector.IsEligibleBuffered( previous ) || this.IsEligibleBuffered( previous );
     }
 
     public override char Combinator { get { return '~'; } }

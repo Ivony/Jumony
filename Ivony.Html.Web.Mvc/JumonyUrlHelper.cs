@@ -160,37 +160,37 @@ namespace Ivony.Html.Web.Mvc
     {
       HashSet<string> result = new HashSet<string>( StringComparer.OrdinalIgnoreCase );
 
-      foreach ( var key in inherits.Split( ',' ) )
+      foreach ( var keySetting in inherits.Split( ',' ) )
       {
-        if ( key == wildcardCharacter )
+        if ( keySetting == wildcardCharacter )
         {
-          foreach ( var k in RouteData.Values.Keys )
-            result.Add( k );
+          foreach ( var key in RouteData.Values.Keys )
+            result.Add( key );
 
           break;
         }
 
-        if ( key.StartsWith( wildcardCharacter ) )//以星号开头
+        if ( keySetting.StartsWith( wildcardCharacter ) )//以星号开头
         {
           foreach ( var k in RouteData.Values.Keys )
           {
-            if ( k.EndsWith( key.Substring( wildcardCharacter.Length ) ) )
+            if ( k.EndsWith( keySetting.Substring( wildcardCharacter.Length ) ) )
               result.Add( k );
           }
         }
 
-        if ( key.EndsWith( wildcardCharacter ) )//以星号结尾
+        if ( keySetting.EndsWith( wildcardCharacter ) )//以星号结尾
         {
           foreach ( var k in RouteData.Values.Keys )
           {
-            if ( k.StartsWith( key.Substring( 0, key.Length - wildcardCharacter.Length ) ) )
+            if ( k.StartsWith( keySetting.Substring( 0, keySetting.Length - wildcardCharacter.Length ) ) )
               result.Add( k );
           }
         }
 
 
-        if ( RouteData.Values.ContainsKey( key ) )
-          result.Add( key );
+        if ( RouteData.Values.ContainsKey( keySetting ) )
+          result.Add( keySetting );
 
       }
 
@@ -268,7 +268,6 @@ namespace Ivony.Html.Web.Mvc
         return virtualPath;
       }
     }
-
 
   }
 }

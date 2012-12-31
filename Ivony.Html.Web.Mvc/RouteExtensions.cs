@@ -118,7 +118,7 @@ namespace Ivony.Html.Web.Mvc
       {
         var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.IsBuiltIn );
         if ( routeTable == null )
-          routes.RegisterSimpleRouteTable( routeTable = new SimpleRouteTable() );
+          routes.RegisterSimpleRouteTable( routeTable = new SimpleRouteTable( "BuiltIn", new MvcRouteHandler(), true ) );
         return routeTable;
       }
     }

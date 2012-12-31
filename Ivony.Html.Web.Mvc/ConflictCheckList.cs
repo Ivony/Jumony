@@ -6,9 +6,9 @@ using System.Text;
 namespace Ivony.Html.Web.Mvc
 {
   /// <summary>
-  /// 冲突检查表
+  /// 简单路由表冲突检查表
   /// </summary>
-  public class ConflictCheckList
+  public sealed class ConflictCheckList
   {
 
     private Dictionary<string, SimpleRouteRule> virtualPathList = new Dictionary<string, SimpleRouteRule>( StringComparer.OrdinalIgnoreCase );

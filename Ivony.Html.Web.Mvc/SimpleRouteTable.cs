@@ -348,12 +348,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    internal SimpleRouteTable()
-      : this( "BuiltIn", new MvcRouteHandler(), true )
-    {
-      IsBuiltIn = true;
-    }
-
     internal bool IsBuiltIn { get; set; }
 
 

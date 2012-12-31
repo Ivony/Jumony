@@ -512,12 +512,20 @@ namespace Ivony.Data
 
 
 
+  /// <summary>
+  /// 为包装 IEnumerable&lt;T&gt; 提供辅助基类
+  /// </summary>
+  /// <typeparam name="T">序列的元素类型</typeparam>
   public abstract class EnumerableWrapper<T> : IEnumerable<T>
   {
 
     private IEnumerable<T> _enumerable;
 
 
+    /// <summary>
+    /// 创建 IEnumerable&lt;T&gt; 的包装
+    /// </summary>
+    /// <param name="enumerable"></param>
     protected EnumerableWrapper( IEnumerable<T> enumerable )
     {
       _enumerable = enumerable;

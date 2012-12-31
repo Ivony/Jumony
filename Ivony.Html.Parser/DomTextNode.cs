@@ -6,17 +6,28 @@ using System.Web;
 
 namespace Ivony.Html.Parser
 {
+  
+  /// <summary>
+  /// IHtmlTextNode 的一个实现
+  /// </summary>
   public class DomTextNode : DomNode, IHtmlTextNode
   {
 
     private readonly string raw;
 
+    /// <summary>
+    /// 创建 DomTextNode 对象
+    /// </summary>
+    /// <param name="rawHtml"></param>
     public DomTextNode( string rawHtml )
     {
       raw = rawHtml;
     }
 
 
+    /// <summary>
+    /// 获取一个名称，用于识别节电类型，此属性总是返回 "TextNode"
+    /// </summary>
     protected override string ObjectName
     {
       get { return "TextNode"; }
@@ -24,6 +35,9 @@ namespace Ivony.Html.Parser
 
 
 
+    /// <summary>
+    /// 获取文本节点所代表的 HTML 文本
+    /// </summary>
     public string HtmlText
     {
       get
@@ -43,6 +57,9 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 获取原始的 HTML 文本
+    /// </summary>
     public override string RawHtml
     {
       get
@@ -50,10 +67,5 @@ namespace Ivony.Html.Parser
         return raw;
       }
     }
-
   }
-
-
-
-
 }

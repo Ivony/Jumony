@@ -103,7 +103,9 @@ namespace Ivony.Html.Parser
       }
     }
 
-
+    /// <summary>
+    /// 指示节点是否已经被移除
+    /// </summary>
     protected bool removed = false;
 
     /// <summary>

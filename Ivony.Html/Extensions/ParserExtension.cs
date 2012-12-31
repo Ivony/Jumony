@@ -18,8 +18,10 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="uri">用于加载 HTML 文档的地址</param>
+    /// <param name="defaultEncoding">默认编码</param>
+    /// <param name="detectEncoding">是否应当检测编码，默认为true，如果检测到编码，则忽略默认编码设置，若设置为false，则强行使用默认编码。</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string uri, bool detectEncoding = true, Encoding defaultEncoding = null )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, string uri, Encoding defaultEncoding = null, bool detectEncoding = true )
     {
 
       if ( parser == null )
@@ -29,7 +31,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "uri" );
 
 
-      return LoadDocument( parser, new Uri( uri ), detectEncoding, defaultEncoding );
+      return LoadDocument( parser, new Uri( uri ), defaultEncoding, detectEncoding );
 
     }
 
@@ -38,8 +40,10 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="uri">用于加载 HTML 文档的地址</param>
+    /// <param name="defaultEncoding">默认编码</param>
+    /// <param name="detectEncoding">是否应当检测编码，默认为true，如果检测到编码，则忽略默认编码设置，若设置为false，则强行使用默认编码。</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri uri, bool detectEncoding = true, Encoding defaultEncoding = null )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, Uri uri, Encoding defaultEncoding = null, bool detectEncoding = true )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -59,7 +63,7 @@ namespace Ivony.Html
       var request = WebRequest.Create( uri );
       var response = request.GetResponse();
 
-      return LoadDocument( parser, response, detectEncoding, defaultEncoding );
+      return LoadDocument( parser, response, defaultEncoding, detectEncoding );
 
     }
 
@@ -68,8 +72,10 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="response">用于加载 HTML 文档的 Web 响应数据</param>
+    /// <param name="detectEncoding">是否应当检测编码，默认为true，如果检测到编码，则忽略默认编码设置，若设置为false，则强行使用默认编码。</param>
+    /// <param name="defaultEncoding">默认编码</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument LoadDocument( this IHtmlParser parser, WebResponse response, bool detectEncoding = true, Encoding defaultEncoding = null )
+    public static IHtmlDocument LoadDocument( this IHtmlParser parser, WebResponse response, Encoding defaultEncoding = null, bool detectEncoding = true )
     {
       if ( parser == null )
         throw new ArgumentNullException( "parser" );
@@ -98,7 +104,7 @@ namespace Ivony.Html
       }
 
 
-      return LoadDocument( parser, response.GetResponseStream(), defaultEncoding ?? Encoding.UTF8, response.ResponseUri );
+      return LoadDocument( parser, response.GetResponseStream(), defaultEncoding ?? Encoding.Default, response.ResponseUri );
     }
 
 
@@ -108,6 +114,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="parser">用于解析 HTML 文本的解析器</param>
     /// <param name="stream">用于加载 HTML 文档的流</param>
+    /// <param name="encoding">流的编码</param>
     /// <param name="uri">文档的 URL 地址</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( this IHtmlParser parser, Stream stream, Encoding encoding, Uri uri )

@@ -39,7 +39,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="provider">负责加载的提供程序</param>
     /// <param name="content">加载的内容</param>
-    /// <param name="contentUri">内容的URL地址</param>
+    /// <param name="virtualPath">内容的虚拟路径</param>
     public HtmlContentResult( IHtmlContentProvider provider, string content, string virtualPath ) : this( provider, content, virtualPath, null ) { }
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="provider">负责加载的提供程序</param>
     /// <param name="content">加载的内容</param>
-    /// <param name="contentUri">内容的URL地址</param>
+    /// <param name="virtualPath">内容的虚拟路径</param>
     /// <param name="cacheKey">缓存内容所使用的缓存键</param>
     public HtmlContentResult( IHtmlContentProvider provider, string content, string virtualPath, string cacheKey )
     {
@@ -124,7 +124,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 从静态文件中加载 HTML 内容
     /// </summary>
-    /// <param name="context">当前请求上下文</param>
     /// <param name="virtualPath">静态文件的虚拟路径</param>
     /// <returns>加载的内容结果</returns>
     public HtmlContentResult LoadContent( string virtualPath )
@@ -214,7 +213,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 读取 ASPX 页面所呈现的 HTML 内容
     /// </summary>
-    /// <param name="context">当前 HTTP 请求</param>
     /// <param name="virtualPath">ASPX 文件路径</param>
     /// <returns>ASPX 页面所呈现的 HTML 内容</returns>
     public HtmlContentResult LoadContent( string virtualPath )

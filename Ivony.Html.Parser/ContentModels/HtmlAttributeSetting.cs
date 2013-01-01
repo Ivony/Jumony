@@ -7,11 +7,17 @@ namespace Ivony.Html.Parser.ContentModels
 {
 
   /// <summary>
-  /// 描述一个HTML标签属性
+  /// 描述一个 HTML 标签属性
   /// </summary>
   public sealed class HtmlAttributeSetting : HtmlContentFragment
   {
 
+    /// <summary>
+    /// 创建 HtmlAttributeSetting 对象
+    /// </summary>
+    /// <param name="info">应当被认为是 HTML 标签属性的 HTML 片段</param>
+    /// <param name="name">属性名</param>
+    /// <param name="value">属性值</param>
     public HtmlAttributeSetting( HtmlContentFragment info, string name, string value )
       : base( info )
     {

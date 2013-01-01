@@ -15,10 +15,10 @@ namespace Ivony.Html.Parser.ContentModels
     /// <summary>
     /// 创建 HtmlCommentContent 实例
     /// </summary>
-    /// <param name="fragment"></param>
-    /// <param name="comment"></param>
-    public HtmlCommentContent( HtmlContentFragment fragment, string comment )
-      : base( fragment )
+    /// <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
+    /// <param name="comment">注释内容</param>
+    public HtmlCommentContent( HtmlContentFragment info, string comment )
+      : base( info )
     {
       Comment = comment;
     }

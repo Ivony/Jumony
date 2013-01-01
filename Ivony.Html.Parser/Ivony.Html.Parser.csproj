@@ -88,7 +88,6 @@
     <Compile Include="JumonyParser.cs" />
     <Compile Include="HtmlParserBase.cs" />
     <Compile Include="IDomContainer.cs" />
-    <Compile Include="JumonyLegacyParser.cs" />
     <Compile Include="JumonyReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

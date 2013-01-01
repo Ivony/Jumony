@@ -39,6 +39,13 @@ namespace Ivony.Html.Web
   public class HtmlParserResult
   {
 
+    /// <summary>
+    /// 创建 HtmlParserResult 对象
+    /// </summary>
+    /// <param name="parser">得到此解析结果的解析器</param>
+    /// <param name="domProvider">HTML DOM 提供程序</param>
+    /// <param name="provider">解析器提供程序</param>
+    /// <param name="virtualPath">文档的虚拟路径</param>
     public HtmlParserResult( IHtmlParser parser, IHtmlDomProvider domProvider, IHtmlParserProvider provider, string virtualPath )
     {
       Parser = parser;

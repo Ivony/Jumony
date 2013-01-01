@@ -15,7 +15,7 @@ namespace Ivony.Html.Parser.ContentModels
     /// <summary>
     /// 创建 HtmlDoctypeDeclaration 对象
     /// </summary>
-    /// <param name="info">HTML 内容片段</param>
+    /// <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
     public HtmlDoctypeDeclaration( HtmlContentFragment info ) : base( info ) { }
 
   }

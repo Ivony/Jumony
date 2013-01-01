@@ -228,6 +228,11 @@ namespace Ivony.Html.Web
       return ParseDocument( content );
     }
 
+    /// <summary>
+    /// 尝试获取指定地址 HTML 文档的文档对象提供程序
+    /// </summary>
+    /// <param name="virtualPath">HTML 文档虚拟路径</param>
+    /// <returns>若添加了 HtmlDocumentProvider 设置，并能将文档编译为 IHtmlDocumentProvider 对象，则返回，否则返回 null</returns>
     public static IHtmlDocumentProvider TryGetDocumentProvider( string virtualPath )
     {
       if ( failedHtmlProviders.Contains( virtualPath ) )
@@ -258,8 +263,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取用于分析 HTML 文档的分析器
     /// </summary>
-    /// <param name="virtualPath">内容的地址</param>
-    /// <param name="htmlContent">HTML 文档内容</param>
+    /// <param name="contentResult">文档内容加载结果</param>
     /// <returns>HTML 分析器相关信息</returns>
     public static HtmlParserResult GetParser( HtmlContentResult contentResult )
     {

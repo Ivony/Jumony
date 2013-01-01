@@ -65,8 +65,8 @@ namespace Ivony.Html.Parser
       /// <summary>
       /// 解析 HTML 文本到指定的文档碎片对象
       /// </summary>
-      /// <param name="html"></param>
-      /// <param name="fragment"></param>
+      /// <param name="html">要解析的 HTML 文本</param>
+      /// <param name="fragment">要处理的文本碎片</param>
       public virtual void ProcessFragment( string html, DomFragment fragment )
       {
 
@@ -120,6 +120,9 @@ namespace Ivony.Html.Parser
     }
 
 
+    /// <summary>
+    /// 获取文档碎片管理器
+    /// </summary>
     public DomFragmentManager Manager
     {
       get { return _manager; }

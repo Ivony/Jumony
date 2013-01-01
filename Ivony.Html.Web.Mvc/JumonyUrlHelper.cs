@@ -100,7 +100,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    Dictionary<IHtmlElement, IDictionary<string,string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
+    Dictionary<IHtmlElement, IDictionary<string, string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
 
 
     /// <summary>
@@ -211,8 +211,12 @@ namespace Ivony.Html.Web.Mvc
     /// 转换容器中所有 URI 与当前请求匹配。
     /// </summary>
     /// <param name="container">确定要转换 URI 范围的容器</param>
+    /// <param name="baseVirtualPath">容器的基路径</param>
     public void ResolveUri( IHtmlContainer container, string baseVirtualPath )
     {
+
+
+
       var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
@@ -223,9 +227,18 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 转换 URI 与当前请求匹配
     /// </summary>
-    /// <param name="attribute"></param>
+    /// <param name="attribute">HTML 属性</param>
+    /// <param name="baseVirtualPath">基路径</param>
     public void ResolveUri( IHtmlAttribute attribute, string baseVirtualPath )
     {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      if ( baseVirtualPath == null )
+        throw new ArgumentNullException( "baseVirtualPath" );
+
+
+
       var uriValue = attribute.AttributeValue;
 
       if ( string.IsNullOrWhiteSpace( uriValue ) )//对于空路径暂不作处理。
@@ -252,10 +265,19 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 转换虚拟路径
     /// </summary>
-    /// <param name="virtualPath"></param>
+    /// <param name="baseVirtualPath">基路径</param>
+    /// <param name="virtualPath">设置的虚拟路径（相对或绝对）</param>
     /// <returns></returns>
     public string ResolveVirtualPath( string baseVirtualPath, string virtualPath )
     {
+
+      if ( baseVirtualPath == null )
+        throw new ArgumentNullException( "baseVitualPath" );
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
       if ( VirtualPathUtility.IsAppRelative( virtualPath ) )
         return VirtualPathUtility.ToAbsolute( virtualPath );
 

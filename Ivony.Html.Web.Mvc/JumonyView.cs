@@ -249,12 +249,6 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
-
-
-
-
-
     /// <summary>
     /// 渲染部分视图（重写此方法接管 partial 处理逻辑）。
     /// </summary>
@@ -300,7 +294,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="partialElement">partial 元素</param>
     /// <param name="exception">渲染过程中产生的异常</param>
-    /// <returns></returns>
+    /// <returns>渲染结果</returns>
     [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]//捕获任何异常
     protected string RenderPartialAsync( IHtmlElement partialElement, out Exception exception )
     {

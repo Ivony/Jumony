@@ -14,7 +14,7 @@ namespace Ivony.Html
   /// CSS层叠选择器
   /// </summary>
   /// <remarks>
-  /// 层叠选择器的表达式分析过程是从左至右，而处理则是从右至左，采取从左至右的方式分析主要考虑到正则工作模式和效率问题。但由于处理方式是从右至左，所以左选择器（父级选择器）是可选的，而右选择器（子级选择器）是必须的。
+  /// 层叠选择器的表达式分析过程是从左至右，而处理则是从右至左，采取从左至右的方式分析主要考虑到正则工作模式和效率问题。但由于处理方式是从右至左。
   /// 简单的说只有一个元素选择器所构成的层叠选择器，其元素选择器是位于右边的。
   /// </remarks>
   public partial class CssCasecadingSelector : ICssSelector
@@ -78,9 +78,9 @@ namespace Ivony.Html
     /// <summary>
     /// 合并两个关系选择器
     /// </summary>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <returns></returns>
+    /// <param name="left">左关系选择器</param>
+    /// <param name="right">右关系选择器</param>
+    /// <returns>合并后的关系选择器</returns>
     public static CssRelativeSelector Combine( CssRelativeSelector left, CssRelativeSelector right )
     {
 
@@ -96,9 +96,15 @@ namespace Ivony.Html
 
 
       var casecadingSelector = selector as CssCasecadingSelector;
-      if ( casecadingSelector != null )
-        return CreateRelativeSelector( CssCasecadingSelector.Combine( left, casecadingSelector ), combinator );
-
+      if ( casecadingSelector != null )                                                                        //如果右边关系选择器的左选择器是一个层叠选择器
+        return CreateRelativeSelector( CssCasecadingSelector.Combine( left, casecadingSelector ), combinator );//将层叠选择器与左边的关系选择器合并，得到一个新的层叠选择器，再根据结合符创建新的关系选择器。
+      
+      /*
+       * 举例说明如下：
+       * 假设左关系选择器是 p>，右关系选择器是 div>ul>li+
+       * 则右关系选择器的左选择器(selector)是div>ul>li，结合符(combinator)是+。
+       * 将selector与左边的关系选择器合并，得到：p>div>ul>li，再与结合符结合得到新的关系选择器：p>div>ul>li+
+       */
 
       var elementSelector = selector as CssElementSelector;
       if ( elementSelector != null )

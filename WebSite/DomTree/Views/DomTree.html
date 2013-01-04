@@ -3,7 +3,6 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title></title>
-  <!--ahs-->
   <style>
     body
     {
@@ -122,18 +121,60 @@
     {
       padding-left: 15px;
     }
+
+    .control
+    {
+      padding: 10px 5px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
-  <div class="cssSelector">
+  <div class="control">
 
-    <form action="ShowDomTree" controller inherits="*">
-    <label>选择器:<view key="Selector" attr="value"></view><input name="selector" size="50" /></label>
-    <input type="submit" value="测试" />
+    <div style="height: 25px;">当前页面是：<a><view key="url"></view></a> &nbsp;&nbsp;&nbsp;<a action="Enter">&lt;&lt;返回更换页面</a></div>
+    <div style="float: right;">
+      <!-- JiaThis Button BEGIN -->
+      <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_tools_1"></a>
+        <a class="jiathis_button_tools_2"></a>
+        <a class="jiathis_button_tools_3"></a>
+        <a class="jiathis_button_tools_4"></a>
+
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+        <a class="jiathis_counter_style"></a>
+      </div>
+      <script type="text/javascript">
+        var jiathis_config = {
+          url: "http://dom.jumony.net/",
+          summary: "这个网站好神奇，真的可以分析任何HTML哦。",
+          title: "Jumony #Jumony#",
+          hideMore: false
+        }
+      </script>
+      <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+      <!-- JiaThis Button END -->
+    </div>
+
+    <form class="cssSelector" action="ShowDomTree" controller inherits="*">
+    <label>
+      <view key="Selector" attr="value"></view>
+      <input name="selector" size="28" id="selectorInput" onblur="showTips()" onfocus="this.style.backgroundImage='';" /></label>
+    <input type="submit" value="显示选择器结果" />
     </form>
 
-  </div>
+    <script>
+      function showTips()
+      {
+        var selectorInput = document.getElementById("selectorInput")
+        if (selectorInput.value == "")
+          selectorInput.style.backgroundImage = "url('/Views/background.png')";
+      }
+      showTips();
+    </script>
 
+  </div>
   <hr />
   <div class="body">
   </div>

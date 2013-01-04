@@ -15,6 +15,14 @@ public class DomTree : ViewHandler<IHtmlDocument>
   protected override void ProcessDocument()
   {
 
+
+    var titleElement =  ViewModel.Find( "title" ).FirstOrDefault();
+    if ( titleElement != null )
+      Document.Find( "title" ).First().InnerHtml( "Jumony Core Demo - " + titleElement.InnerHtml() );
+    else
+      Document.Find( "title" ).First().InnerHtml( "Jumony Core Demo - " + ViewData["url"] );
+
+
     selector = ViewData["Selector"] as ICssSelector;
 
     foreach ( var node in ViewModel.Nodes() )

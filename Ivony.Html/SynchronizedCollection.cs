@@ -91,8 +91,8 @@ namespace Ivony.Html
         return false;
       }
     }
-    
-    
+
+
     bool ICollection.IsSynchronized
     {
       get
@@ -100,8 +100,8 @@ namespace Ivony.Html
         return true;
       }
     }
-    
-    
+
+
     object ICollection.SyncRoot
     {
       get
@@ -149,7 +149,7 @@ namespace Ivony.Html
       SynchronizedCollection<T>.VerifyValueType( value );
       this.Remove( (T) value );
     }
-    
+
     object IList.this[int index]
     {
       get
@@ -162,8 +162,8 @@ namespace Ivony.Html
         this[index] = (T) value;
       }
     }
-    
-    
+
+
     bool IList.IsReadOnly
     {
       get
@@ -171,8 +171,8 @@ namespace Ivony.Html
         return false;
       }
     }
-    
-    
+
+
     bool IList.IsFixedSize
     {
       get
@@ -254,12 +254,7 @@ namespace Ivony.Html
 
     public IEnumerator<T> GetEnumerator()
     {
-      IEnumerator<T> result;
-      lock ( this.sync )
-      {
-        result = this.items.GetEnumerator();
-      }
-      return result;
+      return this.items.GetEnumerator();
     }
 
     public int IndexOf( T item )
@@ -284,8 +279,8 @@ namespace Ivony.Html
         this.InsertItem( index, item );
       }
     }
-    
-    
+
+
     private int InternalIndexOf( T item )
     {
       int count = this.items.Count;
@@ -298,8 +293,8 @@ namespace Ivony.Html
       }
       return -1;
     }
-    
-    
+
+
     public bool Remove( T item )
     {
       bool result;
@@ -318,8 +313,8 @@ namespace Ivony.Html
       }
       return result;
     }
-    
-    
+
+
     public void RemoveAt( int index )
     {
       lock ( this.sync )
@@ -331,7 +326,7 @@ namespace Ivony.Html
       }
     }
 
-    
+
     protected virtual void ClearItems()
     {
       this.items.Clear();
@@ -354,14 +349,14 @@ namespace Ivony.Html
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-      return ( (IEnumerable) this.items ).GetEnumerator();
+      return ((IEnumerable) this.items).GetEnumerator();
     }
 
     void ICollection.CopyTo( Array array, int index )
     {
       lock ( this.sync )
       {
-        ( (ICollection) this.items ).CopyTo( array, index );
+        ((ICollection) this.items).CopyTo( array, index );
       }
     }
 
@@ -377,7 +372,7 @@ namespace Ivony.Html
       }
       else
       {
-        if ( !( value is T ) )
+        if ( !(value is T) )
         {
           throw new ArgumentException( "元素类型与集合类型不匹配" );
         }

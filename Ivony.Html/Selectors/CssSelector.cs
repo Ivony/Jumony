@@ -19,36 +19,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 执行CSS选择器搜索
-    /// </summary>
-    /// <param name="scope">CSS选择器和搜索范畴</param>
-    /// <param name="expression">CSS选择器表达式</param>
-    /// <returns>搜索结果</returns>
-    public static IEnumerable<IHtmlElement> Search( IHtmlContainer scope, string expression )
-    {
-
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-      if ( scope == null )
-        throw new ArgumentNullException( "scope" );
-
-
-      try
-      {
-        var selector = CssParser.Create( scope, expression );
-        return selector.Filter( scope.Descendants() );
-      }
-      catch ( Exception e )
-      {
-        if ( e.Data != null && !e.Data.Contains( "selector expression" ) )
-          e.Data["selector expression"] = expression;
-
-        throw;
-      }
-    }
-
-    /// <summary>
     /// 使用选择器从元素集中筛选出符合选择器要求的元素
     /// </summary>
     /// <param name="selector">选择器</param>

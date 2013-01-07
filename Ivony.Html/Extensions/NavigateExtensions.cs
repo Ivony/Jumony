@@ -354,7 +354,22 @@ namespace Ivony.Html
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      return CssSelector.Search( container, expression );
+      if ( expression == null )
+        throw new ArgumentNullException( "expression" );
+
+
+      try
+      {
+        var selector = CssParser.Create( container, expression );
+        return selector.Filter( container.Descendants() );
+      }
+      catch ( Exception e )
+      {
+        if ( e.Data != null && !e.Data.Contains( "selector expression" ) )
+          e.Data["selector expression"] = expression;
+
+        throw;
+      }
     }
 
 

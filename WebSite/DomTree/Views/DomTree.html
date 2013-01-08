@@ -132,7 +132,7 @@
 <body>
   <div class="control">
 
-    <div style="height: 25px;">当前页面是：<a><view key="url"></view></a> &nbsp;&nbsp;&nbsp;<a action="Enter">&lt;&lt;返回更换页面</a></div>
+    <div style="height: 25px;">当前页面是：<a><view key="Title"></view></a> &nbsp;&nbsp;&nbsp;<a action="Enter">&lt;&lt;返回更换页面</a></div>
     <div style="float: right;">
       <!-- JiaThis Button BEGIN -->
       <div class="jiathis_style">
@@ -159,7 +159,7 @@
 
     <form class="cssSelector" action="ShowDomTree" controller inherits="*">
     <label>
-      <view key="Selector" attr="value"></view>
+      <view key="SelectorExpression" attr="value"></view>
       <input name="selector" size="28" id="selectorInput" onblur="showTips()" onfocus="this.style.backgroundImage='';" /></label>
     <input type="submit" value="显示选择器结果" />
     </form>
@@ -176,6 +176,7 @@
 
   </div>
   <hr />
+  <div class="message">共找到 <view key="SelectedElements" /> 个符合选择器 <view key="SelectorExpression"/> 的元素</div>
   <div class="body">
   </div>
   <div class="message">

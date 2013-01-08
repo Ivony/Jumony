@@ -90,6 +90,7 @@ public class DomTreeController : Controller
 
     try
     {
+      ViewData["SelectorExpression"] = selector;
       ViewData["Selector"] = CssParser.ParseSelector( selector );
     }
     catch ( FormatException e )

@@ -15,12 +15,15 @@ public class DomTree : ViewHandler<IHtmlDocument>
   protected override void ProcessDocument()
   {
 
-
+    string title;
     var titleElement =  ViewModel.Find( "title" ).FirstOrDefault();
     if ( titleElement != null )
-      Document.Find( "title" ).First().InnerHtml( "Jumony Core Demo - " + titleElement.InnerHtml() );
+      title = titleElement.InnerHtml();
     else
-      Document.Find( "title" ).First().InnerHtml( "Jumony Core Demo - " + ViewData["url"] );
+      title = "无标题文档";
+
+    Document.FindSingle( "title" ).InnerHtml( "Jumony Core Demo - " + title );
+    ViewData["title"] = title;
 
 
     selector = ViewData["Selector"] as ICssSelector;
@@ -29,7 +32,12 @@ public class DomTree : ViewHandler<IHtmlDocument>
     {
       ProcessNode( Document.FindSingle( ".body" ), node );
     }
+
+    ViewData["SelectedElements"] = selectedElements;
+
   }
+
+  private int selectedElements = 0;
 
 
   private void ProcessNode( IHtmlElement container, IHtmlNode node, bool encodeWhiteSpace = false )
@@ -62,7 +70,10 @@ public class DomTree : ViewHandler<IHtmlDocument>
       bool selfClosed = HtmlSpecification.selfCloseTags.Contains( element.Name );
 
       if ( selector != null && selector.IsEligible( element ) )
+      {
         container = container.AddElement( "div" ).SetAttribute( "class", "selected" );
+        selectedElements++;
+      }
 
       var beginTag = container.AddElement( "div" ).SetAttribute( "class", "beginTag tag" );
 

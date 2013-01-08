@@ -21,13 +21,7 @@ public class TodoController : Controller
 
     public override void OnPreRender( ViewContext context, ViewBase view )
     {
-      var pageView = view as PageView;
-
-      if ( pageView == null )
-        return;
-
-      pageView.Document.Find( "title" ).First().InnerHtml( "Test" );
-
+      view.Scope.Find( "title" ).First().InnerHtml( "Test" );
     }
 
   }

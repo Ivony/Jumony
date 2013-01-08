@@ -26,7 +26,49 @@ namespace Ivony.Html
     /// <returns>筛选结果</returns>
     public static IEnumerable<IHtmlElement> Filter( this ICssSelector selector, IEnumerable<IHtmlElement> source )
     {
-      return source.Where( e => selector.IsEligible( e ) );
+
+      if ( selector == null )
+        throw new ArgumentNullException( "selector" );
+
+      if ( source == null )
+        return null;
+
+      return source.Where( selector.IsEligible );
+    }
+
+
+    /// <summary>
+    /// 使用选择器从元素集中筛选出符合选择器要求的元素
+    /// </summary>
+    /// <param name="source">源元素集</param>
+    /// <param name="selector">选择器</param>
+    /// <returns>筛选结果</returns>
+    public static IEnumerable<IHtmlElement> FilterBy( this IEnumerable<IHtmlElement> source, ICssSelector selector )
+    {
+      if ( source == null )
+        return null;
+
+      if ( selector == null )
+        return source;
+
+      return source.Where( selector.IsEligible );
+    }
+
+    /// <summary>
+    /// 使用选择器从元素集中筛选出符合选择器要求的元素
+    /// </summary>
+    /// <param name="source">源元素集</param>
+    /// <param name="selector">选择器</param>
+    /// <returns>筛选结果</returns>
+    public static IEnumerable<IHtmlElement> FilterBy( this IEnumerable<IHtmlElement> source, string selector )
+    {
+      if ( source == null )
+        return null;
+
+      if ( string.IsNullOrEmpty( selector ) )
+        return source;
+
+      return FilterBy( source, CssParser.ParseSelector( selector ) );
     }
 
 

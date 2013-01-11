@@ -123,6 +123,9 @@ namespace Ivony.Fluent
     /// <returns>对象图</returns>
     public static IDictionary<string, string> ToPropertiesMap( this object obj )
     {
+      if ( obj == null )
+        return null;
+      
       var dictionary = new Dictionary<string, string>();
 
       foreach ( PropertyDescriptor property in TypeDescriptor.GetProperties( obj ) )

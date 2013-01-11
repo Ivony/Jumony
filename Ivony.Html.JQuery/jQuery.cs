@@ -10,6 +10,10 @@ using Ivony.Html.Styles;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// jQuery 对象，提供 jQuery API 实现
+  /// </summary>
   public class jQuery
   {
 
@@ -21,6 +25,12 @@ namespace Ivony.Html
     private readonly ICssSelector _selector;
     private readonly IEnumerable<IHtmlElement> _elements;
 
+
+    /// <summary>
+    /// 创建 jQuery 对象
+    /// </summary>
+    /// <param name="selector">选择器</param>
+    /// <param name="scope">范畴限定</param>
     public jQuery( string selector, IHtmlContainer scope )
     {
       _selectorExpression = selector;

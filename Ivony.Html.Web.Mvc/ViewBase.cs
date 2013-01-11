@@ -100,7 +100,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 获取 Url 帮助器
     /// </summary>
-    protected JumonyUrlHelper Url
+    public JumonyUrlHelper Url
     {
       get;
       private set;
@@ -303,6 +303,16 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     public virtual void Dispose()
     {
+    }
+
+
+    /// <summary>
+    /// 创建 IViewDataContainer 实例
+    /// </summary>
+    /// <returns>包含当前视图的 IViewDataContainer 实例</returns>
+    internal ViewDataContainer CreateViewDataContainer()
+    {
+      return new ViewDataContainer( this );
     }
 
 

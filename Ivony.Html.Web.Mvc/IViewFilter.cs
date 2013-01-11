@@ -18,25 +18,25 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    void OnPreProcess( ViewContext context, ViewBase view );
+    void OnPreProcess( ViewContext context, JumonyView view );
     /// <summary>
     /// 在处理 HTML 文档之后由 Jumony 框架调用
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    void OnPostProcess( ViewContext context, ViewBase view );
+    void OnPostProcess( ViewContext context, JumonyView view );
     /// <summary>
     /// 在渲染 HTML 文档之前由 Jumony 框架调用
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    void OnPreRender( ViewContext context, ViewBase view );
+    void OnPreRender( ViewContext context, JumonyView view );
     /// <summary>
     /// 在渲染 HTML 文档之后由 Jumony 框架调用
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    void OnPostRender( ViewContext context, ViewBase view );
+    void OnPostRender( ViewContext context, JumonyView view );
 
   }
 
@@ -98,7 +98,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    public virtual void OnPreProcess( ViewContext context, ViewBase view )
+    public virtual void OnPreProcess( ViewContext context, JumonyView view )
     {
     }
 
@@ -107,7 +107,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    public virtual void OnPostProcess( ViewContext context, ViewBase view )
+    public virtual void OnPostProcess( ViewContext context, JumonyView view )
     {
     }
 
@@ -116,7 +116,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    public virtual void OnPreRender( ViewContext context, ViewBase view )
+    public virtual void OnPreRender( ViewContext context, JumonyView view )
     {
     }
 
@@ -125,7 +125,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="view">正在负责处理的视图对象</param>
-    public virtual void OnPostRender( ViewContext context, ViewBase view )
+    public virtual void OnPostRender( ViewContext context, JumonyView view )
     {
     }
   }

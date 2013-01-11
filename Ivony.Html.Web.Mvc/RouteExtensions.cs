@@ -31,8 +31,6 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
-
     /// <summary>
     /// 映射一个路由规则
     /// </summary>
@@ -41,7 +39,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues, string[] queryKeys = null )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string urlPattern, object routeValues = null, string[] queryKeys = null )
     {
       return MapRoute( routeTable, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
     }
@@ -70,7 +68,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="routeValues">默认/静态路由值</param>
     /// <param name="queryKeys">可用于 QueryString 的路由值</param>
     /// <returns>返回简单路由表实例，便于链式注册</returns>
-    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, object routeValues, string[] queryKeys = null )
+    public static SimpleRouteTable MapRoute( this SimpleRouteTable routeTable, string name, string urlPattern, object routeValues = null, string[] queryKeys = null )
     {
       return MapRoute( routeTable, name, urlPattern, routeValues.ToPropertiesMap(), queryKeys );
     }
@@ -96,7 +94,7 @@ namespace Ivony.Html.Web.Mvc
         throw new ArgumentNullException( "urlPattern" );
 
       if ( routeValues == null )
-        throw new ArgumentNullException( "routeValues" );
+        routeValues = new Dictionary<string, string>();
 
 
       routeTable.AddRule( name, urlPattern, routeValues, queryKeys );

@@ -19,7 +19,7 @@ public class TodoController : Controller
   private class MyViewFilter : ViewFilterAttribute
   {
 
-    public override void OnPreRender( ViewContext context, ViewBase view )
+    public override void OnPreRender( ViewContext context, JumonyView view )
     {
       view.Scope.Find( "title" ).First().InnerHtml( "Test" );
     }

@@ -34,7 +34,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 创建 PartialRenderAdapter 实例
     /// </summary>
-    /// <param name="view"></param>
+    /// <param name="view">需要渲染部分视图的宿主视图</param>
     public PartialRenderAdapter( ViewBase view )
     {
       _view = view;

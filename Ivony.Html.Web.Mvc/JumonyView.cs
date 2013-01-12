@@ -23,6 +23,21 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 母板视图
+    /// </summary>
+    protected MasterView MasterView
+    {
+      get;
+      private set;
+    }
+
+
+    protected void Initialize( string virtualPath, MasterView master )
+    {
+      MasterView = master;
+    }
+
 
 
     /// <summary>
@@ -46,6 +61,18 @@ namespace Ivony.Html.Web.Mvc
       OnPostProcess();
       HttpContext.Trace.Write( "Jumony View", "End Process" );
 
+      if ( MasterView != null )
+      {
+        HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
+        MasterView.ProcessCore();
+
+        ProcessMaster( MasterView );
+        HttpContext.Trace.Write( "Jumony View", "End Process Master" );
+      }
+
+
+
+
 
       HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
@@ -60,14 +87,25 @@ namespace Ivony.Html.Web.Mvc
 
       HttpContext.Trace.Write( "Jumony View", "Begin Render" );
       OnPreRender();
-      var content = RenderContent( Scope, PartialMode );
+
+      string content;
+
+      if ( MasterView != null )
+      {
+        if ( PartialMode )
+          throw new InvalidOperationException( "只有页面视图可以使用母板" );
+
+        content = RenderContentWithMaster( (IHtmlDocument) Scope, MasterView );
+      }
+
+      else
+        content = RenderContent( Scope, PartialMode );
+
       OnPostRender();
       HttpContext.Trace.Write( "Jumony View", "End Render" );
 
       return content;
     }
-
-
 
     private void AddGeneratorMetaData()
     {
@@ -216,6 +254,12 @@ namespace Ivony.Html.Web.Mvc
     protected abstract void Process( IHtmlContainer container );
 
 
+    protected virtual void ProcessMaster( Mvc.MasterView MasterView )
+    {
+      throw new NotImplementedException();
+    }
+
+
 
     /// <summary>
     /// 渲染 HTML 内容。
@@ -240,6 +284,15 @@ namespace Ivony.Html.Web.Mvc
         return document.Render( RenderAdapters.ToArray() );
 
     }
+
+    protected virtual string RenderContentWithMaster( IHtmlDocument document, Mvc.MasterView MasterView )
+    {
+
+      MasterView.MergeHeader( document );
+
+      throw new NotImplementedException();
+    }
+
 
 
     /// <summary>

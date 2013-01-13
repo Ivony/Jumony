@@ -11,7 +11,6 @@ class CacheProvider : IMvcCachePolicyProvider
 {
   public CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
   {
-    return null;
     var cacheToken = CacheToken.FromVirtualPath( context.HttpContext ) + CacheToken.FromQueryString( context.HttpContext );
     return new MyCachePolicy( context.HttpContext, cacheToken, this );
   }

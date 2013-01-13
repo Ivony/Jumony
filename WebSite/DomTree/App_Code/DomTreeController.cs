@@ -132,6 +132,9 @@ public class DomTreeController : Controller
 
   protected override void OnException( ExceptionContext filterContext )
   {
+    if ( filterContext.IsChildAction )
+      return;// base.OnException( filterContext );
+
     filterContext.Result = View( "Error", filterContext.Exception );
     filterContext.ExceptionHandled = true;
   }

@@ -60,10 +60,23 @@ namespace Ivony.Html.Web.Mvc
         bindValue = DataBinder.Eval( dataObject, path, format ?? "{0}" );
 
 
-      var attribute = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
-      if ( attribute != null )
+      var attributeName = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
+      if ( attributeName != null )
       {
-        element.NextElement().SetAttribute( attribute, bindValue );
+        element.NextElement().SetAttribute( attributeName, bindValue );
+        return;
+      }
+
+      var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
+      if ( variableName != null )
+      {
+        var hostName = element.Attribute( "host" ).Value();
+        if ( hostName == null )
+          writer.WriteLine( "<script type=\"text/javascript\">window['{0}'] = '{1}';</script>", variableName, bindValue );
+
+        else
+          writer.WriteLine( "<script type=\"text/javascript\">window['{0}']['{1}'] = '{2}';</script>", hostName, variableName, bindValue );
+
         return;
       }
 

@@ -49,6 +49,7 @@ public class DomTreeController : Controller
   }
 
   [HttpPost]
+  [ActionName( "Default" )]
   public ActionResult ChooseDocument( string type, string url, HttpPostedFileBase file, string encoding )
   {
     string content;
@@ -132,6 +133,7 @@ public class DomTreeController : Controller
   protected override void OnException( ExceptionContext filterContext )
   {
     filterContext.Result = View( "Error", filterContext.Exception );
+    filterContext.ExceptionHandled = true;
   }
 
 }

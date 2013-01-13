@@ -14,20 +14,22 @@
         if (type == "Internet")
         {
           document.getElementById('url').style.display = 'inline';
-          document.getElementById('url').value = "http://";
+
+          if (document.getElementById('url').value == "")
+            document.getElementById('url').value = "http://";
+
           document.getElementById('file').style.display = 'none';
         }
         else
         {
           document.getElementById('url').style.display = 'none';
-          document.getElementById('url').value = "";
           document.getElementById('file').style.display = 'inline';
         }
       }
 
     </script>
 
-    <form method="post" action="ChooseDocument" controller enctype="multipart/form-data">
+    <form method="post" action="Default" controller enctype="multipart/form-data">
 
       <div>
         <select name="type" onchange="show( this.value );">
@@ -49,12 +51,12 @@
     <script>
       if (type != null)
       {
-        show(type);
+        document.getElementsByName("type")[0].value = type;
         document.getElementsByName("url")[0].value = url;
       }
 
-      else
-        show(document.getElementsByName("type")[0].value);
+      show(document.getElementsByName("type")[0].value);
+
 
     </script>
   </div>

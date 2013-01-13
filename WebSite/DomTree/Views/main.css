@@ -1,0 +1,10 @@
+﻿body {
+  font-family: 'Consolas', 'Courier New', '微软雅黑', '宋体';
+  font-size: 11pt;
+  min-width: 1000px;
+}
+
+.message {
+  padding: 5px 10px;
+  color: #AAAAAA;
+}

@@ -1,0 +1,59 @@
+﻿.selected {
+  background-color: #F8F8F8;
+}
+
+  .selected .selected {
+    background-color: #F0F0F0;
+  }
+
+    .selected .selected .selected {
+      background-color: #E8E8E8;
+    }
+
+      .selected .selected .selected .selected {
+        background-color: #E0E0E0;
+      }
+
+        .selected .selected .selected .selected .selected {
+          background-color: #D8D8D8;
+        }
+
+          .selected .selected .selected .selected .selected .selected {
+            background-color: #D0D0D0;
+          }
+
+            .selected .selected .selected .selected .selected .selected .selected {
+              background-color: #C8C8C8;
+            }
+
+              .selected .selected .selected .selected .selected .selected .selected .selected {
+                background-color: #C0C0C0;
+              }
+
+                .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                  background-color: #B8B8B8;
+                }
+
+                  .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                    background-color: #B0B0B0;
+                  }
+
+                    .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                      background-color: #A8A8A8;
+                    }
+
+                      .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                        background-color: #A0A0A0;
+                      }
+
+                        .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                          background-color: #989898;
+                        }
+
+                          .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                            background-color: #909090;
+                          }
+
+                            .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected .selected {
+                              background-color: #888888;
+                            }

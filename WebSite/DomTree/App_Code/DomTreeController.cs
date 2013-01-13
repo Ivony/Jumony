@@ -20,15 +20,36 @@ using System.Diagnostics;
 public class DomTreeController : Controller
 {
 
-  [ActionName( "Enter" )]
-  public ActionResult EnterUrl()
+  [Cacheable( typeof( CacheProvider ) )]
+  public ActionResult Default()
   {
-    return View( "EnterUrl" );
+    return View( "Layout" );
   }
 
-  [ActionName( "Enter" )]
+
+  [ChildActionOnly]
+  public ActionResult ChooseDocument( string hash )
+  {
+    var infoFilePath = HttpContext.Request.MapPath( "~/Content/" + hash + ".info" );
+    if ( System.IO.File.Exists( infoFilePath ) )
+    {
+      var info = System.IO.File.ReadAllText( infoFilePath );
+      if ( info == "LocalFile" )
+        ViewData["Type"] = "Local";
+
+      else
+      {
+        ViewData["Type"] = "Internet";
+        ViewData["Url"] = info;
+      }
+    }
+
+    return PartialView( "ChooseDocument" );
+
+  }
+
   [HttpPost]
-  public ActionResult EnterUrl( string type, string url, HttpPostedFileBase file, string encoding )
+  public ActionResult ChooseDocument( string type, string url, HttpPostedFileBase file, string encoding )
   {
     string content;
 
@@ -45,38 +66,42 @@ public class DomTreeController : Controller
     else
     {
 
-      try
-      {
-        var uri = new Uri( url );
-        if ( !uri.Scheme.EqualsIgnoreCase( "http" ) && !uri.Scheme.EqualsIgnoreCase( "https" ) )
-          throw new Exception( "只能访问 http 协议资源" );
+      var uri = new Uri( url );
+      if ( !uri.Scheme.EqualsIgnoreCase( "http" ) && !uri.Scheme.EqualsIgnoreCase( "https" ) )
+        throw new Exception( "只能访问 http 协议资源" );
 
-        var client = new WebClient();
-        client.Encoding = Encoding.GetEncoding( encoding );
-        content = client.DownloadString( url );
-      }
-      catch ( WebException e )
-      {
-        return View( "Error", e );
-      }
-      catch ( Exception e )
-      {
-        return View( "Error", e );
-      }
+      var client = new WebClient();
+      client.Encoding = Encoding.GetEncoding( encoding );
+      content = client.DownloadString( url );
     }
 
     var hash = FormsAuthentication.HashPasswordForStoringInConfigFile( content, "SHA1" );
 
-    System.IO.File.WriteAllText( HttpContext.Request.MapPath( "~/Content/" + hash + ".html" ), content, Encoding.UTF8 );
 
-    return RedirectToAction( "ShowDomTree", new { hash = hash } );
 
+    var documentPath = HttpContext.Request.MapPath( "~/Content/" + hash + ".html" );
+    var infoFilePath = HttpContext.Request.MapPath( "~/Content/" + hash + ".info" );
+
+    Directory.CreateDirectory( Path.GetDirectoryName( documentPath ) );
+
+
+    System.IO.File.WriteAllText( documentPath, content, Encoding.UTF8 );
+    if ( type == "Local" )
+      System.IO.File.WriteAllText( infoFilePath, "LocalFile" );
+    else
+      System.IO.File.WriteAllText( infoFilePath, url );
+
+
+    return RedirectToAction( "Default", new { hash = hash } );
   }
 
 
-  [Cacheable( typeof( CacheProvider ) )]
-  public ActionResult ShowDomTree( string hash, string selector )
+  [ChildActionOnly]
+  public ActionResult PageViewer( string hash, string selector )
   {
+    if ( hash == null )
+      return null;
+
 
     Stopwatch watch = new Stopwatch();
     watch.Start();
@@ -86,19 +111,27 @@ public class DomTreeController : Controller
     if ( document == null )
       return HttpNotFound();
 
+
+    ViewData["Document"] = document;
     ViewData["Timespan"] = watch.Elapsed;
 
-    try
+    ViewData["SelectorExpression"] = selector;
+
+    var _selector = CssParser.ParseSelector( selector );
+    if ( _selector != null )
     {
-      ViewData["SelectorExpression"] = selector;
-      ViewData["Selector"] = CssParser.ParseSelector( selector );
-    }
-    catch ( FormatException e )
-    {
-      return View( "Error", e );
+      ViewData["Selector"] = _selector;
+      ViewData["SelectedElements"] = _selector.Filter( document.Descendants() ).Count();
     }
 
-    return View( "DomTree", document );
+    return PartialView( "PageViewer" );
+  }
+
+
+
+  protected override void OnException( ExceptionContext filterContext )
+  {
+    filterContext.Result = View( "Error", filterContext.Exception );
   }
 
 }

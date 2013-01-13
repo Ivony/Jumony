@@ -1,0 +1,23 @@
+﻿.comment {
+  color: #006400;
+}
+
+.tag .brackets {
+  color: #0000FF;
+}
+
+.tag .elementName {
+  color: #800000;
+}
+
+.tag .attributeName {
+  color: #FF0000;
+}
+
+.selected > .tag {
+  font-weight: bold;
+}
+
+.childs {
+  padding-left: 15px;
+}

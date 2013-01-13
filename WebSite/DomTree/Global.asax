@@ -4,11 +4,13 @@
 
   void Application_Start( object sender, EventArgs e )
   {
-    MvcEnvironment.JumonyViewEngine.ViewLocationFormats = new[] { "~/Views/{0}.html" };
+    MvcEnvironment.JumonyViewEngine.ViewLocationFormats = MvcEnvironment.JumonyViewEngine.PartialViewLocationFormats = new[] { "~/Views/{0}.html" };
 
     MvcEnvironment.SimpleRouteTable
-      .MapAction( "~/", "DomTree", "Enter" )
-      .MapAction( "~/{hash}", "DomTree", "ShowDomTree" );
+      .MapAction( "~/", "DomTree", "Default" )
+      .MapAction( "~/{hash}", "DomTree", "Default" )
+      .MapRoute( "~/{controller}/{action}" );
+
 
   }
 

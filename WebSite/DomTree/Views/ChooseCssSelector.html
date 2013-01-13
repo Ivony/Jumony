@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>CSS 选择器测试</title>
+  <link rel="stylesheet" href="selected.css" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="domViewer.css" />
+</head>
+<body>
+  <form class="cssSelector" action="Default" controller inherits="*">
+    <div style="float: left;">
+      <label>
+        <view key="SelectorExpression" attr="value"></view>
+        <input name="selector" size="28" id="selectorInput" onblur="showTips()" onfocus="this.style.backgroundImage='';" /></label>
+      <input type="submit" value="显示选择器结果" />
+    </div>
+
+    <div class="message" style="float: right;">
+      共找到
+    <view key="SelectedElements" />
+      个符合选择器
+    <view key="SelectorExpression" />
+      的元素
+    </div>
+    <div style="clear: both;"></div>
+
+  </form>
+
+  <script>
+    function showTips()
+    {
+      var selectorInput = document.getElementById("selectorInput")
+      if (selectorInput.value == "")
+        selectorInput.style.backgroundImage = "url('/Views/background.png')";
+    }
+    showTips();
+  </script>
+
+
+</body>
+</html>

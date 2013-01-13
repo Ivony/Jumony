@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Jumony Core Demo</title>
+  <link rel="stylesheet" href="selected.css" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="domViewer.css" />
+</head>
+<body style="min-width: 1000px;">
+
+  <div>
+    <div style="float: left;">
+      <partial action="ChooseDocument" inherits="hash"></partial>
+    </div>
+    <div style="float: right;">
+      <partial view="Share"></partial>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+  <hr />
+  <partial action="PageViewer"></partial>
+</body>
+</html>

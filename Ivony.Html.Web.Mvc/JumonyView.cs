@@ -33,6 +33,11 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 初始化带母板视图的页面视图
+    /// </summary>
+    /// <param name="virtualPath">页面虚拟路径</param>
+    /// <param name="master">母板视图</param>
     protected void Initialize( string virtualPath, MasterView master )
     {
       MasterView = master;

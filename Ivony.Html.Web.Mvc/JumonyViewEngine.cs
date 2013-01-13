@@ -83,6 +83,23 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    protected virtual MasterView CreateMaster( ControllerContext controllerContext, string masterPath )
+    {
+      var handlerPath = masterPath + ".ashx";
+
+      if ( !VirtualPathProvider.FileExists( handlerPath ) )
+        return null;
+
+      var view = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
+      if ( view == null )
+        return null;
+
+      view.Initialize( masterPath );
+      return view;
+    }
+
+
+
     /// <summary>
     /// 创建视图对象
     /// </summary>

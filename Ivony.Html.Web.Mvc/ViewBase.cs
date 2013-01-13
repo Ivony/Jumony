@@ -235,7 +235,6 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 处理和渲染视图
     /// </summary>
-    /// <param name="viewContext">视图上下文</param>
     /// <param name="writer">文本编写器</param>
     protected virtual void RenderCore( TextWriter writer )
     {
@@ -319,7 +318,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 为视图提供 ViewData 的容器类型
     /// </summary>
-    protected class ViewDataContainer : IViewDataContainer
+    public class ViewDataContainer : IViewDataContainer
     {
 
       private ViewBase _view;

@@ -13,7 +13,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 用于渲染部分视图的 HTML 渲染代理
   /// </summary>
-  public sealed class PartialRenderAdapter : HtmlElementAdapter
+  public class PartialRenderAdapter : HtmlElementAdapter
   {
 
     private ViewBase _view;

@@ -96,6 +96,10 @@ namespace Ivony.Html.Web.Mvc
       return content;
     }
 
+
+    /// <summary>
+    /// 添加 &lt;meta name="generator" value="Jumony" /&gt; 标记
+    /// </summary>
     private void AddGeneratorMetaData()
     {
 
@@ -244,7 +248,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 处理母板视图
+    /// 派生类实现此方法处理母板视图
     /// </summary>
     /// <param name="MasterView">页面的母板视图</param>
     protected virtual void ProcessMaster( MasterView MasterView )

@@ -124,7 +124,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 初始化视图
+    /// 初始化视图设置
     /// </summary>
     /// <param name="virtualPath">虚拟路径</param>
     /// <param name="partialMode">是否为部分视图模式</param>
@@ -185,7 +185,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
     /// <summary>
-    /// 初始化视图
+    /// 初始化视图渲染范畴
     /// </summary>
     /// <returns>渲染和处理的范畴，一般情况下是 IHtmlDocument</returns>
     protected virtual IHtmlContainer InitializeScope( string virtualPath, bool partialMode )
@@ -219,6 +219,26 @@ namespace Ivony.Html.Web.Mvc
 
     void IView.Render( ViewContext viewContext, TextWriter writer )
     {
+      InitializeView( viewContext );
+
+      RenderCore( writer );
+    }
+
+    
+    /// <summary>
+    /// 初始化视图，准备处理和渲染
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    protected void InitializeView( ViewContext viewContext )
+    {
+
+      if ( !_initialized )
+        throw new InvalidOperationException( "视图尚未初始化" );
+
+
+      if ( ViewContext != null )
+        throw new InvalidOperationException( "不能重复初始化视图上下文" );
+
       ViewContext = viewContext;
 
       while ( viewContext.IsChildAction )
@@ -227,7 +247,13 @@ namespace Ivony.Html.Web.Mvc
       }
       RawViewContext = viewContext;
 
-      RenderCore( writer );
+
+      Url = new JumonyUrlHelper( this );
+
+      HttpContext.Trace.Write( "Jumony View", "Begin InitializeScope" );
+      Scope = InitializeScope( VirtualPath, PartialMode );
+      HttpContext.Trace.Write( "Jumony View", "End InitializeScope" );
+
     }
 
 
@@ -238,17 +264,6 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="writer">文本编写器</param>
     protected virtual void RenderCore( TextWriter writer )
     {
-
-
-      if ( !_initialized )
-        throw new InvalidOperationException( "视图尚未初始化" );
-
-      Url = new JumonyUrlHelper( this );
-
-      HttpContext.Trace.Write( "Jumony View", "Begin InitializeScope" );
-      Scope = InitializeScope( VirtualPath, PartialMode );
-      HttpContext.Trace.Write( "Jumony View", "End InitializeScope" );
-
       var content = RenderCore( Scope );
 
       CachedResponse = UpdateCache( content );
@@ -258,7 +273,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 实现渲染逻辑
+    /// 实现处理和渲染逻辑
     /// </summary>
     /// <param name="scope">要渲染的范畴</param>
     /// <returns>渲染后的字符串</returns>

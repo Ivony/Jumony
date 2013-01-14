@@ -11,20 +11,9 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 母板页视图
   /// </summary>
-  public class MasterView : ViewBase, IView
+  public abstract class MasterView : JumonyView, IView
   {
 
-
-    /// <summary>
-    /// 创建 MasterView 实例
-    /// </summary>
-    public MasterView()
-    {
-      RenderAdapters = new List<IHtmlAdapter>();
-    }
-
-
-    private bool _initialized = false;
 
     /// <summary>
     /// 初始化母板页视图
@@ -33,47 +22,16 @@ namespace Ivony.Html.Web.Mvc
     internal void Initialize( string virtualPath )
     {
       base.Initialize( virtualPath, false );
-
     }
 
 
-    /// <summary>
-    /// 自定义渲染过程的 HTML 转换器
-    /// </summary>
-    protected virtual IList<IHtmlAdapter> RenderAdapters
+    protected IHtmlDocument Document
     {
       get;
       private set;
     }
 
 
-    /// <summary>
-    /// 母板页文档
-    /// </summary>
-    public IHtmlDocument Document
-    {
-      get;
-      private set;
-    }
-
-    /// <summary>
-    /// 处理母板页
-    /// </summary>
-    internal void ProcessCore()
-    {
-      Document = (IHtmlDocument) InitializeScope( VirtualPath, false );
-      ProcessMaster();
-
-    }
-
-
-    /// <summary>
-    /// 处理母板页
-    /// </summary>
-    protected virtual void ProcessMaster()
-    {
-
-    }
 
 
     /// <summary>
@@ -85,27 +43,72 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
-    /// <summary>
-    /// 渲染页面
-    /// </summary>
-    /// <param name="writer"></param>
-    internal void RenderCore( TextWriter writer, IHtmlAdapter contentAdapter )
+    protected sealed override void Process( IHtmlContainer container )
     {
-      Document.Render( writer, new[] { contentAdapter } );
+      Document = (IHtmlDocument) container;
+      ProcessMaster();
     }
 
 
+    /// <summary>
+    /// 派生类重写此方法处理母板视图
+    /// </summary>
+    protected abstract void ProcessMaster();
 
-
-    protected override string RenderCore( IHtmlContainer scope )
+    /// <summary>
+    /// 重写此方法以屏蔽直接渲染母板视图
+    /// </summary>
+    protected sealed override string RenderCore( IHtmlContainer scope )
     {
       throw new NotSupportedException( "母板页不能当作视图生成" );
     }
 
+    /// <summary>
+    /// 重写此方法以屏蔽直接渲染母板视图
+    /// </summary>
     void IView.Render( ViewContext viewContext, System.IO.TextWriter writer )
     {
       throw new NotSupportedException( "母板页不能当作视图生成" );
     }
+
+
+    internal void ProcessCore( ViewContext viewContext )
+    {
+      InitializeView( viewContext );
+      Process( Scope );
+    }
+
+    internal string RenderCore( IHtmlAdapter contentAdapter )
+    {
+      RenderAdapters.Add( contentAdapter );
+      return RenderContent( RenderAdapters.ToArray() );
+    }
+
   }
+
+
+  /// <summary>
+  /// 用页面视图渲染结果替换母板视图中 content 标签的渲染代理
+  /// </summary>
+  public class ContentRenderAdapter : HtmlElementAdapter
+  {
+
+    private string _content;
+    /// <summary>
+    /// 创建 ContentRenderAdapter 实例
+    /// </summary>
+    /// <param name="content">页面视图渲染结果</param>
+    public ContentRenderAdapter( string content )
+    {
+      _content = content;
+    }
+
+    protected override string CssSelector { get { return "content"; } }
+
+    public override void Render( IHtmlElement element, TextWriter writer )
+    {
+      writer.Write( _content );
+    }
+  }
+
 }

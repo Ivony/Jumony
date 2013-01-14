@@ -69,14 +69,11 @@ namespace Ivony.Html.Web.Mvc
       if ( MasterView != null )
       {
         HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
-        MasterView.ProcessCore();
+        MasterView.ProcessCore( ViewContext );
 
         ProcessMaster( MasterView );
         HttpContext.Trace.Write( "Jumony View", "End Process Master" );
       }
-
-
-
 
 
       HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
@@ -92,20 +89,7 @@ namespace Ivony.Html.Web.Mvc
 
       HttpContext.Trace.Write( "Jumony View", "Begin Render" );
       OnPreRender();
-
-      string content;
-
-      if ( MasterView != null )
-      {
-        if ( PartialMode )
-          throw new InvalidOperationException( "只有页面视图可以使用母板" );
-
-        content = RenderContentWithMaster( (IHtmlDocument) Scope, MasterView );
-      }
-
-      else
-        content = RenderContent( Scope, PartialMode );
-
+      string content = RenderContent( RenderAdapters.ToArray() );
       OnPostRender();
       HttpContext.Trace.Write( "Jumony View", "End Render" );
 
@@ -259,18 +243,42 @@ namespace Ivony.Html.Web.Mvc
     protected abstract void Process( IHtmlContainer container );
 
 
-    protected virtual void ProcessMaster( Mvc.MasterView MasterView )
+    /// <summary>
+    /// 处理母板视图
+    /// </summary>
+    /// <param name="MasterView">页面的母板视图</param>
+    protected virtual void ProcessMaster( MasterView MasterView )
     {
-      throw new NotImplementedException();
     }
 
 
 
     /// <summary>
+    /// 渲染 HTML 内容
+    /// </summary>
+    /// <returns>渲染结果</returns>
+    protected virtual string RenderContent( IHtmlAdapter[] adapters )
+    {
+
+      string content;
+      if ( MasterView != null )
+      {
+        if ( PartialMode )
+          throw new InvalidOperationException( "只有页面视图可以使用母板" );
+
+        content = RenderContentWithMaster( (IHtmlDocument) Scope, MasterView, adapters );
+      }
+
+      else
+        content = RenderContent( Scope, PartialMode, adapters );
+      return content;
+    }
+
+    /// <summary>
     /// 渲染 HTML 内容。
     /// </summary>
     /// <returns></returns>
-    protected virtual string RenderContent( IHtmlContainer scope, bool partialMode )
+    protected virtual string RenderContent( IHtmlContainer scope, bool partialMode, IHtmlAdapter[] adapters )
     {
 
 
@@ -280,22 +288,27 @@ namespace Ivony.Html.Web.Mvc
         var writer = new StringWriter();
 
         foreach ( var node in scope.Nodes() )
-          node.Render( writer, RenderAdapters.ToArray() );
+          node.Render( writer, adapters );
 
         return writer.ToString();
       }
 
       else
-        return document.Render( RenderAdapters.ToArray() );
+        return document.Render( adapters );
 
     }
 
-    protected virtual string RenderContentWithMaster( IHtmlDocument document, Mvc.MasterView MasterView )
+    /// <summary>
+    /// 渲染母板和页面 HTML 内容
+    /// </summary>
+    /// <param name="document">要渲染的页面文档</param>
+    /// <param name="MasterView">母板视图</param>
+    /// <returns>渲染结果</returns>
+    protected virtual string RenderContentWithMaster( IHtmlDocument document, MasterView MasterView, IHtmlAdapter[] adapters )
     {
-
       MasterView.MergeHeader( document );
-
-      throw new NotImplementedException();
+      var content = RenderContent( document.Find( "body" ).First(), true, adapters );
+      return MasterView.RenderCore( new ContentRenderAdapter( content ) );
     }
 
 

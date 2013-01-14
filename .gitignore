@@ -111,3 +111,5 @@ UpgradeLog*.XML
 #custom
 Content
 StaticCaches
+*.mdf
+*.ldf

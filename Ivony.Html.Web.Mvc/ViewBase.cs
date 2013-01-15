@@ -245,10 +245,10 @@ namespace Ivony.Html.Web.Mvc
       {
         viewContext = viewContext.ParentActionViewContext;//循环上溯最原始的视图上下文
       }
+
       RawViewContext = viewContext;
-
-
       Url = new JumonyUrlHelper( this );
+
 
       HttpContext.Trace.Write( "Jumony View", "Begin InitializeScope" );
       Scope = InitializeScope( VirtualPath, PartialMode );

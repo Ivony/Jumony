@@ -85,6 +85,7 @@ namespace Ivony.Html.Web.Mvc
       Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "Jumony View", "End ResolveUri" );
 
+
       AddGeneratorMetaData();
 
       HttpContext.Trace.Write( "Jumony View", "Begin Render" );
@@ -103,7 +104,7 @@ namespace Ivony.Html.Web.Mvc
     private void AddGeneratorMetaData()
     {
 
-      if ( MvcEnvironment.Configuration.DisableGeneratorTag || PartialMode )
+      if ( MvcEnvironment.Configuration.DisableGeneratorTag || PartialMode || MasterView != null )
         return;
 
       var document = Scope as IHtmlDocument;

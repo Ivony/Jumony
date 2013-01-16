@@ -55,7 +55,6 @@ namespace Ivony.Html.Web.Mvc
 
       //获取视图筛选器
       Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      ViewData.Remove( ViewFiltersDataKey );
 
       RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
 
@@ -156,7 +155,7 @@ namespace Ivony.Html.Web.Mvc
       {
         try
         {
-          filter.OnPreRender( ViewContext, this );
+          filter.OnPreProcess( ViewContext, this );
         }
         catch { }
       }

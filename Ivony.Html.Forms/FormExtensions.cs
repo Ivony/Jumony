@@ -45,6 +45,7 @@ namespace Ivony.Html.Forms
       return group.Items.Where( item => item.Selected ).Select( item => item.Value );
     }
 
+
     /// <summary>
     /// 获取指定控件在客户端设置的值
     /// </summary>
@@ -91,7 +92,7 @@ namespace Ivony.Html.Forms
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
     /// <param name="control">表单</param>
-    public static HtmlForm ApplySubmittedValue( this HtmlForm form )
+    public static HtmlForm ApplySubmittedValues( this HtmlForm form )
     {
       if ( form == null )
         throw new ArgumentNullException( "form" );

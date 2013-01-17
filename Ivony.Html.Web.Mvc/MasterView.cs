@@ -40,20 +40,15 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="page">要合并的页面视图</param>
     internal protected virtual void MergeHeader( IHtmlDocument page )
     {
+
+      var headElement = page.Find( "head" ).FirstOrDefault();
+      if ( headElement == null )
+        return;
+
+      //UNDONE
     }
 
 
-    protected sealed override void Process( IHtmlContainer container )
-    {
-      Document = (IHtmlDocument) container;
-      ProcessMaster();
-    }
-
-
-    /// <summary>
-    /// 派生类重写此方法处理母板视图
-    /// </summary>
-    protected abstract void ProcessMaster();
 
     /// <summary>
     /// 重写此方法以屏蔽直接渲染母板视图
@@ -75,7 +70,23 @@ namespace Ivony.Html.Web.Mvc
     internal void ProcessCore( ViewContext viewContext )
     {
       InitializeView( viewContext );
+
+      Document = (IHtmlDocument) Scope;
+
+      HttpContext.Trace.Write( "Jumony MasterView", "Begin Process" );
       Process( Scope );
+      HttpContext.Trace.Write( "Jumony MasterView", "End Process" );
+
+
+      HttpContext.Trace.Write( "Jumony MasterView", "Begin ProcessActionRoutes" );
+      Url.ProcessActionUrls( Scope );
+      HttpContext.Trace.Write( "Jumony MasterView", "End ProcessActionRoutes" );
+
+
+      HttpContext.Trace.Write( "Jumony MasterView", "Begin ResolveUri" );
+      Url.ResolveUri( Scope, VirtualPath );
+      HttpContext.Trace.Write( "Jumony MasterView", "End ResolveUri" );
+
     }
 
     internal string RenderCore( IHtmlAdapter contentAdapter )

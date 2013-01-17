@@ -26,7 +26,7 @@ namespace Ivony.Html.Web.Mvc
     protected HtmlHelper MakeHelper()
     {
 
-      var helper = new HtmlHelper( _view.ViewContext, _view.CreateViewDataContainer() );
+      var helper = new HtmlHelper( ViewContext, _view.CreateViewDataContainer() );
       return helper;
     }
 
@@ -37,7 +37,20 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="view">需要渲染部分视图的宿主视图</param>
     public PartialRenderAdapter( ViewBase view )
     {
+      if ( view == null )
+        throw new ArgumentNullException( "view" );
+
       _view = view;
+    }
+
+    protected ViewContext ViewContext
+    {
+      get { return _view.ViewContext; }
+    }
+
+    protected JumonyUrlHelper Url
+    {
+      get { return _view.Url; }
     }
 
 
@@ -60,9 +73,9 @@ namespace Ivony.Html.Web.Mvc
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-      _view.ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "Begin Render Partial: {0}", partialTag ) );
+      ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "Begin Render Partial: {0}", partialTag ) );
       RenderPartial( element, writer );
-      _view.ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "End Render Partial: {0}", partialTag ) );
+      ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "End Render Partial: {0}", partialTag ) );
     }
 
 
@@ -154,7 +167,7 @@ namespace Ivony.Html.Web.Mvc
       {
         if ( action != null )//Action 部分视图
         {
-          var routeValues = _view.Url.GetRouteValues( partialElement );
+          var routeValues = Url.GetRouteValues( partialElement );
 
           return RenderAction( partialElement, action, partialElement.Attribute( "controller" ).Value(), routeValues );
         }

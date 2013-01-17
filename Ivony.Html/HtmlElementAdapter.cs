@@ -67,6 +67,6 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要渲染的元素</param>
     /// <param name="writer">渲染输出的 TextWriter</param>
-    public abstract void Render( IHtmlElement element, TextWriter writer );
+    protected abstract void Render( IHtmlElement element, TextWriter writer );
   }
 }

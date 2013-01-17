@@ -83,7 +83,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected virtual MasterView CreateMaster( ControllerContext controllerContext, string masterPath )
+    protected virtual JumonyMasterView CreateMaster( ControllerContext controllerContext, string masterPath )
     {
       var handlerPath = masterPath + ".ashx";
 

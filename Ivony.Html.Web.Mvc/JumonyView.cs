@@ -26,7 +26,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 母板视图
     /// </summary>
-    protected MasterView MasterView
+    protected IMasterView MasterView
     {
       get;
       private set;
@@ -47,41 +47,42 @@ namespace Ivony.Html.Web.Mvc
       RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
 
 
-      HttpContext.Trace.Write( "Jumony View", "Begin Process" );
+      HttpContext.Trace.Write( "JumonyView", "Begin Process" );
       OnPreProcess();
       Process( Scope );
       OnPostProcess();
-      HttpContext.Trace.Write( "Jumony View", "End Process" );
+      HttpContext.Trace.Write( "JumonyView", "End Process" );
 
-      if ( MasterView != null )
-      {
-        HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
-        MasterView.ProcessCore( ViewContext );
-
-        ProcessMaster( MasterView );
-        HttpContext.Trace.Write( "Jumony View", "End Process Master" );
-      }
-
-
-      HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
+      HttpContext.Trace.Write( "JumonyView", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony View", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "JumonyView", "End ProcessActionRoutes" );
 
 
-      HttpContext.Trace.Write( "Jumony View", "Begin ResolveUri" );
+      HttpContext.Trace.Write( "JumonyView", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony View", "End ResolveUri" );
-
+      HttpContext.Trace.Write( "JumonyView", "End ResolveUri" );
 
       AddGeneratorMetaData();
 
-      HttpContext.Trace.Write( "Jumony View", "Begin Render" );
-      OnPreRender();
-      string content = RenderContent( RenderAdapters.ToArray() );
-      OnPostRender();
-      HttpContext.Trace.Write( "Jumony View", "End Render" );
 
-      return content;
+      if ( MasterView != null )
+      {
+        HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+        MasterView.Initialize( ViewContext );
+        HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
+
+        return MasterView.Render( this );
+      }
+      else
+      {
+        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        OnPreRender();
+        string content = RenderContent( RenderAdapters.ToArray() );
+        OnPostRender();
+        HttpContext.Trace.Write( "JumonyView", "End Render" );
+
+        return content;
+      }
     }
 
     /// <summary>
@@ -248,7 +249,7 @@ namespace Ivony.Html.Web.Mvc
     /// 派生类实现此方法处理母板视图
     /// </summary>
     /// <param name="MasterView">页面的母板视图</param>
-    protected virtual void ProcessMaster( MasterView MasterView )
+    protected virtual void ProcessMaster( JumonyMasterView MasterView )
     {
     }
 
@@ -305,7 +306,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="document">要渲染的页面文档</param>
     /// <param name="MasterView">母板视图</param>
     /// <returns>渲染结果</returns>
-    protected virtual string RenderContentWithMaster( IHtmlDocument document, MasterView MasterView, IHtmlAdapter[] adapters )
+    protected virtual string RenderContentWithMaster( IHtmlDocument document, JumonyMasterView MasterView, IHtmlAdapter[] adapters )
     {
       MasterView.MergeHeader( document );
       var content = RenderContent( document.Find( "body" ).First(), true, adapters );

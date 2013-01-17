@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class MasterViewHandler : MasterView, IHttpHandler
+  public abstract class MasterViewHandler : JumonyMasterView, IHttpHandler
   {
     #region IHttpHandler 成员
 

@@ -11,7 +11,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 母板页视图
   /// </summary>
-  public abstract class MasterView : JumonyView, IView
+  public abstract class JumonyMasterView : JumonyView, IMasterView
   {
 
 
@@ -45,6 +45,7 @@ namespace Ivony.Html.Web.Mvc
       if ( headElement == null )
         return;
 
+
       //UNDONE
     }
 
@@ -67,9 +68,12 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    internal void ProcessCore( ViewContext viewContext )
+
+
+
+    public void Initialize( ViewContext context )
     {
-      InitializeView( viewContext );
+      InitializeView( context );
 
       Document = (IHtmlDocument) Scope;
 
@@ -86,39 +90,36 @@ namespace Ivony.Html.Web.Mvc
       HttpContext.Trace.Write( "Jumony MasterView", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "Jumony MasterView", "End ResolveUri" );
-
     }
 
-    internal string RenderCore( IHtmlAdapter contentAdapter )
+    public string Render( IMasterContentView view )
     {
-      RenderAdapters.Add( contentAdapter );
-      return RenderContent( RenderAdapters.ToArray() );
-    }
+      RenderAdapters.Add( new ContentRenderAdapter( view ) );
+      return Document.Render( RenderAdapters.ToArray() );
 
+    }
   }
 
 
   /// <summary>
   /// 用页面视图渲染结果替换母板视图中 content 标签的渲染代理
   /// </summary>
-  public class ContentRenderAdapter : HtmlElementAdapter
+  public class ContentRenderAdapter : IHtmlAdapter
   {
 
-    private string _content;
+    private IMasterContentView _contentView;
     /// <summary>
     /// 创建 ContentRenderAdapter 实例
     /// </summary>
     /// <param name="content">页面视图渲染结果</param>
-    public ContentRenderAdapter( string content )
+    public ContentRenderAdapter( IMasterContentView view )
     {
-      _content = content;
+      _contentView = view;
     }
 
-    protected override string CssSelector { get { return "content"; } }
-
-    public override void Render( IHtmlElement element, TextWriter writer )
+    public bool Render( IHtmlNode node, TextWriter writer )
     {
-      writer.Write( _content );
+      throw new NotImplementedException();
     }
   }
 
@@ -128,7 +129,7 @@ namespace Ivony.Html.Web.Mvc
   public interface IMasterContentView
   {
 
-    void InitializeMaster( MasterView master );
+    void InitializeMaster( IMasterView master );
 
   }
 }

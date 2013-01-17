@@ -76,10 +76,10 @@ namespace Ivony.Html.Web.Mvc
     /// <returns></returns>
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {
-      if ( !string.IsNullOrEmpty( masterPath ) )
-        throw new NotSupportedException();
+      var view = CreateViewCore( controllerContext, viewPath, false );
 
-      return CreateViewCore( controllerContext, viewPath, false );
+      if ( view is )
+
     }
 
 
@@ -107,7 +107,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="virtualPath"></param>
     /// <param name="isPartial"></param>
     /// <returns></returns>
-    protected IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
+    protected virtual IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
 
       lock ( _providersSync )
@@ -147,7 +147,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="virtualPath">视图虚拟路径</param>
     /// <param name="isPartial">是否应创建为部分视图</param>
     /// <returns>若有自定义视图处理程序，则返回。</returns>
-    protected ViewBase TryCreateViewHandler( string virtualPath, bool isPartial )
+    protected virtual ViewBase TryCreateViewHandler( string virtualPath, bool isPartial )
     {
       var handlerPath = virtualPath + ".ashx";
 

@@ -122,4 +122,13 @@ namespace Ivony.Html.Web.Mvc
     }
   }
 
+  /// <summary>
+  /// 可使用母板页的内容视图
+  /// </summary>
+  public interface IMasterContentView
+  {
+
+    void InitializeMaster( MasterView master );
+
+  }
 }

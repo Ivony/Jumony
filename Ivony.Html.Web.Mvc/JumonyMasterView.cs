@@ -102,28 +102,6 @@ namespace Ivony.Html.Web.Mvc
 
 
   /// <summary>
-  /// 用页面视图渲染结果替换母板视图中 content 标签的渲染代理
-  /// </summary>
-  public class ContentRenderAdapter : IHtmlAdapter
-  {
-
-    private IMasterContentView _contentView;
-    /// <summary>
-    /// 创建 ContentRenderAdapter 实例
-    /// </summary>
-    /// <param name="content">页面视图渲染结果</param>
-    public ContentRenderAdapter( IMasterContentView view )
-    {
-      _contentView = view;
-    }
-
-    public bool Render( IHtmlNode node, TextWriter writer )
-    {
-      throw new NotImplementedException();
-    }
-  }
-
-  /// <summary>
   /// 可使用母板页的内容视图
   /// </summary>
   public interface IMasterContentView
@@ -131,5 +109,6 @@ namespace Ivony.Html.Web.Mvc
 
     void InitializeMaster( IMasterView master );
 
+    IHtmlAdapter CreateContentAdapter( IMasterView master );
   }
 }

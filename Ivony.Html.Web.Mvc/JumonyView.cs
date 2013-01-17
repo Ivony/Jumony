@@ -11,7 +11,7 @@ using System.Web.Mvc.Html;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class JumonyView : ViewBase
+  public abstract class JumonyView : ViewBase, IMasterContentView
   {
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
@@ -261,19 +261,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>渲染结果</returns>
     protected virtual string RenderContent( IHtmlAdapter[] adapters )
     {
-
-      string content;
-      if ( MasterView != null )
-      {
-        if ( PartialMode )
-          throw new InvalidOperationException( "只有页面视图可以使用母板" );
-
-        content = RenderContentWithMaster( (IHtmlDocument) Scope, MasterView, adapters );
-      }
-
-      else
-        content = RenderContent( Scope, PartialMode, adapters );
-      return content;
+      return RenderContent( Scope, PartialMode, adapters );
     }
 
     /// <summary>
@@ -300,20 +288,6 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
-    /// <summary>
-    /// 渲染母板和页面 HTML 内容
-    /// </summary>
-    /// <param name="document">要渲染的页面文档</param>
-    /// <param name="MasterView">母板视图</param>
-    /// <returns>渲染结果</returns>
-    protected virtual string RenderContentWithMaster( IHtmlDocument document, JumonyMasterView MasterView, IHtmlAdapter[] adapters )
-    {
-      MasterView.MergeHeader( document );
-      var content = RenderContent( document.Find( "body" ).First(), true, adapters );
-      return MasterView.RenderCore( new ContentRenderAdapter( content ) );
-    }
-
-
 
     /// <summary>
     /// 自定义渲染过程的 HTML 转换器
@@ -325,7 +299,38 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    void IMasterContentView.InitializeMaster( IMasterView master )
+    {
+      if ( MasterView != null )
+        throw new InvalidOperationException( "不能重复初始化母板" );
 
+      MasterView = master;
+    }
+
+    IHtmlAdapter IMasterContentView.CreateContentAdapter( IMasterView master )
+    {
+      return new ContentAdapter( this );
+    }
+
+    protected class ContentAdapter : IHtmlAdapter
+    {
+
+      protected JumonyView View { get; private set; }
+
+      protected IHtmlDocument Document
+      {
+        get { return (IHtmlDocument) View.Scope; }
+      }
+
+      public ContentAdapter( JumonyView view )
+      {
+        if ( view.PartialMode )
+          throw new InvalidOperationException( "部分视图不能套用母板" );
+        
+        View = view;
+      }
+
+    }
 
 
   }

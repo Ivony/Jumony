@@ -54,7 +54,7 @@ namespace Ivony.Html.Web.Mvc
     {
 
       //获取视图筛选器
-      Filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      Filters = InitializeFilters();
 
       RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
 
@@ -94,6 +94,17 @@ namespace Ivony.Html.Web.Mvc
       HttpContext.Trace.Write( "Jumony View", "End Render" );
 
       return content;
+    }
+
+    /// <summary>
+    /// 初始化筛选器，获取当前视图所需要应用的筛选器。
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IEnumerable<IViewFilter> InitializeFilters()
+    {
+      var filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
+      return filters;
     }
 
 
@@ -197,7 +208,6 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 引发 PreRender 事件
     /// </summary>
-    /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPreRender()
     {
       foreach ( var filter in Filters )
@@ -222,7 +232,6 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 引发 PostRender 事件
     /// </summary>
-    /// <param name="writer">用于输出渲染结果的编写器</param>
     protected virtual void OnPostRender()
     {
       foreach ( var filter in Filters.Reverse() )

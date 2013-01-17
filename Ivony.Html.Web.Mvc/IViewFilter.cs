@@ -41,6 +41,9 @@ namespace Ivony.Html.Web.Mvc
   }
 
 
+  public interface IChildViewFilter : IViewFilter { }
+
+
 
 
 

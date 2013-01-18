@@ -26,6 +26,7 @@
 
 
     MvcEnvironment.JumonyViewEngine.ViewLocationFormats = new string[] { "~/Views/{0}.html" };
+    MvcEnvironment.JumonyViewEngine.MasterLocationFormats = new string[] { "~/Views/{0}.html" };
     MvcEnvironment.JumonyViewEngine.PartialViewLocationFormats = new string[] { "~/Views/{0}.html" };
 
     HtmlProviders.CachePolicyProviders.Add( new MyCachePolicyProvider() );

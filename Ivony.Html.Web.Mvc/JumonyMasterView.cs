@@ -76,8 +76,10 @@ namespace Ivony.Html.Web.Mvc
 
     string IMasterView.Render( IMasterContentView view )
     {
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin Render" );
       RenderAdapters.Add( view.CreateContentAdapter( this ) );
       return Document.Render( RenderAdapters.ToArray() );
+      HttpContext.Trace.Write( "JumonyMasterView", "End Render" );
 
     }
   }

@@ -250,9 +250,9 @@ namespace Ivony.Html.Web.Mvc
       Url = new JumonyUrlHelper( this );
 
 
-      HttpContext.Trace.Write( "Jumony View", "Begin InitializeScope" );
+      HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );
       Scope = InitializeScope( VirtualPath, PartialMode );
-      HttpContext.Trace.Write( "Jumony View", "End InitializeScope" );
+      HttpContext.Trace.Write( "ViewBase", "End InitializeScope" );
 
     }
 

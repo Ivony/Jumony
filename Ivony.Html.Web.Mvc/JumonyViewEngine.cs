@@ -99,11 +99,11 @@ namespace Ivony.Html.Web.Mvc
       var handlerPath = masterPath + ".ashx";
 
       if ( !VirtualPathProvider.FileExists( handlerPath ) )
-        return null;
+        return new GenericMasterView( masterPath );
 
       var view = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
       if ( view == null )
-        return null;
+        return new GenericMasterView( masterPath );
 
       view.Initialize( masterPath );
       return view;

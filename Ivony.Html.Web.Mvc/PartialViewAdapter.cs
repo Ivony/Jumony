@@ -68,7 +68,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="element">partial 标签</param>
     /// <param name="writer">用于渲染的文本编写器</param>
-    public override void Render( IHtmlElement element, TextWriter writer )
+    protected override void Render( IHtmlElement element, TextWriter writer )
     {
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );

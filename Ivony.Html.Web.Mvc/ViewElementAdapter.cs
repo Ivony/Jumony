@@ -32,7 +32,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="element">view 标签元素</param>
     /// <param name="writer">HTML 编写器</param>
-    public override void Render( IHtmlElement element, TextWriter writer )
+    protected override void Render( IHtmlElement element, TextWriter writer )
     {
 
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();

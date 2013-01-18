@@ -11,7 +11,7 @@ namespace Ivony.Html.Web.Mvc
 
     void Initialize( ViewContext context );
 
-    string Render( ViewBase view );
+    string Render( IMasterContentView view );
 
   }
 }

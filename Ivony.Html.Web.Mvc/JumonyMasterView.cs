@@ -11,7 +11,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 母板页视图
   /// </summary>
-  public abstract class JumonyMasterView : JumonyView, IMasterView
+  public abstract class JumonyMasterView : JumonyView, IMasterView, IView
   {
 
 
@@ -24,31 +24,14 @@ namespace Ivony.Html.Web.Mvc
       base.Initialize( virtualPath, false );
     }
 
-
+    /// <summary>
+    /// 母板页文档
+    /// </summary>
     protected IHtmlDocument Document
     {
       get;
       private set;
     }
-
-
-
-
-    /// <summary>
-    /// 合并页面头数据
-    /// </summary>
-    /// <param name="page">要合并的页面视图</param>
-    internal protected virtual void MergeHeader( IHtmlDocument page )
-    {
-
-      var headElement = page.Find( "head" ).FirstOrDefault();
-      if ( headElement == null )
-        return;
-
-
-      //UNDONE
-    }
-
 
 
     /// <summary>
@@ -69,32 +52,31 @@ namespace Ivony.Html.Web.Mvc
 
 
 
-
-
-    public void Initialize( ViewContext context )
+    void IMasterView.Initialize( ViewContext context )
     {
       InitializeView( context );
 
       Document = (IHtmlDocument) Scope;
 
-      HttpContext.Trace.Write( "Jumony MasterView", "Begin Process" );
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin Process" );
       Process( Scope );
-      HttpContext.Trace.Write( "Jumony MasterView", "End Process" );
+      HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 
-      HttpContext.Trace.Write( "Jumony MasterView", "Begin ProcessActionRoutes" );
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony MasterView", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "JumonyMasterView", "End ProcessActionRoutes" );
 
 
-      HttpContext.Trace.Write( "Jumony MasterView", "Begin ResolveUri" );
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony MasterView", "End ResolveUri" );
+      HttpContext.Trace.Write( "JumonyMasterView", "End ResolveUri" );
     }
 
-    public string Render( IMasterContentView view )
+
+    string IMasterView.Render( IMasterContentView view )
     {
-      RenderAdapters.Add( new ContentRenderAdapter( view ) );
+      RenderAdapters.Add( view.CreateContentAdapter( this ) );
       return Document.Render( RenderAdapters.ToArray() );
 
     }

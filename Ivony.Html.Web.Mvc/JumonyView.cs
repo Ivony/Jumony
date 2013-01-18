@@ -326,10 +326,24 @@ namespace Ivony.Html.Web.Mvc
       {
         if ( view.PartialMode )
           throw new InvalidOperationException( "部分视图不能套用母板" );
-        
+
         View = view;
       }
 
+      bool IHtmlAdapter.Render( IHtmlNode node, TextWriter writer )
+      {
+        var element = node as IHtmlElement;
+        if ( element != null && element.Name == "content" )
+        {
+          foreach ( var contentNode in Document.FindSingle( "body" ).Nodes() )
+            contentNode.Render( writer );
+
+          return true;
+        }
+        
+        else
+          return false;
+      }
     }
 
 

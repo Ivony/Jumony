@@ -78,7 +78,18 @@ namespace Ivony.Html.Web.Mvc
     {
       var view = CreateViewCore( controllerContext, viewPath, false );
 
-      if ( view is )
+      if ( masterPath != null )
+      {
+
+        var contentView = view as IMasterContentView;
+
+        if ( contentView == null )
+          throw new InvalidOperationException( "视图不支持母板" );
+
+        contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
+      }
+
+      return view;
 
     }
 
@@ -131,7 +142,7 @@ namespace Ivony.Html.Web.Mvc
 
         if ( view == null )
         {
-            view = new GenericView( virtualPath, isPartial );
+          view = new GenericView( virtualPath, isPartial );
         }
 
 

@@ -11,7 +11,7 @@ using System.Web.Mvc.Html;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public abstract class JumonyView : ViewBase, IMasterContentView
+  public abstract class JumonyView : ViewBase, IContentView
   {
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
@@ -299,7 +299,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    void IMasterContentView.InitializeMaster( IMasterView master )
+    void IContentView.InitializeMaster( IMasterView master )
     {
       if ( MasterView != null )
         throw new InvalidOperationException( "不能重复初始化母板" );
@@ -307,7 +307,7 @@ namespace Ivony.Html.Web.Mvc
       MasterView = master;
     }
 
-    IHtmlAdapter IMasterContentView.CreateContentAdapter( IMasterView master )
+    IHtmlAdapter IContentView.CreateContentAdapter( IMasterView master )
     {
       return new ContentAdapter( this );
     }

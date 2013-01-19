@@ -157,7 +157,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
-    /// <returns></returns>
+    /// <returns>返回元素便于链式调用</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, string replacement )
     {
       if ( element == null )
@@ -180,7 +180,7 @@ namespace Ivony.Html
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">替换字符串</param>
-    /// <returns></returns>
+    /// <returns>返回元素便于链式调用</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Regex pattern, MatchEvaluator evaluator )
     {
       if ( element == null )
@@ -202,7 +202,7 @@ namespace Ivony.Html
     /// <param name="element">要设置属性的元素</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
-    /// <returns></returns>
+    /// <returns>返回元素便于链式调用</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, Func<string, string> evaluator )
     {
       if ( element == null )
@@ -232,10 +232,10 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性值的元素集</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="value">属性值</param>
-    /// <returns>源元素集</returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string value )
     {
       if ( elements == null )
@@ -253,11 +253,11 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性值的元素</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="oldValue">要被替换的字符串</param>
     /// <param name="newValue">用于替换的字符串</param>
-    /// <returns>设置了属性的元素</returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, string oldValue, string newValue )
     {
       if ( elements == null )
@@ -279,11 +279,11 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性的元素</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="replacement">替换字符串</param>
-    /// <returns></returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Regex pattern, string replacement )
     {
       if ( elements == null )
@@ -304,11 +304,11 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性的元素</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="pattern">用于在属性值中查找匹配字符串的正则表达式对象</param>
     /// <param name="evaluator">替换字符串</param>
-    /// <returns></returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Regex pattern, MatchEvaluator evaluator )
     {
       if ( elements == null )
@@ -329,10 +329,10 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性的元素集</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
-    /// <returns></returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Func<string, string> evaluator )
     {
       if ( elements == null )
@@ -355,10 +355,10 @@ namespace Ivony.Html
     /// <summary>
     /// 设置属性值
     /// </summary>
-    /// <param name="elements">要设置属性的元素集</param>
+    /// <param name="elements">要设置属性值的元素列表</param>
     /// <param name="attributeName">属性名</param>
     /// <param name="evaluator">用于替换属性值的计算函数</param>
-    /// <returns></returns>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> SetAttribute( this IEnumerable<IHtmlElement> elements, string attributeName, Func<int, string, string> evaluator )
     {
       if ( elements == null )
@@ -383,6 +383,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要移除属性的元素</param>
     /// <param name="attributeName">要移除的属性名称</param>
+    /// <returns>返回元素以便于链式调用</returns>
     public static T RemoveAttribute<T>( this T element, string attributeName ) where T : IHtmlElement
     {
       if ( element == null )
@@ -406,8 +407,9 @@ namespace Ivony.Html
     /// <summary>
     /// 移除指定的属性
     /// </summary>
-    /// <param name="elements">要移除属性的元素</param>
+    /// <param name="elements">要移除属性的元素列表</param>
     /// <param name="attributeName">要移除的属性名称</param>
+    /// <returns>返回元素列表便于链式调用</returns>
     public static IEnumerable<IHtmlElement> RemoveAttribute( this IEnumerable<IHtmlElement> elements, string attributeName )
     {
       if ( elements == null )

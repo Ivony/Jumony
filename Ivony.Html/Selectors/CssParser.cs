@@ -8,6 +8,9 @@ using System.Globalization;
 
 namespace Ivony.Html
 {
+  /// <summary>
+  /// CSS 分析器，用于分析 CSS 选择器表达式
+  /// </summary>
   public static class CssParser
   {
 
@@ -15,7 +18,7 @@ namespace Ivony.Html
     /// 从选择器表达式创建选择器对象
     /// </summary>
     /// <param name="expression">选择器表达式</param>
-    /// <returns></returns>
+    /// <returns>CSS 选择器对象</returns>
     public static ICssSelector ParseSelector( string expression )
     {
 
@@ -45,7 +48,7 @@ namespace Ivony.Html
     /// 从选择器表达式创建元素选择器
     /// </summary>
     /// <param name="expression">选择器表达式</param>
-    /// <returns></returns>
+    /// <returns>CSS 元素选择器对象</returns>
     public static CssElementSelector ParseElementSelector( string expression )
     {
       if ( expression == null )
@@ -174,7 +177,7 @@ namespace Ivony.Html
     /// 跳过当前位置所有的空白字符
     /// </summary>
     /// <param name="enumerator">字符枚举器</param>
-    /// <returns></returns>
+    /// <returns>是否跳过了任何空白字符</returns>
     private static bool SkipWhiteSpace( CharEnumerator enumerator )
     {
       var ch = enumerator.Current;
@@ -199,8 +202,8 @@ namespace Ivony.Html
     /// <summary>
     /// 解析元素选择器
     /// </summary>
-    /// <param name="enumerator"></param>
-    /// <returns></returns>
+    /// <param name="enumerator">字符枚举器</param>
+    /// <returns>解析好的元素选择器</returns>
     private static CssElementSelector ParseElementSelector( CharEnumerator enumerator )
     {
       var elementName = ParseName( enumerator );
@@ -263,7 +266,7 @@ namespace Ivony.Html
     /// <param name="elementName">元素名</param>
     /// <param name="cssAttributeSelectors">CSS属性选择器</param>
     /// <param name="cssPseudoClassSelectors">CSS伪类选择器</param>
-    /// <returns></returns>
+    /// <returns>元素选择器</returns>
     private static CssElementSelector CreateElementSelector( string elementName, CssAttributeSelector[] cssAttributeSelectors, ICssPseudoClassSelector[] cssPseudoClassSelectors )
     {
       return new CssElementSelector( elementName, cssAttributeSelectors, cssPseudoClassSelectors );
@@ -274,7 +277,7 @@ namespace Ivony.Html
     /// 解析属性选择器
     /// </summary>
     /// <param name="enumerator">字符枚举器</param>
-    /// <returns></returns>
+    /// <returns>属性选择器</returns>
     private static CssAttributeSelector ParseAttributeSelector( CharEnumerator enumerator )
     {
       if ( enumerator.Current != '[' )
@@ -344,8 +347,8 @@ namespace Ivony.Html
     /// <summary>
     /// 创建属性选择器
     /// </summary>
-    /// <param name="attriuteName"></param>
-    /// <returns></returns>
+    /// <param name="attriuteName">属性名</param>
+    /// <returns>属性选择器，此选择器确定属性是否存在</returns>
     private static CssAttributeSelector CreateAttributeSelector( string attriuteName )
     {
       return new CssAttributeSelector( attriuteName, null, null );
@@ -354,10 +357,10 @@ namespace Ivony.Html
     /// <summary>
     /// 创建属性选择器
     /// </summary>
-    /// <param name="attributeName"></param>
-    /// <param name="compare"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="compare">比较符</param>
+    /// <param name="value">属性参考值</param>
+    /// <returns>属性选择器</returns>
     private static CssAttributeSelector CreateAttributeSelector( string attributeName, string compare, string value )
     {
       return new CssAttributeSelector( attributeName, compare, value );
@@ -367,7 +370,7 @@ namespace Ivony.Html
     /// <summary>
     /// 解析伪类选择器
     /// </summary>
-    /// <param name="enumerator"></param>
+    /// <param name="enumerator">字符枚举器</param>
     /// <returns></returns>
     private static ICssPseudoClassSelector ParsePsedoclassSelector( CharEnumerator enumerator )
     {

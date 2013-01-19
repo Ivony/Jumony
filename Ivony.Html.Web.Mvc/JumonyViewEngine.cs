@@ -67,13 +67,13 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 创建页视图
+    /// 创建页面视图
     /// </summary>
-    /// <param name="controllerContext"></param>
-    /// <param name="viewPath"></param>
-    /// <param name="masterPath"></param>
-    /// <exception cref="System.NotSupportedException">当 masterPath 参数不为空时引发，因为 JumonyViewEngine 不支持母板页</exception>
-    /// <returns></returns>
+    /// <param name="controllerContext">控制器上下文</param>
+    /// <param name="viewPath">视图路径</param>
+    /// <param name="masterPath">母板路径</param>
+    /// <exception cref="System.NotSupportedException">当 masterPath 参数不为空，且当前创建的视图不支持母板时引发</exception>
+    /// <returns>页面视图对象</returns>
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {
       var view = CreateViewCore( controllerContext, viewPath, false );
@@ -94,6 +94,12 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 创建视图母板
+    /// </summary>
+    /// <param name="controllerContext">控制器上下文</param>
+    /// <param name="masterPath">母板路径</param>
+    /// <returns>创建的视图母板</returns>
     protected virtual JumonyMasterView CreateMaster( ControllerContext controllerContext, string masterPath )
     {
       var handlerPath = masterPath + ".ashx";
@@ -114,10 +120,10 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 创建视图对象
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="virtualPath"></param>
-    /// <param name="isPartial"></param>
-    /// <returns></returns>
+    /// <param name="context">控制器上下文</param>
+    /// <param name="virtualPath">视图虚拟路径</param>
+    /// <param name="isPartial">是否为部分视图</param>
+    /// <returns>视图对象</returns>
     protected virtual IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
 

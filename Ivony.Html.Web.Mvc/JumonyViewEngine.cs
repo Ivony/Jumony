@@ -81,20 +81,31 @@ namespace Ivony.Html.Web.Mvc
       if ( string.IsNullOrEmpty( masterPath ) )
       {
 
-        masterPath = VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( viewPath ), "_master.html" );
+        var directory = VirtualPathUtility.GetDirectory( viewPath );
 
-        if ( VirtualPathProvider.FileExists( masterPath ) )
+        do
         {
-          var contentView = view as IContentView;
+          masterPath = VirtualPathUtility.Combine( directory, "_master.html" );
 
-          if ( contentView != null )
+          if ( VirtualPathProvider.FileExists( masterPath ) )
           {
+            var contentView = view as IContentView;
 
-            contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
-            return contentView;
+            if ( contentView != null )
+            {
 
+              contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
+              return contentView;
+
+            }
           }
-        }
+
+          if ( directory == "~/" )
+            break;
+
+          directory = VirtualPathUtility.Combine( directory, "../" );
+
+        }while( MvcEnvironment.Configuration.DefaultMasterFallback)
 
         return view;
       }

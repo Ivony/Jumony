@@ -12,7 +12,7 @@ namespace Ivony.Html.Web.Mvc
   public sealed class MvcConfiguration
   {
 
-    internal MvcConfiguration() 
+    internal MvcConfiguration()
     {
 
 
@@ -58,6 +58,15 @@ namespace Ivony.Html.Web.Mvc
       set;
     }
 
+
+    /// <summary>
+    /// 指示视图引擎查找默认母板时是否应上溯查找，默认是false，即只在本文件夹查找，不上溯到父级文件夹。
+    /// </summary>
+    public bool FallbackDefaultMaster
+    {
+      get;
+      set;
+    }
 
   }
 }

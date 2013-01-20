@@ -335,12 +335,19 @@ namespace Ivony.Html.Web.Mvc
         var element = node as IHtmlElement;
         if ( element != null && element.Name == "content" )
         {
-          foreach ( var contentNode in Document.FindSingle( "body" ).Nodes() )
+          var body = Document.FindSingle( "body" );
+          var contentBodyId = body.Attribute( "content-body" ).Value();
+
+          if ( !string.IsNullOrEmpty( contentBodyId ) )
+            body = Document.GetElementById( contentBodyId );
+
+          
+          foreach ( var contentNode in body.Nodes() )
             contentNode.Render( writer );
 
           return true;
         }
-        
+
         else
           return false;
       }

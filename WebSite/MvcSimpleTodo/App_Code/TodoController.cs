@@ -29,7 +29,7 @@ public class TodoController : Controller
   [MyViewFilter]
   public ActionResult Index()
   {
-    return View( "index", "Master", dbUtility.Entities<Task>( "SELECT ID, Title, Completed FROM Tasks" ) );
+    return View( "index", dbUtility.Entities<Task>( "SELECT ID, Title, Completed FROM Tasks" ) );
   }
 
 

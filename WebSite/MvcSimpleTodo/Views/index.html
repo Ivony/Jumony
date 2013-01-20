@@ -7,29 +7,32 @@
   <link href="styles/reset.css" rel="stylesheet" type="text/css">
   <link href="styles/style.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-  <div class="main box">
-    <div class="box">
-      <div class="box todos">
-        <h2 class="box">待办事项</h2>
-        <ul>
-          <li><span>修改自 simple-todo: 一个简易的 todo 程序 - web.py 中文教程from Python.cn(news, jobs)</span>
-            &nbsp; <a action="complete">完成</a><a action="revert">恢复</a>, <a action="modify">修改</a>,
+<body content-body="content-body">
+  <div class="page">
+
+    <div class="main box" id="content-body">
+      <div class="box">
+        <div class="box todos">
+          <h2 class="box">待办事项</h2>
+          <ul>
+            <li><span>修改自 simple-todo: 一个简易的 todo 程序 - web.py 中文教程from Python.cn(news, jobs)</span>
+              &nbsp; <a action="complete">完成</a><a action="revert">恢复</a>, <a action="modify">修改</a>,
               <a action="remove" onclick="return confirm(&#39;删除以后不能恢复的，确定？&#39;)">删除</a> </li>
-        </ul>
-      </div>
-      <div class="box post">
-        <h2>新增</h2>
+          </ul>
+        </div>
+        <div class="box post">
+          <h2>新增</h2>
 
-        <form method="post" id="post_new">
-        <p>
-          <input type="text" name="title" class="long_txt" /><span class="tips"></span>
-        </p>
-        <p>
-          <input type="submit" class="submit" value="添加" />
-        </p>
-        </form>
+          <form method="post" id="post_new">
+            <p>
+              <input type="text" name="title" class="long_txt" /><span class="tips"></span>
+            </p>
+            <p>
+              <input type="submit" class="submit" value="添加" />
+            </p>
+          </form>
 
+        </div>
       </div>
     </div>
   </div>

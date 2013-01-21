@@ -105,7 +105,7 @@ namespace Ivony.Html.Web.Mvc
 
           directory = VirtualPathUtility.Combine( directory, "../" );
 
-        }while( MvcEnvironment.Configuration.DefaultMasterFallback)
+        } while ( MvcEnvironment.Configuration.FallbackDefaultMaster );
 
         return view;
       }

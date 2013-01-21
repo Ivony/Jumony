@@ -11,12 +11,18 @@ using System.Web.Mvc.Html;
 
 namespace Ivony.Html.Web.Mvc
 {
+  /// <summary>
+  /// Jumony 视图
+  /// </summary>
   public abstract class JumonyView : ViewBase, IContentView
   {
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
 
 
+    /// <summary>
+    /// 创建 JumonyView 对象
+    /// </summary>
     protected JumonyView()
     {
       RenderAdapters = new List<IHtmlAdapter>() { new PartialRenderAdapter( this ) };

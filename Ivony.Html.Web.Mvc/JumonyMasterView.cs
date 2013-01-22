@@ -78,21 +78,11 @@ namespace Ivony.Html.Web.Mvc
     {
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Render" );
       RenderAdapters.Add( view.CreateContentAdapter( this ) );
-      return Document.Render( RenderAdapters.ToArray() );
+      var content = Document.Render( RenderAdapters.ToArray() );
       HttpContext.Trace.Write( "JumonyMasterView", "End Render" );
 
+      return content;
+
     }
-  }
-
-
-  /// <summary>
-  /// 可使用母板页的内容视图
-  /// </summary>
-  public interface IContentView : IView
-  {
-
-    void InitializeMaster( IMasterView master );
-
-    IHtmlAdapter CreateContentAdapter( IMasterView master );
   }
 }

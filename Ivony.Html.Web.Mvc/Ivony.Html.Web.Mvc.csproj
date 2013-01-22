@@ -70,11 +70,13 @@
   <ItemGroup>
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ConflictCheckList.cs" />
+    <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
     <Compile Include="GenericMasterView.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />
     <Compile Include="ICachableResult.cs" />
+    <Compile Include="IContentView.cs" />
     <Compile Include="IMasterView.cs" />
     <Compile Include="IMvcCachePolicy.cs" />
     <Compile Include="IMvcCachePolicyProvider.cs" />

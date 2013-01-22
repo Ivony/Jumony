@@ -77,7 +77,13 @@ namespace Ivony.Html.Web.Mvc
         MasterView.Initialize( ViewContext );
         HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
 
-        return MasterView.Render( this );
+        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        OnPreRender();
+        var content = MasterView.Render( this );
+        OnPostRender();
+        HttpContext.Trace.Write( "JumonyView", "End Render" );
+
+        return content;
       }
       else
       {
@@ -320,48 +326,6 @@ namespace Ivony.Html.Web.Mvc
     {
       return new ContentAdapter( this );
     }
-
-    protected class ContentAdapter : IHtmlAdapter
-    {
-
-      protected JumonyView View { get; private set; }
-
-      protected IHtmlDocument Document
-      {
-        get { return (IHtmlDocument) View.Scope; }
-      }
-
-      public ContentAdapter( JumonyView view )
-      {
-        if ( view.PartialMode )
-          throw new InvalidOperationException( "部分视图不能套用母板" );
-
-        View = view;
-      }
-
-      bool IHtmlAdapter.Render( IHtmlNode node, TextWriter writer )
-      {
-        var element = node as IHtmlElement;
-        if ( element != null && element.Name == "content" )
-        {
-          var body = Document.FindSingle( "body" );
-          var contentBodyId = body.Attribute( "content-body" ).Value();
-
-          if ( !string.IsNullOrEmpty( contentBodyId ) )
-            body = Document.GetElementById( contentBodyId );
-
-
-          foreach ( var contentNode in body.Nodes() )
-            contentNode.Render( writer );
-
-          return true;
-        }
-
-        else
-          return false;
-      }
-    }
-
 
   }
 }

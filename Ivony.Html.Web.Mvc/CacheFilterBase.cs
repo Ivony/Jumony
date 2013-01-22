@@ -49,7 +49,6 @@ namespace Ivony.Html.Web.Mvc
       else
         filterContext.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "OutputCache missed" );
 
-      ;
     }
 
 

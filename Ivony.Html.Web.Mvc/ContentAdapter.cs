@@ -52,11 +52,10 @@ namespace Ivony.Html.Web.Mvc
       {
 
         View.ViewContext.HttpContext.Trace.Write( "ContentView", "Begin Merge Head" );
-        var container = MergeHead( element, Document.FindSingle( "head" ) );
+        var head = MergeHead( element, Document.FindSingle( "head" ) );
         View.ViewContext.HttpContext.Trace.Write( "ContentView", "End Merge Head" );
 
-        foreach ( var contentNode in container.Nodes() )
-          contentNode.Render( writer );
+        head.Render( writer );
 
         return true;
       }
@@ -64,30 +63,30 @@ namespace Ivony.Html.Web.Mvc
         return false;
     }
 
-    private IHtmlContainer MergeHead( IHtmlElement masterHead, IHtmlElement contentHead )
+    private IHtmlElement MergeHead( IHtmlElement masterHead, IHtmlElement contentHead )
     {
 
-      var headFragment = masterHead.Document.CreateFragment();
+      var head = masterHead.Document.CreateFragment().AddElement( "head" );
 
-      headFragment.AddCopy( contentHead.Elements().Where( e => e.Attribute( "ignore" ) == null ) );
+      head.AddCopy( contentHead.Elements().Where( e => e.Attribute( "ignore" ) == null ) );
 
-      if ( !headFragment.Find( "title" ).Any() )
+      if ( !head.Find( "title" ).Any() )
       {
         var title = masterHead.Find( "title" ).FirstOrDefault();
-        headFragment.AddCopy( title );
+        head.AddCopy( title );
       }
 
 
       {
-        var existsStyleSheets =new HashSet<string>( headFragment.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "herf" ).Value() ), StringComparer.OrdinalIgnoreCase );
+        var existsStyleSheets =new HashSet<string>( head.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "herf" ).Value() ), StringComparer.OrdinalIgnoreCase );
         foreach ( var element in masterHead.Find( "link[rel=stylesheet]" ) )
         {
           if ( !existsStyleSheets.Contains( element.Attribute( "href" ).Value() ) )
-            headFragment.AddCopy( element );
+            head.AddCopy( element );
         }
       }
 
-      return headFragment;
+      return head;
     }
 
 

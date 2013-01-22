@@ -95,6 +95,8 @@
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="ViewElementAdapter.cs" />
+    <Compile Include="ViewFilterHandler.cs" />
+    <Compile Include="ViewFilterProvider.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

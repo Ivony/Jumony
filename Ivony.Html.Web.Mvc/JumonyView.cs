@@ -99,6 +99,9 @@ namespace Ivony.Html.Web.Mvc
     {
       var filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
       ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
+
+      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
+
       return filters;
     }
 
@@ -347,7 +350,7 @@ namespace Ivony.Html.Web.Mvc
           if ( !string.IsNullOrEmpty( contentBodyId ) )
             body = Document.GetElementById( contentBodyId );
 
-          
+
           foreach ( var contentNode in body.Nodes() )
             contentNode.Render( writer );
 

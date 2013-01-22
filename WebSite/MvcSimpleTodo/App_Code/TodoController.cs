@@ -16,17 +16,6 @@ public class TodoController : Controller
 
   private SqlDbUtility dbUtility = SqlDbUtility.Create( "Database" );
 
-  private class MyViewFilter : ViewFilterAttribute
-  {
-
-    public override void OnPreRender( ViewContext context, JumonyView view )
-    {
-      view.Scope.Find( "title" ).First().InnerHtml( "Test" );
-    }
-
-  }
-
-  [MyViewFilter]
   public ActionResult Index()
   {
     return View( "index", dbUtility.Entities<Task>( "SELECT ID, Title, Completed FROM Tasks" ) );

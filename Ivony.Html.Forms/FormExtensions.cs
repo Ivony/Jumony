@@ -267,6 +267,10 @@ namespace Ivony.Html.Forms
     /// <exception cref="System.NotSupportedException">不被支持的输入控件</exception>
     public static bool TrySetValue( this IHtmlInputControl input, string value )
     {
+
+      if ( input == null )
+        return false;
+
       var textInput = input as HtmlInputText;
       if ( textInput != null )
         return TrySetValue( textInput, value );

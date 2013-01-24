@@ -31,28 +31,30 @@
 
     <form method="post" action="Default" controller enctype="multipart/form-data">
 
-      <div>
-        <select name="type" onchange="show( this.value );">
-          <option value="Internet">Internet</option>
-          <option value="Local">Local</option>
-        </select>
-        <input id="url" name="url" type="url" style="width: 300px;" value="http://" />
-        <input id="file" name="file" type="file" style="width: 300px; display: none;" />
-        <select name="encoding">
-          <option>UTF-8</option>
-          <option>GB2312</option>
-        </select>
-        <input type="submit" value="开始分析" />
-      </div>
+    <div>
+      <select name="type" onchange="show( this.value );">
+        <option value="Internet">Internet</option>
+        <option value="Local">Local</option>
+      </select>
+      <input id="url" name="url" type="url" style="width: 300px;" value="http://" />
+      <input id="file" name="file" type="file" style="width: 300px; display: none;" />
+      <select name="encoding">
+        <option>UTF-8</option>
+        <option>GB2312</option>
+      </select>
+      <input type="submit" value="开始分析" />
+    </div>
     </form>
 
     <view var="type" key="Type"></view>
     <view var="url" key="Url"></view>
+    <view var="encoding" key="Encoding"></view>
     <script>
       if (type != null)
       {
         document.getElementsByName("type")[0].value = type;
         document.getElementsByName("url")[0].value = url;
+        document.getElementsByName("encoding")[0].value = encoding;
       }
 
       show(document.getElementsByName("type")[0].value);

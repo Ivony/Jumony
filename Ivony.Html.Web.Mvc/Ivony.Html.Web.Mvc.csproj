@@ -88,6 +88,7 @@
     <Compile Include="MasterViewHandler.cs" />
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />
     <Compile Include="MvcConfiguration.cs" />
+    <Compile Include="MvcFormExtensions.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="GenericView.cs" />
     <Compile Include="PartialViewAdapter.cs" />

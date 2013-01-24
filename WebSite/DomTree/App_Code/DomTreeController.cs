@@ -33,20 +33,23 @@ public class DomTreeController : Controller
     var infoFilePath = HttpContext.Request.MapPath( "~/Content/" + hash + ".info" );
     if ( System.IO.File.Exists( infoFilePath ) )
     {
-      var info = System.IO.File.ReadAllText( infoFilePath );
-      if ( info == "LocalFile" )
+      var info = System.IO.File.ReadAllLines( infoFilePath );
+      if ( info[0] == "LocalFile" )
         ViewData["Type"] = "Local";
 
       else
       {
         ViewData["Type"] = "Internet";
-        ViewData["Url"] = info;
+        ViewData["Url"] = info[0];
       }
+
+      ViewData["Encoding"] = info[1];
+
     }
 
     return PartialView( "ChooseDocument" );
-
   }
+
 
   [HttpPost]
   [ActionName( "Default" )]
@@ -87,11 +90,17 @@ public class DomTreeController : Controller
 
 
     System.IO.File.WriteAllText( documentPath, content, Encoding.UTF8 );
-    if ( type == "Local" )
-      System.IO.File.WriteAllText( infoFilePath, "LocalFile" );
-    else
-      System.IO.File.WriteAllText( infoFilePath, url );
 
+    var info = new StringWriter();
+
+    if ( type == "Local" )
+      info.WriteLine( "Local" );
+    else
+      info.WriteLine( url );
+
+    info.WriteLine( encoding );
+
+    System.IO.File.WriteAllText( infoFilePath, info.ToString(), Encoding.UTF8 );
 
     return RedirectToAction( "Default", new { hash = hash } );
   }

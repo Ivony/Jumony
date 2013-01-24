@@ -8,6 +8,9 @@ using Ivony.Fluent;
 namespace Ivony.Html.Web.Mvc
 {
 
+  /// <summary>
+  /// 默认的内容试图渲染代理
+  /// </summary>
   public class ContentAdapter : IHtmlAdapter
   {
 

@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Web.UI;
 using System.Web.Mvc;
+using System.Collections;
+using System.Web.Script.Serialization;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -48,17 +50,49 @@ namespace Ivony.Html.Web.Mvc
         return;
 
 
-      string bindValue = null;
-
       var path = element.Attribute( "path" ).Value();
+
+
+      if ( path != null )
+        dataObject = DataBinder.Eval( dataObject, path );
+
+
       var format = element.Attribute( "format" ).Value();
 
+      if ( format == null )
+      {
 
-      if ( path == null )
-        bindValue = string.Format( format ?? "{0}", dataObject );
-      else
-        bindValue = DataBinder.Eval( dataObject, path, format ?? "{0}" );
+        IEnumerable listValue = dataObject as IEnumerable;
 
+        if ( listValue != null && element.Find( "view" ).Any() )
+        {
+
+
+        }
+      }
+
+
+
+      var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
+      if ( variableName != null )
+      {
+
+        if ( format != null )
+          dataObject = string.Format( format, dataObject );
+
+
+        var hostName = element.Attribute( "host" ).Value();
+        if ( hostName == null )
+          writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}'] = {1} }})();</script>", variableName, ToJson( dataObject ) );
+
+        else
+          writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) );
+
+        return;
+      }
+
+
+      var bindValue = string.Format( format ?? "{0}", dataObject );
 
       var attributeName = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
       if ( attributeName != null )
@@ -67,22 +101,16 @@ namespace Ivony.Html.Web.Mvc
         return;
       }
 
-      var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
-      if ( variableName != null )
-      {
-        var hostName = element.Attribute( "host" ).Value();
-        if ( hostName == null )
-          writer.WriteLine( "<script type=\"text/javascript\">window['{0}'] = '{1}';</script>", variableName, bindValue );
-
-        else
-          writer.WriteLine( "<script type=\"text/javascript\">window['{0}']['{1}'] = '{2}';</script>", hostName, variableName, bindValue );
-
-        return;
-      }
-
       writer.Write( bindValue );
 
     }
+
+    private string ToJson( object dataObject )
+    {
+      var serializer = new JavaScriptSerializer();
+      return serializer.Serialize( dataObject );
+    }
+
 
 
     /// <summary>

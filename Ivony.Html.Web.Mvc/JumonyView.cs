@@ -25,7 +25,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     protected JumonyView()
     {
-      RenderAdapters = new List<IHtmlAdapter>() { new PartialRenderAdapter( this ) };
+      RenderAdapters = new List<IHtmlRenderAdapter>() { new PartialRenderAdapter( this ) };
     }
 
 
@@ -274,7 +274,7 @@ namespace Ivony.Html.Web.Mvc
     /// 渲染 HTML 内容
     /// </summary>
     /// <returns>渲染结果</returns>
-    protected virtual string RenderContent( IHtmlAdapter[] adapters )
+    protected virtual string RenderContent( IHtmlRenderAdapter[] adapters )
     {
       return RenderContent( Scope, PartialMode, adapters );
     }
@@ -283,7 +283,7 @@ namespace Ivony.Html.Web.Mvc
     /// 渲染 HTML 内容。
     /// </summary>
     /// <returns></returns>
-    protected virtual string RenderContent( IHtmlContainer scope, bool partialMode, IHtmlAdapter[] adapters )
+    protected virtual string RenderContent( IHtmlContainer scope, bool partialMode, IHtmlRenderAdapter[] adapters )
     {
 
 
@@ -307,7 +307,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 自定义渲染过程的 HTML 转换器
     /// </summary>
-    protected virtual IList<IHtmlAdapter> RenderAdapters
+    protected virtual IList<IHtmlRenderAdapter> RenderAdapters
     {
       get;
       private set;
@@ -322,7 +322,7 @@ namespace Ivony.Html.Web.Mvc
       MasterView = master;
     }
 
-    IHtmlAdapter IContentView.CreateContentAdapter( IMasterView master )
+    IHtmlRenderAdapter IContentView.CreateContentAdapter( IMasterView master )
     {
       return new ContentAdapter( this );
     }

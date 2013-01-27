@@ -3,6 +3,7 @@ using System.IO;
 using Ivony.Html;
 using Ivony.Html.Parser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Ivony.Html.ExpandedNavigateAPI;
 
 namespace SelectorTest
 {

@@ -14,6 +14,6 @@ namespace Ivony.Html.Web.Mvc
 
     void InitializeMaster( IMasterView master );
 
-    IHtmlAdapter CreateContentAdapter( IMasterView master );
+    IHtmlRenderAdapter CreateContentAdapter( IMasterView master );
   }
 }

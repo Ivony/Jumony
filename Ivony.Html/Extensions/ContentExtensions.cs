@@ -282,7 +282,7 @@ namespace Ivony.Html
     /// <param name="document">要呈现的文档</param>
     /// <param name="adapters">HTML 输出转换器</param>
     /// <returns>文档的 HTML 形式</returns>
-    public static string Render( this IHtmlDocument document, params IHtmlAdapter[] adapters )
+    public static string Render( this IHtmlDocument document, params IHtmlRenderAdapter[] adapters )
     {
       using ( var writer = new StringWriter( CultureInfo.InvariantCulture ) )
       {
@@ -293,16 +293,6 @@ namespace Ivony.Html
     }
 
 
-    /// <summary>
-    /// 将文档呈现为 HTML
-    /// </summary>
-    /// <param name="document">要呈现的文档</param>
-    /// <param name="writer">HTML 编写器</param>
-    public static void Render( this IHtmlDocument document, TextWriter writer )
-    {
-      Render( document, writer, null );
-    }
-
 
     /// <summary>
     /// 将文档呈现为 HTML
@@ -310,13 +300,13 @@ namespace Ivony.Html
     /// <param name="document">要呈现的文档</param>
     /// <param name="writer">HTML 编写器</param>
     /// <param name="adapters">HTML 输出转换器</param>
-    public static void Render( this IHtmlDocument document, TextWriter writer, params IHtmlAdapter[] adapters )
+    public static void Render( this IHtmlDocument document, TextWriter writer, params IHtmlRenderAdapter[] adapters )
     {
 
       if ( document == null )
         throw new ArgumentNullException( "document" );
 
-      RenderChilds( document, writer, adapters );
+      RenderChilds( document, new HtmlRenderContext( writer, adapters ) );
     }
 
 
@@ -328,18 +318,26 @@ namespace Ivony.Html
     /// <param name="encoding">呈现的 HTML 的编码格式</param>
     public static void Render( this IHtmlDocument document, Stream stream, Encoding encoding )
     {
-      var writer = new StreamWriter( stream, encoding );
-      Render( document, writer );
+      using ( var writer = new StreamWriter( stream, encoding ) )
+      {
+        Render( document, writer );
 
-      writer.Flush();
+        writer.Flush();
+      }
     }
 
 
-    private static void RenderChilds( IHtmlContainer container, TextWriter writer, params IHtmlAdapter[] adapter )
+    public static void RenderChilds( this IHtmlContainer container, TextWriter writer, params IHtmlRenderAdapter[] adapters )
+    {
+      RenderChilds( container, new HtmlRenderContext( writer, adapters ) );
+    }
+
+
+    public static void RenderChilds( IHtmlContainer container, HtmlRenderContext context )
     {
       foreach ( var node in container.Nodes() )
       {
-        Render( node, writer, adapter );
+        Render( node, context );
       }
     }
 
@@ -376,25 +374,28 @@ namespace Ivony.Html
     /// <param name="node">要呈现的节点</param>
     /// <param name="writer">HTML 编写器</param>
     /// <param name="adapters">HTML 输出转换器</param>
-    public static void Render( this IHtmlNode node, TextWriter writer, params IHtmlAdapter[] adapters )
+    public static void Render( this IHtmlNode node, TextWriter writer, params IHtmlRenderAdapter[] adapters )
+    {
+      Render( node, new HtmlRenderContext( writer, adapters ) );
+    }
+
+
+
+    /// <summary>
+    /// 将节点呈现为 HTML
+    /// </summary>
+    /// <param name="node">要呈现的节点</param>
+    /// <param name="context">渲染上下文</param>
+    public static void Render( this IHtmlNode node, HtmlRenderContext context )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
-      if ( writer == null )
-        throw new ArgumentNullException( "writer" );
 
-
-
-      if ( adapters != null )
+      foreach ( var a in context.Adapters )
       {
-
-        foreach ( var a in adapters )
-        {
-          if ( a.Render( node, writer ) )
-            return;
-        }
-
+        if ( a.Render( node, context ) )
+          return;
       }
 
 
@@ -402,24 +403,30 @@ namespace Ivony.Html
 
       if ( renderable != null )
       {
-        renderable.Render( writer );
+        renderable.Render( context );
         return;
       }
 
       var element = node as IHtmlElement;
       if ( element != null )
       {
-        RenderElementAndChilds( element, writer, adapters );
+        RenderElementAndChilds( element, context );
         return;
       }
 
-      writer.Write( node.OuterHtml() );
+      context.Write( node.OuterHtml() );
     }
 
 
-    private static void RenderElementAndChilds( IHtmlElement element, TextWriter writer, params IHtmlAdapter[] adapters )
+    /// <summary>
+    /// 渲染元素和其子节点
+    /// </summary>
+    /// <param name="element">要渲染的元素</param>
+    /// <param name="context">渲染上下文</param>
+    private static void RenderElementAndChilds( IHtmlElement element, HtmlRenderContext context )
     {
 
+      var writer = context.Writer;
 
       if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
       {
@@ -437,7 +444,7 @@ namespace Ivony.Html
       {
 
         writer.Write( GenerateTagHtml( element, false ) );
-        RenderChilds( element, writer, adapters );
+        RenderChilds( element, context );
         writer.Write( "</{0}>", element.Name );
 
       }

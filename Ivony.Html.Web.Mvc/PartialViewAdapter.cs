@@ -68,13 +68,13 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="element">partial 标签</param>
     /// <param name="writer">用于渲染的文本编写器</param>
-    protected override void Render( IHtmlElement element, TextWriter writer )
+    protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
       ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "Begin Render Partial: {0}", partialTag ) );
-      RenderPartial( element, writer );
+      RenderPartial( element, context.Writer );
       ViewContext.HttpContext.Trace.Write( "Jumony View Engine", string.Format( "End Render Partial: {0}", partialTag ) );
     }
 

@@ -10,10 +10,10 @@ namespace Ivony.Html
   /// <summary>
   /// 提供一个简单的 IHtmlAdapter 的实现，方便重写对指定元素的渲染规则。
   /// </summary>
-  public abstract class HtmlElementAdapter : IHtmlAdapter
+  public abstract class HtmlElementAdapter : IHtmlRenderAdapter
   {
 
-    bool IHtmlAdapter.Render( IHtmlNode node, TextWriter writer )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
     {
       var element = node as IHtmlElement;
 
@@ -23,7 +23,7 @@ namespace Ivony.Html
       if ( !IsEligible( element ) )
         return false;
 
-      Render( element, writer );
+      Render( element, context );
       return true;
     }
 
@@ -67,6 +67,6 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要渲染的元素</param>
     /// <param name="writer">渲染输出的 TextWriter</param>
-    protected abstract void Render( IHtmlElement element, TextWriter writer );
+    protected abstract void Render( IHtmlElement element, HtmlRenderContext context );
   }
 }

@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.Mvc;
 using System.Collections;
 using System.Web.Script.Serialization;
+using Ivony.Html.ExpandedNavigateAPI;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -34,7 +35,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="element">view 标签元素</param>
     /// <param name="writer">HTML 编写器</param>
-    protected override void Render( IHtmlElement element, TextWriter writer )
+    protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
@@ -64,8 +65,15 @@ namespace Ivony.Html.Web.Mvc
 
         IEnumerable listValue = dataObject as IEnumerable;
 
-        if ( listValue != null && element.Find( "view" ).Any() )
+        if ( listValue != null && element.FindAny( "view" ) )
         {
+
+          foreach ( var dataItem in listValue )
+          {
+
+            RenderChilds( element, dataItem );
+
+          }
 
 
         }
@@ -83,10 +91,10 @@ namespace Ivony.Html.Web.Mvc
 
         var hostName = element.Attribute( "host" ).Value();
         if ( hostName == null )
-          writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}'] = {1} }})();</script>", variableName, ToJson( dataObject ) );
+          context.Writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}'] = {1} }})();</script>", variableName, ToJson( dataObject ) );
 
         else
-          writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) );
+          context.Writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) );
 
         return;
       }
@@ -101,7 +109,7 @@ namespace Ivony.Html.Web.Mvc
         return;
       }
 
-      writer.Write( bindValue );
+      context.Write( bindValue );
 
     }
 
@@ -110,6 +118,16 @@ namespace Ivony.Html.Web.Mvc
       var serializer = new JavaScriptSerializer();
       return serializer.Serialize( dataObject );
     }
+
+
+    private void RenderChilds( IHtmlElement element, object dataItem )
+    {
+      foreach ( var node in element.Nodes() )
+      {
+        //node.Render( )
+      }
+    }
+
 
 
 

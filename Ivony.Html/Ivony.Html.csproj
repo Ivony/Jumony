@@ -67,6 +67,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ExpandedFindExtensions.cs" />
     <Compile Include="HtmlDomDependency.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
@@ -80,8 +81,9 @@
     <Compile Include="HtmlElementAdapter.cs" />
     <Compile Include="HtmlEncoding.cs" />
     <Compile Include="HtmlRange.cs" />
+    <Compile Include="HtmlRenderContext.cs" />
     <Compile Include="HtmlSpecificationBase.cs" />
-    <Compile Include="IHtmlAdapter.cs" />
+    <Compile Include="IHtmlRenderAdapter.cs" />
     <Compile Include="IHtmlCollection.cs" />
     <Compile Include="IHtmlDomModifier.cs" />
     <Compile Include="IHtmlFragment.cs" />

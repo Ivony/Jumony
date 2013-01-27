@@ -17,7 +17,7 @@ namespace Ivony.Html
     /// 呈现这个节点
     /// </summary>
     /// <param name="writer">用于处理呈现结果的文本编写器</param>
-    void Render( TextWriter writer );
+    void Render( HtmlRenderContext context );
 
   }
 }

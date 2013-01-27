@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace HtmlTranslator
 {
-  public class TranslateTask : IHtmlAdapter
+  public class TranslateTask : IHtmlRenderAdapter
   {
     private IHtmlDocument _document;
     private string _documentPath;
@@ -50,7 +50,7 @@ namespace HtmlTranslator
           foreach ( var t in terms )
           {
             var condidateTerms = Dictionary[t.SourceTerm];
-            
+
             string translatedResult;
             if ( condidateTerms.IsSingle( out translatedResult ) )
               t.TranslatedTerm = translatedResult;
@@ -256,12 +256,12 @@ namespace HtmlTranslator
       return true;
     }
 
-    bool IHtmlAdapter.Render( IHtmlNode node, TextWriter writer )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
     {
       var term = Terms.FirstOrDefault( t => t.TextNode.Equals( node ) );
       if ( term != null )
       {
-        writer.Write( term.TranslatedTerm );
+        context.Write( term.TranslatedTerm );
         return true;
       }
 

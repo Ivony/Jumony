@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Ivony.Fluent;
+using Ivony.Html.ExpandedNavigateAPI;
 
 namespace Ivony.Html.Web.Mvc
 {
@@ -11,7 +12,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// 默认的内容试图渲染代理
   /// </summary>
-  public class ContentAdapter : IHtmlAdapter
+  public class ContentAdapter : IHtmlRenderAdapter
   {
 
 
@@ -30,7 +31,7 @@ namespace Ivony.Html.Web.Mvc
       View = view;
     }
 
-    bool IHtmlAdapter.Render( IHtmlNode node, TextWriter writer )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
     {
       var element = node as IHtmlElement;
 
@@ -47,7 +48,7 @@ namespace Ivony.Html.Web.Mvc
 
 
         foreach ( var contentNode in body.Nodes() )
-          contentNode.Render( writer );
+          contentNode.Render( context.Writer );
 
         return true;
       }
@@ -58,7 +59,7 @@ namespace Ivony.Html.Web.Mvc
         var head = MergeHead( element, Document.FindSingle( "head" ) );
         View.ViewContext.HttpContext.Trace.Write( "ContentView", "End Merge Head" );
 
-        head.Render( writer );
+        head.Render( context.Writer );
 
         return true;
       }
@@ -81,7 +82,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       {
-        var existsStyleSheets =new HashSet<string>( head.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "herf" ).Value() ), StringComparer.OrdinalIgnoreCase );
+        var existsStyleSheets = new HashSet<string>( head.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "herf" ).Value() ), StringComparer.OrdinalIgnoreCase );
         foreach ( var element in masterHead.Find( "link[rel=stylesheet]" ) )
         {
           if ( !existsStyleSheets.Contains( element.Attribute( "href" ).Value() ) )

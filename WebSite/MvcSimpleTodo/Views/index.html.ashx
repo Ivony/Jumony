@@ -12,6 +12,7 @@ using Ivony.Html.Forms;
 using Ivony.Html.Forms.Validation;
 using Ivony.Html.Web.Mvc;
 using Ivony.Html.Templates;
+using Ivony.Html.ExpandedNavigateAPI;
 
 
 public class index_html : ViewHandler<Task[]>
@@ -24,8 +25,6 @@ public class index_html : ViewHandler<Task[]>
     var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
 
     ViewModel.BindTo( items, BindTaskItem );
-
-
   }
 
 

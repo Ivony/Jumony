@@ -127,23 +127,5 @@ namespace Ivony.Html.ExpandedNavigateAPI
     }
 
 
-
-    /// <summary>
-    /// 从当前容器按照 CSS 选择器搜索符合要求的元素
-    /// </summary>
-    /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expression">CSS 选择器</param>
-    /// <param name="action">要对元素执行的操作</param>
-    /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression, Action<IHtmlElement> action )
-    {
-
-      if ( action == null )
-        throw new ArgumentNullException( "action" );
-
-      return container.Find( expression ).ForAll( action );
-    }
-
-
   }
 }

@@ -374,55 +374,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 从当前容器按照 CSS 选择器搜索符合要求的元素
-    /// </summary>
-    /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expression">CSS 选择器</param>
-    /// <param name="action">要对元素执行的操作</param>
-    /// <returns>搜索到的符合要求的元素</returns>
-    public static IEnumerable<IHtmlElement> Find( this IHtmlContainer container, string expression, Action<IHtmlElement> action )
-    {
-
-      if ( action == null )
-        throw new ArgumentNullException( "action" );
-
-      return Find( container, expression ).ForAll( action );
-    }
-
-
-    /// <summary>
-    /// 从当前容器按照 CSS 选择器搜索符合要求的唯一元素，如果有多个元素符合要求，则会引发异常。
-    /// </summary>
-    /// <param name="container">要搜索子代元素的容器</param>
-    /// <param name="expression">CSS选择器</param>
-    /// <returns>搜索到的符合要求的唯一元素</returns>
-    public static IHtmlElement FindSingle( this IHtmlContainer container, string expression )
-    {
-      if ( container == null )
-        throw new ArgumentNullException( "container" );
-
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-      try
-      {
-        return Find( container, expression ).Single();
-      }
-      catch ( InvalidOperationException e )
-      {
-        throw new InvalidOperationException( string.Format( "未找到符合选择器 \"{0}\" 的元素或结果集不唯一", expression ), e );
-      }
-      catch ( Exception e )
-      {
-        if ( e.Data != null && !e.Data.Contains( "Ivony.Html.CssQuery.Expression" ) )
-          e.Data["selector expression"] = expression;
-
-        throw;
-      }
-    }
-
-
-    /// <summary>
     /// 获取在兄弟节点中，自己的顺序位置
     /// </summary>
     /// <param name="node">要获取序号的节点</param>

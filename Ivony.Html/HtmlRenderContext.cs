@@ -15,8 +15,12 @@ namespace Ivony.Html
 
     internal HtmlRenderContext( TextWriter writer, IHtmlRenderAdapter[] adapters )
     {
-      Adapters = adapters;
+
+      if ( writer == null )
+        throw new ArgumentNullException( "writer" );
+
       Writer = writer;
+      Adapters = adapters ?? new IHtmlRenderAdapter[0];
     }
 
     internal IHtmlRenderAdapter[] Adapters { get; private set; }
@@ -49,8 +53,8 @@ namespace Ivony.Html
     {
       Writer.Write( value );
     }
-    
-    
+
+
     /// <summary>
     /// 将字符串直接写入渲染输出
     /// </summary>

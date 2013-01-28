@@ -6,6 +6,10 @@ using System.Web;
 
 namespace Ivony.Html.Web.Mvc
 {
+
+  /// <summary>
+  /// 母板视图控制程序的基类
+  /// </summary>
   public abstract class MasterViewHandler : JumonyMasterView, IHttpHandler
   {
     #region IHttpHandler 成员

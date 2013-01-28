@@ -5,13 +5,18 @@ using System.Text;
 
 namespace Ivony.Html.Web.Mvc
 {
-  public class GenericMasterView : JumonyMasterView
+
+  /// <summary>
+  /// JumonyMasterView 的标准实现
+  /// </summary>
+  internal class GenericMasterView : JumonyMasterView
   {
 
     internal GenericMasterView( string virtualPath )
     {
       Initialize( virtualPath );
     }
+
 
     protected override void Process( IHtmlContainer container )
     {

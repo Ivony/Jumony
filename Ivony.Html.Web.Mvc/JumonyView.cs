@@ -307,7 +307,7 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 自定义渲染过程的 HTML 转换器
     /// </summary>
-    protected virtual IList<IHtmlRenderAdapter> RenderAdapters
+    internal protected virtual IList<IHtmlRenderAdapter> RenderAdapters
     {
       get;
       private set;

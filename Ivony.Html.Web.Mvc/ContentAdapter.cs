@@ -10,25 +10,42 @@ namespace Ivony.Html.Web.Mvc
 {
 
   /// <summary>
-  /// 默认的内容试图渲染代理
+  /// 默认的内容视图渲染代理
   /// </summary>
   public class ContentAdapter : IHtmlRenderAdapter
   {
 
 
+    /// <summary>
+    /// 获取内容视图
+    /// </summary>
     protected JumonyView View { get; private set; }
 
+    /// <summary>
+    /// 获取内容视图文档
+    /// </summary>
     protected IHtmlDocument Document
     {
       get { return (IHtmlDocument) View.Scope; }
     }
 
+    /// <summary>
+    /// 获取内容视图的渲染代理
+    /// </summary>
+    protected IHtmlRenderAdapter[] RenderAdapters { get; private set; }
+
+
+    /// <summary>
+    /// 创建 ContentAdapter 对象
+    /// </summary>
+    /// <param name="view">要渲染的内容视图</param>
     public ContentAdapter( JumonyView view )
     {
       if ( view.PartialMode )
         throw new InvalidOperationException( "部分视图不能套用母板" );
 
       View = view;
+      RenderAdapters = view.RenderAdapters.ToArray();
     }
 
     bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
@@ -47,8 +64,7 @@ namespace Ivony.Html.Web.Mvc
           body = Document.GetElementById( contentBodyId );
 
 
-        foreach ( var contentNode in body.Nodes() )
-          contentNode.Render( context.Writer );
+        body.RenderChilds( context.Writer, RenderAdapters );
 
         return true;
       }
@@ -59,7 +75,7 @@ namespace Ivony.Html.Web.Mvc
         var head = MergeHead( element, Document.FindSingle( "head" ) );
         View.ViewContext.HttpContext.Trace.Write( "ContentView", "End Merge Head" );
 
-        head.Render( context.Writer );
+        head.Render( context.Writer, RenderAdapters );
 
         return true;
       }

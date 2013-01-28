@@ -201,7 +201,10 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-
+    /// <summary>
+    /// 转换容器中所有 URI 与当前请求匹配。
+    /// </summary>
+    /// <param name="container">确定要转换 URI 范围的容器</param>
     public void ResolveUri( IHtmlContainer container )
     {
       ResolveUri( container, VirtualPath );
@@ -214,8 +217,6 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="baseVirtualPath">容器的基路径</param>
     public void ResolveUri( IHtmlContainer container, string baseVirtualPath )
     {
-
-
 
       var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
       foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )

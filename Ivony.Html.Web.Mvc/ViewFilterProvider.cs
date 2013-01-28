@@ -8,9 +8,18 @@ using System.Web.Hosting;
 
 namespace Ivony.Html.Web.Mvc
 {
+  
+  /// <summary>
+  /// 视图筛选器提供程序
+  /// </summary>
   public static class ViewFilterProvider
   {
 
+    /// <summary>
+    /// 获取指定虚拟路径的视图筛选器
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns>视图筛选器</returns>
     public static IViewFilter[] GetViewFilters( string virtualPath )
     {
 
@@ -49,6 +58,9 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+    /// <summary>
+    /// 获取当前的虚拟路径提供程序
+    /// </summary>
     public static VirtualPathProvider VirtualPathProvider
     {
       get { return HostingEnvironment.VirtualPathProvider; }

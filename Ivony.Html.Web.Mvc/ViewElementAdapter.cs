@@ -34,7 +34,7 @@ namespace Ivony.Html.Web.Mvc
     /// 渲染 view 标签
     /// </summary>
     /// <param name="element">view 标签元素</param>
-    /// <param name="writer">HTML 编写器</param>
+    /// <param name="context">渲染上下文</param>
     protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 

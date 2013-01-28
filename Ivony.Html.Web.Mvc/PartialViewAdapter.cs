@@ -43,11 +43,19 @@ namespace Ivony.Html.Web.Mvc
       _view = view;
     }
 
+
+    /// <summary>
+    /// 当前视图上下文
+    /// </summary>
     protected ViewContext ViewContext
     {
       get { return _view.ViewContext; }
     }
 
+
+    /// <summary>
+    /// 当前 Url 帮助器
+    /// </summary>
     protected JumonyUrlHelper Url
     {
       get { return _view.Url; }
@@ -67,7 +75,7 @@ namespace Ivony.Html.Web.Mvc
     /// 渲染 partial 标签
     /// </summary>
     /// <param name="element">partial 标签</param>
-    /// <param name="writer">用于渲染的文本编写器</param>
+    /// <param name="context">渲染上下文</param>
     protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 

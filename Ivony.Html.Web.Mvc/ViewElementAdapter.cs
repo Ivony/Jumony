@@ -44,7 +44,7 @@ namespace Ivony.Html.Web.Mvc
       if ( key != null )
         _context.ViewData.TryGetValue( key, out dataObject );
       else
-        dataObject = _context.ViewData.Model;
+        dataObject = GetDataObject( context.Data ) ?? _context.ViewData.Model;
 
 
       if ( dataObject == null )
@@ -71,8 +71,11 @@ namespace Ivony.Html.Web.Mvc
           foreach ( var dataItem in listValue )
           {
 
+            PushData( context.Data, dataObject );
+
             RenderChilds( element, dataItem );
 
+            PopData( context.Data );
           }
 
 
@@ -112,6 +115,41 @@ namespace Ivony.Html.Web.Mvc
       context.Write( bindValue );
 
     }
+
+
+    private object GetDataObject( Hashtable data )
+    {
+      var dataStack = data[this] as Stack;
+
+      if ( dataStack != null && dataStack.Count > 0 )
+        return dataStack.Peek();
+
+      else
+        return null;
+    }
+
+
+    private void PushData( Hashtable data, object dataObject )
+    {
+      var dataStack = data[this] as Stack;
+      if ( dataStack == null )
+        data[this] = dataStack = new Stack();
+
+      dataStack.Push( dataObject );
+    }
+
+
+    private void PopData( Hashtable data )
+    {
+      var dataStack = data[this] as Stack;
+      if ( dataStack == null )
+        throw new InvalidOperationException();
+
+      dataStack.Pop();
+    }
+
+
+
 
     private string ToJson( object dataObject )
     {

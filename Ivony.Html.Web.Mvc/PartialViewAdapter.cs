@@ -63,7 +63,7 @@ namespace Ivony.Html.Web.Mvc
 
 
     /// <summary>
-    /// 一个 CSS 选择器，用于选取 partial 标签
+    /// 重写 CssSelector 属性，用于选取 partial 标签
     /// </summary>
     protected override string CssSelector
     {

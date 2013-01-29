@@ -5,7 +5,6 @@ using Ivony.Html.Parser;
 using System.IO;
 using System.Linq;
 using Ivony.Html.Parser.ContentModels;
-using Ivony.Html.ExpandedNavigateAPI;
 
 namespace SpeficationTest
 {

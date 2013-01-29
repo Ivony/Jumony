@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Ivony.Html.ExpandedDomAPI;
 
 namespace Ivony.Html.Templates
 {

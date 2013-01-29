@@ -12,7 +12,6 @@ using Ivony.Html.Forms;
 using Ivony.Html.Forms.Validation;
 using Ivony.Html.Web.Mvc;
 using Ivony.Html.Templates;
-using Ivony.Html.ExpandedNavigateAPI;
 
 
 public class index_html : ViewHandler<Task[]>

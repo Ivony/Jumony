@@ -279,7 +279,7 @@ namespace Ivony.Html.Forms
       if ( group != null )
         return TrySetValue( group, value );
 
-      throw new NotSupportedException();
+      throw new NotSupportedException( string.Format( "名为 \"{0}\" 输入控件的类型 \"{1}\" 不受支持。", input.Name, input.GetType().FullName ) );
     }
 
 

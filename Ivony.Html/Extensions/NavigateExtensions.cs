@@ -56,23 +56,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 获取所有子元素
-    /// </summary>
-    /// <param name="container">要获取子元素的容器</param>
-    /// <param name="action">要对子元素执行的操作</param>
-    /// <returns>容器的所有子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, Action<IHtmlElement> action )
-    {
-      if ( action == null )
-        throw new ArgumentNullException( "action" );
-
-      return Elements( container ).ForAll( action );
-    }
-
-
-
-
-    /// <summary>
     /// 获取符合条件的子元素
     /// </summary>
     /// <param name="container">要获取子元素的容器</param>
@@ -92,20 +75,6 @@ namespace Ivony.Html
 
 
 
-    /// <summary>
-    /// 获取所有子元素
-    /// </summary>
-    /// <param name="container">要获取子元素的容器</param>
-    /// <param name="selector">用来筛选子元素的元素选择器</param>
-    /// <param name="action">要对子元素执行的操作</param>
-    /// <returns>容器的所有子元素</returns>
-    public static IEnumerable<IHtmlElement> Elements( this IHtmlContainer container, string selector, Action<IHtmlElement> action )
-    {
-      if ( action == null )
-        throw new ArgumentNullException( "action" );
-
-      return Elements( container, selector ).ForAll( action );
-    }
 
 
 

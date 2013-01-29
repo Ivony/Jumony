@@ -13,8 +13,6 @@ namespace Ivony.Html.ExpandedDomAPI
   {
 
 
-
-
     /// <summary>
     /// 在自己后面添加一个文档碎片
     /// </summary>

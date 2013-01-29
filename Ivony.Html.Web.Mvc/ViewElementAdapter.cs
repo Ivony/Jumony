@@ -65,7 +65,7 @@ namespace Ivony.Html.Web.Mvc
 
         IEnumerable listValue = dataObject as IEnumerable;
 
-        if ( listValue != null && element.FindAny( "view" ) )
+        if ( listValue != null && element.Exists( "view" ) )
         {
 
           foreach ( var dataItem in listValue )

@@ -9,7 +9,7 @@ namespace Ivony.Html.ExpandedDomAPI
   /// <summary>
   /// 扩展的 DOM API
   /// </summary>
-  public static class ExtendDomExtensions
+  public static class ExpandedDomExtensions
   {
 
 

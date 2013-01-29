@@ -67,7 +67,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ExpandedFindExtensions.cs" />
+    <Compile Include="Extensions\ExpandedNavigateExtensions.cs" />
     <Compile Include="HtmlDomDependency.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />

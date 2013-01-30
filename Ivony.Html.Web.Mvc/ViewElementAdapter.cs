@@ -70,14 +70,14 @@ namespace Ivony.Html.Web.Mvc
           foreach ( var dataItem in listValue )
           {
 
-            PushData( context.Data, dataObject );
+            PushData( context.Data, dataItem );
 
-            RenderChilds( element, dataItem );
+            element.RenderChilds( context );
 
             PopData( context.Data );
           }
 
-
+          return;
         }
       }
 
@@ -154,15 +154,6 @@ namespace Ivony.Html.Web.Mvc
     {
       var serializer = new JavaScriptSerializer();
       return serializer.Serialize( dataObject );
-    }
-
-
-    private void RenderChilds( IHtmlElement element, object dataItem )
-    {
-      foreach ( var node in element.Nodes() )
-      {
-        //node.Render( )
-      }
     }
 
 

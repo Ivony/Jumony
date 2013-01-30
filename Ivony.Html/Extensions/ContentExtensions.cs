@@ -169,7 +169,7 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( ( HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute ) ) && !attribute.AttributeValue.Contains( '"' ) )
+          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
             builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
             builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
@@ -333,7 +333,7 @@ namespace Ivony.Html
     }
 
 
-    public static void RenderChilds( IHtmlContainer container, HtmlRenderContext context )
+    public static void RenderChilds( this IHtmlContainer container, HtmlRenderContext context )
     {
       foreach ( var node in container.Nodes() )
       {

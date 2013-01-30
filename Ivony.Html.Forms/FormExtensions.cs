@@ -271,9 +271,9 @@ namespace Ivony.Html.Forms
       if ( input == null )
         return false;
 
-      var textInput = input as HtmlInputText;
-      if ( textInput != null )
-        return TrySetValue( textInput, value );
+      var textControl = input as IHtmlTextControl;
+      if ( textControl != null )
+        return TrySetValue( textControl, value );
 
       var group = input as IHtmlGroupControl;
       if ( group != null )

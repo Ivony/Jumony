@@ -888,7 +888,6 @@ namespace Ivony.Html
 
         if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
         {
-
           modifier.AddTextNode( element, text );
         }
         else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) || !encodeWhiteSpaces )

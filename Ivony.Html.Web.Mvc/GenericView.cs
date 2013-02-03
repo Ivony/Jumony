@@ -22,7 +22,7 @@ namespace Ivony.Html.Web.Mvc
       Initialize( virtualPath, partialMode );
     }
 
-    protected override void Process( IHtmlContainer container )
+    protected override void ProcessScope( IHtmlContainer container )
     {
     }
 

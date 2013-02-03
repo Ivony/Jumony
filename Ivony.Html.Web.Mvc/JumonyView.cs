@@ -55,7 +55,7 @@ namespace Ivony.Html.Web.Mvc
 
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );
       OnPreProcess();
-      Process( Scope );
+      ProcessScope( Scope );
       OnPostProcess();
       HttpContext.Trace.Write( "JumonyView", "End Process" );
 
@@ -257,7 +257,10 @@ namespace Ivony.Html.Web.Mvc
     /// <summary>
     /// 派生类实现此方法完成对视图的处理工作
     /// </summary>
-    protected abstract void Process( IHtmlContainer container );
+    protected virtual void ProcessScope( IHtmlContainer container )
+    {
+
+    }
 
 
     /// <summary>

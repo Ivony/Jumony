@@ -18,7 +18,7 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
-    protected override void Process( IHtmlContainer container )
+    protected override void ProcessScope( IHtmlContainer container )
     {
 
     }

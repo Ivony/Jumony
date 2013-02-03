@@ -156,6 +156,23 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>视图对象</returns>
     protected virtual IView CreateViewCore( ControllerContext context, string virtualPath, bool isPartial )
     {
+      IViewProvider viewProvider;
+      var view = CreateViewCore( context, virtualPath, isPartial, out viewProvider );
+      view.Initialize( virtualPath, isPartial );
+      OnViewCreated( new JumonyViewEventArgs() { View = view, ViewProvider = viewProvider } );
+      return view;
+    }
+
+
+    /// <summary>
+    /// 创建视图对象
+    /// </summary>
+    /// <param name="context">控制器上下文</param>
+    /// <param name="virtualPath">视图虚拟路径</param>
+    /// <param name="isPartial">是否为部分视图</param>
+    /// <returns>视图对象</returns>
+    protected virtual ViewBase CreateViewCore( ControllerContext context, string virtualPath, bool isPartial, out IViewProvider viewProvider )
+    {
 
       lock ( _providersSync )
       {
@@ -164,15 +181,17 @@ namespace Ivony.Html.Web.Mvc
           var view = provider.TryCreateView( context, VirtualPathProvider, virtualPath, isPartial );
           if ( view != null )
           {
-            OnViewCreated( new JumonyViewEventArgs() { View = view, ViewProvider = provider } );
+            viewProvider = provider;
             return view;
           }
         }
       }
 
 
+
       {//默认处理策略
 
+        viewProvider = null;
         ViewBase view = TryCreateViewHandler( virtualPath, isPartial );
 
 
@@ -205,7 +224,6 @@ namespace Ivony.Html.Web.Mvc
       if ( view == null )
         return null;
 
-      view.Initialize( virtualPath, isPartial );
       return view;
     }
 

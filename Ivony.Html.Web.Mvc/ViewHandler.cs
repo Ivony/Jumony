@@ -31,12 +31,6 @@ namespace Ivony.Html.Web.Mvc
 
     #endregion
 
-
-    internal new void Initialize( string virtualPath, bool isPartial )
-    {
-      base.Initialize( virtualPath, isPartial );
-    }
-
     /// <summary>
     /// 获取页面文档对象
     /// </summary>
@@ -57,7 +51,7 @@ namespace Ivony.Html.Web.Mvc
     /// 重写 Process 方法，调用 ProcessDocument 方法处理页面逻辑
     /// </summary>
     /// <param name="scope"></param>
-    protected sealed override void Process( IHtmlContainer scope )
+    protected sealed override void ProcessScope( IHtmlContainer scope )
     {
       Document = scope.Document;
       ProcessDocument();

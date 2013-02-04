@@ -17,15 +17,17 @@ namespace Ivony.Html.Web.Mvc
   public class ViewElementAdapter : HtmlElementAdapter
   {
 
-    private ViewContext _context;
+    protected ViewContext ViewContext { get; private set; }
+    protected JumonyUrlHelper Url { get; private set; }
 
     /// <summary>
     /// 创建 ViewElementAdapter 对象
     /// </summary>
     /// <param name="context"></param>
-    public ViewElementAdapter( ViewContext context )
+    public ViewElementAdapter( ViewContext context, JumonyUrlHelper urlHelper )
     {
-      _context = context;
+      ViewContext = context;
+      Url = urlHelper;
     }
 
 
@@ -37,13 +39,45 @@ namespace Ivony.Html.Web.Mvc
     protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 
+      if ( element.Attribute( "action" ) != null )
+      {
+
+        var url = Url.GetRouteUrl( element );
+
+        var nextElement = element.NextElement();
+        if ( nextElement == null )
+          return;
+
+        switch ( nextElement.Name )
+        {
+          case "a":
+          case "link":
+            nextElement.SetAttribute( "href", url );
+            return;
+
+          case "img":
+          case "script":
+            nextElement.SetAttribute( "src", url );
+            return;
+
+          case "form":
+            nextElement.SetAttribute( "action", url );
+            return;
+
+          default:
+            return;
+        }
+      }
+
+
+
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
 
       object dataObject;
       if ( key != null )
-        _context.ViewData.TryGetValue( key, out dataObject );
+        ViewContext.ViewData.TryGetValue( key, out dataObject );
       else
-        dataObject = GetDataObject( context.Data ) ?? _context.ViewData.Model;
+        dataObject = GetDataObject( context.Data ) ?? ViewContext.ViewData.Model;
 
 
       if ( dataObject == null )
@@ -52,33 +86,29 @@ namespace Ivony.Html.Web.Mvc
 
       var path = element.Attribute( "path" ).Value();
 
-
       if ( path != null )
         dataObject = DataBinder.Eval( dataObject, path );
 
 
       var format = element.Attribute( "format" ).Value();
 
-      if ( format == null )
+
+      IEnumerable listValue = dataObject as IEnumerable;
+
+      if ( listValue != null && element.Exists( "view" ) && format == null )
       {
 
-        IEnumerable listValue = dataObject as IEnumerable;
-
-        if ( listValue != null && element.Exists( "view" ) )
+        foreach ( var dataItem in listValue )
         {
 
-          foreach ( var dataItem in listValue )
-          {
+          PushData( context.Data, dataItem );
 
-            PushData( context.Data, dataItem );
+          element.RenderChilds( context );
 
-            element.RenderChilds( context );
-
-            PopData( context.Data );
-          }
-
-          return;
+          PopData( context.Data );
         }
+
+        return;
       }
 
 
@@ -107,7 +137,10 @@ namespace Ivony.Html.Web.Mvc
       var attributeName = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
       if ( attributeName != null )
       {
-        element.NextElement().SetAttribute( attributeName, bindValue );
+        var nextElement = element.NextElement();
+        if ( nextElement == null )
+          return;
+        nextElement.SetAttribute( attributeName, bindValue );
         return;
       }
 

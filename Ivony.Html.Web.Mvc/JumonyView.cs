@@ -47,10 +47,10 @@ namespace Ivony.Html.Web.Mvc
     protected override string RenderCore( IHtmlContainer scope )
     {
 
-      //获取视图筛选器
+      //初始化视图筛选器
       Filters = InitializeFilters();
 
-      RenderAdapters.Add( new ViewElementAdapter( ViewContext ) );
+      RenderAdapters.Add( new ViewElementAdapter( ViewContext, Url ) );
 
 
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );

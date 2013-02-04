@@ -115,6 +115,35 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
+    /// <summary>
+    /// 从元素标签中获取路由的虚拟路径
+    /// </summary>
+    /// <param name="element">要获取分析路由虚拟路径的元素</param>
+    /// <returns>获取的虚拟路径</returns>
+    public string GetRouteUrl( IHtmlElement element )
+    {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( element.Attribute( "action" ) == null )
+        throw new InvalidOperationException();
+
+      var action = element.Attribute( "action" ).Value() ?? RouteData.Values["action"].CastTo<string>();
+      var controller = element.Attribute( "controller" ).Value() ?? RouteData.Values["controller"].CastTo<string>();
+
+
+      var routeValues = GetRouteValues( element );
+
+      element.RemoveAttribute( "action" );
+      element.RemoveAttribute( "controller" );
+      element.RemoveAttribute( "inherits" );
+
+      return Url.Action( action, controller, routeValues );
+    }
+
+
     /// <summary>
     /// 从元素标签中获取所有的路由值
     /// </summary>

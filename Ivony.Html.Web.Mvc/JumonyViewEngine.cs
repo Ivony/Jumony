@@ -170,6 +170,7 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="context">控制器上下文</param>
     /// <param name="virtualPath">视图虚拟路径</param>
     /// <param name="isPartial">是否为部分视图</param>
+    /// <param name="viewProvider">产生该视图的视图提供程序</param>
     /// <returns>视图对象</returns>
     protected virtual ViewBase CreateViewCore( ControllerContext context, string virtualPath, bool isPartial, out IViewProvider viewProvider )
     {

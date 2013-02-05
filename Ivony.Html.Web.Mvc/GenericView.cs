@@ -16,15 +16,5 @@ namespace Ivony.Html.Web.Mvc
 
   internal class GenericView : JumonyView
   {
-
-    public GenericView( string virtualPath, bool partialMode )
-    {
-      Initialize( virtualPath, partialMode );
-    }
-
-    protected override void ProcessScope( IHtmlContainer container )
-    {
-    }
-
   }
 }

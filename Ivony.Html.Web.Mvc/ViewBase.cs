@@ -128,7 +128,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     /// <param name="virtualPath">虚拟路径</param>
     /// <param name="partialMode">是否为部分视图模式</param>
-    internal void Initialize( string virtualPath, bool partialMode )
+    internal virtual void Initialize( string virtualPath, bool partialMode )
     {
       if ( _initialized )
         throw new InvalidOperationException( "视图已经初始化" );

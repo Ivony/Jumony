@@ -86,12 +86,14 @@
     <Compile Include="JumonyUrlHelper.cs" />
     <Compile Include="JumonyView.cs" />
     <Compile Include="JumonyMasterView.cs" />
+    <Compile Include="JumonyViewHandler.cs" />
     <Compile Include="MasterViewHandler.cs" />
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormExtensions.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="GenericView.cs" />
+    <Compile Include="PairtialViewHandler.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="RouteExtensions.cs" />
     <Compile Include="SimpleRouteRule.cs" />

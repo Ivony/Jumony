@@ -197,7 +197,7 @@ namespace Ivony.Html.Web.Mvc
 
         if ( view == null )
         {
-          view = new GenericView( virtualPath, isPartial );
+          view = new GenericView();
         }
 
 
@@ -220,7 +220,7 @@ namespace Ivony.Html.Web.Mvc
       if ( !VirtualPathProvider.FileExists( handlerPath ) )
         return null;
 
-      var view = (ViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewHandler ) );
+      var view = (ViewBase) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewBase ) );
       if ( view == null )
         return null;
 

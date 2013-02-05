@@ -13,6 +13,7 @@ namespace Ivony.Html.Web.Mvc
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
+  [Obsolete( "此类型已过时，仅出于兼容目的而保留，请使用 JumonyViewHandler 类型" )]
   public abstract class ViewHandler : JumonyView, IHttpHandler
   {
 

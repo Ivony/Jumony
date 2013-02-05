@@ -14,6 +14,9 @@ namespace Ivony.Html.Web.Mvc
   public abstract class ViewFilterHandler : IHttpHandler, IViewFilter
   {
 
+
+    #region IHttpHandler 成员
+
     /// <summary>
     /// 重写 IsReusable 属性，始终返回 true。
     /// </summary>
@@ -30,6 +33,8 @@ namespace Ivony.Html.Web.Mvc
     {
       throw new HttpException( 404, "不能直接访问视图筛选处理器" );
     }
+
+    #endregion
 
 
 

@@ -55,7 +55,7 @@ namespace Ivony.Html
       {
         using ( var stream = File.OpenRead( uri.LocalPath ) )
         {
-          return LoadDocument( parser, stream, defaultEncoding, uri );
+          return LoadDocument( parser, stream, defaultEncoding ?? Encoding.Default, uri );
         }
       }
 

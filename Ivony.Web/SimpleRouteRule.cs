@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Routing;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Web
 {
   /// <summary>
   /// 简单路由规则，定义简单路由表的路由规则
@@ -340,7 +340,7 @@ namespace Ivony.Html.Web.Mvc
         if ( _virtualPathDescriptor != null )
           return _virtualPathDescriptor;
 
-        return _virtualPathDescriptor = StaticPrefix + string.Join( "", Enumerable.Repeat( "/{dynamic}", DynamicRouteKyes.Length ) );
+        return _virtualPathDescriptor = StaticPrefix + string.Join( "", Enumerable.Repeat( "/{dynamic}", DynamicRouteKyes.Length ).ToArray() );
       }
     }
 
@@ -367,7 +367,7 @@ namespace Ivony.Html.Web.Mvc
             list.Add( string.Format( "<\"{0}\",dynamic>", key.Replace( "\"", "\\\"" ) ) );
         }
 
-        return _routeValuesDescriptor = string.Join( ",", list );
+        return _routeValuesDescriptor = string.Join( ",", list.ToArray() );
       }
     }
 

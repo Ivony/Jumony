@@ -10,7 +10,7 @@ using System.Web.Hosting;
 using System.Web.Compilation;
 using System.Text.RegularExpressions;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
 

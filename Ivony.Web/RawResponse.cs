@@ -6,7 +6,7 @@ using System.Web;
 using System.Collections.Specialized;
 using System.IO;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
 

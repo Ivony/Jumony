@@ -8,7 +8,7 @@ using System.Web;
 using System.Text.RegularExpressions;
 using System.Web.Security;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
   /// <summary>

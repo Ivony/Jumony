@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
   /// <summary>

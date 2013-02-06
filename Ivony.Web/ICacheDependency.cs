@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
   /// <summary>
   /// 定义缓存依赖项

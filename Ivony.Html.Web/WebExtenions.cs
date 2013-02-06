@@ -48,22 +48,5 @@ namespace Ivony.Html.Web
       context.Items[requestDataToken] = data;
     }
 
-
-    /// <summary>
-    /// 获取当前 HTTP 请求的客户端缓存策略
-    /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public static ClientCachePolicyBase GetClientCachePolicy( this HttpContextBase context )
-    {
-      var instance = context.Items[ClientCachePolicy.Token] as ClientCachePolicy;
-
-      if ( instance == null )
-        return new ClientCachePolicyWrapper( context.Response.Cache );
-
-      else
-        return instance;
-    }
-
   }
 }

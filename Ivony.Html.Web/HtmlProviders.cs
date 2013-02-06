@@ -12,6 +12,7 @@ using System.Web.Compilation;
 using System.Web.Configuration;
 using Ivony.Fluent;
 using System.Collections.ObjectModel;
+using Ivony.Web;
 
 namespace Ivony.Html.Web
 {

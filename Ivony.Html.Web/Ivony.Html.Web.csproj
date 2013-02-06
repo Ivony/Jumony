@@ -67,35 +67,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheExtensions.cs" />
-    <Compile Include="CacheItem.cs" />
-    <Compile Include="CachePolicy.cs" />
-    <Compile Include="CacheToken.cs" />
-    <Compile Include="ClientCachePolicy.cs" />
-    <Compile Include="ClientCachePolicyModule.cs" />
+    <Compile Include="DefaultCachePolicyProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
-    <Compile Include="CacheHelper.cs" />
     <Compile Include="HttpHandler.cs" />
-    <Compile Include="ICacheDependency.cs" />
-    <Compile Include="ICachedResponse.cs" />
-    <Compile Include="ICacheStorageProvider.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
-    <Compile Include="ICachePolicyProvider.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="IHtmlHandlerProvider.cs" />
-    <Compile Include="PersistentCacheStorageProvider.cs" />
-    <Compile Include="StandardCachePolicy.cs" />
     <Compile Include="WebParser.cs" />
     <Compile Include="NoResponseHttpContext.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />
     <Compile Include="IRequestMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RawResponse.cs" />
     <Compile Include="WebExtenions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +97,10 @@
     <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
       <Project>{E775B408-605F-4B66-87B6-98596069B703}</Project>
       <Name>Ivony.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Web\Ivony.Web.csproj">
+      <Project>{82c4ee66-01f7-44c8-b9ff-a6ac3694e459}</Project>
+      <Name>Ivony.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

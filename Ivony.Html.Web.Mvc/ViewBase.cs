@@ -11,6 +11,7 @@ using System.Web.Mvc.Html;
 using Ivony.Fluent;
 using System.Threading;
 using System.Threading.Tasks;
+using Ivony.Web;
 
 namespace Ivony.Html.Web.Mvc
 {

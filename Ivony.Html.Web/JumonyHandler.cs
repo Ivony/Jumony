@@ -8,6 +8,8 @@ using System.IO;
 using Ivony.Fluent;
 using System.Web.Hosting;
 
+using Ivony.Web;
+
 namespace Ivony.Html.Web
 {
 
@@ -75,7 +77,7 @@ namespace Ivony.Html.Web
 
     }
 
-    
+
     /// <summary>
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
@@ -116,7 +118,7 @@ namespace Ivony.Html.Web
       }
 
 
-      ( (IHtmlHandler) this ).ProcessDocument( Context, Document );
+      ((IHtmlHandler) this).ProcessDocument( Context, Document );
 
 
       {

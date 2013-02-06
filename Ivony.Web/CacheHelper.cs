@@ -8,7 +8,7 @@ using System.Web.Hosting;
 using System.Security.Cryptography;
 using System.Web.Routing;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
   /// <summary>
   /// 提供 HTTP 客户端缓存的一些帮助功能

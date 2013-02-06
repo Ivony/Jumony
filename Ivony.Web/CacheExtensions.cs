@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.Compilation;
 using System.Text.RegularExpressions;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
   
   /// <summary>

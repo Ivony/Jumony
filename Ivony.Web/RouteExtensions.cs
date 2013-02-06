@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Routing;
-using System.Web.Mvc;
 using Ivony.Fluent;
+using Ivony.Web;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Web
 {
 
   /// <summary>
@@ -100,81 +100,5 @@ namespace Ivony.Html.Web.Mvc
       routeTable.AddRule( name, urlPattern, routeValues, queryKeys );
       return routeTable;
     }
-
-
-    /// <summary>
-    /// 获取内建的简单路由表实例，如果没有则创建一个。
-    /// </summary>
-    /// <param name="routes">系统路由集合</param>
-    /// <returns>内建的简单路由表实例</returns>
-    public static SimpleRouteTable SimpleRouteTable( this RouteCollection routes )
-    {
-      if ( routes == null )
-        throw new ArgumentNullException( "routes" );
-
-      lock ( routes )
-      {
-        var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.IsBuiltIn );
-        if ( routeTable == null )
-          routes.RegisterSimpleRouteTable( routeTable = new SimpleRouteTable( "BuiltIn", new MvcRouteHandler(), true ) );
-        return routeTable;
-      }
-    }
-
-    /// <summary>
-    /// 获取指定区域的简单区域路由表实例，如果没有则创建一个。
-    /// </summary>
-    /// <param name="context">区域注册上下文</param>
-    /// <returns>内建的简单区域路由表实例</returns>
-    public static SimpleAreaRouteTable SimpleAreaRouteTable( this AreaRegistrationContext context )
-    {
-      if ( context == null )
-        throw new ArgumentNullException( "context" );
-
-
-      var routes = context.Routes;
-      var areaName = context.AreaName;
-      var namespaces = context.Namespaces.ToArray();
-      var useNamespaceFallback = namespaces == null || namespaces.Length == 0;
-
-      lock ( routes )
-      {
-        var routeTable = routes.OfType<SimpleAreaRouteTable>().FirstOrDefault( route => route.AreaName.EqualsIgnoreCase( areaName ) );
-        if ( routeTable == null )
-          routes.RegisterSimpleRouteTable( routeTable = new SimpleAreaRouteTable( areaName, namespaces, useNamespaceFallback ) );
-        return routeTable;
-      }
-    }
-
-
-
-    /// <summary>
-    /// 向路由集合中注册一个简单路由表实例
-    /// </summary>
-    /// <param name="routes">路由集合</param>
-    /// <param name="routeTable">简单路由表实例</param>
-    /// <returns>路由集合</returns>
-    public static RouteCollection RegisterSimpleRouteTable( this RouteCollection routes, SimpleRouteTable routeTable )
-    {
-
-      if ( routes == null )
-        throw new ArgumentNullException( "routes" );
-
-      if ( routeTable == null )
-        throw new ArgumentNullException( "routeTable" );
-
-
-      lock ( routes )
-      {
-        if ( routeTable.Routes == routes )
-          return routes;
-
-        routes.Add( routeTable );
-        routeTable.Routes = routes;
-      }
-
-      return routes;
-    }
-
   }
 }

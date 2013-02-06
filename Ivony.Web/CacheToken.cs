@@ -8,7 +8,7 @@ using System.Web;
 using System.Collections.Specialized;
 using System.Web.Caching;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
   /// <summary>
@@ -60,7 +60,7 @@ namespace Ivony.Html.Web
     {
       if ( _tokenString == null )
       {
-        _tokenString = string.Join( "+", _tokens.Select( t => t.ToString() ) );
+        _tokenString = string.Join( "+", _tokens.Select( t => t.ToString() ).ToArray() );
       }
     }
 
@@ -154,7 +154,7 @@ namespace Ivony.Html.Web
       {
         if ( _tokenString == null )
         {
-          _tokenString = TypeName.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ) );
+          _tokenString = TypeName.Replace( ":", "@:" ) + ":" + string.Join( ";", _tokens.Select( t => t.Replace( "@", "@@" ).Replace( ";", "@;" ) ).ToArray() );
           _tokenString = _tokenString.Replace( "+", "@+" );
 
         }

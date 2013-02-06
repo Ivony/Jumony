@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Ivony.Fluent;
 using Ivony.Html.Parser;
-using System.Web.Hosting;
+using Ivony.Web;
 
 
 
@@ -42,14 +44,14 @@ namespace Ivony.Html.Web.Mvc
     /// <param name="route"></param>
     public static void RegisterRouteBeforeSimpleRouteTable( RouteBase route )
     {
-      lock ( RouteTable.Routes )
+      lock ( Routes )
       {
-        var index = RouteTable.Routes.IndexOf( SimpleRouteTable );
+        var index = Routes.IndexOf( SimpleRouteTable );
         if ( index == -1 )
-          RouteTable.Routes.Add( route );
+          Routes.Add( route );
 
         else
-          RouteTable.Routes.Insert( index, route );
+          Routes.Insert( index, route );
       }
     }
 
@@ -67,12 +69,65 @@ namespace Ivony.Html.Web.Mvc
     }
 
 
+
     /// <summary>
     /// 获取简单路由表的默认内建实例
     /// </summary>
     public static SimpleRouteTable SimpleRouteTable
     {
-      get { return RouteTable.Routes.SimpleRouteTable(); }
+      get { return Routes.RouteTable(); }
+    }
+
+
+    private static RouteCollection Routes
+    {
+      get { return System.Web.Routing.RouteTable.Routes; }
+    }
+
+
+
+    /// <summary>
+    /// 获取内建的简单路由表实例，如果没有则创建一个。
+    /// </summary>
+    /// <param name="routes">系统路由集合</param>
+    /// <returns>内建的简单路由表实例</returns>
+    public static SimpleRouteTable RouteTable( this RouteCollection routes )
+    {
+      if ( routes == null )
+        throw new ArgumentNullException( "routes" );
+
+      lock ( routes )
+      {
+        var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.Name == "BuiltIn" );
+        if ( routeTable == null )
+          routes.Add( routeTable = new SimpleRouteTable( "BuiltIn", new MvcRouteHandler(), true ) );
+        return routeTable;
+      }
+    }
+
+    /// <summary>
+    /// 获取指定区域的简单区域路由表实例，如果没有则创建一个。
+    /// </summary>
+    /// <param name="context">区域注册上下文</param>
+    /// <returns>内建的简单区域路由表实例</returns>
+    public static SimpleAreaRouteTable RouteTable( this AreaRegistrationContext context )
+    {
+      if ( context == null )
+        throw new ArgumentNullException( "context" );
+
+
+      var routes = context.Routes;
+      var areaName = context.AreaName;
+      var namespaces = context.Namespaces.ToArray();
+      var useNamespaceFallback = namespaces == null || namespaces.Length == 0;
+
+      lock ( routes )
+      {
+        var routeTable = routes.OfType<SimpleAreaRouteTable>().FirstOrDefault( route => route.AreaName.EqualsIgnoreCase( areaName ) );
+        if ( routeTable == null )
+          routes.Add( routeTable = new SimpleAreaRouteTable( areaName, namespaces, useNamespaceFallback ) );
+        return routeTable;
+      }
     }
 
 
@@ -148,7 +203,7 @@ namespace Ivony.Html.Web.Mvc
     /// <returns>加载的文档对象</returns>
     public static IHtmlDocument LoadDocument( string virtualPath )
     {
-      return HtmlProviders.LoadDocument(virtualPath);
+      return HtmlProviders.LoadDocument( virtualPath );
     }
 
 

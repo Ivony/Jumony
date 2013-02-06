@@ -98,9 +98,9 @@ namespace Ivony.Html.Web.Mvc
 
       lock ( routes )
       {
-        var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.Name == "BuiltIn" );
+        var routeTable = routes.OfType<SimpleRouteTable>().FirstOrDefault( route => route.Name == "Mvc_BuiltIn" );
         if ( routeTable == null )
-          routes.Add( routeTable = new SimpleRouteTable( "BuiltIn", new MvcRouteHandler(), true ) );
+          routes.Add( routeTable = new SimpleRouteTable( "Mvc_BuiltIn", new MvcRouteHandler(), true ) );
         return routeTable;
       }
     }
@@ -118,8 +118,8 @@ namespace Ivony.Html.Web.Mvc
 
       var routes = context.Routes;
       var areaName = context.AreaName;
-      var namespaces = context.Namespaces.ToArray();
-      var useNamespaceFallback = namespaces == null || namespaces.Length == 0;
+      var namespaces = context.Namespaces.IfNull( new string[0], n => n.ToArray() );
+      var useNamespaceFallback = namespaces.Length == 0;
 
       lock ( routes )
       {
@@ -257,10 +257,5 @@ namespace Ivony.Html.Web.Mvc
         return HtmlProviders.GetCachePolicy( context );
       }
     }
-
-
-
-
   }
-
 }

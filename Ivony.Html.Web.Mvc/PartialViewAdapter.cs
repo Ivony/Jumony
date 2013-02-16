@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -40,8 +41,31 @@ namespace Ivony.Html.Web.Mvc
       if ( view == null )
         throw new ArgumentNullException( "view" );
 
+      var type = view.GetType();
+
+      var partialActions = GetPartialExecutors( type );
+
       _view = view;
     }
+
+
+    public const string partialExecutorMethodPrefix = "Partial_";
+
+    private PartialViewExecutor[] GetPartialExecutors( Type type )
+    {
+      return type
+        .GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
+        .Where( m => m.Name.StartsWith( partialExecutorMethodPrefix ) )
+        .Where( m => m.ReturnType == typeof( string ) )
+        .Select( m => CreateExecutor( m ) ).ToArray();
+    }
+
+    private PartialViewExecutor CreateExecutor( MethodInfo method )
+    {
+
+      return new PartialViewExecutor( method );
+    }
+
 
 
     /// <summary>

@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheFilterBase.cs" />
+    <Compile Include="ConflictCheckList.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
     <Compile Include="GenericMasterView.cs" />
@@ -95,6 +96,12 @@
     <Compile Include="PairtialViewHandler.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
+    <Compile Include="PartialViewExecutor.cs" />
+    <Compile Include="PartialViewAdapter.cs" />
+    <Compile Include="ResourceManager.cs" />
+    <Compile Include="RouteExtensions.cs" />
+    <Compile Include="SimpleRouteRule.cs" />
+    <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
     <Compile Include="ViewElementAdapter.cs" />

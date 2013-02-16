@@ -17,9 +17,7 @@ public class _filter : ViewFilterHandler
 
   public override void OnPreRender( ViewContext context, JumonyView view )
   {
-    view.Scope.Find( "title" ).First().InnerHtml( "Test" );
     var document = view.Scope as IHtmlDocument;
-
     if ( document != null )
       resourceManager.AddAllReference( document );
   }

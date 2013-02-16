@@ -97,7 +97,7 @@ namespace Ivony.Html.Web.Mvc
 
 
       {
-        var existsStyleSheets = new HashSet<string>( head.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "herf" ).Value() ), StringComparer.OrdinalIgnoreCase );
+        var existsStyleSheets = new HashSet<string>( head.Find( "link[rel=stylesheet]" ).Select( e => e.Attribute( "href" ).Value() ), StringComparer.OrdinalIgnoreCase );
         foreach ( var element in masterHead.Find( "link[rel=stylesheet]" ) )
         {
           if ( !existsStyleSheets.Contains( element.Attribute( "href" ).Value() ) )

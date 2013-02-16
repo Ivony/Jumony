@@ -50,7 +50,6 @@
     <Compile Include="ClientCachePolicy.cs" />
     <Compile Include="ClientCachePolicyModule.cs" />
     <Compile Include="ConflictCheckList.cs" />
-    <Compile Include="HttpContextExtensions.cs" />
     <Compile Include="ICacheDependency.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICachePolicyProvider.cs" />
@@ -62,6 +61,7 @@
     <Compile Include="SimpleRouteRule.cs" />
     <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="StandardCachePolicy.cs" />
+    <Compile Include="WebExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

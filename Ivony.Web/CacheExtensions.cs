@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web.Compilation;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Ivony.Web
 {
@@ -16,6 +17,24 @@ namespace Ivony.Web
   /// </summary>
   public static class CacheExtensions
   {
+
+
+    /// <summary>
+    /// 获取当前 HTTP 请求的客户端缓存策略
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public static ClientCachePolicyBase GetClientCachePolicy( this HttpContextBase context )
+    {
+      var instance = context.Items[ClientCachePolicy.Token] as ClientCachePolicy;
+
+      if ( instance == null )
+        return new ClientCachePolicyWrapper( context.Response.Cache );
+
+      else
+        return instance;
+    }
+
 
     
     /// <summary>

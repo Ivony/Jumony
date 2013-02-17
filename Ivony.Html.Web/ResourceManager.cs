@@ -93,8 +93,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 清除文档中所有的资源文件引用
     /// </summary>
-    /// <param name="document"></param>
-    /// <param name="headScopeOnly"></param>
+    /// <param name="document">要清除资源文件引用的文档</param>
+    /// <param name="headScopeOnly">是否仅清除 &gt;head&lt; 元素内部的引用</param>
     public void ClearAllReference( IHtmlDocument document, bool headScopeOnly = true )
     {
       if ( document == null )
@@ -102,9 +102,9 @@ namespace Ivony.Html.Web
 
 
       if ( headScopeOnly )
-        document.Find( "head link[rel=stylesheet], head script[src]" ).Remove();
+        document.Find( "head link[rel=stylesheet][href$=.css], head script[src$=.js]" ).Remove();
       else
-        document.Find( "link[rel=stylesheet], script[src]" ).Remove();
+        document.Find( "link[rel=stylesheet][href$=.css], script[src$=.js]" ).Remove();
     }
 
 

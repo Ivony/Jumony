@@ -133,7 +133,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="parser">分析器</param>
     /// <param name="content">文档内容加载结果</param>
-    /// <returns></returns>
+    /// <returns>分析结果</returns>
     public static IHtmlDocument Parse( this IHtmlParser parser, HtmlContentResult content )
     {
       return parser.Parse( content.Content, CreateDocumentUri( content.VirtualPath ) );
@@ -144,7 +144,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
-    /// 
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 内容加载结果</returns>
     public static HtmlContentResult LoadContent( string virtualPath )
@@ -184,7 +183,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>
-    /// 
     /// <param name="virtualPath">文档的虚拟路径</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument LoadDocument( string virtualPath )
@@ -242,6 +240,7 @@ namespace Ivony.Html.Web
       var section = WebConfigurationManager.GetSection( "system.web/compilation", virtualPath ) as CompilationSection;
       if ( section == null )
         return null;
+      
       if ( section.BuildProviders[VirtualPathUtility.GetExtension( virtualPath )] == null )
         return null;
 
@@ -311,7 +310,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
-    /// 
     /// <param name="contentResult">文档加载结果</param>
     /// <returns>HTML 文档对象</returns>
     public static IHtmlDocument ParseDocument( HtmlContentResult contentResult )
@@ -332,7 +330,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
-    /// 
     /// <param name="contentResult">文档加载结果</param>
     /// <param name="parserResult">解析器选择结果</param>
     /// <returns>HTML 文档对象</returns>
@@ -460,7 +457,7 @@ namespace Ivony.Html.Web
     /// 检测是否能加载指定虚拟路径的文档内容
     /// </summary>
     /// <param name="virtualPath">虚拟路径</param>
-    /// <returns></returns>
+    /// <returns>是否能加载指定虚拟路径的文档内容</returns>
     public bool CanLoadContent( string virtualPath )
     {
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
@@ -509,6 +506,11 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 注册一个 HTML 内容提供程序
+    /// </summary>
+    /// <param name="extension">所支持的扩展名</param>
+    /// <param name="provider">HTML 内容提供程序</param>
     public void RegisterContentProvider( string extension, IHtmlContentProvider provider )
     {
 
@@ -522,11 +524,6 @@ namespace Ivony.Html.Web
 
     }
 
-
-
     private object _sync = new object();
-
   }
-
-
 }

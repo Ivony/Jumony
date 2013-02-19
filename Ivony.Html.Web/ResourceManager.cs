@@ -40,7 +40,14 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取所有 CSS 样式资源的路径
+    /// </summary>
     public string[] AllCssStyleFiles { get { return styleFiles.Copy(); } }
+
+    /// <summary>
+    /// 获取所有 JavaScript 脚本资源的路径
+    /// </summary>
     public string[] AllJavaScriptFiles { get { return scriptFiles.Copy(); } }
 
 

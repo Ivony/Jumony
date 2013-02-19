@@ -65,6 +65,11 @@ namespace Ivony.Html.Web.Mvc
 
 
       HttpContext.Trace.Write( "JumonyView", "Begin ResolveUri" );
+      Scope.Find( "form[postback]" )
+        .SetAttribute( "action", RawViewContext.HttpContext.Request.RawUrl )
+        .SetAttribute( "method", "post" )
+        .RemoveAttribute( "postback" );
+
       Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "JumonyView", "End ResolveUri" );
 

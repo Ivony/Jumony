@@ -19,8 +19,6 @@ public class modify_html : ViewHandler<Task>
 
   protected override void ProcessDocument()
   {
-    Document.FindSingle( "form" ).SetAttribute( "action", Url.Action( "Modify", new { taskId = ViewModel.ID } ) );
-
     Document.FindSingle( "input[name=title]" ).SetAttribute( "value", ViewModel.Title );
 
   }

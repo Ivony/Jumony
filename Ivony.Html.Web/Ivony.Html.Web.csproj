@@ -76,7 +76,6 @@
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
-    <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="WebParser.cs" />
     <Compile Include="NoResponseHttpContext.cs" />

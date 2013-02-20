@@ -62,5 +62,84 @@ namespace Ivony.Html.Web.Mvc
 
     }
 
+
+    public static bool ShowErrorMessage( this HtmlForm form, ModelStateDictionary modelStates, Func<IHtmlInputControl, IHtmlElement> inputControlFinder )
+    {
+      return new GenericMvcFormValidator( form, modelStates )
+      {
+        InputControlFinder = inputControlFinder
+      }.ShowErrorMessage();
+    }
+
+    private class GenericMvcFormValidator : MvcFormValidator
+    {
+      public GenericMvcFormValidator( HtmlForm form, ModelStateDictionary modelStates )
+        : base( form, modelStates )
+      {
+
+      }
+
+
+      public Func<IHtmlInputControl, IHtmlElement> InputControlFinder
+      {
+        get;
+        set;
+      }
+
+      public Func<IHtmlElement, IHtmlElement> InputElementFinder
+      {
+        get;
+        set;
+      }
+
+      public IHtmlElement SummaryContainer
+      {
+        get;
+        set;
+      }
+
+      protected override IHtmlElement FailedMessageContainer( IHtmlInputControl input )
+      {
+
+        if ( InputControlFinder != null )
+          return InputControlFinder( input );
+
+        if ( InputElementFinder != null )
+        {
+          var element = GetInputElement( input );
+
+          if ( element == null )
+            return null;
+
+          return InputElementFinder( element );
+        }
+
+        return base.FailedMessageContainer( input );
+      }
+
+      protected override IHtmlElement FailedSummaryContainer()
+      {
+
+        if ( SummaryContainer != null )
+          return SummaryContainer;
+        return base.FailedSummaryContainer();
+      }
+
+      private IHtmlElement GetInputElement( IHtmlInputControl input )
+      {
+        var inputText = input as HtmlInputText;
+        if ( inputText != null )
+          return inputText.Element;
+
+        var select = input as HtmlSelect;
+        if ( select != null )
+          return select.Element;
+
+        var textaera = input as HtmlTextArea;
+        return textaera.Element;
+
+      }
+
+    }
   }
 }

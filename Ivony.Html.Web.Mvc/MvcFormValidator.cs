@@ -68,7 +68,16 @@ namespace Ivony.Html.Web.Mvc
 
 
 
+    /// <summary>
+    /// 尝试显示错误信息
+    /// </summary>
+    /// <returns></returns>
+    public bool ShowErrorMessage()
+    {
+      Validate();
 
+      return !IsValid;
+    }
 
 
   }

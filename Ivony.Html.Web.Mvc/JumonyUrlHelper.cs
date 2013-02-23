@@ -167,10 +167,18 @@ namespace Ivony.Html.Web.Mvc
       }
 
 
-      foreach ( var attribute in element.Attributes().Where( a => a.Name.StartsWith( "_" ) ).ToArray() )
+      CustomRouteValues( element, "_", routeValues );
+      CustomRouteValues( element, "route-", routeValues );
+
+      return routeValues;
+    }
+
+    private void CustomRouteValues( IHtmlElement element, string prefix, RouteValueDictionary routeValues )
+    {
+      foreach ( var attribute in element.Attributes().Where( a => a.Name.StartsWith( prefix ) ).ToArray() )
       {
 
-        var key = attribute.Name.Substring( 1 );
+        var key = attribute.Name.Substring( prefix.Length );
         var value = attribute.Value() ?? RouteData.Values[key];
 
         routeValues.Remove( key );
@@ -178,8 +186,6 @@ namespace Ivony.Html.Web.Mvc
         routeValues.Add( key, value );
         attribute.Remove();
       }
-
-      return routeValues;
     }
 
 

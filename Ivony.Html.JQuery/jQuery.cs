@@ -100,7 +100,7 @@ namespace Ivony.Html
 
     public string text()
     {
-      return ForFirstOrNull( e => e.InnerText() );
+      return string.Join( "", _elements.Select( e => e.InnerText() ).ToArray() );
     }
 
     public jQuery text( string text )

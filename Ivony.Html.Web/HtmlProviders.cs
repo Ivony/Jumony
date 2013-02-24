@@ -439,6 +439,11 @@ namespace Ivony.Html.Web
   }
 
 
+
+
+  /// <summary>
+  /// ContentProvider 容器
+  /// </summary>
   public class ContentProviderCollection
   {
 

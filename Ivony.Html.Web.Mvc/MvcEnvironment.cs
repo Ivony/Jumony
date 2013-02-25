@@ -12,7 +12,7 @@ using Ivony.Web;
 
 
 
-[assembly: PreApplicationStartMethod( typeof( Ivony.Html.Web.Mvc.MvcEnvironment ), "Initialize" )]
+[assembly: PreApplicationStartMethod( typeof( Ivony.Html.Web.MvcEnvironment ), "Initialize" )]
 
 namespace Ivony.Html.Web
 {

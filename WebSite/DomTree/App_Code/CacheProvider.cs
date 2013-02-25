@@ -5,7 +5,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Ivony.Html.Web;
-using Ivony.Html.Web.Mvc;
 using Ivony.Web;
 
 class CacheProvider : IMvcCachePolicyProvider

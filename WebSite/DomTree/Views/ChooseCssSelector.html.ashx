@@ -3,7 +3,6 @@
 using System;
 using System.Web;
 using Ivony.Html;
-using Ivony.Html.Web.Mvc;
 using Ivony.Html.Web;
 
 public class ChooseCssSelector_html : ViewHandler

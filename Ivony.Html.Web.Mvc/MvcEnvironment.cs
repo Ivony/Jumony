@@ -75,7 +75,7 @@ namespace Ivony.Html.Web.Mvc
     /// </summary>
     public static SimpleRouteTable SimpleRouteTable
     {
-      get { return Routes.RouteTable(); }
+      get { return Routes.SimpleRouteTable(); }
     }
 
 

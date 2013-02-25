@@ -44,7 +44,7 @@ namespace Ivony.Html.Web.Mvc
       MasterLocationFormats = ViewLocationFormats;
       AreaMasterLocationFormats = AreaMasterLocationFormats;
 
-
+      ViewLocationCache = new JumonyViewLocationCache();
     }
 
 

@@ -36,7 +36,7 @@ namespace Ivony.Html.Web
       return Scope.Find( expression );
     }
 
-    
+
     /// <summary>
     /// 在处理范畴内查找符合选择器的唯一元素
     /// </summary>
@@ -47,7 +47,6 @@ namespace Ivony.Html.Web
       return Scope.FindSingle( expression );
     }
 
-
     /// <summary>
     /// 在处理范畴内查找符合选择器的首个元素
     /// </summary>
@@ -57,6 +56,17 @@ namespace Ivony.Html.Web
     {
       return Scope.FindFirst( expression );
     }
+
+    /// <summary>
+    /// 在处理范畴内查找符合选择器的最后一个元素
+    /// </summary>
+    /// <param name="expression">CSS 选择器表达式</param>
+    /// <returns>符合选择器的最后一个元素</returns>
+    protected IHtmlElement FindLast( string expression )
+    {
+      return Scope.FindLast( expression );
+    }
+
 
 
     /// <summary>
@@ -77,6 +87,16 @@ namespace Ivony.Html.Web
     protected void ForSingle( string expression, Action<IHtmlElement> action )
     {
       Scope.Find( expression ).ForSingle( action );
+    }
+
+    /// <summary>
+    /// 对处理范畴内查找符合选择器的最后一个元素进行处理
+    /// </summary>
+    /// <param name="expression">CSS 选择器表达式</param>
+    /// <param name="action">要进行的处理</param>
+    protected void ForSingle( string expression, Action<IHtmlElement> action )
+    {
+      Scope.Find( expression ).ForLast( action );
     }
 
 

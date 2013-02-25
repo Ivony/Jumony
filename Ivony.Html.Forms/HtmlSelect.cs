@@ -6,6 +6,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
+
+  /// <summary>
+  /// 表示一个 &gt;select&lt; 元素
+  /// </summary>
   public class HtmlSelect : IHtmlGroupControl, IHtmlFocusableControl
   {
 
@@ -30,17 +34,28 @@ namespace Ivony.Html.Forms
     private readonly HtmlOption[] options;
 
 
+    /// <summary>
+    /// 获取 DOM 上的 &gt;select&lt; 元素
+    /// </summary>
     public IHtmlElement Element
     {
       get { return _element; }
     }
 
+
+    /// <summary>
+    /// 获取所属的表单对象
+    /// </summary>
     public HtmlForm Form
     {
       get { return _form; }
 
     }
 
+
+    /// <summary>
+    /// 获取输入控件名
+    /// </summary>
     public string Name
     {
       get { return _element.Attribute( "name" ).AttributeValue; }
@@ -48,12 +63,18 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 是否允许多选
+    /// </summary>
     public bool AllowMultipleSelections
     {
       get { return _element.Attribute( "multiple" ) != null; }
     }
 
 
+    /// <summary>
+    /// 获取输入组项
+    /// </summary>
     public IHtmlInputGroupItem[] Items
     {
       get { return options; }
@@ -61,6 +82,9 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 表示一个 &gt;option&lt; 元素
+    /// </summary>
     public class HtmlOption : IHtmlInputGroupItem
     {
 
@@ -68,6 +92,11 @@ namespace Ivony.Html.Forms
       private IHtmlElement _element;
       private HtmlSelect _select;
 
+      /// <summary>
+      /// 创建 HtmlOption 对象
+      /// </summary>
+      /// <param name="select">所属的 HtmlSelect 对象</param>
+      /// <param name="element">DOM 上对应的 &gt;option&lt; 元素</param>
       public HtmlOption( HtmlSelect select, IHtmlElement element )
       {
         _select = select;

@@ -94,7 +94,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="expression">CSS 选择器表达式</param>
     /// <param name="action">要进行的处理</param>
-    protected void ForSingle( string expression, Action<IHtmlElement> action )
+    protected void ForLast( string expression, Action<IHtmlElement> action )
     {
       Scope.Find( expression ).ForLast( action );
     }

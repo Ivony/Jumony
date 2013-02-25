@@ -11,7 +11,7 @@ using System.Web.Compilation;
 using System.Web.Caching;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   internal class GenericView : JumonyView

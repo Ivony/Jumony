@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// Jumony 视图

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using Ivony.Fluent;
 using Ivony.Html.Forms;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

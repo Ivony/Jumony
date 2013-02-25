@@ -14,7 +14,7 @@ using Ivony.Web;
 
 [assembly: PreApplicationStartMethod( typeof( Ivony.Html.Web.Mvc.MvcEnvironment ), "Initialize" )]
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

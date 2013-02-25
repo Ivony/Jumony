@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

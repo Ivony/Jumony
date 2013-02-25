@@ -6,7 +6,7 @@ using System.Web;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   public class JumonyViewHandler : JumonyView, IHttpHandler
   {

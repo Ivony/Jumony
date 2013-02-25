@@ -9,7 +9,7 @@ using Ivony.Fluent;
 using Ivony.Web;
 
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// 用于指定 Action 或 Controller 应缓存输出结果。

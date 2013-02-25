@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// 用于渲染部分视图的 HTML 渲染代理

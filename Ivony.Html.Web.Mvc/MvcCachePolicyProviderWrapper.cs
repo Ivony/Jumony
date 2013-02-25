@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web;
 using Ivony.Web;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

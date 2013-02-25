@@ -13,7 +13,7 @@ using Ivony.Web;
 
 
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// IMvcCachePolicyProvider 的一个标准抽象实现

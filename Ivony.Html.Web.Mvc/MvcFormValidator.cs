@@ -6,7 +6,7 @@ using Ivony.Html.Forms.Validation;
 using Ivony.Html.Forms;
 using System.Web.Mvc;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

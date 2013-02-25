@@ -8,7 +8,7 @@ using System.IO;
 using System.Web.Routing;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// HTML 视图处理程序基类

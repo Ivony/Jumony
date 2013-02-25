@@ -7,7 +7,7 @@ using System.Web.Caching;
 using System.Web.Mvc;
 using Ivony.Web;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   public class JumonyViewLocationCache : IViewLocationCache
   {

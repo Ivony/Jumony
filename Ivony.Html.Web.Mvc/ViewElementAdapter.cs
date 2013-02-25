@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.Collections;
 using System.Web.Script.Serialization;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

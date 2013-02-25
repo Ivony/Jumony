@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Ivony.Fluent;
 using Ivony.Web;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
 

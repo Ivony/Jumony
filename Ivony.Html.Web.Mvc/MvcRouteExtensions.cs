@@ -7,7 +7,7 @@ using System.Web.Routing;
 using Ivony.Web;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
 
   /// <summary>

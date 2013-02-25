@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using Ivony.Web;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   /// <summary>
   /// MVC 环境的缓存策略提供程序所需要实现的接口

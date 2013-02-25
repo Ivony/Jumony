@@ -26,22 +26,22 @@ namespace Ivony.Html.Web
     /// </summary>
     protected ControllerCachePolicyProvider()
     {
-      actionProviders = type.GetMethods()
+      InitializeActionProviders();
+    }
+
+
+    /// <summary>
+    /// 初始化所有 Action 缓存提供程序
+    /// </summary>
+    protected void InitializeActionProviders()
+    {
+      actionProviders = GetType().GetMethods()
         .Where( method => method.ReturnType == typeof( CachePolicy ) )
         .Where( method => method.GetParameters().Select( p => p.ParameterType ).SequenceEqual( new[] { typeof( ControllerContext ), typeof( IDictionary<string, object> ) } ) )
         .ToDictionary( method => method.Name, method => (ActionCachePolicyProvider) Delegate.CreateDelegate( typeof( ActionCachePolicyProvider ), this, method ) );
-
-
     }
 
-    private Type type;
     private Dictionary<string, ActionCachePolicyProvider> actionProviders;
-
-
-    public abstract string ControllerName
-    {
-      get;
-    }
 
 
 
@@ -52,26 +52,9 @@ namespace Ivony.Html.Web
     /// <param name="action">当前执行的 Action</param>
     /// <param name="parameters">Action 的参数</param>
     /// <returns></returns>
-    public CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
+    public virtual CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
 
-      if ( MatchController( context, action.ControllerDescriptor.ControllerName ) )
-        return CreateActionCachePolicy( context, action, parameters );
-
-      else
-        return null;
-
-    }
-
-    /// <summary>
-    /// 创建 Action 的缓存策略
-    /// </summary>
-    /// <param name="context">当前控制器上下文</param>
-    /// <param name="action">当前执行的 Action</param>
-    /// <param name="parameters">Action 的参数</param>
-    /// <returns>缓存策略</returns>
-    protected virtual CachePolicy CreateActionCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
-    {
       ActionCachePolicyProvider actionProvider;
 
       if ( !actionProviders.TryGetValue( action.ActionName, out actionProvider ) )
@@ -79,35 +62,8 @@ namespace Ivony.Html.Web
 
 
       return actionProvider( context, parameters );
+
     }
-
-
-
-    protected bool MatchController( ControllerContext context, string controllerName )
-    {
-      if ( ControllerName.Contains( "." ) )
-        return context.Controller.GetType().FullName.EqualsIgnoreCase( ControllerName );
-
-      else if ( ControllerName.Contains( ":" ) )
-      {
-        var frags = ControllerName.Split( ':' );
-        var area = frags[0];
-        var controller = frags[1];
-
-        if ( !context.RouteData.Values.ContainsKey( "area" ) )
-          return false;
-
-        var _area = context.RouteData.Values["area"] as string;
-        if ( !area.EqualsIgnoreCase( _area ) )
-          return false;
-
-        return frags[1].EqualsIgnoreCase( controllerName );
-      }
-
-      else
-        return ControllerName.EqualsIgnoreCase( controllerName );
-    }
-
 
 
     CachePolicy ICachePolicyProvider.CreateCachePolicy( HttpContextBase context )
@@ -130,29 +86,6 @@ namespace Ivony.Html.Web
 
 
 
-    private static Dictionary<string, ControllerCachePolicyProvider> _providers = new Dictionary<string, ControllerCachePolicyProvider>();
-    private static object _providersSync = new object();
-
-
-
-    /// <summary>
-    /// 注册控制器缓存策略提供程序
-    /// </summary>
-    /// <param name="provider">缓存策略提供程序</param>
-    public static void RegisterCacheProvider( ControllerCachePolicyProvider provider )
-    {
-      lock ( _providersSync )
-      {
-        var name = provider.ControllerName;
-        if ( _providers.ContainsKey( name ) )
-          throw new InvalidOperationException( string.Format( "已经注册了名为 \"{0}\" 的控制器缓存策略提供程序", name ) );
-
-        _providers.Add( name, provider );
-      }
-    }
-
-
-
     private static Dictionary<string, ControllerCachePolicyProvider> InitializeProviders()
     {
       var providerBaseType = typeof( ControllerCachePolicyProvider );
@@ -160,7 +93,6 @@ namespace Ivony.Html.Web
       var types = BuildManager.GetReferencedAssemblies()
         .Cast<Assembly>()
         .SelectMany( assembly => assembly.GetExportedTypes() )
-        .Where( type => type.Name.EndsWith( typeNamePostfix ) )
         .Where( type => type.IsSubclassOf( providerBaseType ) )
         .ToArray();
 

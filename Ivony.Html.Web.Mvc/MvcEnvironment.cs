@@ -32,7 +32,7 @@ namespace Ivony.Html.Web
       CachePolicyProviders = new SynchronizedCollection<IMvcCachePolicyProvider>( _cachePolicyProvidersSync );
 
       GlobalFilters.Filters.Add( GlobalCacheFilter = new GlobalCacheFilter() );
-      
+
       CacheStorageProvider = new WebCacheStorageProvider( HostingEnvironment.Cache );
     }
 
@@ -210,6 +210,29 @@ namespace Ivony.Html.Web
       {
         return HtmlProviders.GetCachePolicy( context );
       }
+    }
+
+    public static string GetAreaName( ControllerContext context )
+    {
+      var areaName = context.RouteData.Values["area"] as string;
+      if ( areaName == null )
+      {
+        var route = context.RouteData.Route as IRouteWithArea;
+        if ( route == null )
+          return null;
+
+        areaName = route.Area;
+      }
+
+      var namespaces = context.RouteData.DataTokens["Namespaces"] as string[];
+      if ( namespaces == null )
+        return areaName;
+
+      if ( !namespaces.Contains( context.Controller.GetType().Namespace ) )
+        return null;
+
+      return areaName;
+
     }
   }
 }

@@ -37,7 +37,7 @@ namespace Ivony.Html.Web
       if ( action.GetCustomAttributes( typeof( CacheableAttribute ), true ).Any() || action.ControllerDescriptor.GetCustomAttributes( typeof( CacheableAttribute ), true ).Any() )
         return null;
 
-      ControllerCachePolicyProvider provider = ControllerCachePolicyProvider.GetProvider( action.ControllerDescriptor.ControllerName );
+      ControllerCachePolicyProvider provider = GetControllerProvider( MvcEnvironment.GetAreaName( context ), action.ControllerDescriptor.ControllerName );
       if ( provider != null )
       {
         var policy = provider.CreateCachePolicy( context, action, parameters );
@@ -48,5 +48,53 @@ namespace Ivony.Html.Web
 
       return MvcEnvironment.CreateCachePolicy( context, action, parameters );
     }
+
+    private ControllerCachePolicyProvider GetControllerProvider( string areaName, string controllerName )
+    {
+
+      ControllerCachePolicyProvider provider;
+
+      string key;
+
+      if ( string.IsNullOrEmpty( areaName ) )
+        key = controllerName;
+      else
+        key = areaName + "." + controllerName;
+
+      if ( _providers.TryGetValue( key, out provider ) )
+        return provider;
+      else
+        return null;
+    }
+
+
+    private Dictionary<string, ControllerCachePolicyProvider> _providers = new Dictionary<string, ControllerCachePolicyProvider>();
+    private object _providersSync = new object();
+
+
+
+    /// <summary>
+    /// 注册控制器缓存策略提供程序
+    /// </summary>
+    /// <param name="provider">缓存策略提供程序</param>
+    public void RegisterCacheProvider( ControllerCachePolicyProvider provider, string controllerName, string areaName = null )
+    {
+      lock ( _providersSync )
+      {
+        var name = areaName + "." + controllerName;
+        if ( _providers.ContainsKey( name ) )
+        {
+          if ( string.IsNullOrEmpty( areaName ) )
+            throw new InvalidOperationException( string.Format( "已经为控制器 \"{0}\" 注册了缓存策略提供程序", controllerName ) );
+
+          else
+            throw new InvalidOperationException( string.Format( "已经为区域 \"{1}\" 的控制器 \"{0}\" 注册了缓存策略提供程序", controllerName, areaName ) );
+        }
+
+        _providers.Add( name, provider );
+      }
+    }
+
+
   }
 }

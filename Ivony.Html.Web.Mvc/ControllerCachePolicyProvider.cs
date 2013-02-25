@@ -16,25 +16,16 @@ using Ivony.Web;
 namespace Ivony.Html.Web
 {
   /// <summary>
-  /// IMvcCachePolicyProvider 的一个标准抽象实现
+  /// 基于 Controller 和 Action 名称提供缓存策略的缓存策略提供程序
   /// </summary>
   public abstract class ControllerCachePolicyProvider : IMvcCachePolicyProvider
   {
-
-    private static readonly string typeNamePostfix = "CachePolicyProvider";
 
     /// <summary>
     /// 创建 ControllerCachePolicyProvider 实例
     /// </summary>
     protected ControllerCachePolicyProvider()
     {
-      type = GetType();
-      if ( !type.Name.EndsWith( typeNamePostfix ) )
-        throw new InvalidOperationException( "派生类类名不正确，应以 " + typeNamePostfix + " 结尾" );
-
-      controllerName = type.Name.Substring( 0, type.Name.Length - typeNamePostfix.Length );
-
-
       actionProviders = type.GetMethods()
         .Where( method => method.ReturnType == typeof( CachePolicy ) )
         .Where( method => method.GetParameters().Select( p => p.ParameterType ).SequenceEqual( new[] { typeof( ControllerContext ), typeof( IDictionary<string, object> ) } ) )
@@ -44,8 +35,14 @@ namespace Ivony.Html.Web
     }
 
     private Type type;
-    private string controllerName;
     private Dictionary<string, ActionCachePolicyProvider> actionProviders;
+
+
+    public abstract string ControllerName
+    {
+      get;
+    }
+
 
 
     /// <summary>
@@ -57,10 +54,12 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
-      if ( !action.ControllerDescriptor.ControllerName.EqualsIgnoreCase( controllerName ) )
-        return null;
 
-      return CreateActionCachePolicy( context, action, parameters );
+      if ( MatchController( context, action.ControllerDescriptor.ControllerName ) )
+        return CreateActionCachePolicy( context, action, parameters );
+
+      else
+        return null;
 
     }
 
@@ -81,6 +80,34 @@ namespace Ivony.Html.Web
 
       return actionProvider( context, parameters );
     }
+
+
+
+    protected bool MatchController( ControllerContext context, string controllerName )
+    {
+      if ( ControllerName.Contains( "." ) )
+        return context.Controller.GetType().FullName.EqualsIgnoreCase( ControllerName );
+
+      else if ( ControllerName.Contains( ":" ) )
+      {
+        var frags = ControllerName.Split( ':' );
+        var area = frags[0];
+        var controller = frags[1];
+
+        if ( !context.RouteData.Values.ContainsKey( "area" ) )
+          return false;
+
+        var _area = context.RouteData.Values["area"] as string;
+        if ( !area.EqualsIgnoreCase( _area ) )
+          return false;
+
+        return frags[1].EqualsIgnoreCase( controllerName );
+      }
+
+      else
+        return ControllerName.EqualsIgnoreCase( controllerName );
+    }
+
 
 
     CachePolicy ICachePolicyProvider.CreateCachePolicy( HttpContextBase context )
@@ -116,9 +143,9 @@ namespace Ivony.Html.Web
     {
       lock ( _providersSync )
       {
-        var name = provider.controllerName;
+        var name = provider.ControllerName;
         if ( _providers.ContainsKey( name ) )
-          throw new InvalidOperationException( string.Format( "已经为名为 \"{0}\" 的控制器注册了缓存策略提供程序", name ) );
+          throw new InvalidOperationException( string.Format( "已经注册了名为 \"{0}\" 的控制器缓存策略提供程序", name ) );
 
         _providers.Add( name, provider );
       }
@@ -144,7 +171,7 @@ namespace Ivony.Html.Web
         try
         {
           var instance = (ControllerCachePolicyProvider) Activator.CreateInstance( t );
-          result.Add( instance.controllerName, instance );
+          result.Add( instance.ControllerName, instance );
         }
         catch
         {

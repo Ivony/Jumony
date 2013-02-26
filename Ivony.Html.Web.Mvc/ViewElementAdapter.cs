@@ -12,7 +12,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 用于渲染 view 标签的元素渲染代理
+  /// 用于渲染 &gt;view&lt; 标签的元素渲染代理
   /// </summary>
   public class ViewElementAdapter : HtmlElementAdapter
   {
@@ -32,9 +32,9 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 渲染 view 标签
+    /// 渲染 &gt;view&lt; 标签
     /// </summary>
-    /// <param name="element">view 标签元素</param>
+    /// <param name="element">&gt;view&lt; 标签元素</param>
     /// <param name="context">渲染上下文</param>
     protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {

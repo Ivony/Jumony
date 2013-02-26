@@ -20,9 +20,9 @@ public class index_html : ViewHandler<Task[]>
   {
     Document.FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 
-    var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
+    //var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
 
-    ViewModel.BindTo( items, BindTaskItem );
+    //ViewModel.BindTo( items, BindTaskItem );
   }
 
 

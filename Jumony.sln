@@ -47,27 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Web.Binding", "I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegularsAssemblyBuilder", "RegularsAssemblyBuilder\RegularsAssemblyBuilder.csproj", "{1C8EEB5A-310B-4042-AF3B-062E91F045A8}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SpeficationTest", "SpeficationTest\", "{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/SpeficationTest"
-		Debug.AspNetCompiler.PhysicalPath = "SpeficationTest\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\SpeficationTest\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/SpeficationTest"
-		Release.AspNetCompiler.PhysicalPath = "SpeficationTest\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\SpeficationTest\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "17850"
-		DefaultWebSiteLanguage = "Visual C#"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{5E0D8705-9477-4577-97BB-F4639EA8B0C1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C186DFE3-0B29-4212-9EEF-609BFFB73324}"
@@ -360,16 +339,6 @@ Global
 		{1C8EEB5A-310B-4042-AF3B-062E91F045A8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1C8EEB5A-310B-4042-AF3B-062E91F045A8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1C8EEB5A-310B-4042-AF3B-062E91F045A8}.Release|x86.ActiveCfg = Release|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
-		{EC12F5F0-9A0D-4823-8D35-444E6CE083E5}.Release|x86.ActiveCfg = Debug|Any CPU
 		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E0D8705-9477-4577-97BB-F4639EA8B0C1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

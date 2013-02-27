@@ -123,6 +123,18 @@ namespace Ivony.Html.Web
     /// <returns>获取的虚拟路径</returns>
     public string GetRouteUrl( IHtmlElement element )
     {
+      return GetRouteUrl( element, true );
+    }
+
+
+    /// <summary>
+    /// 从元素标签中获取路由的虚拟路径
+    /// </summary>
+    /// <param name="element">要获取分析路由虚拟路径的元素</param>
+    /// <param name="clearRouteAttributes">是否清理路由属性设置</param>
+    /// <returns>获取的虚拟路径</returns>
+    internal string GetRouteUrl( IHtmlElement element, bool clearRouteAttributes )
+    {
 
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -134,11 +146,15 @@ namespace Ivony.Html.Web
       var controller = element.Attribute( "controller" ).Value() ?? RouteData.Values["controller"].CastTo<string>();
 
 
-      var routeValues = GetRouteValues( element );
+      var routeValues = GetRouteValues( element, clearRouteAttributes );
 
-      element.RemoveAttribute( "action" );
-      element.RemoveAttribute( "controller" );
-      element.RemoveAttribute( "inherits" );
+
+      if ( clearRouteAttributes )
+      {
+        element.RemoveAttribute( "action" );
+        element.RemoveAttribute( "controller" );
+        element.RemoveAttribute( "inherits" );
+      }
 
       return Url.Action( action, controller, routeValues );
     }
@@ -150,6 +166,12 @@ namespace Ivony.Html.Web
     /// <param name="element">要获取分析路由值的元素</param>
     /// <returns>获取的路由值</returns>
     public RouteValueDictionary GetRouteValues( IHtmlElement element )
+    {
+      return GetRouteValues( element, true );
+    }
+
+
+    internal RouteValueDictionary GetRouteValues( IHtmlElement element, bool clearRouteAttributes )
     {
 
       var routeValues = new RouteValueDictionary();
@@ -167,13 +189,13 @@ namespace Ivony.Html.Web
       }
 
 
-      CustomRouteValues( element, "_", routeValues );
-      CustomRouteValues( element, "route-", routeValues );
+      CustomRouteValues( element, "_", routeValues, clearRouteAttributes );
+      CustomRouteValues( element, "route-", routeValues, clearRouteAttributes );
 
       return routeValues;
     }
 
-    private void CustomRouteValues( IHtmlElement element, string prefix, RouteValueDictionary routeValues )
+    private void CustomRouteValues( IHtmlElement element, string prefix, RouteValueDictionary routeValues, bool clearRouteAttributes )
     {
       foreach ( var attribute in element.Attributes().Where( a => a.Name.StartsWith( prefix ) ).ToArray() )
       {
@@ -184,7 +206,9 @@ namespace Ivony.Html.Web
         routeValues.Remove( key );
 
         routeValues.Add( key, value );
-        attribute.Remove();
+
+        if ( clearRouteAttributes )
+          attribute.Remove();
       }
     }
 

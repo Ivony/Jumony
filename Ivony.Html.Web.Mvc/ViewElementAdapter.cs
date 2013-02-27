@@ -42,7 +42,7 @@ namespace Ivony.Html.Web
       if ( element.Attribute( "action" ) != null )
       {
 
-        var url = Url.GetRouteUrl( element );
+        var url = Url.GetRouteUrl( element, false );
 
         var nextElement = element.NextElement();
         if ( nextElement == null )

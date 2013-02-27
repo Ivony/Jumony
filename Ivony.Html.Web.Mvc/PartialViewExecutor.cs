@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Web.Mvc;
 using Ivony.Fluent;
 
 namespace Ivony.Html.Web
@@ -20,14 +22,47 @@ namespace Ivony.Html.Web
         throw new InvalidOperationException();
       Name = name.Substring( PartialRenderAdapter.partialExecutorMethodPrefix.Length );
       _parameters = method.GetParameters();
+
+
+      _executor = CreateExecutor( method );
+
     }
+
+    private Executor CreateExecutor( MethodInfo methodInfo )
+    {
+      ParameterExpression handlerParamter = Expression.Parameter( typeof( JumonyViewHandler ), "handler" );
+      ParameterExpression argsParameter = Expression.Parameter( typeof( object[] ), "parameters" );
+
+
+      List<Expression> list = new List<Expression>();
+      ParameterInfo[] parameters = methodInfo.GetParameters();
+      for ( int i = 0; i < parameters.Length; i++ )
+      {
+        ParameterInfo parameterInfo = parameters[i];
+        BinaryExpression expression = Expression.ArrayIndex( argsParameter, Expression.Constant( i ) );
+        UnaryExpression item = Expression.Convert( expression, parameterInfo.ParameterType );
+        list.Add( item );
+      }
+
+
+      UnaryExpression instance = Expression.Convert( handlerParamter, methodInfo.ReflectedType );
+      MethodCallExpression methodCallExpression = Expression.Call( instance, methodInfo, list );
+      UnaryExpression body = Expression.Convert( methodCallExpression, typeof( object ) );
+
+
+      Expression<Executor> result = Expression.Lambda<Executor>( body, new ParameterExpression[] { handlerParamter, argsParameter } );
+      return result.Compile();
+    }
+
+
+    private delegate string Executor( JumonyViewHandler handler, object[] parameters );
 
     public string Name { get; private set; }
 
 
-    private Func<JumonyView, object[], string> _executor;
+    private Executor _executor;
 
-    public string Execute( JumonyView view, IHtmlElement partialElement )
+    public string Execute( JumonyViewHandler handler, IHtmlElement partialElement )
     {
 
       object[] parameterValues = new object[_parameters.Length];
@@ -41,7 +76,7 @@ namespace Ivony.Html.Web
           parameterValues[parameter.Position] = parameter.DefaultValue;
       }
 
-      return _executor( view, parameterValues );
+      return _executor( handler, parameterValues );
 
     }
 

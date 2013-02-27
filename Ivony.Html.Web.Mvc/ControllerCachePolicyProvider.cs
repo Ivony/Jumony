@@ -84,14 +84,7 @@ namespace Ivony.Html.Web
     }
 
 
-
-
-
     private delegate CachePolicy ActionCachePolicyProvider( ControllerContext context, IDictionary<string, object> parameters );
-
-
-
-
 
   }
 }

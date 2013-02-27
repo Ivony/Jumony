@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -47,10 +48,9 @@ namespace Ivony.Html.Web
 
       UnaryExpression instance = Expression.Convert( handlerParamter, methodInfo.ReflectedType );
       MethodCallExpression methodCallExpression = Expression.Call( instance, methodInfo, list );
-      UnaryExpression body = Expression.Convert( methodCallExpression, typeof( object ) );
 
 
-      Expression<Executor> result = Expression.Lambda<Executor>( body, new ParameterExpression[] { handlerParamter, argsParameter } );
+      Expression<Executor> result = Expression.Lambda<Executor>( methodCallExpression, new ParameterExpression[] { handlerParamter, argsParameter } );
       return result.Compile();
     }
 
@@ -82,8 +82,11 @@ namespace Ivony.Html.Web
 
     private object ConvertValue( string value, Type type )
     {
-      throw new NotImplementedException();
-    }
+      var converter = TypeDescriptor.GetConverter( type );
+      if ( !converter.CanConvertFrom( typeof( string ) ) )
+        throw new InvalidOperationException( string.Format( "无法将参数从字符串转换为 {0} 类型", type.FullName ) );
 
+      return converter.ConvertTo( value, type );
+    }
   }
 }

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
@@ -43,7 +44,9 @@ namespace Ivony.Html.Web
 
       var type = view.GetType();
 
-      var partialActions = GetPartialExecutors( type );
+
+      if ( view is JumonyViewHandler )
+        _partialExecutors = GetPartialExecutors( type );
 
       _view = view;
     }
@@ -51,19 +54,29 @@ namespace Ivony.Html.Web
 
     public const string partialExecutorMethodPrefix = "Partial_";
 
+
+    private static readonly KeyedCache<Type, PartialViewExecutor[]> _cache = new KeyedCache<Type, PartialViewExecutor[]>();
+
+
+    private PartialViewExecutor[] _partialExecutors;
+
     private PartialViewExecutor[] GetPartialExecutors( Type type )
     {
-      return type
+
+      return _cache.FetchOrCreateItem( type, () => type
         .GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
         .Where( m => m.Name.StartsWith( partialExecutorMethodPrefix ) )
         .Where( m => m.ReturnType == typeof( string ) )
-        .Select( m => CreateExecutor( m ) ).ToArray();
+        .Select( m => CreateExecutor( m ) ).ToArray() );
+
     }
 
     private PartialViewExecutor CreateExecutor( MethodInfo method )
     {
-
-      return new PartialViewExecutor( method );
+      if ( method.Name.StartsWith( partialExecutorMethodPrefix ) )
+        return new PartialViewExecutor( method );
+      else
+        return null;
     }
 
 
@@ -190,6 +203,14 @@ namespace Ivony.Html.Web
       var view = partialElement.Attribute( "view" ).Value();
       var path = partialElement.Attribute( "path" ).Value();
       var handler = partialElement.Attribute( "handler" ).Value();
+      var name = partialElement.Attribute( "name" ).Value();
+
+      if ( !_partialExecutors.IsNullOrEmpty() && name != null )
+      {
+        var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
+        if ( executor != null )
+          return executor.Execute( (JumonyViewHandler) _view, partialElement );
+      }
 
 
       var helper = MakeHelper();

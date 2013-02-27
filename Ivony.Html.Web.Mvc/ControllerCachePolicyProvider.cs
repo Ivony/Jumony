@@ -51,7 +51,7 @@ namespace Ivony.Html.Web
     /// <param name="context">当前请求的 MVC 上下文</param>
     /// <param name="action">当前执行的 Action</param>
     /// <param name="parameters">Action 的参数</param>
-    /// <returns></returns>
+    /// <returns>缓存策略</returns>
     public virtual CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
 
@@ -81,56 +81,6 @@ namespace Ivony.Html.Web
     public static CacheToken CreateToken( string typeName, IDictionary<string, object> parameters )
     {
       return CacheToken.CreateToken( typeName, parameters.Select( pair => pair.Key + ":" + pair.Value ).ToArray() );
-    }
-
-
-
-
-    private static Dictionary<string, ControllerCachePolicyProvider> InitializeProviders()
-    {
-      var providerBaseType = typeof( ControllerCachePolicyProvider );
-
-      var types = BuildManager.GetReferencedAssemblies()
-        .Cast<Assembly>()
-        .SelectMany( assembly => assembly.GetExportedTypes() )
-        .Where( type => type.IsSubclassOf( providerBaseType ) )
-        .ToArray();
-
-      var result = new Dictionary<string, ControllerCachePolicyProvider>();
-
-      types.ForAll( t =>
-      {
-        try
-        {
-          var instance = (ControllerCachePolicyProvider) Activator.CreateInstance( t );
-          result.Add( instance.ControllerName, instance );
-        }
-        catch
-        {
-
-        }
-      } );
-
-      return result;
-    }
-
-
-    /// <summary>
-    /// 获取缓存策略提供程序
-    /// </summary>
-    /// <param name="controllerName">控制器名称</param>
-    /// <returns>该控制器的缓存策略提供程序，如果有的话</returns>
-    internal static ControllerCachePolicyProvider GetProvider( string controllerName )
-    {
-      lock ( _providersSync )
-      {
-        ControllerCachePolicyProvider provider;
-
-        if ( _providers.TryGetValue( controllerName, out provider ) )
-          return provider;
-      }
-
-      return null;
     }
 
 

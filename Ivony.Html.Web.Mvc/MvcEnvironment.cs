@@ -212,9 +212,16 @@ namespace Ivony.Html.Web
       }
     }
 
+
+    /// <summary>
+    /// 获取当前 Controller 所属的 Area
+    /// </summary>
+    /// <remarks>注意，即使当前请求属于某个 Area ，如果执行的 Controller 的类型不属于这个区域的命名空间，此方法仍然会返回 null （即执行的是无区域的 Controller）</remarks>
+    /// <param name="context">当前执行的控制器上下文</param>
+    /// <returns>所属的 Area</returns>
     public static string GetAreaName( ControllerContext context )
     {
-      var areaName = context.RouteData.Values["area"] as string;
+      var areaName = context.RouteData.DataTokens["area"] as string;
       if ( areaName == null )
       {
         var route = context.RouteData.Route as IRouteWithArea;
@@ -228,11 +235,24 @@ namespace Ivony.Html.Web
       if ( namespaces == null )
         return areaName;
 
-      if ( !namespaces.Contains( context.Controller.GetType().Namespace ) )
-        return null;
+      var controllerType = context.Controller.GetType();
+      if ( namespaces.Any( n => InNamespace( n, controllerType.Namespace ) ) )
+        return areaName;
 
-      return areaName;
+      return null;
 
+    }
+
+    private static bool InNamespace( string namespaceSetting, string controllerNamespace )
+    {
+
+      if ( string.IsNullOrEmpty( controllerNamespace ) )
+        return false;
+
+      if ( namespaceSetting.EndsWith( ".*" ) )
+        return controllerNamespace.StartsWith( namespaceSetting.Substring( 0, namespaceSetting.Length - 2 ), StringComparison.OrdinalIgnoreCase );
+      else
+        return controllerNamespace.EqualsIgnoreCase( namespaceSetting );
     }
   }
 }

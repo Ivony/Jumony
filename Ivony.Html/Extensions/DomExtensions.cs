@@ -796,6 +796,36 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 尝试从 DOM 中移除这些属性
+    /// </summary>
+    /// <param name="attributes">要移除的属性</param>
+    /// <exception cref="System.NotSupportedException">若文档不支持修改 DOM 结构</exception>
+    /// <exception cref="System.InvalidOperationException">若属性不是位于同一文档</exception>
+    public static void Remove( this IEnumerable<IHtmlAttribute> attributes )
+    {
+
+      if ( !attributes.Any() )
+        return;
+
+      var document = attributes.First().Document;
+      var modifier = document.DomModifier;
+
+      if ( modifier == null )
+        throw new NotSupportedException();
+
+      var array = attributes.ToArray();
+
+      if ( array.Any( item => !item.Document.Equals( document ) ) )
+        throw new InvalidOperationException();
+
+      foreach ( var attr in array )
+      {
+        modifier.RemoveAttribute( attr );
+      }
+    }
+
+
 
 
 

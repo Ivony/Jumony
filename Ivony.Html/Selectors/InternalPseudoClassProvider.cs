@@ -279,7 +279,7 @@ namespace Ivony.Html
           case "only-of-type":
             return element.Siblings( element.Name ).Count() == 1;
           case "empty":
-            return element.Elements().Count() == 0;
+            return element.Nodes().Count( n => n is IHtmlElement || n is IHtmlTextNode ) == 0;//只有元素和文本节点视为有内容 http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#empty-pseudo
 
           default:
             throw new InvalidOperationException();

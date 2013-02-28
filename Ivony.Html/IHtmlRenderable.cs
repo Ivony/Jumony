@@ -16,7 +16,7 @@ namespace Ivony.Html
     /// <summary>
     /// 呈现这个节点
     /// </summary>
-    /// <param name="writer">用于处理呈现结果的文本编写器</param>
+    /// <param name="context">呈现渲染上下文</param>
     void Render( HtmlRenderContext context );
 
   }

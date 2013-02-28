@@ -61,7 +61,7 @@ namespace SelectorTest
     [TestCategory( "选择器" )]
     public void SelectorTest1()
     {
-      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "CssSelectorTest1.html" ) );
+      var document = LoadDocument( "CssSelectorTest1.html" );
 
       SelectorAssert( document, "html", elements => elements.Count() == 1 );
       SelectorAssert( document, "body", elements => elements.Count() == 1 );
@@ -81,6 +81,25 @@ namespace SelectorTest
       SelectorAssert( document, "html, body", elements => elements.Count() == 2 );
       SelectorAssert( document, "body, head", elements => elements.Count() == 2 );
       SelectorAssert( document, "html >*", elements => elements.Count() == 2 );
+    }
+
+    [TestMethod]
+    [TestCategory( "选择器" )]
+    public void NegationPseudoClassTest()
+    {
+      var document = LoadDocument( "NegationPseudoClassTest.html" );
+
+      SelectorAssert( document, "p:not(.test)", elements => elements.Count() == 2 );
+      SelectorAssert( document, "p:not( :empty )", elements => elements.Count() == 2 && elements.All( e => e.InnerHtml() != "" ) );
+      SelectorAssert( document, "p:not( :first-of-type)", elements => elements.Count() == 1 && elements.All( e => e.ElementsIndexOfSelf() > 0 ) );
+
+    }
+
+
+    private static IHtmlDocument LoadDocument( string filename )
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, filename ) );
+      return document;
     }
 
     private void SelectorAssert( IHtmlContainer container, string selector, Predicate<IEnumerable<IHtmlElement>> assert )

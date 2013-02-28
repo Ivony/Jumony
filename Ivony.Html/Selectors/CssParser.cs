@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 using System.Globalization;
+using Ivony.Html.Selectors;
 
 namespace Ivony.Html
 {
@@ -385,6 +386,10 @@ namespace Ivony.Html
       if ( name.IsNullOrEmpty() )
         throw FormatError( enumerator );
 
+      if ( name.EqualsIgnoreCase( "not" ) )
+        return ParseNegationPseudoClass( enumerator );
+
+
       if ( enumerator.Current != '(' )
         return CreatePseudoClassSelector( name );
 
@@ -411,6 +416,26 @@ namespace Ivony.Html
       }
 
       throw new FormatException( "意外的遇到字符串的结束" );
+    }
+
+    private static ICssPseudoClassSelector ParseNegationPseudoClass( CharEnumerator enumerator )
+    {
+
+      if ( enumerator.Current != '(' )
+        throw FormatError( enumerator, '(' );
+
+      EnsureNext( enumerator );
+
+      SkipWhiteSpace( enumerator );
+      var elementSelector = ParseElementSelector( enumerator );
+      SkipWhiteSpace( enumerator );
+      
+      if ( enumerator.Current != ')' )
+        throw FormatError( enumerator, ')' );
+      enumerator.MoveNext();
+
+      return new NegationPseudoClass( elementSelector );
+
     }
 
 

@@ -57,6 +57,7 @@ namespace Ivony
 
       {
         TValue value = creator();
+        
         this._lock.EnterWriteLock();
         try
         {
@@ -71,6 +72,7 @@ namespace Ivony
         {
           _lock.ExitWriteLock();
         }
+
       }
     }
   }

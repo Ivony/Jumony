@@ -52,6 +52,10 @@ namespace Ivony.Html.Web
     }
 
 
+
+    /// <summary>
+    /// 处理 Partial 的方法名称前缀
+    /// </summary>
     public const string partialExecutorMethodPrefix = "Partial_";
 
 

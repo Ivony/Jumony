@@ -45,9 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FreeComment.cs" />
     <Compile Include="FreeElement.cs" />
     <Compile Include="FreeNode.cs" />
+    <Compile Include="FreeTextNode.cs" />
     <Compile Include="HtmlFragment.cs" />
+    <Compile Include="HtmlNodeFactory.cs" />
     <Compile Include="IFreeNode.cs" />
     <Compile Include="IHtmlNodeFactory.cs" />
     <Compile Include="LegacyDomExtensions.cs" />

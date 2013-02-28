@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html
 {
-  public sealed class FreeElement : FreeNode, IFreeElement
+  internal sealed class FreeElement : FreeNode, IFreeElement
   {
 
     internal FreeElement( IHtmlFragment fragment, IHtmlNodeFactory factory )

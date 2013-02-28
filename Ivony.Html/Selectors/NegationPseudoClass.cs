@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Selectors
 {
+
+  /// <summary>
+  /// 否定伪类实现
+  /// </summary>
   internal class NegationPseudoClass : ICssPseudoClassSelector
   {
     private CssElementSelector _elementSelector;
@@ -17,6 +21,11 @@ namespace Ivony.Html.Selectors
     public bool IsEligible( IHtmlElement element )
     {
       return !_elementSelector.IsEligible( element );
+    }
+
+    public override string ToString()
+    {
+      return string.Format( ":not({0})", _elementSelector );
     }
   }
 }

@@ -77,6 +77,42 @@ namespace Ivony.Html.Web
 
 
 
+
+    /// <summary>
+    /// 映射 MVC 默认路由规则
+    /// </summary>
+    /// <param name="routeTable">简单路由表实例</param>
+    /// <returns>返回简单路由表实例，便于链式注册</returns>
+    public static SimpleRouteTable MapDefaultRoute( this SimpleRouteTable routeTable )
+    {
+      return routeTable.MapRoute( "~/{controller}/{action}" );
+    }
+
+
+    /// <summary>
+    /// 映射 MVC 默认路由规则
+    /// </summary>
+    /// <param name="routeTable">简单路由表实例</param>
+    /// <param name="defaultController">默认的 Controller</param>
+    /// <param name="defaultAction">默认的 Action</param>
+    /// <returns>返回简单路由表实例，便于链式注册</returns>
+    public static SimpleAreaRouteTable MapDefaultRoute( this SimpleAreaRouteTable routeTable, string defaultController = null, string defaultAction = null )
+    {
+      if ( defaultController == null && defaultAction != null )
+        throw new ArgumentNullException( "defaultController" );
+
+      routeTable.MapRoute( "~/{controller}/{action}" );
+
+      if ( defaultController != null )
+        routeTable.MapRoute( "~/{action}", new { controller = defaultController } );
+
+      if ( defaultAction != null )
+        routeTable.MapRoute( "~/", new { controller = defaultController, action = defaultAction } );
+
+      return routeTable;
+    }
+
+
     /// <summary>
     /// 映射一个路由规则
     /// </summary>

@@ -194,7 +194,7 @@ namespace Ivony.Html.Web
       var document = LoadDocument( virtualPath );
 
       if ( partialMode )
-        return FindPartialScope( document );
+        return GetPartialScope( document );
 
       else
         return document;
@@ -206,7 +206,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="document">加载的文档</param>
     /// <returns>渲染范畴</returns>
-    protected virtual IHtmlContainer FindPartialScope( IHtmlDocument document )
+    protected virtual IHtmlContainer GetPartialScope( IHtmlDocument document )
     {
       var body = document.Find( "body" ).SingleOrDefault();
 

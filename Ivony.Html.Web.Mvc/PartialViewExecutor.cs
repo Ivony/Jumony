@@ -72,8 +72,8 @@ namespace Ivony.Html.Web
         var value = partialElement.Attribute( parameter.Name ).Value();
         if ( value != null )
           parameterValues[parameter.Position] = ConvertValue( value, parameter.ParameterType );
-        else if ( parameter.DefaultValue != null )
-          parameterValues[parameter.Position] = parameter.DefaultValue;
+        else
+          parameterValues[parameter.Position] = parameter.DefaultValue.IfNull( null );
       }
 
       return _executor( handler, parameterValues );

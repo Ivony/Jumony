@@ -10,10 +10,9 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
-  public class PartialViewExecutor
-  {
-    private MethodInfo method;
 
+  internal sealed class PartialViewExecutor
+  {
     private ParameterInfo[] _parameters;
 
     public PartialViewExecutor( MethodInfo method )

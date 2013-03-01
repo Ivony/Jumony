@@ -11,6 +11,7 @@ namespace Ivony.Html
   /// <summary>
   /// 提供修改文档对象模型（DOM）的扩展方法
   /// </summary>
+  [Obsolete( "该部分 API 已经过时" )]
   public static class LegacyDomExtensions
   {
 

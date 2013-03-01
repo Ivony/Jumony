@@ -8,6 +8,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义创建HTML文档对象的工厂
   /// </summary>
+  [Obsolete( "此部分 API 已经过时" )]
   public interface IHtmlNodeFactory
   {
 

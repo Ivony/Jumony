@@ -24,8 +24,6 @@ namespace Ivony.Html.Dynamic
     public override bool TryGetMember( GetMemberBinder binder, out object result )
     {
 
-      result = null;
-
       if ( binder.ReturnType.IsAssignableFrom( typeof( string ) ) )
       {
 
@@ -44,11 +42,12 @@ namespace Ivony.Html.Dynamic
             return true;
         }
 
-        if ( FindAttribute( binder.Name, ref result ) )
+        if ( FindAttribute( binder.Name, out result ) )
           return true;
 
       }
 
+      result = null;
       return true;
     }
 
@@ -81,7 +80,7 @@ namespace Ivony.Html.Dynamic
       return false;
     }
 
-    private bool FindAttribute( string name, ref object result )
+    private bool FindAttribute( string name, out object result )
     {
       var attribute = Element.Attribute( name );
       if ( attribute != null )
@@ -90,6 +89,7 @@ namespace Ivony.Html.Dynamic
         return true;
       }
 
+      result = null;
       return false;
     }
 

@@ -39,6 +39,7 @@ namespace Ivony.Html.Web
     protected override void Render( IHtmlElement element, HtmlRenderContext context )
     {
 
+      //如果有 action 属性，则绑定路由
       if ( element.Attribute( "action" ) != null )
       {
 
@@ -71,6 +72,7 @@ namespace Ivony.Html.Web
 
 
 
+      //获取绑定数据源
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
 
       object dataObject;
@@ -83,16 +85,17 @@ namespace Ivony.Html.Web
       if ( dataObject == null )
         return;
 
-
       var path = element.Attribute( "path" ).Value();
 
       if ( path != null )
         dataObject = DataBinder.Eval( dataObject, path );
 
 
+
       var format = element.Attribute( "format" ).Value();
 
-
+      
+      //如果数据源是列表，检测是否适用列表绑定
       IEnumerable listValue = dataObject as IEnumerable;
 
       if ( listValue != null && element.Exists( "view" ) && format == null )
@@ -113,6 +116,8 @@ namespace Ivony.Html.Web
 
 
 
+
+      //绑定到客户端脚本对象
       var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
       if ( variableName != null )
       {
@@ -132,6 +137,8 @@ namespace Ivony.Html.Web
       }
 
 
+
+      //绑定为 HTML 文本
       var bindValue = string.Format( format ?? "{0}", dataObject );
 
       var attributeName = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();

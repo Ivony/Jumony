@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 一个标准 HTML 解析器的实现（基于HTML 4.01规范）
   /// </summary>
-  public class JumonyParser : HtmlParserBase, IDomFragmentParserProvider
+  public class JumonyParser : HtmlParserBase, IDomFragmentParserProvider, IDomFragmentParser
   {
 
     /// <summary>
@@ -90,7 +90,7 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     public virtual IDomFragmentParser GetFragmentParser( DomDocument document )
     {
-      return new JumonyFragmentParser();
+      return this;
     }
 
 
@@ -110,49 +110,27 @@ namespace Ivony.Html.Parser
 
 
     /// <summary>
-    /// 解析 HTML 文本为碎片的 HTML 解析器
+    /// 解析 HTML 文本到指定的文档碎片对象
     /// </summary>
-    protected class JumonyFragmentParser : JumonyParser, IDomFragmentParser
+    /// <param name="html">要解析的 HTML 文本</param>
+    /// <param name="fragment">要处理的文本碎片</param>
+    public virtual void ParseToFragment( string html, DomFragment fragment )
     {
 
+      if ( string.IsNullOrEmpty( html ) )
+        return;
 
-      /// <summary>
-      /// 重写 Parse 方法，抛出 NotSupportedException
-      /// </summary>
-      /// <param name="html">要解析的 HTML 字符串</param>
-      /// <param name="url">文档的 URL</param>
-      /// <returns>总是抛出 System.NotSupportedException ，因为此解析器不能用于解析文档</returns>
-      public sealed override IHtmlDocument Parse( string html, Uri url )
+      lock ( SyncRoot )
       {
-        throw new NotSupportedException();
+        InitializeStack();
+
+        ContainerStack.Push( fragment );
+
+        ParseInternal( html );
+
+        fragment.ContentFragment = new HtmlContentFragment( Reader, 0, Reader.HtmlText.Length );
       }
-
-      /// <summary>
-      /// 解析 HTML 文本到指定的文档碎片对象
-      /// </summary>
-      /// <param name="html">要解析的 HTML 文本</param>
-      /// <param name="fragment">要处理的文本碎片</param>
-      public virtual void ParseToFragment( string html, DomFragment fragment )
-      {
-
-        if ( string.IsNullOrEmpty( html ) )
-          return;
-
-        lock ( SyncRoot )
-        {
-          InitializeStack();
-
-          ContainerStack.Push( fragment );
-
-          ParseInternal( html );
-
-          fragment.ContentFragment = new HtmlContentFragment( Reader, 0, Reader.HtmlText.Length );
-        }
-      }
-
-
     }
-
 
 
   }

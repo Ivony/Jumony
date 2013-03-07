@@ -84,6 +84,7 @@
     <Compile Include="DomTextNode.cs" />
     <Compile Include="ContentModels\HtmlBeginTag.cs" />
     <Compile Include="ContentModels\HtmlContentFragment.cs" />
+    <Compile Include="IDomFragmentParserProvider.cs" />
     <Compile Include="IHtmlReader.cs" />
     <Compile Include="JumonyParser.cs" />
     <Compile Include="HtmlParserBase.cs" />

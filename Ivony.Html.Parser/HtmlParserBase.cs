@@ -112,7 +112,8 @@ namespace Ivony.Html.Parser
 
         ParseInternal( html );
 
-        return document;
+
+        return CompleteDocument( document );
 
       }
     }
@@ -401,6 +402,13 @@ namespace Ivony.Html.Parser
       return CreateSpecial( doctype.Html );
 
     }
+
+
+    protected virtual IHtmlDocument CompleteDocument( IHtmlDocument document )
+    {
+      return Provider.CompleteDocument( document );
+    }
+
 
 
 

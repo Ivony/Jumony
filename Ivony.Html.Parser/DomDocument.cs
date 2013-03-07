@@ -90,7 +90,12 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 文档碎片管理器
     /// </summary>
-    public IHtmlFragmentManager FragmentManager
+    public DomFragmentManager FragmentManager
+    {
+      get { return _manager; }
+    }
+
+    IHtmlFragmentManager IHtmlDocument.FragmentManager
     {
       get { return _manager; }
     }
@@ -142,7 +147,7 @@ namespace Ivony.Html.Parser
     {
 
       _currentVersionCache = null;//抛弃旧的版本缓存
-      
+
       if ( HtmlDomChanged != null )
       {
         if ( object.Equals( this, e.Node.Document ) )

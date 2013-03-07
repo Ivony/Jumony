@@ -101,5 +101,16 @@ namespace Ivony.Html.Parser
       get { return _document.DomModifier; }
     }
 
+
+
+    internal IDomFragmentParserProvider ParserProvider { get; set; }
+
+    public IDomFragmentParser GetParser()
+    {
+      if ( ParserProvider == null )
+        throw new NotSupportedException();
+
+      return ParserProvider.GetFragmentParser( _document );
+    }
   }
 }

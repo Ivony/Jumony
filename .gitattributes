@@ -2,7 +2,7 @@
 * text=auto
 
 
-*.cs text
+*.cs text eof=lf
 
 # Custom for Visual Studio
 *.cs     diff=csharp

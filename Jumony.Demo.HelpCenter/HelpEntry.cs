@@ -10,7 +10,7 @@ public class HelpEntry
 
   public string VirtualPath { get; set; }
 
-  public string ParentTopic { get; set; }
+  public string Parent { get; set; }
 
   public string Name { get; set; }
 

@@ -6,6 +6,10 @@ using System.Web.Caching;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Ivony.Web;
+using Ivony.Fluent;
+using Ivony.Html.Web;
+using Ivony.Html;
+using Ivony.Html.ExpandedAPI;
 
 /// <summary>
 /// HelpController 的摘要说明
@@ -27,10 +31,10 @@ public class HelpController : Controller
   public ActionResult Navigation()
   {
 
-    var topics = Cache.Get( navigationCacheKey ) as Topic[];
+    var topics = Cache.Get( navigationCacheKey ) as HelpEntry[];
 
     if ( topics == null )
-      Cache.Insert( navigationCacheKey, topics = InitializeTopics(), VirtualPathProvider.GetCacheDependency( helpEntriesVirtualPath, null, DateTime.UtcNow ) );
+      Cache.Insert( navigationCacheKey, topics = InitializeEntries(), VirtualPathProvider.GetCacheDependency( helpEntriesVirtualPath, null, DateTime.UtcNow ) );
 
     return View( "Navigation", topics );
 
@@ -47,21 +51,39 @@ public class HelpController : Controller
     get { return HttpRuntime.Cache; }
   }
 
-  private Topic[] InitializeTopics()
+  private HelpEntry[] InitializeEntries()
   {
 
     var directory = VirtualPathProvider.GetDirectory( helpEntriesVirtualPath );
-    var topics = directory.EnumerateFiles().Select( file => GetEntry( file ) );
+    var entries = directory.EnumerateFiles().Select( file => GetEntry( file ) ).NotNull();
+
+    return entries.OrderBy( e => e.Parent ).ToArray();
 
   }
 
-  private Entry GetEntry( VirtualFile file )
+  private HelpTopic GetTopic( HelpEntry e )
   {
-    throw new NotImplementedException();
+    return new HelpTopic( e );
   }
 
-  private Topic GetTopic( VirtualFile file )
+  private HelpEntry GetEntry( VirtualFile file )
   {
-    throw new NotImplementedException();
+
+    if ( !VirtualPathUtility.GetExtension( file.VirtualPath ).EqualsIgnoreCase( ".html" ) )
+      return null;
+
+    var document = HtmlProviders.LoadDocument( file.VirtualPath );
+
+    return new HelpEntry()
+    {
+      Title = document.FindFirst( "title" ).InnerText(),
+      Name = file.Name,
+      VirtualPath = file.VirtualPath,
+      ParentTopic = document.FindFirstOrDefault( "meta[parent]" ).IfNull( null, element => element.Attribute( "parent" ).Value() )
+    };
+
+
+
   }
+
 }

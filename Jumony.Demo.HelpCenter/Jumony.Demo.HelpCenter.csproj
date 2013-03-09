@@ -32,6 +32,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,8 +42,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="HelpController.cs" />
+    <Compile Include="HelpEntry.cs" />
+    <Compile Include="HelpTopic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
+      <Project>{bf0b37e7-2d93-4a3d-ad6d-0b51b66f5b21}</Project>
+      <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Web.Mvc\Ivony.Html.Web.Mvc.csproj">
+      <Project>{2fc154e1-e0e5-4f34-a6db-973d5332070a}</Project>
+      <Name>Ivony.Html.Web.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
+      <Project>{6ce7336e-d881-40b2-9495-c06cf9a61ac6}</Project>
+      <Name>Ivony.Html.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
+      <Project>{e775b408-605f-4b66-87b6-98596069b703}</Project>
+      <Name>Ivony.Html</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Web\Ivony.Web.csproj">
+      <Project>{82c4ee66-01f7-44c8-b9ff-a6ac3694e459}</Project>
+      <Name>Ivony.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

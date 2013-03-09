@@ -131,7 +131,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "JumonySite", "http://localh
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		ProjectReferences = "{2fc154e1-e0e5-4f34-a6db-973d5332070a}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;"
+		ProjectReferences = "{2fc154e1-e0e5-4f34-a6db-973d5332070a}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;{157c4483-5593-400d-8f2c-87745ae46704}|Jumony.Demo.HelpCenter.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_1629"
 		Debug.AspNetCompiler.PhysicalPath = "WebSite\JumonySite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_1629\"
@@ -172,6 +172,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PartialTest", "http://local
 		SlnRelativePath = "WebSite\PartialTest\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jumony.Demo.HelpCenter", "Jumony.Demo.HelpCenter\Jumony.Demo.HelpCenter.csproj", "{157C4483-5593-400D-8F2C-87745AE46704}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -442,6 +444,16 @@ Global
 		{9F59712A-2689-4C78-A956-33DDD11E481F}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{9F59712A-2689-4C78-A956-33DDD11E481F}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{9F59712A-2689-4C78-A956-33DDD11E481F}.Release|x86.ActiveCfg = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{157C4483-5593-400D-8F2C-87745AE46704}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -458,6 +470,7 @@ Global
 		{00200A5B-B49C-44ED-94E8-245359363C69} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{29F93961-DF4F-4912-B376-892B62BDC93E} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{41B8513A-6921-422B-9A76-345B6335B666} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
+		{157C4483-5593-400D-8F2C-87745AE46704} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{563E1240-78F7-4B65-9C9D-CBDCEF06D2B0} = {4B94B6DA-59D9-48FB-A05E-BE25C4C7EEDA}
 		{43ED2A81-21D8-4105-AE7B-7F03F9E98557} = {4B94B6DA-59D9-48FB-A05E-BE25C4C7EEDA}
 		{150787A5-84FE-49EB-ACAD-B04838DF6B25} = {AF5D7B06-51A8-4AA0-86A2-BC1FCC4D08A4}

@@ -48,9 +48,6 @@ namespace Ivony.Web
       DataTokens = new RouteValueDictionary();
 
 
-      urlPattern = VirtualPathUtility.AppendTrailingSlash( urlPattern );//在 URL 模式最后添加 / ，使得 xxx 与 xxx/ 被视为同一模式。
-
-
       var match = urlPatternRegex.Match( urlPattern );
 
       if ( !match.Success )
@@ -447,7 +444,7 @@ namespace Ivony.Web
       virtualPath = virtualPath.Substring( 2 );
 
 
-      virtualPath = VirtualPathUtility.AppendTrailingSlash( virtualPath );//在虚拟路径最后添加 / ，使得 xxx 与 xxx/ 被视为同一路径。
+      virtualPath = VirtualPathUtility.RemoveTrailingSlash( virtualPath );//在虚拟路径最后移除 / ，使得 xxx/ 与 xxx 被视为同一路径。
 
       var pathParagraphs = virtualPath.Split( '/' );
 

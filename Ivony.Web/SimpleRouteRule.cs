@@ -48,7 +48,7 @@ namespace Ivony.Web
       DataTokens = new RouteValueDictionary();
 
 
-      urlPattern = VirtualPathUtility.RemoveTrailingSlash( urlPattern );//去除 URL 模式最后的 / ，使得 xxx/ 与 xxx 被视为同一模式。
+      urlPattern = VirtualPathUtility.AppendTrailingSlash( urlPattern );//在 URL 模式最后添加 / ，使得 xxx 与 xxx/ 被视为同一模式。
 
 
       var match = urlPatternRegex.Match( urlPattern );
@@ -432,7 +432,6 @@ namespace Ivony.Web
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
 
-      virtualPath = VirtualPathUtility.RemoveTrailingSlash( virtualPath );//去除虚拟路径最后的 / ，使得 xxx/ 与 xxx 被视为同一路径。
 
 
       var queryKeySet = new HashSet<string>( _queryKeys, StringComparer.OrdinalIgnoreCase );
@@ -448,6 +447,7 @@ namespace Ivony.Web
       virtualPath = virtualPath.Substring( 2 );
 
 
+      virtualPath = VirtualPathUtility.AppendTrailingSlash( virtualPath );//在虚拟路径最后添加 / ，使得 xxx 与 xxx/ 被视为同一路径。
 
       var pathParagraphs = virtualPath.Split( '/' );
 

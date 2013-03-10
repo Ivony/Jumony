@@ -100,7 +100,7 @@ namespace Ivony.Html.Web
     }
 
 
-    Dictionary<IHtmlElement, IDictionary<string, string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
+    private Dictionary<IHtmlElement, IDictionary<string, string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
 
 
     /// <summary>

@@ -443,8 +443,7 @@ namespace Ivony.Web
 
       virtualPath = virtualPath.Substring( 2 );
 
-
-      virtualPath = VirtualPathUtility.RemoveTrailingSlash( virtualPath );//在虚拟路径最后移除 / ，使得 xxx/ 与 xxx 被视为同一路径。
+      virtualPath = virtualPath.TrimEnd( '/' );//在虚拟路径最后移除 / ，使得 xxx/ 与 xxx 被视为同一路径。
 
       var pathParagraphs = virtualPath.Split( '/' );
 

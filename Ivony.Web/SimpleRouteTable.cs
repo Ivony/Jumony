@@ -73,7 +73,7 @@ namespace Ivony.Web
 
 
       var data = _rules
-        .OrderBy( r => r.DynamicRouteKyes.Length )
+        .OrderBy( r => r.DynamicRouteKeys.Length )
         .Select( r => new
           {
             Rule = r,
@@ -300,7 +300,7 @@ namespace Ivony.Web
 
 
       //拥有最少动态参数的被优先考虑
-      candidateRules = candidateRules.GroupBy( p => p.DynamicRouteKyes.Length ).OrderBy( group => group.Key ).First().ToArray();
+      candidateRules = candidateRules.GroupBy( p => p.DynamicRouteKeys.Length ).OrderBy( group => group.Key ).First().ToArray();
 
       if ( candidateRules.IsSingle( out bestRule ) )
         return bestRule;

@@ -21,7 +21,7 @@ namespace Jumony.Demo.HelpCenter
 
 
 
-    public ActionResult Show( string name = "index" )
+    public ActionResult Entry( string name = "index" )
     {
       return View( name );
     }

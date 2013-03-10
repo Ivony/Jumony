@@ -48,6 +48,8 @@ namespace Ivony.Web
       DataTokens = new RouteValueDictionary();
 
 
+      urlPattern = VirtualPathUtility.RemoveTrailingSlash( urlPattern );//去除 URL 模式最后的 / ，使得 xxx/ 与 xxx 被视为同一模式。
+
 
       var match = urlPatternRegex.Match( urlPattern );
 
@@ -179,7 +181,7 @@ namespace Ivony.Web
     /// <remarks>
     /// 动态路由键的值不能包含特殊字符
     /// </remarks>
-    public string[] DynamicRouteKyes
+    public string[] DynamicRouteKeys
     {
       get { return _dynamics.ToArray(); }
     }
@@ -240,7 +242,7 @@ namespace Ivony.Web
 
       var builder = new StringBuilder( StaticPrefix );
 
-      foreach ( var key in DynamicRouteKyes )
+      foreach ( var key in DynamicRouteKeys )
       {
         var value = routeValues[key];
 
@@ -340,7 +342,7 @@ namespace Ivony.Web
         if ( _virtualPathDescriptor != null )
           return _virtualPathDescriptor;
 
-        return _virtualPathDescriptor = StaticPrefix + string.Join( "", Enumerable.Repeat( "/{dynamic}", DynamicRouteKyes.Length ).ToArray() );
+        return _virtualPathDescriptor = StaticPrefix + string.Join( "", Enumerable.Repeat( "/{dynamic}", DynamicRouteKeys.Length ).ToArray() );
       }
     }
 
@@ -429,6 +431,9 @@ namespace Ivony.Web
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw new ArgumentException( "virtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", "virtualPath" );
+
+      virtualPath = VirtualPathUtility.RemoveTrailingSlash( virtualPath );//去除虚拟路径最后的 / ，使得 xxx/ 与 xxx 被视为同一路径。
+
 
       var queryKeySet = new HashSet<string>( _queryKeys, StringComparer.OrdinalIgnoreCase );
       var requestQueryKeySet = new HashSet<string>( queryString.AllKeys, StringComparer.OrdinalIgnoreCase );

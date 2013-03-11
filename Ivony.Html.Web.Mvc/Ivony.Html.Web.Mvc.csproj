@@ -8,7 +8,7 @@
     <ProjectGuid>{2FC154E1-E0E5-4F34-A6DB-973D5332070A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ivony.Html.Web.Mvc</RootNamespace>
+    <RootNamespace>Ivony.Html.Web</RootNamespace>
     <AssemblyName>Ivony.Html.Web.Mvc</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -75,6 +75,7 @@
     <Compile Include="GenericMasterView.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />
+    <Compile Include="HtmlViewHandlerProvider.cs" />
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IContentView.cs" />
     <Compile Include="IHtmlViewHandler.cs" />

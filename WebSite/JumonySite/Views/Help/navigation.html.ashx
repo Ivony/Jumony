@@ -12,7 +12,7 @@ using Jumony.Demo.HelpCenter;
 public class Navigation : JumonyViewHandler
 {
 
-  protected override void ProcessScope( IHtmlContainer scope )
+  protected override void ProcessScope()
   {
 
     var entries = ViewModel as HelpEntry[];

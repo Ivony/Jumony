@@ -22,33 +22,4 @@ namespace Ivony.Html.Web
 
   }
 
-
-  internal class HtmlViewHandlerWrapper : IHtmlViewHandler
-  {
-    private IHtmlHandler _handler;
-
-    public HtmlViewHandlerWrapper( IHtmlHandler handler )
-    {
-      _handler = handler;
-    }
-
-
-    public void ProcessScope( ViewContext context, IHtmlContainer scope )
-    {
-      _handler.ProcessDocument( context.HttpContext, scope.Document );
-    }
-
-    public ViewDataDictionary ViewData
-    {
-      get;
-      set;
-    }
-
-    public void Dispose()
-    {
-      _handler.Dispose();
-    }
-  }
-
-
 }

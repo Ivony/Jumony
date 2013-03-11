@@ -2,25 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using System.Web.Mvc;
 
-namespace Ivony.Html.Web.Mvc
+namespace Ivony.Html.Web
 {
   internal static class HtmlViewHandlerProvider
   {
 
-    public IHtmlViewHandler GetHandler( string virtualPath )
+    public static IHtmlViewHandler GetHandler( string virtualPath )
     {
       var handlerPath = virtualPath + ".ashx";
 
+      return GetHandlerInternal( handlerPath ) ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
+    }
+
+    private static IHtmlViewHandler GetHandlerInternal( string handlerPath )
+    {
       if ( HostingEnvironment.VirtualPathProvider.FileExists( handlerPath ) )
       {
         try
         {
-          var handler = BuildManager.GetCompiledType( handlerPath ) as IHtmlViewHandler;
+          var instance = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( object ) );
+
+          var handler = instance as IHtmlViewHandler;
           if ( handler != null )
             return handler;
+
+          var htmlHandler = instance as IHtmlHandler;
+          if ( htmlHandler != null )
+            return new HtmlViewHandlerWrapper( htmlHandler );
         }
         catch
         {
@@ -30,6 +43,35 @@ namespace Ivony.Html.Web.Mvc
 
       return null;
     }
+
+
+    private class HtmlViewHandlerWrapper : IHtmlViewHandler
+    {
+      private IHtmlHandler _handler;
+
+      public HtmlViewHandlerWrapper( IHtmlHandler handler )
+      {
+        _handler = handler;
+      }
+
+
+      public void ProcessScope( ViewContext context, IHtmlContainer scope )
+      {
+        _handler.ProcessDocument( context.HttpContext, scope.Document );
+      }
+
+      public ViewDataDictionary ViewData
+      {
+        get;
+        set;
+      }
+
+      public void Dispose()
+      {
+        _handler.Dispose();
+      }
+    }
+
 
   }
 }

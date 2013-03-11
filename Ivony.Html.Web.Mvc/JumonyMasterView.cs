@@ -59,7 +59,7 @@ namespace Ivony.Html.Web
       Document = (IHtmlDocument) Scope;
 
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Process" );
-      ProcessScope( Scope );
+      ProcessScope();
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 

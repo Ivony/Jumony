@@ -45,9 +45,9 @@ namespace Ivony.Html.Web
       private set;
     }
 
-    protected sealed override void ProcessScope( IHtmlContainer container )
+    protected sealed override void ProcessScope()
     {
-      Container = container;
+      Container = Scope;
       ProcessContainer();
     }
 

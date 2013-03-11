@@ -1,0 +1,13 @@
+﻿body { font-family: 'Microsoft YaHei', SimHei, sans-serif; margin: 20px 50px; font-size: 14px; max-width: 1200px; }
+nav { float: left; width: 200px; margin: 0px 10px; }
+  nav ul { margin: 0px; padding: 0px; }
+    nav ul h3 { font-size: 20px; margin: 0px; }
+    nav ul ul { font-size: 14px; list-style: none; }
+  nav li { margin: 10px; }
+
+body > section { margin-left: 200px; width: auto; }
+section { margin: 20px 5px; }
+p { margin: 5px 20px; }
+code { font-family: Consolas, 'Courier New'; }
+
+h5 { margin: 10px 0px 5px 0px; }

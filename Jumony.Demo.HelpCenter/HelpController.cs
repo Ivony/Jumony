@@ -10,6 +10,7 @@ using Ivony.Fluent;
 using Ivony.Html.Web;
 using Ivony.Html;
 using Ivony.Html.ExpandedAPI;
+using System.IO;
 
 namespace Jumony.Demo.HelpCenter
 {
@@ -23,24 +24,30 @@ namespace Jumony.Demo.HelpCenter
 
     public ActionResult Entry( string name = "index" )
     {
-      return View( name );
+
+      var entry = GetEntries().FirstOrDefault( e => e.Name == name );
+      if ( entry == null )
+        return HttpNotFound();
+
+      return View( entry.VirtualPath, "frame" );
     }
 
 
     private const string navigationCacheKey = "Navigation";
-    private const string helpEntriesVirtualPath = "~/Help";
+    private const string helpEntriesVirtualPath = "~/HelpEntries";
 
     public ActionResult Navigation()
     {
+      return PartialView( "Navigation", GetEntries() );
+    }
 
+    private HelpEntry[] GetEntries()
+    {
       var entries = Cache.Get( navigationCacheKey ) as HelpEntry[];
 
       if ( entries == null )
-        Cache.Insert( navigationCacheKey, entries = InitializeEntries(), VirtualPathProvider.GetCacheDependency( helpEntriesVirtualPath, null, DateTime.UtcNow ) );
-
-      return View( "Navigation", entries );
-
-
+        Cache.Insert( navigationCacheKey, entries = InitializeEntries(), VirtualPathProvider.GetCacheDependency( helpEntriesVirtualPath, null, DateTime.UtcNow ), DateTime.UtcNow.AddMinutes( 5 ), Cache.NoSlidingExpiration );
+      return entries;
     }
 
     protected VirtualPathProvider VirtualPathProvider
@@ -63,18 +70,20 @@ namespace Jumony.Demo.HelpCenter
 
     private HelpEntry GetEntry( VirtualFile file )
     {
+      var virtualPath = VirtualPathUtility.ToAppRelative( file.VirtualPath );
+      var name = Path.GetFileNameWithoutExtension( file.Name );
 
-      if ( !VirtualPathUtility.GetExtension( file.VirtualPath ).EqualsIgnoreCase( ".html" ) )
+      if ( !VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
         return null;
 
-      var document = HtmlProviders.LoadDocument( file.VirtualPath );
+      var document = HtmlProviders.LoadDocument( virtualPath );
 
       return new HelpEntry()
       {
-        Title = document.FindFirst( "title" ).InnerText(),
-        Name = file.Name,
-        VirtualPath = file.VirtualPath,
-        Category = document.FindFirstOrDefault( "meta[category]" ).IfNull( null, element => element.Attribute( "parent" ).Value() )
+        Title = document.FindFirst( "title" ).InnerHtml(),
+        Name = name,
+        VirtualPath = virtualPath,
+        Category = document.FindFirstOrDefault( "meta[name=category]" ).IfNull( null, element => element.Attribute( "content" ).Value() )
       };
 
 

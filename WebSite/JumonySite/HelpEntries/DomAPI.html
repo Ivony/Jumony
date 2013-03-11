@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>HTML DOM API</title>
+  <meta name="category" content="Jumony API" />
+  <link href="../Views/Help/main.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <p>
+    DOM API即是修改文档结构的API，通过DOM API可以方便的在文档中新增元素、注释或是文本节点，也能够将一小段HTML片段插入文档，或是在在文档中移除这些元素。Jumony
+    提供了标准统一的DOM API用于修改文档结构，对于所有支持修改的HTML DOM，这些API提供了一致的行为。
+  </p>
+  <section>
+    <h3>针对 IHtmlContainer 的 API</h3>
+    <section>
+      <code>IHtmlElement AddElement( [int index], string elementName )</code>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的元素</p>
+      <h5>参数:</h5>
+      <p><strong>elementName:</strong> 元素名</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+    </section>
+    <section>
+      <code>IHtmlTextNode AddTextNode( [int index], string htmlText )</code>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的文本节点</p>
+      <h5>参数:</h5>
+      <p><strong>htmlText:</strong> HTML文本</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+    </section>
+    <section>
+      <code>IHtmlComment AddComment( [int index], string comment )</code>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的注释节点</p>
+      <h5>参数:</h5>
+      <p><strong>comment:</strong> 注释内容</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+    </section>
+    <section>
+      <code>IEnumerable&gt;IHtmlNode&lt; AddFragment( [int index], IHtmlFragment fragment )</code>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的节点列表</p>
+      <h5>参数:</h5>
+      <p><strong>fragment:</strong> 要添加的文档碎片</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+    </section>
+  </section>
+</body>
+</html>

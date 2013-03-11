@@ -34,6 +34,7 @@ public class _handler : IHtmlHandler, IHttpHandler
     {
       var code = e.InnerText();
       code = ProcessKeywords( code );
+      code = ProcessTypeNames( code );
 
       e.ClearNodes();
       e.AddFragment( code );
@@ -46,5 +47,12 @@ public class _handler : IHtmlHandler, IHttpHandler
   private string ProcessKeywords( string code )
   {
     return keywords.Replace( code, match => "<span class='keyword'>" + match.Value + "</span>" );
+  }
+
+  private Regex typeNames = new Regex( @"\b(IHtmlElement|IHtmlContainer|IHtmlTextNode|IHtmlComment|IHtmlSpecial|IHtmlDocument|IHtmlAttribute|IEnumerable|IHtmlNode|IHtmlFragment)\b" );
+
+  private string ProcessTypeNames( string code )
+  {
+    return typeNames.Replace( code, match => "<span class='typeName'>" + match.Value + "</span>" );
   }
 }

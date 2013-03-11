@@ -20,6 +20,9 @@ namespace Ivony.Html
     /// <returns></returns>
     IHtmlDocument Parse( string html, Uri uri );
 
-
+    /// <summary>
+    /// 获取用于构建 DOM 结构的 DOM 提供程序
+    /// </summary>
+    IHtmlDomProvider DomProvider { get; }
   }
 }

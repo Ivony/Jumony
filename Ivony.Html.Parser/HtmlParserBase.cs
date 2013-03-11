@@ -57,7 +57,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 派生类提供 Provider 用于创建 DOM 结构
     /// </summary>
-    protected abstract IHtmlDomProvider Provider
+    public abstract IHtmlDomProvider DomProvider
     {
       get;
     }
@@ -103,7 +103,7 @@ namespace Ivony.Html.Parser
 
         InitializeStack();
 
-        var document = Provider.CreateDocument( url );
+        var document = DomProvider.CreateDocument( url );
 
         if ( string.IsNullOrEmpty( html ) )
           return document;
@@ -177,7 +177,7 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     protected virtual IHtmlTextNode CreateTextNode( string text )
     {
-      return Provider.AddTextNode( CurrentContainer, text );
+      return DomProvider.AddTextNode( CurrentContainer, text );
     }
 
 
@@ -293,7 +293,7 @@ namespace Ivony.Html.Parser
     /// <returns>创建好的元素</returns>
     protected virtual IHtmlElement CreateElement( string tagName, Dictionary<string, string> attributes )
     {
-      return Provider.AddElement( CurrentContainer, tagName, attributes );
+      return DomProvider.AddElement( CurrentContainer, tagName, attributes );
     }
 
 
@@ -365,7 +365,7 @@ namespace Ivony.Html.Parser
     /// <returns>创建的注释节点</returns>
     protected virtual IHtmlComment CreateCommet( string comment )
     {
-      return Provider.AddComment( CurrentContainer, comment );
+      return DomProvider.AddComment( CurrentContainer, comment );
     }
 
 
@@ -387,7 +387,7 @@ namespace Ivony.Html.Parser
     /// <returns>创建的特殊标签节点</returns>
     protected virtual IHtmlSpecial CreateSpecial( string html )
     {
-      return Provider.AddSpecial( CurrentContainer, html );
+      return DomProvider.AddSpecial( CurrentContainer, html );
     }
 
 
@@ -406,7 +406,7 @@ namespace Ivony.Html.Parser
 
     protected virtual IHtmlDocument CompleteDocument( IHtmlDocument document )
     {
-      return Provider.CompleteDocument( document );
+      return DomProvider.CompleteDocument( document );
     }
 
 

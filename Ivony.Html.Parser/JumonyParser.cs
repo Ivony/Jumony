@@ -17,7 +17,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 获取 HTML DOM 提供程序
     /// </summary>
-    protected override IHtmlDomProvider Provider
+    public override IHtmlDomProvider DomProvider
     {
       get { return new DomProvider( this ); }
     }

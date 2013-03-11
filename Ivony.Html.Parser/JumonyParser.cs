@@ -19,7 +19,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     protected override IHtmlDomProvider Provider
     {
-      get { return DomProvider.Instance; }
+      get { return new DomProvider( this ); }
     }
 
     /// <summary>
@@ -93,19 +93,6 @@ namespace Ivony.Html.Parser
       return this;
     }
 
-
-    /// <summary>
-    /// 完成文档的创建，已重写此方法将自己作为 FragmentParserProvider 注入
-    /// </summary>
-    /// <param name="document">已经解析完成的文档对象</param>
-    /// <returns>完成所有工作的文档对象</returns>
-    protected override IHtmlDocument CompleteDocument( IHtmlDocument document )
-    {
-
-      document.CastTo<DomDocument>().FragmentManager.ParserProvider = this;
-
-      return base.CompleteDocument( document );
-    }
 
 
 

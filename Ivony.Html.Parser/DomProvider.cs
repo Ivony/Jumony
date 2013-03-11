@@ -12,6 +12,14 @@ namespace Ivony.Html.Parser
   public class DomProvider : IHtmlDomProvider
   {
 
+
+    private IDomFragmentParserProvider _fragmentParserProvider;
+
+    public DomProvider( IDomFragmentParserProvider provider )
+    {
+      _fragmentParserProvider = provider;
+    }
+
     /// <summary>
     /// 创建文档
     /// </summary>
@@ -41,21 +49,6 @@ namespace Ivony.Html.Parser
 
       return domContainer;
     }
-
-
-    private static DomProvider _instance = new DomProvider();
-
-    /// <summary>
-    /// DomProvider 对象的唯一实例
-    /// </summary>
-    public static DomProvider Instance
-    {
-      get
-      {
-        return _instance;
-      }
-    }
-
 
 
     /// <summary>
@@ -110,6 +103,7 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 完成文档的创建
     /// </summary>
+    /// <remarks>将在此步骤注入 FragmentParserProvider 对象</remarks>
     /// <param name="document">已经完成 DOM 结构部署的文档</param>
     /// <returns>创建完成的文档</returns>
     public IHtmlDocument CompleteDocument( IHtmlDocument document )
@@ -117,6 +111,8 @@ namespace Ivony.Html.Parser
       var domDocument = document as DomDocument;
       if ( domDocument == null )
         throw new InvalidOperationException();
+
+      domDocument.FragmentManager.ParserProvider = _fragmentParserProvider;
 
       return domDocument;
     }

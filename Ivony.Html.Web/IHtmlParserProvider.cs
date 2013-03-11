@@ -108,7 +108,8 @@ namespace Ivony.Html.Web
     /// <returns>包含默认解析器的结果</returns>
     public HtmlParserResult GetParser( string virtualPath )
     {
-      return new HtmlParserResult( new JumonyParser(), new DomProvider(), this, virtualPath );
+      var parser = new JumonyParser();
+      return new HtmlParserResult( parser, new DomProvider( parser ), this, virtualPath );
     }
 
 

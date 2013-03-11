@@ -101,7 +101,7 @@ namespace Ivony.Html.Web
     /// 清除文档中所有的资源文件引用
     /// </summary>
     /// <param name="document">要清除资源文件引用的文档</param>
-    /// <param name="headScopeOnly">是否仅清除 &gt;head&lt; 元素内部的引用</param>
+    /// <param name="headScopeOnly">是否仅清除 &lt;head&gt; 元素内部的引用</param>
     public void ClearAllReference( IHtmlDocument document, bool headScopeOnly = true )
     {
       if ( document == null )

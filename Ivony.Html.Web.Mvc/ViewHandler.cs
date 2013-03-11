@@ -51,7 +51,6 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 重写 Process 方法，调用 ProcessDocument 方法处理页面逻辑
     /// </summary>
-    /// <param name="scope"></param>
     protected sealed override void ProcessScope()
     {
       Document = Scope.Document;

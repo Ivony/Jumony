@@ -8,7 +8,7 @@ namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// 表示一个 &gt;select&lt; 元素
+  /// 表示一个 &lt;select&gt; 元素
   /// </summary>
   public class HtmlSelect : IHtmlGroupControl, IHtmlFocusableControl
   {
@@ -35,7 +35,7 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
-    /// 获取 DOM 上的 &gt;select&lt; 元素
+    /// 获取 DOM 上的 &lt;select&gt; 元素
     /// </summary>
     public IHtmlElement Element
     {
@@ -83,7 +83,7 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
-    /// 表示一个 &gt;option&lt; 元素
+    /// 表示一个 &lt;option&gt; 元素
     /// </summary>
     public class HtmlOption : IHtmlInputGroupItem
     {
@@ -96,7 +96,7 @@ namespace Ivony.Html.Forms
       /// 创建 HtmlOption 对象
       /// </summary>
       /// <param name="select">所属的 HtmlSelect 对象</param>
-      /// <param name="element">DOM 上对应的 &gt;option&lt; 元素</param>
+      /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
       public HtmlOption( HtmlSelect select, IHtmlElement element )
       {
         _select = select;

@@ -3,7 +3,7 @@ namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// 表示 HTML 输入组控件的抽象，例如多选单选按钮组和 &gt;select&lt; 元素
+  /// 表示 HTML 输入组控件的抽象，例如多选单选按钮组和 &lt;select&gt; 元素
   /// </summary>
   public interface IHtmlGroupControl : IHtmlInputControl
   {
@@ -26,7 +26,7 @@ namespace Ivony.Html.Forms
   }
 
   /// <summary>
-  /// 表示 HTML 输入组项的抽象，例如 &gt;option&lt; 元素或是多选单选按钮。
+  /// 表示 HTML 输入组项的抽象，例如 &lt;option&gt; 元素或是多选单选按钮。
   /// </summary>
   public interface IHtmlInputGroupItem : IHtmlFormElement
   {

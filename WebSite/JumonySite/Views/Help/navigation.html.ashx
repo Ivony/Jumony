@@ -8,6 +8,7 @@ using Ivony.Fluent;
 using Ivony.Web;
 using Ivony.Html;
 using Jumony.Demo.HelpCenter;
+using System.Collections.Generic;
 
 public class Navigation : JumonyViewHandler
 {
@@ -15,6 +16,7 @@ public class Navigation : JumonyViewHandler
   protected override void ProcessScope()
   {
 
+    entryName = RawViewContext.RouteData.Values["name"].CastTo<string>();
     var entries = ViewModel as HelpEntry[];
 
     var categoryList = Scope.AddElement( "ul" );
@@ -22,7 +24,12 @@ public class Navigation : JumonyViewHandler
 
     categoryGroup.ForAll( g => Category( g, categoryList ) );
 
+
+
   }
+
+  private string entryName;
+
 
   private void Category( IGrouping<string, HelpEntry> grouping, IHtmlContainer categoryList )
   {
@@ -30,7 +37,23 @@ public class Navigation : JumonyViewHandler
     item.AddElement( "h3" ).InnerText( grouping.Key );
     var entryList = item.AddElement( "ul" );
     foreach ( var entry in grouping )
-      entryList.AddElement( "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_name", entry.Name ).InnerText( entry.Title );
+    {
+      if ( entry.Name == entryName )
+      {
+        var listItem = entryList.AddElement( "li" ).InnerText( entry.Title );
+        AddSubTitles( entry.SubTitles, listItem );
+      }
+      else
+        entryList.AddElement( "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_name", entry.Name ).InnerText( entry.Title );
+    }
+  }
+
+  private void AddSubTitles( IDictionary<string, string> subTitles, IHtmlElement listItem )
+  {
+    var list = listItem.AddElement( "ul" );
+    foreach ( var pair in subTitles )
+      list.AddElement( "li" ).AddElement( "a" ).SetAttribute( "href", "#" + pair.Key ).InnerText( pair.Value );
+
   }
 
 }

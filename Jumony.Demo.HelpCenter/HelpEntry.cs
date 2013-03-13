@@ -16,5 +16,7 @@ namespace Jumony.Demo.HelpCenter
 
     public string Name { get; set; }
 
+    public IDictionary<string, string> SubTitles { get; set; }
+
   }
 }

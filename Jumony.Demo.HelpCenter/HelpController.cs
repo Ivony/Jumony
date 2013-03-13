@@ -83,7 +83,8 @@ namespace Jumony.Demo.HelpCenter
         Title = document.FindFirst( "title" ).InnerHtml(),
         Name = name,
         VirtualPath = virtualPath,
-        Category = document.FindFirstOrDefault( "meta[name=category]" ).IfNull( null, element => element.Attribute( "content" ).Value() )
+        Category = document.FindFirstOrDefault( "meta[name=category]" ).IfNull( null, element => element.Attribute( "content" ).Value() ),
+        SubTitles = document.Find( "h3[id]" ).ToDictionary( element => element.Attribute( "id" ).Value(), element => element.InnerText() )
       };
 
 

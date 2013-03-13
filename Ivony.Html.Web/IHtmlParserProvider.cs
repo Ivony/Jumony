@@ -21,14 +21,14 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">HTML 内容虚拟路径</param>
     /// <param name="htmlContent">HTML 内容</param>
     /// <returns>HTML 解析器结果</returns>
-    HtmlParserResult GetParser( string virtualPath, string htmlContent );
+    IHtmlParser GetParser( string virtualPath, string htmlContent );
 
 
     /// <summary>
     /// 释放解析器实例
     /// </summary>
     /// <param name="parser"></param>
-    void ReleaseParser( HtmlParserResult parser );
+    void ReleaseParser( IHtmlParser parser );
 
   }
 
@@ -106,20 +106,19 @@ namespace Ivony.Html.Web
     /// 获取默认的解析器结果
     /// </summary>
     /// <returns>包含默认解析器的结果</returns>
-    public HtmlParserResult GetParser( string virtualPath )
+    public IHtmlParser GetParser( string virtualPath )
     {
-      var parser = new JumonyParser();
-      return new HtmlParserResult( parser, new DomProvider( parser ), this, virtualPath );
+      return new WebParser();
     }
 
 
 
-    HtmlParserResult IHtmlParserProvider.GetParser( string virtualPath, string htmlContent )
+    IHtmlParser IHtmlParserProvider.GetParser( string virtualPath, string htmlContent )
     {
       return GetParser( virtualPath );
     }
 
-    void IHtmlParserProvider.ReleaseParser( HtmlParserResult parser )
+    void IHtmlParserProvider.ReleaseParser( IHtmlParser parser )
     {
     }
   }

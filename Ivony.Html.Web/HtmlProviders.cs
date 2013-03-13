@@ -240,7 +240,7 @@ namespace Ivony.Html.Web
       var section = WebConfigurationManager.GetSection( "system.web/compilation", virtualPath ) as CompilationSection;
       if ( section == null )
         return null;
-      
+
       if ( section.BuildProviders[VirtualPathUtility.GetExtension( virtualPath )] == null )
         return null;
 
@@ -264,7 +264,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="contentResult">文档内容加载结果</param>
     /// <returns>HTML 分析器相关信息</returns>
-    public static HtmlParserResult GetParser( HtmlContentResult contentResult )
+    public static IHtmlParser GetParser( HtmlContentResult contentResult )
     {
 
       if ( contentResult == null )
@@ -277,10 +277,10 @@ namespace Ivony.Html.Web
       {
         foreach ( var provider in ParserProviders )
         {
-          var result = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
+          var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
 
-          if ( result != null )
-            return result;
+          if ( parser != null )
+            return parser;
 
         }
       }
@@ -317,12 +317,9 @@ namespace Ivony.Html.Web
       if ( contentResult == null )
         throw new ArgumentNullException( "contentResult" );
 
+      var parser = GetParser( contentResult );
+      return ParseDocument( contentResult, parser );
 
-
-      var result = GetParser( contentResult );
-
-
-      return ParseDocument( contentResult, result );
     }
 
 
@@ -330,11 +327,14 @@ namespace Ivony.Html.Web
     /// 分析 HTML 文档，此方法会根据情况缓存文档模型
     /// </summary>
     /// <param name="contentResult">文档加载结果</param>
-    /// <param name="parserResult">解析器选择结果</param>
+    /// <param name="parser">HTML 解析器</param>
     /// <returns>HTML 文档对象</returns>
-    public static IHtmlDocument ParseDocument( HtmlContentResult contentResult, HtmlParserResult parserResult )
+    public static IHtmlDocument ParseDocument( HtmlContentResult contentResult, IHtmlParser parser )
     {
-      if ( contentResult.CacheKey != null && parserResult.DomProvider != null )//如果可以缓存
+
+      var domProvider = parser.DomProvider;
+
+      if ( contentResult.CacheKey != null && domProvider != null )//如果可以缓存
       {
         var key = contentResult.CacheKey;
         var cacheKey = string.Format( CultureInfo.InvariantCulture, DocumentCacheKey, contentResult.VirtualPath );
@@ -343,19 +343,18 @@ namespace Ivony.Html.Web
 
         if ( createDocument != null )
         {
-          var provider = parserResult.DomProvider;
-          return createDocument( provider );
+          return createDocument( domProvider );
         }
 
         Trace( "Document cache missed" );
 
 
-        var document = ParseDocument( parserResult, contentResult.Content, contentResult.VirtualPath );
+        var document = ParseDocument( parser, contentResult.Content, contentResult.VirtualPath );
         createDocument = document.Compile();//必须同步编译文档，否则文档对象可能被修改。
 
         new Action( delegate
         {
-          createDocument( parserResult.DomProvider );//可以异步预热，预热后再存入缓存。
+          createDocument( domProvider );//可以异步预热，预热后再存入缓存。
           Cache.Insert( cacheKey, createDocument, new CacheDependency( new string[0], new[] { key } ), CacheItemPriority.High );
         }
           ).BeginInvoke( null, null );//立即在新线程预热此方法
@@ -367,7 +366,7 @@ namespace Ivony.Html.Web
 
       else
 
-        return ParseDocument( parserResult, contentResult.Content, contentResult.VirtualPath );
+        return ParseDocument( parser, contentResult.Content, contentResult.VirtualPath );
     }
 
     private static void Trace( string message )
@@ -391,16 +390,9 @@ namespace Ivony.Html.Web
     }
 
 
-    private static IHtmlDocument ParseDocument( HtmlParserResult result, string htmlContent, string virtualPath )
+    private static IHtmlDocument ParseDocument( IHtmlParser parser, string htmlContent, string virtualPath )
     {
-      var parser = result.Parser;
-
-      var document = parser.Parse( htmlContent, CreateDocumentUri( virtualPath ) );
-
-      if ( result.Provider != null )
-        result.Provider.ReleaseParser( result );
-
-      return document;
+      return parser.Parse( htmlContent, CreateDocumentUri( virtualPath ) );
     }
 
 

@@ -48,7 +48,7 @@ namespace Ivony.Html.Web.Binding
 
         encoded = encoded.Replace( "\n", "<br />" );
 
-        _targetElement.ReplaceWithHtml( encoded );
+        _targetElement.ReplaceWith( encoded );
       }
     }
   }

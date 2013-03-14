@@ -864,7 +864,7 @@ namespace Ivony.Html
     /// <param name="node">要被替换的节点</param>
     /// <param name="html">替换节点的 HTML 文本</param>
     /// <returns>HTML 文本置入后产生的节点集</returns>
-    public static IEnumerable<IHtmlNode> ReplaceWithHtml( this IHtmlNode node, string html )
+    public static IEnumerable<IHtmlNode> ReplaceWith( this IHtmlNode node, string html )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );

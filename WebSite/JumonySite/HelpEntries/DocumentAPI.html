@@ -8,5 +8,27 @@
 </head>
 <body>
   <p>文档 API 是与 HTML 文档有关的一系列 API 的统称，文档 API 可以在文档范围内查找元素（包括在文档碎片中的），或是编译文档 DOM 结构为代码，或是将文档中的 URL 全部转换为绝对的路径</p>
+
+  <section>
+    <h3 id="compile">编译相关的 API</h3>
+    <p>编译 API 可以将文档结构编译为代码，从而快速的重建文档的 DOM 结构。当文档被用来当作模版使用时，这些 API 将非常有用和提高性能，据测试，通过编译后的代码产生文档结构比直接通过 HTML 文本解析文档结构平均要快 7 - 11 倍。</p>
+    <section>
+      <code>Func&lt;IHtmlDomProvider, IHtmlDocument&gt; IHtmlDocument.Compile()</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构编译为一个方法，稍候可以通过这个方法精确重建 DOM 结构</p>
+      <h5>返回值：</h5>
+      <p>可以用于重建 DOM 结构的方法。</p>
+    </section>
+    <section>
+      <code>CodeMemberMethod IHtmlDocument.GenerateCodeMethod( string methodName )</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构产生一段代码，这段代码可以精确重建 DOM 结构</p>
+      <h5>参数:</h5>
+      <p><strong>methodName:</strong> 产生的代码所使用的方法名称</p>
+      <h5>返回值：</h5>
+      <p>CodeDom 方法声明对象，可以用于产生各种语言的代码。</p>
+    </section>
+  </section>
+
 </body>
 </html>

@@ -125,9 +125,20 @@
       <h5>说明：</h5>
       <p>从 DOM 中移除这一批节点</p>
     </section>
+    <section>
+      <code>void IHtmlAttribute.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这个属性</p>
+    </section>
+    <section>
+      <code>void IEnumerable&lt;IHtmlAttribute&gt;.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这一批属性</p>
+    </section>
   </section>
   <section>
     <h3 id="replace">替换节点的 API</h3>
+    <p>替换节点的 API 可以将节点用指定的 HTML 片段替换。</p>
     <section>
       <code>IEnumerable&lt;IHtmlNode&gt; ReplaceWith( IHtmlFragment fragment )</code>
       <h5>说明：</h5>
@@ -147,6 +158,68 @@
       <p>返回替换在 DOM 中的节点列表</p>
     </section>
   </section>
-
+  <section>
+    <h3 id="makecopy">创建副本的 API</h3>
+    <p>创建副本的 API 可以创建 HTML 片段或文档的副本</p>
+    <section>
+      <code>IHtmlFragment IHtmlFragment.MakeCopy()</code>
+      <h5>说明：</h5>
+      <p>为文档片段创建副本</p>
+      <h5>返回值：</h5>
+      <p>文档片段的副本</p>
+    </section>
+    <section>
+      <code>IHtmlDocument IHtmlDomProvider.MakeCopy( IHtmlDocument document )</code>
+      <h5>说明：</h5>
+      <p>创建指定文档的副本</p>
+      <h5>参数:</h5>
+      <p><strong>document:</strong> 要创建副本的文档。</p>
+      <h5>返回值：</h5>
+      <p>指定文档的副本。</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="fragment">文档片段相关的 API</h3>
+    <p>文档片段相关的 API 主要用来创建 IHtmlFragment 即文档片段对象</p>
+    <section>
+      <code>IHtmlFragment IHtmlDocument.CreateFragment()</code>
+      <h5>说明：</h5>
+      <p>创建文档片段。</p>
+      <h5>返回值：</h5>
+      <p>创建的文档片段。</p>
+    </section>
+    <section>
+      <code>IHtmlFragment IHtmlDocument.ParseFragment( string html )</code>
+      <h5>说明：</h5>
+      <p>解析并创建文档片段.</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 要解析的文档片段 HTML 文本。</p>
+      <h5>返回值：</h5>
+      <p>创建的文档片段。</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="content">内容相关的 API</h3>
+    <p>内容相关的 API 包括 InnerHtml 和 InnerText ，可以比较直观的达到设置 InnerHtml 和 InnerText 的效果</p>
+    <section>
+      <code>IHtmlElement IHtmlElement.InnerHtml( string html )</code>
+      <h5>说明：</h5>
+      <p>设置元素的 InnerHTML 。</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 用于替换元素内容的 HTML 文本。</p>
+      <h5>返回值：</h5>
+      <p>元素自身，便于链式调用。</p>
+    </section>
+    <section>
+      <code>IHtmlElement IHtmlElement.InnerText( string text, [bool encodeWhiteSpaces] )</code>
+      <h5>说明：</h5>
+      <p>设置元素的 InnerText 。</p>
+      <h5>参数:</h5>
+      <p><strong>text:</strong> 用于替换元素内容的纯文本。</p>
+      <p><strong>encodeWhiteSpaces:</strong> 指定是否要对连续的空白字符编码，默认是 false ，即标准的 InnerText 行为，并不会对连续的空白字符编码</p>
+      <h5>返回值：</h5>
+      <p>元素自身，便于链式调用。</p>
+    </section>
+  </section>
 </body>
 </html>

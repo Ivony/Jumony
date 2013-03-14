@@ -42,14 +42,14 @@ public class _handler : IHtmlHandler, IHttpHandler
   }
 
 
-  private Regex keywords = new Regex( @"\b(string|int|void|class|public|protected|private)\b" );
+  private Regex keywords = new Regex( @"\b(string|int|void|class|public|protected|private|bool)\b" );
 
   private string ProcessKeywords( string code )
   {
     return keywords.Replace( code, match => "<span class='keyword'>" + match.Value + "</span>" );
   }
 
-  private Regex typeNames = new Regex( @"\b(IHtmlElement|IHtmlContainer|IHtmlTextNode|IHtmlComment|IHtmlSpecial|IHtmlDocument|IHtmlAttribute|IEnumerable|IHtmlNode|IHtmlFragment)\b" );
+  private Regex typeNames = new Regex( @"\b(IHtmlElement|IHtmlContainer|IHtmlTextNode|IHtmlComment|IHtmlSpecial|IHtmlDocument|IHtmlAttribute|IEnumerable|IHtmlNode|IHtmlFragment|IHtmlDomProvider|CodeMemberMethod|Func)\b" );
 
   private string ProcessTypeNames( string code )
   {

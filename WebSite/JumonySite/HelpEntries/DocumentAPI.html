@@ -29,6 +29,33 @@
       <p>CodeDom 方法声明对象，可以用于产生各种语言的代码。</p>
     </section>
   </section>
+  <section>
+    <h3 id="identity">标识元素的 API</h3>
+    <p>标识元素的 API 可以根据 ID 查找元素，或是获取以及分配元素的 ID。</p>
+    <section>
+      <code>string IHtmlElement.Identity( [bool create, [bool ancestorsCreate]] )</code>
+      <h5>说明：</h5>
+      <p>获取元素的唯一标识 ID ，若元素没有唯一标识 ID ，则可以设置是否产生一个唯一标识 ID 赋予元素</p>
+      <h5>参数:</h5>
+      <p><strong>create:</strong> 确定若元素没有唯一标识 ID ，是否将产生的唯一 ID 设置给元素的 ID 属性。</p>
+      <p><strong>ancestorsCreate:</strong> 确定若元素没有唯一标识 ID ，将产生的唯一 ID 设置给元素的 ID 属性的同时，是否应对所有没有唯一 ID 的父级元素同样设置。若 create 参数值为 false 而 anctorsCreate 为 true ，则会抛出异常</p>
+      <h5>返回值：</h5>
+      <p>元素的唯一标识 ID，若元素没有 ID 属性或者 ID 属性不唯一，并且也没有要求产生唯一标识赋予元素，则返回 null 。</p>
+    </section>
+    <section>
+      <code>string IHtmlElement.Unique()</code>
+      <h5>说明：</h5>
+      <p>获取元素的唯一标识 ID ，若元素没有唯一标识 ID，则自动产生一个。</p>
+      <h5>返回值：</h5>
+      <p>元素的唯一标识 ID。</p>
+    </section>
+    <h4>Unique 和 Identity 方法的区别</h4>
+    <p>
+      Unique 方法在找不到唯一标识时，会自动创建一个，此时 Unique 方法的返回值将与元素的 ID 属性无关。<br />
+      Identity 方法在找不到唯一标识时，不会自动创建一个。如果设置要求创建唯一标识，则会自动设置到元素的
+      ID 属性，所以说 Identity 方法将总是与元素的 ID 属性相关。
+    </p>
+  </section>
 
 </body>
 </html>

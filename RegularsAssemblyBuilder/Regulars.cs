@@ -12,7 +12,7 @@ namespace RegularsAssemblyBuilder
   {
 
     /// <summary>用于匹配 HTML 元素标签名的正则表达式</summary>
-    public static readonly string tagNamePattern = @"(?<tagName>[\w:_\-\.]+)";
+    public static readonly string tagNamePattern = @"(?<tagName>[a-zA-Z][\w:_\-\.]*)";
 
 
     /// <summary>用于匹配一般属性值的正则表达式</summary>

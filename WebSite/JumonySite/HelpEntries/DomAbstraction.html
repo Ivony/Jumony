@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>HTML 文档对象模型</title>
+  <meta name="category" content="Jumony 概述" />
+  <link href="../Views/Help/main.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <p>文档对象模型（Document Object Model）简称 DOM ，是指用对象的形式描述文档结构的一种模型。Jumony 参考 XML
+    的文档对象模型，为 HTML 设计了一种简化的文档对象模型。并不完全遵循 W3C 繁琐的结构。</p>
+  <p>Jumony 的文档对象模型包括六种具体对象、两种抽象对象，六种具体对象分别为：</p>
+  <ul>
+    <li>Document</li>
+    <li>Element</li>
+    <li>TextNode</li>
+    <li>Comment</li>
+    <li>Special</li>
+    <li>Attribute</li>
+  </ul>
+  <p>两种抽象对象为</p>
+  <ul>
+
+    <li>Container</li>
+    <li>Node</li>
+
+  </ul>
+
+  <section>
+    <h3 id="compile">编译相关</h3>
+    <p>编译 API 可以将文档结构编译为代码，从而快速的重建文档的 DOM 结构。当文档被用来当作模版使用时，这些 API 将非常有用和提高性能，据测试，通过编译后的代码产生文档结构比直接通过 HTML 文本解析文档结构平均要快 7 - 11 倍。</p>
+    <section>
+      <code>Func&lt;IHtmlDomProvider, IHtmlDocument&gt; IHtmlDocument.Compile()</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构编译为一个方法，稍候可以通过这个方法精确重建 DOM 结构</p>
+      <h5>返回值：</h5>
+      <p>可以用于重建 DOM 结构的方法。</p>
+    </section>
+    <section>
+      <code>CodeMemberMethod IHtmlDocument.GenerateCodeMethod( string methodName )</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构产生一段代码，这段代码可以精确重建 DOM 结构</p>
+      <h5>参数:</h5>
+      <p><strong>methodName:</strong> 产生的代码所使用的方法名称</p>
+      <h5>返回值：</h5>
+      <p>CodeDom 方法声明对象，可以用于产生各种语言的代码。</p>
+    </section>
+  </section>
+
+
+</body>
+</html>

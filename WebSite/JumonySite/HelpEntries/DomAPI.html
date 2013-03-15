@@ -12,7 +12,7 @@
     提供了标准统一的DOM API用于修改文档结构，对于所有支持修改的HTML DOM，这些API提供了一致的行为。
   </p>
   <section>
-    <h3 id="add">添加节点的 API</h3>
+    <h3 id="add">添加节点</h3>
     <p>添加节点的 API 均以 Add 开头，可以在 DOM 中自由添加任意节点。</p>
     <section>
       <code>IHtmlElement IHtmlContainer.AddElement( [int index], string elementName )</code>
@@ -106,7 +106,7 @@
     </section>
   </section>
   <section>
-    <h3 id="remove">移除节点的 API</h3>
+    <h3 id="remove">移除节点</h3>
     <p>移除节点的 API 主要包括 ClearNodes 和 Remove ，前者移除容器所有子节点，后者则是移除节点自身</p>
     <section>
       <code>IHtmlContainer IHtmlContainer.ClearNodes()</code>
@@ -137,7 +137,7 @@
     </section>
   </section>
   <section>
-    <h3 id="replace">替换节点的 API</h3>
+    <h3 id="replace">替换节点</h3>
     <p>替换节点的 API 可以将节点用指定的 HTML 片段替换。</p>
     <section>
       <code>IEnumerable&lt;IHtmlNode&gt; ReplaceWith( IHtmlFragment fragment )</code>
@@ -159,7 +159,7 @@
     </section>
   </section>
   <section>
-    <h3 id="makecopy">创建副本的 API</h3>
+    <h3 id="makecopy">创建副本</h3>
     <p>创建副本的 API 可以创建 HTML 片段或文档的副本</p>
     <section>
       <code>IHtmlFragment IHtmlFragment.MakeCopy()</code>
@@ -179,7 +179,7 @@
     </section>
   </section>
   <section>
-    <h3 id="fragment">文档片段相关的 API</h3>
+    <h3 id="fragment">文档片段相关</h3>
     <p>文档片段相关的 API 主要用来创建 IHtmlFragment 即文档片段对象</p>
     <section>
       <code>IHtmlFragment IHtmlDocument.CreateFragment()</code>
@@ -199,7 +199,7 @@
     </section>
   </section>
   <section>
-    <h3 id="content">内容相关的 API</h3>
+    <h3 id="content">内容相关</h3>
     <p>内容相关的 API 包括 InnerHtml 和 InnerText ，可以比较直观的达到设置 InnerHtml 和 InnerText 的效果</p>
     <section>
       <code>IHtmlElement IHtmlElement.InnerHtml( string html )</code>

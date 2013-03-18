@@ -6,6 +6,7 @@ using System.Text;
 using Ivony.Fluent;
 using System.Globalization;
 using Ivony.Html.Selectors;
+using Ivony.Html.Styles;
 
 namespace Ivony.Html
 {
@@ -429,7 +430,7 @@ namespace Ivony.Html
       SkipWhiteSpace( enumerator );
       var elementSelector = ParseElementSelector( enumerator );
       SkipWhiteSpace( enumerator );
-      
+
       if ( enumerator.Current != ')' )
         throw FormatError( enumerator, ')' );
       enumerator.MoveNext();
@@ -508,6 +509,7 @@ namespace Ivony.Html
       return enumerator.Current;
     }
 
+
     /// <summary>
     /// 解析引用字符串
     /// </summary>
@@ -572,6 +574,66 @@ namespace Ivony.Html
         name = name.Replace( '|', ':' );
 
       return name;
+    }
+
+    public static CssSetting[] ParseCssSettings( string expression )
+    {
+      if ( expression == null )
+        return null;
+
+      using ( var enumerator = new CharEnumerator( expression ) )
+      {
+        return ParseCssSettings( enumerator );
+      }
+    }
+
+    private static CssSetting[] ParseCssSettings( CharEnumerator enumerator )
+    {
+
+      var list = new List<CssSetting>();
+
+      do
+      {
+
+        list.Add( ParseCssSetting( enumerator ) );
+
+      } while ( enumerator.MoveNext() );
+
+
+      return list.ToArray();
+
+    }
+
+    private static CssSetting ParseCssSetting( CharEnumerator enumerator )
+    {
+      SkipWhiteSpace( enumerator );
+      var name = ParseName( enumerator );
+      SkipWhiteSpace( enumerator );
+
+      if ( enumerator.Current != ':' )
+        throw FormatError( enumerator, ':' );
+
+      EnsureNext( enumerator );
+
+
+      var offset = enumerator.Offset;
+
+      while ( true )
+      {
+        if ( enumerator.Current == ';' )//遇到结束符
+        {
+          enumerator.MoveNext();
+          break;
+        }
+
+        if ( !enumerator.MoveNext() )//或者遇到字符串结束
+          break;
+      }
+
+      var value = enumerator.SubString( offset, enumerator.Offset - offset );
+
+
+      return new CssSetting( name, value );
     }
 
 

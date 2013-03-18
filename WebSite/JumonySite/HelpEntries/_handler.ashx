@@ -33,8 +33,16 @@ public class _handler : IHtmlHandler, IHttpHandler
     document.Find( "code" ).ForAll( e =>
     {
       var code = e.InnerText();
-      code = ProcessKeywords( code );
-      code = ProcessTypeNames( code );
+      var language = e.Attribute( "language" ).Value();
+      switch ( language )
+      {
+        case "html":
+          code = ProcessHtmlCode( code );
+          break;
+        default:
+          code = ProcessCSharpCode( code );
+          break;
+      }
 
       e.ClearNodes();
       e.AddFragment( code );
@@ -42,16 +50,29 @@ public class _handler : IHtmlHandler, IHttpHandler
   }
 
 
+  private string ProcessHtmlCode( string code )
+  {
+    return code;
+  }
+
+  private string ProcessCSharpCode( string code )
+  {
+    code = ProcessCSharpKeywords( code );
+    code = ProcessCSharpTypeNames( code );
+    return code;
+  }
+
+
   private Regex keywords = new Regex( @"\b(string|int|void|class|public|protected|private|bool)\b" );
 
-  private string ProcessKeywords( string code )
+  private string ProcessCSharpKeywords( string code )
   {
     return keywords.Replace( code, match => "<span class='keyword'>" + match.Value + "</span>" );
   }
 
   private Regex typeNames = new Regex( @"\b(IHtmlElement|IHtmlContainer|IHtmlTextNode|IHtmlComment|IHtmlSpecial|IHtmlDocument|IHtmlAttribute|IEnumerable|IHtmlNode|IHtmlFragment|IHtmlDomProvider|CodeMemberMethod|Func)\b" );
 
-  private string ProcessTypeNames( string code )
+  private string ProcessCSharpTypeNames( string code )
   {
     return typeNames.Replace( code, match => "<span class='typeName'>" + match.Value + "</span>" );
   }

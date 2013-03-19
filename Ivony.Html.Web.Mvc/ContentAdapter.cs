@@ -105,6 +105,15 @@ namespace Ivony.Html.Web
         }
       }
 
+      {
+        var existsScripts = new HashSet<string>( head.Find( "script[src]" ).Select( e => e.Attribute( "src" ).Value() ), StringComparer.OrdinalIgnoreCase );
+        foreach ( var element in masterHead.Find( "script[src]" ) )
+        {
+          if ( !existsScripts.Contains( element.Attribute( "src" ).Value() ) )
+            head.AddCopy( element );
+        }
+      }
+
       return head;
     }
 

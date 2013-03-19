@@ -4,10 +4,50 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title></title>
   <link href="main.css" type="text/css" rel="stylesheet" />
+  <script src="../../Scripts/jquery-1.9.1.min.js"></script>
 </head>
 <body>
+  <script>
+    $(function ()
+    {
+
+      var lastTop = $(document).scrollTop();
+      var fixed = 20;
+
+      var f = function ()
+      {
+        var top = $(document).scrollTop();
+        var offset = top - lastTop;
+
+        fixed -= offset;
+
+
+        if (offset > 0)
+        {
+          var navHeight = $("nav").height();
+          var windowHeight = $(window).height();
+
+          if (navHeight + fixed < windowHeight)
+            fixed = windowHeight - navHeight;
+
+        }
+
+        if (fixed > 20)
+          fixed = 20;
+
+        $("nav").css({ position: 'fixed', top: fixed });
+        lastTop = top;
+
+      };
+
+      $(document).scroll(f)
+      f();
+    });
+  </script>
   <nav>
+    <div id="NavTop"></div>
     <partial action="Navigation"></partial>
+    <div id="NavBottom"></div>
   </nav>
   <section>
     <content></content>

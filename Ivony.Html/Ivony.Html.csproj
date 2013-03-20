@@ -67,6 +67,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Css\CssStyle.cs" />
     <Compile Include="Extensions\ExpandedNavigateExtensions.cs" />
     <Compile Include="HtmlDomDependency.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
@@ -108,24 +109,23 @@
     <Compile Include="IHtmlTextNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
-    <Compile Include="Selectors\CssCacheableSelector.cs" />
-    <Compile Include="Selectors\CssCasecadingSelector.cs" />
-    <Compile Include="Selectors\CssAttributeSelector.cs" />
-    <Compile Include="Selectors\CssElementsRestrictionSelector.cs" />
-    <Compile Include="Selectors\CssMultipleSelector.cs" />
-    <Compile Include="Selectors\CssParser.cs" />
-    <Compile Include="Selectors\CssSelector.cs" />
-    <Compile Include="Selectors\CssElementSelector.cs" />
-    <Compile Include="Selectors\ICssPseudoClassProvider.cs" />
-    <Compile Include="Selectors\ICssPseudoClassSelector.cs" />
-    <Compile Include="Selectors\InternalPseudoClassProvider.cs" />
-    <Compile Include="Selectors\ICssSelector.cs" />
-    <Compile Include="Selectors\CssRelativeSelector.cs" />
-    <Compile Include="Selectors\NegationPseudoClass.cs" />
-    <Compile Include="Selectors\TraceEnumerable.cs" />
-    <Compile Include="Styles\CssSetting.cs" />
-    <Compile Include="Styles\CssStyle.cs" />
-    <Compile Include="Styles\CssStyleParser.cs" />
+    <Compile Include="Css\CssCacheableSelector.cs" />
+    <Compile Include="Css\CssCasecadingSelector.cs" />
+    <Compile Include="Css\CssAttributeSelector.cs" />
+    <Compile Include="Css\CssElementsRestrictionSelector.cs" />
+    <Compile Include="Css\CssMultipleSelector.cs" />
+    <Compile Include="Css\CssParser.cs" />
+    <Compile Include="Css\CssSelector.cs" />
+    <Compile Include="Css\CssElementSelector.cs" />
+    <Compile Include="Css\ICssPseudoClassProvider.cs" />
+    <Compile Include="Css\ICssPseudoClassSelector.cs" />
+    <Compile Include="Css\InternalPseudoClassProvider.cs" />
+    <Compile Include="Css\ICssSelector.cs" />
+    <Compile Include="Css\CssRelativeSelector.cs" />
+    <Compile Include="Css\NegationPseudoClass.cs" />
+    <Compile Include="Css\TraceEnumerable.cs" />
+    <Compile Include="Css\CssStyleSetting.cs" />
+    <Compile Include="Styles\StyleManager.cs" />
     <Compile Include="SynchronizedCollection.cs" />
   </ItemGroup>
   <ItemGroup>

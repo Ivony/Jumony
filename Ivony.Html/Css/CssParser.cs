@@ -576,7 +576,7 @@ namespace Ivony.Html
       return name;
     }
 
-    public static CssSetting[] ParseCssSettings( string expression )
+    public static CssStyleSetting[] ParseCssSettings( string expression )
     {
       if ( expression == null )
         return null;
@@ -587,10 +587,10 @@ namespace Ivony.Html
       }
     }
 
-    private static CssSetting[] ParseCssSettings( CharEnumerator enumerator )
+    private static CssStyleSetting[] ParseCssSettings( CharEnumerator enumerator )
     {
 
-      var list = new List<CssSetting>();
+      var list = new List<CssStyleSetting>();
 
       do
       {
@@ -604,7 +604,7 @@ namespace Ivony.Html
 
     }
 
-    private static CssSetting ParseCssSetting( CharEnumerator enumerator )
+    private static CssStyleSetting ParseCssSetting( CharEnumerator enumerator )
     {
       SkipWhiteSpace( enumerator );
       var name = ParseName( enumerator );
@@ -617,9 +617,13 @@ namespace Ivony.Html
 
 
       var offset = enumerator.Offset;
+      var important = false;
 
       while ( true )
       {
+
+        ParseQuoteText( enumerator );
+        important = ParseImportant( enumerator );
         if ( enumerator.Current == ';' )//遇到结束符
         {
           enumerator.MoveNext();
@@ -630,10 +634,38 @@ namespace Ivony.Html
           break;
       }
 
-      var value = enumerator.SubString( offset, enumerator.Offset - offset );
+
+      if ( !important )
+      {
+        var value = enumerator.SubString( offset, enumerator.Offset - offset );
+        return new CssStyleSetting( name, value );
+      }
+      else
+      {
+        var value = enumerator.SubString( offset, enumerator.Offset - offset - impoartantFlag.Length );
+        return new CssStyleSetting( name, value, true );
+      }
 
 
-      return new CssSetting( name, value );
+    }
+
+
+    private const string impoartantFlag = "!important";
+
+    private static bool ParseImportant( CharEnumerator enumerator )
+    {
+      if ( enumerator.Current != '!' )
+        return false;
+
+
+      if ( enumerator.SubString( enumerator.Offset, impoartantFlag.Length ) == impoartantFlag )
+      {
+        enumerator.Skip( impoartantFlag.Length );
+        return true;
+      }
+
+      else
+        return false;
     }
 
 
@@ -701,8 +733,18 @@ namespace Ivony.Html
       {
         return _str;
       }
+
+      public void Skip( int length )
+      {
+        _index += length;
+      }
     }
 
 
+
+    public static CssStyle ParseCssStyle( string styleExpression )
+    {
+      return new CssStyle( ParseCssSettings( styleExpression ) );
+    }
   }
 }

@@ -23,9 +23,9 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要操纵样式的元素</param>
     /// <returns>样式对象</returns>
-    public static CssStyle Style( this IHtmlElement element )
+    public static StyleManager Style( this IHtmlElement element )
     {
-      return new CssStyle( element );
+      return new StyleManager( element );
     }
 
     /// <summary>
@@ -43,19 +43,7 @@ namespace Ivony.Html
 
       return element;
     }
-
-
-    /// <summary>
-    /// 获取元素集合的样式对象，用于方便的操纵一组元素的样式
-    /// </summary>
-    /// <param name="elements">要操纵样式的元素集合</param>
-    /// <returns>样式对象</returns>
-    private static CssStyle Style( this IEnumerable<IHtmlElement> elements )//UNDONE 暂时屏蔽
-    {
-      return new CssStyleSetSetter( elements );
-    }
   }
-
 }
 
 
@@ -66,21 +54,14 @@ namespace Ivony.Html.Styles
   /// <summary>
   /// 提供元素CSS样式管理
   /// </summary>
-  public class CssStyle
+  public class StyleManager
   {
 
-    private static readonly Regex styleSettingsRegex = new Regex( string.Format( CultureInfo.InvariantCulture, @"^\s*(?<styleSetting>{0})*$", Regulars.styleSettingPattern ), RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-
-    private readonly Hashtable settings = Hashtable.Synchronized( new Hashtable( StringComparer.OrdinalIgnoreCase ) );
+    private readonly CssStyle style;
 
     private IHtmlElement _element;
 
-    internal CssStyle()
-    {
-    }
-
-    internal CssStyle( IHtmlElement element )
+    internal StyleManager( IHtmlElement element )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -89,7 +70,7 @@ namespace Ivony.Html.Styles
 
       lock ( element.SyncRoot )
       {
-        settings = GetStyleSettings( element.Attribute( "style" ).Value() );
+        style = CssParser.ParseCssStyle( element.Attribute( "style" ).Value().IfNull( "" ) );
       }
     }
 
@@ -101,7 +82,7 @@ namespace Ivony.Html.Styles
     /// <returns>样式设置值</returns>
     public virtual string GetValue( string name )
     {
-      return (string) settings[name];
+      return style[name];
     }
 
     /// <summary>
@@ -110,64 +91,14 @@ namespace Ivony.Html.Styles
     /// <param name="name">样式名</param>
     /// <param name="value">样式值</param>
     /// <returns>样式管理器自身</returns>
-    public virtual CssStyle SetValue( string name, string value )
+    public virtual StyleManager SetValue( string name, string value )
     {
-      settings[name] = value;
-
-      _element.SetAttribute( "style", GetStyleExpression( settings ) );
+      style[name] = value;
 
       return this;
     }
 
 
-
-    /// <summary>
-    /// 分析样式表达式，获取所有样式值
-    /// </summary>
-    /// <param name="styleExpression">样式表达式</param>
-    /// <returns>样式设置值</returns>
-    protected Hashtable GetStyleSettings( string styleExpression )
-    {
-
-      if ( string.IsNullOrEmpty( styleExpression ) )
-        return new Hashtable();
-
-      var match = styleSettingsRegex.Match( styleExpression );
-
-      if ( !match.Success )
-        throw new FormatException();
-
-      foreach ( var settingCapture in match.Groups["styleSetting"].Captures.Cast<Capture>() )
-      {
-        string name = settingCapture.FindCaptures( match.Groups["name"] ).Single().Value;
-        string value = settingCapture.FindCaptures( match.Groups["value"] ).Single().Value;
-
-        settings.Add( name, value );
-      }
-
-      return settings;
-    }
-
-
-
-    /// <summary>
-    /// 生成样式表达式
-    /// </summary>
-    /// <param name="styleSettings">样式设置</param>
-    /// <returns>样式表达式</returns>
-    protected static string GetStyleExpression( Hashtable styleSettings )
-    {
-
-      if ( styleSettings == null )
-        throw new ArgumentNullException( "styleSettings" );
-
-      var builder = new StringBuilder();
-
-      foreach ( DictionaryEntry entry in styleSettings )
-        builder.AppendFormat( "{0}: {1}; ", entry.Key, entry.Value );
-
-      return builder.ToString().Trim();
-    }
 
 
 
@@ -251,34 +182,6 @@ namespace Ivony.Html.Styles
       }
 
       return classSet;
-    }
-
-
-
-  }
-
-
-
-  internal class CssStyleSetSetter : CssStyle
-  {
-
-    private IEnumerable<IHtmlElement> _elements;
-
-    public CssStyleSetSetter( IEnumerable<IHtmlElement> elements )
-    {
-      _elements = elements;
-    }
-
-    public override string GetValue( string name )
-    {
-      throw new NotSupportedException( "CssStyle 对象在表示元素集的时候，不支持 Get 方法。" );
-    }
-
-    public override CssStyle SetValue( string name, string value )
-    {
-      _elements.ForAll( e => e.Style().SetValue( name, value ) );
-
-      return this;
     }
   }
 }

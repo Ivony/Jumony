@@ -75,7 +75,10 @@ namespace Ivony.Html
     private class NthPseudoClass : ICssPseudoClassSelector
     {
 
-      private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>((\+|\-)?#interger)|\-)n\p{Zs}*(?<augend>(\+|\-)\p{Zs}*#interger)?)".Replace( "#interger", Regulars.integerPattern );
+      /// <summary>匹配任意十进制无符号整数</summary>
+      private static readonly string integerPattern = "([1-9][0-9]*|0)";
+
+      private static readonly string expressionPattern = @"(?<augend>#interger)|((?<multiplier>((\+|\-)?#interger)|\-)n\p{Zs}*(?<augend>(\+|\-)\p{Zs}*#interger)?)".Replace( "#interger", integerPattern );
       private static readonly Regex expressionRegex = new Regex( "^(" + expressionPattern + ")$", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
       private string _name;

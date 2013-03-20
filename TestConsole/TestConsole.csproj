@@ -52,10 +52,6 @@
       <Project>{bf0b37e7-2d93-4a3d-ad6d-0b51b66f5b21}</Project>
       <Name>Ivony.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
-      <Project>{563e1240-78f7-4b65-9c9d-cbdcef06d2b0}</Project>
-      <Name>Ivony.Html.Binding</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Dynamic\Ivony.Html.Dynamic.csproj">
       <Project>{66d674f8-5c60-4a9d-9bb5-2e5c86625f90}</Project>
       <Name>Ivony.Html.Dynamic</Name>

@@ -11,12 +11,12 @@ namespace Ivony.Html.Styles
 
     public const string name = "display";
 
-    public static DisplayValue Display( this CssStyle style )
+    public static DisplayValue Display( this StyleManager style )
     {
       throw new NotImplementedException();
     }
 
-    public static CssStyle Display( this CssStyle style, DisplayValue value )
+    public static StyleManager Display( this StyleManager style, DisplayValue value )
     {
       style.SetValue( name, value.ValueString );
       return style;

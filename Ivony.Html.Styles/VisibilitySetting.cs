@@ -10,12 +10,12 @@ namespace Ivony.Html.Styles
 
     public const string name = "visibility";
 
-    public static VisibilityValue Visibility( this CssStyle style )
+    public static VisibilityValue Visibility( this StyleManager style )
     {
       throw new NotImplementedException();
     }
 
-    public static CssStyle Visibility( this CssStyle style, VisibilityValue value )
+    public static StyleManager Visibility( this StyleManager style, VisibilityValue value )
     {
       style.SetValue( name, value.ValueString );
       return style;

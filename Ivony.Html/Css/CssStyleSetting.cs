@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Styles
+namespace Ivony.Html
 {
 
   /// <summary>
   /// 定义一个样式设置
   /// </summary>
-  public class CssSetting
+  public class CssStyleSetting
   {
 
 
@@ -18,7 +18,7 @@ namespace Ivony.Html.Styles
     /// </summary>
     /// <param name="name">CSS 样式名</param>
     /// <param name="value">CSS 样式值</param>
-    public CssSetting( string name, string value ) : this( name, value, false ) { }
+    public CssStyleSetting( string name, string value ) : this( name, value, false ) { }
 
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace Ivony.Html.Styles
     /// <param name="name">CSS 样式名</param>
     /// <param name="value">CSS 样式值</param>
     /// <param name="important">是否覆盖其他样式设置</param>
-    public CssSetting( string name, string value, bool important )
+    public CssStyleSetting( string name, string value, bool important )
     {
       Name = name;
       Value = value;

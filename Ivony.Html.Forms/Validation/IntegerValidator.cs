@@ -9,7 +9,7 @@ namespace Ivony.Html.Forms.Validation
   public class IntegerValidator : IHtmlValueValidator
   {
 
-    private static readonly Regex integerRegex = new Regex( @"^(\+|\-)?" + Regulars.integerPattern + "$" );
+    private static readonly Regex integerRegex = new Regex( @"^(\+|\-)?[1-9][0-9]*$" );
 
     #region IHtmlValueValidator 成员
 

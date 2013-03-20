@@ -134,6 +134,10 @@ namespace Ivony.Html
 
     }
 
+    /// <summary>
+    /// 重写 ToString 方法输出样式设置表达式
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
       return GenerateStyleExpression( _settings.Values );

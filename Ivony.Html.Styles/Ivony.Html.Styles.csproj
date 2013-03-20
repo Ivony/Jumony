@@ -69,7 +69,6 @@
     <Compile Include="CssLengthValue.cs" />
     <Compile Include="CssPercentageValue.cs" />
     <Compile Include="PaddingSetting.cs" />
-    <Compile Include="StyleExtensions.cs" />
     <Compile Include="VisibilitySetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

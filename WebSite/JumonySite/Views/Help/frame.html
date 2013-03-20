@@ -12,12 +12,25 @@
     {
 
       var lastTop = $(document).scrollTop();
+      var lastHash = window.location.hash;
       var fixed = 20;
 
       var f = function ()
       {
+
+
         var top = $(document).scrollTop();
         var offset = top - lastTop;
+
+
+        if (lastHash != window.location.hash)
+        {
+          lastTop = top;
+          lastHash = window.location.hash;
+          return;
+        }
+
+        lastHash = "";
 
         fixed -= offset;
 

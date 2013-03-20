@@ -7,8 +7,7 @@
   <link href="../Views/Help/main.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-  <p>
-    DOM API 即是修改文档结构的 API，通过 DOM API 可以方便的在文档中新增元素、注释或是文本节点，也能够将一小段 HTML 片段插入文档，或是在在文档中移除这些元素。Jumony
+  <p>DOM API 即是修改文档结构的 API，通过 DOM API 可以方便的在文档中新增元素、注释或是文本节点，也能够将一小段 HTML 片段插入文档，或是在在文档中移除这些元素。Jumony
     提供了标准统一的DOM API用于修改文档结构，对于所有支持修改的HTML DOM，这些API提供了一致的行为。
   </p>
   <section>
@@ -45,7 +44,8 @@
       <p>返回添加在DOM中的注释节点</p>
     </section>
     <section>
-      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], IHtmlFragment fragment )</code>
+      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], IHtmlFragment
+        fragment )</code>
       <h5>说明：</h5>
       <p>在容器中添加一个文档片段</p>
       <h5>参数:</h5>
@@ -55,7 +55,8 @@
       <p>返回添加在DOM中的节点列表</p>
     </section>
     <section>
-      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], string html )</code>
+      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], string
+        html )</code>
       <h5>说明：</h5>
       <p>在容器中添加一个文档片段</p>
       <h5>参数:</h5>
@@ -95,7 +96,8 @@
       <p>返回添加在 DOM 中的注释节点</p>
     </section>
     <section>
-      <code>IHtmlTextNode IHtmlContainer.AddCopy( [int index], IEnumerable&lt;IHtmlNode&gt; nodes )</code>
+      <code>IHtmlTextNode IHtmlContainer.AddCopy( [int index], IEnumerable&lt;IHtmlNode&gt;
+        nodes )</code>
       <h5>说明：</h5>
       <p>在容器中添加一批节点的拷贝</p>
       <h5>参数:</h5>
@@ -216,7 +218,8 @@
       <p>设置元素的 InnerText 。</p>
       <h5>参数:</h5>
       <p><strong>text:</strong> 用于替换元素内容的纯文本。</p>
-      <p><strong>encodeWhiteSpaces:</strong> 指定是否要对连续的空白字符编码，默认是 false ，即标准的 InnerText 行为，并不会对连续的空白字符编码</p>
+      <p><strong>encodeWhiteSpaces:</strong> 指定是否要对连续的空白字符编码，默认是 false ，即标准的 InnerText 行为，并不会对连续的空白字符编码
+      </p>
       <h5>返回值：</h5>
       <p>元素自身，便于链式调用。</p>
     </section>

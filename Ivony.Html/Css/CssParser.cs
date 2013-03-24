@@ -742,9 +742,16 @@ namespace Ivony.Html
 
 
 
+    /// <summary>
+    /// 解析 CSS 样式设置
+    /// </summary>
+    /// <param name="styleExpression">CSS 样式设置表达式</param>
+    /// <returns>CSS 样式设置</returns>
     public static CssStyle ParseCssStyle( string styleExpression )
     {
-      return new CssStyle( ParseCssSettings( styleExpression ) );
+      var style = new CssStyle();
+      style.InitializeSettings( ParseCssSettings( styleExpression ) );
+      return style;
     }
   }
 }

@@ -614,6 +614,7 @@ namespace Ivony.Html
         throw FormatError( enumerator, ':' );
 
       EnsureNext( enumerator );
+      SkipWhiteSpace( enumerator );
 
 
       var offset = enumerator.Offset;

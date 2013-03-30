@@ -16,14 +16,14 @@ namespace Ivony.Html.Css
     /// <summary>
     /// 属性名
     /// </summary>
-    public string Name { get; }
+    string Name { get; }
 
     /// <summary>
     /// 解出属性值
     /// </summary>
     /// <param name="value">属性值缩写形式</param>
     /// <returns>解出的属性值</returns>
-    public CssStyleProperty[] ExtractProperties( string shorthand );
+    CssStyleProperty[] ExtractProperties( string shorthand );
 
   }
 
@@ -36,12 +36,56 @@ namespace Ivony.Html.Css
     }
 
 
-    private Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
 
     public CssStyleProperty[] ExtractProperties( string shorthand )
     {
-      var values = whitespaceRegex.Split( shorthand );
+      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
 
+      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+    }
+  }
+
+  public class MarginStyleShorthandRule : ICssStyleShorthandRule
+  {
+    public string Name
+    {
+      get { return "margin"; }
+    }
+
+
+    public CssStyleProperty[] ExtractProperties( string shorthand )
+    {
+      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
+
+      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+    }
+  }
+
+
+  public class BorderWidthStyleShorthandRule : ICssStyleShorthandRule
+  {
+    public string Name
+    {
+      get { return "border-width"; }
+    }
+
+    public CssStyleProperty[] ExtractProperties( string shorthand )
+    {
+      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
+
+      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+    }
+  }
+
+
+
+
+  internal static class CssStyleShorthandHelper
+  {
+
+    public static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
+    public static CssStyleProperty[] GenerateBoxProperties( string prefix, string[] values )
+    {
       string top, right, bottom, left;
 
       if ( values.Length == 0 )
@@ -59,8 +103,12 @@ namespace Ivony.Html.Css
         left = values[3];
 
 
-      return new[] { new CssStyleProperty( "padding-top", top ), new CssStyleProperty( "padding-right", right ), new CssStyleProperty( "padding-bottom", bottom ), new CssStyleProperty( "padding-left", left ) };
+      return new[] { new CssStyleProperty( prefix + "-top", top ), new CssStyleProperty( prefix + "-right", right ), new CssStyleProperty( prefix + "-bottom", bottom ), new CssStyleProperty( prefix + "-left", left ) };
     }
+
+
+    public static readonly Regex lengthValueRegex = new Regex( @"\d+(px|cm|in)" );
+
   }
 
 

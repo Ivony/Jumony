@@ -17,11 +17,11 @@ namespace Ivony.Html
 
 
 
-    protected abstract void SetStyleSetting( CssStyleSetting setting );
+    protected abstract void SetStyleSetting( CssStyleProperty setting );
 
-    protected abstract CssStyleSetting GetStyleSetting( string name );
+    protected abstract CssStyleProperty GetStyleSetting( string name );
 
-    protected abstract CssStyleSetting[] GetAllStyleSettings();
+    protected abstract CssStyleProperty[] GetAllStyleSettings();
 
 
     public abstract object SyncRoot { get; }
@@ -92,12 +92,12 @@ namespace Ivony.Html
       if ( value.EndsWith( importantFlag ) )
         throw new FormatException( string.Format( "value 参数值不能以 \"{0}\" 结尾。", importantFlag ) );
 
-      var setting = new CssStyleSetting( name, value, important );
+      var setting = new CssStyleProperty( name, value, important );
       SetStyleSetting( setting );
     }
 
 
-    internal void InitializeSettings( CssStyleSetting[] settings )
+    internal void InitializeSettings( CssStyleProperty[] settings )
     {
       foreach ( var s in settings )
         SetStyleSetting( s );

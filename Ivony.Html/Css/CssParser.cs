@@ -576,7 +576,7 @@ namespace Ivony.Html
       return name;
     }
 
-    public static CssStyleSetting[] ParseCssSettings( string expression )
+    public static CssStyleProperty[] ParseCssSettings( string expression )
     {
       if ( expression == null )
         return null;
@@ -587,10 +587,10 @@ namespace Ivony.Html
       }
     }
 
-    private static CssStyleSetting[] ParseCssSettings( CharEnumerator enumerator )
+    private static CssStyleProperty[] ParseCssSettings( CharEnumerator enumerator )
     {
 
-      var list = new List<CssStyleSetting>();
+      var list = new List<CssStyleProperty>();
 
       do
       {
@@ -604,7 +604,7 @@ namespace Ivony.Html
 
     }
 
-    private static CssStyleSetting ParseCssSetting( CharEnumerator enumerator )
+    private static CssStyleProperty ParseCssSetting( CharEnumerator enumerator )
     {
       SkipWhiteSpace( enumerator );
       var name = ParseName( enumerator );
@@ -638,12 +638,12 @@ namespace Ivony.Html
       if ( !important )
       {
         var value = enumerator.SubString( offset, enumerator.Offset - offset );
-        return new CssStyleSetting( name, value );
+        return new CssStyleProperty( name, value );
       }
       else
       {
         var value = enumerator.SubString( offset, enumerator.Offset - offset - impoartantFlag.Length );
-        return new CssStyleSetting( name, value, true );
+        return new CssStyleProperty( name, value, true );
       }
 
 

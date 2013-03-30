@@ -13,7 +13,7 @@ namespace Ivony.Html
   {
 
 
-    private Dictionary<string, CssStyleSetting> _settings = new Dictionary<string, CssStyleSetting>();
+    private Dictionary<string, CssStyleProperty> _settings = new Dictionary<string, CssStyleProperty>();
 
     private object _sync = new object();
 
@@ -24,7 +24,7 @@ namespace Ivony.Html
     /// 设置样式设置
     /// </summary>
     /// <param name="setting">样式设置</param>
-    protected override void SetStyleSetting( CssStyleSetting setting )
+    protected override void SetStyleSetting( CssStyleProperty setting )
     {
       lock ( SyncRoot )
       {
@@ -40,11 +40,11 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="name">样式名</param>
     /// <returns>样式设置</returns>
-    protected override CssStyleSetting GetStyleSetting( string name )
+    protected override CssStyleProperty GetStyleSetting( string name )
     {
       lock ( SyncRoot )
       {
-        CssStyleSetting setting;
+        CssStyleProperty setting;
         if ( _settings.TryGetValue( name, out setting ) )
           return setting;
 
@@ -54,7 +54,7 @@ namespace Ivony.Html
     }
 
 
-    protected override CssStyleSetting[] GetAllStyleSettings()
+    protected override CssStyleProperty[] GetAllStyleSettings()
     {
       return _settings.Values.ToArray();
     }

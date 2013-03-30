@@ -230,7 +230,7 @@ namespace Ivony.Html.Web
     /// 初始化视图，准备处理和渲染
     /// </summary>
     /// <param name="viewContext">视图上下文</param>
-    protected void InitializeView( ViewContext viewContext )
+    protected virtual void InitializeView( ViewContext viewContext )
     {
 
       if ( !_initialized )

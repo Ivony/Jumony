@@ -11,7 +11,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 母板页视图
   /// </summary>
-  public abstract class JumonyMasterView : JumonyView, IMasterView, IView
+  public class JumonyMasterView : JumonyView, IMasterView, IView
   {
 
 
@@ -52,6 +52,11 @@ namespace Ivony.Html.Web
 
 
 
+    protected override IEnumerable<IViewFilter> InitializeFilters( ViewContext context )
+    {
+      return base.InitializeFilters( context ).OfType<IMasterViewFiler>();
+    }
+
     void IMasterView.Initialize( ViewContext context )
     {
       InitializeView( context );
@@ -59,7 +64,9 @@ namespace Ivony.Html.Web
       Document = (IHtmlDocument) Scope;
 
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Process" );
+      OnPreProcess();
       ProcessScope();
+      OnPostProcess();
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 
@@ -77,12 +84,16 @@ namespace Ivony.Html.Web
     string IMasterView.Render( IContentView view )
     {
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Render" );
+      OnPreRender();
       RenderAdapters.Add( view.CreateContentAdapter( this ) );
       var content = Document.Render( RenderAdapters.ToArray() );
+      OnPostRender();
       HttpContext.Trace.Write( "JumonyMasterView", "End Render" );
 
       return content;
 
     }
+
+
   }
 }

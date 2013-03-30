@@ -39,6 +39,15 @@ namespace Ivony.Html.Web
     }
 
 
+    protected override void InitializeView( ViewContext viewContext )
+    {
+      base.InitializeView( viewContext );
+
+      Filters = InitializeFilters( viewContext );
+      RenderAdapters.Add( new ViewElementAdapter( viewContext, Url ) );
+    }
+
+
     /// <summary>
     /// 处理和渲染指定 HTML 范畴
     /// </summary>
@@ -48,9 +57,6 @@ namespace Ivony.Html.Web
     {
 
       //初始化视图筛选器
-      Filters = InitializeFilters();
-
-      RenderAdapters.Add( new ViewElementAdapter( ViewContext, Url ) );
 
 
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );
@@ -106,10 +112,10 @@ namespace Ivony.Html.Web
     /// 初始化筛选器，获取当前视图所需要应用的筛选器。
     /// </summary>
     /// <returns></returns>
-    protected virtual IEnumerable<IViewFilter> InitializeFilters()
+    protected virtual IEnumerable<IViewFilter> InitializeFilters( ViewContext context )
     {
-      var filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
+      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
 
       filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
 

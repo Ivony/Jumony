@@ -41,9 +41,17 @@ namespace Ivony.Html.Web
   }
 
 
+  /// <summary>
+  /// 实现此接口标识筛选器也应用于其所应用页面的子视图
+  /// </summary>
   public interface IChildViewFilter : IViewFilter { }
 
 
+
+  /// <summary>
+  /// 实现此接口标识筛选器可以应用于母板视图
+  /// </summary>
+  public interface IMasterViewFiler : IViewFilter { }
 
 
 

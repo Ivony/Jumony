@@ -71,3 +71,18 @@ namespace Ivony.Html
     }
   }
 }
+
+    public override bool IsUriValue( IHtmlAttribute attributeementedException();
+    }
+
+    public override bool IsBlockElement( IHtmlElement element )
+ScriptValue( IHtmlAttribute attributeementedException();
+    }
+
+    public override bool IsBlockElement( IHtmlElement element )
+MarkupValue( IHtmlAttribute attribute )
+    {
+      throw new NotImplementedException();
+    }
+  }
+}

@@ -87,7 +87,26 @@ namespace Ivony.Html
     /// <summary>
     /// 确认元素文本内容格式
     /// </summary>
-    /// <param name="element">要确认文本内容格式的元素</param>
+    //    /// <summary>
+    /// 判断一个属性值的值是否应被视为URI。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>其值是否应被视为URI</returns>
+    public abstract bool IsUriValue( IHtmlAttribute attribute );
+
+    /// <summary>
+    /// 判断一个属性值的值是否应被视为脚本。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>其值是否应被视为脚本</returns>
+    public abstract bool IsScriptValue( IHtmlAttribute attribute );
+
+    /// <summary>
+    /// 判断一个属性是否为标记属性。
+    /// </summary>
+    /// <param name="attribute">要检查的属性</param>
+    /// <returns>是否为标记属性</returns>
+    public abstract bool IsMarkupValue( IHtmlAttribute attribute );   /// <param name="element">要确认文本内容格式的元素</param>
     /// <returns>文本内容格式</returns>
     public abstract TextMode ElementTextMode( IHtmlElement element );
 

@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 
 
-#pragma warning disable 1591
+#prusing Ivony.Fluent;
+pragma warning disable 1591
 
 
 namespace Ivony.Html
@@ -56,22 +57,22 @@ namespace Ivony.Html
     public static readonly ICollection<string> nonTextElements = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
 
 
-    public override bool IsCDataElement( string elementName )
+    public override bool IsCDataElement( string elementNamtName )
     {
       return cdataTags.Contains( elementName );
     }
 
-    public override bool IsOptionalEndTag( string elementName )
+    public override bool IsOptionalEndTag( string, StringComparer.OrdinalIgnoreCasg elementName )
     {
       return optionalCloseTags.Contains( elementName );
     }
 
-    public override bool IsForbiddenEndTag( string elementName )
+    public override bool IsForbiddenEndTag( string ele, StringComparer.OrdinalIgnoreCasementName )
     {
       return fobiddenEndTags.Contains( elementName );
     }
 
-    public override bool ImmediatelyClose( string openTag, string nextTag )
+    public override bool ImmediatelyClose( string openTag, , StringComparer.OrdinalIgnoreCas string nextTag )
     {
       if ( openTag == null )
         throw new ArgumentNullException( "openTag" );
@@ -133,7 +134,7 @@ namespace Ivony.Html
     public override bool IsInlineElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "element" );
+        throw new , StringComparer.OrdinalIgnoreCas ArgumentNullException( "element" );
 
       return inlineElements.Contains( element.Name );
     }
@@ -141,7 +142,7 @@ namespace Ivony.Html
     public override bool IsSpecialElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "element" );
+        throw new Argumen, StringComparer.OrdinalIgnoreCasntNullException( "element" );
 
       return specialElements.Contains( element.Name );
     }
@@ -149,7 +150,7 @@ namespace Ivony.Html
     public override bool IsFormInputElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "element" );
+        throw new ArgumentNullE, StringComparer.OrdinalIgnoreCasException( "element" );
 
       return inputControlElements.Contains( element.Name );
     }
@@ -157,7 +158,7 @@ namespace Ivony.Html
     public override bool IsStylingElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "element" );
+        throw new ArgumentNullException( , StringComparer.OrdinalIgnoreCas "element" );
 
       return stylingElements.Contains( element.Name );
     }
@@ -165,9 +166,122 @@ namespace Ivony.Html
     public override TextMode ElementTextMode( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "element" );
+        throw new ArgumentNullException( "elem, StringComparer.OrdinalIgnoreCase );
+    }
 
-      if ( preformatedElements.Contains( element.Name ) )
+
+    public override bool IsUriValue( IHtmlAttribute attribute )
+    {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+
+      var elementName = attribute.Element.Name;
+
+      switch ( attribute.Name.ToLowerInvariant() )
+      {
+        case "action":
+          return elementName.EqualsIgnoreCase( "form" );
+
+        case "background":
+          return elementName.EqualsIgnoreCase( "body" );
+
+        case "cite":
+          return elementName.EqualsIgnoreCase( "blockquote" )
+            || elementName.EqualsIgnoreCase( "q" )
+            || elementName.EqualsIgnoreCase( "del" )
+            || elementName.EqualsIgnoreCase( "ins" );
+
+        case "classid":
+          return elementName.EqualsIgnoreCase( "object" );
+
+        case "codebase":
+          return elementName.EqualsIgnoreCase( "object" )
+            || elementName.EqualsIgnoreCase( "applet" );
+
+        case "data":
+          return elementName.EqualsIgnoreCase( "object" );
+
+        case "href":
+          return elementName.EqualsIgnoreCase( "a" )
+            || elementName.EqualsIgnoreCase( "area" )
+            || elementName.EqualsIgnoreCase( "link" )
+            || elementName.EqualsIgnoreCase( "base" );
+
+
+        case "longdesc":
+          return elementName.EqualsIgnoreCase( "img" )
+            || elementName.EqualsIgnoreCase( "frame" )
+            || elementName.EqualsIgnoreCase( "iframe" );
+
+        case "profile":
+          return elementName.EqualsIgnoreCase( "head" );
+
+        case "src":
+          return elementName.EqualsIgnoreCase( "script" )
+            || elementName.EqualsIgnoreCase( "input" )
+            || elementName.EqualsIgnoreCase( "frame" )
+            || elementName.EqualsIgnoreCase( "iframe" )
+            || elementName.EqualsIgnoreCase( "img" )ent )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" )ScriptValue( IHtmlAttribute attribute )
+    {
+      if ( attribute == null )
+        throw new ArgumentNullException( "attribute" );
+
+      var elementName = attribute.Element.Name;
+
+      switch ( attribute.Name.ToLowerInvariant() )
+      {
+        case "onblur":
+        case "onchange":
+        case "onclick":
+        case "ondbclick":
+        case "onfocus":
+        case "onkeydown":
+        case "onkeypress":
+        case "onkeyup":
+        case "onload":
+        case "onmousedown":
+        case "onmousemove":
+        case "onmouseout":
+        case "onmouseover":
+        case "onmouseup":
+        case "onreset":
+        case "onselect":
+        case "onsubmit":
+        case "onunload":
+          return true;
+      }
+
+      return false;
+
+    }
+
+    public override bool IsMarkupValue( IHtmlAttribute attribute )
+    {
+      switch ( attribute.Name )
+      {
+        case "checked":
+        case "compact":
+        case "declare":
+        case "defer":
+        case "disabled":
+        case "ismap":
+        case "multiple":
+        case "nohref":
+        case "noresize":
+        case "noshade":
+        case "nowrap":
+        case "readonly":
+        case "selected":
+          return true;
+      }
+
+      return false;
+    }
+     if ( preformatedElements.Contains( element.Name ) )
         return TextMode.Preformated;
 
       else if ( cdataTags.Contains( element.Name ) )

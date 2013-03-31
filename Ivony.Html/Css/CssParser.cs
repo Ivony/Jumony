@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 using System.Globalization;
-using Ivony.Html.Selectors;
 using Ivony.Html.Styles;
 
 namespace Ivony.Html
@@ -750,8 +749,8 @@ namespace Ivony.Html
     /// <returns>CSS 样式设置</returns>
     public static CssStyle ParseCssStyle( string styleExpression )
     {
-      var style = new CssStyle();
-      style.InitializeSettings( ParseCssSettings( styleExpression ) );
+      var style = new CssStyle( new Css21StyleSpecification() );
+      style.SetProperties( ParseCssSettings( styleExpression ) );
       return style;
     }
   }

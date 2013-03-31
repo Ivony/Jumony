@@ -69,9 +69,9 @@
   <ItemGroup>
     <Compile Include="Css\CssStyleSpecificationBase.cs" />
     <Compile Include="Css\CssStyle.cs" />
-    <Compile Include="Css\CssStyleBase.cs" />
     <Compile Include="Css\ICssStyleShorthandRule.cs" />
     <Compile Include="Extensions\ExpandedNavigateExtensions.cs" />
+    <Compile Include="Html41Specification.cs" />
     <Compile Include="HtmlDomDependency.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />

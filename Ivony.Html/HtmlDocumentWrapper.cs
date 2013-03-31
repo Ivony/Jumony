@@ -87,5 +87,11 @@ namespace Ivony.Html
     {
       get { return Document.DomModifier; }
     }
+
+
+    public HtmlSpecificationBase HtmlSpecification
+    {
+      get { return Document.HtmlSpecification; }
+    }
   }
 }

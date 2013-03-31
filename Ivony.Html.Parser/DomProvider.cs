@@ -96,10 +96,6 @@ namespace Ivony.Html.Parser
       return EnsureDomContainer( container ).AddNode( new DomSpecial( html ) );
     }
 
-
-
-    #region IHtmlDomProvider 成员
-
     /// <summary>
     /// 完成文档的创建
     /// </summary>
@@ -116,7 +112,5 @@ namespace Ivony.Html.Parser
 
       return domDocument;
     }
-
-    #endregion
   }
 }

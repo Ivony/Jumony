@@ -169,5 +169,12 @@ namespace Ivony.Html.Parser
         return _currentVersionCache;
       }
     }
+
+    private HtmlSpecificationBase _specification = new Html41Specification();
+
+    public HtmlSpecificationBase HtmlSpecification
+    {
+      get { return _specification; }
+    }
   }
 }

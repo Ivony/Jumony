@@ -124,8 +124,9 @@ namespace Ivony.Html
     private static string GenerateElementHtml( IHtmlElement element )
     {
       var builder = new StringBuilder();
+      var specification = element.Document.HtmlSpecification;
 
-      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+      if ( specification.IsForbiddenEndTag( element.Name ) )
       {
         if ( element.Nodes().Any() )
           throw new FormatException( string.Format( CultureInfo.InvariantCulture, "HTML元素 {0} 不能有任何内容", element.Name ) );
@@ -169,7 +170,9 @@ namespace Ivony.Html
         builder.Append( attribute.Name );
         if ( attribute.AttributeValue != null )
         {
-          if ( (HtmlSpecification.IsUriValue( attribute ) || HtmlSpecification.IsScriptValue( attribute )) && !attribute.AttributeValue.Contains( '"' ) )
+          var specification = element.Document.HtmlSpecification;
+
+          if ( ( specification.IsUriValue( attribute ) || specification.IsScriptValue( attribute ) ) && !attribute.AttributeValue.Contains( '"' ) )
             builder.Append( "=\"" ).Append( attribute.AttributeValue ).Append( "\"" );
           else
             builder.Append( "=\"" ).Append( HtmlEncoding.HtmlAttributeEncode( attribute.AttributeValue ) ).Append( "\"" );
@@ -200,6 +203,8 @@ namespace Ivony.Html
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
+      var specification = node.Document.HtmlSpecification;
+
       var textNode = node as IHtmlTextNode;
       if ( textNode != null )
       {
@@ -208,14 +213,19 @@ namespace Ivony.Html
         if ( parent == null )
           throw new InvalidOperationException();
 
-        if ( HtmlSpecification.cdataTags.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
+        var textMode = specification.ElementTextMode( parent );
+
+        if ( textMode == TextMode.CData )
           return textNode.HtmlText;
 
-        else if ( HtmlSpecification.preformatedElements.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( textMode == TextMode.Preformated )
           return HtmlEncoding.HtmlDecode( textNode.HtmlText );
 
-        else
+        else if ( textMode == TextMode.Normal )
           return HtmlEncoding.HtmlDecode( whitespaceRegex.Replace( textNode.HtmlText, " " ) );
+
+        else
+          return null;
       }
 
       var commentNode = node as IHtmlComment;
@@ -228,7 +238,7 @@ namespace Ivony.Html
         if ( element.Name.EqualsIgnoreCase( "br" ) )
           return Environment.NewLine;
 
-        else if ( HtmlSpecification.nonTextElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        else if ( specification.ElementTextMode( element ) == TextMode.NonText )
           return null;
       }
 
@@ -428,7 +438,9 @@ namespace Ivony.Html
 
       var writer = context.Writer;
 
-      if ( HtmlSpecification.selfCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+      var specification = element.Document.HtmlSpecification;
+
+      if ( specification.IsForbiddenEndTag( element.Name ) )
       {
         var builder = new StringBuilder();
 

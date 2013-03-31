@@ -318,7 +318,7 @@ namespace Ivony.Html
       if ( baseUri == null )
         throw new InvalidOperationException();
 
-      foreach ( var attribute in document.AllElements().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      foreach ( var attribute in document.AllElements().SelectMany( e => e.Attributes() ).Where( a => document.HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
 
         var value = attribute.Value();

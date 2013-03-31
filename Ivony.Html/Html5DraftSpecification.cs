@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 
+#pragma warning disable 1591
+
 namespace Ivony.Html
 {
 
@@ -13,7 +15,6 @@ namespace Ivony.Html
     /// </summary>
     public class Html5DraftSpecification : HtmlSpecificationBase
     {
-
         public override bool IsCDataElement(string elementName)
         {
             throw new NotImplementedException();

@@ -12,6 +12,11 @@ namespace Ivony.Html
   public abstract class CssCacheableSelector : ICssSelector
   {
 
+    /// <summary>
+    /// 检查元素是否符合选择器要求（此方法会自动缓存结果）
+    /// </summary>
+    /// <param name="element">要检查的元素</param>
+    /// <returns>是否符合选择器的要求</returns>
     public virtual bool IsEligible( IHtmlElement element )
     {
       if ( element == null )
@@ -42,8 +47,19 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 派生类实现此方法检查元素是否符合选择器要求
+    /// </summary>
+    /// <param name="element"></param>
+    /// <returns></returns>
     protected abstract bool IsEligibleCore( IHtmlElement element );
 
+    /// <summary>
+    /// 创建现有 CSS 选择器的自动缓存包装
+    /// </summary>
+    /// <param name="selector">已有的 CSS 选择器</param>
+    /// <returns>对已有选择器的自动缓存的包装</returns>
     public static ICssSelector CreateCacheableWrapper( ICssSelector selector )
     {
       var cacheable = selector as CssCacheableSelector;

@@ -13,7 +13,7 @@ namespace Ivony.Html
 {
   /// <summary>
   /// 定义 HTML 4.01 草案规范
-  /// </summary>
+  summary>
   public sealed class Html41Specification : HtmlSpecificationBase
   {
 
@@ -170,7 +170,17 @@ namespace Ivony.Html
     }
 
 
-    public override bool IsUriValue( IHtmlAttribute attribute )
+       public override bool IsListns( element.Name );
+    }
+
+    public override TextMode ElementTextMode( IHtmlElement element )
+    {
+      if ( element == null )
+        tlistw ArgumentNullException( "elem, StringComparer.OrdinalIgnoreCase );
+    }
+
+
+    p public override bool IsUriValue( IHtmlAttribute attribute )
     {
       if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
@@ -266,7 +276,7 @@ namespace Ivony.Html
         case "checked":
         case "compact":
         case "declare":
-        case "defer":
+        ca.ToLowerInvariant()se "defer":
         case "disabled":
         case "ismap":
         case "multiple":

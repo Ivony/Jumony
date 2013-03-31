@@ -62,17 +62,10 @@ namespace Ivony.Html
 
     public override TextMode ElementTextMode( IHtmlElement element )
     {
-      throw new NotImplementedException();
+      tbool IsListElement( IHtmlElement elementementedException();
     }
 
-    public override CssStyleSpecificationBase GetCssStyleSpecification()
-    {
-      return new Css21StyleSpecification();
-    }
-  }
-}
-
-    public override bool IsUriValue( IHtmlAttribute attributeementedException();
+    public override bool IsBlockElemementedException();
     }
 
     public override bool IsBlockElement( IHtmlElement element )
@@ -85,4 +78,20 @@ MarkupValue( IHtmlAttribute attribute )
       throw new NotImplementedException();
     }
   }
+}
+
+
+    lement )
+    {
+      throw new NotImplementedException();
+    }
+
+    public override CssStyleSpecificationBase GetCssStyleSpecification()
+    {
+      return new Css21StyleSpecification();
+    }
+  }
+}
+
+    public override bool IsUriValue( IHtmlAttribute attributeemented}
 }

@@ -87,6 +87,12 @@ namespace Ivony.Html
     /// <summary>
     /// 确认元素文本内容格式
     /// </summary>
+        /// <summary>
+    /// 判断元素是否为列表定义��断的元素</param>
+    /// <returns>是否为特殊元素</returns>
+    public abstract bool IsSpecialElement( 样式设置元素</returns>
+    public abstract bool IsList内容格式
+    /// </summary>
     //    /// <summary>
     /// 判断一个属性值的值是否应被视为URI。
     /// </summary>

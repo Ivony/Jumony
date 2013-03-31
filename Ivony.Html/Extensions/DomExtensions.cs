@@ -979,7 +979,7 @@ namespace Ivony.Html
         }
         else
         {
-          var fragment = element.Document.ParseFragment( html );
+          var fragment = ;element.Document.ParseFragment( html );
 
           fragment.Into( element, 0 );
         }

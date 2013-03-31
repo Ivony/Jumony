@@ -238,7 +238,7 @@ namespace Ivony.Html.Forms.Validation
     /// <returns></returns>
     protected IHtmlElement EnsureList( IHtmlElement container )
     {
-      if ( HtmlSpecification.listElements.Contains( container.Name.ToLowerInvariant() ) )
+      if ( container.Document.HtmlSpecification.IsListElement( container ) )
         return container;
 
 

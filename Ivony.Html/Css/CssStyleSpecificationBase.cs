@@ -85,6 +85,16 @@ namespace Ivony.Html.Css
   public class Css21StyleSpecification : CssStyleSpecificationBase
   {
 
+
+    public Css21StyleSpecification()
+    {
+      StyleShorthandRules.Add( new PaddingShorthandRule() );
+      StyleShorthandRules.Add( new MarginShorthandRule() );
+      StyleShorthandRules.Add( new BorderWidthShorthandRule() );
+      StyleShorthandRules.Add( new BorderStyleShorthandRule() );
+      StyleShorthandRules.Add( new BorderColorShorthandRule() );
+    }
+
     /// <summary>
     /// 检查 CSS 样式属性设置是否合法有效
     /// </summary>

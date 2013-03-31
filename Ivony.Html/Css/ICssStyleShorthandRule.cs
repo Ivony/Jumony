@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Ivony.Html.Css
+namespace Ivony.Html
 {
 
   /// <summary>
@@ -28,7 +28,7 @@ namespace Ivony.Html.Css
   }
 
 
-  public class PaddingStyleShorthandRule : ICssStyleShorthandRule
+  public class PaddingShorthandRule : ICssStyleShorthandRule
   {
     public string Name
     {
@@ -39,13 +39,13 @@ namespace Ivony.Html.Css
 
     public CssStyleProperty[] ExtractProperties( string shorthand )
     {
-      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
+      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
 
-      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+      return CssStyleHelper.GenerateBoxProperties( Name, values );
     }
   }
 
-  public class MarginStyleShorthandRule : ICssStyleShorthandRule
+  public class MarginShorthandRule : ICssStyleShorthandRule
   {
     public string Name
     {
@@ -55,14 +55,14 @@ namespace Ivony.Html.Css
 
     public CssStyleProperty[] ExtractProperties( string shorthand )
     {
-      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
+      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
 
-      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+      return CssStyleHelper.GenerateBoxProperties( Name, values );
     }
   }
 
 
-  public class BorderWidthStyleShorthandRule : ICssStyleShorthandRule
+  public class BorderWidthShorthandRule : ICssStyleShorthandRule
   {
     public string Name
     {
@@ -71,16 +71,46 @@ namespace Ivony.Html.Css
 
     public CssStyleProperty[] ExtractProperties( string shorthand )
     {
-      var values = CssStyleShorthandHelper.whitespaceRegex.Split( shorthand );
+      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
 
-      return CssStyleShorthandHelper.GenerateBoxProperties( Name, values );
+      return CssStyleHelper.GenerateBoxProperties( Name, values );
+    }
+  }
+
+  public class BorderStyleShorthandRule : ICssStyleShorthandRule
+  {
+    public string Name
+    {
+      get { return "border-style"; }
+    }
+
+    public CssStyleProperty[] ExtractProperties( string shorthand )
+    {
+      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
+
+      return CssStyleHelper.GenerateBoxProperties( Name, values );
+    }
+  }
+
+  public class BorderColorShorthandRule : ICssStyleShorthandRule
+  {
+    public string Name
+    {
+      get { return "border-color"; }
+    }
+
+    public CssStyleProperty[] ExtractProperties( string shorthand )
+    {
+      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
+
+      return CssStyleHelper.GenerateBoxProperties( Name, values );
     }
   }
 
 
 
 
-  internal static class CssStyleShorthandHelper
+  internal static class CssStyleHelper
   {
 
     public static readonly Regex whitespaceRegex = new Regex( @"\s+", RegexOptions.Compiled );
@@ -107,9 +137,19 @@ namespace Ivony.Html.Css
     }
 
 
-    public static readonly Regex lengthValueRegex = new Regex( @"\d+(px|cm|in)" );
+    public static readonly Regex lengthValueRegex = new Regex( @"^\d+(px|cm|in)$" );
+
+    public static bool IsLengthValue( string value )
+    {
+      return lengthValueRegex.IsMatch( value );
+    }
+
+    public static readonly Regex colorValueRegex = new Regex( @"^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))$" );
+
+    public static bool IsLengthValue( string value )
+    {
+      return colorValueRegex.IsMatch( value );
+    }
 
   }
-
-
 }

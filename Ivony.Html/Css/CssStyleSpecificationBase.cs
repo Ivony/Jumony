@@ -6,10 +6,16 @@ using System.Text;
 
 namespace Ivony.Html.Css
 {
+  
+  /// <summary>
+  /// 定义 CSS 样式规范抽象基类
+  /// </summary>
   public abstract class CssStyleSpecificationBase
   {
 
-
+    /// <summary>
+    /// 创建 CssStyleSpecificationBase 对象
+    /// </summary>
     protected CssStyleSpecificationBase()
     {
       StyleShorthandRules = new CssStyleShorthandRuleCollection();
@@ -59,6 +65,10 @@ namespace Ivony.Html.Css
   public class Css21StyleSpecification : CssStyleSpecificationBase
   {
 
+    protected override bool ValidateProperty( CssStyleProperty property )
+    {
+      return true;
+    }
   }
 
   public class CssStyleShorthandRuleCollection : KeyedCollection<string, ICssStyleShorthandRule>

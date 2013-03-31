@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 定义 HTML 规范抽象基类
+  /// </summary>
   public abstract class HtmlSpecificationBase
   {
 

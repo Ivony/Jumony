@@ -24,12 +24,12 @@ namespace Ivony.Html
     /// 设置样式设置
     /// </summary>
     /// <param name="setting">样式设置</param>
-    protected override void SetStyleSetting( CssStyleProperty setting )
+    protected override void SetStyleProperty( CssStyleProperty setting )
     {
       lock ( SyncRoot )
       {
         var name = setting.Name;
-        var s = GetStyleSetting( name );
+        var s = GetStyleProperty( name );
         if ( s == null || setting.Important || !s.Important )
           _settings[name] = setting;
       }
@@ -40,7 +40,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="name">样式名</param>
     /// <returns>样式设置</returns>
-    protected override CssStyleProperty GetStyleSetting( string name )
+    protected override CssStyleProperty GetStyleProperty( string name )
     {
       lock ( SyncRoot )
       {
@@ -54,7 +54,7 @@ namespace Ivony.Html
     }
 
 
-    protected override CssStyleProperty[] GetAllStyleSettings()
+    protected override CssStyleProperty[] GetAllStyleProperties()
     {
       return _settings.Values.ToArray();
     }

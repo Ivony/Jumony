@@ -13,17 +13,36 @@ namespace Ivony.Html
   /// </summary>
   public abstract class CssStyleBase
   {
+
+    /// <summary>
+    /// CSS 样式 important 标识
+    /// </summary>
     public const string importantFlag = "!important";
 
 
+    /// <summary>
+    /// 设置样式属性
+    /// </summary>
+    /// <param name="property">样式属性</param>
+    protected abstract void SetStyleProperty( CssStyleProperty property );
 
-    protected abstract void SetStyleSetting( CssStyleProperty setting );
+    /// <summary>
+    /// 获取样式属性
+    /// </summary>
+    /// <param name="name">样式名称</param>
+    /// <returns></returns>
+    protected abstract CssStyleProperty GetStyleProperty( string name );
 
-    protected abstract CssStyleProperty GetStyleSetting( string name );
+    /// <summary>
+    /// 获取所有的样式属性
+    /// </summary>
+    /// <returns>所有的样式属性</returns>
+    protected abstract CssStyleProperty[] GetAllStyleProperties();
 
-    protected abstract CssStyleProperty[] GetAllStyleSettings();
 
-
+    /// <summary>
+    /// 获取用于同步的对象
+    /// </summary>
     public abstract object SyncRoot { get; }
 
 
@@ -47,7 +66,7 @@ namespace Ivony.Html
     /// <returns>样式设置值</returns>
     public string GetValue( string name )
     {
-      var setting = GetStyleSetting( name );
+      var setting = GetStyleProperty( name );
       if ( setting == null )
         return null;
 
@@ -93,14 +112,14 @@ namespace Ivony.Html
         throw new FormatException( string.Format( "value 参数值不能以 \"{0}\" 结尾。", importantFlag ) );
 
       var setting = new CssStyleProperty( name, value, important );
-      SetStyleSetting( setting );
+      SetStyleProperty( setting );
     }
 
 
     internal void InitializeSettings( CssStyleProperty[] settings )
     {
       foreach ( var s in settings )
-        SetStyleSetting( s );
+        SetStyleProperty( s );
     }
 
 
@@ -110,7 +129,7 @@ namespace Ivony.Html
     /// <returns></returns>
     public override string ToString()
     {
-      return string.Join( ";", GetAllStyleSettings().Select( s => s.ToString() ).ToArray() );
+      return string.Join( ";", GetAllStyleProperties().Select( s => s.ToString() ).ToArray() );
     }
 
 

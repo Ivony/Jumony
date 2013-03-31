@@ -25,85 +25,34 @@ namespace Ivony.Html
     /// <returns>解出的属性值</returns>
     CssStyleProperty[] ExtractProperties( string shorthand );
 
+
+    CssStyleProperty TryGetShorthandProperty( CssStyle cssStyle );
   }
 
 
-  public class PaddingShorthandRule : ICssStyleShorthandRule
+  internal class StandardBoxShorthandRule : ICssStyleShorthandRule
   {
+
+    public StandardBoxShorthandRule( string propertyName )
+    {
+      Name = propertyName;
+    }
+
     public string Name
     {
-      get { return "padding"; }
-    }
-
-
-
-    public CssStyleProperty[] ExtractProperties( string shorthand )
-    {
-      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
-
-      return CssStyleHelper.GenerateBoxProperties( Name, values );
-    }
-  }
-
-  public class MarginShorthandRule : ICssStyleShorthandRule
-  {
-    public string Name
-    {
-      get { return "margin"; }
-    }
-
-
-    public CssStyleProperty[] ExtractProperties( string shorthand )
-    {
-      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
-
-      return CssStyleHelper.GenerateBoxProperties( Name, values );
-    }
-  }
-
-
-  public class BorderWidthShorthandRule : ICssStyleShorthandRule
-  {
-    public string Name
-    {
-      get { return "border-width"; }
+      get;
+      private set;
     }
 
     public CssStyleProperty[] ExtractProperties( string shorthand )
     {
       var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
-
       return CssStyleHelper.GenerateBoxProperties( Name, values );
     }
-  }
 
-  public class BorderStyleShorthandRule : ICssStyleShorthandRule
-  {
-    public string Name
+    public CssStyleProperty TryGetShorthandProperty( CssStyle cssStyle )
     {
-      get { return "border-style"; }
-    }
-
-    public CssStyleProperty[] ExtractProperties( string shorthand )
-    {
-      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
-
-      return CssStyleHelper.GenerateBoxProperties( Name, values );
-    }
-  }
-
-  public class BorderColorShorthandRule : ICssStyleShorthandRule
-  {
-    public string Name
-    {
-      get { return "border-color"; }
-    }
-
-    public CssStyleProperty[] ExtractProperties( string shorthand )
-    {
-      var values = CssStyleHelper.whitespaceRegex.Split( shorthand );
-
-      return CssStyleHelper.GenerateBoxProperties( Name, values );
+      return null;
     }
   }
 

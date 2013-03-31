@@ -91,6 +91,13 @@ namespace Ivony.Html
     /// <returns>文本内容格式</returns>
     public abstract TextMode ElementTextMode( IHtmlElement element );
 
+
+    /// <summary>
+    /// 获取与之相匹配的 CSS 样式规范
+    /// </summary>
+    /// <returns></returns>
+    public abstract CssStyleSpecificationBase GetCssStyleSpecification();
+
   }
 
 
@@ -104,7 +111,9 @@ namespace Ivony.Html
     /// <summary>CData，内容当作文本来解释</summary>
     CData,
     /// <summary>预格式化，不合并空白字符</summary>
-    Preformated
+    Preformated,
+    /// <summary>非文本，元素没有文本内容</summary>
+    NonText
   }
 
 

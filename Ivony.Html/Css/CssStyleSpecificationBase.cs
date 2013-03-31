@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Css
+namespace Ivony.Html
 {
-  
+
   /// <summary>
   /// 定义 CSS 样式规范抽象基类
   /// </summary>
@@ -76,6 +76,37 @@ namespace Ivony.Html.Css
           return new[] { property };
       }
     }
+
+
+    /// <summary>
+    /// 检查指定的样式属性是否为一个缩写形式
+    /// </summary>
+    /// <param name="name">指定的属性名</param>
+    /// <returns>是否为缩写形式</returns>
+    public bool IsShorthandStyle( string name )
+    {
+      return StyleShorthandRules.Contains( name );
+    }
+
+    /// <summary>
+    /// 获取缩写形式的样式属性
+    /// </summary>
+    /// <param name="name">样式属性名</param>
+    /// <param name="style">所有的样式设置</param>
+    /// <returns>返回缩写形式，如果可能</returns>
+    public CssStyleProperty TryGetShorthandProperty( string name, CssStyle style )
+    {
+      if ( StyleShorthandRules.Contains( name ) )
+      {
+        var rule = StyleShorthandRules[name];
+        return rule.TryGetShorthandProperty( style );
+      }
+
+      else
+        return null;
+
+
+    }
   }
 
 
@@ -86,13 +117,16 @@ namespace Ivony.Html.Css
   {
 
 
+    /// <summary>
+    /// 创建 Css21StyleSpecification 对象
+    /// </summary>
     public Css21StyleSpecification()
     {
-      StyleShorthandRules.Add( new PaddingShorthandRule() );
-      StyleShorthandRules.Add( new MarginShorthandRule() );
-      StyleShorthandRules.Add( new BorderWidthShorthandRule() );
-      StyleShorthandRules.Add( new BorderStyleShorthandRule() );
-      StyleShorthandRules.Add( new BorderColorShorthandRule() );
+      StyleShorthandRules.Add( new StandardBoxShorthandRule( "padding" ) );
+      StyleShorthandRules.Add( new StandardBoxShorthandRule( "margin" ) );
+      StyleShorthandRules.Add( new StandardBoxShorthandRule( "border-width" ) );
+      StyleShorthandRules.Add( new StandardBoxShorthandRule( "border-style" ) );
+      StyleShorthandRules.Add( new StandardBoxShorthandRule( "border-color" ) );
     }
 
     /// <summary>

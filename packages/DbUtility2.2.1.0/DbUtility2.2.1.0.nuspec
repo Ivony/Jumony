@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DbUtility2</id>
+    <version>2.1.0</version>
+    <title>DbUtility</title>
+    <authors>Ivony</authors>
+    <owners>Ivony</owners>
+    <projectUrl>https://github.com/Ivony/DbUtility</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>DbUtility is a light utility for SQL Server</description>
+    <references>
+      <reference file="DbUtility.v2.dll" />
+    </references>
+  </metadata>
+</package>

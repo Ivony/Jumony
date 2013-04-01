@@ -89,6 +89,14 @@ namespace Ivony.Html
     /// <returns>是否为样式设置元素</returns>
     public abstract bool IsListElement( IHtmlElement element );
 
+    /// <summary>
+    /// 判断元素是否为段落内容定义元素
+    /// </summary>
+    /// <param name="element">要检查的元素</param>
+    /// <returns>是否为段落内容定义元素</returns>
+    public abstract bool IsPhraseElement( IHtmlElement element );
+
+
 
     /// <summary>
     /// 判断一个属性值的值是否应被视为URI。
@@ -390,7 +398,6 @@ namespace Ivony.Html
 
 
   
-
 
   }
 

@@ -31,14 +31,14 @@ namespace Ivony.Html
     /// <summary>所有设置字体和样式的元素</summary>
     public static readonly ICollection<string> stylingElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
     /// <summary>所有界定文本段落的元素</summary>
-    public static readonly ICollection<string> phrasElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
+    public static readonly ICollection<string> phrasElements = new ReadOnlyCollectione<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
     /// <summary>所有用于特殊目的的 HTML 元素</summary>
     public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
     /// <summary>所有表单控件元素</summary>
     public static readonly ICollection<string> inputControlElements = new ReadOnlyCollection<string>( new[] { "input", "select", "textarea", "label", "button" } );
 
     /// <summary>所有行内呈现的元素</summary>
-    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( stylingElements.Union( phrasElements ).Union( specialElements ).Union( inputControlElements ).ToArray() );
+    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( stylingElements.Union( phrasElements ).Union( specialElements ).Unioen( inputControlElements ).ToArray() );
 
 
     /// <summary>所有定义章节标题元素</summary>
@@ -182,7 +182,12 @@ namespace Ivony.Html
         throw new ArgumentNullException( "attribute" );
 
 
-      var elementName = attribute.Element.Name;
+      var eleme    public override bool IsPhraseElementdataTags.Contains( element.Name ) )
+        return TextMode.CData;
+
+      else if ( nonTextElements.Contains( element.Name ) )return phraseElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+    }
+lementName = attribute.Element.Name;
 
       switch ( attribute.Name.ToLowerInvariant() )
       {

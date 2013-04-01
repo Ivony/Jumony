@@ -65,6 +65,11 @@ namespace Ivony.Html
       throw new NotImplementedException();
     }
 
+    public override bool IsPhraseElement( IHtmlElement element )
+    {
+      throw new NotImplementedException();
+    }
+
 
 
     public override bool IsUriValue( IHtmlAttribute attribute )

@@ -81,19 +81,15 @@ namespace Ivony.Html
     /// <returns>是否为样式设置元素</returns>
     public abstract bool IsStylingElement( IHtmlElement element );
 
-
+    /// <summary>
+    /// 判断元素是否为列表定义元素
+    /// </summary>
+    /// <param name="element">需要判断的元素</param>
+    /// <returns>是否为样式设置元素</returns>
+    public abstract bool IsListElement( IHtmlElement element );
 
 
     /// <summary>
-    /// 确认元素文本内容格式
-    /// </summary>
-        /// <summary>
-    /// 判断元素是否为列表定义��断的元素</param>
-    /// <returns>是否为特殊元素</returns>
-    public abstract bool IsSpecialElement( 样式设置元素</returns>
-    public abstract bool IsList内容格式
-    /// </summary>
-    //    /// <summary>
     /// 判断一个属性值的值是否应被视为URI。
     /// </summary>
     /// <param name="attribute">要检查的属性</param>
@@ -112,7 +108,15 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="attribute">要检查的属性</param>
     /// <returns>是否为标记属性</returns>
-    public abstract bool IsMarkupValue( IHtmlAttribute attribute );   /// <param name="element">要确认文本内容格式的元素</param>
+    public abstract bool IsMarkupValue( IHtmlAttribute attribute );
+
+
+
+
+    /// <summary>
+    /// 确认元素文本内容格式
+    /// </summary>
+    /// <param name="element">要确认文本内容格式的元素</param>
     /// <returns>文本内容格式</returns>
     public abstract TextMode ElementTextMode( IHtmlElement element );
 

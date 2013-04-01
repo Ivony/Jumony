@@ -18,7 +18,7 @@ namespace Ivony.Html
 
     private object _sync = new object();
 
-    public override object SyncRoot { get { return _sync; } }
+    public object SyncRoot { get { return _sync; } }
 
 
     public CssStyle( CssStyleSpecificationBase specification )
@@ -35,10 +35,9 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// important 标识
+    /// 定义 !important 标识
     /// </summary>
     public const string importantFlag = "!important";
-
 
     /// <summary>
     /// 设置样式属性
@@ -142,10 +141,17 @@ namespace Ivony.Html
       }
     }
 
+
+    /// <summary>
+    /// 获取或设置样式属性
+    /// </summary>
+    /// <param name="name">样式属性名</param>
+    /// <returns>样式属性值</returns>
     public string this[string name]
     {
       get { return GetValue( name ); }
       set { SetValue( name, value ); }
+
     }
 
   }

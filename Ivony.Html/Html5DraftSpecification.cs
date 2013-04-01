@@ -60,28 +60,31 @@ namespace Ivony.Html
       throw new NotImplementedException();
     }
 
-    public override TextMode ElementTextMode( IHtmlElement element )
-    {
-      tbool IsListElement( IHtmlElement elementementedException();
-    }
-
-    public override bool IsBlockElemementedException();
-    }
-
-    public override bool IsBlockElement( IHtmlElement element )
-ScriptValue( IHtmlAttribute attributeementedException();
-    }
-
-    public override bool IsBlockElement( IHtmlElement element )
-MarkupValue( IHtmlAttribute attribute )
+    public override bool IsListElement( IHtmlElement element )
     {
       throw new NotImplementedException();
     }
-  }
-}
 
 
-    lement )
+
+    public override bool IsUriValue( IHtmlAttribute attribute )
+    {
+      throw new NotImplementedException();
+    }
+
+    public override bool IsScriptValue( IHtmlAttribute attribute )
+    {
+      throw new NotImplementedException();
+    }
+
+    public override bool IsMarkupValue( IHtmlAttribute attribute )
+    {
+      throw new NotImplementedException();
+    }
+
+
+    
+    public override TextMode ElementTextMode( IHtmlElement element )
     {
       throw new NotImplementedException();
     }
@@ -90,8 +93,6 @@ MarkupValue( IHtmlAttribute attribute )
     {
       return new Css21StyleSpecification();
     }
-  }
-}
 
-    public override bool IsUriValue( IHtmlAttribute attributeemented}
+  }
 }

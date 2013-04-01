@@ -95,11 +95,10 @@ namespace Ivony.Html
 
     public static readonly Regex colorValueRegex = new Regex( @"^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}))$" );
 
-    public static bool IsLengthValue( string value )
+    public static bool IsColorValue( string value )
     {
       return colorValueRegex.IsMatch( value );
     }
 
   }
 }
-Color

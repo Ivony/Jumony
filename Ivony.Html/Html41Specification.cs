@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 
-#prusing Ivony.Fluent;
-pragma warning disable 1591
+
+#pragma warning disable 1591
 
 
 namespace Ivony.Html
 {
   /// <summary>
-  /// 定义 HTML 4.01 草案规范
-  summary>
+  /// 定义 HTML 4.01 规范
+  /// </summary>
   public sealed class Html41Specification : HtmlSpecificationBase
   {
 
@@ -57,22 +58,24 @@ namespace Ivony.Html
     public static readonly ICollection<string> nonTextElements = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
 
 
-    public override bool IsCDataElement( string elementNamtName )
+
+
+    public override bool IsCDataElement( string elementName )
     {
-      return cdataTags.Contains( elementName );
+      return cdataTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
     }
 
-    public override bool IsOptionalEndTag( string, StringComparer.OrdinalIgnoreCasg elementName )
+    public override bool IsOptionalEndTag( string elementName )
     {
-      return optionalCloseTags.Contains( elementName );
+      return optionalCloseTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
     }
 
-    public override bool IsForbiddenEndTag( string ele, StringComparer.OrdinalIgnoreCasementName )
+    public override bool IsForbiddenEndTag( string elementName )
     {
-      return fobiddenEndTags.Contains( elementName );
+      return fobiddenEndTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
     }
 
-    public override bool ImmediatelyClose( string openTag, , StringComparer.OrdinalIgnoreCas string nextTag )
+    public override bool ImmediatelyClose( string openTag, string nextTag )
     {
       if ( openTag == null )
         throw new ArgumentNullException( "openTag" );
@@ -128,59 +131,52 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return blockElements.Contains( element.Name );
+      return blockElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
     public override bool IsInlineElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new , StringComparer.OrdinalIgnoreCas ArgumentNullException( "element" );
+        throw new ArgumentNullException( "element" );
 
-      return inlineElements.Contains( element.Name );
+      return inlineElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
     public override bool IsSpecialElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new Argumen, StringComparer.OrdinalIgnoreCasntNullException( "element" );
+        throw new ArgumentNullException( "element" );
 
-      return specialElements.Contains( element.Name );
+      return specialElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
     public override bool IsFormInputElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullE, StringComparer.OrdinalIgnoreCasException( "element" );
+        throw new ArgumentNullException( "element" );
 
-      return inputControlElements.Contains( element.Name );
+      return inputControlElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
     public override bool IsStylingElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( , StringComparer.OrdinalIgnoreCas "element" );
+        throw new ArgumentNullException( "element" );
 
-      return stylingElements.Contains( element.Name );
+      return stylingElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
-    public override TextMode ElementTextMode( IHtmlElement element )
+    public override bool IsListElement( IHtmlElement element )
     {
       if ( element == null )
-        throw new ArgumentNullException( "elem, StringComparer.OrdinalIgnoreCase );
+        throw new ArgumentNullException( "element" );
+
+      return listElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
     }
 
 
-       public override bool IsListns( element.Name );
-    }
 
-    public override TextMode ElementTextMode( IHtmlElement element )
-    {
-      if ( element == null )
-        tlistw ArgumentNullException( "elem, StringComparer.OrdinalIgnoreCase );
-    }
-
-
-    p public override bool IsUriValue( IHtmlAttribute attribute )
+    public override bool IsUriValue( IHtmlAttribute attribute )
     {
       if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
@@ -232,10 +228,14 @@ namespace Ivony.Html
             || elementName.EqualsIgnoreCase( "input" )
             || elementName.EqualsIgnoreCase( "frame" )
             || elementName.EqualsIgnoreCase( "iframe" )
-            || elementName.EqualsIgnoreCase( "img" )ent )
-    {
-      if ( element == null )
-        throw new ArgumentNullException( "element" )ScriptValue( IHtmlAttribute attribute )
+            || elementName.EqualsIgnoreCase( "img" );
+
+        default:
+          return false;
+      }
+    }
+
+    public override bool IsScriptValue( IHtmlAttribute attribute )
     {
       if ( attribute == null )
         throw new ArgumentNullException( "attribute" );
@@ -271,12 +271,12 @@ namespace Ivony.Html
 
     public override bool IsMarkupValue( IHtmlAttribute attribute )
     {
-      switch ( attribute.Name )
+      switch ( attribute.Name.ToLowerInvariant() )
       {
         case "checked":
         case "compact":
         case "declare":
-        ca.ToLowerInvariant()se "defer":
+        case "defer":
         case "disabled":
         case "ismap":
         case "multiple":
@@ -291,7 +291,14 @@ namespace Ivony.Html
 
       return false;
     }
-     if ( preformatedElements.Contains( element.Name ) )
+
+
+    public override TextMode ElementTextMode( IHtmlElement element )
+    {
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      if ( preformatedElements.Contains( element.Name ) )
         return TextMode.Preformated;
 
       else if ( cdataTags.Contains( element.Name ) )

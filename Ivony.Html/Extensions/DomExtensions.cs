@@ -943,7 +943,7 @@ namespace Ivony.Html
           element.Document.ParseFragment( encoded ).Into( element, 0 );
         }
         else
-          throw new InvalidOperationException( "元素不包含任何文本内容，无法设置 InnerText" )
+          throw new InvalidOperationException( "元素不包含任何文本内容，无法设置 InnerText" );
       }
 
       return element;
@@ -979,7 +979,7 @@ namespace Ivony.Html
         }
         else
         {
-          var fragment = ;element.Document.ParseFragment( html );
+          var fragment = element.Document.ParseFragment( html );
 
           fragment.Into( element, 0 );
         }

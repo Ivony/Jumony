@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -129,6 +130,7 @@ namespace Ivony.Html
 
 
     internal static readonly IDictionary<string, char> entities = new Dictionary<string, char> 
+  
     {
       { "quot",'\"' },
       { "amp",'&' },
@@ -382,10 +384,12 @@ namespace Ivony.Html
       { "spades", '♠' },
       { "clubs", '♣' },
       { "hearts", '♥' },
-      { "diams", '♦' } 
-    };
+      { "diams", '♦' }   };
 
     internal static readonly ICollection<char> _htmlEntityEndingChars = new ReadOnlyCollection<char>( new char[] { ';', '&' } );
+
+
+  
 
 
   }

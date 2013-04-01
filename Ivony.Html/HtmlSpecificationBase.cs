@@ -138,7 +138,6 @@ namespace Ivony.Html
 
 
     internal static readonly IDictionary<string, char> entities = new Dictionary<string, char> 
-  
     {
       { "quot",'\"' },
       { "amp",'&' },
@@ -392,12 +391,10 @@ namespace Ivony.Html
       { "spades", '♠' },
       { "clubs", '♣' },
       { "hearts", '♥' },
-      { "diams", '♦' }   };
+      { "diams", '♦' } 
+    };
 
     internal static readonly ICollection<char> _htmlEntityEndingChars = new ReadOnlyCollection<char>( new char[] { ';', '&' } );
-
-
-  
 
   }
 

@@ -82,7 +82,7 @@ namespace Ivony.Html
       throw new NotImplementedException();
     }
 
-    public override bool IsMarkupValue( IHtAttributtribute attribute )
+    public override bool IsMarkupAttribute( IHtmlAttribute attribute )
     {
       throw new NotImplementedException();
     }

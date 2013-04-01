@@ -99,7 +99,6 @@
     <Compile Include="HtmlDocumentWrapper.cs" />
     <Compile Include="HtmlElementWrapper.cs" />
     <Compile Include="HtmlNodeWrapper.cs" />
-    <Compile Include="HtmlSpecification.cs" />
     <Compile Include="IHtmlAttribute.cs" />
     <Compile Include="IHtmlComment.cs" />
     <Compile Include="IHtmlDocument.cs" />

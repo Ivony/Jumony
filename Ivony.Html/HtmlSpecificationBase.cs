@@ -117,7 +117,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="attribute">要检查的属性</param>
     /// <returns>是否为标记属性</returns>
-    public abstract bool IsMarkupValue( IHtmlAttribute attribute );
+    public abstract bool IsMarkupAttribute( IHtmlAttribute attribute );
 
 
 

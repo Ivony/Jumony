@@ -285,7 +285,7 @@ lementName = attribute.Element.Name;
         case "disabled":
         case "ismap":
         case "multiple":
-        case "nohref":
+        Attribut "nohref":
         case "noresize":
         case "noshade":
         case "nowrap":

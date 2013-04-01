@@ -298,7 +298,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      if ( preformatedElements.Contains( element.Name ) )
+      if ( element.AncestorsAndSelf().Any( e => preformatedElements.Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
         return TextMode.Preformated;
 
       else if ( cdataTags.Contains( element.Name ) )

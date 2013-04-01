@@ -962,7 +962,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-
+      var specification = element.Document.HtmlSpecification;
       var modifier = EnsureModifiable( element );
 
       lock ( element.SyncRoot )
@@ -973,7 +973,7 @@ namespace Ivony.Html
           return element;
 
 
-        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( specification.IsCDataElement( element.Name ) )
         {
           modifier.AddTextNode( element, html );
         }

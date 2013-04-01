@@ -276,9 +276,10 @@ namespace Ivony.Html.Web
     /// <param name="baseVirtualPath">容器的基路径</param>
     public void ResolveUri( IHtmlContainer container, string baseVirtualPath )
     {
+      var specification = container.Document.HtmlSpecification;
 
       var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
-      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => specification.IsUriValue( a ) ).ToArray() )
       {
         ResolveUri( attribute, absoluteBase );
       }

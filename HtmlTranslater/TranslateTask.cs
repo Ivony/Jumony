@@ -250,7 +250,7 @@ namespace HtmlTranslator
       if ( textNode.Ancestors().Any( e => e.Name.EqualsIgnoreCase( "partial" ) || e.Name.EqualsIgnoreCase( "head" ) ) )
         return false;
 
-      if ( textNode.Parent() != null && HtmlSpecification.nonTextElements.Contains( textNode.Parent().Name, StringComparer.OrdinalIgnoreCase ) )
+      if ( textNode.Parent() != null && textNode.ElementTextMode() == TextMode.NonText )
         return false;
 
       return true;

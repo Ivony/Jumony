@@ -933,11 +933,7 @@ namespace Ivony.Html
           encoded = encoded.Replace( "  ", "&nbsp; " );
 
           if ( encoded.EndsWith( "  " ) )
-            encoded = encoded.Substring( 0, encoded.Length - 1 ) + "&nbsp;";//如果末尾多出一个空格，则替换为&nbsp;
-
-          encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
-
-          encoded = encoded.Replace( "\n", "<br />" );
+            encoded = encoded.Substring( 0, encoded.Length - 1 ) + "&nbsp;";//如果末尾多出一个空格，则替换�mode = element.ElementTextMode(encoded.Replace( "\n", "<br />" );
 
 
           element.Document.ParseFragment( encoded ).Into( element, 0 );

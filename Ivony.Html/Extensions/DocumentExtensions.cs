@@ -343,6 +343,21 @@ namespace Ivony.Html
 
 
 
+    public static TextMode ElementTextMode( this IHtmlNode node )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      var specification = node.Document.HtmlSpecification;
+      var element = node as IHtmlElement ?? node.Parent();
+
+      if ( element == null )
+        return TextMode.Normal;
+
+      return specification.ElementTextMode( element );
+    }
+
+
 
 
 

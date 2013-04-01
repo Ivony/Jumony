@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Html.Parser.ContentModels;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Ivony.Html.Parser
 {
@@ -13,6 +14,44 @@ namespace Ivony.Html.Parser
   /// </summary>
   public class JumonyReader : IHtmlReader
   {
+
+
+    /// <summary>
+    /// 用于匹配元素标签名的正则
+    /// </summary>
+    public static readonly Regex tagNameRegex = new Regulars.TagName();
+
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
+
+    private static object _sync = new object();
+
+    /// <summary>
+    /// 获取匹配指定结束标签的正则表达式对象
+    /// </summary>
+    /// <param name="tagName">标签名</param>
+    /// <returns>匹配指定结束标签的正则表达式对象</returns>
+    public static Regex GetEndTagRegex( string tagName )
+    {
+
+      if ( tagName == null )
+        throw new ArgumentNullException( "tagName" );
+
+      if ( !tagNameRegex.IsMatch( tagName ) )
+        throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "\"{0}\" 不是一个合法有效的 HTML 元素名称", tagName ), "tagName" );
+
+
+      tagName = tagName.ToLowerInvariant();
+
+      lock ( _sync )
+      {
+        Regex regex;
+
+        if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
+          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
+
+        return regex;
+      }
+    }
 
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象
@@ -120,7 +159,7 @@ namespace Ivony.Html.Parser
     protected virtual HtmlEndTag FindEndTag( int index, string elementName )
     {
 
-      Regex endTagRegex = HtmlSpecification.GetEndTagRegex( elementName );
+      Regex endTagRegex = GetEndTagRegex( elementName );
       var endTagMatch = endTagRegex.Match( HtmlText, index );
 
 

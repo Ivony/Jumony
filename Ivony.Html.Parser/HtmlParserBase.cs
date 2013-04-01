@@ -118,6 +118,16 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+    /// <summary>
+    /// 获取所使用的 HTML 规范
+    /// </summary>
+    protected HtmlSpecificationBase HtmlSpecification
+    {
+      get;
+      private set;
+    }
+
     /// <summary>
     /// 分析 HTML 文本
     /// </summary>
@@ -189,6 +199,10 @@ namespace Ivony.Html.Parser
     /// <returns>处理过程中所创建的元素对象，若不支持则返回 null</returns>
     protected virtual IHtmlElement ProcessBeginTag( HtmlBeginTag beginTag )
     {
+
+      if ( HtmlSpecification == null )
+        HtmlSpecification = GetDefaultSpecification();
+
       string tagName = beginTag.TagName;
       bool selfClosed = beginTag.SelfClosed;
 
@@ -206,7 +220,7 @@ namespace Ivony.Html.Parser
       //检查父级是否可选结束标记，并作相应处理
       {
         var element = CurrentContainer as IHtmlElement;
-        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( element != null && HtmlSpecification.IsOptionalEndTag( element.Name ) )
         {
           if ( ImmediatelyClose( tagName, element ) )
             ContainerStack.Pop();
@@ -251,6 +265,7 @@ namespace Ivony.Html.Parser
     }
 
 
+
     /// <summary>
     /// 检查元素是否为自结束标签
     /// </summary>
@@ -258,7 +273,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为自结束标签</returns>
     protected virtual bool IsSelfCloseElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.selfCloseTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
+      return HtmlSpecification.IsForbiddenEndTag( tag.TagName );
     }
 
     /// <summary>
@@ -268,7 +283,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为CDATA标签</returns>
     protected virtual bool IsCDataElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.cdataTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
+      return HtmlSpecification.IsCDataElement( tag.TagName );
     }
 
 
@@ -399,9 +414,35 @@ namespace Ivony.Html.Parser
     protected virtual IHtmlSpecial ProcessDoctypeDeclaration( HtmlDoctypeDeclaration doctype )
     {
 
+      if ( HtmlSpecification == null )
+        HtmlSpecification = GetHtmlspecification( doctype );
+
       return CreateSpecial( doctype.Html );
 
     }
+
+
+    /// <summary>
+    /// 根据 DTD 声明获取相应的 HTML 规范
+    /// </summary>
+    /// <param name="doctype">DTD 声明</param>
+    /// <returns>所适用的 HTML 规范</returns>
+    protected virtual HtmlSpecificationBase GetHtmlspecification( HtmlDoctypeDeclaration doctype )
+    {
+      return new Html41Specification();
+    }
+
+
+    /// <summary>
+    /// 获取默认的 HTML 规范
+    /// </summary>
+    /// <remarks>当遇到第一个元素开始标签却还没有遇到 DTD 声明时，则调用此方法来获取默认的 HTML 规范。</remarks>
+    /// <returns>默认的 HTML 规范</returns>
+    protected virtual HtmlSpecificationBase GetDefaultSpecification()
+    {
+      return new Html41Specification();
+    }
+
 
 
     protected virtual IHtmlDocument CompleteDocument( IHtmlDocument document )

@@ -146,7 +146,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 将客户端提交来的值，应用到对应的输入控件上
     /// </summary>
-    /// <param name="control">输入控件</param>
+    /// <param name="group">输入控件</param>
     public static IHtmlGroupControl ApplySubmittedValue( this IHtmlGroupControl group )
     {
 
@@ -224,25 +224,33 @@ namespace Ivony.Html.Forms
     /// 尝试为输入组设置一个值
     /// </summary>
     /// <param name="group">输入组</param>
-    /// <param name="value">要设置的值</param>
+    /// <param name="values">要设置的值</param>
     /// <returns>是否成功</returns>
     /// <remarks>此方法暂不支持设置多个用逗号分隔的值</remarks>
-    public static bool TrySetValue( this IHtmlGroupControl group, string value )
+    public static bool TrySetValue( this IHtmlGroupControl group, string values )
     {
-      var item = Item( group, value );
+      ClearValues( group );
 
-      if ( item == null )
-        return false;
+      bool success = true;
 
-      item.Selected = true;
-      return true;
+      foreach ( var v in values.Split( ',' ) )
+      {
+        var item = Item( group, v );
+
+        if ( item == null )
+          success = false;
+
+        item.Selected = true;
+      }
+
+      return success;
     }
 
 
     /// <summary>
     /// 尝试为文本控件设置一个值
     /// </summary>
-    /// <param name="group">文本控件</param>
+    /// <param name="textInput">文本控件</param>
     /// <param name="value">要设置的值</param>
     /// <remarks>对于密码框此方法会设置失败并返回false</remarks>
     /// <returns>是否成功</returns>

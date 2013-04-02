@@ -20,10 +20,10 @@ namespace SpeficationTest
     }
 
     [TestMethod]
-    public void SpeficationTest1()
+    public void SpecificationTest1()
     {
       //测试孤立的'<'能否被正确解析
-      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpeficationTest1.html" ) );
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest1.html" ) );
       var element = document.FindSingle( "a" );//需要找到一个<a>元素
       Assert.AreEqual( element.InnerHtml(), "abc" );//并且内容是"abc"
       Assert.AreEqual( element.Attributes().Count(), 1 );//有且只有一个属性
@@ -35,10 +35,10 @@ namespace SpeficationTest
     }
 
     [TestMethod]
-    public void SpeficationTest2()
+    public void SpecificationTest2()
     {
       //测试各种属性表达式能否被正确解析
-      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpeficationTest2.html" ) );
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest2.html" ) );
       var element = document.FindSingle( "A" );
 
       Assert.AreEqual( element.Attribute( "a" ).AttributeValue, "abc" );//双引号情况
@@ -55,11 +55,11 @@ namespace SpeficationTest
 
     }
 
-    [TestMethod]
-    public void SpeficationTest3()
+    //[TestMethod] 这个测试已经过时。
+    public void SpecificationTest3()
     {
       //测试各种异常标签是否不被识别
-      var str = File.ReadAllText( Path.Combine( Environment.CurrentDirectory, "SpeficationTest3.html" ) );
+      var str = File.ReadAllText( Path.Combine( Environment.CurrentDirectory, "SpecificationTest3.html" ) );
 
       var contents = new JumonyReader( str ).EnumerateContent().ToArray();
       var tag = contents.OfType<HtmlBeginTag>().FirstOrDefault();
@@ -68,10 +68,10 @@ namespace SpeficationTest
     }
 
     [TestMethod]
-    public void SpeficationTest4()
+    public void SpecificationTest4()
     {
       //测试中文标签和中文属性是否能够被识别
-      var str = File.ReadAllText( Path.Combine( Environment.CurrentDirectory, "SpeficationTest4.html" ) );
+      var str = File.ReadAllText( Path.Combine( Environment.CurrentDirectory, "SpecificationTest4.html" ) );
 
       var contents = new JumonyReader( str ).EnumerateContent().ToArray();
       var beginTags = contents.OfType<HtmlBeginTag>().ToArray();
@@ -85,9 +85,9 @@ namespace SpeficationTest
 
 
     [TestMethod]
-    public void SpeficationTest5()
+    public void SpecificationTest5()
     {
-      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpeficationTest5.html" ) );
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest5.html" ) );
 
       //Assert.AreEqual( document.DocumentDeclaration, "<!DOCTYPE html>", "HTML 声明解析失败" );
 
@@ -95,6 +95,15 @@ namespace SpeficationTest
       var specials = document.DescendantNodes().OfType<IHtmlSpecial>().ToArray();
 
       Assert.AreEqual( specials.Count(), 4, "特殊标签解析数量不对" );
+
+    }
+
+    [TestMethod]
+    public void SpecificationTest6()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest6.html" ) );
+
+      Assert.AreEqual( document.Elements().Count(), 0, "无元素名的开始或结束标签解析错误" );
 
     }
 

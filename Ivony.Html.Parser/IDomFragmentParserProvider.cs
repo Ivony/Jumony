@@ -12,6 +12,11 @@ namespace Ivony.Html.Parser
   /// <remarks>JumonyParser 实现此接口并将自身实例作为碎片解析器提供</remarks>
   public interface IDomFragmentParserProvider
   {
+    /// <summary>
+    /// 获取文档碎片解析器
+    /// </summary>
+    /// <param name="document">文档对象</param>
+    /// <returns>文档碎片解析器</returns>
     IDomFragmentParser GetFragmentParser( DomDocument document );
   }
 
@@ -22,6 +27,11 @@ namespace Ivony.Html.Parser
   /// <remarks>JumonyParser 已实现此接口作为碎片解析器</remarks>
   public interface IDomFragmentParser
   {
+    /// <summary>
+    /// 解析 HTML 并填充文档碎片
+    /// </summary>
+    /// <param name="html">HTML 代码</param>
+    /// <param name="fragment">文档碎片对象</param>
     void ParseToFragment( string html, DomFragment fragment );
   }
 }

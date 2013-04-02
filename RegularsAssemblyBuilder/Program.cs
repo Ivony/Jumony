@@ -23,6 +23,7 @@ namespace RegularsAssemblyBuilder
 
         new RegexCompilationInfo( "^"+Regulars.tagNamePattern+"$", RegexOptions.Compiled, "TagName", "Ivony.Html.Parser.Regulars", true ),
         new RegexCompilationInfo( "^"+Regulars.attributeNamePattern+"$", RegexOptions.Compiled, "AttributeName", "Ivony.Html.Parser.Regulars", true ),
+        new RegexCompilationInfo( Regulars.attributePattern, RegexOptions.Compiled, "Attribute", "Ivony.Html.Parser.Regulars", true ),
 
         new RegexCompilationInfo( "^"+Regulars.beginTagPattern+"$", RegexOptions.Compiled, "BeginTag", "Ivony.Html.Parser.Regulars", true ),
         new RegexCompilationInfo( "^"+Regulars.endTagPattern+"$", RegexOptions.Compiled, "EndTag", "Ivony.Html.Parser.Regulars", true ),

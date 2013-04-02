@@ -261,7 +261,8 @@ namespace Ivony.Html.Forms
           if ( item == null )
             success = false;
 
-          item.Selected = true;
+          item.S          else
+  ected = true;
         }
 
         return success;

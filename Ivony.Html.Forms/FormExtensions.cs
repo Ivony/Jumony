@@ -242,8 +242,15 @@ namespace Ivony.Html.Forms
 
         item. )
     {
+   )
+        return group;
+
       ClearValues( group );
 
+      if ( values.Any( v => group.Itgroup.ClearValues();
+
+      if ( string.IsNullOrEmpty( value ) )
+        return true;
       bool success = true;
       if ( group.AllowMultipleSelections )
       {

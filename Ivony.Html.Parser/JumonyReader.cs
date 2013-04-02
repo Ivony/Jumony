@@ -60,13 +60,13 @@ namespace Ivony.Html.Parser
 
 
     /// <summary>
-    /// 创建一个 JumonyReader 对象
+    /// 用于匹配属性设置的正则表达式对象
     /// </summary>
-    /// <p用于匹配属性设置d static readonly Regex tagRegex = new Regulars.HtmlTag();
+    protected static readonly Regex attributeRegex = new Regulars.Attribute();
 
 
     /// <summary>
-   attributeRegex = new Regulars.Attribute对象
+    /// 创建一个 JumonyReader 对象
     /// </summary>
     /// <param name="htmlText"></param>
     public JumonyReader( string htmlText )
@@ -238,7 +238,8 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = CreateAttributes( match );
+      var capture = match.Groups["attributes"];
+      var attributes = CreateAttributes( capture.Value, capture.Index );
 
 
       var fragment = CreateFragment( match );
@@ -249,22 +250,25 @@ namespace Ivony.Html.Parser
 
     /// <summary>
     /// 创建属性设置内容对象
-    capture = match.Groups["attributes"];
-      var attributes = CreateAttributes( capture.Value, capture.Indexmatch">属性设置的匹配</param>
+    /// </summary>
+    /// <param name="match">属性设置的匹配</param>
     /// <returns>HTML 属性设置的内容对象</returns>
-    protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( Match match )
-    {
-      foreach ( Capture capture in match.Groups["attribute"].Captures )
-      {
-        string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
-        string value = capture.FindCaptures( match.Groups["atstring attributesExpression, int index )
+    protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( string attributesExpression, int index )
     {
       foreach ( Match match in attributeRegex.Matches( attributesExpression ) )
       {
         string name = match.Groups["attrName"].Value;
         string value = match.Groups["attrValue"].Success ? match.Groups["attrValue"].Value : null;
 
-        yield return new HtmlAttributeSetting( CreateFragment( match, indexturns>
+        yield return new HtmlAttributeSetting( CreateFragment( match, index ), name, value );
+      }
+    }
+
+    /// <summary>
+    /// 根据匹配到的结果，创建一个结束标签
+    /// </summary>
+    /// <param name="match">正则表达式匹配结果</param>
+    /// <returns>用于描述结束标签内容的对象</returns>
     protected virtual HtmlEndTag CreateEndTag( Match match )
     {
       string tagName = match.Groups["tagName"].Value;
@@ -338,14 +342,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="capture">捕获到的字符串</param>
     /// <returns>文档内容片段对象</returns>
-    protected HtmlContentFragment CreateFragment( Capture capture )
-    {
-      return new HtmlContentFragment( this, capture.Index, capture.Length );
-    }
-
-  }
-}
-, int offset = 0 )
+    protected HtmlContentFragment CreateFragment( Capture capture, int offset = 0 )
     {
       return new HtmlContentFragment( this, offset + capture.Index, capture.Length );
     }

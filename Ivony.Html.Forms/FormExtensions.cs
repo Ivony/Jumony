@@ -227,7 +227,7 @@ namespace Ivony.Html.Forms
     /// <param name="values">要设置的值</param>
     /// <returns>是否成功</returns>
     /// <remarks>此方法暂不支持设置多个用逗号分隔的值</remarks>
-    public static bool TrySetValue( this IHtmlGroupControl group, string values )
+    public static bool TrySetValue( this IHtmlGroupControl group, string valus )
     {
       ClearValues( group );
 
@@ -240,19 +240,37 @@ namespace Ivony.Html.Forms
         if ( item == null )
           success = false;
 
-        item.Selected = true;
+        item. )
+    {
+      ClearValues( group );
+
+      bool success = true;
+      if ( group.AllowMultipleSelections )
+      {
+        foreach ( var v in value.Split( ',' ) )
+        {
+          var item = Item( group, v );
+
+          if ( item == null )
+            success = false;
+
+          item.Selected = true;
+        }
+
+        return success;
       }
+      else
+      {
+        var item = Item( group, value );
 
-      return success;
-    }
+        if ( item == null )
+          return false;
 
+        item.Selected = true;
 
-    /// <summary>
-    /// 尝试为文本控件设置一个值
-    /// </summary>
-    /// <param name="textInput">文本控件</param>
-    /// <param name="value">要设置的值</param>
-    /// <remarks>对于密码框此方法会设置失败并返回false</remarks>
+        return true;
+      }
+�失败并返回false</remarks>
     /// <returns>是否成功</returns>
     public static bool TrySetValue( this IHtmlTextControl textInput, string value )
     {

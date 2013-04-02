@@ -575,18 +575,18 @@ namespace Ivony.Html
       return name;
     }
 
-    public static CssStyleProperty[] ParseCssSettings( string expression )
+    public static CssStyleProperty[] ParseProperties( string expression )
     {
       if ( expression == null )
         return null;
 
       using ( var enumerator = new CharEnumerator( expression ) )
       {
-        return ParseCssSettings( enumerator );
+        return ParseProperties( enumerator );
       }
     }
 
-    private static CssStyleProperty[] ParseCssSettings( CharEnumerator enumerator )
+    private static CssStyleProperty[] ParseProperties( CharEnumerator enumerator )
     {
 
       var list = new List<CssStyleProperty>();
@@ -594,7 +594,7 @@ namespace Ivony.Html
       do
       {
 
-        list.Add( ParseCssSetting( enumerator ) );
+        list.Add( ParseProperty( enumerator ) );
 
       } while ( enumerator.MoveNext() );
 
@@ -603,7 +603,7 @@ namespace Ivony.Html
 
     }
 
-    private static CssStyleProperty ParseCssSetting( CharEnumerator enumerator )
+    private static CssStyleProperty ParseProperty( CharEnumerator enumerator )
     {
       SkipWhiteSpace( enumerator );
       var name = ParseName( enumerator );
@@ -750,7 +750,7 @@ namespace Ivony.Html
     public static CssStyle ParseCssStyle( string styleExpression )
     {
       var style = new CssStyle( new Css21StyleSpecification() );
-      style.SetProperties( ParseCssSettings( styleExpression ) );
+      style.SetProperties( ParseProperties( styleExpression ) );
       return style;
     }
   }

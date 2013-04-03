@@ -9,20 +9,25 @@
 </head>
 <body style="min-width: 1000px;">
 
-  <div>
-    <div style="float: left;">
-      <partial action="ChooseDocument" inherits="hash"></partial>
-    </div>
-    <div style="float: left; padding: 2px 20px;">
-      <partial view="Share"></partial>
-    </div>
-    <div style="float: left; padding: 2px 20px;">
-      <<- 您的支持，我的动力。
-    </div>
+  <div style="position: fixed; top: 0px; left: 0px; width: 100%; height: 45px; background-color: white;">
+    <div style="margin: 10px 10px 0px 10px;">
+      <div style="float: left;">
+        <partial action="ChooseDocument" inherits="hash"></partial>
+      </div>
+      <div style="float: left; padding: 2px 20px;">
+        <partial view="Share"></partial>
+      </div>
+      <div style="float: left; padding: 2px 20px;">
+        <<- 您的支持，我的动力。
+   
+      </div>
 
-    <div style="clear: both;"></div>
+      <div style="clear: both;"></div>
+      <hr />
+    </div>
   </div>
-  <hr />
+  <div style="height: 45px;"></div>
   <partial action="PageViewer"></partial>
+
 </body>
 </html>

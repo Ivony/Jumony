@@ -224,33 +224,21 @@ namespace Ivony.Html.Forms
     /// 尝试为输入组设置一个值
     /// </summary>
     /// <param name="group">输入组</param>
-    /// <param name="values">要设置的值</param>
+    /// <param name="value">要设置的值</param>
     /// <returns>是否成功</returns>
     /// <remarks>此方法暂不支持设置多个用逗号分隔的值</remarks>
-    public static bool TrySetValue( this IHtmlGroupControl group, string valus )
+    public static bool TrySetValue( this IHtmlGroupControl group, string value )
     {
-      ClearValues( group );
 
-      bool success = true;
+      if ( group == null )
+        throw new ArgumentNullException( "group" );
 
-      foreach ( var v in values.Split( ',' ) )
-      {
-        var item = Item( group, v );
-
-        if ( item == null )
-          success = false;
-
-        item. )
-    {
-   )
-        return group;
-
-      ClearValues( group );
-
-      if ( values.Any( v => group.Itgroup.ClearValues();
+      group.ClearValues();
 
       if ( string.IsNullOrEmpty( value ) )
         return true;
+
+
       bool success = true;
       if ( group.AllowMultipleSelections )
       {
@@ -260,9 +248,8 @@ namespace Ivony.Html.Forms
 
           if ( item == null )
             success = false;
-
-          item.S          else
-  ected = true;
+          else
+            item.Selected = true;
         }
 
         return success;
@@ -278,7 +265,16 @@ namespace Ivony.Html.Forms
 
         return true;
       }
-�失败并返回false</remarks>
+
+    }
+
+
+    /// <summary>
+    /// 尝试为文本控件设置一个值
+    /// </summary>
+    /// <param name="textInput">文本控件</param>
+    /// <param name="value">要设置的值</param>
+    /// <remarks>对于密码框此方法会设置失败并返回false</remarks>
     /// <returns>是否成功</returns>
     public static bool TrySetValue( this IHtmlTextControl textInput, string value )
     {

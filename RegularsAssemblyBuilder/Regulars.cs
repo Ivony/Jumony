@@ -29,7 +29,7 @@ namespace RegularsAssemblyBuilder
     public static readonly string attributeNamePattern = @"(?<attrName>[\w:_\-]+)";
 
     /// <summary>用于匹配用属性表达式的的正则表达式</summary>
-    public static readonly string attributePattern = @"\s+(?<attribute>#attrName#attrValue)".Replace( "#attrName", attributeNamePattern ).Replace( "#attrValue", attributeValuePattern );
+    public static readonly string attributePattern = @"(\G|\s)(?<attribute>#attrName#attrValue)".Replace( "#attrName", attributeNamePattern ).Replace( "#attrValue", attributeValuePattern );
 
     /// <summary>用于匹配用开始标签的正则表达式</summary>
     public static readonly string beginTagPattern = @"<#tagName(?<attributes>.*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern ).Replace( "#attribute", attributePattern );

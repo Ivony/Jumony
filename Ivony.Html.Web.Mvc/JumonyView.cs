@@ -273,7 +273,8 @@ namespace Ivony.Html.Web
 
       var handler = HtmlViewHandlerProvider.GetHandler( VirtualPath );
 
-      handler.ProcessScope( ViewContext, Scope );
+      if ( handler != null )
+        handler.ProcessScope( ViewContext, Scope );
 
     }
 

@@ -13,11 +13,16 @@ namespace Ivony.Html.Web
   public abstract class HtmlHandlerBase : HttpHandlerBase
   {
 
-    
+
     /// <summary>
     /// 获取要处理的范畴
     /// </summary>
     public abstract IHtmlContainer Scope { get; }
+
+    /// <summary>
+    /// 获取文档的虚拟路径
+    /// </summary>
+    public abstract string VirtualPath { get; }
 
     /// <summary>
     /// 在处理范畴内查找符合选择器的元素

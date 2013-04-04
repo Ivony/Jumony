@@ -9,17 +9,17 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
-  internal static class HtmlViewHandlerProvider
+  internal static class ViewHandlerProvider
   {
 
-    public static IHtmlViewHandler GetHandler( string virtualPath )
+    public static IViewHandler GetHandler( string virtualPath )
     {
       var handlerPath = virtualPath + ".ashx";
 
       return GetHandlerInternal( handlerPath ) ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
     }
 
-    private static IHtmlViewHandler GetHandlerInternal( string handlerPath )
+    private static IViewHandler GetHandlerInternal( string handlerPath )
     {
       if ( HostingEnvironment.VirtualPathProvider.FileExists( handlerPath ) )
       {
@@ -27,7 +27,7 @@ namespace Ivony.Html.Web
         {
           var instance = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( object ) );
 
-          var handler = instance as IHtmlViewHandler;
+          var handler = instance as IViewHandler;
           if ( handler != null )
             return handler;
 
@@ -45,7 +45,7 @@ namespace Ivony.Html.Web
     }
 
 
-    private class HtmlViewHandlerWrapper : IHtmlViewHandler
+    private class HtmlViewHandlerWrapper : IViewHandler
     {
       private IHtmlHandler _handler;
 

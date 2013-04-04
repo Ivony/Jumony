@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Ivony.Fluent;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
-using Ivony.Fluent;
-using Ivony.Html.ExpandedAPI;
-using System.Web.Routing;
-using System.Web.Mvc;
 using System.Web.Caching;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
+  /// <summary>
+  /// Jumony 视图处理程序，继承此类型可以获得最完整的 Jumony 视图逻辑重写
+  /// </summary>
   public class JumonyViewHandler : JumonyView, IHttpHandler
   {
 

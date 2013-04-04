@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
-  public abstract class ViewHandler : HtmlHandlerBase, IHtmlViewHandler, IHttpHandler
+  public abstract class ViewHandler : HtmlHandlerBase, IViewHandler, IHttpHandler
   {
 
 
@@ -32,7 +32,7 @@ namespace Ivony.Html.Web
     #endregion
 
 
-    
+
     /// <summary>
     /// 获取当前视图上下文
     /// </summary>
@@ -53,6 +53,7 @@ namespace Ivony.Html.Web
 
 
     private IHtmlContainer _scope;
+    private string _virtualPath;
 
     /// <summary>
     /// 获取当前要处理的 HTML 范围
@@ -62,16 +63,29 @@ namespace Ivony.Html.Web
       get { return _scope; }
     }
 
+    /// <summary>
+    /// 获取当前文档的虚拟路径
+    /// </summary>
+    public sealed override string VirtualPath
+    {
+      get { return VirtualPath; }
+    }
+
+
+
+
 
     /// <summary>
     /// 处理指定文档范畴
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="scope">要处理的范围</param>
-    public void ProcessScope( ViewContext context, IHtmlContainer scope )
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    void IViewHandler.ProcessScope( ViewContext context, IHtmlContainer scope, string virtualPath )
     {
       ViewContext = context;
       _scope = scope;
+      _virtualPath = virtualPath;
     }
 
 
@@ -107,22 +121,13 @@ namespace Ivony.Html.Web
     {
       _viewData = viewData;
     }
-
-
-    /// <summary>
-    /// 派生类可以重写此方法完成销毁逻辑
-    /// </summary>
-    public virtual void Dispose()
-    {
-    }
-
   }
 
 
   /// <summary>
   /// 强类型 HTML 视图处理程序的基类
   /// </summary>
-  /// <typeparam name="T">Model 的类型</typeparam>
+  /// <typeparam name="TModel">Model 的类型</typeparam>
   public abstract class ViewHandler<TModel> : ViewHandler
   {
 

@@ -20,10 +20,10 @@ namespace Ivony.Html.Web
     /// 创建 JumonyUrlHelper 实例
     /// </summary>
     /// <param name="view"></param>
-    public JumonyUrlHelper( ViewBase view )
-      : base( view.ViewContext.RequestContext )
+    public JumonyUrlHelper( RequestContext requestContext, string virtualPath )
+      : base( requestContext )
     {
-      VirtualPath = view.VirtualPath;
+      VirtualPath = virtualPath;
     }
 
 

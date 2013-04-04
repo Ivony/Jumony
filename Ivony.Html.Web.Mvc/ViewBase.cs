@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web;
-using System.Web.Routing;
-using System.Web.Caching;
+﻿using Ivony.Web;
+using System;
 using System.IO;
-using System.Web.Mvc.Html;
-using Ivony.Fluent;
-using System.Threading;
-using System.Threading.Tasks;
-using Ivony.Web;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
@@ -189,7 +181,7 @@ namespace Ivony.Html.Web
       }
 
       RawViewContext = viewContext;
-      Url = new JumonyUrlHelper( this );
+      Url = new JumonyUrlHelper( viewContext.RequestContext, VirtualPath );
 
 
       HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );

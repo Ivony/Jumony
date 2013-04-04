@@ -301,7 +301,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected virtual IHtmlDocument LoadDocument()
     {
-      var document = RequestMapping.LoadTemplate();
+      var document = RequestMapping.LoadDocument();
 
       return document;
     }
@@ -325,6 +325,13 @@ namespace Ivony.Html.Web
       get { return Document; }
     }
 
+    /// <summary>
+    /// 获取当前文档的虚拟路径
+    /// </summary>
+    public sealed override string VirtualPath
+    {
+      get { return VirtualPath; }
+    }
 
 
 

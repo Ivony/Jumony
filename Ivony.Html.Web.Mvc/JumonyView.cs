@@ -287,7 +287,7 @@ namespace Ivony.Html.Web
     protected virtual void ProcessScope()
     {
 
-      var handler = HtmlViewHandlerProvider.GetHandler( VirtualPath );
+      var handler = ViewHandlerProvider.GetHandler( VirtualPath );
 
       if ( handler != null )
         handler.ProcessScope( ViewContext, Scope );

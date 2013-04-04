@@ -10,7 +10,7 @@ namespace Ivony.Html.Web
 {
   
   /// <summary>
-  /// 视图筛选器提供程序
+  /// 提供视图筛选器
   /// </summary>
   public static class ViewFilterProvider
   {

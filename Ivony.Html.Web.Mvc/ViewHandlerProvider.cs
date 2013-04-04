@@ -9,9 +9,16 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
-  internal static class ViewHandlerProvider
+  /// <summary>
+  /// 提供视图处理程序
+  /// </summary>
+  public static class ViewHandlerProvider
   {
-
+    /// <summary>
+    /// 获取视图处理程序
+    /// </summary>
+    /// <param name="virtualPath">视图的虚拟路径</param>
+    /// <returns>该虚拟路径的视图处理程序</returns>
     public static IViewHandler GetHandler( string virtualPath )
     {
       var handlerPath = virtualPath + ".ashx";

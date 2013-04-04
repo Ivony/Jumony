@@ -13,8 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
-  [Obsolete( "此类型已过时，仅出于兼容目的而保留，请改用 JumonyViewHandler 类型" )]
-  public abstract class ViewHandler : JumonyView, IHttpHandler
+  public abstract class ViewHandler : HtmlHandlerBase, IHtmlViewHandler, IHttpHandler
   {
 
 
@@ -32,10 +31,12 @@ namespace Ivony.Html.Web
 
     #endregion
 
+
+    
     /// <summary>
-    /// 获取页面文档对象
+    /// 获取当前视图上下文
     /// </summary>
-    public IHtmlDocument Document
+    protected ViewContext ViewContext
     {
       get;
       private set;
@@ -43,19 +44,78 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类重写此方法自定义文档处理逻辑
+    /// 获取当前 HTTP 上下文
+    /// </summary>
+    protected override HttpContextBase HttpContext
+    {
+      get { return ViewContext.HttpContext; }
+    }
+
+
+    private IHtmlContainer _scope;
+
+    /// <summary>
+    /// 获取当前要处理的 HTML 范围
+    /// </summary>
+    public override IHtmlContainer Scope
+    {
+      get { return _scope; }
+    }
+
+
+    /// <summary>
+    /// 处理指定文档范畴
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <param name="scope">要处理的范围</param>
+    public void ProcessScope( ViewContext context, IHtmlContainer scope )
+    {
+      ViewContext = context;
+      _scope = scope;
+    }
+
+
+    /// <summary>
+    /// 派生类实现此方法处理文档
     /// </summary>
     protected abstract void ProcessDocument();
 
 
+
+    private ViewDataDictionary _viewData;
+
     /// <summary>
-    /// 重写 Process 方法，调用 ProcessDocument 方法处理页面逻辑
+    /// 获取或设置视图数据
     /// </summary>
-    protected sealed override void ProcessScope()
+    public virtual ViewDataDictionary ViewData
     {
-      Document = Scope.Document;
-      ProcessDocument();
+      get
+      {
+        if ( _viewData == null )
+          SetViewData( new ViewDataDictionary() );
+
+        return _viewData;
+      }
+      set { SetViewData( value ); }
     }
+
+    /// <summary>
+    /// 设置视图数据，此方法仅供框架调用
+    /// </summary>
+    /// <param name="viewData">视图数据</param>
+    protected virtual void SetViewData( ViewDataDictionary viewData )
+    {
+      _viewData = viewData;
+    }
+
+
+    /// <summary>
+    /// 派生类可以重写此方法完成销毁逻辑
+    /// </summary>
+    public virtual void Dispose()
+    {
+    }
+
   }
 
 
@@ -63,16 +123,26 @@ namespace Ivony.Html.Web
   /// 强类型 HTML 视图处理程序的基类
   /// </summary>
   /// <typeparam name="T">Model 的类型</typeparam>
-  public abstract class ViewHandler<T> : ViewHandler
+  public abstract class ViewHandler<TModel> : ViewHandler
   {
 
-    /// <summary>
-    /// 模型
-    /// </summary>
-    protected new T ViewModel
+    private ViewDataDictionary<TModel> _viewData;
+
+    public new ViewDataDictionary<TModel> ViewData
     {
-      get { return base.ViewModel.CastTo<T>(); }
+      get
+      {
+        if ( _viewData == null )
+          SetViewData( new ViewDataDictionary<TModel>() );
+
+        return _viewData;
+      }
+
+      set { SetViewData( value ); }
     }
+
+
+
 
   }
 

@@ -16,7 +16,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 用于处理 HTTP 请求的处理器
   /// </summary>
-  public abstract class JumonyHandler : IHttpHandler, IHtmlHandler, IRequiresSessionState
+  public abstract class JumonyHandler : HtmlHandlerBase, IHttpHandler, IHtmlHandler, IRequiresSessionState
   {
 
     /// <summary>
@@ -39,6 +39,9 @@ namespace Ivony.Html.Web
     {
       get
       {
+        if ( _mapping == null )
+          _mapping = HttpContext.GetMapping();
+
         return _mapping;
       }
     }
@@ -61,9 +64,9 @@ namespace Ivony.Html.Web
     /// <param name="context">HTTP 上下文信息</param>
     protected void ProcessRequest( HttpContextBase context )
     {
-      Context = context;
+      _httpContext = context;
 
-      _mapping = Context.GetMapping();
+      _mapping = HttpContext.GetMapping();
 
       if ( RequestMapping == null )
         throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
@@ -118,7 +121,7 @@ namespace Ivony.Html.Web
       }
 
 
-      ((IHtmlHandler) this).ProcessDocument( Context, Document );
+      ( (IHtmlHandler) this ).ProcessDocument( HttpContext, Document );
 
 
       {
@@ -148,10 +151,8 @@ namespace Ivony.Html.Web
 
 
       return response;
-
-
-
     }
+
 
 
     /// <summary>
@@ -181,7 +182,7 @@ namespace Ivony.Html.Web
     protected virtual ICachedResponse ResolveCache()
     {
 
-      var policy = HtmlProviders.GetCachePolicy( Context );
+      var policy = HtmlProviders.GetCachePolicy( HttpContext );
 
       if ( policy == null )
         return null;
@@ -239,7 +240,7 @@ namespace Ivony.Html.Web
     void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
     {
 
-      Context = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
+      _httpContext = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
       Document = document;
 
       OnPreProcessDocument();
@@ -295,18 +296,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 在文档范围内使用选择器查找符合要求的元素
-    /// </summary>
-    /// <param name="selector">CSS选择器表达式</param>
-    /// <returns>符合选择器要求的元素</returns>
-    protected IEnumerable<IHtmlElement> Find( string selector )
-    {
-      return Document.Find( selector );
-    }
-
-
-
-    /// <summary>
     /// 加载Web页面
     /// </summary>
     /// <returns></returns>
@@ -318,79 +307,24 @@ namespace Ivony.Html.Web
     }
 
 
+    private HttpContextBase _httpContext;
+
     /// <summary>
     /// 获取与该页关联的 HttpContext 对象。
     /// </summary>
-    public HttpContextBase Context
+    protected override HttpContextBase HttpContext
     {
-      get;
-      private set;
+      get { return _httpContext; }
     }
-
 
     /// <summary>
-    /// 获取请求的页的 HttpRequest 对象
+    /// 获取要处理的 HTML 范畴
     /// </summary>
-    protected HttpRequestBase Request
+    public sealed override IHtmlContainer Scope
     {
-      get { return Context.Request; }
+      get { return Document; }
     }
 
-
-    /// <summary>
-    /// 获取与该 Page 对象关联的 HttpResponse 对象。该对象使您得以将 HTTP 响应数据发送到客户端，并包含有关该响应的信息
-    /// </summary>
-    protected HttpResponseBase Response
-    {
-      get { return Context.Response; }
-    }
-
-
-    /// <summary>
-    /// 获取 Server 对象，它是 HttpServerUtility 类的实例
-    /// </summary>
-    protected HttpServerUtilityBase Server
-    {
-      get { return Context.Server; }
-    }
-
-
-    /// <summary>
-    /// 为当前 Web 请求获取 HttpApplicationState 对象
-    /// </summary>
-    protected HttpApplicationStateBase Application
-    {
-      get { return Context.Application; }
-    }
-
-
-    /// <summary>
-    /// 为当前 Web 请求获取 TraceContext 对象
-    /// </summary>
-    protected TraceContext Trace
-    {
-      get { return Context.Trace; }
-    }
-
-
-    /// <summary>
-    /// 获取与该页驻留的应用程序关联的 Cache 对象
-    /// </summary>
-    protected System.Web.Caching.Cache Cache
-    {
-      get { return Context.Cache; }
-    }
-
-
-    /// <summary>
-    /// 返回与 Web 服务器上的指定虚拟路径相对应的物理文件路径
-    /// </summary>
-    /// <param name="virtualPath">Web 服务器的虚拟路径</param>
-    /// <returns>与 path 相对应的物理文件路径</returns>
-    public string MapPath( string virtualPath )
-    {
-      return Server.MapPath( virtualPath );
-    }
 
 
 
@@ -450,6 +384,7 @@ namespace Ivony.Html.Web
     }
 
     #endregion
+
 
   }
 }

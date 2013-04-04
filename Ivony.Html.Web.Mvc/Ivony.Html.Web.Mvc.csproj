@@ -90,7 +90,6 @@
     <Compile Include="JumonyMasterView.cs" />
     <Compile Include="JumonyViewHandler.cs" />
     <Compile Include="JumonyViewLocationCache.cs" />
-    <Compile Include="MasterViewHandler.cs" />
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormExtensions.cs" />

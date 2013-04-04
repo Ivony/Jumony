@@ -135,8 +135,10 @@ namespace Ivony.Html.Web
       var handlerPath = masterPath + ".ashx";
       JumonyMasterView masterView = null;
 
+      /*
       if ( VirtualPathProvider.FileExists( handlerPath ) )
         masterView = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
+      */
 
       if ( masterView == null )
         masterView = new JumonyMasterView();

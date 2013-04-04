@@ -19,6 +19,7 @@ namespace Ivony.Html.Web
   {
 
     private ViewBase _view;
+    private IViewHandler _viewHandler;
 
 
     /// <summary>
@@ -28,7 +29,7 @@ namespace Ivony.Html.Web
     protected HtmlHelper MakeHelper()
     {
 
-      var helper = new HtmlHelper( ViewContext, _view.CreateViewDataContainer() );
+      var helper = new HtmlHelper( ViewContext, _viewHandler );
       return helper;
     }
 
@@ -37,18 +38,18 @@ namespace Ivony.Html.Web
     /// 创建 PartialRenderAdapter 实例
     /// </summary>
     /// <param name="view">需要渲染部分视图的宿主视图</param>
-    public PartialRenderAdapter( ViewBase view )
+    public PartialRenderAdapter( ViewBase view, IViewHandler viewHandler )
     {
       if ( view == null )
         throw new ArgumentNullException( "view" );
 
-      var type = view.GetType();
+      if ( viewHandler == null )
+        throw new ArgumentNullException( "viewHandler" );
 
-
-      if ( view is JumonyViewHandler )
-        _partialExecutors = GetPartialExecutors( type );
+      _partialExecutors = GetPartialExecutors( viewHandler.GetType() );
 
       _view = view;
+      _viewHandler = viewHandler;
     }
 
 
@@ -213,7 +214,7 @@ namespace Ivony.Html.Web
       {
         var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
         if ( executor != null )
-          return executor.Execute( (JumonyViewHandler) _view, partialElement );
+          return executor.Execute( _viewHandler, partialElement );
       }
 
 

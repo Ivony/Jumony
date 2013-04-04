@@ -54,14 +54,14 @@ namespace Ivony.Html.Web
     }
 
 
-    private delegate string Executor( JumonyViewHandler handler, object[] parameters );
+    private delegate string Executor( IViewHandler handler, object[] parameters );
 
     public string Name { get; private set; }
 
 
     private Executor _executor;
 
-    public string Execute( JumonyViewHandler handler, IHtmlElement partialElement )
+    public string Execute( IViewHandler handler, IHtmlElement partialElement )
     {
 
       object[] parameterValues = new object[_parameters.Length];

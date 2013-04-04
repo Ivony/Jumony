@@ -51,10 +51,14 @@ namespace Ivony.Html.Web
     }
 
 
-
-    protected override IEnumerable<IViewFilter> InitializeFilters( ViewContext context )
+    /// <summary>
+    /// 重写 InitializeFilters 方法，只返回支持母板页的筛选器
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <returns>所需要适用的筛选器</returns>
+    protected override IEnumerable<IViewFilter> GetFilters( ViewContext context )
     {
-      return base.InitializeFilters( context ).OfType<IMasterViewFiler>();
+      return base.GetFilters( context ).OfType<IMasterViewFiler>();
     }
 
     void IMasterView.Initialize( ViewContext context )

@@ -19,7 +19,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 JumonyUrlHelper 实例
     /// </summary>
-    /// <param name="view"></param>
+    /// <param name="requestContext">请求上下文</param>
+    /// <param name="virtualPath">当前请求文档的虚拟路径</param>
     public JumonyUrlHelper( RequestContext requestContext, string virtualPath )
       : base( requestContext )
     {

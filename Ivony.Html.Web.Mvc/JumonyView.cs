@@ -37,10 +37,73 @@ namespace Ivony.Html.Web
     {
       base.InitializeView( viewContext );
 
-      //初始化视图筛选器
-      Filters = InitializeFilters( viewContext );
-      RenderAdapters = new List<IHtmlRenderAdapter>( InitializeRenderAdapters() );
+      InitailizeJumonyView( viewContext );
     }
+
+    /// <summary>
+    /// Jumony 视图初始化
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    protected virtual void InitailizeJumonyView( ViewContext viewContext )
+    {
+      //初始化视图筛选器
+      Filters = GetFilters( viewContext );
+      Handler = GetHandler();
+      RenderAdapters = new List<IHtmlRenderAdapter>( GetRenderAdapters() );
+    }
+
+
+
+    /// <summary>
+    /// 获取当前视图所需要应用的筛选器。
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    {
+      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
+
+      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
+
+      return filters;
+    }
+
+    /// <summary>
+    /// 获取视图处理程序
+    /// </summary>
+    /// <returns>视图处理程序</returns>
+    protected virtual IViewHandler GetHandler()
+    {
+      return ViewHandlerProvider.GetHandler( VirtualPath );
+    }
+
+
+
+    /// <summary>
+    /// 初始化 HTML 渲染代理
+    /// </summary>
+    /// <remarks>
+    /// 默认的渲染代理包含两个，分别是：
+    /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
+    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
+    /// </remarks>
+    /// <returns>返回默认的 HTML 渲染代理</returns>
+    protected virtual IEnumerable<IHtmlRenderAdapter> GetRenderAdapters()
+    {
+      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( this, Handler ), new ViewElementAdapter( ViewContext, Url ) };
+    }
+
+
+    /// <summary>
+    /// 视图处理程序
+    /// </summary>
+    protected IViewHandler Handler
+    {
+      get;
+      private set;
+    }
+
+
 
     /// <summary>
     /// 处理和渲染指定 HTML 范畴
@@ -106,34 +169,6 @@ namespace Ivony.Html.Web
 
         return content;
       }
-    }
-
-    /// <summary>
-    /// 初始化筛选器，获取当前视图所需要应用的筛选器。
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerable<IViewFilter> InitializeFilters( ViewContext context )
-    {
-      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
-
-      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
-
-      return filters;
-    }
-
-    /// <summary>
-    /// 初始化 HTML 渲染代理
-    /// </summary>
-    /// <remarks>
-    /// 默认的渲染代理包含两个，分别是：
-    /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
-    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
-    /// </remarks>
-    /// <returns>返回默认的 HTML 渲染代理</returns>
-    protected virtual IEnumerable<IHtmlRenderAdapter> InitializeRenderAdapters()
-    {
-      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( this ), new ViewElementAdapter( ViewContext, Url ) };
     }
 
 
@@ -291,6 +326,8 @@ namespace Ivony.Html.Web
 
       if ( handler != null )
         handler.ProcessScope( ViewContext, Scope, VirtualPath );
+
+
 
     }
 

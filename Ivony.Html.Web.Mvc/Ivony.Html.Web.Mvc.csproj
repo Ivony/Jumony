@@ -74,6 +74,7 @@
     <Compile Include="ControllerCachePolicyProvider.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />
+    <Compile Include="MvcHelpers.cs" />
     <Compile Include="ViewHandlerProvider.cs" />
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IContentView.cs" />

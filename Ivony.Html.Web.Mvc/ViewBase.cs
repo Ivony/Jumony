@@ -243,57 +243,5 @@ namespace Ivony.Html.Web
     {
       return CachedResponse;
     }
-
-
-
-    /// <summary>
-    /// 视图引擎调用此方法清理视图所使用的所有非托管资源
-    /// </summary>
-    public virtual void Dispose()
-    {
-    }
-
-
-    /// <summary>
-    /// 创建 IViewDataContainer 实例
-    /// </summary>
-    /// <returns>包含当前视图的 IViewDataContainer 实例</returns>
-    internal ViewDataContainer CreateViewDataContainer()
-    {
-      return new ViewDataContainer( this );
-    }
-
-
-    /// <summary>
-    /// 为视图提供 ViewData 的容器类型
-    /// </summary>
-    public class ViewDataContainer : IViewDataContainer
-    {
-
-      private ViewBase _view;
-
-      /// <summary>
-      /// 创建 ViewDataContainer 对象
-      /// </summary>
-      /// <param name="view"></param>
-      public ViewDataContainer( ViewBase view )
-      {
-        _view = view;
-      }
-
-
-      ViewDataDictionary IViewDataContainer.ViewData
-      {
-        get
-        {
-          return _view.ViewContext.ViewData;
-        }
-        set
-        {
-          throw new NotSupportedException();
-        }
-      }
-    }
-
   }
 }

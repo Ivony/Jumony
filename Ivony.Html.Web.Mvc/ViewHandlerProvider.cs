@@ -55,7 +55,7 @@ namespace Ivony.Html.Web
       }
 
 
-      public void ProcessScope( ViewContext context, IHtmlContainer scope )
+      public void ProcessScope( ViewContext context, IHtmlContainer scope, string virtualPath )
       {
         _handler.ProcessDocument( context.HttpContext, scope.Document );
       }

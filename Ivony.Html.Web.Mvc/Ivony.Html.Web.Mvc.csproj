@@ -72,7 +72,6 @@
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
-    <Compile Include="GenericMasterView.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />
     <Compile Include="ViewHandlerProvider.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormExtensions.cs" />
     <Compile Include="MvcFormValidator.cs" />
-    <Compile Include="GenericView.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
     <Compile Include="PartialViewHandler.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
@@ -105,7 +103,7 @@
     <Compile Include="ViewElementAdapter.cs" />
     <Compile Include="ViewFilterHandler.cs" />
     <Compile Include="ViewFilterProvider.cs" />
-    <Compile Include="ViewHandlerBase.cs" />
+    <Compile Include="ViewHandler.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

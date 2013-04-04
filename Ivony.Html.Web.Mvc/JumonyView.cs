@@ -14,7 +14,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 视图
   /// </summary>
-  public abstract class JumonyView : ViewBase, IContentView
+  public class JumonyView : ViewBase, IContentView
   {
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
@@ -290,7 +290,7 @@ namespace Ivony.Html.Web
       var handler = ViewHandlerProvider.GetHandler( VirtualPath );
 
       if ( handler != null )
-        handler.ProcessScope( ViewContext, Scope );
+        handler.ProcessScope( ViewContext, Scope, VirtualPath );
 
     }
 

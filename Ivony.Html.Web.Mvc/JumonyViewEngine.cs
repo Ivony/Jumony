@@ -133,16 +133,16 @@ namespace Ivony.Html.Web
     protected virtual JumonyMasterView CreateMaster( ControllerContext controllerContext, string masterPath )
     {
       var handlerPath = masterPath + ".ashx";
+      JumonyMasterView masterView = null;
 
-      if ( !VirtualPathProvider.FileExists( handlerPath ) )
-        return new GenericMasterView( masterPath );
+      if ( VirtualPathProvider.FileExists( handlerPath ) )
+        masterView = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
 
-      var view = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
-      if ( view == null )
-        return new GenericMasterView( masterPath );
+      if ( masterView == null )
+        masterView = new JumonyMasterView();
 
-      view.Initialize( masterPath );
-      return view;
+      masterView.Initialize( masterPath );
+      return masterView;
     }
 
 
@@ -198,7 +198,7 @@ namespace Ivony.Html.Web
 
         if ( view == null )
         {
-          view = new GenericView();
+          view = new JumonyView();
         }
 
 

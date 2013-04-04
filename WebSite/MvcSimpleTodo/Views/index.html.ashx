@@ -35,7 +35,7 @@ public class index_html : ViewHandler<Task[]>
 
     if ( task.Completed )
     {
-      taskElement.Style().AddClass( "finished" );
+      taskElement.SetAttribute( "class", "finished" );
       taskElement.Find( "a[action=complete]" ).Remove();
     }
     else

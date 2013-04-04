@@ -136,6 +136,8 @@ namespace Ivony.Html.Web
       AddGeneratorMetaData();
 
 
+      string result;
+
       if ( MasterView != null )
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
@@ -153,23 +155,27 @@ namespace Ivony.Html.Web
 
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        var content = MasterView.Render( this );
+        result = MasterView.Render( this );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
-
-        return content;
       }
       else
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        string content = RenderContent( RenderAdapters.ToArray() );
+        result = RenderContent( RenderAdapters.ToArray() );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
-
-        return content;
       }
+
+
+      var disposable = Handler as IDisposable;
+      if ( disposable != null )
+        disposable.Dispose();
+
+      return result;
     }
+
 
 
 
@@ -321,9 +327,7 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void ProcessScope()
     {
-
       Handler.ProcessScope( ViewContext, Scope, Url );
-
     }
 
 

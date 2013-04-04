@@ -19,16 +19,6 @@ namespace Ivony.Html.Web
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
 
-
-    /// <summary>
-    /// 创建 JumonyView 对象
-    /// </summary>
-    protected JumonyView()
-    {
-      RenderAdapters = new List<IHtmlRenderAdapter>() { new PartialRenderAdapter( this ) };
-    }
-
-
     /// <summary>
     /// 母板视图
     /// </summary>
@@ -39,25 +29,26 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 重写 InitializeView 方法，增加 Jumony 视图初始化步骤
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
     protected override void InitializeView( ViewContext viewContext )
     {
       base.InitializeView( viewContext );
 
+      //初始化视图筛选器
       Filters = InitializeFilters( viewContext );
-      RenderAdapters.Add( new ViewElementAdapter( viewContext, Url ) );
+      RenderAdapters = new List<IHtmlRenderAdapter>( InitializeRenderAdapters() );
     }
-
 
     /// <summary>
     /// 处理和渲染指定 HTML 范畴
     /// </summary>
     /// <param name="scope">要处理和渲染的范畴</param>
-    /// <returns></returns>
+    /// <returns>渲染结果</returns>
     protected override string RenderCore( IHtmlContainer scope )
     {
-
-      //初始化视图筛选器
-
 
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );
       OnPreProcess();
@@ -87,6 +78,15 @@ namespace Ivony.Html.Web
         HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
         MasterView.Initialize( ViewContext );
         HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
+
+
+        var jumonyMaster = MasterView as JumonyMasterView;
+        if ( jumonyMaster != null )
+        {
+          HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+          ProcessMaster( jumonyMaster );
+          HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+        }
 
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
@@ -121,6 +121,22 @@ namespace Ivony.Html.Web
 
       return filters;
     }
+
+    /// <summary>
+    /// 初始化 HTML 渲染代理
+    /// </summary>
+    /// <remarks>
+    /// 默认的渲染代理包含两个，分别是：
+    /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
+    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
+    /// </remarks>
+    /// <returns>返回默认的 HTML 渲染代理</returns>
+    protected virtual IEnumerable<IHtmlRenderAdapter> InitializeRenderAdapters()
+    {
+      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( this ), new ViewElementAdapter( ViewContext, Url ) };
+    }
+
+
 
 
     /// <summary>
@@ -167,7 +183,7 @@ namespace Ivony.Html.Web
     #region Events
 
     /// <summary>
-    /// 初识化结束后，进行任何处理前引发此事件
+    /// 初始化结束后，进行任何处理前引发此事件
     /// </summary>
     public event EventHandler PreProcess;
 
@@ -266,7 +282,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类实现此方法完成对视图的处理工作
+    /// 处理 HTML 文档
     /// </summary>
     protected virtual void ProcessScope()
     {

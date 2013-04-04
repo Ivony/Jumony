@@ -41,7 +41,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return null;
+      return new GenericViewHandler();
     }
 
 
@@ -55,7 +55,7 @@ namespace Ivony.Html.Web
       }
 
 
-      public void ProcessScope( ViewContext context, IHtmlContainer scope, string virtualPath )
+      public void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper )
       {
         _handler.ProcessDocument( context.HttpContext, scope.Document );
       }

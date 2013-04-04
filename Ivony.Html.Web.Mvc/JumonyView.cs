@@ -322,12 +322,7 @@ namespace Ivony.Html.Web
     protected virtual void ProcessScope()
     {
 
-      var handler = ViewHandlerProvider.GetHandler( VirtualPath );
-
-      if ( handler != null )
-        handler.ProcessScope( ViewContext, Scope, VirtualPath );
-
-
+      Handler.ProcessScope( ViewContext, Scope, Url );
 
     }
 

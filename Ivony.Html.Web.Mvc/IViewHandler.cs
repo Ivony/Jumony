@@ -18,7 +18,8 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">视图上下文</param>
     /// <param name="scope">要处理的 HTML 范畴</param>
-    void ProcessScope( ViewContext context, IHtmlContainer scope, string virtualPath );
+    /// <param name="urlHelper">有关视图的虚拟路径帮助器</param>
+    void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper );
 
   }
 

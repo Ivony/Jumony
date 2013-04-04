@@ -197,9 +197,7 @@ namespace Ivony.Html.Web
 
 
         if ( view == null )
-        {
           view = new JumonyView();
-        }
 
 
         OnViewCreated( new JumonyViewEventArgs() { View = view } );
@@ -214,14 +212,14 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">视图虚拟路径</param>
     /// <param name="isPartial">是否应创建为部分视图</param>
     /// <returns>若有自定义视图处理程序，则返回。</returns>
-    protected virtual ViewBase TryCreateViewHandler( string virtualPath, bool isPartial )
+    protected virtual JumonyViewHandler TryCreateViewHandler( string virtualPath, bool isPartial )
     {
       var handlerPath = virtualPath + ".ashx";
 
       if ( !VirtualPathProvider.FileExists( handlerPath ) )
         return null;
 
-      var view = (ViewBase) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewBase ) );
+      var view = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( object ) ) as JumonyViewHandler;
       if ( view == null )
         return null;
 

@@ -18,11 +18,11 @@ public class index_html : ViewHandler<Task[]>
 
   protected override void ProcessDocument()
   {
-    Document.FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
+    FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 
-    var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
+    var items = FindSingle( "ul > li" ).Repeat( Model.Count() );//绑定数据
 
-    ViewModel.BindTo( items, BindTaskItem );
+    Model.BindTo( items, BindTaskItem );
   }
 
 

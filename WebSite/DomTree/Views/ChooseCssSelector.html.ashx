@@ -11,7 +11,7 @@ public class ChooseCssSelector_html : ViewHandler
   {
 
     if ( ViewData["SelectedElements"] == null )
-      Document.Find( ".message" ).Remove();
+      Find( ".message" ).Remove();
 
   }
 }

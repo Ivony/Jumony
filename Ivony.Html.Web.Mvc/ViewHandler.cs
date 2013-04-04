@@ -53,7 +53,6 @@ namespace Ivony.Html.Web
 
 
     private IHtmlContainer _scope;
-    private string _virtualPath;
 
     /// <summary>
     /// 获取当前要处理的 HTML 范围
@@ -64,11 +63,20 @@ namespace Ivony.Html.Web
     }
 
     /// <summary>
+    /// 有关视图的虚拟路径帮助器
+    /// </summary>
+    public JumonyUrlHelper Url
+    {
+      get;
+      private set;
+    }
+
+    /// <summary>
     /// 获取当前文档的虚拟路径
     /// </summary>
     public sealed override string VirtualPath
     {
-      get { return VirtualPath; }
+      get { return Url.VirtualPath; }
     }
 
 
@@ -78,14 +86,17 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 处理指定文档范畴
     /// </summary>
-    /// <param name="context">视图上下文</param>
+    /// <param name="viewContext">视图上下文</param>
     /// <param name="scope">要处理的范围</param>
-    /// <param name="virtualPath">文档的虚拟路径</param>
-    void IViewHandler.ProcessScope( ViewContext context, IHtmlContainer scope, string virtualPath )
+    /// <param name="urlHelper">适用于当前文档的虚拟路径帮助器</param>
+    void IViewHandler.ProcessScope( ViewContext viewContext, IHtmlContainer scope, JumonyUrlHelper urlHelper )
     {
-      ViewContext = context;
+      ViewContext = viewContext;
+      ViewData = viewContext.ViewData;
       _scope = scope;
-      _virtualPath = virtualPath;
+      Url = urlHelper;
+
+      ProcessDocument();
     }
 
 
@@ -112,6 +123,12 @@ namespace Ivony.Html.Web
       }
       set { SetViewData( value ); }
     }
+
+
+    /// <summary>
+    /// 获取模型
+    /// </summary>
+    protected object Model { get { return ViewData.Model; } }
 
     /// <summary>
     /// 设置视图数据，此方法仅供框架调用
@@ -143,9 +160,19 @@ namespace Ivony.Html.Web
         return _viewData;
       }
 
-      set { SetViewData( value ); }
+      set { _viewData = value; }
     }
 
+
+    protected override void SetViewData( ViewDataDictionary viewData )
+    {
+      _viewData = new ViewDataDictionary<TModel>( viewData );
+    }
+
+    /// <summary>
+    /// 获取模型
+    /// </summary>
+    protected new TModel Model { get { return ViewData.Model; } }
 
 
 

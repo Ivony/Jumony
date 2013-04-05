@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     private Executor CreateExecutor( MethodInfo methodInfo )
     {
-      ParameterExpression handlerParamter = Expression.Parameter( typeof( JumonyViewHandler ), "handler" );
+      ParameterExpression handlerParamter = Expression.Parameter( typeof( IViewHandler ), "handler" );
       ParameterExpression argsParameter = Expression.Parameter( typeof( object[] ), "parameters" );
 
 

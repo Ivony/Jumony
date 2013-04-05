@@ -96,7 +96,7 @@ namespace Ivony.Html.Web
 
 
 
-    private IList<IHtmlRenderAdapter> RenderAdapters { get; private set; }
+    private IList<IHtmlRenderAdapter> RenderAdapters { get; set; }
 
 
     string IMasterView.Render( IContentView view )

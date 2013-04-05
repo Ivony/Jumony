@@ -20,7 +20,12 @@ namespace Ivony.Html.Web
     /// <param name="scope">要处理的 HTML 范畴</param>
     /// <param name="urlHelper">有关视图的虚拟路径帮助器</param>
     void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper );
+  }
 
+
+  public interface ICustomRenderAdapters : IViewHandler
+  {
+    IHtmlRenderAdapter[] GetCustomRenderAdapters();
   }
 
 }

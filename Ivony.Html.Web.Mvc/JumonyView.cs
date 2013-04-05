@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using Ivony.Fluent;
 
 
 namespace Ivony.Html.Web
@@ -48,8 +49,6 @@ namespace Ivony.Html.Web
     {
       Url = new JumonyUrlHelper( viewContext.RequestContext, VirtualPath );
       Filters = GetFilters( viewContext );
-      Handler = GetHandler( VirtualPath );
-      RenderAdapters = new List<IHtmlRenderAdapter>( GetRenderAdapters() );
     }
 
 
@@ -78,9 +77,8 @@ namespace Ivony.Html.Web
     }
 
 
-
     /// <summary>
-    /// 初始化 HTML 渲染代理
+    /// 获取 HTML 渲染代理
     /// </summary>
     /// <remarks>
     /// 默认的渲染代理包含两个，分别是：
@@ -88,9 +86,20 @@ namespace Ivony.Html.Web
     /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
     /// </remarks>
     /// <returns>返回默认的 HTML 渲染代理</returns>
-    protected virtual IEnumerable<IHtmlRenderAdapter> GetRenderAdapters()
+    public virtual IHtmlRenderAdapter[] GetRenderAdapters( IViewHandler handler )
     {
-      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( this, Handler ), new ViewElementAdapter( ViewContext, Url ) };
+
+      var result = new List<IHtmlRenderAdapter>()
+      {
+        new PartialRenderAdapter( ViewContext, Url, handler ),
+        new ViewElementAdapter( ViewContext, Url )
+      };
+
+      var customRenderAdapters = handler as ICustomRenderAdapters;
+      if ( customRenderAdapters != null )
+        result.AddRange( customRenderAdapters.GetCustomRenderAdapters() );
+
+      return result.ToArray();
     }
 
 
@@ -104,14 +113,8 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 视图处理程序
-    /// </summary>
-    protected IViewHandler Handler
-    {
-      get;
-      private set;
-    }
+
+    public IList<IHtmlRenderAdapter> RenderAdapters { get; private set; }
 
 
 
@@ -123,9 +126,13 @@ namespace Ivony.Html.Web
     protected override string RenderCore( IHtmlContainer scope )
     {
 
+      HttpContext.Trace.Write( "JumonyView", "Begin GetViewHandler" );
+      var handler = GetHandler( VirtualPath );
+      HttpContext.Trace.Write( "JumonyView", "End GetViewHandler" );
+
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );
       OnPreProcess();
-      ProcessScope();
+      ProcessScope( handler );
       OnPostProcess();
       HttpContext.Trace.Write( "JumonyView", "End Process" );
 
@@ -146,6 +153,8 @@ namespace Ivony.Html.Web
       AddGeneratorMetaData();
 
 
+      var renderAdapters = GetRenderAdapters( handler );
+
       string result;
 
       if ( MasterView != null )
@@ -158,9 +167,9 @@ namespace Ivony.Html.Web
         var jumonyMaster = MasterView as JumonyMasterView;
         if ( jumonyMaster != null )
         {
-          HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
           ProcessMaster( jumonyMaster );
-          HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
         }
 
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
@@ -173,13 +182,13 @@ namespace Ivony.Html.Web
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        result = RenderContent( RenderAdapters.ToArray() );
+        result = RenderContent( renderAdapters );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
       }
 
 
-      var disposable = Handler as IDisposable;
+      var disposable = handler as IDisposable;
       if ( disposable != null )
         disposable.Dispose();
 
@@ -335,9 +344,9 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 处理 HTML 文档
     /// </summary>
-    protected virtual void ProcessScope()
+    protected virtual void ProcessScope( IViewHandler handler )
     {
-      Handler.ProcessScope( ViewContext, Scope, Url );
+      handler.ProcessScope( ViewContext, Scope, Url );
     }
 
 
@@ -382,16 +391,6 @@ namespace Ivony.Html.Web
       else
         return document.Render( adapters );
 
-    }
-
-
-    /// <summary>
-    /// 自定义渲染过程的 HTML 转换器
-    /// </summary>
-    internal protected virtual IList<IHtmlRenderAdapter> RenderAdapters
-    {
-      get;
-      private set;
     }
 
 

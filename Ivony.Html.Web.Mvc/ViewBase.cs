@@ -36,15 +36,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取 Url 帮助器
-    /// </summary>
-    public JumonyUrlHelper Url
-    {
-      get;
-      private set;
-    }
-
-    /// <summary>
     /// 获取原始的（顶层的）视图上下文
     /// </summary>
     protected ViewContext RawViewContext
@@ -181,7 +172,6 @@ namespace Ivony.Html.Web
       }
 
       RawViewContext = viewContext;
-      Url = new JumonyUrlHelper( viewContext.RequestContext, VirtualPath );
 
 
       HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );

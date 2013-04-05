@@ -46,9 +46,9 @@ namespace Ivony.Html.Web
     /// <param name="viewContext">视图上下文</param>
     protected virtual void InitailizeJumonyView( ViewContext viewContext )
     {
-      //初始化视图筛选器
+      Url = new JumonyUrlHelper( viewContext.RequestContext, VirtualPath );
       Filters = GetFilters( viewContext );
-      Handler = GetHandler();
+      Handler = GetHandler( VirtualPath );
       RenderAdapters = new List<IHtmlRenderAdapter>( GetRenderAdapters() );
     }
 
@@ -72,9 +72,9 @@ namespace Ivony.Html.Web
     /// 获取视图处理程序
     /// </summary>
     /// <returns>视图处理程序</returns>
-    protected virtual IViewHandler GetHandler()
+    protected virtual IViewHandler GetHandler( string virtualPath )
     {
-      return ViewHandlerProvider.GetHandler( VirtualPath );
+      return ViewHandlerProvider.GetHandler( virtualPath );
     }
 
 
@@ -91,6 +91,16 @@ namespace Ivony.Html.Web
     protected virtual IEnumerable<IHtmlRenderAdapter> GetRenderAdapters()
     {
       return new IHtmlRenderAdapter[] { new PartialRenderAdapter( this, Handler ), new ViewElementAdapter( ViewContext, Url ) };
+    }
+
+
+    /// <summary>
+    /// 获取用于生成应用程序 URL 的帮助器
+    /// </summary>
+    public JumonyUrlHelper Url
+    {
+      get;
+      private set;
     }
 
 

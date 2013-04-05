@@ -80,6 +80,22 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取与此请求关联且仅可用于一个请求的数据。
+    /// </summary>
+    protected TempDataDictionary TempData
+    {
+      get { return ViewContext.TempData; }
+    }
+
+
+    /// <summary>
+    /// 获取 URL 路由信息
+    /// </summary>
+    protected RouteData RouteData
+    {
+      get { return ViewContext.RouteData; }
+    }
 
 
 

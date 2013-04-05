@@ -99,6 +99,8 @@ namespace Ivony.Html.Web
 
 
 
+
+
     /// <summary>
     /// 处理指定文档范畴
     /// </summary>
@@ -189,9 +191,7 @@ namespace Ivony.Html.Web
     /// 获取模型
     /// </summary>
     protected new TModel Model { get { return ViewData.Model; } }
-
-
-
   }
+
 
 }

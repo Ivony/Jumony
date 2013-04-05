@@ -19,11 +19,15 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="virtualPath">视图的虚拟路径</param>
     /// <returns>该虚拟路径的视图处理程序</returns>
-    public static IViewHandler GetHandler( string virtualPath )
+    public static IViewHandler GetHandler( string virtualPath, bool isMasterView = false )
     {
       var handlerPath = virtualPath + ".ashx";
 
-      return GetHandlerInternal( handlerPath ) ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
+      var handler = GetHandlerInternal( handlerPath );
+      if ( handler != null || isMasterView )
+        return handler;
+
+      return handler ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
     }
 
     private static IViewHandler GetHandlerInternal( string handlerPath )
@@ -78,7 +82,5 @@ namespace Ivony.Html.Web
         _handler.Dispose();
       }
     }
-
-
   }
 }

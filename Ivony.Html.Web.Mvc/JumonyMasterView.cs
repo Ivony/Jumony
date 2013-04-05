@@ -61,15 +61,22 @@ namespace Ivony.Html.Web
       return base.GetFilters( context ).OfType<IMasterViewFiler>();
     }
 
+
+
     void IMasterView.Initialize( ViewContext context )
     {
       InitializeView( context );
 
       Document = (IHtmlDocument) Scope;
 
+
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin GetViewHandler" );
+      var handler = GetHandler( VirtualPath );
+      HttpContext.Trace.Write( "JumonyMasterView", "End GetViewHandler" );
+
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Process" );
       OnPreProcess();
-      ProcessScope();
+      ProcessScope( handler );
       OnPostProcess();
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
@@ -82,7 +89,14 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "JumonyMasterView", "End ResolveUri" );
+
+
+      RenderAdapters = new List<IHtmlRenderAdapter>( GetRenderAdapters( handler ) );
     }
+
+
+
+    private IList<IHtmlRenderAdapter> RenderAdapters { get; private set; }
 
 
     string IMasterView.Render( IContentView view )
@@ -95,6 +109,13 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "End Render" );
 
       return content;
+    }
+
+
+    protected override IViewHandler GetHandler( string virtualPath )
+    {
+
+      return ViewHandlerProvider.GetHandler( virtualPath, true );
 
     }
 

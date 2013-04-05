@@ -16,7 +16,7 @@ using Ivony.Html.Templates;
 public class modify_html : ViewHandler<Task>
 {
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
     FindSingle( "input[name=title]" ).SetAttribute( "value", Model.Title );
 

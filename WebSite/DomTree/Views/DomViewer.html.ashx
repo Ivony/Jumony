@@ -12,7 +12,7 @@ public class DomViewer_html : ViewHandler
   private ICssSelector selector;
   private IHtmlDocument document;
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
 
     selector = ViewData["Selector"] as ICssSelector;

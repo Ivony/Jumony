@@ -7,6 +7,6 @@ namespace Ivony.Html.Web
 {
   public class GenericViewHandler : ViewHandler
   {
-    protected override void ProcessDocument() { }
+    protected override void ProcessScope() { }
   }
 }

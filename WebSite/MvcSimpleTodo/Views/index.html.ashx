@@ -16,7 +16,7 @@ using Ivony.Html.Templates;
 public class index_html : ViewHandler<Task[]>
 {
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
     FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 

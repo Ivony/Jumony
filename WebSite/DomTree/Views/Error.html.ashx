@@ -9,7 +9,7 @@ public class Error : ViewHandler<Exception>
 {
 
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
   }
 }

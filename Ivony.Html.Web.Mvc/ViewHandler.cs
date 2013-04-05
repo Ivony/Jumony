@@ -114,14 +114,14 @@ namespace Ivony.Html.Web
       _scope = scope;
       Url = urlHelper;
 
-      ProcessDocument();
+      ProcessScope();
     }
 
 
     /// <summary>
-    /// 派生类实现此方法处理文档
+    /// 派生类实现此方法处理 HTMl 文档或文档范畴
     /// </summary>
-    protected abstract void ProcessDocument();
+    protected virtual void ProcessScope();
 
 
 
@@ -168,6 +168,10 @@ namespace Ivony.Html.Web
 
     private ViewDataDictionary<TModel> _viewData;
 
+
+    /// <summary>
+    /// 获取或设置视图数据
+    /// </summary>
     public new ViewDataDictionary<TModel> ViewData
     {
       get
@@ -181,8 +185,11 @@ namespace Ivony.Html.Web
       set { _viewData = value; }
     }
 
-
-    protected override void SetViewData( ViewDataDictionary viewData )
+    /// <summary>
+    /// 重写 SetViewData 方法使用强类型视图
+    /// </summary>
+    /// <param name="viewData"></param>
+    protected sealed override void SetViewData( ViewDataDictionary viewData )
     {
       _viewData = new ViewDataDictionary<TModel>( viewData );
     }

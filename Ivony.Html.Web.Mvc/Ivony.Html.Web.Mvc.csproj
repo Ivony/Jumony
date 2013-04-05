@@ -95,7 +95,6 @@
     <Compile Include="MvcFormExtensions.cs" />
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
-    <Compile Include="PartialViewHandler.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
     <Compile Include="PartialViewExecutor.cs" />
     <Compile Include="PartialViewAdapter.cs" />

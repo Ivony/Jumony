@@ -67,6 +67,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Css\CssPropertyParser.cs" />
     <Compile Include="Css\CssStyleSpecificationBase.cs" />
     <Compile Include="Css\CssStyle.cs" />
     <Compile Include="Css\ICssStyleShorthandRule.cs" />

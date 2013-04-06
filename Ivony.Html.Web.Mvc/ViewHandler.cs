@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
-  public abstract class ViewHandler : HtmlHandlerBase, IViewHandler, IHttpHandler
+  public class ViewHandler : HtmlHandlerBase, IViewHandler, IHttpHandler
   {
 
 

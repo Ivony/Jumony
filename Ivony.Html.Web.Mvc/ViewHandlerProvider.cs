@@ -52,7 +52,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return new GenericViewHandler();
+      return new ViewHandler();
     }
 
 

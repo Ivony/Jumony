@@ -16,14 +16,14 @@ namespace RegularsAssemblyBuilder
 
 
     /// <summary>用于匹配一般属性值的正则表达式</summary>
-    public static readonly string normalAttributeValuePattern = @"(?<attrValue>(?:[^'""\s][^\s]*)?(?=\s|$))";
+    public static readonly string normalAttributeValuePattern = @"(?<attrValue>([^'""\s][^\s]*)?(?=\s|$))";
     /// <summary>用于匹配用双引号包裹的属性值的正则表达式</summary>
-    public static readonly string sqouteAttributeValuePattern = @"(?:'(?<attrValue>[^']*)')";
+    public static readonly string sqouteAttributeValuePattern = @"('(?<attrValue>[^']*)')";
     /// <summary>用于匹配用单引号包裹的属性值的正则表达式</summary>
-    public static readonly string dquoteAttributeValuePattern = @"(?:""(?<attrValue>[^""]*)"")";
+    public static readonly string dquoteAttributeValuePattern = @"(""(?<attrValue>[^""]*)"")";
 
     /// <summary>用于匹配用属性值的正则表达式</summary>
-    public static readonly string attributeValuePattern = @"(?:(?:\s*=\s*(?:#squote|#dquote|#normal))|(?=\s|$))".Replace( "#squote", sqouteAttributeValuePattern ).Replace( "#dquote", dquoteAttributeValuePattern ).Replace( "#normal", normalAttributeValuePattern );
+    public static readonly string attributeValuePattern = @"((\s*=\s*(#squote|#dquote|#normal))|(?=\s|$))".Replace( "#squote", sqouteAttributeValuePattern ).Replace( "#dquote", dquoteAttributeValuePattern ).Replace( "#normal", normalAttributeValuePattern );
 
     /// <summary>用于匹配用属性名称的的正则表达式</summary>
     public static readonly string attributeNamePattern = @"(?<attrName>[\w:_\-]+)";
@@ -38,13 +38,13 @@ namespace RegularsAssemblyBuilder
     public static readonly string endTagPattern = @"</#tagName\s*>".Replace( "#tagName", tagNamePattern );
 
     /// <summary>用于匹配用注释标签的正则表达式</summary>
-    public static readonly string commentPattern = @"<!--(?<commentText>(?:.|\n)*?)-->";
+    public static readonly string commentPattern = @"<!--(?<commentText>(.|\n)*?)-->";
 
     /// <summary>用于匹配用声明标签的正则表达式</summary>
-    public static readonly string doctypeDeclarationPattern = @"(?:<!(?!--)(?<specialText>(?:.|\n)*?)(?<!--)>)";
+    public static readonly string doctypeDeclarationPattern = @"(<!(?!--)(?<specialText>(.|\n)*?)(?<!--)>)";
 
     /// <summary>用于匹配用特殊标签的正则表达式</summary>
-    public static readonly string specialTagPattern = @"(?:<\?(?<specialText>(?:.|\n)*?)\?>)|(?:<\%(?<specialText>(?:.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
+    public static readonly string specialTagPattern = @"(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
 
     /// <summary>用于匹配用任意标签的正则表达式</summary>
     public static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern, Regulars.doctypeDeclarationPattern );

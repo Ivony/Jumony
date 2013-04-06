@@ -10,9 +10,9 @@ namespace Ivony.Html
   {
 
 
-    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?![0-9-])[\-_\w]+)(?>\s*):(?>\s*)(?<value>.+?)(?<important>!important)?(?:;|$)";
+    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?>(?![0-9-])[\-_\w]+))(?>\s*):(?>\s*)(?<value>.+?)(?<important>!important)?(;|$)";
 
-    private static Regex propertyDeclarationRegex = new Regex( propertyDeclarationPattern, RegexOptions.Compiled );
+    private static Regex propertyDeclarationRegex = new Regex( propertyDeclarationPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
 
     private static string nonasciiPattern = @"[^\0-\237]";
     private static string unicodePattern = @"\\[0-9a-f]{1,6}(\r\n|[ \n\r\t\f])?";

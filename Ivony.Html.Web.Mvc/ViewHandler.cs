@@ -121,7 +121,10 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类实现此方法处理 HTMl 文档或文档范畴
     /// </summary>
-    protected virtual void ProcessScope();
+    protected virtual void ProcessScope()
+    {
+
+    }
 
 
 

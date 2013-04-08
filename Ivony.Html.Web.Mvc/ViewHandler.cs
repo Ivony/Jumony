@@ -115,6 +115,8 @@ namespace Ivony.Html.Web
       Url = urlHelper;
 
       ProcessScope();
+
+      ProcessElements();
     }
 
 
@@ -205,3 +207,4 @@ namespace Ivony.Html.Web
 
 
 }
+

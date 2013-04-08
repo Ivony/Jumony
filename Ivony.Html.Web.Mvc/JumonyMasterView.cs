@@ -91,12 +91,8 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "End ResolveUri" );
 
 
-      RenderAdapters = new List<IHtmlRenderAdapter>( GetRenderAdapters( handler ) );
+      RenderAdapters = GetRenderAdapters( handler );
     }
-
-
-
-    private IList<IHtmlRenderAdapter> RenderAdapters { get; set; }
 
 
     string IMasterView.Render( IContentView view )

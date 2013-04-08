@@ -173,7 +173,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "PartialTest", "http://local
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jumony.Demo.HelpCenter", "Jumony.Demo.HelpCenter\Jumony.Demo.HelpCenter.csproj", "{157C4483-5593-400D-8F2C-87745AE46704}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "P:\Projects\Database\Database.sqlproj", "{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

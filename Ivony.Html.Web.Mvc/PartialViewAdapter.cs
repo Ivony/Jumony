@@ -50,7 +50,12 @@ namespace Ivony.Html.Web
       ViewHandler = viewHandler;
       Url = urlHelper;
 
-      _partialExecutors = GetPartialExecutors( viewHandler.GetType() );
+
+      var wrapper = viewHandler as HtmlViewHandlerWrapper;
+      if ( wrapper != null )
+        _partialExecutors = GetPartialExecutors( wrapper.Handler.GetType() );
+      else
+        _partialExecutors = GetPartialExecutors( viewHandler.GetType() );
     }
 
 

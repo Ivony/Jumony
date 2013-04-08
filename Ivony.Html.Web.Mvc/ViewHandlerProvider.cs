@@ -56,31 +56,4 @@ namespace Ivony.Html.Web
     }
 
 
-    private class HtmlViewHandlerWrapper : IViewHandler
-    {
-      private IHtmlHandler _handler;
-
-      public HtmlViewHandlerWrapper( IHtmlHandler handler )
-      {
-        _handler = handler;
-      }
-
-
-      public void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper )
-      {
-        _handler.ProcessDocument( context.HttpContext, scope.Document );
-      }
-
-      public ViewDataDictionary ViewData
-      {
-        get;
-        set;
-      }
-
-      public void Dispose()
-      {
-        _handler.Dispose();
-      }
-    }
-  }
 }

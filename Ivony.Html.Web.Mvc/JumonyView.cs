@@ -86,7 +86,7 @@ namespace Ivony.Html.Web
     /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
     /// </remarks>
     /// <returns>返回默认的 HTML 渲染代理</returns>
-    public virtual IHtmlRenderAdapter[] GetRenderAdapters( IViewHandler handler )
+    public virtual IList<IHtmlRenderAdapter> GetRenderAdapters( IViewHandler handler )
     {
 
       var result = new List<IHtmlRenderAdapter>()
@@ -99,7 +99,7 @@ namespace Ivony.Html.Web
       if ( customRenderAdapters != null )
         result.AddRange( customRenderAdapters.GetCustomRenderAdapters() );
 
-      return result.ToArray();
+      return result;
     }
 
 
@@ -114,7 +114,10 @@ namespace Ivony.Html.Web
 
 
 
-    public IList<IHtmlRenderAdapter> RenderAdapters { get; private set; }
+    /// <summary>
+    /// 渲染代理列表
+    /// </summary>
+    internal IList<IHtmlRenderAdapter> RenderAdapters { get; set; }
 
 
 
@@ -153,7 +156,7 @@ namespace Ivony.Html.Web
       AddGeneratorMetaData();
 
 
-      var renderAdapters = GetRenderAdapters( handler );
+      RenderAdapters = GetRenderAdapters( handler );
 
       string result;
 
@@ -182,7 +185,7 @@ namespace Ivony.Html.Web
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        result = RenderContent( renderAdapters );
+        result = RenderContent( RenderAdapters.ToArray() );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
       }

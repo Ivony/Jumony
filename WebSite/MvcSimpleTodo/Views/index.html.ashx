@@ -18,16 +18,20 @@ public class index_html : ViewHandler<Task[]>
 
   protected override void ProcessScope()
   {
-    FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
+    //FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 
     var items = FindSingle( "ul > li" ).Repeat( Model.Count() );//绑定数据
 
     Model.BindTo( items, BindTaskItem );
   }
 
+  [HandleElement( "form" )]
+  public void Test( IHtmlElement element )
+  {
+    element.SetAttribute( "action", Url.Action( "Add" ) );
+  }
 
-
-  private void BindTaskItem( Task task, IHtmlElement taskElement )
+  public void BindTaskItem( Task task, IHtmlElement taskElement )
   {
     taskElement.Elements( "span" ).Single().InnerText( task.Title );
 

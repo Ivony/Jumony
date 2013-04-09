@@ -41,7 +41,7 @@ namespace RegularsAssemblyBuilder
     public static readonly string commentPattern = @"<!--(?<commentText>(.|\n)*?)-->";
 
     /// <summary>用于匹配用声明标签的正则表达式</summary>
-    public static readonly string doctypeDeclarationPattern = @"(<!(?!--)(?<specialText>(.|\n)*?)(?<!--)>)";
+    public static readonly string doctypeDeclarationPattern = @"(<!(?i:DOCTYPE)\s+(?<declaration>(.|\n)*?)>)";
 
     /// <summary>用于匹配用特殊标签的正则表达式</summary>
     public static readonly string specialTagPattern = @"(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";

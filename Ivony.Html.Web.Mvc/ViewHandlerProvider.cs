@@ -24,10 +24,11 @@ namespace Ivony.Html.Web
       var handlerPath = virtualPath + ".ashx";
 
       var handler = GetHandlerInternal( handlerPath );
-      if ( handler != null || isMasterView )
-        return handler;
 
-      return handler ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) ) ?? new ViewHandler();
+      if ( handler == null && !isMasterView )
+        handler = GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
+
+      return handler ?? new ViewHandler();
     }
 
     private static IViewHandler GetHandlerInternal( string handlerPath )

@@ -73,6 +73,7 @@
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HttpHandlerBase.cs" />
     <Compile Include="HtmlHandlerWrapper.cs" />
+    <Compile Include="IHandlerWrapper.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />

@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取被包装的处理器
     /// </summary>
-    public object Handler { get; }
+    object Handler { get; }
 
   }
 }

@@ -51,7 +51,7 @@ namespace Ivony.Html.Web
       Url = urlHelper;
 
 
-      var wrapper = viewHandler as HtmlViewHandlerWrapper;
+      var wrapper = viewHandler as IHandlerWrapper;
       if ( wrapper != null )
         _partialExecutors = GetPartialExecutors( wrapper.Handler.GetType() );
       else
@@ -231,7 +231,13 @@ namespace Ivony.Html.Web
       {
         var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
         if ( executor != null )
-          return executor.Execute( ViewHandler, partialElement );
+        {
+          var wrapper = ViewHandler as IHandlerWrapper;
+          if ( wrapper != null )
+            return executor.Execute( wrapper.Handler, partialElement );
+          else
+            return executor.Execute( ViewHandler, partialElement );
+        }
       }
 
 

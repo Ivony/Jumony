@@ -30,7 +30,7 @@ namespace Ivony.Html.Web
 
     private Executor CreateExecutor( MethodInfo methodInfo )
     {
-      ParameterExpression handlerParamter = Expression.Parameter( typeof( IViewHandler ), "handler" );
+      ParameterExpression handlerParamter = Expression.Parameter( typeof( object ), "handler" );
       ParameterExpression argsParameter = Expression.Parameter( typeof( object[] ), "parameters" );
 
 
@@ -54,14 +54,14 @@ namespace Ivony.Html.Web
     }
 
 
-    private delegate string Executor( IViewHandler handler, object[] parameters );
+    private delegate string Executor( object handler, object[] parameters );
 
     public string Name { get; private set; }
 
 
     private Executor _executor;
 
-    public string Execute( IViewHandler handler, IHtmlElement partialElement )
+    public string Execute( object handler, IHtmlElement partialElement )
     {
 
       object[] parameterValues = new object[_parameters.Length];

@@ -6,23 +6,19 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
-  internal class HtmlViewHandlerWrapper : IViewHandler, IDisposable
+  internal class HtmlViewHandlerWrapper : IViewHandler, IHandlerWrapper, IDisposable
   {
-    internal IHtmlHandler Handler
-    {
-      get;
-      private set;
-    }
+    private IHtmlHandler _handler;
 
     public HtmlViewHandlerWrapper( IHtmlHandler handler )
     {
-      Handler = handler;
+      _handler = handler;
     }
 
 
     public void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper )
     {
-      Handler.ProcessDocument( context.HttpContext, scope.Document );
+      _handler.ProcessDocument( context.HttpContext, scope.Document );
     }
 
     public ViewDataDictionary ViewData
@@ -33,7 +29,13 @@ namespace Ivony.Html.Web
 
     void IDisposable.Dispose()
     {
-      Handler.Dispose();
+      _handler.Dispose();
+    }
+
+
+    object IHandlerWrapper.Handler
+    {
+      get { return _handler; }
     }
   }
 }

@@ -50,11 +50,6 @@ public class _handler : IHtmlHandler, IHttpHandler
   }
 
 
-  private string ProcessHtmlCode( string code )
-  {
-    return code;
-  }
-
   private string ProcessCSharpCode( string code )
   {
     code = ProcessCSharpKeywords( code );

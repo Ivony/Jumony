@@ -10,6 +10,11 @@ namespace Ivony.Html.Web
   {
     private IHtmlHandler _handler;
 
+
+    /// <summary>
+    /// 为现有的 IHtmlHandler 对象创建 ViewHandler 包装
+    /// </summary>
+    /// <param name="handler">现有的 IHtmlHandler 对象</param>
     public HtmlViewHandlerWrapper( IHtmlHandler handler )
     {
       _handler = handler;
@@ -17,6 +22,9 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 重写 ProcessScope 方法，重定向到被包装的 Handler
+    /// </summary>
     protected override void ProcessScope()
     {
       _handler.ProcessDocument( HttpContext, Scope.Document );

@@ -49,9 +49,6 @@ namespace Ivony.Html.Web
 
     private static ElementHandlerInfo CreateHandlerInfo( MethodInfo method )
     {
-      if ( !typeof( HtmlHandlerBase ).IsAssignableFrom( method.DeclaringType ) )
-        return null;
-
 
       var selectorAttribute = method.GetCustomAttributesData().FirstOrDefault( a => a.Constructor.DeclaringType == typeof( HandleElementAttribute ) );
       if ( selectorAttribute == null )

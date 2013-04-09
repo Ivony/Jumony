@@ -119,10 +119,22 @@ namespace Ivony.Html.Web
       ProcessElements( FindElementHandlers() );
     }
 
+
     protected virtual void ProcessElements( HtmlElementHandler[] handlers )
     {
-      Scope.Descendants().ForAll( element => handlers.Where( h => h.Selector.IsEligible( element ) ).ForFirst( h => h.Process( element ) ) );
+      ProcessElements( Scope, handlers );
     }
+
+
+    protected void ProcessElements( IHtmlContainer container, HtmlElementHandler[] handlers )
+    {
+      foreach ( var element in container.Elements() )
+      {
+        handlers.Where( h => h.Selector.IsEligible( element ) ).ForFirst( h => h.Process( element ) );
+        ProcessElements( element, handlers );
+      }
+    }
+
 
 
   }

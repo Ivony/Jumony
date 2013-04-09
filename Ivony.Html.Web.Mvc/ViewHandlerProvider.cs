@@ -27,7 +27,7 @@ namespace Ivony.Html.Web
       if ( handler != null || isMasterView )
         return handler;
 
-      return handler ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
+      return handler ?? GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) ) ?? new ViewHandler();
     }
 
     private static IViewHandler GetHandlerInternal( string handlerPath )
@@ -52,7 +52,7 @@ namespace Ivony.Html.Web
         }
       }
 
-      return new ViewHandler();
+      return null;
     }
   }
 }

@@ -30,20 +30,23 @@ public class _handler : IHtmlHandler, IHttpHandler
 
   public void ProcessDocument( HttpContextBase context, IHtmlDocument document )
   {
-    document.Find( "code:not( [language=html] )" ).ForAll( e =>
-    {
-      var code = e.InnerText();
-      var language = e.Attribute( "language" ).Value();
-      switch ( language )
-      {
-        default:
-          code = ProcessCSharpCode( code );
-          break;
-      }
+  }
 
-      e.ClearNodes();
-      e.AddFragment( code );
-    } );
+  
+  [HandleElement( "code:not( [language=html] )" )]
+  public void ProcessCode( IHtmlElement element )
+  {
+    var code = element.InnerText();
+    var language = element.Attribute( "language" ).Value();
+    switch ( language )
+    {
+      default:
+        code = ProcessCSharpCode( code );
+        break;
+    }
+
+    element.ClearNodes();
+    element.AddFragment( code );
   }
 
 

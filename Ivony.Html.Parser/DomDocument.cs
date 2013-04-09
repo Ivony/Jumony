@@ -170,11 +170,13 @@ namespace Ivony.Html.Parser
       }
     }
 
-    private HtmlSpecificationBase _specification = new Html41Specification();
-
+    /// <summary>
+    /// 文档所采用的 HTML 规范。
+    /// </summary>
     public HtmlSpecificationBase HtmlSpecification
     {
-      get { return _specification; }
+      get;
+      internal set;
     }
   }
 }

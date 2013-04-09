@@ -394,15 +394,17 @@ namespace Ivony.Html
         CodeExpression urlExpression;
 
         if ( document.DocumentUri != null )
-          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUri ) );
+          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUri.AbsoluteUri ) );
         else
           urlExpression = new CodePrimitiveExpression( null );
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument", urlExpression ) ) );//var document = provider.CreateDocument();
 
-        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
-
         var documentVariable = new CodeVariableReferenceExpression( "document" );
+        
+        constructor.Statements.Add( new CodeMethodInvokeExpression( providerVariable, "SetHtmlSpecification", documentVariable, new CodePrimitiveExpression( document.HtmlSpecification.ToString() ) ) );// provider.SetHtmlSpecification( document, spec );
+
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
         BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
 

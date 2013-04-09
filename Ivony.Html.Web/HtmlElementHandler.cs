@@ -14,7 +14,7 @@ namespace Ivony.Html.Web
   /// </summary>
   public class HtmlElementHandler
   {
-    private delegate void Executor( HtmlHandlerBase handler, IHtmlElement element );
+    private delegate void Executor( object handler, IHtmlElement element );
 
     private class ElementHandlerInfo
     {
@@ -27,7 +27,15 @@ namespace Ivony.Html.Web
 
     public static HtmlElementHandler[] GetElementHandlers( HtmlHandlerBase handler )
     {
-      var type = handler.GetType();
+
+      object _handler = handler;
+
+      var wrapper = handler as IHandlerWrapper;
+      if ( wrapper != null )
+        _handler = wrapper.Handler;
+
+
+      var type = _handler.GetType();
       var handlerInfos = _cache.FetchOrCreateItem( type, ()
         => type.GetMethods( BindingFlags.Public | BindingFlags.Instance )
           .Select( m => CreateHandlerInfo( m ) )
@@ -35,7 +43,7 @@ namespace Ivony.Html.Web
           .ToArray()
         );
 
-      return handlerInfos.Select( info => new HtmlElementHandler( info.Selector, element => info.Executor( handler, element ) ) ).ToArray();
+      return handlerInfos.Select( info => new HtmlElementHandler( info.Selector, element => info.Executor( _handler, element ) ) ).ToArray();
     }
 
 
@@ -67,7 +75,7 @@ namespace Ivony.Html.Web
       if ( parameters.Length == 1 && parameters[0].ParameterType == typeof( IHtmlElement ) )
       {
 
-        ParameterExpression handlerParamter = Expression.Parameter( typeof( HtmlHandlerBase ), "handler" );
+        ParameterExpression handlerParamter = Expression.Parameter( typeof( object ), "handler" );
         ParameterExpression elementParameter = Expression.Parameter( typeof( IHtmlElement ), "element" );
 
         UnaryExpression instance = Expression.Convert( handlerParamter, method.ReflectedType );

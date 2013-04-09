@@ -28,10 +28,11 @@ namespace Ivony.Html.Parser
     }
 
     /// <summary>
-    /// 初始化容器堆栈
+    /// 初始化容器
     /// </summary>
-    protected virtual void InitializeStack()
+    protected virtual void Initialize()
     {
+      HtmlSpecification = null;
       ContainerStack = new Stack<IHtmlContainer>();
     }
 
@@ -112,7 +113,7 @@ namespace Ivony.Html.Parser
       lock ( SyncRoot )
       {
 
-        InitializeStack();
+        Initialize();
 
         Document = DomProvider.CreateDocument( url );
 
@@ -214,7 +215,7 @@ namespace Ivony.Html.Parser
     {
 
       if ( HtmlSpecification == null )
-        HtmlSpecification = DomProvider.SetHtmlSpecification( Document, null );
+        SetHtmlSpecification( (HtmlDoctypeDeclaration) null );
 
       string tagName = beginTag.TagName;
       bool selfClosed = beginTag.SelfClosed;
@@ -441,7 +442,12 @@ namespace Ivony.Html.Parser
     protected virtual void SetHtmlSpecification( HtmlDoctypeDeclaration doctype )
     {
       if ( HtmlSpecification == null )
-        SetHtmlSpecification( DomProvider.SetHtmlSpecification( Document, doctype.Declaration ) );
+      {
+        var declaration = doctype.IfNull( null, d => d.Declaration );
+
+        SetHtmlSpecification( DomProvider.SetHtmlSpecification( Document, declaration ) );
+
+      }
     }
 
 
@@ -452,9 +458,12 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     protected virtual void SetHtmlSpecification( HtmlSpecificationBase specification )
     {
+      if ( specification == null )
+        throw new ArgumentNullException( "specification" );
+
       if ( HtmlSpecification != null )
         throw new InvalidOperationException( "已经设置了当前所使用的 HTML 规范" );
-      
+
       HtmlSpecification = specification;
     }
 

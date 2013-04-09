@@ -109,9 +109,10 @@ namespace Ivony.Html.Parser
 
       lock ( SyncRoot )
       {
-        SetHtmlSpecification( fragment.Document.HtmlSpecification );
 
-        InitializeStack();
+        Initialize();
+
+        SetHtmlSpecification( fragment.Document.HtmlSpecification );
 
         ContainerStack.Push( fragment );
 

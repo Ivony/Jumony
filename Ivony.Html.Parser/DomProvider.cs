@@ -60,6 +60,9 @@ namespace Ivony.Html.Parser
       if ( domDocument == null )
         throw new NotSupportedException( "只能处理指定类型的文档" );
 
+      if ( domDocument.HtmlSpecification != null )
+        throw new InvalidOperationException();
+
       return domDocument.HtmlSpecification = SelectSpecification( specificationType );
     }
 

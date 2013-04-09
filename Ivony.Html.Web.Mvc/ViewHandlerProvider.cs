@@ -54,6 +54,5 @@ namespace Ivony.Html.Web
 
       return new ViewHandler();
     }
-
-
+  }
 }

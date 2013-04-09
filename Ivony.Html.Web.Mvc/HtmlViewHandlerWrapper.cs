@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
-  internal class HtmlViewHandlerWrapper : IViewHandler, IHandlerWrapper, IDisposable
+  internal class HtmlViewHandlerWrapper : ViewHandler, IHandlerWrapper, IDisposable
   {
     private IHtmlHandler _handler;
 
@@ -16,20 +16,18 @@ namespace Ivony.Html.Web
     }
 
 
-    public void ProcessScope( ViewContext context, IHtmlContainer scope, JumonyUrlHelper urlHelper )
+
+    protected override void ProcessScope()
     {
-      _handler.ProcessDocument( context.HttpContext, scope.Document );
+      _handler.ProcessDocument( HttpContext, Scope.Document );
     }
 
-    public ViewDataDictionary ViewData
-    {
-      get;
-      set;
-    }
 
     void IDisposable.Dispose()
     {
-      _handler.Dispose();
+      var disposable = _handler as IDisposable;
+      if ( disposable != null )
+        _handler.Dispose();
     }
 
 

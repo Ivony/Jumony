@@ -44,12 +44,12 @@ namespace Ivony.Html
     /// <summary>所有定义章节标题元素</summary>
     public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
     /// <summary>所有定义列表的元素</summary>
-    public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol" } );
+    public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol", "dl" } );
     /// <summary>预格式化元素</summary>
     public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
 
     /// <summary>所有块级元素</summary>
-    public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "dl", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
+    public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
 
     /// <summary>所有文本流元素</summary>
     public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );

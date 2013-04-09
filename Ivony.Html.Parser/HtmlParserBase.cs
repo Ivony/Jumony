@@ -84,6 +84,17 @@ namespace Ivony.Html.Parser
       get { return _sync; }
     }
 
+
+    /// <summary>
+    /// 正在处理的文档
+    /// </summary>
+    protected IHtmlDocument Document
+    {
+      get;
+      private set;
+    }
+
+
     /// <summary>
     /// 分析 HTML 文本并创建文档
     /// </summary>
@@ -103,17 +114,19 @@ namespace Ivony.Html.Parser
 
         InitializeStack();
 
-        var document = DomProvider.CreateDocument( url );
+        Document = DomProvider.CreateDocument( url );
 
-        if ( string.IsNullOrEmpty( html ) )
-          return document;
+        if ( !string.IsNullOrEmpty( html ) )
+        {
+          ContainerStack.Push( Document );
 
-        ContainerStack.Push( document );
+          ParseInternal( html );
+        }
 
-        ParseInternal( html );
+        if ( Document.HtmlSpecification == null )//若始终没能找到 DTD 声明，则设置默认的规范
+          DomProvider.SetHtmlSpecification( Document, null );
 
-
-        return CompleteDocument( document );
+        return CompleteDocument( Document );
 
       }
     }
@@ -201,7 +214,7 @@ namespace Ivony.Html.Parser
     {
 
       if ( HtmlSpecification == null )
-        HtmlSpecification = GetDefaultSpecification();
+        HtmlSpecification = DomProvider.SetHtmlSpecification( Document, null );
 
       string tagName = beginTag.TagName;
       bool selfClosed = beginTag.SelfClosed;
@@ -414,37 +427,43 @@ namespace Ivony.Html.Parser
     protected virtual IHtmlSpecial ProcessDoctypeDeclaration( HtmlDoctypeDeclaration doctype )
     {
 
-      if ( HtmlSpecification == null )
-        HtmlSpecification = GetHtmlspecification( doctype );
-
+      SetHtmlSpecification( doctype );
       return CreateSpecial( doctype.Html );
 
     }
 
 
     /// <summary>
-    /// 根据 DTD 声明获取相应的 HTML 规范
+    /// 根据 DTD 声明设置相应的 HTML 规范
     /// </summary>
     /// <param name="doctype">DTD 声明</param>
     /// <returns>所适用的 HTML 规范</returns>
-    protected virtual HtmlSpecificationBase GetHtmlspecification( HtmlDoctypeDeclaration doctype )
+    protected virtual void SetHtmlSpecification( HtmlDoctypeDeclaration doctype )
     {
-      return new Html41Specification();
+      if ( HtmlSpecification == null )
+        SetHtmlSpecification( DomProvider.SetHtmlSpecification( Document, doctype.Declaration ) );
     }
 
 
     /// <summary>
-    /// 获取默认的 HTML 规范
+    /// 设置当前解析器所使用的 HTML 规范
     /// </summary>
-    /// <remarks>当遇到第一个元素开始标签却还没有遇到 DTD 声明时，则调用此方法来获取默认的 HTML 规范。</remarks>
-    /// <returns>默认的 HTML 规范</returns>
-    protected virtual HtmlSpecificationBase GetDefaultSpecification()
+    /// <param name="specification">要设置的 HTML 解析规范</param>
+    /// <returns></returns>
+    protected virtual void SetHtmlSpecification( HtmlSpecificationBase specification )
     {
-      return new Html41Specification();
+      if ( HtmlSpecification != null )
+        throw new InvalidOperationException( "已经设置了当前所使用的 HTML 规范" );
+      
+      HtmlSpecification = specification;
     }
 
 
-
+    /// <summary>
+    /// 完成最终文档解析构建
+    /// </summary>
+    /// <param name="document">已经完成的文档结构</param>
+    /// <returns>最终完成的文档</returns>
     protected virtual IHtmlDocument CompleteDocument( IHtmlDocument document )
     {
       return DomProvider.CompleteDocument( document );

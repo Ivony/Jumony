@@ -318,7 +318,7 @@ namespace Ivony.Html.Parser
       var raw = match.ToString();
 
       var fragment = CreateFragment( match );
-      return new HtmlDoctypeDeclaration( fragment );
+      return new HtmlDoctypeDeclaration( fragment, match.Groups["declaration"].Value );
     }
 
 

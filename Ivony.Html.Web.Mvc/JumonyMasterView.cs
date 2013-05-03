@@ -111,7 +111,7 @@ namespace Ivony.Html.Web
     protected override IViewHandler GetHandler( string virtualPath )
     {
 
-      return ViewHandlerProvider.GetHandler( virtualPath, true );
+      return ViewHandlerProvider.GetViewHandler( virtualPath, false );
 
     }
 

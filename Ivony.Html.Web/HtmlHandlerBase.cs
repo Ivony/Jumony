@@ -108,34 +108,5 @@ namespace Ivony.Html.Web
       Scope.Find( expression ).ForAll( action );
     }
 
-
-    protected HtmlElementHandler[] FindElementHandlers()
-    {
-      return HtmlElementHandler.GetElementHandlers( this );
-    }
-
-    protected virtual void ProcessElements()
-    {
-      ProcessElements( FindElementHandlers() );
-    }
-
-
-    protected virtual void ProcessElements( HtmlElementHandler[] handlers )
-    {
-      ProcessElements( Scope, handlers );
-    }
-
-
-    protected void ProcessElements( IHtmlContainer container, HtmlElementHandler[] handlers )
-    {
-      foreach ( var element in container.Elements() )
-      {
-        handlers.Where( h => h.Selector.IsEligible( element ) ).ForFirst( h => h.Process( element ) );
-        ProcessElements( element, handlers );
-      }
-    }
-
-
-
   }
 }

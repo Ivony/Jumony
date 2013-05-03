@@ -73,7 +73,7 @@ namespace Ivony.Html.Web
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
-      return ViewHandlerProvider.GetHandler( virtualPath );
+      return ViewHandlerProvider.GetViewHandler( virtualPath );
     }
 
 

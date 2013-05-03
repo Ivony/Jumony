@@ -23,8 +23,15 @@ namespace Ivony.Html.Web
   }
 
 
+  /// <summary>
+  /// 需要提供自定义渲染代理的视图处理程序实现此接口
+  /// </summary>
   public interface ICustomRenderAdapters : IViewHandler
   {
+    /// <summary>
+    /// 提供自定义渲染代理
+    /// </summary>
+    /// <returns>自定义的渲染代理</returns>
     IHtmlRenderAdapter[] GetCustomRenderAdapters();
   }
 

@@ -83,29 +83,23 @@ namespace Ivony.Html.Web
 
         var directory = VirtualPathUtility.GetDirectory( viewPath );
 
-        do
-        {
+        if ( MvcEnvironment.Configuration.FallbackDefaultMaster )
+          masterPath = ViewHandlerProvider.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
+        else
           masterPath = VirtualPathUtility.Combine( directory, "_master.html" );
 
-          if ( VirtualPathProvider.FileExists( masterPath ) )
+        if ( VirtualPathProvider.FileExists( masterPath ) )
+        {
+          var contentView = view as IContentView;
+
+          if ( contentView != null )
           {
-            var contentView = view as IContentView;
 
-            if ( contentView != null )
-            {
+            contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
+            return contentView;
 
-              contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
-              return contentView;
-
-            }
           }
-
-          if ( directory == "~/" )
-            break;
-
-          directory = VirtualPathUtility.Combine( directory, "../" );
-
-        } while ( MvcEnvironment.Configuration.FallbackDefaultMaster );
+        }
 
         return view;
       }
@@ -132,17 +126,7 @@ namespace Ivony.Html.Web
     /// <returns>创建的视图母板</returns>
     protected virtual JumonyMasterView CreateMaster( ControllerContext controllerContext, string masterPath )
     {
-      var handlerPath = masterPath + ".ashx";
-      JumonyMasterView masterView = null;
-
-      /*
-      if ( VirtualPathProvider.FileExists( handlerPath ) )
-        masterView = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
-      */
-
-      if ( masterView == null )
-        masterView = new JumonyMasterView();
-
+      JumonyMasterView masterView = new JumonyMasterView();
       masterView.Initialize( masterPath );
       return masterView;
     }

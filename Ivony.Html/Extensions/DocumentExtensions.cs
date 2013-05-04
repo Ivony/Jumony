@@ -318,7 +318,7 @@ namespace Ivony.Html
       if ( baseUri == null )
         throw new InvalidOperationException();
 
-      foreach ( var attribute in document.AllElements().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      foreach ( var attribute in document.AllElements().SelectMany( e => e.Attributes() ).Where( a => document.HtmlSpecification.IsUriValue( a ) ).ToArray() )
       {
 
         var value = attribute.Value();
@@ -341,6 +341,21 @@ namespace Ivony.Html
     }
 
 
+
+
+    public static TextMode ElementTextMode( this IHtmlNode node )
+    {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
+      var specification = node.Document.HtmlSpecification;
+      var element = node as IHtmlElement ?? node.Parent();
+
+      if ( element == null )
+        return TextMode.Normal;
+
+      return specification.ElementTextMode( element );
+    }
 
 
 
@@ -379,15 +394,17 @@ namespace Ivony.Html
         CodeExpression urlExpression;
 
         if ( document.DocumentUri != null )
-          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUri ) );
+          urlExpression = new CodeObjectCreateExpression( typeof( Uri ), new CodePrimitiveExpression( document.DocumentUri.AbsoluteUri ) );
         else
           urlExpression = new CodePrimitiveExpression( null );
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument", urlExpression ) ) );//var document = provider.CreateDocument();
 
-        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
-
         var documentVariable = new CodeVariableReferenceExpression( "document" );
+        
+        constructor.Statements.Add( new CodeMethodInvokeExpression( providerVariable, "SetHtmlSpecification", documentVariable, new CodePrimitiveExpression( document.HtmlSpecification.ToString() ) ) );// provider.SetHtmlSpecification( document, spec );
+
+        constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
         BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
 
@@ -585,10 +602,19 @@ namespace Ivony.Html
 
       private static void EmitCreateDocument( ILGenerator il, IHtmlDocument document )
       {
-        //create document
+        //init           provider
 
+        //CreateDocument document
         //dup            document, document   
         //st container   document
+
+        //ld provider    document, provider
+        //ld container   document, provider, document
+        //ld spec        document, provider, document, specS
+        //SetHtmlSpecifi document, spec
+        //pop            document
+
+
 
         //begin create element
 
@@ -634,6 +660,16 @@ namespace Ivony.Html
 
         il.Emit( OpCodes.Dup );
         il.Emit( OpCodes.Stloc_0 );// set container;
+
+
+        il.Emit( OpCodes.Ldarg_0 );
+        il.Emit( OpCodes.Ldloc_0 );
+        il.Emit( OpCodes.Castclass, typeof( IHtmlDocument ) );
+        il.Emit( OpCodes.Ldstr, document.HtmlSpecification.ToString() );
+        il.Emit( OpCodes.Callvirt, SetHtmlSpecification );
+        il.Emit( OpCodes.Pop );
+
+
 
         foreach ( var node in document.Nodes() )
           EmitCreateNode( il, node );
@@ -707,6 +743,7 @@ namespace Ivony.Html
 
       private static readonly ConstructorInfo NewUri = typeof( Uri ).GetConstructor( new[] { typeof( string ) } );
       private static readonly MethodInfo CreateDocument = typeof( IHtmlDomProvider ).GetMethod( "CreateDocument" );
+      private static readonly MethodInfo SetHtmlSpecification = typeof( IHtmlDomProvider ).GetMethod( "SetHtmlSpecification" );
       private static readonly MethodInfo CreateFragment = typeof( IHtmlFragmentManager ).GetMethod( "CreateFragment" );
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );

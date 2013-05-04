@@ -10,14 +10,14 @@ using Ivony.Html;
 using Jumony.Demo.HelpCenter;
 using System.Collections.Generic;
 
-public class Navigation : JumonyViewHandler
+public class Navigation : ViewHandler<HelpEntry[]>
 {
 
   protected override void ProcessScope()
   {
 
-    entryName = RawViewContext.RouteData.Values["name"].CastTo<string>();
-    var entries = ViewModel as HelpEntry[];
+    entryName = ViewContext.ParentActionViewContext.RouteData.Values["name"].CastTo<string>();
+    var entries = Model;
 
     var categoryList = Scope.AddElement( "ul" );
     var categoryGroup = entries.GroupBy( e => e.Category );

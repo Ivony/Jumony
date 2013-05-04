@@ -13,8 +13,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// HTML 视图处理程序基类
   /// </summary>
-  [Obsolete( "此类型已过时，仅出于兼容目的而保留，请改用 JumonyViewHandler 类型" )]
-  public abstract class ViewHandler : JumonyView, IHttpHandler
+  public class ViewHandler : HtmlHandlerBase, IViewHandler, IHttpHandler
   {
 
 
@@ -32,10 +31,12 @@ namespace Ivony.Html.Web
 
     #endregion
 
+
+
     /// <summary>
-    /// 获取页面文档对象
+    /// 获取当前视图上下文
     /// </summary>
-    public IHtmlDocument Document
+    protected ViewContext ViewContext
     {
       get;
       private set;
@@ -43,18 +44,120 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类重写此方法自定义文档处理逻辑
+    /// 获取当前 HTTP 上下文
     /// </summary>
-    protected abstract void ProcessDocument();
+    protected override HttpContextBase HttpContext
+    {
+      get { return ViewContext.HttpContext; }
+    }
+
+
+    private IHtmlContainer _scope;
+
+    /// <summary>
+    /// 获取当前要处理的 HTML 范围
+    /// </summary>
+    public override IHtmlContainer Scope
+    {
+      get { return _scope; }
+    }
+
+    /// <summary>
+    /// 有关视图的虚拟路径帮助器
+    /// </summary>
+    public JumonyUrlHelper Url
+    {
+      get;
+      private set;
+    }
+
+    /// <summary>
+    /// 获取当前文档的虚拟路径
+    /// </summary>
+    public sealed override string VirtualPath
+    {
+      get { return Url.VirtualPath; }
+    }
 
 
     /// <summary>
-    /// 重写 Process 方法，调用 ProcessDocument 方法处理页面逻辑
+    /// 获取与此请求关联且仅可用于一个请求的数据。
     /// </summary>
-    protected sealed override void ProcessScope()
+    protected TempDataDictionary TempData
     {
-      Document = Scope.Document;
-      ProcessDocument();
+      get { return ViewContext.TempData; }
+    }
+
+
+    /// <summary>
+    /// 获取 URL 路由信息
+    /// </summary>
+    protected RouteData RouteData
+    {
+      get { return ViewContext.RouteData; }
+    }
+
+
+
+
+
+    /// <summary>
+    /// 处理指定文档范畴
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    /// <param name="scope">要处理的范围</param>
+    /// <param name="urlHelper">适用于当前文档的虚拟路径帮助器</param>
+    void IViewHandler.ProcessScope( ViewContext viewContext, IHtmlContainer scope, JumonyUrlHelper urlHelper )
+    {
+      ViewContext = viewContext;
+      ViewData = viewContext.ViewData;
+      _scope = scope;
+      Url = urlHelper;
+
+      ProcessScope();
+    }
+
+
+    /// <summary>
+    /// 派生类实现此方法处理 HTMl 文档或文档范畴
+    /// </summary>
+    protected virtual void ProcessScope()
+    {
+
+    }
+
+
+
+    private ViewDataDictionary _viewData;
+
+    /// <summary>
+    /// 获取或设置视图数据
+    /// </summary>
+    public virtual ViewDataDictionary ViewData
+    {
+      get
+      {
+        if ( _viewData == null )
+          SetViewData( new ViewDataDictionary() );
+
+        return _viewData;
+      }
+      set { SetViewData( value ); }
+    }
+
+
+    /// <summary>
+    /// 获取模型
+    /// </summary>
+    protected object Model { get { return ViewData.Model; } }
+
+    /// <summary>
+    /// 设置视图数据，此方法仅供框架调用
+    /// </summary>
+    /// <param name="viewData">视图数据</param>
+    protected virtual void SetViewData( ViewDataDictionary viewData )
+    {
+      _viewData = viewData;
     }
   }
 
@@ -62,18 +165,44 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 强类型 HTML 视图处理程序的基类
   /// </summary>
-  /// <typeparam name="T">Model 的类型</typeparam>
-  public abstract class ViewHandler<T> : ViewHandler
+  /// <typeparam name="TModel">Model 的类型</typeparam>
+  public abstract class ViewHandler<TModel> : ViewHandler
   {
 
+    private ViewDataDictionary<TModel> _viewData;
+
+
     /// <summary>
-    /// 模型
+    /// 获取或设置视图数据
     /// </summary>
-    protected new T ViewModel
+    public new ViewDataDictionary<TModel> ViewData
     {
-      get { return base.ViewModel.CastTo<T>(); }
+      get
+      {
+        if ( _viewData == null )
+          SetViewData( new ViewDataDictionary<TModel>() );
+
+        return _viewData;
+      }
+
+      set { _viewData = value; }
     }
 
+    /// <summary>
+    /// 重写 SetViewData 方法使用强类型视图
+    /// </summary>
+    /// <param name="viewData"></param>
+    protected sealed override void SetViewData( ViewDataDictionary viewData )
+    {
+      _viewData = new ViewDataDictionary<TModel>( viewData );
+    }
+
+    /// <summary>
+    /// 获取模型
+    /// </summary>
+    protected new TModel Model { get { return ViewData.Model; } }
   }
 
+
 }
+

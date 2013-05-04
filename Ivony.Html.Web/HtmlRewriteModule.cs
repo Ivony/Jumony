@@ -42,7 +42,7 @@ namespace Ivony.Html.Web
       var httpHandler = handler as JumonyHandler;
 
       if ( httpHandler == null )
-        httpHandler = new HttpHandler( handler );
+        httpHandler = new HtmlHandlerWrapper( handler );
 
 
       context.SetMapping( result );

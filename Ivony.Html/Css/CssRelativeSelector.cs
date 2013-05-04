@@ -12,17 +12,29 @@ namespace Ivony.Html
   public abstract class CssRelativeSelector : ICssSelector
   {
 
+    /// <summary>
+    /// 创建 CssRelativeSelector 对象
+    /// </summary>
+    /// <param name="leftSelector"></param>
     protected CssRelativeSelector( ICssSelector leftSelector )
     {
       LeftSelector = leftSelector;
     }
 
+    /// <summary>
+    /// 获取左选择器
+    /// </summary>
     public virtual ICssSelector LeftSelector
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 检查元素是否符合选择器
+    /// </summary>
+    /// <param name="element">要检验的元素</param>
+    /// <returns>是否符合选择器</returns>
     public virtual bool IsEligible( IHtmlElement element )
     {
       if ( element == null )
@@ -31,12 +43,24 @@ namespace Ivony.Html
       return IsEligible( LeftSelector, element );
     }
 
+    /// <summary>
+    /// 检查元素是否符合选择器
+    /// </summary>
+    /// <param name="leftSelector">左选择器</param>
+    /// <param name="element">要检验的元素</param>
+    /// <returns>是否符合选择器</returns>
     protected abstract bool IsEligible( ICssSelector leftSelector, IHtmlElement element );
 
 
-
+    /// <summary>
+    /// 结合符
+    /// </summary>
     public abstract char Combinator { get; }
 
+    /// <summary>
+    /// 重写 ToString 方法输出选择器表达式
+    /// </summary>
+    /// <returns>选择器表达式形式</returns>
     public override string ToString()
     {
       return LeftSelector.ToString() + Combinator;

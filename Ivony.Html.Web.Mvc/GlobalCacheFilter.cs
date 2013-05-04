@@ -11,7 +11,7 @@ namespace Ivony.Html.Web
 
 
   /// <summary>
-  /// 全局缓存筛选器，在 ASP.NET MVC 3 中将此筛选器加入全局筛选器，即可使得默认缓存策略运用于全局。
+  /// 全局缓存筛选器，使得默认缓存策略运用于全局。
   /// </summary>
   public sealed class GlobalCacheFilter : CacheFilterBase
   {

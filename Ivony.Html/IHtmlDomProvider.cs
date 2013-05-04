@@ -19,6 +19,14 @@ namespace Ivony.Html
     /// <returns>空白文档</returns>
     IHtmlDocument CreateDocument( Uri uri );
 
+
+    /// <summary>
+    /// 设置文档所采用的文档规范
+    /// </summary>
+    /// <param name="document">文档</param>
+    /// <param name="specificationType">所采用的文档规范名称</param>
+    HtmlSpecificationBase SetHtmlSpecification( IHtmlDocument document, string specificationType );
+
     /// <summary>
     /// 向指定容器中添加一个元素
     /// </summary>

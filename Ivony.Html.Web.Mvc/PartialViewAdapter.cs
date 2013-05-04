@@ -18,8 +18,6 @@ namespace Ivony.Html.Web
   public class PartialRenderAdapter : HtmlElementAdapter
   {
 
-    private ViewBase _view;
-
 
     /// <summary>
     /// 创建 HtmlHelper 对象
@@ -28,7 +26,7 @@ namespace Ivony.Html.Web
     protected HtmlHelper MakeHelper()
     {
 
-      var helper = new HtmlHelper( ViewContext, _view.CreateViewDataContainer() );
+      var helper = new HtmlHelper( ViewContext, ViewHandler );
       return helper;
     }
 
@@ -37,18 +35,27 @@ namespace Ivony.Html.Web
     /// 创建 PartialRenderAdapter 实例
     /// </summary>
     /// <param name="view">需要渲染部分视图的宿主视图</param>
-    public PartialRenderAdapter( ViewBase view )
+    public PartialRenderAdapter( ViewContext viewContext, JumonyUrlHelper urlHelper, IViewHandler viewHandler )
     {
-      if ( view == null )
-        throw new ArgumentNullException( "view" );
+      if ( viewContext == null )
+        throw new ArgumentNullException( "viewContext" );
 
-      var type = view.GetType();
+      if ( urlHelper == null )
+        throw new ArgumentNullException( "urlHelper" );
+
+      if ( viewHandler == null )
+        throw new ArgumentNullException( "viewHandler" );
+
+      ViewContext = viewContext;
+      ViewHandler = viewHandler;
+      Url = urlHelper;
 
 
-      if ( view is JumonyViewHandler )
-        _partialExecutors = GetPartialExecutors( type );
-
-      _view = view;
+      var wrapper = viewHandler as IHandlerWrapper;
+      if ( wrapper != null )
+        _partialExecutors = GetPartialExecutors( wrapper.Handler.GetType() );
+      else
+        _partialExecutors = GetPartialExecutors( viewHandler.GetType() );
     }
 
 
@@ -86,11 +93,12 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 当前视图上下文
+    /// 获取当前视图上下文
     /// </summary>
     protected ViewContext ViewContext
     {
-      get { return _view.ViewContext; }
+      get;
+      private set;
     }
 
 
@@ -99,7 +107,17 @@ namespace Ivony.Html.Web
     /// </summary>
     protected JumonyUrlHelper Url
     {
-      get { return _view.Url; }
+      get;
+      private set;
+    }
+
+    /// <summary>
+    /// 获取当前视图处理程序
+    /// </summary>
+    protected IViewHandler ViewHandler
+    {
+      get;
+      private set;
     }
 
 
@@ -213,7 +231,13 @@ namespace Ivony.Html.Web
       {
         var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
         if ( executor != null )
-          return executor.Execute( (JumonyViewHandler) _view, partialElement );
+        {
+          var wrapper = ViewHandler as IHandlerWrapper;
+          if ( wrapper != null )
+            return executor.Execute( wrapper.Handler, partialElement );
+          else
+            return executor.Execute( ViewHandler, partialElement );
+        }
       }
 
 

@@ -648,6 +648,8 @@ namespace Ivony.Html
     {
       lock ( element.SyncRoot )
       {
+        var specification = element.Document.HtmlSpecification;
+
 
         if ( element.Nodes().All( n => n is IHtmlTextNode || n is IHtmlComment ) )//只有文本和注释的元素是可以被安全数据绑定的。
           return true;
@@ -668,7 +670,7 @@ namespace Ivony.Html
           return false;
 
         //如果元素内部只有设置文本样式的子元素，那么它是安全的。
-        if ( childs.All( e => HtmlSpecification.fontstyleElements.Union( HtmlSpecification.phrasElements ).Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
+        if ( childs.All( e => specification.IsStylingElement( e ) || specification.IsPhraseElement( e ) ) )
           return true;
 
         return false;

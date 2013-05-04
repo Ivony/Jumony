@@ -181,7 +181,7 @@ namespace Ivony.Html.Web.Binding
 
     private bool MarkupAttribute( IHtmlAttribute attribute )
     {
-      return HtmlSpecification.IsMarkupAttribute( attribute );
+      return attribute.Document.HtmlSpecification.IsMarkupAttribute( attribute );
     }
 
 

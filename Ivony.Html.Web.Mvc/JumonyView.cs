@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using Ivony.Fluent;
 
 
 namespace Ivony.Html.Web
@@ -14,20 +15,10 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 视图
   /// </summary>
-  public abstract class JumonyView : ViewBase, IContentView
+  public class JumonyView : ViewBase, IContentView
   {
 
     internal const string ViewFiltersDataKey = "Jumony_ViewBase_ViewFilters";
-
-
-    /// <summary>
-    /// 创建 JumonyView 对象
-    /// </summary>
-    protected JumonyView()
-    {
-      RenderAdapters = new List<IHtmlRenderAdapter>() { new PartialRenderAdapter( this ) };
-    }
-
 
     /// <summary>
     /// 母板视图
@@ -40,22 +31,111 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
+    /// 重写 InitializeView 方法，增加 Jumony 视图初始化步骤
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    protected override void InitializeView( ViewContext viewContext )
+    {
+      base.InitializeView( viewContext );
+
+      InitailizeJumonyView( viewContext );
+    }
+
+    /// <summary>
+    /// Jumony 视图初始化
+    /// </summary>
+    /// <param name="viewContext">视图上下文</param>
+    protected virtual void InitailizeJumonyView( ViewContext viewContext )
+    {
+      Url = new JumonyUrlHelper( viewContext.RequestContext, VirtualPath );
+      Filters = GetFilters( viewContext );
+    }
+
+
+
+    /// <summary>
+    /// 获取当前视图所需要应用的筛选器。
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    {
+      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
+      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
+
+      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
+
+      return filters;
+    }
+
+    /// <summary>
+    /// 获取视图处理程序
+    /// </summary>
+    /// <returns>视图处理程序</returns>
+    protected virtual IViewHandler GetHandler( string virtualPath )
+    {
+      return ViewHandlerProvider.GetViewHandler( virtualPath );
+    }
+
+
+    /// <summary>
+    /// 获取 HTML 渲染代理
+    /// </summary>
+    /// <remarks>
+    /// 默认的渲染代理包含两个，分别是：
+    /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
+    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
+    /// </remarks>
+    /// <returns>返回默认的 HTML 渲染代理</returns>
+    public virtual IList<IHtmlRenderAdapter> GetRenderAdapters( IViewHandler handler )
+    {
+
+      var result = new List<IHtmlRenderAdapter>()
+      {
+        new PartialRenderAdapter( ViewContext, Url, handler ),
+        new ViewElementAdapter( ViewContext, Url )
+      };
+
+      var customRenderAdapters = handler as ICustomRenderAdapters;
+      if ( customRenderAdapters != null )
+        result.AddRange( customRenderAdapters.GetCustomRenderAdapters() );
+
+      return result;
+    }
+
+
+    /// <summary>
+    /// 获取用于生成应用程序 URL 的帮助器
+    /// </summary>
+    public JumonyUrlHelper Url
+    {
+      get;
+      private set;
+    }
+
+
+
+    /// <summary>
+    /// 渲染代理列表
+    /// </summary>
+    internal IList<IHtmlRenderAdapter> RenderAdapters { get; set; }
+
+
+
+    /// <summary>
     /// 处理和渲染指定 HTML 范畴
     /// </summary>
     /// <param name="scope">要处理和渲染的范畴</param>
-    /// <returns></returns>
+    /// <returns>渲染结果</returns>
     protected override string RenderCore( IHtmlContainer scope )
     {
 
-      //初始化视图筛选器
-      Filters = InitializeFilters();
-
-      RenderAdapters.Add( new ViewElementAdapter( ViewContext, Url ) );
-
+      HttpContext.Trace.Write( "JumonyView", "Begin GetViewHandler" );
+      var handler = GetHandler( VirtualPath );
+      HttpContext.Trace.Write( "JumonyView", "End GetViewHandler" );
 
       HttpContext.Trace.Write( "JumonyView", "Begin Process" );
       OnPreProcess();
-      ProcessScope();
+      ProcessScope( handler );
       OnPostProcess();
       HttpContext.Trace.Write( "JumonyView", "End Process" );
 
@@ -76,45 +156,50 @@ namespace Ivony.Html.Web
       AddGeneratorMetaData();
 
 
+      RenderAdapters = GetRenderAdapters( handler );
+
+      string result;
+
       if ( MasterView != null )
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
         MasterView.Initialize( ViewContext );
         HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
 
+
+        var jumonyMaster = MasterView as JumonyMasterView;
+        if ( jumonyMaster != null )
+        {
+          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+          ProcessMaster( jumonyMaster );
+          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+        }
+
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        var content = MasterView.Render( this );
+        result = MasterView.Render( this );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
-
-        return content;
       }
       else
       {
         HttpContext.Trace.Write( "JumonyView", "Begin Render" );
         OnPreRender();
-        string content = RenderContent( RenderAdapters.ToArray() );
+        result = RenderContent( RenderAdapters.ToArray() );
         OnPostRender();
         HttpContext.Trace.Write( "JumonyView", "End Render" );
-
-        return content;
       }
+
+
+      var disposable = handler as IDisposable;
+      if ( disposable != null )
+        disposable.Dispose();
+
+      return result;
     }
 
-    /// <summary>
-    /// 初始化筛选器，获取当前视图所需要应用的筛选器。
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerable<IViewFilter> InitializeFilters()
-    {
-      var filters = ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
 
-      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
 
-      return filters;
-    }
 
 
     /// <summary>
@@ -161,7 +246,7 @@ namespace Ivony.Html.Web
     #region Events
 
     /// <summary>
-    /// 初识化结束后，进行任何处理前引发此事件
+    /// 初始化结束后，进行任何处理前引发此事件
     /// </summary>
     public event EventHandler PreProcess;
 
@@ -260,15 +345,11 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类实现此方法完成对视图的处理工作
+    /// 处理 HTML 文档
     /// </summary>
-    protected virtual void ProcessScope()
+    protected virtual void ProcessScope( IViewHandler handler )
     {
-
-      var handler = HtmlViewHandlerProvider.GetHandler( VirtualPath );
-
-      handler.ProcessScope( ViewContext, Scope );
-
+      handler.ProcessScope( ViewContext, Scope, Url );
     }
 
 
@@ -313,16 +394,6 @@ namespace Ivony.Html.Web
       else
         return document.Render( adapters );
 
-    }
-
-
-    /// <summary>
-    /// 自定义渲染过程的 HTML 转换器
-    /// </summary>
-    internal protected virtual IList<IHtmlRenderAdapter> RenderAdapters
-    {
-      get;
-      private set;
     }
 
 

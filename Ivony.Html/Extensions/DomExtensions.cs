@@ -907,6 +907,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "element" );
 
       var modifier = EnsureModifiable( element );
+      var mode = element.ElementTextMode();
 
       lock ( element.SyncRoot )
       {
@@ -916,15 +917,15 @@ namespace Ivony.Html
           return element;
 
 
-        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( mode == TextMode.CData )
         {
           modifier.AddTextNode( element, text );
         }
-        else if ( HtmlSpecification.preformatedElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) || !encodeWhiteSpaces )
+        else if ( mode == TextMode.Preformated || !encodeWhiteSpaces )
         {
           modifier.AddTextNode( element, HtmlEncoding.HtmlEncode( text ) );
         }
-        else
+        else if ( mode == TextMode.Normal )
         {
           var encoded = HtmlEncoding.HtmlEncode( text );
 
@@ -940,6 +941,8 @@ namespace Ivony.Html
 
           element.Document.ParseFragment( encoded ).Into( element, 0 );
         }
+        else
+          throw new InvalidOperationException( "元素不包含任何文本内容，无法设置 InnerText" );
       }
 
       return element;
@@ -958,7 +961,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-
+      var specification = element.Document.HtmlSpecification;
       var modifier = EnsureModifiable( element );
 
       lock ( element.SyncRoot )
@@ -969,7 +972,7 @@ namespace Ivony.Html
           return element;
 
 
-        if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( specification.IsCDataElement( element.Name ) )
         {
           modifier.AddTextNode( element, html );
         }

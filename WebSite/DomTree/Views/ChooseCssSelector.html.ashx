@@ -7,11 +7,11 @@ using Ivony.Html.Web;
 
 public class ChooseCssSelector_html : ViewHandler
 {
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
 
     if ( ViewData["SelectedElements"] == null )
-      Document.Find( ".message" ).Remove();
+      Find( ".message" ).Remove();
 
   }
 }

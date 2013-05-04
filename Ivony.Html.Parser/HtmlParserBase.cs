@@ -28,10 +28,11 @@ namespace Ivony.Html.Parser
     }
 
     /// <summary>
-    /// 初始化容器堆栈
+    /// 初始化容器
     /// </summary>
-    protected virtual void InitializeStack()
+    protected virtual void Initialize()
     {
+      HtmlSpecification = null;
       ContainerStack = new Stack<IHtmlContainer>();
     }
 
@@ -84,6 +85,17 @@ namespace Ivony.Html.Parser
       get { return _sync; }
     }
 
+
+    /// <summary>
+    /// 正在处理的文档
+    /// </summary>
+    protected IHtmlDocument Document
+    {
+      get;
+      private set;
+    }
+
+
     /// <summary>
     /// 分析 HTML 文本并创建文档
     /// </summary>
@@ -101,21 +113,33 @@ namespace Ivony.Html.Parser
       lock ( SyncRoot )
       {
 
-        InitializeStack();
+        Initialize();
 
-        var document = DomProvider.CreateDocument( url );
+        Document = DomProvider.CreateDocument( url );
 
-        if ( string.IsNullOrEmpty( html ) )
-          return document;
+        if ( !string.IsNullOrEmpty( html ) )
+        {
+          ContainerStack.Push( Document );
 
-        ContainerStack.Push( document );
+          ParseInternal( html );
+        }
 
-        ParseInternal( html );
+        if ( Document.HtmlSpecification == null )//若始终没能找到 DTD 声明，则设置默认的规范
+          DomProvider.SetHtmlSpecification( Document, null );
 
-
-        return CompleteDocument( document );
+        return CompleteDocument( Document );
 
       }
+    }
+
+
+    /// <summary>
+    /// 获取所使用的 HTML 规范
+    /// </summary>
+    protected HtmlSpecificationBase HtmlSpecification
+    {
+      get;
+      private set;
     }
 
     /// <summary>
@@ -189,6 +213,10 @@ namespace Ivony.Html.Parser
     /// <returns>处理过程中所创建的元素对象，若不支持则返回 null</returns>
     protected virtual IHtmlElement ProcessBeginTag( HtmlBeginTag beginTag )
     {
+
+      if ( HtmlSpecification == null )
+        SetHtmlSpecification( (HtmlDoctypeDeclaration) null );
+
       string tagName = beginTag.TagName;
       bool selfClosed = beginTag.SelfClosed;
 
@@ -206,7 +234,7 @@ namespace Ivony.Html.Parser
       //检查父级是否可选结束标记，并作相应处理
       {
         var element = CurrentContainer as IHtmlElement;
-        if ( element != null && HtmlSpecification.optionalCloseTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+        if ( element != null && HtmlSpecification.IsOptionalEndTag( element.Name ) )
         {
           if ( ImmediatelyClose( tagName, element ) )
             ContainerStack.Pop();
@@ -251,6 +279,7 @@ namespace Ivony.Html.Parser
     }
 
 
+
     /// <summary>
     /// 检查元素是否为自结束标签
     /// </summary>
@@ -258,7 +287,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为自结束标签</returns>
     protected virtual bool IsSelfCloseElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.selfCloseTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
+      return HtmlSpecification.IsForbiddenEndTag( tag.TagName );
     }
 
     /// <summary>
@@ -268,7 +297,7 @@ namespace Ivony.Html.Parser
     /// <returns>是否为CDATA标签</returns>
     protected virtual bool IsCDataElement( HtmlBeginTag tag )
     {
-      return HtmlSpecification.cdataTags.Contains( tag.TagName, StringComparer.OrdinalIgnoreCase );
+      return HtmlSpecification.IsCDataElement( tag.TagName );
     }
 
 
@@ -399,11 +428,51 @@ namespace Ivony.Html.Parser
     protected virtual IHtmlSpecial ProcessDoctypeDeclaration( HtmlDoctypeDeclaration doctype )
     {
 
+      SetHtmlSpecification( doctype );
       return CreateSpecial( doctype.Html );
 
     }
 
 
+    /// <summary>
+    /// 根据 DTD 声明设置相应的 HTML 规范
+    /// </summary>
+    /// <param name="doctype">DTD 声明</param>
+    /// <returns>所适用的 HTML 规范</returns>
+    protected virtual void SetHtmlSpecification( HtmlDoctypeDeclaration doctype )
+    {
+      if ( HtmlSpecification == null )
+      {
+        var declaration = doctype.IfNull( null, d => d.Declaration );
+
+        SetHtmlSpecification( DomProvider.SetHtmlSpecification( Document, declaration ) );
+
+      }
+    }
+
+
+    /// <summary>
+    /// 设置当前解析器所使用的 HTML 规范
+    /// </summary>
+    /// <param name="specification">要设置的 HTML 解析规范</param>
+    /// <returns></returns>
+    protected virtual void SetHtmlSpecification( HtmlSpecificationBase specification )
+    {
+      if ( specification == null )
+        throw new ArgumentNullException( "specification" );
+
+      if ( HtmlSpecification != null )
+        throw new InvalidOperationException( "已经设置了当前所使用的 HTML 规范" );
+
+      HtmlSpecification = specification;
+    }
+
+
+    /// <summary>
+    /// 完成最终文档解析构建
+    /// </summary>
+    /// <param name="document">已经完成的文档结构</param>
+    /// <returns>最终完成的文档</returns>
     protected virtual IHtmlDocument CompleteDocument( IHtmlDocument document )
     {
       return DomProvider.CompleteDocument( document );

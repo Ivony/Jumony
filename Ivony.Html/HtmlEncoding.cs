@@ -72,10 +72,10 @@ namespace Ivony.Html
             continue;
         }
 
-        if ( (ch >= '\x00a0') && (ch < '\x0100') )
+        if ( ( ch >= '\x00a0' ) && ( ch < '\x0100' ) )
         {
           writer.Write( "&#" );
-          writer.Write( ((int) ch).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
+          writer.Write( ( (int) ch ).ToString( System.Globalization.NumberFormatInfo.InvariantInfo ) );
           writer.Write( ';' );
         }
         else
@@ -142,14 +142,14 @@ namespace Ivony.Html
         {
           int entityEnds = htmlText.IndexOfAny( new[] { ';', '&' }, i + 1 );
 
-          if ( (entityEnds > 0) && (htmlText[entityEnds] == ';') )
+          if ( ( entityEnds > 0 ) && ( htmlText[entityEnds] == ';' ) )
           {
             string entity = htmlText.Substring( i + 1, entityEnds - i - 1 );
 
             if ( entity.StartsWith( "#" ) )//以#开头
             {
               ushort charCode;
-              if ( (entity[1] == 'x') || (entity[1] == 'X') )
+              if ( ( entity[1] == 'x' ) || ( entity[1] == 'X' ) )
                 ushort.TryParse( entity.Substring( 2 ), NumberStyles.AllowHexSpecifier, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
               else
                 ushort.TryParse( entity.Substring( 1 ), NumberStyles.Integer, (IFormatProvider) NumberFormatInfo.InvariantInfo, out charCode );
@@ -165,7 +165,7 @@ namespace Ivony.Html
             else
             {
               i = entityEnds;
-              if ( !HtmlSpecification.entities.TryGetValue( entity, out ch ) )//没有找到则原样输出
+              if ( !HtmlSpecificationBase.entities.TryGetValue( entity, out ch ) )//没有找到则原样输出
               {
                 writer.Write( '&' );
                 writer.Write( entity );

@@ -11,12 +11,12 @@ namespace Ivony.Html.Web
 {
   public class JumonyViewLocationCache : IViewLocationCache
   {
-    public string GetViewLocation( System.Web.HttpContextBase httpContext, string key )
+    public string GetViewLocation( HttpContextBase httpContext, string key )
     {
       return (string) HttpRuntime.Cache.Get( key );
     }
 
-    public void InsertViewLocation( System.Web.HttpContextBase httpContext, string key, string virtualPath )
+    public void InsertViewLocation( HttpContextBase httpContext, string key, string virtualPath )
     {
       HttpRuntime.Cache.Insert( key, virtualPath, null, Cache.NoAbsoluteExpiration, new TimeSpan( 0, 10, 0 ) );
     }

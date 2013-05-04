@@ -12,7 +12,7 @@ public class DomViewer_html : ViewHandler
   private ICssSelector selector;
   private IHtmlDocument document;
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
 
     selector = ViewData["Selector"] as ICssSelector;
@@ -25,6 +25,8 @@ public class DomViewer_html : ViewHandler
 
   private void ProcessNode( IHtmlElement container, IHtmlNode node, bool encodeWhiteSpace = false )
   {
+
+    var specification = node.Document.HtmlSpecification;
 
     var special = node as IHtmlSpecial;
     if ( special != null )
@@ -50,12 +52,12 @@ public class DomViewer_html : ViewHandler
     var element = node as IHtmlElement;
     if ( element != null )
     {
-      bool selfClosed = HtmlSpecification.selfCloseTags.Contains( element.Name );
+      bool selfClosed = specification.IsForbiddenEndTag( element.Name );
 
       if ( selector != null && selector.IsEligible( element ) )
         container = container.AddElement( "div" ).SetAttribute( "class", "selected" );
 
-      
+
       var beginTag = container.AddElement( "div" ).SetAttribute( "class", "beginTag tag" );
 
       beginTag.AddElement( "span" ).SetAttribute( "class", "brackets" ).InnerText( "<" );
@@ -79,7 +81,7 @@ public class DomViewer_html : ViewHandler
 
 
       var _encodeWhiteSpace = false;
-      if ( HtmlSpecification.cdataTags.Contains( element.Name ) )
+      if ( specification.IsCDataElement( element.Name ) )
         _encodeWhiteSpace = true;
 
 

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using System.Web;
-using System.Web.Routing;
-using System.Web.Caching;
+﻿using Ivony.Web;
+using System;
 using System.IO;
-using System.Web.Mvc.Html;
-using Ivony.Fluent;
-using System.Threading;
-using System.Threading.Tasks;
-using Ivony.Web;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace Ivony.Html.Web
 {
@@ -32,21 +24,6 @@ namespace Ivony.Html.Web
       private set;
     }
 
-    /// <summary>
-    /// 获取视图模型
-    /// </summary>
-    protected object ViewModel
-    {
-      get { return ViewContext.ViewData.Model; }
-    }
-
-    /// <summary>
-    /// 获取视图数据
-    /// </summary>
-    protected ViewDataDictionary ViewData
-    {
-      get { return ViewContext.ViewData; }
-    }
 
     /// <summary>
     /// 获取当前 HTTP 上下文
@@ -56,56 +33,7 @@ namespace Ivony.Html.Web
       get { return ViewContext.HttpContext; }
     }
 
-    /// <summary>
-    /// 获取当前 HTTP 响应的追踪上下文对象
-    /// </summary>
-    protected TraceContext Trace
-    {
-      get { return HttpContext.Trace; }
-    }
 
-
-
-    /// <summary>
-    /// 获取请求上下文
-    /// </summary>
-    protected RequestContext RequestContext
-    {
-      get { return ViewContext.RequestContext; }
-    }
-
-    /// <summary>
-    /// 获取路由信息
-    /// </summary>
-    protected RouteData RouteData
-    {
-      get { return ViewContext.RouteData; }
-    }
-
-    /// <summary>
-    /// 获取 TempData
-    /// </summary>
-    protected TempDataDictionary TempData
-    {
-      get { return ViewContext.TempData; }
-    }
-
-    /// <summary>
-    /// 获取缓存提供对象
-    /// </summary>
-    protected Cache Cache
-    {
-      get { return HttpContext.Cache; }
-    }
-
-    /// <summary>
-    /// 获取 Url 帮助器
-    /// </summary>
-    public JumonyUrlHelper Url
-    {
-      get;
-      private set;
-    }
 
     /// <summary>
     /// 获取原始的（顶层的）视图上下文
@@ -115,10 +43,6 @@ namespace Ivony.Html.Web
       get;
       private set;
     }
-
-
-
-
 
 
     private bool _initialized = false;
@@ -230,7 +154,7 @@ namespace Ivony.Html.Web
     /// 初始化视图，准备处理和渲染
     /// </summary>
     /// <param name="viewContext">视图上下文</param>
-    protected void InitializeView( ViewContext viewContext )
+    protected virtual void InitializeView( ViewContext viewContext )
     {
 
       if ( !_initialized )
@@ -248,7 +172,6 @@ namespace Ivony.Html.Web
       }
 
       RawViewContext = viewContext;
-      Url = new JumonyUrlHelper( this );
 
 
       HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );
@@ -310,57 +233,5 @@ namespace Ivony.Html.Web
     {
       return CachedResponse;
     }
-
-
-
-    /// <summary>
-    /// 视图引擎调用此方法清理视图所使用的所有非托管资源
-    /// </summary>
-    public virtual void Dispose()
-    {
-    }
-
-
-    /// <summary>
-    /// 创建 IViewDataContainer 实例
-    /// </summary>
-    /// <returns>包含当前视图的 IViewDataContainer 实例</returns>
-    internal ViewDataContainer CreateViewDataContainer()
-    {
-      return new ViewDataContainer( this );
-    }
-
-
-    /// <summary>
-    /// 为视图提供 ViewData 的容器类型
-    /// </summary>
-    public class ViewDataContainer : IViewDataContainer
-    {
-
-      private ViewBase _view;
-
-      /// <summary>
-      /// 创建 ViewDataContainer 对象
-      /// </summary>
-      /// <param name="view"></param>
-      public ViewDataContainer( ViewBase view )
-      {
-        _view = view;
-      }
-
-
-      ViewDataDictionary IViewDataContainer.ViewData
-      {
-        get
-        {
-          return _view.ViewData;
-        }
-        set
-        {
-          throw new NotSupportedException();
-        }
-      }
-    }
-
   }
 }

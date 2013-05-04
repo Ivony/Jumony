@@ -23,7 +23,4 @@ namespace Ivony.Html.Web
     CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters );
 
   }
-
-
-
 }

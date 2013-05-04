@@ -16,18 +16,22 @@ using Ivony.Html.Templates;
 public class index_html : ViewHandler<Task[]>
 {
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
-    Document.FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
+    //FindSingle( "form" ).SetAttribute( "action", Url.Action( "Add" ) );
 
-    var items = Document.FindSingle( "ul > li" ).Repeat( ViewModel.Count() );//绑定数据
+    var items = FindSingle( "ul > li" ).Repeat( Model.Count() );//绑定数据
 
-    ViewModel.BindTo( items, BindTaskItem );
+    Model.BindTo( items, BindTaskItem );
   }
 
+  [HandleElement( "form" )]
+  public void Test( IHtmlElement element )
+  {
+    element.SetAttribute( "action", Url.Action( "Add" ) );
+  }
 
-
-  private void BindTaskItem( Task task, IHtmlElement taskElement )
+  public void BindTaskItem( Task task, IHtmlElement taskElement )
   {
     taskElement.Elements( "span" ).Single().InnerText( task.Title );
 
@@ -35,7 +39,7 @@ public class index_html : ViewHandler<Task[]>
 
     if ( task.Completed )
     {
-      taskElement.Style().AddClass( "finished" );
+      taskElement.SetAttribute( "class", "finished" );
       taskElement.Find( "a[action=complete]" ).Remove();
     }
     else

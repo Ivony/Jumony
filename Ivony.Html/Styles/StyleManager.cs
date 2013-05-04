@@ -70,7 +70,7 @@ namespace Ivony.Html.Styles
 
       lock ( element.SyncRoot )
       {
-        style = CssParser.ParseCssStyle( element.Attribute( "style" ).Value().IfNull( "" ) );
+        style = CssPropertyParser.ParseCssStyle( element.Attribute( "style" ).Value().IfNull( "" ) );
       }
     }
 

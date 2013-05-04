@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Html.Parser.ContentModels;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Ivony.Html.Parser
 {
@@ -14,10 +15,54 @@ namespace Ivony.Html.Parser
   public class JumonyReader : IHtmlReader
   {
 
+
+    /// <summary>
+    /// 用于匹配元素标签名的正则
+    /// </summary>
+    public static readonly Regex tagNameRegex = new Regulars.TagName();
+
+    private static readonly IDictionary<string, Regex> endTagRegexes = new Dictionary<string, Regex>( StringComparer.OrdinalIgnoreCase );
+
+    private static object _sync = new object();
+
+    /// <summary>
+    /// 获取匹配指定结束标签的正则表达式对象
+    /// </summary>
+    /// <param name="tagName">标签名</param>
+    /// <returns>匹配指定结束标签的正则表达式对象</returns>
+    public static Regex GetEndTagRegex( string tagName )
+    {
+
+      if ( tagName == null )
+        throw new ArgumentNullException( "tagName" );
+
+      if ( !tagNameRegex.IsMatch( tagName ) )
+        throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "\"{0}\" 不是一个合法有效的 HTML 元素名称", tagName ), "tagName" );
+
+
+      tagName = tagName.ToLowerInvariant();
+
+      lock ( _sync )
+      {
+        Regex regex;
+
+        if ( !endTagRegexes.TryGetValue( tagName, out regex ) )
+          endTagRegexes.Add( tagName, regex = new Regex( @"</#tagName\s*>".Replace( "#tagName", tagName ), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant ) );
+
+        return regex;
+      }
+    }
+
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象
     /// </summary>
     protected static readonly Regex tagRegex = new Regulars.HtmlTag();
+
+
+    /// <summary>
+    /// 用于匹配属性设置的正则表达式对象
+    /// </summary>
+    protected static readonly Regex attributeRegex = new Regulars.Attribute();
 
 
     /// <summary>
@@ -120,7 +165,7 @@ namespace Ivony.Html.Parser
     protected virtual HtmlEndTag FindEndTag( int index, string elementName )
     {
 
-      Regex endTagRegex = HtmlSpecification.GetEndTagRegex( elementName );
+      Regex endTagRegex = GetEndTagRegex( elementName );
       var endTagMatch = endTagRegex.Match( HtmlText, index );
 
 
@@ -193,7 +238,8 @@ namespace Ivony.Html.Parser
 
 
       //处理所有属性
-      var attributes = CreateAttributes( match );
+      var capture = match.Groups["attributes"];
+      var attributes = CreateAttributes( capture.Value, capture.Index );
 
 
       var fragment = CreateFragment( match );
@@ -207,14 +253,14 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="match">属性设置的匹配</param>
     /// <returns>HTML 属性设置的内容对象</returns>
-    protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( Match match )
+    protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( string attributesExpression, int index )
     {
-      foreach ( Capture capture in match.Groups["attribute"].Captures )
+      foreach ( Match match in attributeRegex.Matches( attributesExpression ) )
       {
-        string name = capture.FindCaptures( match.Groups["attrName"] ).Single().Value;
-        string value = capture.FindCaptures( match.Groups["attrValue"] ).Select( c => c.Value ).SingleOrDefault();
+        string name = match.Groups["attrName"].Value;
+        string value = match.Groups["attrValue"].Success ? match.Groups["attrValue"].Value : null;
 
-        yield return new HtmlAttributeSetting( CreateFragment( capture ), name, value );
+        yield return new HtmlAttributeSetting( CreateFragment( match, index ), name, value );
       }
     }
 
@@ -272,7 +318,7 @@ namespace Ivony.Html.Parser
       var raw = match.ToString();
 
       var fragment = CreateFragment( match );
-      return new HtmlDoctypeDeclaration( fragment );
+      return new HtmlDoctypeDeclaration( fragment, match.Groups["declaration"].Value );
     }
 
 
@@ -296,9 +342,9 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="capture">捕获到的字符串</param>
     /// <returns>文档内容片段对象</returns>
-    protected HtmlContentFragment CreateFragment( Capture capture )
+    protected HtmlContentFragment CreateFragment( Capture capture, int offset = 0 )
     {
-      return new HtmlContentFragment( this, capture.Index, capture.Length );
+      return new HtmlContentFragment( this, offset + capture.Index, capture.Length );
     }
 
   }

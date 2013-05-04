@@ -169,5 +169,14 @@ namespace Ivony.Html.Parser
         return _currentVersionCache;
       }
     }
+
+    /// <summary>
+    /// 文档所采用的 HTML 规范。
+    /// </summary>
+    public HtmlSpecificationBase HtmlSpecification
+    {
+      get;
+      internal set;
+    }
   }
 }

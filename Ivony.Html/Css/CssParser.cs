@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 using System.Globalization;
-using Ivony.Html.Selectors;
 using Ivony.Html.Styles;
 
 namespace Ivony.Html
@@ -200,6 +199,7 @@ namespace Ivony.Html
       else
         return false;
     }
+
 
     /// <summary>
     /// 解析元素选择器
@@ -576,100 +576,6 @@ namespace Ivony.Html
       return name;
     }
 
-    public static CssStyleSetting[] ParseCssSettings( string expression )
-    {
-      if ( expression == null )
-        return null;
-
-      using ( var enumerator = new CharEnumerator( expression ) )
-      {
-        return ParseCssSettings( enumerator );
-      }
-    }
-
-    private static CssStyleSetting[] ParseCssSettings( CharEnumerator enumerator )
-    {
-
-      var list = new List<CssStyleSetting>();
-
-      do
-      {
-
-        list.Add( ParseCssSetting( enumerator ) );
-
-      } while ( enumerator.MoveNext() );
-
-
-      return list.ToArray();
-
-    }
-
-    private static CssStyleSetting ParseCssSetting( CharEnumerator enumerator )
-    {
-      SkipWhiteSpace( enumerator );
-      var name = ParseName( enumerator );
-      SkipWhiteSpace( enumerator );
-
-      if ( enumerator.Current != ':' )
-        throw FormatError( enumerator, ':' );
-
-      EnsureNext( enumerator );
-
-
-      var offset = enumerator.Offset;
-      var important = false;
-
-      while ( true )
-      {
-
-        ParseQuoteText( enumerator );
-        important = ParseImportant( enumerator );
-        if ( enumerator.Current == ';' )//遇到结束符
-        {
-          enumerator.MoveNext();
-          break;
-        }
-
-        if ( !enumerator.MoveNext() )//或者遇到字符串结束
-          break;
-      }
-
-
-      if ( !important )
-      {
-        var value = enumerator.SubString( offset, enumerator.Offset - offset );
-        return new CssStyleSetting( name, value );
-      }
-      else
-      {
-        var value = enumerator.SubString( offset, enumerator.Offset - offset - impoartantFlag.Length );
-        return new CssStyleSetting( name, value, true );
-      }
-
-
-    }
-
-
-    private const string impoartantFlag = "!important";
-
-    private static bool ParseImportant( CharEnumerator enumerator )
-    {
-      if ( enumerator.Current != '!' )
-        return false;
-
-
-      if ( enumerator.SubString( enumerator.Offset, impoartantFlag.Length ) == impoartantFlag )
-      {
-        enumerator.Skip( impoartantFlag.Length );
-        return true;
-      }
-
-      else
-        return false;
-    }
-
-
-
     private class CharEnumerator : IEnumerator<char>
     {
 
@@ -738,20 +644,7 @@ namespace Ivony.Html
       {
         _index += length;
       }
-    }
 
-
-
-    /// <summary>
-    /// 解析 CSS 样式设置
-    /// </summary>
-    /// <param name="styleExpression">CSS 样式设置表达式</param>
-    /// <returns>CSS 样式设置</returns>
-    public static CssStyle ParseCssStyle( string styleExpression )
-    {
-      var style = new CssStyle();
-      style.InitializeSettings( ParseCssSettings( styleExpression ) );
-      return style;
     }
   }
 }

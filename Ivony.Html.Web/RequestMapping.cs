@@ -19,27 +19,15 @@ namespace Ivony.Html.Web
     /// 创建 RequestMapping 对象
     /// </summary>
     /// <param name="mapper">产生此结果的映射器</param>
-    /// <param name="templatePath">HTML 模版路径</param>
+    /// <param name="virtualPath">HTML 模版路径</param>
     /// <param name="handler">HTML 文档处理程序</param>
-    public RequestMapping( IRequestMapper mapper, string templatePath, IHtmlHandler handler )
+    public RequestMapping( IRequestMapper mapper, string virtualPath, IHtmlHandler handler )
     {
 
-      if ( !VirtualPathUtility.IsAppRelative( templatePath ) )
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw new ArgumentException( "模版文件路径只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "templatePath" );
 
-      TemplatePath = templatePath;
-      Handler = handler;
-    }
-
-
-    /// <summary>
-    /// 派生类调用创建 RequestMapping 对象
-    /// </summary>
-    /// <param name="mapper">请求映射器</param>
-    /// <param name="handler">HTML 文档处理程序</param>
-    protected RequestMapping( IRequestMapper mapper, IHtmlHandler handler )
-    {
-      Mapper = mapper;
+      VirtualPath = virtualPath;
       Handler = handler;
     }
 
@@ -56,25 +44,25 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取 HTML 文档模版路径
     /// </summary>
-    protected virtual string TemplatePath
+    public virtual string VirtualPath
     {
       get;
-      set;
+      private set;
     }
 
 
-    private bool _templateLoaded;
-    private string _templateCacheKey;
+    private bool _loaded;
+    private string _cacheKey;
 
     /// <summary>
     /// 获取模版缓存键
     /// </summary>
-    public virtual string TemplateCacheKey
+    public string CacheKey
     {
       get
       {
-        if ( _templateLoaded )
-          return _templateCacheKey;
+        if ( _loaded )
+          return _cacheKey;
 
         else
           throw new InvalidOperationException( "模版尚未加载" );
@@ -86,11 +74,11 @@ namespace Ivony.Html.Web
     /// 加载 HTML 文档模版
     /// </summary>
     /// <returns>HTML 文档模版</returns>
-    public virtual IHtmlDocument LoadTemplate()
+    public IHtmlDocument LoadDocument()
     {
-      var document = LoadDocument( out _templateCacheKey );
+      var document = LoadDocument( out _cacheKey );
 
-      _templateLoaded = true;
+      _loaded = true;
       return document;
     }
 
@@ -101,7 +89,7 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档</returns>
     protected virtual IHtmlDocument LoadDocument( out string cacheKey )
     {
-      var document = HtmlProviders.LoadDocument( TemplatePath, out cacheKey );
+      var document = HtmlProviders.LoadDocument( VirtualPath, out cacheKey );
       return document;
     }
 

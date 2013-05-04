@@ -6,6 +6,10 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.ExpandedAPI
 {
+
+  /// <summary>
+  /// 提供扩展的导航 API
+  /// </summary>
   public static class ExpandedNavigateExtensions
   {
 

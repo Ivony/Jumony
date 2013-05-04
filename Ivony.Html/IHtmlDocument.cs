@@ -48,6 +48,14 @@ namespace Ivony.Html
       get;
     }
 
+    
+    /// <summary>
+    /// 获取该文档应当遵循的 HTML 规范
+    /// </summary>
+    HtmlSpecificationBase HtmlSpecification
+    {
+      get;
+    }
 
   }
 }

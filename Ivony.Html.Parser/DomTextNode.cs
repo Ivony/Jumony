@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Ivony.Html.Parser
 {
-  
+
   /// <summary>
   /// IHtmlTextNode 的一个实现
   /// </summary>
@@ -42,10 +42,10 @@ namespace Ivony.Html.Parser
     {
       get
       {
-        var element =  this.Parent();
+        var element = this.Parent();
         if ( element != null )
         {
-          if ( HtmlSpecification.cdataTags.Contains( element.Name, StringComparer.OrdinalIgnoreCase ) )
+          if ( Document.HtmlSpecification.IsCDataElement( element.Name ) )
             return raw;
 
           else

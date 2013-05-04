@@ -15,6 +15,10 @@ namespace Ivony.Html.Parser
 
     private IDomFragmentParserProvider _fragmentParserProvider;
 
+    /// <summary>
+    /// 创建 DomProvider 对象
+    /// </summary>
+    /// <param name="provider">文档碎片解析器提供程序</param>
     public DomProvider( IDomFragmentParserProvider provider )
     {
       _fragmentParserProvider = provider;
@@ -37,6 +41,34 @@ namespace Ivony.Html.Parser
     public IHtmlDocument CreateDocument( Uri url )
     {
       return new DomDocument( url );
+    }
+
+
+
+    /// <summary>
+    /// 设置文档所采用的文档规范
+    /// </summary>
+    /// <param name="document">文档</param>
+    /// <param name="specificationType">所采用的文档规范名称</param>
+    public HtmlSpecificationBase SetHtmlSpecification( IHtmlDocument document, string specificationType )
+    {
+
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+      var domDocument = document as DomDocument;
+      if ( domDocument == null )
+        throw new NotSupportedException( "只能处理指定类型的文档" );
+
+      if ( domDocument.HtmlSpecification != null )
+        throw new InvalidOperationException();
+
+      return domDocument.HtmlSpecification = SelectSpecification( specificationType );
+    }
+
+    private HtmlSpecificationBase SelectSpecification( string specificationType )
+    {
+      return new Html41Specification();
     }
 
 
@@ -96,10 +128,6 @@ namespace Ivony.Html.Parser
       return EnsureDomContainer( container ).AddNode( new DomSpecial( html ) );
     }
 
-
-
-    #region IHtmlDomProvider 成员
-
     /// <summary>
     /// 完成文档的创建
     /// </summary>
@@ -114,9 +142,11 @@ namespace Ivony.Html.Parser
 
       domDocument.FragmentManager.ParserProvider = _fragmentParserProvider;
 
+      if ( domDocument.HtmlSpecification == null )
+        throw new InvalidOperationException( "尚未设置文档所使用的 HTML 规范！" );
+
       return domDocument;
     }
 
-    #endregion
   }
 }

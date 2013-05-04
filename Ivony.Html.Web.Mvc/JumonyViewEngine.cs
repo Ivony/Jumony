@@ -83,29 +83,23 @@ namespace Ivony.Html.Web
 
         var directory = VirtualPathUtility.GetDirectory( viewPath );
 
-        do
-        {
+        if ( MvcEnvironment.Configuration.FallbackDefaultMaster )
+          masterPath = ViewHandlerProvider.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
+        else
           masterPath = VirtualPathUtility.Combine( directory, "_master.html" );
 
-          if ( VirtualPathProvider.FileExists( masterPath ) )
+        if ( VirtualPathProvider.FileExists( masterPath ) )
+        {
+          var contentView = view as IContentView;
+
+          if ( contentView != null )
           {
-            var contentView = view as IContentView;
 
-            if ( contentView != null )
-            {
+            contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
+            return contentView;
 
-              contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
-              return contentView;
-
-            }
           }
-
-          if ( directory == "~/" )
-            break;
-
-          directory = VirtualPathUtility.Combine( directory, "../" );
-
-        } while ( MvcEnvironment.Configuration.FallbackDefaultMaster );
+        }
 
         return view;
       }
@@ -132,17 +126,9 @@ namespace Ivony.Html.Web
     /// <returns>创建的视图母板</returns>
     protected virtual JumonyMasterView CreateMaster( ControllerContext controllerContext, string masterPath )
     {
-      var handlerPath = masterPath + ".ashx";
-
-      if ( !VirtualPathProvider.FileExists( handlerPath ) )
-        return new GenericMasterView( masterPath );
-
-      var view = (MasterViewHandler) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( MasterViewHandler ) );
-      if ( view == null )
-        return new GenericMasterView( masterPath );
-
-      view.Initialize( masterPath );
-      return view;
+      JumonyMasterView masterView = new JumonyMasterView();
+      masterView.Initialize( masterPath );
+      return masterView;
     }
 
 
@@ -197,9 +183,7 @@ namespace Ivony.Html.Web
 
 
         if ( view == null )
-        {
-          view = new GenericView();
-        }
+          view = new JumonyView();
 
 
         OnViewCreated( new JumonyViewEventArgs() { View = view } );
@@ -214,14 +198,14 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">视图虚拟路径</param>
     /// <param name="isPartial">是否应创建为部分视图</param>
     /// <returns>若有自定义视图处理程序，则返回。</returns>
-    protected virtual ViewBase TryCreateViewHandler( string virtualPath, bool isPartial )
+    protected virtual JumonyViewHandler TryCreateViewHandler( string virtualPath, bool isPartial )
     {
       var handlerPath = virtualPath + ".ashx";
 
       if ( !VirtualPathProvider.FileExists( handlerPath ) )
         return null;
 
-      var view = (ViewBase) BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewBase ) );
+      var view = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( object ) ) as JumonyViewHandler;
       if ( view == null )
         return null;
 

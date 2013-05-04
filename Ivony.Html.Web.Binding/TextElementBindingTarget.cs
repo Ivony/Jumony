@@ -30,7 +30,7 @@ namespace Ivony.Html.Web.Binding
 
       var text = (string) value;
 
-      if ( HtmlSpecification.preformatedElements.Contains( parent.Name, StringComparer.OrdinalIgnoreCase ) )
+      if ( parent.ElementTextMode() == TextMode.Preformated )
       {
         parent.AddTextNode( _targetElement.NodesIndexOfSelf(), HtmlEncoding.HtmlEncode( text ) );
         _targetElement.Remove();

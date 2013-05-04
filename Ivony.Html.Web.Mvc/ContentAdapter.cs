@@ -56,15 +56,7 @@ namespace Ivony.Html.Web
 
       if ( element.Name.EqualsIgnoreCase( "content" ) )
       {
-        var body = Document.FindSingle( "body" );
-        var contentBodyId = body.Attribute( "content-body" ).Value();
-
-        if ( !string.IsNullOrEmpty( contentBodyId ) )
-          body = Document.GetElementById( contentBodyId );
-
-
-        body.RenderChilds( context.Writer, RenderAdapters );
-
+        GetContentBody( element ).RenderChilds( context.Writer, RenderAdapters );
         return true;
       }
       else if ( element.Name.EqualsIgnoreCase( "head" ) )
@@ -82,7 +74,32 @@ namespace Ivony.Html.Web
         return false;
     }
 
-    private IHtmlElement MergeHead( IHtmlElement masterHead, IHtmlElement contentHead )
+
+
+    /// <summary>
+    /// 获取内容视图需要被的渲染内容
+    /// </summary>
+    /// <param name="element">位于母板视图上的 &lt;content&gt; 标签</param>
+    /// <returns>该 &lt;content&gt; 标签需要被渲染的内容</returns>
+    protected virtual IHtmlContainer GetContentBody( IHtmlElement element )
+    {
+      var body = Document.FindSingle( "body" );
+      var contentBodyId = body.Attribute( "content-body" ).Value();
+
+      if ( !string.IsNullOrEmpty( contentBodyId ) )
+        body = Document.GetElementById( contentBodyId );
+
+      return body;
+    }
+
+
+    /// <summary>
+    /// 合并内容视图与母板视图的文档头
+    /// </summary>
+    /// <param name="masterHead">母板视图的文档头</param>
+    /// <param name="contentHead">内容视图的文档头</param>
+    /// <returns>合并后的 &lt;head&gt; 元素</returns>
+    protected virtual IHtmlElement MergeHead( IHtmlElement masterHead, IHtmlElement contentHead )
     {
 
       var head = masterHead.Document.CreateFragment().AddElement( "head" );

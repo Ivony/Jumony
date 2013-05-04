@@ -67,9 +67,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Css\CssPropertyParser.cs" />
+    <Compile Include="Css\CssStyleSpecificationBase.cs" />
     <Compile Include="Css\CssStyle.cs" />
-    <Compile Include="Css\CssStyleBase.cs" />
+    <Compile Include="Css\ICssStyleShorthandRule.cs" />
     <Compile Include="Extensions\ExpandedNavigateExtensions.cs" />
+    <Compile Include="Html41Specification.cs" />
     <Compile Include="HtmlDomDependency.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
@@ -97,7 +100,6 @@
     <Compile Include="HtmlDocumentWrapper.cs" />
     <Compile Include="HtmlElementWrapper.cs" />
     <Compile Include="HtmlNodeWrapper.cs" />
-    <Compile Include="HtmlSpecification.cs" />
     <Compile Include="IHtmlAttribute.cs" />
     <Compile Include="IHtmlComment.cs" />
     <Compile Include="IHtmlDocument.cs" />
@@ -125,7 +127,7 @@
     <Compile Include="Css\CssRelativeSelector.cs" />
     <Compile Include="Css\NegationPseudoClass.cs" />
     <Compile Include="Css\TraceEnumerable.cs" />
-    <Compile Include="Css\CssStyleSetting.cs" />
+    <Compile Include="Css\CssStyleProperty.cs" />
     <Compile Include="Styles\StyleManager.cs" />
     <Compile Include="SynchronizedCollection.cs" />
   </ItemGroup>

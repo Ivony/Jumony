@@ -11,7 +11,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 母板页视图
   /// </summary>
-  public abstract class JumonyMasterView : JumonyView, IMasterView, IView
+  public class JumonyMasterView : JumonyView, IMasterView, IView
   {
 
 
@@ -51,6 +51,17 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 重写 InitializeFilters 方法，只返回支持母板页的筛选器
+    /// </summary>
+    /// <param name="context">视图上下文</param>
+    /// <returns>所需要适用的筛选器</returns>
+    protected override IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    {
+      return base.GetFilters( context ).OfType<IMasterViewFiler>();
+    }
+
+
 
     void IMasterView.Initialize( ViewContext context )
     {
@@ -58,8 +69,15 @@ namespace Ivony.Html.Web
 
       Document = (IHtmlDocument) Scope;
 
+
+      HttpContext.Trace.Write( "JumonyMasterView", "Begin GetViewHandler" );
+      var handler = GetHandler( VirtualPath );
+      HttpContext.Trace.Write( "JumonyMasterView", "End GetViewHandler" );
+
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Process" );
-      ProcessScope();
+      OnPreProcess();
+      ProcessScope( handler );
+      OnPostProcess();
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 
@@ -71,18 +89,32 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "Begin ResolveUri" );
       Url.ResolveUri( Scope, VirtualPath );
       HttpContext.Trace.Write( "JumonyMasterView", "End ResolveUri" );
+
+
+      RenderAdapters = GetRenderAdapters( handler );
     }
 
 
     string IMasterView.Render( IContentView view )
     {
       HttpContext.Trace.Write( "JumonyMasterView", "Begin Render" );
+      OnPreRender();
       RenderAdapters.Add( view.CreateContentAdapter( this ) );
       var content = Document.Render( RenderAdapters.ToArray() );
+      OnPostRender();
       HttpContext.Trace.Write( "JumonyMasterView", "End Render" );
 
       return content;
+    }
+
+
+    protected override IViewHandler GetHandler( string virtualPath )
+    {
+
+      return ViewHandlerProvider.GetViewHandler( virtualPath, false );
 
     }
+
+
   }
 }

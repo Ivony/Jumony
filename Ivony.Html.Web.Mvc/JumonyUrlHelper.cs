@@ -19,11 +19,12 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 JumonyUrlHelper 实例
     /// </summary>
-    /// <param name="view"></param>
-    public JumonyUrlHelper( ViewBase view )
-      : base( view.ViewContext.RequestContext )
+    /// <param name="requestContext">请求上下文</param>
+    /// <param name="virtualPath">当前请求文档的虚拟路径</param>
+    public JumonyUrlHelper( RequestContext requestContext, string virtualPath )
+      : base( requestContext )
     {
-      VirtualPath = view.VirtualPath;
+      VirtualPath = virtualPath;
     }
 
 
@@ -276,9 +277,10 @@ namespace Ivony.Html.Web
     /// <param name="baseVirtualPath">容器的基路径</param>
     public void ResolveUri( IHtmlContainer container, string baseVirtualPath )
     {
+      var specification = container.Document.HtmlSpecification;
 
       var absoluteBase = VirtualPathUtility.ToAbsolute( baseVirtualPath );
-      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => HtmlSpecification.IsUriValue( a ) ).ToArray() )
+      foreach ( var attribute in container.Descendants().SelectMany( e => e.Attributes() ).Where( a => specification.IsUriValue( a ) ).ToArray() )
       {
         ResolveUri( attribute, absoluteBase );
       }

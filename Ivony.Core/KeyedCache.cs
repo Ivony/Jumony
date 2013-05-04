@@ -6,6 +6,12 @@ using System.Threading;
 
 namespace Ivony
 {
+
+  /// <summary>
+  /// 使用唯一键检索的延迟加载缓存实现
+  /// </summary>
+  /// <typeparam name="TKey">用于检索缓存对象的键的类型</typeparam>
+  /// <typeparam name="TValue">缓存对象的类型</typeparam>
   public class KeyedCache<TKey, TValue>
   {
 

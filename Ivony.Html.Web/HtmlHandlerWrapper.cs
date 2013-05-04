@@ -10,12 +10,12 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 此类型用于包装 IHtmlHandler 处理 HTTP 请求
   /// </summary>
-  internal sealed class HttpHandler : JumonyHandler
+  internal sealed class HtmlHandlerWrapper : JumonyHandler
   {
 
     private IHtmlHandler _handler;
 
-    public HttpHandler( IHtmlHandler handler )
+    public HtmlHandlerWrapper( IHtmlHandler handler )
     {
       if ( handler == null )
         throw new ArgumentNullException( "handler" );
@@ -25,7 +25,7 @@ namespace Ivony.Html.Web
 
     protected override void ProcessDocument()
     {
-      _handler.ProcessDocument( new HttpContextWrapper( HttpContext.Current ), Document );
+      _handler.ProcessDocument( new HttpContextWrapper( System.Web.HttpContext.Current ), Document );
     }
 
     public override void Dispose()

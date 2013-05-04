@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Ivony.Fluent;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
-using Ivony.Fluent;
-using Ivony.Html.ExpandedAPI;
+using System.Web.Caching;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
+  /// <summary>
+  /// Jumony 视图处理程序，继承此类型可以获得最完整的 Jumony 视图逻辑重写
+  /// </summary>
   public class JumonyViewHandler : JumonyView, IHttpHandler
   {
 
@@ -109,6 +112,66 @@ namespace Ivony.Html.Web
     {
       Scope.Find( expression ).ForAll( action );
     }
+
+
+    /// <summary>
+    /// 获取视图模型
+    /// </summary>
+    protected object ViewModel
+    {
+      get { return ViewContext.ViewData.Model; }
+    }
+
+    /// <summary>
+    /// 获取视图数据
+    /// </summary>
+    protected ViewDataDictionary ViewData
+    {
+      get { return ViewContext.ViewData; }
+    }
+
+    /// <summary>
+    /// 获取当前 HTTP 响应的追踪上下文对象
+    /// </summary>
+    protected TraceContext Trace
+    {
+      get { return HttpContext.Trace; }
+    }
+
+
+
+    /// <summary>
+    /// 获取请求上下文
+    /// </summary>
+    protected RequestContext RequestContext
+    {
+      get { return ViewContext.RequestContext; }
+    }
+
+    /// <summary>
+    /// 获取路由信息
+    /// </summary>
+    protected RouteData RouteData
+    {
+      get { return ViewContext.RouteData; }
+    }
+
+    /// <summary>
+    /// 获取 TempData
+    /// </summary>
+    protected TempDataDictionary TempData
+    {
+      get { return ViewContext.TempData; }
+    }
+
+    /// <summary>
+    /// 获取缓存提供对象
+    /// </summary>
+    protected Cache Cache
+    {
+      get { return HttpContext.Cache; }
+    }
+
 
   }
 }

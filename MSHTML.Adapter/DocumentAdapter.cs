@@ -95,5 +95,13 @@ namespace Ivony.Html.MSHTMLAdapter
     {
       get { return this; }
     }
+
+
+    private HtmlSpecificationBase _specification = new Html41Specification();
+
+    public HtmlSpecificationBase HtmlSpecification
+    {
+      get { return _specification; }
+    }
   }
 }

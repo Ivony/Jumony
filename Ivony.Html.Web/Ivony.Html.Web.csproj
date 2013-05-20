@@ -83,6 +83,7 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="ResourceManager.cs" />
+    <Compile Include="ViewElementBinder.cs" />
     <Compile Include="WebParser.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />

@@ -102,5 +102,10 @@ namespace Ivony.Html.Web
     {
       throw new NotImplementedException();
     }
+
+    internal void SetListDataContext( object dataObject )
+    {
+      throw new NotImplementedException();
+    }
   }
 }

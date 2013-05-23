@@ -9,12 +9,14 @@ using Ivony.Html.ExpandedAPI;
 
 namespace Ivony.Html.Web
 {
-  public class ViewElementBinder : IHtmlElementBinder
+  public class ElementBinder : IHtmlElementBinder
   {
     public void BindElement( HtmlBindingContext context )
     {
 
       var element = context.CurrentElement;
+      if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
+        return;
 
       //获取绑定数据源
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
@@ -41,21 +43,17 @@ namespace Ivony.Html.Web
 
       //如果数据源是列表，检测是否适用列表绑定
 
-      if ( element.Exists( "view" ) && format == null )
+      if ( element.Exists( "view, binding" ) && format == null )
       {
         IEnumerable listValue = dataObject as IEnumerable;
 
 
 
         if ( listValue != null )
-        {
-          var array = listValue.Cast<object>().ToArray();
-          element.Repeat( array.Length ).BindFrom( array, ( item, e ) => context.BindElement( item, e ) );
+          context.SetListDataContext( dataObject );
 
-        }
         else
           context.SetDataContext( dataObject );
-
 
         return;
       }
@@ -74,10 +72,10 @@ namespace Ivony.Html.Web
 
         var hostName = element.Attribute( "host" ).Value();
         if ( hostName == null )
-          context.Writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}'] = {1} }})();</script>", variableName, ToJson( dataObject ) );
+          element.ReplaceWith( string.Format( "<script type=\"text/javascript\">(function(){{ this['{0}'] = {1} }})();</script>", variableName, ToJson( dataObject ) ) );
 
         else
-          context.Writer.WriteLine( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) );
+          element.ReplaceWith( string.Format( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) ) );
 
         return;
       }
@@ -93,11 +91,21 @@ namespace Ivony.Html.Web
         var nextElement = element.NextElement();
         if ( nextElement == null )
           return;
+
         nextElement.SetAttribute( attributeName, bindValue );
         return;
       }
 
-      context.Write( bindValue );
+      element.ReplaceWith( bindValue );
     }
+
+
+    private string ToJson( object dataObject )
+    {
+      var serializer = new JavaScriptSerializer();
+      return serializer.Serialize( dataObject );
+    }
+
+
   }
 }

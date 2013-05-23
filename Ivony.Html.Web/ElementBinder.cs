@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web.Script.Serialization;
 using System.Web.UI;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
@@ -11,12 +12,13 @@ namespace Ivony.Html.Web
 {
   public class ElementBinder : IHtmlElementBinder
   {
-    public void BindElement( HtmlBindingContext context )
+    public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
 
-      var element = context.CurrentElement;
+      dataContext = null;
+
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
-        return;
+        return false;
 
       //获取绑定数据源
       var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
@@ -29,7 +31,7 @@ namespace Ivony.Html.Web
 
 
       if ( dataObject == null )
-        return;
+        return false;
 
       var path = element.Attribute( "path" ).Value();
 
@@ -50,12 +52,12 @@ namespace Ivony.Html.Web
 
 
         if ( listValue != null )
-          context.SetListDataContext( dataObject );
+          dataContext = listValue;
 
         else
-          context.SetDataContext( dataObject );
+          dataContext = dataObject;
 
-        return;
+        return true;
       }
 
 
@@ -77,7 +79,7 @@ namespace Ivony.Html.Web
         else
           element.ReplaceWith( string.Format( "<script type=\"text/javascript\">(function(){{ this['{0}']['{1}'] = {2} }})();</script>", hostName, variableName, ToJson( dataObject ) ) );
 
-        return;
+        return true;
       }
 
 
@@ -90,13 +92,14 @@ namespace Ivony.Html.Web
       {
         var nextElement = element.NextElement();
         if ( nextElement == null )
-          return;
+          return false;
 
         nextElement.SetAttribute( attributeName, bindValue );
-        return;
+        return true;
       }
 
       element.ReplaceWith( bindValue );
+      return true;
     }
 
 
@@ -105,6 +108,7 @@ namespace Ivony.Html.Web
       var serializer = new JavaScriptSerializer();
       return serializer.Serialize( dataObject );
     }
+
 
 
   }

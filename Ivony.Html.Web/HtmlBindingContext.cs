@@ -11,9 +11,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 HtmlBindingContext 实例
     /// </summary>
-    /// <param name="scope">进行绑定的范畴</param>
-    /// <param name="binders">进行绑定的器</param>
-    /// <param name="dataContext">当前数据上下文</param>
+    /// <param name="binders">所有可以用于绑定的绑定器</param>
     public HtmlBindingContext( IHtmlElementBinder[] binders )
     {
       Binders = binders;
@@ -32,17 +30,18 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 当前的数据上下文
     /// </summary>
-    public object DataContext { get; private set; }
+    public object DataContext
+    {
+      get { return _bindingDataContexts.Peek().DataContext; }
+    }
 
     /// <summary>
     /// 当前数据上下文应用的范畴
     /// </summary>
-    public IHtmlContainer DataContextScope { get; private set; }
-
-    /// <summary>
-    /// 当前正在绑定的元素
-    /// </summary>
-    public IHtmlElement CurrentElement { get; private set; }
+    public IHtmlContainer DataContextScope
+    {
+      get { return _bindingDataContexts.Peek().Scope; }
+    }
 
     /// <summary>
     /// 元素绑定器
@@ -59,8 +58,10 @@ namespace Ivony.Html.Web
     public void DataBind( IHtmlContainer scope, object dataContext, IDictionary<string, object> data )
     {
 
+      _bindingDataContexts = new Stack<BindingDataContext>();
+      _bindingDataContexts.Push( new BindingDataContext { DataContext = dataContext, Scope = scope } );
+
       BindingScope = scope;
-      DataContext = DataContext;
       Data = data;
 
       foreach ( var element in scope.Elements() )
@@ -74,38 +75,41 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定数据的元素</param>
     private void BindElement( IHtmlElement element )
     {
-      CurrentElement = element;
+      object dataContext = null;
+      Binders.First( b => b.BindElement( element, this, out dataContext ) );
 
-      var data = Binders.ForAll( b => b.BindElement( this ) ).ToArray().NotNull().FirstOrDefault();
-      if ( data != null )
-      {
-        DataContext = data;
-        DataContextScope = element;
-      }
+
+      if ( dataContext != null )
+        _bindingDataContexts.Push( new BindingDataContext { DataContext = dataContext, Scope = element } );
 
       foreach ( var child in element.Elements() )
+      {
         BindElement( element );
+      }
+
+      if ( dataContext != null )
+        _bindingDataContexts.Pop();
+
 
     }
 
 
-    /// <summary>
-    /// 设置数据上下文
-    /// </summary>
-    /// <param name="dataContext">数据项</param>
-    public void SetDataContext( object dataContext )
+
+    private Stack<BindingDataContext> _bindingDataContexts;
+
+
+    private class BindingDataContext
     {
-      throw new NotImplementedException();
+      /// <summary>
+      /// 数据上下文
+      /// </summary>
+      public object DataContext { get; set; }
+
+      /// <summary>
+      /// 数据上下文所存在的范畴
+      /// </summary>
+      public IHtmlContainer Scope { get; set; }
     }
 
-    public void BindElement( object item, IHtmlElement element )
-    {
-      throw new NotImplementedException();
-    }
-
-    internal void SetListDataContext( object dataObject )
-    {
-      throw new NotImplementedException();
-    }
   }
 }

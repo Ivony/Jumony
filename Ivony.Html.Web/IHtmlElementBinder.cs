@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
     /// 绑定元素
     /// </summary>
     /// <param name="context">数据绑定上下文</param>
-    void BindElement( HtmlBindingContext context );
+    bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext );
 
   }
 }

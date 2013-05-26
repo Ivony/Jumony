@@ -75,6 +75,10 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定数据的元素</param>
     private void BindElement( IHtmlElement element )
     {
+
+
+      element.Attributes().ForAll( a => BindAttribute( a ) );
+      
       object dataContext = null;
       Binders.First( b => b.BindElement( element, this, out dataContext ) );
 
@@ -91,6 +95,11 @@ namespace Ivony.Html.Web
         _bindingDataContexts.Pop();
 
 
+    }
+
+    private void BindAttribute( IHtmlAttribute attribute )
+    {
+      Binders.First( b => b.BindAttribute( attribute, this ) );
     }
 
 

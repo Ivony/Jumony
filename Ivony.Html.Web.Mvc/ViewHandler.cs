@@ -115,6 +115,8 @@ namespace Ivony.Html.Web
       Url = urlHelper;
 
       ProcessScope();
+
+      HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( scope, viewContext.ViewData.Model, viewContext.ViewData );
     }
 
 

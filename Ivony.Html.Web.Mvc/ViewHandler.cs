@@ -116,7 +116,13 @@ namespace Ivony.Html.Web
 
       ProcessScope();
 
-      HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( scope, viewContext.ViewData.Model, viewContext.ViewData );
+      DataBind();
+
+    }
+
+    protected virtual void DataBind()
+    {
+      HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( Scope, Model, ViewData );
     }
 
 

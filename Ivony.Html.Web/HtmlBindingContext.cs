@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ivony.Fluent;
+using System.Collections;
+using System.Linq;
+using Ivony.Html.ExpandedAPI;
 
 namespace Ivony.Html.Web
 {
@@ -78,7 +81,7 @@ namespace Ivony.Html.Web
 
 
       element.Attributes().ForAll( a => BindAttribute( a ) );
-      
+
       object dataContext = null;
       Binders.First( b => b.BindElement( element, this, out dataContext ) );
 
@@ -86,15 +89,43 @@ namespace Ivony.Html.Web
       if ( dataContext != null )
         _bindingDataContexts.Push( new BindingDataContext { DataContext = dataContext, Scope = element } );
 
+      var listData = dataContext as IEnumerable;
+      if ( listData != null && IsListItem( element ) )
+        BindElementList( element, listData.Cast<object>().ToArray() );
+
+
+
       foreach ( var child in element.Elements() )
-      {
         BindElement( element );
-      }
+
 
       if ( dataContext != null )
         _bindingDataContexts.Pop();
 
 
+    }
+
+
+    private void BindElementList( IHtmlElement element, object[] data )
+    {
+      var elementList = element.Repeat( data.Length );
+
+      for ( int i = 0; i < data.Length; i++ )
+      {
+        var d = data[i];
+        var e = elementList[i];
+        _bindingDataContexts.Push( new BindingDataContext { DataContext = d, Scope = e } );
+
+        foreach ( var child in element.Elements() )
+          BindElement( element );
+
+        _bindingDataContexts.Pop();
+      }
+    }
+
+    private bool IsListItem( IHtmlElement element )
+    {
+      return element.Name.EqualsIgnoreCase( "li" ) || element.Name.EqualsIgnoreCase( "tr" ) || element.Name.EqualsIgnoreCase( "view" ) || element.Name.EqualsIgnoreCase( "binding" );
     }
 
     private void BindAttribute( IHtmlAttribute attribute )

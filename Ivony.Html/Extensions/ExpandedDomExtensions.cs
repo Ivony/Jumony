@@ -552,7 +552,7 @@ namespace Ivony.Html.ExpandedAPI
     /// <remarks>
     /// 若提供的 count 等于 0，则会从 DOM中 移除元素，若等于 1 则不做任何事情。
     /// </remarks>
-    public static IEnumerable<IHtmlElement> Repeat( this IHtmlElement element, int count )
+    public static IHtmlElement[] Repeat( this IHtmlElement element, int count )
     {
 
       if ( count < 0 )
@@ -562,20 +562,21 @@ namespace Ivony.Html.ExpandedAPI
       {
         case 0:
           element.Remove();
-          return Enumerable.Empty<IHtmlElement>();
+          return new IHtmlElement[0];
         case 1:
           return new[] { element };
 
         default:
 
-          List<IHtmlElement> result = new List<IHtmlElement>() { element };
+          IHtmlElement[] result = new IHtmlElement[count];
+          result[0] = element;
 
           var container = element.Container;
           lock ( element.Container )
           {
             var index = element.NodesIndexOfSelf();
             for ( int i = 1; i < count; i++ )
-              result.Add( container.AddCopy( index + i, element ) );
+              result[i] = container.AddCopy( index + i, element );
           }
 
           return result;

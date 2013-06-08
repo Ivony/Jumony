@@ -15,21 +15,23 @@
         <div class="box todos">
           <h2 class="box">待办事项</h2>
           <ul>
-            <li><span>修改自 simple-todo: 一个简易的 todo 程序 - web.py 中文教程from Python.cn(news, jobs)</span>
+            <view>
+            <li><span><view path="Title" /></span>
               &nbsp; <a action="complete">完成</a><a action="revert">恢复</a>, <a action="modify">修改</a>,
               <a action="remove" onclick="return confirm(&#39;删除以后不能恢复的，确定？&#39;)">删除</a> </li>
+            </view>
           </ul>
         </div>
         <div class="box post">
           <h2>新增</h2>
 
           <form method="post" id="post_new" action="Add" controller>
-            <p>
-              <input type="text" name="title" class="long_txt" /><span class="tips"></span>
-            </p>
-            <p>
-              <input type="submit" class="submit" value="添加" />
-            </p>
+          <p>
+            <input type="text" name="title" class="long_txt" /><span class="tips"></span>
+          </p>
+          <p>
+            <input type="submit" class="submit" value="添加" />
+          </p>
           </form>
 
         </div>

@@ -203,6 +203,7 @@ namespace Ivony.Html.Web
     protected sealed override void SetViewData( ViewDataDictionary viewData )
     {
       _viewData = new ViewDataDictionary<TModel>( viewData );
+      base.SetViewData( _viewData );
     }
 
     /// <summary>

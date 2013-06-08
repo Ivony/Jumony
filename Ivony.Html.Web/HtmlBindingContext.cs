@@ -83,7 +83,7 @@ namespace Ivony.Html.Web
       element.Attributes().ForAll( a => BindAttribute( a ) );
 
       object dataContext = null;
-      Binders.First( b => b.BindElement( element, this, out dataContext ) );
+      Binders.FirstOrDefault( b => b.BindElement( element, this, out dataContext ) );
 
 
       if ( dataContext != null )
@@ -95,8 +95,8 @@ namespace Ivony.Html.Web
 
 
 
-      foreach ( var child in element.Elements() )
-        BindElement( element );
+      foreach ( var child in element.Elements().ToArray() )
+        BindElement( child );
 
 
       if ( dataContext != null )
@@ -116,8 +116,8 @@ namespace Ivony.Html.Web
         var e = elementList[i];
         _bindingDataContexts.Push( new BindingDataContext { DataContext = d, Scope = e } );
 
-        foreach ( var child in element.Elements() )
-          BindElement( element );
+        foreach ( var child in e.Elements().ToArray() )
+          BindElement( child );
 
         _bindingDataContexts.Pop();
       }
@@ -130,7 +130,7 @@ namespace Ivony.Html.Web
 
     private void BindAttribute( IHtmlAttribute attribute )
     {
-      Binders.First( b => b.BindAttribute( attribute, this ) );
+      Binders.FirstOrDefault( b => b.BindAttribute( attribute, this ) );
     }
 
 

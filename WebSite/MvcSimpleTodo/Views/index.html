@@ -17,8 +17,8 @@
           <ul>
             <view>
             <li><span><view path="Title" /></span>
-              &nbsp; <a action="complete">完成</a><a action="revert">恢复</a>, <a action="modify">修改</a>,
-              <a action="remove" onclick="return confirm(&#39;删除以后不能恢复的，确定？&#39;)">删除</a> </li>
+              &nbsp; <a action="complete" _taskId="{Binding path=ID}">完成</a><a action="revert" _taskId="{Binding path=ID}">恢复</a>, <a action="modify" _taskId="{Binding path=ID}">修改</a>,
+              <a action="remove" _taskId="{Binding path=ID}" onclick="return confirm(&#39;删除以后不能恢复的，确定？&#39;)">删除</a> </li>
             </view>
           </ul>
         </div>

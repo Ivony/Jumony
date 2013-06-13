@@ -80,7 +80,7 @@ namespace Ivony.Html.Web
     {
 
 
-      element.Attributes().ForAll( a => BindAttribute( a ) );
+      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
 
       object dataContext = null;
       Binders.FirstOrDefault( b => b.BindElement( element, this, out dataContext ) );

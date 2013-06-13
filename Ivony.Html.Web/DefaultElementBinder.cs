@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
@@ -24,27 +25,16 @@ namespace Ivony.Html.Web
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
         return false;
 
-      //获取绑定数据源
-      var key = element.Attribute( "key" ).Value() ?? element.Attribute( "name" ).Value();
+      var expression = new BindingExpression( element );
 
-      object dataObject;
-      if ( key != null )
-        context.Data.TryGetValue( key, out dataObject );
-      else
-        dataObject = context.DataContext;
-
+      object dataObject = GetDataObject( expression, context );
 
       if ( dataObject == null )
         return false;
 
-      var path = element.Attribute( "path" ).Value();
-
-      if ( path != null )
-        dataObject = DataBinder.Eval( dataObject, path );
 
 
 
-      var format = element.Attribute( "format" ).Value();
 
 
 
@@ -56,6 +46,9 @@ namespace Ivony.Html.Web
       }
 
 
+
+
+      var format = element.Attribute( "format" ).Value();
 
 
       //绑定到客户端脚本对象
@@ -103,6 +96,32 @@ namespace Ivony.Html.Web
     }
 
 
+
+    private static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
+    {
+      //获取绑定数据源
+
+      string key;
+      object dataObject;
+
+      if ( expression.Arguments.TryGetValue( "key", out key ) || expression.Arguments.TryGetValue( "name", out key ) )
+        context.Data.TryGetValue( key, out dataObject );
+      else
+        dataObject = context.DataContext;
+
+      if ( dataObject == null )
+        return null;
+
+
+      string path;
+
+      if ( expression.Arguments.TryGetValue( "path", out path ) )
+        dataObject = DataBinder.Eval( dataObject, path );
+
+      return dataObject;
+    }
+
+
     private string ToJson( object dataObject )
     {
       var serializer = new JavaScriptSerializer();
@@ -119,7 +138,33 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
     {
-      return false;
+
+      var expression = BindingExpression.ParseExpression( attribute );
+      if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
+        return false;
+
+      var dataObject = GetDataObject( expression, context );
+
+      if ( dataObject == null )
+        return false;
+
+
+      string format;
+      if ( !expression.Arguments.TryGetValue( "format", out format ) )
+        format = null;
+
+      string value;
+
+      if ( format != null && dataObject is IFormattable )
+        value = ((IFormattable) dataObject).ToString( format, CultureInfo.InvariantCulture );
+      else
+        value = dataObject.ToString();
+
+      attribute.SetValue( value );
+
+      return true;
+
+
     }
   }
 }

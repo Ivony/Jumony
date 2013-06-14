@@ -22,6 +22,15 @@ namespace Ivony.Html.Web
 
       dataContext = null;
 
+      if ( element.Attribute( "binding-visible" ) != null )
+      {
+        var visible = element.Attribute( "binding-visible" ).Value();
+        if ( visible.EqualsIgnoreCase( "false" ) || visible.EqualsIgnoreCase( "hidden" ) || visible.EqualsIgnoreCase( "invisible" ) )
+          element.Remove();
+        return true;
+      }
+
+
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
         return false;
 

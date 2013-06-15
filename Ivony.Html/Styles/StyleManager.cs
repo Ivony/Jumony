@@ -95,9 +95,10 @@ namespace Ivony.Html.Styles
     {
       style[name] = value;
 
+      _element.SetAttribute( "style", style.ToString() );
+
       return this;
     }
-
 
 
 

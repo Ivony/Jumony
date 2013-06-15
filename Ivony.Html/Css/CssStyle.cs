@@ -15,8 +15,8 @@ namespace Ivony.Html
 
 
     private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>();
-
     private object _sync = new object();
+
 
     public object SyncRoot { get { return _sync; } }
 
@@ -153,6 +153,19 @@ namespace Ivony.Html
       set { SetValue( name, value ); }
 
     }
+
+
+
+    /// <summary>
+    /// 获取 CSS 样式的字符串表达形式
+    /// </summary>
+    /// <returns>CSS 样式表达式</returns>
+    public override string ToString()
+    {
+      return string.Join( ";", _properties.Values.Select( p => p.ToString() ).ToArray() );
+
+    }
+
 
   }
 }

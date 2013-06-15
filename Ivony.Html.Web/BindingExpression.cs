@@ -24,22 +24,38 @@ namespace Ivony.Html.Web
       _args = args;
     }
 
+
+    /// <summary>
+    /// 表达式名称
+    /// </summary>
     public string Name
     {
       get { return _name; }
     }
 
+
+    /// <summary>
+    /// 参数值
+    /// </summary>
     public IDictionary<string, string> Arguments
     {
       get { return new Dictionary<string, string>( _args ); }
     }
 
 
-    public BindingExpression( IHtmlElement element ) : this( element.Name, element.Attributes().ToDictionary( a => a.Name, a => a.AttributeValue ) ) { }
+    /// <summary>
+    /// 从元素创建绑定表达式
+    /// </summary>
+    /// <param name="element">要创建绑定表达式的元素</param>
+    public BindingExpression( IHtmlElement element ) : this( element.Name, element.Attributes().ToDictionary( a => a.Name, a => a.AttributeValue, StringComparer.OrdinalIgnoreCase ) ) { }
 
 
 
-
+    /// <summary>
+    /// 解析属性为绑定表达式
+    /// </summary>
+    /// <param name="attribute">要解析的属性</param>
+    /// <returns>绑定表达式</returns>
     public static BindingExpression ParseExpression( IHtmlAttribute attribute )
     {
       var expression = attribute.Value();
@@ -65,8 +81,8 @@ namespace Ivony.Html.Web
 
       foreach ( Capture capture in match.Groups["args"].Captures )
       {
-        var name = capture.FindCaptures( match.Groups["name"] ).FirstOrDefault().Value;
-        var value = capture.FindCaptures( match.Groups["value"] ).FirstOrDefault().Value;
+        var name = capture.FindCaptures( match.Groups["name"] ).First().Value;
+        var value = capture.FindCaptures( match.Groups["value"] ).First().Value;
 
         args[name] = value;
       }
@@ -74,7 +90,5 @@ namespace Ivony.Html.Web
       return new BindingExpression( _name, args );
 
     }
-
-
   }
 }

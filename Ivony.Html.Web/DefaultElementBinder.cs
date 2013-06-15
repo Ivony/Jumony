@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 默认的元素绑定器，处理 &lt;view&gt; 或者 &lt;binding&gt; 元素
+  /// 默认的元素绑定器，处理 &lt;view&gt; 或者 &lt;binding&gt; 元素，以及属性绑定表达式和绑定属性处理。
   /// </summary>
   public class DefaultElementBinder : IHtmlElementBinder
   {
@@ -118,7 +118,6 @@ namespace Ivony.Html.Web
 
     private static void BindElementStyles( IHtmlElement element, IHtmlAttribute[] styleAttributes )
     {
-
       foreach ( var attribute in styleAttributes )
       {
         element.Style( attribute.Name.Substring( styleAttributePrefix.Length ), attribute.AttributeValue );
@@ -166,7 +165,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="attribute">要绑定的元素属性</param>
     /// <param name="context">绑定上下文</param>
-    /// <returns></returns>
+    /// <returns>是否成功绑定</returns>
     public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
     {
 
@@ -180,22 +179,47 @@ namespace Ivony.Html.Web
         return false;
 
 
-      string format;
-      if ( !expression.Arguments.TryGetValue( "format", out format ) )
-        format = null;
-
-      string value;
-
-      if ( format != null && dataObject is IFormattable )
-        value = ( (IFormattable) dataObject ).ToString( format, CultureInfo.InvariantCulture );
-      else
-        value = dataObject.ToString();
+      string value = GetBindingValue( expression, dataObject );
 
       attribute.SetValue( value );
 
       return true;
+    }
+
+    private static string GetBindingValue( BindingExpression expression, object dataObject )
+    {
+
+      {
+        string format;
+        if ( expression.Arguments.TryGetValue( "format", out format ) )
+        {
+          var formattable = dataObject as IFormattable;
+
+          if ( formattable != null )
+            return ( (IFormattable) dataObject ).ToString( format, CultureInfo.InvariantCulture );
+        }
+      }
 
 
+
+      {
+        string value;
+        if ( expression.Arguments.TryGetValue( "value", out value ) )
+        {
+          if ( Convert.ToBoolean( dataObject ) )
+            return value;
+
+          else if ( expression.Arguments.TryGetValue( "alternativeValue", out value ) )
+            return value;
+
+          else
+            return null;
+        }
+      }
+
+
+
+      return dataObject.ToString();
     }
   }
 }

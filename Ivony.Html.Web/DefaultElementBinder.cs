@@ -17,6 +17,10 @@ namespace Ivony.Html.Web
   /// </summary>
   public class DefaultElementBinder : IHtmlElementBinder
   {
+
+
+    private const string styleAttributePrefix = "style-";
+
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
 
@@ -29,6 +33,12 @@ namespace Ivony.Html.Web
           element.Remove();
         return true;
       }
+
+
+      var styleAttributes = element.Attributes().Where( a => a.Name.StartsWith( styleAttributePrefix ) ).ToArray();
+      if ( styleAttributes.Any() )
+        BindElementStyles( element, styleAttributes );
+
 
 
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
@@ -106,6 +116,18 @@ namespace Ivony.Html.Web
 
 
 
+    private static void BindElementStyles( IHtmlElement element, IHtmlAttribute[] styleAttributes )
+    {
+
+      foreach ( var attribute in styleAttributes )
+      {
+        element.Style( attribute.Name.Substring( styleAttributePrefix.Length ), attribute.AttributeValue );
+        attribute.Remove();
+      }
+    }
+
+
+
     private static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
     {
       //获取绑定数据源
@@ -165,7 +187,7 @@ namespace Ivony.Html.Web
       string value;
 
       if ( format != null && dataObject is IFormattable )
-        value = ((IFormattable) dataObject).ToString( format, CultureInfo.InvariantCulture );
+        value = ( (IFormattable) dataObject ).ToString( format, CultureInfo.InvariantCulture );
       else
         value = dataObject.ToString();
 

@@ -16,8 +16,8 @@
           <h2 class="box">待办事项</h2>
           <ul>
             <view>
-              <li>
-                <span style-text-decoration="{Binding path=Completed, value=line-through}"><binding path="Title">标题</binding></span>
+              <li style-class="{Binding path=Completed, value=finished}">
+                <span><binding path="Title">标题</binding></span>
                 &nbsp;
                 <a action="complete" binding-visible="{Binding path=Completed, value=false, alternativevalue=true}" _taskid="{Binding path=ID}">完成</a>
                 <a action="revert" binding-visible="{Binding path=Completed}" _taskid="{Binding path=ID}">恢复</a> , 

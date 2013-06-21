@@ -127,7 +127,7 @@ namespace Ivony.Html.Web
         if ( string.IsNullOrEmpty( value ) )
           continue;
 
-        else if ( name.EqualsIgnoreCase( "calss" ) )
+        else if ( name.EqualsIgnoreCase( "class" ) )
           element.Style().AddClass( value );
 
         else

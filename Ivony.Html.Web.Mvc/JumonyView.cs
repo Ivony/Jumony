@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using Ivony.Fluent;
+using Ivony.Html.ExpandedAPI;
 
 
 namespace Ivony.Html.Web
@@ -73,7 +74,21 @@ namespace Ivony.Html.Web
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
+      var handler =  ViewHandlerProvider.GetViewHandler( virtualPath, false );
+      if ( handler != null )
+        return handler;
+
+      var head = Scope.Document.FindFirstOrDefault( "head" );
+      if ( head == null )
+        return null;
+
+      var handlerMeta = head.FindFirstOrDefault( "meta[name=handler]" );
+      if ( handlerMeta == null )
+        return null;
+
+      var handlerPath = handlerMeta.Attribute( "value" ).Value();
       return ViewHandlerProvider.GetViewHandler( virtualPath );
+
     }
 
 

@@ -87,25 +87,39 @@ namespace Ivony.Html.Web
 
 
       if ( dataContext != null )
+      {
         _bindingDataContexts.Push( new BindingDataContext { DataContext = dataContext, Scope = element } );
 
-      var listData = dataContext as IEnumerable;
-      if ( listData != null && IsListItem( element ) )
-        BindElementList( element, listData.Cast<object>().ToArray() );
+        var listData = dataContext as IEnumerable;
+        if ( listData != null && IsListItem( element ) )
+          BindElementList( element, listData.Cast<object>().ToArray() );
 
+        else
+          BindChilds( element );
 
-
-      foreach ( var child in element.Elements().ToArray() )
-        BindElement( child );
-
-
-      if ( dataContext != null )
         _bindingDataContexts.Pop();
-
-
+      }
+      else
+        BindChilds( element );
     }
 
 
+    /// <summary>
+    /// 遍历绑定所有子元素
+    /// </summary>
+    /// <param name="element">要绑定子元素的元素</param>
+    private void BindChilds( IHtmlElement element )
+    {
+      foreach ( var child in element.Elements().ToArray() )
+        BindElement( child );
+    }
+
+
+    /// <summary>
+    /// 绑定元素列表
+    /// </summary>
+    /// <param name="element">要绑定元素列表的元素</param>
+    /// <param name="data">列表数据</param>
     private void BindElementList( IHtmlElement element, object[] data )
     {
       var elementList = element.Repeat( data.Length );
@@ -116,18 +130,24 @@ namespace Ivony.Html.Web
         var e = elementList[i];
         _bindingDataContexts.Push( new BindingDataContext { DataContext = d, Scope = e } );
 
-        foreach ( var child in e.Elements().ToArray() )
-          BindElement( child );
+        BindChilds( e );
 
         _bindingDataContexts.Pop();
       }
     }
+
+
 
     private bool IsListItem( IHtmlElement element )
     {
       return element.Name.EqualsIgnoreCase( "li" ) || element.Name.EqualsIgnoreCase( "tr" ) || element.Name.EqualsIgnoreCase( "view" ) || element.Name.EqualsIgnoreCase( "binding" );
     }
 
+
+    /// <summary>
+    /// 进行属性绑定
+    /// </summary>
+    /// <param name="attribute">要绑定的属性</param>
     private void BindAttribute( IHtmlAttribute attribute )
     {
       Binders.FirstOrDefault( b => b.BindAttribute( attribute, this ) );

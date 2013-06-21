@@ -120,7 +120,20 @@ namespace Ivony.Html.Web
     {
       foreach ( var attribute in styleAttributes )
       {
-        element.Style( attribute.Name.Substring( styleAttributePrefix.Length ), attribute.AttributeValue );
+
+        var value = attribute.AttributeValue;
+        var name = attribute.Name.Substring( styleAttributePrefix.Length );
+
+        if ( string.IsNullOrEmpty( value ) )
+          continue;
+
+        else if ( name.EqualsIgnoreCase( "calss" ) )
+          element.Style().AddClass( value );
+
+        else
+          element.Style( name, value );
+
+
         attribute.Remove();
       }
     }
@@ -196,7 +209,7 @@ namespace Ivony.Html.Web
           var formattable = dataObject as IFormattable;
 
           if ( formattable != null )
-            return ( (IFormattable) dataObject ).ToString( format, CultureInfo.InvariantCulture );
+            return ((IFormattable) dataObject).ToString( format, CultureInfo.InvariantCulture );
         }
       }
 

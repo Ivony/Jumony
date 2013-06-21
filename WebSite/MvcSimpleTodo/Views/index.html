@@ -17,10 +17,10 @@
           <ul>
             <view>
               <li>
-                <span><binding path="Title" >标题</binding></span>
+                <span style-text-decoration="{Binding path=Completed, value=line-through}"><binding path="Title">标题</binding></span>
                 &nbsp;
-                <a action="complete" _taskid="{Binding path=ID}">完成</a>
-                <a action="revert" binding-visible="{Binding path=Completed}" _taskid="{Binding path=ID}">恢复</a>, 
+                <a action="complete" binding-visible="{Binding path=Completed, value=false, alternativevalue=true}" _taskid="{Binding path=ID}">完成</a>
+                <a action="revert" binding-visible="{Binding path=Completed}" _taskid="{Binding path=ID}">恢复</a> , 
                 <a action="modify" _taskid="{Binding path=ID}">修改</a>,
                 <a action="remove" _taskid="{Binding path=ID}" onclick="return confirm(&#39;删除以后不能恢复的，确定？&#39;)">删除</a>
               </li>

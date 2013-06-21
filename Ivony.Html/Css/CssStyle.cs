@@ -46,6 +46,13 @@ namespace Ivony.Html
     /// <param name="value">样式值</param>
     public void SetValue( string name, string value )
     {
+
+      if ( value == null )
+      {
+        RemoveProperty( name );
+        return;
+      }
+
       if ( value.EndsWith( importantFlag ) )
       {
         value = value.Remove( value.Length - importantFlag.Length );
@@ -101,6 +108,16 @@ namespace Ivony.Html
           _properties[name] = property;
       }
     }
+
+
+    protected void RemoveProperty( string name )
+    {
+      lock ( SyncRoot )
+      {
+        _properties.Remove( name );
+      }
+    }
+
 
 
 

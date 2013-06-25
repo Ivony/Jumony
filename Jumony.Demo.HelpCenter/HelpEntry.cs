@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
+using Ivony.Html;
+using Ivony.Html.Web;
 
 namespace Jumony.Demo.HelpCenter
 {
-  public class HelpEntry
+
+  /// <summary>
+  /// 代表一个帮助条目
+  /// </summary>
+  public class HelpEntry : HelpTopic
   {
-
-    public string Title { get; set; }
-
-    public string VirtualPath { get; set; }
-
-    public string Category { get; set; }
-
-    public string Name { get; set; }
-
-    public IDictionary<string, string> SubTitles { get; set; }
 
   }
 }

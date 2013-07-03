@@ -30,29 +30,48 @@ namespace Jumony.Demo.HelpCenter
     }
 
 
+    private const string helpEntriesVirtualPath = "~/HelpEntries";
+
+
     private static VirtualPathProvider VirtualPathProvider { get { return HostingEnvironment.VirtualPathProvider; } }
 
     private static HelpTopic CreateTopic( string virtualPath )
     {
 
+      virtualPath = VirtualPathUtility.Combine( helpEntriesVirtualPath, virtualPath );
 
       var directory = VirtualPathProvider.GetDirectory( virtualPath );
 
       if ( directory != null )
       {
         var childPaths = directory.Children.Cast<VirtualFileBase>().Select( f => VirtualPathUtility.ToAppRelative( f.VirtualPath ) );
-        var childs = childPaths.ToDictionary( p => GetTitle( p ), p => p );
+        var childs = childPaths.ToDictionary( p => GetTopic( p ).Title, p => p );
+
+
+        var document = HtmlProviders.LoadDocument( VirtualPathUtility.Combine( virtualPath, "index.html" ) );
 
         return new HelpTopic()
         {
           VirtualPath = virtualPath,
+          IsDirectory = true,
+          Document = document,
           Childs = childs
         };
 
       }
       else if ( VirtualPathProvider.FileExists( virtualPath ) )
       {
-      
+        var document = HtmlProviders.LoadDocument( virtualPath );
+
+        return new HelpTopic()
+        {
+          VirtualPath = virtualPath,
+          IsDirectory = false,
+          Document = document,
+          Childs = new Dictionary<string, string>(),
+          Title = document.FindFirst( "title" ).InnerHtml()
+
+        };
       }
 
       else
@@ -60,22 +79,15 @@ namespace Jumony.Demo.HelpCenter
 
     }
 
-    private static string GetTitle( string virtualPath )
-    {
 
-      var directory = VirtualPathProvider.GetDirectory( virtualPath );
-      if ( directory != null )
-        return GetTitle( VirtualPathUtility.Combine( virtualPath, "index.html" ) );
+    public string VirtualPath { get; private set; }
 
-      var document = HtmlProviders.LoadDocument( virtualPath );
-      return document.FindFirst( "title" ).InnerHtml();
-    }
+    public Dictionary<string, string> Childs { get; private set; }
 
+    public IHtmlDocument Document { get; private set; }
 
-    public string VirtualPath { get; private set }
+    public bool IsDirectory { get; private set; }
 
-    public Dictionary<string, string> Childs { get; private set }
-
-
+    public string Title { get; private set; }
   }
 }

@@ -22,19 +22,19 @@ namespace Jumony.Demo.HelpCenter
 
 
 
-    public ActionResult Entry( string virtualPath = "." )
+    public ActionResult Entry( string path = "." )
     {
 
-      var topic = HelpTopic.GetTopic( virtualPath );
-      return View( topic.Document );
+      var topic = HelpTopic.GetTopic( path );
+      return View( topic.DocumentPath, "frame" );
     }
 
 
     private const string navigationCacheKey = "Navigation";
 
-    public ActionResult Navigation( string virtualPath )
+    public ActionResult Navigation( string path = "." )
     {
-      return PartialView( "Navigation", HelpTopic.GetTopic( virtualPath ) );
+      return PartialView( "Navigation", HelpTopic.GetTopic( path ) );
     }
 
   }

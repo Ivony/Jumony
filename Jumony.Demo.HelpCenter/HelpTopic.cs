@@ -8,6 +8,7 @@ using Ivony;
 using Ivony.Html;
 using Ivony.Html.Web;
 using System.Web.Hosting;
+using System.Web.Caching;
 
 namespace Jumony.Demo.HelpCenter
 {
@@ -15,64 +16,111 @@ namespace Jumony.Demo.HelpCenter
   /// <summary>
   /// 代表一个帮助主题
   /// </summary>
-  public class HelpTopic
+  public abstract class HelpTopic
   {
 
-
+    private static string cachePrefix = "HelpTopicCache_";
     private static KeyedCache<string, HelpTopic> _cache = new KeyedCache<string, HelpTopic>();
+
+
+
+
 
     public static HelpTopic GetTopic( string virtualPath )
     {
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "虚拟路径必须是应用程序根相对路径", "virtualPath" );
+      var cacheKey = cachePrefix + virtualPath;
 
-      return _cache.FetchOrCreateItem( virtualPath, () => CreateTopic( virtualPath ) );
+      var topic = HttpRuntime.Cache.Get( cachePrefix + virtualPath ) as HelpTopic;
+      if ( topic == null )
+      {
+        topic = CreateTopic( virtualPath );
+        HttpRuntime.Cache.Insert( cacheKey, topic, new CacheDependency( HostingEnvironment.MapPath( topic.DocumentPath ) ) );
+      }
+
+      return topic;
     }
 
 
-    private const string helpEntriesVirtualPath = "~/HelpEntries";
-
+    private const string helpEntriesVirtualPath = "~/HelpEntries/";
 
     private static VirtualPathProvider VirtualPathProvider { get { return HostingEnvironment.VirtualPathProvider; } }
+
+
+
+    private string _virtualPath;
+
+    private HelpTopic( string virtualPath )
+    {
+      _virtualPath = virtualPath;
+    }
+
+
+    private class HelpCategory : HelpTopic
+    {
+      public HelpCategory( string virtualPath )
+        : base( virtualPath )
+      {
+        if ( virtualPath == null )
+          throw new ArgumentNullException( "virtualPath" );
+
+        if ( !VirtualPathProvider.DirectoryExists( virtualPath ) )
+          throw new ArgumentException( "虚拟路径不是一个目录", "virtualPath" );
+      }
+
+
+      public override bool IsDirectory { get { return true; } }
+
+      public override HelpTopic[] Childs
+      {
+        get
+        {
+          var directory = VirtualPathProvider.GetDirectory( VirtualPath );
+          return directory.Children.OfType<VirtualFile>()
+            .Select( f => VirtualPathUtility.ToAppRelative( f.VirtualPath ) )
+            .Where( p => VirtualPathUtility.GetExtension( p ) == ".html" )
+            .Where( p => VirtualPathUtility.GetFileName( p ) != "index.html" )
+            .Union( directory.Children.OfType<VirtualDirectory>().Select( d => VirtualPathUtility.ToAppRelative( d.VirtualPath ) ) )
+            .Select( p => GetTopic( VirtualPathUtility.MakeRelative( helpEntriesVirtualPath, p ) ) ).ToArray();
+        }
+      }
+
+    }
+
+
+
+    private class HelpEntry : HelpTopic
+    {
+      public HelpEntry( string virtualPath )
+        : base( virtualPath )
+      {
+        if ( virtualPath == null )
+          throw new ArgumentNullException( "virtualPath" );
+
+        if ( !VirtualPathProvider.FileExists( virtualPath ) )
+          throw new ArgumentException( "虚拟路径不是一个文件", "virtualPath" );
+      }
+
+      public override bool IsDirectory { get { return false; } }
+
+      public override HelpTopic[] Childs { get { return new HelpTopic[0]; } }
+
+    }
+
 
     private static HelpTopic CreateTopic( string virtualPath )
     {
 
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
       virtualPath = VirtualPathUtility.Combine( helpEntriesVirtualPath, virtualPath );
 
-      var directory = VirtualPathProvider.GetDirectory( virtualPath );
 
-      if ( directory != null )
-      {
-        var childPaths = directory.Children.Cast<VirtualFileBase>().Select( f => VirtualPathUtility.ToAppRelative( f.VirtualPath ) );
-        var childs = childPaths.ToDictionary( p => GetTopic( p ).Title, p => p );
+      if ( VirtualPathProvider.DirectoryExists( virtualPath ) )
+        return new HelpCategory( virtualPath );
 
-
-        var document = HtmlProviders.LoadDocument( VirtualPathUtility.Combine( virtualPath, "index.html" ) );
-
-        return new HelpTopic()
-        {
-          VirtualPath = virtualPath,
-          IsDirectory = true,
-          Document = document,
-          Childs = childs
-        };
-
-      }
       else if ( VirtualPathProvider.FileExists( virtualPath ) )
-      {
-        var document = HtmlProviders.LoadDocument( virtualPath );
-
-        return new HelpTopic()
-        {
-          VirtualPath = virtualPath,
-          IsDirectory = false,
-          Document = document,
-          Childs = new Dictionary<string, string>(),
-          Title = document.FindFirst( "title" ).InnerHtml()
-
-        };
-      }
+        return new HelpEntry( virtualPath );
 
       else
         return null;
@@ -80,14 +128,56 @@ namespace Jumony.Demo.HelpCenter
     }
 
 
-    public string VirtualPath { get; private set; }
 
-    public Dictionary<string, string> Childs { get; private set; }
 
-    public IHtmlDocument Document { get; private set; }
 
-    public bool IsDirectory { get; private set; }
+    public string VirtualPath
+    {
+      get { return IsDirectory ? VirtualPathUtility.AppendTrailingSlash( _virtualPath ) : VirtualPathUtility.RemoveTrailingSlash( _virtualPath ); }
+    }
 
-    public string Title { get; private set; }
+    public string DocumentPath
+    {
+      get { return IsDirectory ? VirtualPathUtility.Combine( VirtualPath, "index.html" ) : VirtualPath; }
+    }
+
+    public string HelpPath
+    {
+      get { return VirtualPathUtility.MakeRelative( helpEntriesVirtualPath, VirtualPath ); }
+    }
+
+    public abstract HelpTopic[] Childs { get; }
+
+    public IHtmlDocument Document
+    {
+      get { return HtmlProviders.LoadDocument( DocumentPath ); }
+    }
+
+
+    public HelpTopic Parent
+    {
+      get
+      {
+
+
+
+        if ( VirtualPath.EqualsIgnoreCase( helpEntriesVirtualPath ) )
+          return null;
+
+        var virtualPath = VirtualPathUtility.GetDirectory( VirtualPathUtility.RemoveTrailingSlash( VirtualPath ) );
+        if ( virtualPath.EqualsIgnoreCase( helpEntriesVirtualPath ) )
+          return GetTopic( "." );
+
+        return GetTopic( VirtualPathUtility.MakeRelative( helpEntriesVirtualPath, virtualPath ) );
+      }
+    }
+
+
+    public abstract bool IsDirectory { get; }
+
+    public string Title
+    {
+      get { return Document.FindFirst( "head" ).FindFirst( "title" ).InnerHtml(); }
+    }
   }
 }

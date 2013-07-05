@@ -10,49 +10,41 @@ using Ivony.Html;
 using Jumony.Demo.HelpCenter;
 using System.Collections.Generic;
 
-public class Navigation : ViewHandler<HelpEntry[]>
+public class Navigation : ViewHandler<HelpTopic>
 {
 
   protected override void ProcessScope()
   {
 
-    entryName = ViewContext.ParentActionViewContext.RouteData.Values["name"].CastTo<string>();
-    var entries = Model;
+    var parentsList = Scope.AddElement( "ul" );
 
-    var categoryList = Scope.AddElement( "ul" );
-    var categoryGroup = entries.GroupBy( e => e.Category );
-
-    categoryGroup.ForAll( g => Category( g, categoryList ) );
-
-
-
-  }
-
-  private string entryName;
-
-
-  private void Category( IGrouping<string, HelpEntry> grouping, IHtmlContainer categoryList )
-  {
-    var item = categoryList.AddElement( "li" );
-    item.AddElement( "h3" ).InnerText( grouping.Key );
-    var entryList = item.AddElement( "ul" );
-    foreach ( var entry in grouping )
     {
-      if ( entry.Name == entryName )
+      var topic = Model;
+      while ( true )
       {
-        var listItem = entryList.AddElement( "li" ).InnerText( entry.Title );
-        AddSubTitles( entry.SubTitles, listItem );
+        var parent = topic.Parent;
+        if ( parent == null )
+          break;
+
+        parentsList.AddElement( 0, "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_path", parent.HelpPath ).InnerText( parent.Title );
+        topic = parent;
       }
-      else
-        entryList.AddElement( "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_name", entry.Name ).InnerText( entry.Title );
     }
+
+    var siblingList = parentsList.AddElement( "li" ).AddElement( "ul" );
+    var selfNode = siblingList.AddElement( "li" );
+    selfNode.InnerText( Model.Title );
+    var childsList = selfNode.AddElement( "ul" );
+    foreach ( var child in Model.Childs )
+    {
+      childsList.AddElement( "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_path", child.HelpPath ).InnerText( child.Title );
+    }
+
+
   }
 
-  private void AddSubTitles( IDictionary<string, string> subTitles, IHtmlElement listItem )
+  protected void ProcessBody( IHtmlElement body )
   {
-    var list = listItem.AddElement( "ul" );
-    foreach ( var pair in subTitles )
-      list.AddElement( "li" ).AddElement( "a" ).SetAttribute( "href", "#" + pair.Key ).InnerText( pair.Value );
 
   }
 

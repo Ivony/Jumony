@@ -1,0 +1,713 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DbUtility.v2</name>
+    </assembly>
+    <members>
+        <member name="T:Ivony.Data.DbUtility">
+            <summary>
+            所有数据库访问帮助器的基类
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.GetExpressionParser">
+            <summary>
+            获取DbExpressionParser实例，用于分析数据查询表达式
+            </summary>
+            <returns>DbExpressionParser实例</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.CreateCommand(Ivony.Data.IDbExpression)">
+            <summary>
+            创建 DbCommand 对象
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>DbCommand 对象</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteNonQuery(Ivony.Data.IDbExpression)">
+            <summary>
+            执行无结果的查询
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteScalar(Ivony.Data.IDbExpression)">
+            <summary>
+            执行查询，并返回首行首列
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>查询结果的首行首列</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteFirstRow(Ivony.Data.IDbExpression)">
+            <summary>
+            执行查询，并返回首行
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>查询结果的首行</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteData(Ivony.Data.IDbExpression)">
+            <summary>
+            执行查询，并返回第一个结果集
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>第一个结果集</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteNonQuery(System.Data.IDbCommand)">
+            <summary>
+            执行无结果的查询
+            </summary>
+            <param name="command">查询命令</param>
+            <returns>受影响的行数。</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteScalar(System.Data.IDbCommand)">
+            <summary>
+            协助执行查询，并返回首行首列
+            </summary>
+            <param name="command">查询命令</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteFirstRow(System.Data.IDbCommand)">
+            <summary>
+            协助执行查询，并返回首行
+            </summary>
+            <param name="command">查询命令</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteData(System.Data.IDbCommand)">
+            <summary>
+            执行查询，并返回第一个结果集
+            </summary>
+            <param name="command">查询命令</param>
+            <returns>第一个结果集</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.Fill(System.Data.IDataAdapter)">
+            <summary>
+            利用 DataAdapter 填充 DataSet
+            </summary>
+            <param name="adapter">用于填充 DataSet 的 Adapter 对象</param>
+            <returns>填充后的 DataSet 对象</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.Fill(System.Data.IDataAdapter,System.Data.DataSet)">
+            <summary>
+            利用 DataAdapter 填充 DataSet
+            </summary>
+            <param name="adapter">用于填充 DataSet 的 Adapter 对象</param>
+            <param name="dataSet">要被填充的 DataSet 对象</param>
+            <returns>填充后的 DataSet 对象</returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteReader(Ivony.Data.IDbExpression)">
+            <summary>
+            执行命令，并返回DataReader对象，请注意数据库连接将在DataReader关闭的同时关闭。
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.ExecuteReader(System.Data.IDbCommand)">
+            <summary>
+            协助执行查询，并返回DataReader对象
+            </summary>
+            <param name="command">查询命令</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.OnError(System.Object,System.Data.Common.DbException,System.Data.IDbCommand)">
+            <summary>
+            当查询发生异常时
+            </summary>
+            <param name="sender">产生事件的源</param>
+            <param name="exception">异常信息</param>
+            <param name="command">产生异常的命令对象</param>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.CreateTransaction">
+            <summary>
+            创建事务管理器
+            </summary>
+            <returns>事务管理器</returns>
+        </member>
+        <member name="E:Ivony.Data.DbUtility.Error">
+            <summary>
+            当发生错误时引发此事件
+            </summary>
+        </member>
+        <member name="E:Ivony.Data.DbUtility.CommandExecuting">
+            <summary>
+            当执行某个命令前引发此事件
+            </summary>
+        </member>
+        <member name="E:Ivony.Data.DbUtility.CommandExecuted">
+            <summary>
+            当成功执行某个命令后引发此事件
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.DbUtility.DbCommandEventArgs">
+            <summary>
+            为数据库操作事件提供事件参数
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.DbUtility.DbCommandEventArgs.#ctor(System.Data.IDbCommand)">
+            <summary>
+            创建 DbCommandEventArgs 对象
+            </summary>
+            <param name="command">执行的查询命令</param>
+        </member>
+        <member name="P:Ivony.Data.DbUtility.DbCommandEventArgs.Command">
+            <summary>
+            获取执行的查询命令对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.DbUtility.DbErrorEventArgs">
+            <summary>
+            为 Error 事件提供参数
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.DbUtility.DbErrorEventArgs.Exception">
+            <summary>
+            异常信息
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.DbUtility.DbErrorEventArgs.Command">
+            <summary>
+            导致异常的命令对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.DataSetExtensions">
+            <summary>
+            为系统的 DataSet 和 DataTable 对象提供扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.DataSetExtensions.AsView(System.Data.DataTable)">
+            <summary>
+            将 DataTable 转换为易于数据绑定的 DataRowView 对象列表
+            </summary>
+            <param name="table">要转换的 DataTable</param>
+            <returns>易于数据绑定的形式</returns>
+        </member>
+        <member name="M:Ivony.Data.DataSetExtensions.AsDictionaries(System.Data.DataTable)">
+            <summary>
+            将 DataTable 转换为易于数据绑定的 IDictionary&lt;string, object&gt; 对象列表
+            </summary>
+            <param name="table">要转换的 DataTable</param>
+            <returns>易于数据绑定的形式</returns>
+        </member>
+        <member name="M:Ivony.Data.DataSetExtensions.Column``1(System.Data.DataTable)">
+            <summary>
+            获取第一列数据
+            </summary>
+            <typeparam name="T">列数据类型</typeparam>
+            <param name="table">数据对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DataSetExtensions.Column``1(System.Data.DataTable,System.String)">
+            <summary>
+            获取指定列数据
+            </summary>
+            <typeparam name="T">列数据类型</typeparam>
+            <param name="table">数据对象</param>
+            <param name="columnName">列名</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Data.DynamicExtensions">
+            <summary>
+            提供关于动态对象的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.DynamicExtensions.ToDynamic(System.Data.DataRow)">
+            <summary>
+            将 DataRow 转换为动态对象
+            </summary>
+            <param name="dataItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DynamicExtensions.ToDynamics(System.Data.DataTable)">
+            <summary>
+            将 DataTable 转换为动态对象数组
+            </summary>
+            <param name="data">DataTable对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.DynamicExtensions.Dynamics(Ivony.Data.DbUtility,Ivony.Data.IDbExpression)">
+            <summary>
+            查询数据库并将最后一个结果集填充动态对象列表
+            </summary>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="expression">查询表达式</param>
+            <returns>实体集</returns>
+        </member>
+        <member name="M:Ivony.Data.DynamicExtensions.Dynamics(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            查询数据库并将最后一个结果集填充动态对象列表
+            </summary>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="template">查询字符串模版</param>
+            <param name="parameters">模版参数</param>
+            <returns>实体集</returns>
+        </member>
+        <member name="T:Ivony.Data.EntityExtensions">
+            <summary>
+            提供面向 Entity 的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.Entities``1(Ivony.Data.DbUtility,Ivony.Data.IDbExpression)">
+            <summary>
+            查询数据库并将最后一个结果集填充实体类型
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="expression">查询表达式</param>
+            <returns>实体集</returns>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.Entity``1(Ivony.Data.DbUtility,Ivony.Data.IDbExpression)">
+            <summary>
+            查询数据库并将结果首行填充实体
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="expression">查询表达式</param>
+            <returns>实体</returns>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.ToEntity``1(System.Data.DataRow,Ivony.Data.IEntityConverter{``0})">
+            <summary>
+            将 DataRow 转换为实体
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dataItem">包含数据的 DataRow</param>
+            <returns>实体</returns>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.CreateEntityConvertMethod``1">
+            <summary>
+            创建转换方法
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <returns>针对指定实体的转换方法</returns>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.GetFieldname(System.Reflection.PropertyInfo)">
+            <summary>
+            获取属性所对应的字段名
+            </summary>
+            <param name="property">要获取字段名的属性</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.EntityExtensions.GetAttributes(System.Reflection.PropertyInfo)">
+            <summary>
+            获取指定属性上的特性
+            </summary>
+            <param name="p">要获取特性的属性</param>
+            <returns>属性上所设置的特性</returns>
+        </member>
+        <member name="T:Ivony.Data.EntityExtensions.DefaultEntityConverter`1">
+            <summary>
+            提供默认的 EntityConverter 对象，这个对象什么都不做，并且被设置为可重用和需要预转换。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Ivony.Data.IEntityConverter`1">
+            <summary>
+            定义实体转换器类型
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Ivony.Data.IEntityConverter`1.Convert(System.Data.DataRow,`0)">
+            <summary>
+            将数据写入实体
+            </summary>
+            <param name="dataItem"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Data.IEntityConverter`1.IsReusable">
+            <summary>
+            是否可重用
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.IEntityConverter`1.NeedPreconversion">
+            <summary>
+            是否需要预转换
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.FieldNameAttribute">
+            <summary>
+            用于指定字段名称的特性
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.FieldNameAttribute.#ctor(System.String)">
+            <summary>
+            创建 FieldNameAttribute 对象
+            </summary>
+            <param name="name">字段名</param>
+        </member>
+        <member name="P:Ivony.Data.FieldNameAttribute.FieldName">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.NonFieldAttribute">
+            <summary>
+            用于指示属性与任何字段没有关系
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.EntityConvertAttribute">
+            <summary>
+            指定类型所应使用的实体转换器
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ExcelDbUtility.GetExpressionParser">
+            <summary>
+            获取数据库表达式解析器
+            </summary>
+            <returns>数据库表达式解析器</returns>
+        </member>
+        <member name="T:Ivony.Data.TemplateParseContext">
+            <summary>
+            模板解析上下文
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.TemplateParseContext.CreateParameterExpression(Ivony.Data.ParameterExpression)">
+            <summary>
+            创建参数 SQL 表达式
+            </summary>
+            <param name="parameter">参数表达式</param>
+            <returns>该参数在 SQL 语句中引用的形式</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.ExecuteNonQuery(Ivony.Data.IDbExpression,Ivony.Data.DbUtility)">
+            <summary>
+            执行无结果的查询
+            </summary>
+            <param name="expression">查询表达式</param>
+            <param name="dbUtility">数据库访问帮助器</param>
+            <returns>影响的行数</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.ExecuteScalar(Ivony.Data.IDbExpression,Ivony.Data.DbUtility)">
+            <summary>
+            执行查询，并返回首行首列
+            </summary>
+            <param name="expression">查询表达式</param>
+            <param name="dbUtility">数据库访问帮助器</param>
+            <returns>查询结果的首行首列</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.ExecuteScalar``1(Ivony.Data.IDbExpression,Ivony.Data.DbUtility)">
+            <summary>
+            执行查询，并返回首行首列
+            </summary>
+            <param name="expression">查询表达式</param>
+            <param name="dbUtility">数据库访问帮助器</param>
+            <returns>查询结果的首行首列</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.ExecuteFirstRow(Ivony.Data.IDbExpression,Ivony.Data.DbUtility)">
+            <summary>
+            执行查询，并返回首行
+            </summary>
+            <param name="expression">查询表达式</param>
+            <param name="dbUtility">数据库访问帮助器</param>
+            <returns>查询结果的首行</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.ExecuteData(Ivony.Data.IDbExpression,Ivony.Data.DbUtility)">
+            <summary>
+            执行查询，并返回第一个结果集
+            </summary>
+            <param name="expression">查询表达式</param>
+            <param name="dbUtility">数据库访问帮助器</param>
+            <returns>第一个结果集</returns>
+        </member>
+        <member name="M:Ivony.Data.DbExpressions.Template(System.String,System.Object[])">
+            <summary>
+            创建模版表达式实例
+            </summary>
+            <param name="template">SQL 命令模版</param>
+            <param name="parameters">模版参数列表</param>
+            <returns>模版表达式</returns>
+        </member>
+        <member name="T:Ivony.Data.StoredProcedureExpression">
+            <summary>
+            存储过程表达式
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.StoredProcedureExpression.#ctor(System.String)">
+            <summary>
+            创建 StoredProcedureExpression 对象
+            </summary>
+            <param name="name">存储过程名称</param>
+        </member>
+        <member name="M:Ivony.Data.StoredProcedureExpression.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            创建 StoredProcedureExpression 对象
+            </summary>
+            <param name="name">存储过程名称</param>
+            <param name="parameters">存储过程参数列表</param>
+        </member>
+        <member name="P:Ivony.Data.StoredProcedureExpression.Name">
+            <summary>
+            存储过程名称
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.StoredProcedureExpression.Parameters">
+            <summary>
+            存储过程参数列表
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.TableExpression">
+            <summary>
+            数据表表达式
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.ITemplatePartialExpression">
+            <summary>
+            定义可以作为模板的一部分被嵌入模板的表达式
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ITemplatePartialExpression.Parse(Ivony.Data.TemplateParseContext)">
+            <summary>
+            解析模版并提供嵌入的 SQL 表达式
+            </summary>
+            <param name="context">模版解析上下文</param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Data.TemplateExpression">
+            <summary>
+            模板表达式
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.TemplateExpression.#ctor(System.String,System.Object[])">
+            <summary>
+            创建 TemplateExpression 对象
+            </summary>
+            <param name="template">模版</param>
+            <param name="parameters">参数列表</param>
+        </member>
+        <member name="M:Ivony.Data.TemplateExpression.Parse(Ivony.Data.TemplateParseContext)">
+            <summary>
+            解析模版表达式
+            </summary>
+            <param name="context">模版解析上下文</param>
+            <returns>需要嵌入在模版中的形式</returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExpression.ParseParameterListSymbol(System.Int32)">
+            <summary>
+            处理参数列表表达式“{...}”
+            </summary>
+            <param name="amount">参数个数</param>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Data.TemplateExpression.Template">
+            <summary>
+            模版
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.TemplateExpression.Parameters">
+            <summary>
+            参数列表
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.ParameterExpression">
+            <summary>
+            参数表达式
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ParameterExpression.#ctor(System.Object)">
+            <summary>
+            创建 ParameterExpression 实例
+            </summary>
+            <param name="value">参数值</param>
+        </member>
+        <member name="M:Ivony.Data.ParameterExpression.Parse(Ivony.Data.TemplateParseContext)">
+            <summary>
+            解析成参数表达式
+            </summary>
+            <param name="context">模版解析上下文</param>
+            <returns>需要嵌入在模版中的形式</returns>
+        </member>
+        <member name="P:Ivony.Data.ParameterExpression.Value">
+            <summary>
+            参数值
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.ParameterExpression.DbType">
+            <summary>
+            数据类型，可选
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.ITransactionUtility">
+            <summary>
+            定义事务管理器
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ITransactionUtility.Begin">
+            <summary>
+            开始事务
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ITransactionUtility.Commit">
+            <summary>
+            提交事务
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.ITransactionUtility.Rollback">
+            <summary>
+            回滚事务
+            </summary>
+        </member>
+        <member name="P:Ivony.Data.ITransactionUtility.DbUtility">
+            <summary>
+            获取帮助执行SQL语句的DbUtility实例。
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.LegacyAPI.LegacyExtensions">
+            <summary>
+            提供向下兼容的API
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.SqlDbUtility">
+            <summary>
+            用于操作 SQL Server 的数据库访问工具
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.#ctor(System.String)">
+            <summary>
+            创建 SqlDbUtility 对象
+            </summary>
+            <param name="connectionString">数据库连接字符串</param>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.InternalCreateConnection">
+            <summary>
+            创建数据库连接
+            </summary>
+            <returns>数据库连接</returns>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.GetExpressionParser">
+            <summary>
+            获取查询表达式解析器
+            </summary>
+            <returns>查询表达式解析器</returns>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.CreateTransaction">
+            <summary>
+            创建一个事务
+            </summary>
+            <returns>事务管理器</returns>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.Create(System.String)">
+            <summary>
+            创建数据库访问工具
+            </summary>
+            <param name="name">连接字符串名称</param>
+            <returns>数据库访问工具</returns>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.TransactionUtility.Begin">
+            <summary>
+            开始事务
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.TransactionUtility.Commit">
+            <summary>
+            提交事务
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.TransactionUtility.Rollback">
+            <summary>
+            回滚事务
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.TransactionUtility.Dispose">
+            <summary>
+            销毁事务对象
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlDbUtility.TransactionUtility.CreateCommand">
+            <summary>
+            创建命令对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Data.SqlDbUtility.TransactionUtility.DbUtility">
+            <summary>
+            用于操作数据库的 DbUtility 对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Data.SqlServerExpressionParser">
+            <summary>
+            用于 SQL Server 的表达式解析器
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.SqlServerExpressionParser.Parse(Ivony.Data.IDbExpression)">
+            <summary>
+            解析查询表达式
+            </summary>
+            <param name="expression">查询表达式</param>
+            <returns>解析后创建的命令对象</returns>
+        </member>
+        <member name="T:Ivony.Data.TemplateExtensions">
+            <summary>
+            有关模板的扩展方法
+            </summary>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Data(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            执行查询，并返回第一个结果集
+            </summary>
+            <param name="template">查询字符串模板</param>
+            <param name="parameters">查询字符串参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.NonQuery(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            执行无结果的查询
+            </summary>
+            <param name="commandText">查询字符串模板</param>
+            <param name="parameters">查询字符串参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Scalar(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            执行查询，并返回首行首列
+            </summary>
+            <param name="commandText">查询字符串模板</param>
+            <param name="parameters">查询字符串参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Scalar``1(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            执行查询，并返回首行首列
+            </summary>
+            <param name="commandText">查询字符串模板</param>
+            <param name="parameters">查询字符串参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.FirstRow(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            执行查询，并返回首行
+            </summary>
+            <param name="commandText">查询字符串模板</param>
+            <param name="parameters">查询字符串参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Entities``1(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            查询数据库并将最后一个结果集填充实体类型
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="template">查询字符串模版</param>
+            <param name="parameters">模版参数</param>
+            <returns>实体集</returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Entity``1(Ivony.Data.DbUtility,System.String,System.Object[])">
+            <summary>
+            查询数据库并将结果首行填充实体
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="dbUtility">DbUtility 实例</param>
+            <param name="template">查询字符串模版</param>
+            <param name="parameters">模版参数</param>
+            <returns>实体</returns>
+        </member>
+        <member name="M:Ivony.Data.TemplateExtensions.Template(System.String,System.Object[])">
+            <summary>
+            创建模版表达式实例
+            </summary>
+            <param name="template">SQL 命令模版</param>
+            <param name="parameters">模版参数列表</param>
+            <returns>模版表达式</returns>
+        </member>
+        <member name="M:Ivony.Data.TransactionExtensions.BeginTransaction(Ivony.Data.DbUtility)">
+            <summary>
+            开启新事务
+            </summary>
+            <returns>事务管理器</returns>
+        </member>
+    </members>
+</doc>

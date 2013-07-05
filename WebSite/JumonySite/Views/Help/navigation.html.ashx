@@ -32,6 +32,19 @@ public class Navigation : ViewHandler<HelpTopic>
     }
 
     var siblingList = parentsList.AddElement( "li" ).AddElement( "ul" );
+
+    {
+      var parent = Model.Parent;
+      if ( parent != null )
+      {
+        foreach ( var sibling in parent.Childs )
+        {
+          if ( sibling != Model )
+            siblingList.AddElement( "li" ).AddElement( "a" ).SetAttribute( "action", "Entry" ).SetAttribute( "_path", sibling.HelpPath ).InnerText( sibling.Title );
+        }
+      }
+    }
+
     var selfNode = siblingList.AddElement( "li" );
     selfNode.InnerText( Model.Title );
     var childsList = selfNode.AddElement( "ul" );

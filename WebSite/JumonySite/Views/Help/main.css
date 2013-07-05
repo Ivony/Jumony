@@ -1,7 +1,7 @@
 ﻿body { font-family: 'Microsoft YaHei', SimHei, sans-serif; margin: 20px 50px; font-size: 14px; max-width: 1200px; }
 
 nav { float: left; width: 250px; margin: 0px 10px; }
-  nav ul { margin: 0px; padding: 0px; }
+  nav ul { margin: 0px; padding: 0px; list-style: none; }
     nav ul h3 { font-size: 20px; margin: 0px; }
     nav ul ul { font-size: 14px; list-style: none; }
   nav li { margin: 10px; }

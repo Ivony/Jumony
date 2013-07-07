@@ -1,23 +1,41 @@
-﻿body { font-family: 'Microsoft YaHei', SimHei, sans-serif; margin: 20px 50px; font-size: 14px; max-width: 1200px; }
+﻿body {font-family: 'Microsoft YaHei', SimHei, sans-serif; margin: 20px 50px; font-size: 14px; max-width: 1200px; }
 
-nav { float: left; width: 250px; margin: 0px 10px; }
-  nav ul { margin: 0px; padding: 0px; list-style: none; }
-    nav ul h3 { font-size: 20px; margin: 0px; }
-    nav ul ul { font-size: 14px; list-style: none; }
-  nav li { margin: 10px; }
+nav {float: left; width: 250px; margin: 0px 10px; }
 
-body > section { margin-left: 250px; width: auto; }
+nav ul {margin: 0px; padding: 0px; list-style: none; }
 
-section { margin: 35px 0px 35px 10px; }
+nav ul h3 {font-size: 20px; margin: 0px; }
 
-p { margin: 5px; }
+nav ul ul {font-size: 14px; list-style: none; }
 
-h3 { margin: 50px 0px 20px 0px; }
+nav li {margin: 10px; }
 
-  h3 ~ p, h4 ~ p, h5 ~ p, h6 ~ p { margin-left: 20px; }
+body > section {margin-left: 250px; width: auto; }
 
-code { font-family: Consolas, 'Courier New'; }
-  code .keyword { color: blue; }
-  code .typeName { color: #2b91af; }
+section {margin: 35px 0px 35px 10px; }
 
-h5 { margin: 10px 0px 5px 0px; }
+section.demo {margin: 10px 0px 25px 20px; background-color: #EEEEEE; }
+
+p {margin: 5px; }
+
+h3 {margin: 50px 0px 20px 0px; }
+
+h3 ~ p, h4 ~ p, h5 ~ p, h6 ~ p { margin-left: 20px; }
+code {font-family: Consolas, 'Courier New'; }
+
+code .keyword {color: blue; }
+
+code .typeName {color: #2b91af; }
+
+h5 {margin: 10px 0px 5px 0px; }
+
+pre.code {margin: 10px; background-color: #EEEEEE; font-family: Consolas; font-size: 10pt; color: black; }
+
+pre.code .keyword {color: #0000FF; }
+
+pre.code .string {color: #A31515; }
+
+pre.code [class="User Types"]{ color: #2996B5 }
+
+
+

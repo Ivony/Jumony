@@ -79,7 +79,7 @@ namespace Jumony.Demo.HelpCenter
             .Select( f => VirtualPathUtility.ToAppRelative( f.VirtualPath ) )
             .Where( p => VirtualPathUtility.GetExtension( p ) == ".html" )
             .Where( p => VirtualPathUtility.GetFileName( p ) != "index.html" )
-            .Union( directory.Children.OfType<VirtualDirectory>().Select( d => VirtualPathUtility.ToAppRelative( d.VirtualPath ) ) )
+            .Union( directory.Children.OfType<VirtualDirectory>().Select( d => VirtualPathUtility.ToAppRelative( d.VirtualPath ) ).Where( d => VirtualPathProvider.FileExists( VirtualPathUtility.Combine( d, "index.html" ) ) ) )
             .Select( p => GetTopic( VirtualPathUtility.MakeRelative( helpEntriesVirtualPath, p ) ) ).ToArray();
         }
       }

@@ -44,7 +44,7 @@ namespace Ivony.Html.Web
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
         return false;
 
-      var expression = new BindingExpression( element );
+      var expression = new AttributeExpression( element );
 
       object dataObject = GetDataObject( expression, context );
 
@@ -116,6 +116,11 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 绑定元素样式
+    /// </summary>
+    /// <param name="element">要处理的元素</param>
+    /// <param name="styleAttributes">样式属性值</param>
     private static void BindElementStyles( IHtmlElement element, IHtmlAttribute[] styleAttributes )
     {
       foreach ( var attribute in styleAttributes )
@@ -140,7 +145,7 @@ namespace Ivony.Html.Web
 
 
 
-    private static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
+    private static object GetDataObject( AttributeExpression expression, HtmlBindingContext context )
     {
       //获取绑定数据源
 
@@ -182,7 +187,7 @@ namespace Ivony.Html.Web
     public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
     {
 
-      var expression = BindingExpression.ParseExpression( attribute );
+      var expression = AttributeExpression.ParseExpression( attribute );
       if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
         return false;
 
@@ -199,7 +204,7 @@ namespace Ivony.Html.Web
       return true;
     }
 
-    private static string GetBindingValue( BindingExpression expression, object dataObject )
+    private static string GetBindingValue( AttributeExpression expression, object dataObject )
     {
 
       {

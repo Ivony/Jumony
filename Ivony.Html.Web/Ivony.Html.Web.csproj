@@ -68,8 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingExpression.cs" />
-    <Compile Include="DefaultCachePolicyProvider.cs" />
+    <Compile Include="AttributeExpression.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlElementHandler.cs" />

@@ -87,16 +87,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取默认的缓存策略提供程序
-    /// </summary>
-    public static ICachePolicyProvider DefaultCachePolicyProvider
-    {
-      get { return Web.DefaultCachePolicyProvider.Instance; }
-    }
-
-
-
-    /// <summary>
     /// 映射请求
     /// </summary>
     /// <param name="request">当前 HTTP 请求信息</param>
@@ -422,7 +412,7 @@ namespace Ivony.Html.Web
 
       }
 
-      return Web.DefaultCachePolicyProvider.Instance.CreateCachePolicy( context );
+      return null;
     }
 
 

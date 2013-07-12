@@ -30,8 +30,16 @@ namespace Ivony.Html.Parser
     /// 构造 DomFragmentManager 对象
     /// </summary>
     /// <param name="document">FragmentManager 对象所属的文档</param>
-    public DomFragmentManager( DomDocument document )
+    public DomFragmentManager( DomDocument document, IDomFragmentParserProvider parserProvider )
     {
+
+      if ( document == null )
+        throw new ArgumentNullException( "document" );
+
+      if ( parserProvider == null )
+        throw new ArgumentNullException( "parserProvider" );
+
+
       lock ( document.SyncRoot )
       {
         if ( document.FragmentManager != null )
@@ -40,6 +48,7 @@ namespace Ivony.Html.Parser
         _document = document;
 
         _fragments = new SynchronizedCollection<DomFragment>( SyncRoot );
+        _parserProvider = parserProvider;
       }
     }
 
@@ -103,14 +112,16 @@ namespace Ivony.Html.Parser
 
 
 
-    internal IDomFragmentParserProvider ParserProvider { get; set; }
+    IDomFragmentParserProvider _parserProvider;
 
+
+    /// <summary>
+    /// 获取用于解析文档片段的解析器
+    /// </summary>
+    /// <returns>文档片段解析器</returns>
     public IDomFragmentParser GetParser()
     {
-      if ( ParserProvider == null )
-        throw new NotSupportedException();
-
-      return ParserProvider.GetFragmentParser( _document );
+      return _parserProvider.GetFragmentParser( _document );
     }
   }
 }

@@ -30,7 +30,7 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     public IHtmlDocument CreateDocument()
     {
-      return new DomDocument( null );
+      return new DomDocument( null, _fragmentParserProvider );
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ namespace Ivony.Html.Parser
     /// <returns></returns>
     public IHtmlDocument CreateDocument( Uri url )
     {
-      return new DomDocument( url );
+      return new DomDocument( url, _fragmentParserProvider );
     }
 
 
@@ -139,8 +139,6 @@ namespace Ivony.Html.Parser
       var domDocument = document as DomDocument;
       if ( domDocument == null )
         throw new InvalidOperationException();
-
-      domDocument.FragmentManager.ParserProvider = _fragmentParserProvider;
 
       if ( domDocument.HtmlSpecification == null )
         throw new InvalidOperationException( "尚未设置文档所使用的 HTML 规范！" );

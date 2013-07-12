@@ -26,7 +26,7 @@ namespace Ivony.Html.Parser
 
 
     /// <summary>
-    /// 获取一个名称，用于识别节电类型，此属性总是返回 "TextNode"
+    /// 获取一个名称，用于识别节点类型，此属性总是返回 "TextNode"
     /// </summary>
     protected override string ObjectName
     {

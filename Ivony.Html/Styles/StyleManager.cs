@@ -25,8 +25,13 @@ namespace Ivony.Html
     /// <returns>样式对象</returns>
     public static StyleManager Style( this IHtmlElement element )
     {
-      return new StyleManager( element );
+
+      return StyleManager.GetStyleManager( element );
     }
+
+
+
+
 
     /// <summary>
     /// 对元素设置指定样式
@@ -57,11 +62,45 @@ namespace Ivony.Html.Styles
   public class StyleManager
   {
 
-    private readonly CssStyle style;
+
+    private CssStyle _style;
+
+    private string _styleString;
 
     private IHtmlElement _element;
 
-    internal StyleManager( IHtmlElement element )
+    private IHtmlAttribute _styleAttribute;
+
+
+    /// <summary>
+    /// 获取指定元素的样式管理器
+    /// </summary>
+    /// <param name="element">要获取样式管理器的元素</param>
+    /// <returns>获取的样式管理器</returns>
+    internal static StyleManager GetStyleManager( IHtmlElement element )
+    {
+      var styleAttribute = element.Attribute( "style" );
+      var dataContainer = styleAttribute as IDataContainer;
+
+
+      //如果 style 属性支持缓存数据容器，则尝试缓存获取。
+      if ( dataContainer != null )
+      {
+        var manager = dataContainer.Data[typeof( StyleManager )] as StyleManager;
+        if ( manager != null && manager._styleString.EqualsIgnoreCase( styleAttribute.Value() ) )
+          return manager;
+
+        manager = new StyleManager( element );
+        dataContainer.Data[typeof( StyleManager )] = manager;
+        return manager;
+      }
+
+      return new StyleManager( element );
+    }
+
+
+
+    private StyleManager( IHtmlElement element )
     {
       if ( element == null )
         throw new ArgumentNullException( "element" );
@@ -70,9 +109,11 @@ namespace Ivony.Html.Styles
 
       lock ( element.SyncRoot )
       {
-        style = CssPropertyParser.ParseCssStyle( element.Attribute( "style" ).Value().IfNull( "" ) );
+        _styleAttribute = element.Attribute( "style" );
+        _style = CssPropertyParser.ParseCssStyle( _styleAttribute.Value().IfNull( "" ) );
       }
     }
+
 
 
     /// <summary>
@@ -82,8 +123,12 @@ namespace Ivony.Html.Styles
     /// <returns>样式设置值</returns>
     public virtual string GetValue( string name )
     {
-      return style[name];
+
+      EnsureStyle();
+
+      return _style[name];
     }
+
 
     /// <summary>
     /// 设置样式值
@@ -93,96 +138,42 @@ namespace Ivony.Html.Styles
     /// <returns>样式管理器自身</returns>
     public virtual StyleManager SetValue( string name, string value )
     {
-      style[name] = value;
 
-      _element.SetAttribute( "style", style.ToString() );
+      lock ( _element.SyncRoot )
+      {
 
-      return this;
+        EnsureStyle();
+
+        _style[name] = value;
+
+        _element.SetAttribute( "style", _style.ToString() );
+
+        return this;
+      }
     }
 
 
 
-
     /// <summary>
-    /// 添加一个样式类
+    /// 确保当前跟踪的样式是最新的
     /// </summary>
-    /// <param name="className">类名</param>
-    /// <returns>被操作的元素</returns>
-    public IHtmlElement AddClass( string className )
+    private void EnsureStyle()
     {
       lock ( _element.SyncRoot )
       {
-        var classes = GetClasses();
-
-        if ( !classes.Contains( className ) )
-          classes.Add( className );
-
-        SetClasses( classes );
+        var styleAttribute = _element.Attribute( "style" );
+        if ( _modified || styleAttribute != _styleAttribute )
+        {
+          _styleString = styleAttribute.Value().IfNull( "" );
+          _style = CssPropertyParser.ParseCssStyle( _styleString );
+          _styleAttribute = styleAttribute;
+        }
       }
-
-      return _element;
-    }
-
-
-    /// <summary>
-    /// 移除一个样式类
-    /// </summary>
-    /// <param name="className">类名</param>
-    /// <returns>被操作的元素</returns>
-    public IHtmlElement RemoveClass( string className )
-    {
-      lock ( _element.SyncRoot )
-      {
-        var classes = GetClasses();
-
-        if ( classes.Contains( className ) )
-          classes.Remove( className );
-
-        SetClasses( classes );
-      }
-
-      return _element;
-    }
-
-
-    /// <summary>
-    /// 获取当前应用的所有样式类
-    /// </summary>
-    /// <returns>样式类名集合</returns>
-    public IEnumerable<string> Classes()
-    {
-      return GetClasses();
     }
 
 
 
-    private void SetClasses( HashSet<string> classes )
-    {
-      _element.SetAttribute( "class", string.Join( " ", classes.ToArray() ) );
-    }
-
-    private HashSet<string> GetClasses()
-    {
-      var classSet = new HashSet<string>();
 
 
-      var classes = _element.Attribute( "class" ).Value();
-      if ( classes == null )
-        return classSet;
-
-      foreach ( var c in classes.Split( ' ' ) )
-      {
-        if ( string.IsNullOrEmpty( c ) )
-          continue;
-
-        if ( classSet.Contains( c ) )
-          continue;
-
-
-        classSet.Add( c );
-      }
-
-      return classSet;
-    }
   }
 }

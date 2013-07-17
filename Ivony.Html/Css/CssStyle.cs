@@ -8,7 +8,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// CSS3 样式设置的实现
+  /// 定义 CSS 样式属性集合
   /// </summary>
   public class CssStyle
   {
@@ -21,12 +21,19 @@ namespace Ivony.Html
     public object SyncRoot { get { return _sync; } }
 
 
+    /// <summary>
+    /// 创建 CssStyle 对象
+    /// </summary>
+    /// <param name="specification">要遵循的 CSS 规范</param>
     public CssStyle( CssStyleSpecificationBase specification )
     {
       Specification = specification;
     }
 
 
+    /// <summary>
+    /// 获取该 CssStyle 对象所遵循的 CSS 规范。
+    /// </summary>
     public CssStyleSpecificationBase Specification
     {
       get;
@@ -39,6 +46,7 @@ namespace Ivony.Html
     /// </summary>
     public const string importantFlag = "!important";
 
+    
     /// <summary>
     /// 设置样式属性
     /// </summary>
@@ -110,6 +118,10 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 移除样式属性
+    /// </summary>
+    /// <param name="name">要移除的样式属性名</param>
     protected void RemoveProperty( string name )
     {
       lock ( SyncRoot )

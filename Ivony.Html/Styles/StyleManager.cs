@@ -65,10 +65,7 @@ namespace Ivony.Html.Styles
 
     private CssStyle _style;
 
-    private string _styleString;
-
     private IHtmlElement _element;
-
     private IHtmlAttribute _styleAttribute;
 
 
@@ -79,19 +76,17 @@ namespace Ivony.Html.Styles
     /// <returns>获取的样式管理器</returns>
     internal static StyleManager GetStyleManager( IHtmlElement element )
     {
-      var styleAttribute = element.Attribute( "style" );
-      var dataContainer = styleAttribute as IDataContainer;
+      var dataContainer = element as IDataContainer;
 
 
       //如果 style 属性支持缓存数据容器，则尝试缓存获取。
       if ( dataContainer != null )
       {
         var manager = dataContainer.Data[typeof( StyleManager )] as StyleManager;
-        if ( manager != null && manager._styleString.EqualsIgnoreCase( styleAttribute.Value() ) )
+        if ( manager != null )
           return manager;
 
-        manager = new StyleManager( element );
-        dataContainer.Data[typeof( StyleManager )] = manager;
+        dataContainer.Data[typeof( StyleManager )] = manager = new StyleManager( element );
         return manager;
       }
 
@@ -107,11 +102,6 @@ namespace Ivony.Html.Styles
 
       _element = element;
 
-      lock ( element.SyncRoot )
-      {
-        _styleAttribute = element.Attribute( "style" );
-        _style = CssPropertyParser.ParseCssStyle( _styleAttribute.Value().IfNull( "" ) );
-      }
     }
 
 
@@ -162,10 +152,9 @@ namespace Ivony.Html.Styles
       lock ( _element.SyncRoot )
       {
         var styleAttribute = _element.Attribute( "style" );
-        if ( _modified || styleAttribute != _styleAttribute )
+        if ( styleAttribute != _styleAttribute )
         {
-          _styleString = styleAttribute.Value().IfNull( "" );
-          _style = CssPropertyParser.ParseCssStyle( _styleString );
+          _style = CssPropertyParser.ParseCssStyle( styleAttribute.Value().IfNull( "" ) );
           _styleAttribute = styleAttribute;
         }
       }

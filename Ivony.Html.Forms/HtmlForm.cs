@@ -8,6 +8,10 @@ using System.Web;
 
 namespace Ivony.Html.Forms
 {
+
+  /// <summary>
+  /// 抽象化 HTML 表单，提供有用的功能。
+  /// </summary>
   public class HtmlForm
   {
     private IHtmlElement _element;
@@ -28,7 +32,6 @@ namespace Ivony.Html.Forms
     private HtmlLabel[] labels;
 
     private Hashtable labelsTable = Hashtable.Synchronized( new Hashtable() );
-    private Hashtable controlsTable = Hashtable.Synchronized( new Hashtable() );
 
 
 
@@ -51,19 +54,18 @@ namespace Ivony.Html.Forms
     /// </summary>
     public void RefreshForm()
     {
-      textControls =
+
+      TextControls =
       Element.Find( "input[type=text][name] , input[type=password][name] , input[type=hidden][name]" )
         .Select( e => new HtmlInputText( this, e ) ).Cast<IHtmlTextControl>()
         .Union( Element.Find( "textarea[name]" ).Select( e => new HtmlTextArea( this, e ) ).Cast<IHtmlTextControl>() )
-        .ForAll( control => controlsTable.Add( control.Name, control ) )
         .ToArray();
 
 
-      groupControls =
+      GroupControls =
       Element.Find( "select[name]" )
         .Select( select => new HtmlSelect( this, select ) ).Cast<IHtmlGroupControl>()
         .Union( HtmlButtonGroup.CaptureInputGroups( this ).Cast<IHtmlGroupControl>() )
-        .ForAll( control => controlsTable.Add( control.Name, control ) )
         .ToArray();
 
 
@@ -73,8 +75,18 @@ namespace Ivony.Html.Forms
 
       labels.GroupBy( l => l.ForElementId ).ForAll( grouping =>
         labelsTable.Add( grouping.Key, grouping.ToArray() ) );
+
+
+      _inputControls = new InputControlCollection( this );
+      _formValues = new FormValueCollection( this );
+
     }
 
+
+
+    internal IHtmlGroupControl[] GroupControls { get; private set; }
+
+    internal IHtmlTextControl[] TextControls { get; private set; }
 
 
 
@@ -127,49 +139,24 @@ namespace Ivony.Html.Forms
 
 
 
+    private InputControlCollection _inputControls;
+
     /// <summary>
     /// 获取表单所有的输入控件
     /// </summary>
-    public IEnumerable<IHtmlInputControl> InputControls
+    public InputControlCollection InputControls
     {
-      get { return controlsTable.Values.Cast<IHtmlInputControl>(); }
+      get { return _inputControls; }
     }
 
 
-    /// <summary>
-    /// 获取指定名称的输入控件
-    /// </summary>
-    /// <param name="name">输入控件名</param>
-    /// <returns>输入控件</returns>
-    public IHtmlInputControl this[string name]
+    private FormValueCollection _formValues;
+
+
+    public FormValueCollection Values
     {
-      get { return InputControl( name ); }
+      get { return _formValues; }
     }
-
-
-
-    public IHtmlInputControl InputControl( string name )
-    {
-      return controlsTable[name].CastTo<IHtmlInputControl>();
-    }
-
-
-    /// <summary>
-    /// 所有文本输入控件
-    /// </summary>
-    private IHtmlTextControl[] TextInputs
-    {
-      get { return textControls; }
-    }
-
-    /// <summary>
-    /// 所有组合输入控件
-    /// </summary>
-    private IHtmlGroupControl[] GroupInputs
-    {
-      get { return groupControls; }
-    }
-
 
 
     /// <summary>

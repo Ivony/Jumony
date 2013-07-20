@@ -37,12 +37,12 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="group">输入组</param>
     /// <returns></returns>
-    public static IEnumerable<string> CurrentValues( this IHtmlGroupControl group )
+    public static string[] CurrentValues( this IHtmlGroupControl group )
     {
       if ( group == null )
         throw new ArgumentNullException( "group" );
 
-      return group.Items.Where( item => item.Selected ).Select( item => item.Value );
+      return group.Items.Where( item => item.Selected ).Select( item => item.Value ).ToArray();
     }
 
 
@@ -332,7 +332,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="input">输入控件</param>
     /// <returns></returns>
-    public static string ValueString( this IHtmlInputControl input )
+    public static string Value( this IHtmlInputControl input )
     {
       var textInput = input as HtmlInputText;
       if ( textInput != null )

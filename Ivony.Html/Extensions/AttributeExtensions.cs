@@ -106,6 +106,21 @@ namespace Ivony.Html
     /// <returns>设置了属性的元素</returns>
     public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value )
     {
+      IHtmlAttribute attribute;
+      return SetAttribute( element, attributeName, value, out attribute );
+    }
+
+
+    /// <summary>
+    /// 设置属性值
+    /// </summary>
+    /// <param name="element">要设置属性值的元素</param>
+    /// <param name="attributeName">属性名</param>
+    /// <param name="value">属性值</param>
+    /// <param name="attribute">设置好的属性</param>
+    /// <returns>设置了属性的元素</returns>
+    public static IHtmlElement SetAttribute( this IHtmlElement element, string attributeName, string value, out IHtmlAttribute attribute )
+    {
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
@@ -114,12 +129,12 @@ namespace Ivony.Html
 
       lock ( element.SyncRoot )
       {
-        var attribute = element.Attribute( attributeName );
+        var _attribute = element.Attribute( attributeName );
 
-        if ( attribute != null )
-          attribute.Remove();
+        if ( _attribute != null )
+          _attribute.Remove();
 
-        element.AddAttribute( attributeName, value );
+        attribute = element.AddAttribute( attributeName, value );
       }
 
       return element;

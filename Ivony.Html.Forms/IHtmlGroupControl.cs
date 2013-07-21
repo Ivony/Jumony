@@ -23,6 +23,13 @@ namespace Ivony.Html.Forms
     {
       get;
     }
+
+
+    IHtmlInputGroupItem this[string value]
+    {
+      get;
+    }
+
   }
 
   /// <summary>

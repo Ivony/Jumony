@@ -83,6 +83,18 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
+    /// 获取具有指定值的项
+    /// </summary>
+    /// <param name="value">指定的值</param>
+    /// <returns>具有这个值的输入项</returns>
+    public IHtmlInputGroupItem this[string value]
+    {
+      get { return options.FirstOrDefault( o => o.Value == value ); }
+    }
+
+
+
+    /// <summary>
     /// 表示一个 &lt;option&gt; 元素
     /// </summary>
     public class HtmlOption : IHtmlInputGroupItem

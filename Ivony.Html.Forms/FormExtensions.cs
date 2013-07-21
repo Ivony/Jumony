@@ -159,7 +159,7 @@ namespace Ivony.Html.Forms
 
       ClearValues( group );
 
-      if ( values.Any( v => group.Item( v ) == null ) )
+      if ( values.Any( v => group[v] == null ) )
         throw new InvalidOperationException();
 
 
@@ -201,22 +201,51 @@ namespace Ivony.Html.Forms
       return group.Items.Select( item => item.Value );
     }
 
+
+
     /// <summary>
-    /// 通过 value 获取输入组项
+    /// 为指定的输入控件设置值
     /// </summary>
-    /// <param name="group">输入组</param>
-    /// <param name="value">要查找输入组项的值</param>
-    /// <returns>输入组项，如果没有找到则返回 false</returns>
-    public static IHtmlInputGroupItem Item( this IHtmlGroupControl group, string value )
+    /// <param name="input">要设置值的输入控件</param>
+    /// <param name="value">要设置的值</param>
+    public static void SetValue( this IHtmlInputControl input, string value )
     {
+      if ( input == null )
+        throw new ArgumentNullException( "input" );
 
-      if ( group == null )
-        throw new ArgumentNullException( "group" );
+      var textControl = input as IHtmlTextControl;
+      if ( textControl != null )
+        SetValue( textControl, value );
 
-      if ( value == null )
-        throw new ArgumentNullException( "value" );
+      var group = input as IHtmlGroupControl;
+      if ( group != null )
+        SetValue( group, value );
 
-      return group.Items.Where( item => item.Value == value ).SingleOrDefault();
+      throw new NotSupportedException( string.Format( "名为 \"{0}\" 输入控件的类型 \"{1}\" 不受支持。", input.Name, input.GetType().FullName ) );
+    }
+
+
+    /// <summary>
+    /// 为指定的文本输入控件设置值
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="value"></param>
+    public static void SetValue( this IHtmlTextControl input, string value )
+    {
+      if ( !TrySetValue( input, value ) )
+        throw new InvalidOperationException( "因为未知原因导致设置失败" );
+    }
+
+
+    /// <summary>
+    /// 为指定的输入组输入控件设置值
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="value"></param>
+    public static void SetValue( this IHtmlGroupControl input, string value )
+    {
+      if ( !TrySetValue( input, value ) )
+        throw new InvalidOperationException( string.Format( "为名为 \"{0}\" 的输入组控件设置值 \"{1}\" 时失败，输入组可能不支持这个值或值组合。", input.Name, value ) );
     }
 
 
@@ -226,7 +255,6 @@ namespace Ivony.Html.Forms
     /// <param name="group">输入组</param>
     /// <param name="value">要设置的值</param>
     /// <returns>是否成功</returns>
-    /// <remarks>此方法暂不支持设置多个用逗号分隔的值</remarks>
     public static bool TrySetValue( this IHtmlGroupControl group, string value )
     {
 
@@ -239,24 +267,23 @@ namespace Ivony.Html.Forms
         return true;
 
 
-      bool success = true;
       if ( group.AllowMultipleSelections )
       {
-        foreach ( var v in value.Split( ',' ) )
-        {
-          var item = Item( group, v );
+        var values = value.Split( ',' );
+        if ( values.Any( v => group[v] == null ) )
+          return false;
 
-          if ( item == null )
-            success = false;
-          else
-            item.Selected = true;
+        foreach ( var v in values )
+        {
+          var item = group[v];
+          item.Selected = true;
         }
 
-        return success;
+        return true;
       }
       else
       {
-        var item = Item( group, value );
+        var item = group[value];
 
         if ( item == null )
           return false;
@@ -311,20 +338,6 @@ namespace Ivony.Html.Forms
 
       throw new NotSupportedException( string.Format( "名为 \"{0}\" 输入控件的类型 \"{1}\" 不受支持。", input.Name, input.GetType().FullName ) );
     }
-
-
-    /// <summary>
-    /// 尝试对表单所有元素设置值
-    /// </summary>
-    /// <param name="form">要设置值的表单</param>
-    /// <param name="values">要设置的值</param>
-    /// <returns>是否成功</returns>
-    public static bool TrySetValues( this HtmlForm form, NameValueCollection values )
-    {
-      throw new NotImplementedException();
-    }
-
-
 
 
     /// <summary>

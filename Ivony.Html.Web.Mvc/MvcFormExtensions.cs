@@ -31,7 +31,7 @@ namespace Ivony.Html.Web
       {
 
         if ( data.ContainsKey( key ) )
-          form[key].TrySetValue( data[key] );
+          form.Values[key] = data[key];
 
       }
 
@@ -54,7 +54,7 @@ namespace Ivony.Html.Web
       {
         if ( valueProvider.ContainsPrefix( key ) )
         {
-          form[key].TrySetValue( valueProvider.GetValue( key ).AttemptedValue );
+          form.Values[key] = valueProvider.GetValue( key ).AttemptedValue;
         }
       }
 
@@ -63,6 +63,13 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 显示表单验证失败信息，如果有的话
+    /// </summary>
+    /// <param name="form">要显示验证失败信息的表单</param>
+    /// <param name="modelStates">Model 验证信息</param>
+    /// <param name="inputControlFinder">提示容器查找器，指定错误信息显示的位置</param>
+    /// <returns>是否存在错误信息</returns>
     public static bool ShowErrorMessage( this HtmlForm form, ModelStateDictionary modelStates, Func<IHtmlInputControl, IHtmlElement> inputControlFinder )
     {
       return new GenericMvcFormValidator( form, modelStates )

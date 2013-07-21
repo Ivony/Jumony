@@ -17,6 +17,11 @@ namespace Ivony.Html.Forms
       _form = form;
     }
 
+    /// <summary>
+    /// 获取指定字段的值
+    /// </summary>
+    /// <param name="name">字段名</param>
+    /// <returns>值</returns>
     public string this[string name]
     {
       get { return GetValue( name ); }
@@ -24,6 +29,11 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 获取指定字段的值
+    /// </summary>
+    /// <param name="name">字段名</param>
+    /// <returns>值</returns>
     public string GetValue( string name )
     {
       var control = _form.InputControls[name];
@@ -35,6 +45,11 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 获取指定多选字段的值
+    /// </summary>
+    /// <param name="name">字段名</param>
+    /// <returns>所有的值（如果是单值字段则返回只包含一个值的数组）</returns>
     public string[] GetValues( string name )
     {
       var control = _form.InputControls[name];
@@ -51,6 +66,11 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 为表单设置值
+    /// </summary>
+    /// <param name="name">字段名</param>
+    /// <param name="value">字段值</param>
     public void SetValue( string name, string value )
     {
       var control = _form.InputControls[name];
@@ -60,22 +80,6 @@ namespace Ivony.Html.Forms
       control.SetValue( value );
 
     }
-
-    public void SetValues( string name, string[] values )
-    {
-      var control = _form.InputControls[name];
-      if ( control == null )
-        throw new InvalidOperationException( string.Format( "表单中找不到名为 \"{0}\" 的控件", name ) );
-
-      var groupControl = control as IHtmlGroupControl;
-      if ( groupControl != null )
-        groupControl.SetValue( values );
-    }
-
-
-
-
-
 
   }
 }

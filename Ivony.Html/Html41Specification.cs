@@ -15,6 +15,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义 HTML 4.01 规范
   /// </summary>
+  /// <remarks>此类型实例是只读且线程安全的</remarks>
   public sealed class Html41Specification : HtmlSpecificationBase
   {
 

@@ -60,6 +60,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,13 +68,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultCachePolicyProvider.cs" />
+    <Compile Include="AttributeExpression.cs" />
+    <Compile Include="HtmlBindingContext.cs" />
+    <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlElementHandler.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HttpHandlerBase.cs" />
     <Compile Include="HtmlHandlerWrapper.cs" />
     <Compile Include="IHandlerWrapper.cs" />
+    <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
@@ -81,6 +85,7 @@
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="ResourceManager.cs" />
+    <Compile Include="DefaultElementBinder.cs" />
     <Compile Include="WebParser.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />

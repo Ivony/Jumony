@@ -214,7 +214,7 @@ namespace Ivony.Html.Parser
     protected virtual IHtmlElement ProcessBeginTag( HtmlBeginTag beginTag )
     {
 
-      if ( HtmlSpecification == null )
+      if ( HtmlSpecification == null )//当解析第一个开始标签时还没有找到 DTD 声明，则强行使用默认的 HTML 规范。
         SetHtmlSpecification( (HtmlDoctypeDeclaration) null );
 
       string tagName = beginTag.TagName;

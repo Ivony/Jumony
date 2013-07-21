@@ -143,7 +143,14 @@ namespace Ivony.Html.Forms
     /// <returns>输入控件</returns>
     public IHtmlInputControl this[string name]
     {
-      get { return controlsTable[name].CastTo<IHtmlInputControl>(); }
+      get { return InputControl( name ); }
+    }
+
+
+
+    public IHtmlInputControl InputControl( string name )
+    {
+      return controlsTable[name].CastTo<IHtmlInputControl>();
     }
 
 

@@ -13,6 +13,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义 HTML5 草案规范
   /// </summary>
+  /// <remarks>此类型实例是只读且线程安全的</remarks>
   public sealed class Html5DraftSpecification : HtmlSpecificationBase
   {
     public override bool IsCDataElement( string elementName )

@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>HTML DOM API</title>
+  <link href="../../Views/Help/main.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <p>DOM API 即是修改文档结构的 API，通过 DOM API 可以方便的在文档中新增元素、注释或是文本节点，也能够将一小段 HTML 片段插入文档，或是在在文档中移除这些元素。Jumony
+    提供了标准统一的DOM API用于修改文档结构，对于所有支持修改的HTML DOM，这些API提供了一致的行为。
+  </p>
+  <section>
+    <h3 id="add">添加节点</h3>
+    <p>添加节点的 API 均以 Add 开头，可以在 DOM 中自由添加任意节点。</p>
+    <section>
+      <code>IHtmlElement IHtmlContainer.AddElement( [int index], string elementName )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一个元素</p>
+      <h5>参数:</h5>
+      <p><strong>elementName:</strong> 元素名</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的元素</p>
+    </section>
+    <section>
+      <code>IHtmlTextNode IHtmlContainer.AddTextNode( [int index], string htmlText )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一个文本节点</p>
+      <h5>参数:</h5>
+      <p><strong>htmlText:</strong> HTML文本</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的文本节点</p>
+    </section>
+    <section>
+      <code>IHtmlComment IHtmlContainer.AddComment( [int index], string comment )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一个注释节点</p>
+      <h5>参数:</h5>
+      <p><strong>comment:</strong> 注释内容</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的注释节点</p>
+    </section>
+    <section>
+      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], IHtmlFragment
+        fragment )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一个文档片段</p>
+      <h5>参数:</h5>
+      <p><strong>fragment:</strong> 要添加的文档碎片</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的节点列表</p>
+    </section>
+    <section>
+      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlContainer.AddFragment( [int index], string
+        html )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一个文档片段</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 要添加的文档片段 HTML ，将会被自动解析为 IHtmlFragment 然后被添加。</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的节点列表</p>
+    </section>
+    <section>
+      <code>IHtmlElement IHtmlContainer.AddCopy( [int index], IHtmlElement element )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加元素的拷贝</p>
+      <h5>参数:</h5>
+      <p><strong>element:</strong> 要添加拷贝的元素。</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在DOM中的元素</p>
+    </section>
+    <section>
+      <code>IHtmlTextNode IHtmlContainer.AddCopy( [int index], IHtmlTextNode textNode )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加文本节点的拷贝</p>
+      <h5>参数:</h5>
+      <p><strong>textNode:</strong> 要添加拷贝的文本节点。</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在 DOM 中的文本节点</p>
+    </section>
+    <section>
+      <code>IHtmlTextNode IHtmlContainer.AddCopy( [int index], IHtmlComment comment )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加注释节点的拷贝</p>
+      <h5>参数:</h5>
+      <p><strong>comment:</strong> 要添加拷贝的注释节点。</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在 DOM 中的注释节点</p>
+    </section>
+    <section>
+      <code>IHtmlTextNode IHtmlContainer.AddCopy( [int index], IEnumerable&lt;IHtmlNode&gt;
+        nodes )</code>
+      <h5>说明：</h5>
+      <p>在容器中添加一批节点的拷贝</p>
+      <h5>参数:</h5>
+      <p><strong>nodes:</strong> 要添加拷贝的节点列表。</p>
+      <p><strong>index:</strong> 要添加的位置，此参数可以省略，若省略index参数，则添加到容器的末尾</p>
+      <h5>返回值：</h5>
+      <p>返回添加在 DOM 中的节点列表</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="remove">移除节点</h3>
+    <p>移除节点的 API 主要包括 ClearNodes 和 Remove ，前者移除容器所有子节点，后者则是移除节点自身</p>
+    <section>
+      <code>IHtmlContainer IHtmlContainer.ClearNodes()</code>
+      <h5>说明：</h5>
+      <p>移除容器所有的子节点</p>
+      <h5>返回值：</h5>
+      <p>返回容器自身便于链式调用</p>
+    </section>
+    <section>
+      <code>void IHtmlNode.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这个节点</p>
+    </section>
+    <section>
+      <code>void IEnumerable&lt;IHtmlNode&gt;.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这一批节点</p>
+    </section>
+    <section>
+      <code>void IHtmlAttribute.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这个属性</p>
+    </section>
+    <section>
+      <code>void IEnumerable&lt;IHtmlAttribute&gt;.Remove()</code>
+      <h5>说明：</h5>
+      <p>从 DOM 中移除这一批属性</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="replace">替换节点</h3>
+    <p>替换节点的 API 可以将节点用指定的 HTML 片段替换。</p>
+    <section>
+      <code>IEnumerable&lt;IHtmlNode&gt; ReplaceWith( IHtmlFragment fragment )</code>
+      <h5>说明：</h5>
+      <p>将节点用指定的文档片段替换</p>
+      <h5>参数:</h5>
+      <p><strong>fragment:</strong> 用于替换节点的文档片段。</p>
+      <h5>返回值：</h5>
+      <p>返回替换在 DOM 中的节点列表</p>
+    </section>
+    <section>
+      <code>IEnumerable&lt;IHtmlNode&gt; ReplaceWith( string html )</code>
+      <h5>说明：</h5>
+      <p>将节点用指定的文档片段替换</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 用于替换节点的的文档片段 HTML ，将会被自动解析为 IHtmlFragment 然后替换。</p>
+      <h5>返回值：</h5>
+      <p>返回替换在 DOM 中的节点列表</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="makecopy">创建副本</h3>
+    <p>创建副本的 API 可以创建 HTML 片段或文档的副本</p>
+    <section>
+      <code>IHtmlFragment IHtmlFragment.MakeCopy()</code>
+      <h5>说明：</h5>
+      <p>为文档片段创建副本</p>
+      <h5>返回值：</h5>
+      <p>文档片段的副本</p>
+    </section>
+    <section>
+      <code>IHtmlDocument IHtmlDomProvider.MakeCopy( IHtmlDocument document )</code>
+      <h5>说明：</h5>
+      <p>创建指定文档的副本</p>
+      <h5>参数:</h5>
+      <p><strong>document:</strong> 要创建副本的文档。</p>
+      <h5>返回值：</h5>
+      <p>指定文档的副本。</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="fragment">文档片段相关</h3>
+    <p>文档片段相关的 API 主要用来创建 IHtmlFragment 即文档片段对象</p>
+    <section>
+      <code>IHtmlFragment IHtmlDocument.CreateFragment()</code>
+      <h5>说明：</h5>
+      <p>创建文档片段。</p>
+      <h5>返回值：</h5>
+      <p>创建的文档片段。</p>
+    </section>
+    <section>
+      <code>IHtmlFragment IHtmlDocument.ParseFragment( string html )</code>
+      <h5>说明：</h5>
+      <p>解析并创建文档片段.</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 要解析的文档片段 HTML 文本。</p>
+      <h5>返回值：</h5>
+      <p>创建的文档片段。</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="content">内容相关</h3>
+    <p>内容相关的 API 包括 InnerHtml 和 InnerText ，可以比较直观的达到设置 InnerHtml 和 InnerText 的效果</p>
+    <section>
+      <code>IHtmlElement IHtmlElement.InnerHtml( string html )</code>
+      <h5>说明：</h5>
+      <p>设置元素的 InnerHTML 。</p>
+      <h5>参数:</h5>
+      <p><strong>html:</strong> 用于替换元素内容的 HTML 文本。</p>
+      <h5>返回值：</h5>
+      <p>元素自身，便于链式调用。</p>
+    </section>
+    <section>
+      <code>IHtmlElement IHtmlElement.InnerText( string text, [bool encodeWhiteSpaces] )</code>
+      <h5>说明：</h5>
+      <p>设置元素的 InnerText 。</p>
+      <h5>参数:</h5>
+      <p><strong>text:</strong> 用于替换元素内容的纯文本。</p>
+      <p><strong>encodeWhiteSpaces:</strong> 指定是否要对连续的空白字符编码，默认是 false ，即标准的 InnerText 行为，并不会对连续的空白字符编码
+      </p>
+      <h5>返回值：</h5>
+      <p>元素自身，便于链式调用。</p>
+    </section>
+  </section>
+</body>
+</html>

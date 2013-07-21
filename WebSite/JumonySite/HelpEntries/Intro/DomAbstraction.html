@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>HTML 文档对象模型</title>
+  <link href="../../Views/Help/main.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <p>文档对象模型（Document Object Model）简称 DOM ，是指用对象的形式描述文档结构的一种模型。Jumony 参考 XML
+    的文档对象模型，为 HTML 设计了一种简化的文档对象模型。并不完全遵循 W3C 繁琐的结构。</p>
+  <p>Jumony 的文档对象模型定义了七个具体的对象，以及三个抽象，下面将一一阐述：</p>
+  <section>
+    <h3 id="element">元素（IHtmlElement）</h3>
+    <p>元素是 HTML 中最常见的一种对象，如下的 HTML 代码便定义了一个元素：</p>
+    <p><code language="html">&lt;a href=&quot;#title&quot;&gt;Text&lt;/a&gt;</code></p>
+    <p>元素一般由一个开始标签、一个结束标签以及在标签之间的 HTML 内容组成。在上例中，
+      <code language="html">&lt;a href=&quot;#title&quot;&gt;</code>是开始标签，
+      <code language="html">&lt;/a&gt;</code>是结束标签，<code language="html">Text</code>是元素的内容。
+    </p>
+    <p>也有一些元素不能包含任何内容，这些元素的在 HTML 代码中便没有结束标签，如：</p>
+    <p><code language="html">&lt;img src=&quot;/images/logo.png&quot;&gt;</code></p>
+    <h5>抽象：</h5>
+    <p>由于元素可以包含其他的内容，所以元素满足容器（Container）的抽象。而元素也同时是 
+      HTML 文档内容的一部分，所以元素同时也是一个节点（Node）。</p>
+  </section>
+  <section>
+    <h3 id="attribute">属性（IHtmlAttribute）</h3>
+    <p>属性是元素的一部分，定义在元素的开始标签中，如下的 HTML 定义了一个元素，并且这个元素也包含了一个属性：</p>
+    <code style="margin: 0px 40px;" language="html">&lt;img src=&quot;/images/logo.png&quot;&gt;</code>
+    <p>其中的 <code language="html" part="attribute">src=&quot;/images.logo.png&quot;</code>
+      便是一个属性。属性由属性名和属性值所组成，其中<code language="html" part="attribute-name">src</code>是属性名，而
+      <code language="html" part="attribute-value">&quot;/images.logo.png&quot;</code>
+      则是属性值。
+      一个元素也可以由多个属性组成：
+    </p>
+    <h5>抽象：</h5>
+    <p>值得注意的是，属性是元素的一部分，并不直接是 HTML 文档内容的一部分，所以属性并不是一个节点（Node）。</p>
+  </section>
+  <section>
+    <h3 id="comment">注释（IHtmlComment）</h3>
+    <p>注释是 HTML 中的一种特殊的标签，下面的 HTML 代码定义了一个注释</p>
+    <code style="margin: 0px 40px;" language="html">&lt;!--Comment Content--&gt;</code>
+    <p>其中的 <code language="html" part="comment-content">Comment Content</code> 即是注释内容。注释内容会被
+      HTML 排版引擎所忽略。</p>
+    <h5>抽象：</h5>
+    <p>与元素一样，注释也是 HTML 文档内容的一部分，所以注释也是一个节点（Node）。</p>
+  </section>
+  <section>
+    <h3 id="textnode">文本节点（IHtmlTextNode）</h3>
+    <p>所有没有被尖括号&lt;&gt;括起来的内容，都是 HTML 文本节点。例如：</p>
+    <code style="margin: 0px 40px;" language="html">文本A&lt;p&gt;文本内容&lt;p&gt;文本B</code>
+    <p>其中的 <code language="html">文本A</code> 、<code language="html">文本内容</code> 、 
+      <code language="html">文本B</code> 都是 HTML 文本节点</p>
+    <h5>抽象：</h5>
+    <p>与元素一样，文本节点也是 HTML 文档内容的一部分，所以文本节点是一个节点（Node）。</p>
+  </section>
+  <section>
+    <h3 id="special">特殊节点（IHtmlSpecial）</h3>
+    <p>特殊节点并不是 HTML 标准的一部分，所有无法被识别的标签，都会被分析器解释为特殊节点。例如 DOCTYPE 声明：</p>
+    <code style="margin: 0px 40px;" language="html">&lt;!DOCTYPE html&gt;</code>
+    <p>或者是代码片段</p>
+    <code style="margin: 0px 40px;" language="html">&lt;%=Eval( "name" )%&gt;</code>
+    <h5>抽象：</h5>
+    <p>与元素和注释一样，特殊节点也是 HTML 文档内容的一部分，所以特殊节点是一个节点（Node）。</p>
+  </section>
+  <section>
+    <h3 id="fragment">文档片段（IHtmlFragment）</h3>
+    <p>文档片段是一种特殊的 DOM 对象，其表现为不存在于当前 HTML 文档中的一小段 HTML 片段，文档片段可以随时被插入到文档的指定位置。插入到具体位置后，原有的文档片段对象即被销毁。
+    </p>
+    <p>文档片段可以通过解析 HTML 而得到</p>
+    <h5>抽象：</h5>
+    <p>文档可以包含其他内容节点，所以与元素一样，文档也是一个容器。</p>
+  </section>
+  <section>
+    <h3 id="document">文档（IHtmlDocument）</h3>
+    <p>HTML 文档是所有 DOM 对象的根对象，所有的 DOM 对象必然属于某个文档。</p>
+    <p>文档包含一个可选的 HTML 文档类型声明，一系列的子节点和文档片段。在某个文档上创建的文档片段，只能插入到这个文档的之中。</p>
+    <p>文档决定了整个 DOM 结构的具体实现，以及依据的 HTML 规范版本，这些将进一步影响到所有 API 的行为。所以针对A文档和B文档的同一个API的行为可能是不同的。
+    </p>
+    <h5>抽象：</h5>
+    <p>文档可以包含其他内容节点，所以与元素一样，文档也是一个容器。</p>
+  </section>
+  <section>
+    <h3 id="container">容器（IHtmlContainer）</h3>
+    <p>容器是一个抽象对象，其被定义为可以包含子节点的对象。所以，文档、元素、文档片段均符合容器抽象。</p>
+    <p>IHtmlContainer 接口定义了一个 Nodes 方法获取容器的所有子节点。而 Jumony API 则提供了丰富多样的导航方法可以利用 CSS 选择器查找容器的所有子元素、子代元素。同时，所有的容器都支持 InnerHtml 和 InnerText 方法获取其内容</p>
+  </section>
+  <section>
+    <h3 id="node">节点（IHtmlNode）</h3>
+    <p>节点也是一个抽象对象，其被定义为包含在容器中在文档上有确定位置的对象，元素、文本节点、注释节点和特殊节点均符合节点抽象。但值得注意的是，属性并不是节点。</p>
+    <p>IHtmlNode 接口定义了 Container 方法获取节点所属的容器。Jumony API 提供了丰富的导航方法可以获取节点的所有父代、兄弟节点和元素以及前后节点和元素。同时，所有的节点都支持 OuterHtml 方法。</p>
+  </section>
+  <section>
+    <h3 id="domobject">DOM 对象（IHtmlDomObject）</h3>
+    <p>DOM 对象是上面所有对象的抽象。由于文档决定了 DOM 结构的具体实现和所依据的 HTML 规范，所以所有的 DOM 对象的行为均由文档对象决定。故而 IHtmlDomObject 接口定义 Document 属性用于获取 DOM 对象所属的文档。</p>
+  </section>
+</body>
+</html>

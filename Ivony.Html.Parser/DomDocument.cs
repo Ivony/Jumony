@@ -18,14 +18,19 @@ namespace Ivony.Html.Parser
     /// 创建 DomDocument 对象
     /// </summary>
     /// <param name="uri">文档的 URL</param>
-    public DomDocument( Uri uri )
+    public DomDocument( Uri uri, IDomFragmentParserProvider fragementParserProvider )
     {
+
+      if ( fragementParserProvider == null )
+        throw new ArgumentNullException( "fragementParserProvider" );
+
       _uri = uri;
-      _manager = new DomFragmentManager( this );
+      _manager = new DomFragmentManager( this, fragementParserProvider );
       _modifier = new DomModifier();
 
       _modifier.HtmlDomChanged += OnDomChanged;
     }
+
 
 
     private Uri _uri;

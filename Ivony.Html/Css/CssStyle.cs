@@ -8,25 +8,32 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// CSS3 样式设置的实现
+  /// 定义 CSS 样式属性集合
   /// </summary>
   public class CssStyle
   {
 
 
     private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>();
-
     private object _sync = new object();
+
 
     public object SyncRoot { get { return _sync; } }
 
 
+    /// <summary>
+    /// 创建 CssStyle 对象
+    /// </summary>
+    /// <param name="specification">要遵循的 CSS 规范</param>
     public CssStyle( CssStyleSpecificationBase specification )
     {
       Specification = specification;
     }
 
 
+    /// <summary>
+    /// 获取该 CssStyle 对象所遵循的 CSS 规范。
+    /// </summary>
     public CssStyleSpecificationBase Specification
     {
       get;
@@ -39,6 +46,7 @@ namespace Ivony.Html
     /// </summary>
     public const string importantFlag = "!important";
 
+    
     /// <summary>
     /// 设置样式属性
     /// </summary>
@@ -46,6 +54,13 @@ namespace Ivony.Html
     /// <param name="value">样式值</param>
     public void SetValue( string name, string value )
     {
+
+      if ( value == null )
+      {
+        RemoveProperty( name );
+        return;
+      }
+
       if ( value.EndsWith( importantFlag ) )
       {
         value = value.Remove( value.Length - importantFlag.Length );
@@ -103,6 +118,20 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 移除样式属性
+    /// </summary>
+    /// <param name="name">要移除的样式属性名</param>
+    protected void RemoveProperty( string name )
+    {
+      lock ( SyncRoot )
+      {
+        _properties.Remove( name );
+      }
+    }
+
+
+
 
     /// <summary>
     /// 获取样式属性值
@@ -153,6 +182,19 @@ namespace Ivony.Html
       set { SetValue( name, value ); }
 
     }
+
+
+
+    /// <summary>
+    /// 获取 CSS 样式的字符串表达形式
+    /// </summary>
+    /// <returns>CSS 样式表达式</returns>
+    public override string ToString()
+    {
+      return string.Join( ";", _properties.Values.Select( p => p.ToString() ).ToArray() );
+
+    }
+
 
   }
 }

@@ -115,6 +115,14 @@ namespace Ivony.Html.Web
       Url = urlHelper;
 
       ProcessScope();
+
+      DataBind();
+
+    }
+
+    protected virtual void DataBind()
+    {
+      HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( Scope, Model, ViewData );
     }
 
 
@@ -195,6 +203,7 @@ namespace Ivony.Html.Web
     protected sealed override void SetViewData( ViewDataDictionary viewData )
     {
       _viewData = new ViewDataDictionary<TModel>( viewData );
+      base.SetViewData( _viewData );
     }
 
     /// <summary>

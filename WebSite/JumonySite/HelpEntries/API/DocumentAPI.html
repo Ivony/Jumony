@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>HTML 文档 API</title>
+  <link href="../../Views/Help/main.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+  <p>文档 API 是与 HTML 文档有关的一系列 API 的统称，文档 API 可以在文档范围内查找元素（包括在文档碎片中的），或是编译文档 DOM 结构为代码，或是将文档中的 URL 全部转换为绝对的路径</p>
+
+  <section>
+    <h3 id="compile">编译相关</h3>
+    <p>编译 API 可以将文档结构编译为代码，从而快速的重建文档的 DOM 结构。当文档被用来当作模版使用时，这些 API 将非常有用和提高性能，据测试，通过编译后的代码产生文档结构比直接通过 HTML 文本解析文档结构平均要快 7 - 11 倍。</p>
+    <section>
+      <code>Func&lt;IHtmlDomProvider, IHtmlDocument&gt; IHtmlDocument.Compile()</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构编译为一个方法，稍候可以通过这个方法精确重建 DOM 结构</p>
+      <h5>返回值：</h5>
+      <p>可以用于重建 DOM 结构的方法。</p>
+    </section>
+    <section>
+      <code>CodeMemberMethod IHtmlDocument.GenerateCodeMethod( string methodName )</code>
+      <h5>说明：</h5>
+      <p>将文档 DOM 结构产生一段代码，这段代码可以精确重建 DOM 结构</p>
+      <h5>参数:</h5>
+      <p><strong>methodName:</strong> 产生的代码所使用的方法名称</p>
+      <h5>返回值：</h5>
+      <p>CodeDom 方法声明对象，可以用于产生各种语言的代码。</p>
+    </section>
+  </section>
+  <section>
+    <h3 id="identity">标识元素</h3>
+    <p>标识元素的 API 可以根据 ID 查找元素，或是获取以及分配元素的 ID。</p>
+    <section>
+      <code>string IHtmlElement.Identity( [bool create, [bool ancestorsCreate]] )</code>
+      <h5>说明：</h5>
+      <p>获取元素的唯一标识 ID ，若元素没有唯一标识 ID ，则可以设置是否产生一个唯一标识 ID 赋予元素</p>
+      <h5>参数:</h5>
+      <p><strong>create:</strong> 确定若元素没有唯一标识 ID ，是否将产生的唯一 ID 设置给元素的 ID 属性。</p>
+      <p><strong>ancestorsCreate:</strong> 确定若元素没有唯一标识 ID ，将产生的唯一 ID 设置给元素的 ID 属性的同时，是否应对所有没有唯一 ID 的父级元素同样设置。若 create 参数值为 false 而 anctorsCreate 为 true ，则会抛出异常</p>
+      <h5>返回值：</h5>
+      <p>元素的唯一标识 ID，若元素没有 ID 属性或者 ID 属性不唯一，并且也没有要求产生唯一标识赋予元素，则返回 null 。</p>
+      <h5>备注：</h5>
+      <p>元素的唯一标识仅在文档结构不被修改时唯一，当文档结构变化时，元素的唯一标识将会改变，也不能确保唯一性。</p>
+    </section>
+    <section>
+      <code>string IHtmlElement.Unique()</code>
+      <h5>说明：</h5>
+      <p>获取元素的唯一标识 ID ，若元素没有唯一标识 ID，则自动产生一个。</p>
+      <h5>返回值：</h5>
+      <p>元素的唯一标识 ID。</p>
+    </section>
+    <h4>Unique 和 Identity 方法的区别</h4>
+    <p>
+      Unique 方法在找不到唯一标识时，会自动创建一个，此时 Unique 方法的返回值将与元素的 ID 属性无关。<br />
+      Identity 方法在找不到唯一标识时，不会自动创建一个。如果设置要求创建唯一标识，则会自动设置到元素的
+      ID 属性，所以说 Identity 方法将总是与元素的 ID 属性相关。<br />
+      当元素拥有唯一的 ID 属性时，这两个方法的行为一致。
+    </p>
+  </section>
+  <section>
+    <h3 id="global">全局查找</h3>
+    <p>全局查找的 API 可以在文档范围内查找元素，与导航 API 不同的是，全局查找可以检索包含在尚未被分配的文档片段中的节点或元素。</p>
+    <section>
+      <code>IEnumerable&lt;IHtmlNode&gt; IHtmlDocument.AllNodes()</code>
+      <h5>说明：</h5>
+      <p>获取文档所有的节点，包括在尚未分配的文档片段中的节点。</p>
+      <h5>返回值：</h5>
+      <p>文档所有的节点</p>
+    </section>
+    <section>
+      <code>IEnumerable&lt;IHtmlElement&gt; IHtmlDocument.AllElements()</code>
+      <h5>说明：</h5>
+      <p>获取文档所有的元素，包括在尚未分配的文档片段中的元素。</p>
+      <h5>返回值：</h5>
+      <p>文档所有的元素</p>
+    </section>
+    <section>
+      <code>IHtmlElement IHtmlDocument.GetElementById( string id )</code>
+      <h5>说明：</h5>
+      <p>根据 ID 在全局范围（包含尚未分配的文档片段）搜索元素，若搜索到的元素不唯一，则抛出异常。</p>
+      <h5>返回值：</h5>
+      <p>指定 ID 的元素。</p>
+    </section>
+  </section>
+</body>
+</html>

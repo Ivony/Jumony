@@ -102,29 +102,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "JumonyGuide", "http://local
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Web", "Ivony.Web\Ivony.Web.csproj", "{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "WebSite\MvcSimpleTodo\", "{29F93961-DF4F-4912-B376-892B62BDC93E}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		ProjectReferences = "{2FC154E1-E0E5-4F34-A6DB-973D5332070A}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{1B363540-4F50-48CC-93C8-19EB85024AC2}|Ivony.Html.Templates.dll;{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}|Ivony.Html.Styles.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
-		Debug.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
-		Debug.AspNetCompiler.Updateable = "false"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "true"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
-		Release.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
-		Release.AspNetCompiler.Updateable = "false"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "true"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "1888"
-		VWDDynamicPort = "false"
-		VWDVirtualPath = "/"
-	EndProjectSection
-EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "JumonySite", "http://localhost:1629", "{41B8513A-6921-422B-9A76-345B6335B666}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
@@ -174,6 +151,28 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jumony.Demo.HelpCenter", "Jumony.Demo.HelpCenter\Jumony.Demo.HelpCenter.csproj", "{157C4483-5593-400D-8F2C-87745AE46704}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MvcSimpleTodo", "http://localhost:1888", "{29F93961-DF4F-4912-B376-892B62BDC93E}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{2FC154E1-E0E5-4F34-A6DB-973D5332070A}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{1B363540-4F50-48CC-93C8-19EB85024AC2}|Ivony.Html.Templates.dll;{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}|Ivony.Html.Styles.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
+		Debug.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
+		Debug.AspNetCompiler.Updateable = "false"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "true"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/MvcSimpleTodo"
+		Release.AspNetCompiler.PhysicalPath = "WebSite\MvcSimpleTodo\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MvcSimpleTodo\"
+		Release.AspNetCompiler.Updateable = "false"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "true"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "WebSite\MvcSimpleTodo\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -404,16 +403,6 @@ Global
 		{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}.Release|x86.ActiveCfg = Release|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
-		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|x86.ActiveCfg = Debug|Any CPU
 		{41B8513A-6921-422B-9A76-345B6335B666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41B8513A-6921-422B-9A76-345B6335B666}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41B8513A-6921-422B-9A76-345B6335B666}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -458,6 +447,16 @@ Global
 		{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
 		{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{29F93961-DF4F-4912-B376-892B62BDC93E}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -472,10 +471,10 @@ Global
 		{8A4B2ACB-5C79-4171-950E-2FA7D8325A52} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{C69BFC19-85B7-415D-A754-9F674169ACBD} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{00200A5B-B49C-44ED-94E8-245359363C69} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
-		{29F93961-DF4F-4912-B376-892B62BDC93E} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{41B8513A-6921-422B-9A76-345B6335B666} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{157C4483-5593-400D-8F2C-87745AE46704} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{0D61713C-B5F2-4800-8AEC-0AE4F5D01FE8} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
+		{29F93961-DF4F-4912-B376-892B62BDC93E} = {9CA214D9-ABAE-4202-A1E1-6E1E5802FE0C}
 		{43ED2A81-21D8-4105-AE7B-7F03F9E98557} = {4B94B6DA-59D9-48FB-A05E-BE25C4C7EEDA}
 		{150787A5-84FE-49EB-ACAD-B04838DF6B25} = {AF5D7B06-51A8-4AA0-86A2-BC1FCC4D08A4}
 		{4AA86193-4163-4451-9E7A-3A03D925E97C} = {5819B631-AB5E-437C-AD43-D53F8A38086B}

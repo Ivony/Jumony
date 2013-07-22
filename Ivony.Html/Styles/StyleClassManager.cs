@@ -91,6 +91,45 @@ namespace Ivony.Html.Styles
 
 
     /// <summary>
+    /// 添加多个样式类
+    /// </summary>
+    /// <param name="classNames">要添加的样式类名</param>
+    /// <returns>样式类管理器</returns>
+    public StyleClassManager Add( params string[] classNames )
+    {
+      return Add( classNames.AsEnumerable() );
+    }
+
+
+
+    /// <summary>
+    /// 添加多个样式类
+    /// </summary>
+    /// <param name="classNames">要添加的样式类名</param>
+    /// <returns>样式类管理器</returns>
+    public StyleClassManager Add( IEnumerable<string> classNames )
+    {
+      lock ( _element.SyncRoot )
+      {
+        EnsureUpdated();
+        bool flag = false;
+
+        classNames.ForAll( delegate( string c )
+        {
+          if ( _classes.Add( c ) ) flag = true;
+        } );
+
+
+        if ( flag )
+          UpdateClass();
+
+        return this;
+      }
+    }
+
+
+
+    /// <summary>
     /// 移除一个样式类
     /// </summary>
     /// <param name="className">类名</param>
@@ -104,6 +143,44 @@ namespace Ivony.Html.Styles
       }
 
       return this;
+    }
+
+
+
+    /// <summary>
+    /// 移除多个样式类
+    /// </summary>
+    /// <param name="classNames">要移除的样式类名</param>
+    /// <returns>样式类管理器</returns>
+    public StyleClassManager Remove( params string[] classNames )
+    {
+      return Remove( classNames.AsEnumerable() );
+    }
+
+
+    /// <summary>
+    /// 移除多个样式类
+    /// </summary>
+    /// <param name="classNames">要添加的样式类名</param>
+    /// <returns>样式类管理器</returns>
+    public StyleClassManager Remove( IEnumerable<string> classNames )
+    {
+      lock ( _element.SyncRoot )
+      {
+        EnsureUpdated();
+        bool flag = false;
+
+        classNames.ForAll( delegate( string c )
+        {
+          if ( _classes.Remove( c ) ) flag = true;
+        } );
+
+
+        if ( flag )
+          UpdateClass();
+
+        return this;
+      }
     }
 
 

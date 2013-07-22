@@ -151,7 +151,7 @@ namespace Ivony.Html
 
     public jQuery addClass( string className )
     {
-      return ForAll( element => element.Style().AddClass( className ) );
+      return ForAll( element => element.Class().Add( className ) );
     }
 
     public jQuery addClass( Func<int, string, string> classEvaluator )
@@ -161,7 +161,7 @@ namespace Ivony.Html
 
     public jQuery addClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
     {
-      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().AddClass( c ) ) );
+      return ForAll( ( e, i ) => e.Class().Add( classEvaluator( i, e.Class() ) ) );
     }
 
 
@@ -169,7 +169,7 @@ namespace Ivony.Html
 
     public jQuery removeClass( string className )
     {
-      return ForAll( element => element.Style().RemoveClass( className ) );
+      return ForAll( element => element.Class().Remove( className ) );
     }
 
     public jQuery removeClass( Func<int, string, string> classEvaluator )
@@ -179,7 +179,7 @@ namespace Ivony.Html
 
     public jQuery removeClass( Func<int, IEnumerable<string>, IEnumerable<string>> classEvaluator )
     {
-      return ForAll( ( e, i ) => classEvaluator( i, e.Style().Classes() ).ForAll( c => e.Style().RemoveClass( c ) ) );
+      return ForAll( ( e, i ) => e.Class().Remove( classEvaluator( i, e.Class() ) ) );
     }
 
 
@@ -188,14 +188,7 @@ namespace Ivony.Html
     {
       return ForAll( element =>
         {
-
-          lock ( element.SyncRoot )
-          {
-            if ( element.Style().Classes().Contains( className ) )
-              element.Style().RemoveClass( className );
-            else
-              element.Style().AddClass( className );
-          }
+          element.Class().Toggle( className );
 
         } );
     }
@@ -204,7 +197,7 @@ namespace Ivony.Html
 
     public bool hasClass( string className )
     {
-      return _elements.Any( element => element.Style().Classes().Contains( className ) );
+      return _elements.Any( element => element.Class().Contains( className ) );
     }
 
 

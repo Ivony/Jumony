@@ -184,7 +184,7 @@ namespace Ivony.Html
 
 
 
-    public jQuery toogleClass( string className )
+    public jQuery toggleClass( string className )
     {
       return ForAll( element =>
         {

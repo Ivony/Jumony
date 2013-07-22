@@ -133,7 +133,7 @@ namespace Ivony.Html.Web
           continue;
 
         else if ( name.EqualsIgnoreCase( "class" ) )
-          element.Style().AddClass( value );
+          element.Class( value );
 
         else
           element.Style( name, value );

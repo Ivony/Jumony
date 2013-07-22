@@ -66,7 +66,7 @@ namespace Ivony.Html
     /// 派生类实现此方法提供自定义的渲染规则。
     /// </summary>
     /// <param name="element">要渲染的元素</param>
-    /// <param name="writer">渲染输出的 TextWriter</param>
+    /// <param name="context">渲染上下文</param>
     protected abstract void Render( IHtmlElement element, HtmlRenderContext context );
   }
 }

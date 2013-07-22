@@ -18,6 +18,7 @@ namespace Ivony.Html.Parser
     /// 创建 DomDocument 对象
     /// </summary>
     /// <param name="uri">文档的 URL</param>
+    /// <param name="fragementParserProvider">文档碎片解析器提供程序，用于提供相似行为的文档碎片解析器</param>
     public DomDocument( Uri uri, IDomFragmentParserProvider fragementParserProvider )
     {
 

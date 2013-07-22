@@ -251,7 +251,8 @@ namespace Ivony.Html.Parser
     /// <summary>
     /// 创建属性设置内容对象
     /// </summary>
-    /// <param name="match">属性设置的匹配</param>
+    /// <param name="attributesExpression">属性表达式</param>
+    /// <param name="index">属性表达式开始位置</param>
     /// <returns>HTML 属性设置的内容对象</returns>
     protected virtual IEnumerable<HtmlAttributeSetting> CreateAttributes( string attributesExpression, int index )
     {
@@ -341,6 +342,7 @@ namespace Ivony.Html.Parser
     /// 创建一个文档内容片段对象
     /// </summary>
     /// <param name="capture">捕获到的字符串</param>
+    /// <param name="offset">捕获对象的偏移量，用于计算真实的字符串位置</param>
     /// <returns>文档内容片段对象</returns>
     protected HtmlContentFragment CreateFragment( Capture capture, int offset = 0 )
     {

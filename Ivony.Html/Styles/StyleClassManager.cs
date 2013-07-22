@@ -21,9 +21,6 @@ namespace Ivony.Html.Styles
 
     private HashSet<string> _classes;
 
-    private static Regex whiteSpacesRegex = new Regex( @"\s+", RegexOptions.Compiled );
-
-
     private StyleClassManager( IHtmlElement element )
     {
       _element = element;
@@ -65,7 +62,7 @@ namespace Ivony.Html.Styles
       if ( attribute == _attribute )
         return;
 
-      _classes = new HashSet<string>( whiteSpacesRegex.Split( attribute.Value().IfNull( "" ) ) );
+      _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.Value() ?? "" ) );
       _attribute = attribute;
     }
 

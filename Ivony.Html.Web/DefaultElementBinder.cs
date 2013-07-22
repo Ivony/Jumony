@@ -19,7 +19,8 @@ namespace Ivony.Html.Web
   {
 
 
-    private const string styleAttributePrefix = "style-";
+    private const string styleAttributePrefix = "binding-style-";
+    private const string classAttributePrefix = "binding-class";
 
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
@@ -35,9 +36,17 @@ namespace Ivony.Html.Web
       }
 
 
+
+      //处理样式类
+      var classes = Regulars.whiteSpaceSeparatorRegex.Split( element.Attribute( classAttributePrefix ).Value() ?? "" );
+      element.Class().Add( classes );
+
+
+      //处理CSS样式
       var styleAttributes = element.Attributes().Where( a => a.Name.StartsWith( styleAttributePrefix ) ).ToArray();
       if ( styleAttributes.Any() )
         BindElementStyles( element, styleAttributes );
+
 
 
 
@@ -50,8 +59,6 @@ namespace Ivony.Html.Web
 
       if ( dataObject == null )
         return false;
-
-
 
 
 
@@ -114,8 +121,6 @@ namespace Ivony.Html.Web
       return true;
     }
 
-
-
     /// <summary>
     /// 绑定元素样式
     /// </summary>
@@ -132,9 +137,6 @@ namespace Ivony.Html.Web
         if ( string.IsNullOrEmpty( value ) )
           continue;
 
-        else if ( name.EqualsIgnoreCase( "class" ) )
-          element.Class( value );
-
         else
           element.Style( name, value );
 
@@ -142,6 +144,16 @@ namespace Ivony.Html.Web
         attribute.Remove();
       }
     }
+
+
+
+    private static void BindElementClasses( IHtmlElement element, IHtmlAttribute[] classAttributes )
+    {
+      throw new NotImplementedException();
+    }
+
+
+
 
 
 

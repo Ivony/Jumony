@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// CSS 样式解析器
+  /// </summary>
   public static class CssPropertyParser
   {
 
@@ -19,22 +23,27 @@ namespace Ivony.Html
     private static string escapePattern = "{unicode}|\\[^\n\r\f0-9a-f]".Replace( "{unicode}", "(?:" + unicodePattern + ")" );
 
 
-
+    /// <summary>
+    /// 解析 CSS 样式属性
+    /// </summary>
+    /// <param name="expression">要解析的 CSS 样式表达式</param>
+    /// <returns>CSS 样式属性</returns>
     public static CssStyleProperty[] ParseProperties( string expression )
     {
-      return propertyDeclarationRegex.Matches( expression ).Cast<Match>().Select(
+      return propertyDeclarationRegex.Matches( expression ?? "" ).Cast<Match>().Select(
         match => new CssStyleProperty( match.Groups["name"].Value, match.Groups["value"].Value, match.Groups["important"].Success )
       ).ToArray();
     }
 
 
     /// <summary>
-    /// 解析 CSS 样式设置
+    /// 解析 CSS 样式属性
     /// </summary>
     /// <param name="styleExpression">CSS 样式设置表达式</param>
-    /// <returns>CSS 样式设置</returns>
+    /// <returns>CSS 样式属性</returns>
     public static CssStyle ParseCssStyle( string styleExpression )
     {
+
       var style = new CssStyle( new Css21StyleSpecification() );
       style.SetProperties( ParseProperties( styleExpression ) );
       return style;

@@ -59,11 +59,11 @@ namespace Ivony.Html.Styles
     private void EnsureUpdated()
     {
       var attribute = _element.Attribute( "class" );
-      if ( attribute == _attribute )
-        return;
-
-      _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.Value() ?? "" ) );
-      _attribute = attribute;
+      if ( _classes == null || attribute != _attribute || (attribute == null && _classes.Any()) )
+      {
+        _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.Value() ?? "" ).Where( c => c != "" ) );
+        _attribute = attribute;
+      }
     }
 
     /// <summary>
@@ -232,7 +232,7 @@ namespace Ivony.Html.Styles
     /// </summary>
     private void UpdateClass()
     {
-      _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ) );
+      _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ), out _attribute );
     }
 
 

@@ -41,10 +41,10 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="styleExpression">CSS 样式设置表达式</param>
     /// <returns>CSS 样式属性</returns>
-    public static CssStyle ParseCssStyle( string styleExpression )
+    public static CssStyle ParseCssStyle( string styleExpression, CssStyleSpecificationBase specification = null )
     {
 
-      var style = new CssStyle( new Css21StyleSpecification() );
+      var style = new CssStyle( specification ?? new Css21StyleSpecification() );
       style.SetProperties( ParseProperties( styleExpression ) );
       return style;
     }

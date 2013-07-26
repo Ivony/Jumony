@@ -20,7 +20,7 @@ namespace Ivony.Html.Web
 
 
     private const string styleAttributePrefix = "binding-style-";
-    private const string classAttributePrefix = "binding-class";
+    private const string classAttributeName = "binding-class";
 
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
@@ -37,9 +37,23 @@ namespace Ivony.Html.Web
 
 
 
+
       //处理样式类
-      var classes = Regulars.whiteSpaceSeparatorRegex.Split( element.Attribute( classAttributePrefix ).Value() ?? "" );
-      element.Class().Add( classes );
+      {
+        var classAttribute = element.Attribute( classAttributeName );
+        if ( classAttribute != null )
+        {
+          if ( !string.IsNullOrWhiteSpace( classAttribute.AttributeValue ) )
+          {
+
+            var classes = Regulars.whiteSpaceSeparatorRegex.Split( classAttribute.AttributeValue ).Where( c => c != "" ).ToArray();
+            if ( classes.Any() )
+              element.Class( classes );
+          }
+
+          element.RemoveAttribute( classAttributeName );
+        }
+      }
 
 
       //处理CSS样式

@@ -53,25 +53,25 @@ namespace APITest
       Assert.AreEqual( element.Attribute( "class" ).Value(), "test", ".Class( name ) 测试不通过" );
 
       element.Class( "-test" );
-      Assert.AreEqual( element.Attribute( "class" ).Value(), "", ".Class( -name ) 测试不通过" );
+      Assert.AreEqual( element.Attribute( "class" ).Value() ?? "", "", ".Class( -name ) 测试不通过" );
 
       element.Class( "~test" );
       Assert.AreEqual( element.Attribute( "class" ).Value(), "test", ".Class( ~name ) 测试不通过" );
 
       element.Class( "~test" );
-      Assert.AreEqual( element.Attribute( "class" ).Value(), "", ".Class( ~name ) 测试不通过" );
+      Assert.AreEqual( element.Attribute( "class" ).Value() ?? "", "", ".Class( ~name ) 测试不通过" );
 
       element.Class( "~test" );
       Assert.AreEqual( element.Attribute( "class" ).Value(), "test", ".Class( ~name ) 测试不通过" );
 
       element.Class().Toggle( "test" );
-      Assert.AreEqual( element.Attribute( "class" ).Value(), "", ".Class().Toggle( name ) 测试不通过" );
+      Assert.AreEqual( element.Attribute( "class" ).Value() ?? "", "", ".Class().Toggle( name ) 测试不通过" );
 
       element.Class().Toggle( "test" );
       Assert.AreEqual( element.Attribute( "class" ).Value(), "test", ".Class().Toggle( name ) 测试不通过" );
 
       element.Class().Toggle( "test" );
-      Assert.AreEqual( element.Attribute( "class" ).Value(), "", ".Class().Toggle( name ) 测试不通过" );
+      Assert.AreEqual( element.Attribute( "class" ).Value() ?? "", "", ".Class().Toggle( name ) 测试不通过" );
 
       element.Class( "+deleted", "+completed" );
       Assert.IsTrue( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name, +name )" );
@@ -83,6 +83,17 @@ namespace APITest
       element.Class( "~deleted", "~completed" );
       Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( ~name, ~name )" );
       Assert.IsTrue( CssParser.Create( element.Document, ".completed" ).IsEligible( element ), ".Class( ~name, ~name )" );
+
+      element.Class( "~deleted ~completed" );
+      Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( ~name ~name )" );
+      Assert.IsTrue( CssParser.Create( element.Document, ".deleted" ).IsEligible( element ), ".Class( ~name ~name )" );
+
+      element.Class( "deleted completed" );
+      Assert.IsTrue( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name +name )" );
+
+      element.Class( "+deleted ~completed" );
+      Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name, ~name )" );
+      Assert.IsTrue( CssParser.Create( element.Document, ".deleted" ).IsEligible( element ), ".Class( +name, ~name )" );
 
     }
 

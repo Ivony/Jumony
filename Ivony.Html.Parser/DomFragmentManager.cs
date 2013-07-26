@@ -54,7 +54,7 @@ namespace Ivony.Html.Parser
     }
 
     /// <summary>
-    /// FragmentManager 对象所属的文档
+    /// FragmentManager 所属的文档
     /// </summary>
     public IHtmlDocument Document
     {

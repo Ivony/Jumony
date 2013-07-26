@@ -22,6 +22,14 @@ namespace Ivony.Html.Web
     private const string styleAttributePrefix = "binding-style-";
     private const string classAttributeName = "binding-class";
 
+
+    /// <summary>
+    /// 对元素进行数据绑定
+    /// </summary>
+    /// <param name="element">需要绑定数据的元素</param>
+    /// <param name="context">绑定上下文</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <returns>是否进行了绑定</returns>
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
 
@@ -161,16 +169,6 @@ namespace Ivony.Html.Web
 
 
 
-    private static void BindElementClasses( IHtmlElement element, IHtmlAttribute[] classAttributes )
-    {
-      throw new NotImplementedException();
-    }
-
-
-
-
-
-
     private static object GetDataObject( AttributeExpression expression, HtmlBindingContext context )
     {
       //获取绑定数据源
@@ -229,6 +227,7 @@ namespace Ivony.Html.Web
 
       return true;
     }
+
 
     private static string GetBindingValue( AttributeExpression expression, object dataObject )
     {

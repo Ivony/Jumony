@@ -16,7 +16,7 @@ namespace Ivony.Html.Styles
 
     private IHtmlElement _element;
 
-    private IHtmlAttribute _attribute;
+    private string _rawValue;
 
 
     private HashSet<string> _classes;
@@ -58,19 +58,17 @@ namespace Ivony.Html.Styles
     /// </summary>
     private void EnsureUpdated()
     {
-      var attribute = _element.Attribute( "class" );
+      var classValue = _element.Attribute( "class" ).Value();
 
+      if ( _rawValue != classValue || _classes == null )
+      {
+        if ( string.IsNullOrEmpty( classValue ) )
+          _classes = new HashSet<string>();
+        else
+          _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( classValue ).Where( c => c != "" ) );
+        _rawValue = classValue;
+      }
 
-      if ( attribute == null || string.IsNullOrEmpty( attribute.AttributeValue ) )//如果 class 属性为空或值为空，则设置为空
-      {
-        _classes = new HashSet<string>();
-        _attribute = null;
-      }
-      else if ( _attribute != attribute || _classes == null )//如果 class 属性有改变或者 _class 没有被设置，那么初始化设置。
-      {
-        _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.AttributeValue ).Where( c => c != "" ) );
-        _attribute = attribute;
-      }
     }
 
     /// <summary>
@@ -241,7 +239,7 @@ namespace Ivony.Html.Styles
     {
 
       if ( _classes.Any() )
-        _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ), out _attribute );
+        _element.SetAttribute( "class", _rawValue = string.Join( " ", _classes.ToArray() ) );
 
       else
         _element.RemoveAttribute( "class" );

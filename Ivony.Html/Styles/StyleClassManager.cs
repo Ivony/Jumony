@@ -59,9 +59,16 @@ namespace Ivony.Html.Styles
     private void EnsureUpdated()
     {
       var attribute = _element.Attribute( "class" );
-      if ( _classes == null || attribute != _attribute || (attribute == null && _classes.Any()) )
+
+
+      if ( attribute == null || string.IsNullOrEmpty( attribute.AttributeValue ) )//如果 class 属性为空或值为空，则设置为空
       {
-        _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.Value() ?? "" ).Where( c => c != "" ) );
+        _classes = new HashSet<string>();
+        _attribute = null;
+      }
+      else if ( _attribute != attribute || _classes == null )//如果 class 属性有改变或者 _class 没有被设置，那么初始化设置。
+      {
+        _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( attribute.AttributeValue ).Where( c => c != "" ) );
         _attribute = attribute;
       }
     }
@@ -232,7 +239,12 @@ namespace Ivony.Html.Styles
     /// </summary>
     private void UpdateClass()
     {
-      _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ), out _attribute );
+
+      if ( _classes.Any() )
+        _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ), out _attribute );
+
+      else
+        _element.RemoveAttribute( "class" );
     }
 
 

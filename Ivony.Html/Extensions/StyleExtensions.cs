@@ -85,6 +85,8 @@ namespace Ivony.Html
       if ( classes == null )
         throw new ArgumentNullException( "classes" );
 
+      classes = classes.SelectMany( i => Regulars.whiteSpaceSeparatorRegex.Split( i ) ).Where( name => name != "" ).ToArray();
+
       var manager = StyleClassManager.GetStyleClassManager( element );
       foreach ( var expression in classes )
       {

@@ -108,12 +108,28 @@ namespace Ivony.Html.Styles
       lock ( _element.SyncRoot )
       {
         var styleAttribute = _element.Attribute( "style" );
-        if ( styleAttribute != _attribute )
+
+        if ( _style == null || styleAttribute != _attribute || (styleAttribute == null && _style.Any()) )
         {
           _style = CssPropertyParser.ParseCssStyle( styleAttribute.Value().IfNull( "" ) );
           _attribute = styleAttribute;
         }
       }
+    }
+
+
+    /// <summary>
+    /// 清除所有样式
+    /// </summary>
+    /// <returns></returns>
+    public StyleManager Clear()
+    {
+
+      _style.Clear();
+      _element.SetAttribute( "style", "", out _attribute );
+
+      return this;
+
     }
   }
 }

@@ -19,8 +19,17 @@ namespace Ivony.Html.Web
   {
 
 
-    private const string styleAttributePrefix = "style-";
+    private const string styleAttributePrefix = "binding-style-";
+    private const string classAttributeName = "binding-class";
 
+
+    /// <summary>
+    /// 对元素进行数据绑定
+    /// </summary>
+    /// <param name="element">需要绑定数据的元素</param>
+    /// <param name="context">绑定上下文</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <returns>是否进行了绑定</returns>
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
 
@@ -35,9 +44,31 @@ namespace Ivony.Html.Web
       }
 
 
+
+
+      //处理样式类
+      {
+        var classAttribute = element.Attribute( classAttributeName );
+        if ( classAttribute != null )
+        {
+          if ( !string.IsNullOrWhiteSpace( classAttribute.AttributeValue ) )
+          {
+
+            var classes = Regulars.whiteSpaceSeparatorRegex.Split( classAttribute.AttributeValue ).Where( c => c != "" ).ToArray();
+            if ( classes.Any() )
+              element.Class( classes );
+          }
+
+          element.RemoveAttribute( classAttributeName );
+        }
+      }
+
+
+      //处理CSS样式
       var styleAttributes = element.Attributes().Where( a => a.Name.StartsWith( styleAttributePrefix ) ).ToArray();
       if ( styleAttributes.Any() )
         BindElementStyles( element, styleAttributes );
+
 
 
 
@@ -50,8 +81,6 @@ namespace Ivony.Html.Web
 
       if ( dataObject == null )
         return false;
-
-
 
 
 
@@ -114,8 +143,6 @@ namespace Ivony.Html.Web
       return true;
     }
 
-
-
     /// <summary>
     /// 绑定元素样式
     /// </summary>
@@ -131,9 +158,6 @@ namespace Ivony.Html.Web
 
         if ( string.IsNullOrEmpty( value ) )
           continue;
-
-        else if ( name.EqualsIgnoreCase( "class" ) )
-          element.Class( value );
 
         else
           element.Style( name, value );
@@ -203,6 +227,7 @@ namespace Ivony.Html.Web
 
       return true;
     }
+
 
     private static string GetBindingValue( AttributeExpression expression, object dataObject )
     {

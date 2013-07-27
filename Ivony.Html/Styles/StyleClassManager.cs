@@ -16,13 +16,10 @@ namespace Ivony.Html.Styles
 
     private IHtmlElement _element;
 
-    private IHtmlAttribute _attribute;
+    private string _rawValue;
 
 
     private HashSet<string> _classes;
-
-    private static Regex whiteSpacesRegex = new Regex( @"\s+", RegexOptions.Compiled );
-
 
     private StyleClassManager( IHtmlElement element )
     {
@@ -61,12 +58,17 @@ namespace Ivony.Html.Styles
     /// </summary>
     private void EnsureUpdated()
     {
-      var attribute = _element.Attribute( "class" );
-      if ( attribute == _attribute )
-        return;
+      var classValue = _element.Attribute( "class" ).Value();
 
-      _classes = new HashSet<string>( whiteSpacesRegex.Split( attribute.Value().IfNull( "" ) ) );
-      _attribute = attribute;
+      if ( _rawValue != classValue || _classes == null )
+      {
+        if ( string.IsNullOrEmpty( classValue ) )
+          _classes = new HashSet<string>();
+        else
+          _classes = new HashSet<string>( Regulars.whiteSpaceSeparatorRegex.Split( classValue ).Where( c => c != "" ) );
+        _rawValue = classValue;
+      }
+
     }
 
     /// <summary>
@@ -235,7 +237,12 @@ namespace Ivony.Html.Styles
     /// </summary>
     private void UpdateClass()
     {
-      _element.SetAttribute( "class", string.Join( " ", _classes.ToArray() ) );
+
+      if ( _classes.Any() )
+        _element.SetAttribute( "class", _rawValue = string.Join( " ", _classes.ToArray() ) );
+
+      else
+        _element.RemoveAttribute( "class" );
     }
 
 

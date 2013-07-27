@@ -21,7 +21,7 @@ namespace Ivony.Html
     /// <summary>
     /// 解出属性值
     /// </summary>
-    /// <param name="value">属性值缩写形式</param>
+    /// <param name="shorthand">属性值缩写形式</param>
     /// <returns>解出的属性值</returns>
     CssStyleProperty[] ExtractProperties( string shorthand );
 

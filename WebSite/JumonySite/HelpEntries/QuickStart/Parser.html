@@ -74,7 +74,7 @@ for ASP.NET 进行网站开发时，解析器将被框架自动调用。</p>
 </pre>
   <p>下面的代码可以输出新浪的首页一共有多少个元素：</p>
   <pre class="code"><span class="identifier">document</span>&nbsp;<span class="operator">=</span>&nbsp;<span class="identifier">parser</span><span class="operator">.</span><span class="identifier">LoadDocument</span>(&nbsp;<span class="string">"http://www.sina.com.cn/"</span>&nbsp;);
-<span class="User Types">Console</span><span class="operator">.</span><span class="identifier">WriteLine</span>(&nbsp;<span class="identifier">document</span><span class="operator">.</span><span class="identifier">Elements</span>()<span class="operator">.</span><span class="identifier">Count</span>()&nbsp;);
+<span class="User Types">Console</span><span class="operator">.</span><span class="identifier">WriteLine</span>(&nbsp;<span class="identifier">document</span><span class="operator">.</span><span class="identifier">Descendants</span>()<span class="operator">.</span><span class="identifier">Count</span>()&nbsp;);
 <span class="User Types">Console</span><span class="operator">.</span><span class="identifier">ReadLine</span>();</pre>
   <p>
   运行结果如下：</p>
@@ -93,7 +93,7 @@ for ASP.NET 进行网站开发时，解析器将被框架自动调用。</p>
   <p>除了从一个地址来加载 HTML 文档， LoadDocument 方法还提供了许多重载来帮我们从 Stream 、 TextReader 或是 
   WebResponse 中来加载 HTML 文档。</p>
   <p>为了测试 Jumony 对于 HTML 文档解析中出现的问题，Jumony 有一个公开的用于测试 JumonyParser 的网站，可以直接使用 
-  URL 或者上传本地 HTML 文件交由 JumonyParser 解析，来查看 JumonyParser 的解析结果。这个网站的地址是：<a href="http://dom.jumony.com/">http://dom.jumony.com/</a></p>
+  URL 或者上传本地 HTML 文件交由 JumonyParser 解析，来查看 JumonyParser 的解析结果。这个网站的地址是：<a href="http://dom.jumony.net/">http://dom.jumony.net/</a></p>
   <p>好了，关于解析器的使用，我们就先聊到这里，下一篇 QuickStart 我们将来看一下 Jumony API 所提供的 CSS 选择器支持。</p>
 </section>
 

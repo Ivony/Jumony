@@ -141,11 +141,7 @@ a:hover
   padding-bottom: 10px;
   border-bottom: 1px dotted #CCC;
 }
-.todos ul li.finished
-{
-  color: #666;
-}
-.todos ul li.finished span
+.todos ul li span.finished
 {
   text-decoration: line-through;
 }

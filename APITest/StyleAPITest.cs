@@ -73,25 +73,25 @@ namespace APITest
       element.Class().Toggle( "test" );
       Assert.AreEqual( element.Attribute( "class" ).Value() ?? "", "", ".Class().Toggle( name ) 测试不通过" );
 
-      element.Class( "+deleted", "+completed" );
+      element.Class( "+deleted", "+completed" );//class="deleted completed"
       Assert.IsTrue( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name, +name )" );
 
-      element.Class( "+deleted", "~completed" );
+      element.Class( "+deleted", "~completed" );//class="deleted"
       Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name, ~name )" );
       Assert.IsTrue( CssParser.Create( element.Document, ".deleted" ).IsEligible( element ), ".Class( +name, ~name )" );
 
-      element.Class( "~deleted", "~completed" );
+      element.Class( "~deleted", "~completed" );//class="completed"
       Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( ~name, ~name )" );
       Assert.IsTrue( CssParser.Create( element.Document, ".completed" ).IsEligible( element ), ".Class( ~name, ~name )" );
 
-      element.Class( "~deleted ~completed" );
+      element.Class( "~deleted ~completed" );//class="deleted"
       Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( ~name ~name )" );
       Assert.IsTrue( CssParser.Create( element.Document, ".deleted" ).IsEligible( element ), ".Class( ~name ~name )" );
 
-      element.Class( "deleted completed" );
-      Assert.IsTrue( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name +name )" );
+      element.Class( "deleted completed" );//class="deleted completed"
+      Assert.IsTrue( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( name name )" );
 
-      element.Class( "+deleted ~completed" );
+      element.Class( "+deleted ~completed" );//class="deleted"
       Assert.IsFalse( CssParser.Create( element.Document, ".deleted.completed" ).IsEligible( element ), ".Class( +name, ~name )" );
       Assert.IsTrue( CssParser.Create( element.Document, ".deleted" ).IsEligible( element ), ".Class( +name, ~name )" );
 

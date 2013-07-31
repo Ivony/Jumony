@@ -51,7 +51,14 @@ namespace Ivony.Html
       if ( container == null )
         throw new ArgumentNullException( "container" );
 
-      return container.Nodes().OfType<IHtmlElement>();
+      var nodes = container.Nodes();
+      var nodeCollection = nodes as IHtmlNodeCollection;
+
+      if ( nodeCollection != null )
+        return nodeCollection.Elements();
+
+      else
+        return nodes.OfType<IHtmlElement>();
     }
 
 
@@ -86,6 +93,9 @@ namespace Ivony.Html
     /// <returns>节点的所有父代元素集合</returns>
     public static IEnumerable<IHtmlElement> Ancestors( this IHtmlNode node )
     {
+
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
 
       EnsureAvaliable( node );
 
@@ -146,8 +156,21 @@ namespace Ivony.Html
     /// <returns>容器所有的子代元素</returns>
     public static IEnumerable<IHtmlElement> Descendants( this IHtmlContainer container )
     {
-      return container.DescendantNodes().OfType<IHtmlElement>();
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
+
+
+      var nodes = container.Nodes();
+      var nodeCollection = nodes as IHtmlNodeCollection;
+      if ( nodeCollection != null )
+        return nodeCollection.DescendantElements();
+
+      else
+        return DescendantNodesInternal( nodes ).OfType<IHtmlElement>();
+
+
     }
+
 
     /// <summary>
     /// 获取符合条件的子代元素
@@ -161,6 +184,8 @@ namespace Ivony.Html
       return CssParser.ParseSelector( selector ).Filter( Descendants( container ) );
     }
 
+
+
     /// <summary>
     /// 获取所有的子代节点
     /// </summary>
@@ -168,19 +193,35 @@ namespace Ivony.Html
     /// <returns>容器所有的子代节点</returns>
     public static IEnumerable<IHtmlNode> DescendantNodes( this IHtmlContainer container )
     {
+      if ( container == null )
+        throw new ArgumentNullException( "container" );
 
-      foreach ( var node in container.Nodes() )
+
+      var nodes = container.Nodes();
+      var nodeCollection = nodes as IHtmlNodeCollection;
+
+      if ( nodeCollection != null )
+        return nodeCollection.DescendantNodes();
+
+      else
+        return DescendantNodesInternal( nodes );
+    }
+
+
+    private static IEnumerable<IHtmlNode> DescendantNodesInternal( IEnumerable<IHtmlNode> nodes )
+    {
+
+      foreach ( var node in nodes )
       {
         yield return node;
 
         var childContainer = node as IHtmlContainer;
         if ( childContainer != null )
         {
-          foreach ( var descendantNode in DescendantNodes( childContainer ) )
+          foreach ( var descendantNode in DescendantNodesInternal( childContainer.Nodes() ) )
             yield return descendantNode;
         }
       }
-
     }
 
 
@@ -210,6 +251,9 @@ namespace Ivony.Html
     /// <returns>所有的兄弟（同级）元素节点</returns>
     public static IEnumerable<IHtmlElement> Siblings( this IHtmlNode node )
     {
+      if ( node == null )
+        throw new ArgumentNullException( "node" );
+
       return node.SiblingNodes().OfType<IHtmlElement>();
     }
 

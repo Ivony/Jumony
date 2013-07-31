@@ -30,4 +30,17 @@ namespace Ivony.Html
 
   }
 
+
+  public interface IHtmlNodeCollection : IEnumerable<IHtmlNode>
+  {
+    IEnumerable<IHtmlElement> Elements();
+
+    IEnumerable<IHtmlElement> DescendantElements();
+
+    IEnumerable<IHtmlNode> DescendantNodes();
+
+
+  }
+
+
 }

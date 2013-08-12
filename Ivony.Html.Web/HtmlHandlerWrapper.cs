@@ -10,7 +10,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 此类型用于包装 IHtmlHandler 处理 HTTP 请求
   /// </summary>
-  internal sealed class HtmlHandlerWrapper : JumonyHandler
+  internal sealed class HtmlHandlerWrapper : JumonyHandler, IHandlerWrapper
   {
 
     private IHtmlHandler _handler;
@@ -34,5 +34,10 @@ namespace Ivony.Html.Web
 
     }
 
+
+    object IHandlerWrapper.Handler
+    {
+      get { return _handler; }
+    }
   }
 }

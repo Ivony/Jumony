@@ -33,7 +33,6 @@ public class _handler : IHtmlHandler, IHttpHandler
   }
 
   
-  [HandleElement( "code:not( [language=html] )" )]
   public void ProcessCode( IHtmlElement element )
   {
     var code = element.InnerText();

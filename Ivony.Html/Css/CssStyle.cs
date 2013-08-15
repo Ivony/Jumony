@@ -10,7 +10,7 @@ namespace Ivony.Html
   /// <summary>
   /// 定义 CSS 样式属性集合
   /// </summary>
-  public class CssStyle
+  public class CssStyle : IEnumerable<CssStyleProperty>
   {
 
 
@@ -196,5 +196,23 @@ namespace Ivony.Html
     }
 
 
+
+    public IEnumerator<CssStyleProperty> GetEnumerator()
+    {
+      return _properties.Values.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+      return _properties.Values.GetEnumerator();
+    }
+
+    /// <summary>
+    /// 清除所有样式
+    /// </summary>
+    public void Clear()
+    {
+      _properties.Clear();
+    }
   }
 }

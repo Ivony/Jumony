@@ -9,6 +9,10 @@ using Ivony.Html.ExpandedAPI;
 
 namespace Ivony.Html.Web
 {
+  
+  /// <summary>
+  /// 绑定上下文
+  /// </summary>
   public class HtmlBindingContext
   {
     /// <summary>

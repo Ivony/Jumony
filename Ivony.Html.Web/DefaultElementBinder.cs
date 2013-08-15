@@ -19,8 +19,17 @@ namespace Ivony.Html.Web
   {
 
 
-    private const string styleAttributePrefix = "style-";
+    private const string styleAttributePrefix = "binding-style-";
+    private const string classAttributeName = "binding-class";
 
+
+    /// <summary>
+    /// 对元素进行数据绑定
+    /// </summary>
+    /// <param name="element">需要绑定数据的元素</param>
+    /// <param name="context">绑定上下文</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <returns>是否进行了绑定</returns>
     public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
     {
 
@@ -35,14 +44,42 @@ namespace Ivony.Html.Web
       }
 
 
+
+
+      //处理样式类
+      {
+        var classAttribute = element.Attribute( classAttributeName );
+        if ( classAttribute != null )
+        {
+          if ( !string.IsNullOrWhiteSpace( classAttribute.AttributeValue ) )
+          {
+
+            var classes = Regulars.whiteSpaceSeparatorRegex.Split( classAttribute.AttributeValue ).Where( c => c != "" ).ToArray();
+            if ( classes.Any() )
+              element.Class( classes );
+          }
+
+          element.RemoveAttribute( classAttributeName );
+        }
+      }
+
+
+      //处理CSS样式
       var styleAttributes = element.Attributes().Where( a => a.Name.StartsWith( styleAttributePrefix ) ).ToArray();
       if ( styleAttributes.Any() )
         BindElementStyles( element, styleAttributes );
 
 
 
+
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
+      {
+        var dataContextExpression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
+        if ( dataContextExpression != null )
+          dataContext = GetDataObject( dataContextExpression, context );
+
         return false;
+      }
 
       var expression = new AttributeExpression( element );
 
@@ -51,18 +88,6 @@ namespace Ivony.Html.Web
       if ( dataObject == null )
         return false;
 
-
-
-
-
-
-
-      //如果有嵌套的绑定标签，则认为是数据上下文绑定
-      if ( element.Exists( "view, binding" ) )
-      {
-        dataContext = dataObject;
-        return true;
-      }
 
 
 
@@ -114,8 +139,6 @@ namespace Ivony.Html.Web
       return true;
     }
 
-
-
     /// <summary>
     /// 绑定元素样式
     /// </summary>
@@ -131,9 +154,6 @@ namespace Ivony.Html.Web
 
         if ( string.IsNullOrEmpty( value ) )
           continue;
-
-        else if ( name.EqualsIgnoreCase( "class" ) )
-          element.Style().AddClass( value );
 
         else
           element.Style( name, value );
@@ -187,6 +207,9 @@ namespace Ivony.Html.Web
     public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
     {
 
+      if ( attribute.Name == "datacontext" )
+        return false;
+
       var expression = AttributeExpression.ParseExpression( attribute );
       if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
         return false;
@@ -203,6 +226,7 @@ namespace Ivony.Html.Web
 
       return true;
     }
+
 
     private static string GetBindingValue( AttributeExpression expression, object dataObject )
     {

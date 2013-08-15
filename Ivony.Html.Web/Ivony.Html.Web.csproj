@@ -71,7 +71,6 @@
     <Compile Include="AttributeExpression.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
-    <Compile Include="HtmlElementHandler.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HttpHandlerBase.cs" />

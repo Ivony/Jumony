@@ -30,6 +30,7 @@ namespace Ivony.Html.Parser
     /// 构造 DomFragmentManager 对象
     /// </summary>
     /// <param name="document">FragmentManager 对象所属的文档</param>
+    /// <param name="parserProvider">文档碎片解析器提供程序</param>
     public DomFragmentManager( DomDocument document, IDomFragmentParserProvider parserProvider )
     {
 
@@ -53,7 +54,7 @@ namespace Ivony.Html.Parser
     }
 
     /// <summary>
-    /// FragmentManager 对象所属的文档
+    /// FragmentManager 所属的文档
     /// </summary>
     public IHtmlDocument Document
     {

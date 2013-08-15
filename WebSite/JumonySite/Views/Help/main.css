@@ -16,7 +16,7 @@ section {margin: 35px 0px 35px 10px; }
 
 section.demo {margin: 10px 0px 25px 20px; background-color: #EEEEEE; }
 
-p {margin: 5px; }
+p {margin: 10px 0px }
 
 h3 {margin: 50px 0px 20px 0px; }
 
@@ -29,13 +29,19 @@ code .typeName {color: #2b91af; }
 
 h5 {margin: 10px 0px 5px 0px; }
 
-pre.code {margin: 10px; background-color: #EEEEEE; font-family: Consolas; font-size: 10pt; color: black; }
+pre { margin: 0px; }
+
+pre.code {padding: 5px 15px; background-color: #EEEEEE; font-family: Consolas; font-size: 10pt; color: black; }
 
 pre.code .keyword {color: #0000FF; }
 
-pre.code .string {color: #A31515; }
+pre.code .string, pre.code [class="String(C# @ Verbatim)"] {color: #A31515; }
 
 pre.code [class="User Types"]{ color: #2996B5 }
+
+pre.console{ color:white; background-color:black; font-family: Consolas, "Courier New", Courier, monospace ; font-size:14px; padding: 5px; }
+
+
 
 
 

@@ -210,7 +210,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="sender">事件源</param>
     /// <param name="e">时间参数</param>
-    protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
+    protected void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
       if ( HtmlDomChanged != null )
         HtmlDomChanged( sender, e );

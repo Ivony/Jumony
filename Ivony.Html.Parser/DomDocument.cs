@@ -149,7 +149,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     /// <param name="sender">引发事件的事件源</param>
     /// <param name="e">HtmlDomChanged 事件参数</param>
-    protected virtual void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
+    protected void OnDomChanged( object sender, HtmlDomChangedEventArgs e )
     {
 
       _currentVersionCache = null;//抛弃旧的版本缓存

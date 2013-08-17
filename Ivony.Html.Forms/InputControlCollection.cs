@@ -53,7 +53,7 @@ namespace Ivony.Html.Forms
     }
 
 
-    System.Collections.Generic.IEnumerator<IHtmlInputControl> GetEnumerator()
+    IEnumerator<IHtmlInputControl> IEnumerable<IHtmlInputControl>.GetEnumerator()
     {
       return _controls.Values.GetEnumerator();
     }
@@ -62,5 +62,6 @@ namespace Ivony.Html.Forms
     {
       return _controls.Values.GetEnumerator();
     }
+
   }
 }

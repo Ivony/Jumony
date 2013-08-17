@@ -81,7 +81,7 @@ namespace Ivony.Html.Forms
         if ( value )
         {
           if ( radio )//如果是单选按钮，那么只有一个可以被选中
-            _group.items.Where( item => item.radio ).ForAll( item => item.Selected = false );
+            _group.Items.ForAll( item => item.Selected = false );
 
           Element.SetAttribute( "checked", "checked" );
 

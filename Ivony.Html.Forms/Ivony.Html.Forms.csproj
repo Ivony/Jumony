@@ -62,14 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormExtensions.cs" />
+    <Compile Include="FormValueCollection.cs" />
     <Compile Include="HtmlForm.cs" />
     <Compile Include="HtmlButtonGroup.cs" />
+    <Compile Include="HtmlGroupControlBase.cs" />
+    <Compile Include="HtmlInputButtonGroupItem.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
     <Compile Include="IHtmlFormElement.cs" />
     <Compile Include="IHtmlGroupControl.cs" />
+    <Compile Include="IHtmlTextControl.cs" />
     <Compile Include="InputControlCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\EmailValidator.cs" />

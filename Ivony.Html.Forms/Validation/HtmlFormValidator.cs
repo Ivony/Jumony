@@ -332,7 +332,7 @@ namespace Ivony.Html.Forms.Validation
       if ( inputName == null )
         throw new ArgumentNullException( "inputName" );
 
-      var input = Form[inputName];
+      var input = Form.InputControls[inputName];
 
       if ( input == null )
         throw new ArgumentException( string.Format( CultureInfo.InvariantCulture, "未能找到 \"name\" 属性为 \"{0}\" 的输入控件", inputName ), "inputName" );

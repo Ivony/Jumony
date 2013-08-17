@@ -13,7 +13,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlFragment 的实现
   /// </summary>
-  public class DomFragment : DomObject, IHtmlFragment, IDomContainer
+  public sealed class DomFragment : DomObject, IHtmlFragment, IDomContainer
   {
 
 

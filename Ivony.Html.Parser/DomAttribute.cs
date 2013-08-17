@@ -9,7 +9,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlAttribute 的实现
   /// </summary>
-  public class DomAttribute : DomObject, IHtmlAttribute
+  public sealed class DomAttribute : DomObject, IHtmlAttribute
   {
 
     private readonly DomElement _element;

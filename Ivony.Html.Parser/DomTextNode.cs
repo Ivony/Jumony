@@ -10,7 +10,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlTextNode 的一个实现
   /// </summary>
-  public class DomTextNode : DomNode, IHtmlTextNode
+  public sealed class DomTextNode : DomNode, IHtmlTextNode
   {
 
     private readonly string raw;

@@ -11,7 +11,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlDocument 的实现
   /// </summary>
-  public class DomDocument : DomObject, IHtmlDocument, IDomContainer, INotifyDomChanged, IVersionCacheContainer
+  public sealed class DomDocument : DomObject, IHtmlDocument, IDomContainer, INotifyDomChanged, IVersionCacheContainer
   {
 
     /// <summary>

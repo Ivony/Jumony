@@ -9,7 +9,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 表示一个文档类型声明
   /// </summary>
-  public class DomDocumentType : DomNode, IHtmlSpecial
+  public sealed class DomDocumentType : DomNode, IHtmlSpecial
   {
 
     private const string DocumentTypePattern = @"\<!DOCTYPE .+?\>";

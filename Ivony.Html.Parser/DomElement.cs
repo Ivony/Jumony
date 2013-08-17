@@ -12,7 +12,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// IHtmlElement 的实现
   /// </summary>
-  public class DomElement : DomNode, IHtmlElement, IDomContainer
+  public sealed class DomElement : DomNode, IHtmlElement, IDomContainer
   {
 
     private readonly string _name;

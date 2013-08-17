@@ -10,7 +10,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 一个特殊的 DOM 节点，默认情况下，特殊 DOM 节点是指用尖括号括起，且首尾第一个字符为"!@%$#"这些特殊字符的标签。
   /// </summary>
-  public class DomSpecial : DomNode, IHtmlSpecial, IHtmlTextNode
+  public sealed class DomSpecial : DomNode, IHtmlSpecial, IHtmlTextNode
   {
 
     private string raw;

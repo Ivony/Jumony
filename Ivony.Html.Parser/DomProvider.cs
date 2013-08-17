@@ -9,7 +9,7 @@ namespace Ivony.Html.Parser
   /// <summary>
   /// 标准 Jumony DOM 模型提供程序
   /// </summary>
-  public class DomProvider : IHtmlDomProvider
+  public sealed class DomProvider : IHtmlDomProvider
   {
 
 

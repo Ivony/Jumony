@@ -69,6 +69,7 @@
     <Compile Include="ContentModels\HtmlSpecialTag.cs" />
     <Compile Include="ContentModels\HtmlTextContent.cs" />
     <Compile Include="DomAttribute.cs" />
+    <Compile Include="DomAttributeCollection.cs" />
     <Compile Include="DomComment.cs" />
     <Compile Include="DomDocument.cs" />
     <Compile Include="DomDocumentType.cs" />

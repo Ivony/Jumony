@@ -35,6 +35,12 @@ namespace Ivony.Html.Parser
 
     public void AddBefore( T item, T addedItem )
     {
+      if ( item == null )
+        throw new ArgumentNullException( "item" );
+
+      if ( addedItem == null )
+        throw new ArgumentNullException( "addedItem" );
+
       lock ( SyncRoot )
       {
         _cache = null;
@@ -43,13 +49,20 @@ namespace Ivony.Html.Parser
         if ( !_index.TryGetValue( item, out node ) )
           throw new InvalidOperationException();
 
-        _list.AddBefore( node, addedItem );
+        _index.Add( addedItem, _list.AddBefore( node, addedItem ) );
       }
     }
 
 
     public void AddAfter( T item, T addedItem )
     {
+
+      if ( item == null )
+        throw new ArgumentNullException( "item" );
+
+      if ( addedItem == null )
+        throw new ArgumentNullException( "addedItem" );
+
       lock ( SyncRoot )
       {
         _cache = null;
@@ -58,7 +71,8 @@ namespace Ivony.Html.Parser
         if ( !_index.TryGetValue( item, out node ) )
           throw new InvalidOperationException();
 
-        _list.AddAfter( node, addedItem );
+        var _node = _list.AddAfter( node, addedItem );
+        _index.Add( addedItem, _node );
       }
     }
 

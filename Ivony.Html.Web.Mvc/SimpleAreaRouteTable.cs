@@ -5,9 +5,8 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Ivony.Web;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
   /// <summary>
   /// 用于 MVC 的简单区域路由表，提供某一区域的简单路由服务

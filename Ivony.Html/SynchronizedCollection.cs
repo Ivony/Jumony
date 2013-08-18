@@ -184,21 +184,9 @@ namespace Ivony.Html
 
 
 
-    public SynchronizedCollection()
-    {
-      this.items = new List<T>();
-      this.sync = new object();
-    }
+    public SynchronizedCollection() : this( new object() ) { }
 
-    public SynchronizedCollection( object syncRoot )
-    {
-      if ( syncRoot == null )
-        throw new ArgumentNullException( "syncRoot" );
-
-
-      this.items = new List<T>();
-      this.sync = syncRoot;
-    }
+    public SynchronizedCollection( object syncRoot ) : this( syncRoot, Enumerable.Empty<T>() ) { }
 
     public SynchronizedCollection( object syncRoot, IEnumerable<T> list )
     {
@@ -330,22 +318,36 @@ namespace Ivony.Html
     protected virtual void ClearItems()
     {
       this.items.Clear();
+
+      OnChanged();
     }
 
     protected virtual void InsertItem( int index, T item )
     {
       this.items.Insert( index, item );
+
+      OnChanged();
     }
 
     protected virtual void RemoveItem( int index )
     {
       this.items.RemoveAt( index );
+
+      OnChanged();
     }
 
     protected virtual void SetItem( int index, T item )
     {
       this.items[index] = item;
+
+      OnChanged();
     }
+
+    protected virtual void OnChanged()
+    {
+
+    }
+
 
     IEnumerator IEnumerable.GetEnumerator()
     {

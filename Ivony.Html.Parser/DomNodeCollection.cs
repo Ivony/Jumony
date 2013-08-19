@@ -73,7 +73,7 @@ namespace Ivony.Html.Parser
 
       else
         node.Container.CastTo<IDomContainer>().NodeCollection.AddDescendantNodeAfter( node, item );
-    
+
     }
 
     private void AddDescendantNodeBefore( DomNode next, DomNode node )
@@ -174,7 +174,7 @@ namespace Ivony.Html.Parser
     /// </summary>
     public IHtmlNodeCollection HtmlNodes
     {
-      get 
+      get
       {
         lock ( SyncRoot )
         {
@@ -221,6 +221,61 @@ namespace Ivony.Html.Parser
       {
         return _collection.GetEnumerator();
       }
+    }
+
+
+    private int version;
+
+
+    private class Enumerator : IEnumerator<DomNode>, IEnumerator<IHtmlNode>
+    {
+
+      private IEnumerator<DomNode> _enumerator;
+      private DomNodeCollection _collection;
+      private int _version;
+
+      public Enumerator( DomNodeCollection collection, IEnumerator<DomNode> enumerator, int version )
+      {
+        _collection = collection;
+        _enumerator = enumerator;
+        _version = version;
+      }
+
+
+      public void Dispose()
+      {
+        _enumerator.Dispose();
+      }
+
+      public bool MoveNext()
+      {
+        if ( _version != _collection.version )
+          throw new InvalidOperationException( "集合已修改，枚举操作可能无法执行" );
+
+        return _enumerator.MoveNext();
+      }
+
+      public void Reset()
+      {
+        _enumerator.Reset();
+      }
+
+
+      object IEnumerator.Current
+      {
+        get { return _enumerator.Current; }
+      }
+
+      IHtmlNode IEnumerator<IHtmlNode>.Current
+      {
+        get { return _enumerator.Current; }
+      }
+
+      DomNode IEnumerator<DomNode>.Current
+      {
+        get { return _enumerator.Current; }
+      }
+
     }
 
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Css
+namespace Ivony.Html
 {
   public struct CssSpecificity : IComparable<CssSpecificity>, IComparable, IEquatable<CssSpecificity>
   {

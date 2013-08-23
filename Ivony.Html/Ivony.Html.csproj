@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Css\CssPropertyParser.cs" />
+    <Compile Include="Css\CssSpecificity.cs" />
     <Compile Include="Css\CssStyleSpecificationBase.cs" />
     <Compile Include="Css\CssStyle.cs" />
     <Compile Include="Css\ICssStyleShorthandRule.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="HtmlRange.cs" />
     <Compile Include="HtmlRenderContext.cs" />
     <Compile Include="HtmlSpecificationBase.cs" />
+    <Compile Include="Css\ICssSelector.cs" />
     <Compile Include="IHtmlRenderAdapter.cs" />
     <Compile Include="IHtmlCollection.cs" />
     <Compile Include="IHtmlDomModifier.cs" />

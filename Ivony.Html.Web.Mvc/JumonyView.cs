@@ -74,7 +74,7 @@ namespace Ivony.Html.Web
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
-      var handler =  ViewHandlerProvider.GetViewHandler( virtualPath, false );
+      var handler =  ViewHandlerProvider.GetViewHandler( virtualPath + ".ashx", false );
       if ( handler != null )
         return handler;
 
@@ -87,7 +87,7 @@ namespace Ivony.Html.Web
         return null;
 
       var handlerPath = handlerMeta.Attribute( "value" ).Value();
-      return ViewHandlerProvider.GetViewHandler( virtualPath );
+      return ViewHandlerProvider.GetViewHandler( handlerPath, true );
 
     }
 

@@ -124,7 +124,7 @@
     <Compile Include="Css\ICssPseudoClassProvider.cs" />
     <Compile Include="Css\ICssPseudoClassSelector.cs" />
     <Compile Include="Css\InternalPseudoClassProvider.cs" />
-    <Compile Include="Css\ICssSelector.cs" />
+    <Compile Include="Css\ISelector.cs" />
     <Compile Include="Css\CssRelativeSelector.cs" />
     <Compile Include="Css\NegationPseudoClass.cs" />
     <Compile Include="Css\TraceEnumerable.cs" />

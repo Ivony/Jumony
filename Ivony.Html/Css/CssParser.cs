@@ -20,13 +20,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="expression">选择器表达式</param>
     /// <returns>CSS 选择器对象</returns>
-    public static ICssSelector ParseSelector( string expression )
+    public static ISelector ParseSelector( string expression )
     {
 
       if ( expression == null )
         return null;
 
-      var selector = selectorsCache[expression] as ICssSelector;
+      var selector = selectorsCache[expression] as ISelector;
       if ( selector != null )
         return selector;
 
@@ -69,7 +69,7 @@ namespace Ivony.Html
     /// <param name="expression">选择器表达式</param>
     /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
     /// <returns>带范畴限定的层叠选择器</returns>
-    public static ICssSelector Create( IHtmlContainer scope, string expression )
+    public static ISelector Create( IHtmlContainer scope, string expression )
     {
       if ( scope == null )
         throw new ArgumentNullException( "scope" );
@@ -87,13 +87,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="enumerator">用于读取选择器表达式的枚举器</param>
     /// <returns>选择器对象</returns>
-    private static ICssSelector ParseSelector( CharEnumerator enumerator )
+    private static ISelector ParseSelector( CharEnumerator enumerator )
     {
 
 
-      var selectorList = new List<ICssSelector>();
+      var selectorList = new List<ISelector>();
 
-      ICssSelector selector = null;
+      ISelector selector = null;
 
       selector = ParseElementSelector( enumerator );
 
@@ -166,7 +166,7 @@ namespace Ivony.Html
     /// <param name="combanitor">结合符</param>
     /// <param name="rightSelector">右选择器</param>
     /// <returns>层叠选择器</returns>
-    private static ICssSelector CreateCasecadingSelector( ICssSelector leftSelector, char combanitor, CssElementSelector rightSelector )
+    private static ISelector CreateCasecadingSelector( ISelector leftSelector, char combanitor, CssElementSelector rightSelector )
     {
       return CssCasecadingSelector.Create( leftSelector, combanitor, rightSelector );
     }

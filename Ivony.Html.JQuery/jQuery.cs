@@ -22,7 +22,7 @@ namespace Ivony.Html
     private readonly IHtmlContainer _scope;
 
 
-    private readonly ICssSelector _selector;
+    private readonly ISelector _selector;
     private readonly IEnumerable<IHtmlElement> _elements;
 
 

@@ -10,12 +10,12 @@ namespace Ivony.Html
   /// <summary>
   /// 多重（并列）选择器
   /// </summary>
-  internal sealed class CssMultipleSelector : ICssSelector
+  internal sealed class CssMultipleSelector : ISelector
   {
 
-    private ICssSelector[] _selectors;
+    private ISelector[] _selectors;
 
-    public CssMultipleSelector( params ICssSelector[] selectors )
+    public CssMultipleSelector( params ISelector[] selectors )
     {
 
       _selectors = selectors;
@@ -47,7 +47,7 @@ namespace Ivony.Html
 
 
 
-    public static ICssSelector Combine( CssRelativeSelector relativeSelector, CssMultipleSelector multipleSelector )
+    public static ISelector Combine( CssRelativeSelector relativeSelector, CssMultipleSelector multipleSelector )
     {
 
       return new CssMultipleSelector( multipleSelector._selectors.Select( selector => CssCasecadingSelector.Create( relativeSelector, selector ) ).ToArray() );

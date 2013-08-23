@@ -9,7 +9,7 @@ namespace Ivony.Html
   /// <summary>
   /// 限制为仅匹配特定一些些元素的 CSS 选择器，主要用于作为范畴限定。
   /// </summary>
-  public class CssElementsRestrictionSelector : ICssSelector
+  public class CssElementsRestrictionSelector : ISelector
   {
 
     private readonly HashSet<IHtmlElement> _elements;
@@ -28,7 +28,7 @@ namespace Ivony.Html
 
     }
 
-    bool ICssSelector.IsEligible( IHtmlElement element )
+    bool ISelector.IsEligible( IHtmlElement element )
     {
       if ( element == null )
         return false;

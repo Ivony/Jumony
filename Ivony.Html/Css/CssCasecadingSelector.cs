@@ -17,10 +17,10 @@ namespace Ivony.Html
   /// 层叠选择器的表达式分析过程是从左至右，而处理则是从右至左，采取从左至右的方式分析主要考虑到正则工作模式和效率问题。但由于处理方式是从右至左。
   /// 简单的说只有一个元素选择器所构成的层叠选择器，其元素选择器是位于右边的。
   /// </remarks>
-  public partial class CssCasecadingSelector : ICssSelector
+  public partial class CssCasecadingSelector : ISelector
   {
 
-    public CssCasecadingSelector( CssRelativeSelector relativeSelector, ICssSelector lastSelector )
+    public CssCasecadingSelector( CssRelativeSelector relativeSelector, ISelector lastSelector )
     {
 
       if ( relativeSelector == null )
@@ -44,7 +44,7 @@ namespace Ivony.Html
     /// <param name="leftSelector">左选择器</param>
     /// <param name="combinator">结合符</param>
     /// <param name="rightSelector">右选择器</param>
-    public static CssCasecadingSelector Create( ICssSelector leftSelector, char combinator, ICssSelector rightSelector )
+    public static CssCasecadingSelector Create( ISelector leftSelector, char combinator, ISelector rightSelector )
     {
       if ( leftSelector == null )
         throw new ArgumentNullException( "leftSelector" );
@@ -128,7 +128,7 @@ namespace Ivony.Html
     /// <summary>
     /// 最后一个选择器
     /// </summary>
-    public ICssSelector LastSelector
+    public ISelector LastSelector
     {
       get;
       private set;
@@ -141,7 +141,7 @@ namespace Ivony.Html
     /// <param name="leftSelector">左选择器</param>
     /// <param name="combanitor">关系结合符</param>
     /// <returns>关系选择器</returns>
-    private static CssRelativeSelector CreateRelativeSelector( ICssSelector leftSelector, char combanitor )
+    private static CssRelativeSelector CreateRelativeSelector( ISelector leftSelector, char combanitor )
     {
       if ( combanitor == '>' )
         return new CssParentRelativeSelector( leftSelector );
@@ -199,7 +199,7 @@ namespace Ivony.Html
     /// <param name="relativeSelector">前置关系选择器</param>
     /// <param name="selector">右选择器</param>
     /// <returns></returns>
-    public static ICssSelector Create( CssRelativeSelector relativeSelector, ICssSelector selector )
+    public static ISelector Create( CssRelativeSelector relativeSelector, ISelector selector )
     {
 
       if ( relativeSelector == null )
@@ -232,7 +232,7 @@ namespace Ivony.Html
     /// <param name="elements">作为范畴限定的元素集</param>
     /// <param name="expression">选择器表达式</param>
     /// <returns>层叠选择器</returns>
-    public static ICssSelector Create( IEnumerable<IHtmlElement> elements, string expression )
+    public static ISelector Create( IEnumerable<IHtmlElement> elements, string expression )
     {
 
       if ( elements == null )

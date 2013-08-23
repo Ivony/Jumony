@@ -9,7 +9,7 @@ namespace Ivony.Html
   /// <summary>
   /// 可以对筛选结果进行缓存的 CSS 选择器
   /// </summary>
-  public abstract class CssCacheableSelector : ICssSelector
+  public abstract class CssCacheableSelector : ISelector
   {
 
     /// <summary>
@@ -60,7 +60,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="selector">已有的 CSS 选择器</param>
     /// <returns>对已有选择器的自动缓存的包装</returns>
-    public static ICssSelector CreateCacheableWrapper( ICssSelector selector )
+    public static ISelector CreateCacheableWrapper( ISelector selector )
     {
       var cacheable = selector as CssCacheableSelector;
       if ( cacheable == null )
@@ -76,9 +76,9 @@ namespace Ivony.Html
     private class CacheableCssSelectorWrapper : CssCacheableSelector
     {
 
-      private ICssSelector _selector;
+      private ISelector _selector;
 
-      public CacheableCssSelectorWrapper( ICssSelector selector )
+      public CacheableCssSelectorWrapper( ISelector selector )
       {
         _selector = selector;
       }

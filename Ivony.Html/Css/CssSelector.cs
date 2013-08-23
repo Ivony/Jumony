@@ -24,7 +24,7 @@ namespace Ivony.Html
     /// <param name="selector">选择器</param>
     /// <param name="source">源元素集</param>
     /// <returns>筛选结果</returns>
-    public static IEnumerable<IHtmlElement> Filter( this ICssSelector selector, IEnumerable<IHtmlElement> source )
+    public static IEnumerable<IHtmlElement> Filter( this ISelector selector, IEnumerable<IHtmlElement> source )
     {
 
       if ( selector == null )
@@ -43,7 +43,7 @@ namespace Ivony.Html
     /// <param name="source">源元素集</param>
     /// <param name="selector">选择器</param>
     /// <returns>筛选结果</returns>
-    public static IEnumerable<IHtmlElement> FilterBy( this IEnumerable<IHtmlElement> source, ICssSelector selector )
+    public static IEnumerable<IHtmlElement> FilterBy( this IEnumerable<IHtmlElement> source, ISelector selector )
     {
       if ( source == null )
         return null;
@@ -78,7 +78,7 @@ namespace Ivony.Html
     /// <param name="selector">选择器</param>
     /// <param name="element">元素</param>
     /// <returns>是否符合选择器要求</returns>
-    public static bool IsEligibleBuffered( this ICssSelector selector, IHtmlElement element )
+    public static bool IsEligibleBuffered( this ISelector selector, IHtmlElement element )
     {
       if ( selector == null )
         throw new ArgumentNullException( "selector" );

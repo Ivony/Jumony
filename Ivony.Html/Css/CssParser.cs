@@ -207,13 +207,30 @@ namespace Ivony.Html
     /// <param name="enumerator">字符枚举器</param>
     /// <returns>解析好的元素选择器</returns>
     private static CssElementSelector ParseElementSelector( CharEnumerator enumerator )
+    { 
+      CssSpecificity specificity;
+      return ParseElementSelector( enumerator, out specificity );
+    }
+
+
+    /// <summary>
+    /// 解析元素选择器
+    /// </summary>
+    /// <param name="enumerator">字符枚举器</param>
+    /// <returns>解析好的元素选择器</returns>
+    private static CssElementSelector ParseElementSelector( CharEnumerator enumerator, out CssSpecificity specificity )
     {
+
+      int a = 0, b = 0, c = 0;
+
       var elementName = ParseName( enumerator );
       if ( elementName.IsNullOrEmpty() && enumerator.Current == '*' )
       {
         enumerator.MoveNext();
         elementName = "*";
       }
+      else
+        c++;
 
       var attributeSelectors = new List<CssAttributeSelector>();
       var psedoclassSelectors = new List<ICssPseudoClassSelector>();
@@ -224,12 +241,14 @@ namespace Ivony.Html
         {
           EnsureNext( enumerator );
           attributeSelectors.Add( CreateAttributeSelector( "id", "=", ParseName( enumerator ) ) );
+          a++;
         }
 
         else if ( enumerator.Current == '.' )
         {
           EnsureNext( enumerator );
           attributeSelectors.Add( CreateAttributeSelector( "class", "~=", ParseName( enumerator ) ) );
+          b++;
         }
 
         else
@@ -239,8 +258,10 @@ namespace Ivony.Html
       while ( true )//解析属性选择符
       {
         if ( enumerator.Current == '[' )
+        {
           attributeSelectors.Add( ParseAttributeSelector( enumerator ) );
-
+          b++;
+        }
         else
           break;
       }
@@ -248,11 +269,16 @@ namespace Ivony.Html
       while ( true )//解析伪类选择符
       {
         if ( enumerator.Current == ':' )
+        {
           psedoclassSelectors.Add( ParsePsedoclassSelector( enumerator ) );
-
+          b++;
+        }
         else
           break;
       }
+
+
+      specificity = new CssSpecificity( a, b, c );
 
 
       if ( elementName != null || attributeSelectors.Any() || psedoclassSelectors.Any() )
@@ -419,6 +445,10 @@ namespace Ivony.Html
       throw new FormatException( "意外的遇到字符串的结束" );
     }
 
+    /// <summary>
+    /// 解析否定伪类
+    /// </summary>
+    /// <returns></returns>
     private static ICssPseudoClassSelector ParseNegationPseudoClass( CharEnumerator enumerator )
     {
 

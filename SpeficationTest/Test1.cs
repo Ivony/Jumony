@@ -5,6 +5,7 @@ using Ivony.Html.Parser;
 using System.IO;
 using System.Linq;
 using Ivony.Html.Parser.ContentModels;
+using Ivony.Html.ExpandedAPI;
 
 namespace SpeficationTest
 {
@@ -104,6 +105,19 @@ namespace SpeficationTest
       var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest6.html" ) );
 
       Assert.AreEqual( document.Elements().Count(), 0, "无元素名的开始或结束标签解析错误" );
+
+    }
+
+    [TestMethod]
+    public void SpecificationTest7()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest7.html" ) );
+
+      var link = document.FindFirstOrDefault( "a" );
+      Assert.IsNotNull( link, "属性或内容包含特殊字符的标签解析失败" );
+      Assert.AreEqual( link.Attribute( "href" ).Value(), "#", "属性内容包含 > 时解析失败。" );
+      Assert.AreEqual( link.Attribute( "title" ).Value(), "this is a <a> tag", "属性内容包含 > 时解析失败。" );
+      Assert.AreEqual( link.Elements().Count(), 0, "错误的解析了以特殊字符为标签名的标签" );
 
     }
 

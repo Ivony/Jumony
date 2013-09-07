@@ -440,10 +440,14 @@ namespace Ivony.Web
 
 
       virtualPath = multipleSlashRegex.Replace( virtualPath, "/" );//将连续的/替换成单独的/
+      var extensionLength = VirtualPathUtility.GetExtension( virtualPath ).Length;
+      if ( extensionLength > 0 )
+        virtualPath = virtualPath.Remove( virtualPath.Length - extensionLength );//去除扩展名
+
 
       virtualPath = virtualPath.Substring( 2 );
+      virtualPath = VirtualPathUtility.RemoveTrailingSlash( virtualPath ) ?? "";//在虚拟路径最后移除 / ，使得 xxx/ 与 xxx 被视为同一路径。
 
-      virtualPath = virtualPath.TrimEnd( '/' );//在虚拟路径最后移除 / ，使得 xxx/ 与 xxx 被视为同一路径。
 
       var pathParagraphs = virtualPath.Split( '/' );
 

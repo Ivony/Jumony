@@ -80,11 +80,9 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">视图的虚拟路径</param>
     /// <param name="excludeDefaultHandler">是否要查找默认视图处理程序</param>
     /// <returns>该虚拟路径的视图处理程序</returns>
-    public static IViewHandler GetViewHandler( string virtualPath, bool includeDefaultHandler = false )
+    public static IViewHandler GetViewHandler( string virtualPath, bool includeDefaultHandler )
     {
-      var handlerPath = virtualPath + ".ashx";
-
-      var handler = GetHandlerInternal( handlerPath );
+      var handler = GetHandlerInternal( virtualPath );
 
       if ( handler == null && !includeDefaultHandler )
         handler = GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );

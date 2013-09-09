@@ -72,14 +72,16 @@ namespace Ivony.Html.Web
 
 
 
-      if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
+      var dataContextExpression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
+      if ( dataContextExpression != null )
       {
-        var dataContextExpression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
-        if ( dataContextExpression != null )
-          dataContext = GetDataObject( dataContextExpression, context );
-
+        dataContext = GetDataObject( dataContextExpression, context );
         return false;
       }
+
+      
+      if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
+        return false;
 
       var expression = new AttributeExpression( element );
 

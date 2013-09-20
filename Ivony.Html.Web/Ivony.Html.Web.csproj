@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
+    <Compile Include="GeneralListBinder.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
@@ -83,6 +84,10 @@
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
+    <Compile Include="ListBinderBase.cs" />
+    <Compile Include="ListBinderProvider.cs" />
+    <Compile Include="ListDataContext.cs" />
+    <Compile Include="RepeatListBinder.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="DefaultElementBinder.cs" />
     <Compile Include="WebParser.cs" />

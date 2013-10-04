@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{9CA214D9-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapter", "Adapter", "{AF5D7B06-51A8-4AA0-86A2-BC1FCC4D08A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectorTest", "SelectorTest\SelectorTest.csproj", "{4AA86193-4163-4451-9E7A-3A03D925E97C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssTest", "SelectorTest\CssTest.csproj", "{4AA86193-4163-4451-9E7A-3A03D925E97C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Web.Binding", "Ivony.Html.Web.Binding\Ivony.Html.Web.Binding.csproj", "{F35F2A61-7147-43CE-8D3C-2785455064A2}"
 EndProject

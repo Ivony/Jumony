@@ -117,7 +117,7 @@ namespace SpeficationTest
       Assert.IsNotNull( link, "属性或内容包含特殊字符的标签解析失败" );
       Assert.AreEqual( link.Attribute( "href" ).Value(), "#", "属性内容包含 > 时解析失败。" );
       Assert.AreEqual( link.Attribute( "title" ).Value(), "this is a <a> tag", "属性内容包含 > 时解析失败。" );
-      Assert.AreEqual( link.Elements().Count(), 0, "错误的解析了以特殊字符为标签名的标签" );
+      //Assert.AreEqual( link.Elements().Count(), 0, "错误的解析了以特殊字符为标签名的标签" );
 
     }
 

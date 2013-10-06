@@ -14,7 +14,7 @@ namespace Ivony.Html
   {
 
 
-    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?>(?![0-9-])[\-_\w]+))(?>\s*):(?>\s*)(?<value>.+?)(?<important>!important)?(;|$)";
+    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?>(?![0-9-])[\-_\w]+))(?>\s*):(?>\s*)(?<value>.*?)(?<important>!important)?(;|$)";
 
     private static Regex propertyDeclarationRegex = new Regex( propertyDeclarationPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
 

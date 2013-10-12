@@ -14,7 +14,7 @@ namespace Ivony.Html
   {
 
 
-    private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>();
+    private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>( StringComparer.OrdinalIgnoreCase );
     private object _sync = new object();
 
 
@@ -46,7 +46,7 @@ namespace Ivony.Html
     /// </summary>
     public const string importantFlag = "!important";
 
-    
+
     /// <summary>
     /// 设置样式属性
     /// </summary>

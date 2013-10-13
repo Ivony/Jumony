@@ -18,6 +18,9 @@ namespace Ivony.Html
     private object _sync = new object();
 
 
+    /// <summary>
+    /// 获取用于线程同步的对象
+    /// </summary>
     public object SyncRoot { get { return _sync; } }
 
 
@@ -197,7 +200,7 @@ namespace Ivony.Html
 
 
 
-    public IEnumerator<CssStyleProperty> GetEnumerator()
+    IEnumerator<CssStyleProperty> IEnumerable<CssStyleProperty>.GetEnumerator()
     {
       return _properties.Values.GetEnumerator();
     }

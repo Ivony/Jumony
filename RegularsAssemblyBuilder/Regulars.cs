@@ -32,7 +32,7 @@ namespace RegularsAssemblyBuilder
     public static readonly string attributePattern = @"(\G|\s)(?<attribute>#attrName#attrValue)".Replace( "#attrName", attributeNamePattern ).Replace( "#attrValue", attributeValuePattern );
 
     /// <summary>用于匹配用开始标签的正则表达式</summary>
-    public static readonly string beginTagPattern = @"<#tagName(?<attributes>.*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern ).Replace( "#attribute", attributePattern );
+    public static readonly string beginTagPattern = @"<#tagName(?<attributes>([^'""]|(?>'[^']*')|(?>""[^""]*""))*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern ).Replace( "#attribute", attributePattern );
 
     /// <summary>用于匹配用结束标签的正则表达式</summary>
     public static readonly string endTagPattern = @"</#tagName\s*>".Replace( "#tagName", tagNamePattern );

@@ -217,7 +217,10 @@ namespace Ivony.Html.Web
       var dataObject = GetDataObject( expression, context );
 
       if ( dataObject == null )
-        return false;
+      {
+        attribute.Remove();
+        return true;
+      }
 
 
       string value = GetBindingValue( expression, dataObject );

@@ -71,7 +71,7 @@ namespace Ivony.Html.Web
       BindingScope = scope;
       Data = data;
 
-      foreach ( var element in scope.Elements() )
+      foreach ( var element in scope.Elements().ToArray() )
         BindElement( element );
     }
 

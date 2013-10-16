@@ -65,8 +65,8 @@
     <Compile Include="FormValueCollection.cs" />
     <Compile Include="HtmlForm.cs" />
     <Compile Include="HtmlButtonGroup.cs" />
-    <Compile Include="HtmlGroupControlBase.cs" />
     <Compile Include="HtmlInputButtonGroupItem.cs" />
+    <Compile Include="HtmlFormControl.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />

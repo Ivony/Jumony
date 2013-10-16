@@ -5,7 +5,11 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
-  public class HtmlGroupControlBase
+  public abstract class HtmlFormControl
   {
+    public abstract string Name { get; }
+
+    public abstract string Value { get; }
+
   }
 }

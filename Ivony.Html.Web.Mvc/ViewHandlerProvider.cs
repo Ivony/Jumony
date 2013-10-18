@@ -94,10 +94,27 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
+    /// 查找母板视图的处理程序
+    /// </summary>
+    /// <param name="virtualPath">母板视图虚拟路径</param>
+    /// <returns></returns>
+    public static IViewHandler GetMasterViewHandler( string virtualPath )
+    {
+      var handler = ViewHandlerProviders.Select( provider => provider.FindViewHandler( virtualPath ) ).NotNull().FirstOrDefault();
+
+      if ( handler != null )
+        return handler;
+
+      return GetViewHandlerInternal( virtualPath + ".ashx", false );
+    }
+
+
+
+    /// <summary>
     /// 获取视图处理程序
     /// </summary>
     /// <param name="virtualPath">视图的虚拟路径</param>
-    /// <param name="excludeDefaultHandler">是否要查找默认视图处理程序</param>
+    /// <param name="includeDefaultHandler">是否要查找默认视图处理程序</param>
     /// <returns>该虚拟路径的视图处理程序</returns>
     internal static IViewHandler GetViewHandlerInternal( string virtualPath, bool includeDefaultHandler )
     {
@@ -142,6 +159,10 @@ namespace Ivony.Html.Web
 
     private static SynchronizedCollection<IViewHandlerProvider> _providers = new SynchronizedCollection<IViewHandlerProvider>();
 
+
+    /// <summary>
+    /// 注册的视图处理器提供程序。
+    /// </summary>
     public static ICollection<IViewHandlerProvider> ViewHandlerProviders
     {
       get { return _providers; }
@@ -166,5 +187,9 @@ namespace Ivony.Html.Web
 
       return handlerMeta.Attribute( "value" ).Value();
     }
+
+    
+
+
   }
 }

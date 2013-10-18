@@ -111,7 +111,7 @@ namespace Ivony.Html.Web
     protected override IViewHandler GetHandler( string virtualPath )
     {
 
-      return ViewHandlerProvider.GetViewHandlerInternal( virtualPath + ".ashx", false );
+      return ViewHandlerProvider.GetMasterViewHandler( virtualPath );
 
     }
 

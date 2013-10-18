@@ -79,7 +79,7 @@ namespace Ivony.Html.Web
       public string HandlerPath { get; set; }
     }
 
-    
+
     /// <summary>
     /// 获取视图处理程序
     /// </summary>
@@ -96,16 +96,12 @@ namespace Ivony.Html.Web
 
         cacheItem = new HandlerPathCacheItem() { HandlerPath = handlerPath };
 
-        HttpRuntime.Cache.Insert( cacheKey, cacheItem, null );
+        HttpRuntime.Cache.Insert( cacheKey, cacheItem, ScopeCacheDependency );
 
       }
 
-      
-      var handler =  ViewHandlerProvider.GetViewHandlerInternal( virtualPath + ".ashx", false );
-      if ( handler != null )
-        return handler;
 
-      return ViewHandlerProvider.GetViewHandlerInternal( handlerPath, true );
+      return ViewHandlerProvider.GetViewHandler( virtualPath );
 
     }
 

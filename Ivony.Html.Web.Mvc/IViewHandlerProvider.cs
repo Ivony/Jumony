@@ -17,7 +17,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="virtualPath">视图虚拟路径</param>
     /// <returns>要用于处理视图的 ViewHandler 对象</returns>
-    public IViewHandler FindViewHandler( string virtualPath );
+    IViewHandler FindViewHandler( string virtualPath );
 
   }
 }

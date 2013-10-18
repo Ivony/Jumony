@@ -417,6 +417,32 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 创建指定虚拟路径文件的缓存依赖项，当文件发生变化时可以清除缓存。
+    /// </summary>
+    /// <param name="virtualPath">需要监视的文件虚拟路径</param>
+    /// <returns>监视路径的缓存依赖项</returns>
+    public static CacheDependency CreateCacheDependency( string virtualPath )
+    {
+
+      return CreateCacheDependency( HostingEnvironment.VirtualPathProvider, virtualPath );
+
+    }
+
+
+    /// <summary>
+    /// 创建指定虚拟路径文件的缓存依赖项，当文件发生变化时可以清除缓存。
+    /// </summary>
+    /// <param name="provider">当前所使用的虚拟路径提供程序</param>
+    /// <param name="virtualPath">需要监视的文件虚拟路径</param>
+    /// <returns>监视路径的缓存依赖项</returns>
+    public static CacheDependency CreateCacheDependency( VirtualPathProvider provider, string virtualPath )
+    {
+      var now = DateTime.UtcNow;
+
+      return provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
+
+    }
   }
 
 

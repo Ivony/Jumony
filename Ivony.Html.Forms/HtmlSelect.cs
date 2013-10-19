@@ -10,28 +10,17 @@ namespace Ivony.Html.Forms
   /// <summary>
   /// 表示一个 &lt;select&gt; 元素
   /// </summary>
-  public class HtmlSelect : IHtmlGroupControl, IHtmlFocusableControl
+  public class HtmlSelect : FormGroupControl
   {
 
-    public HtmlSelect( HtmlForm form, IHtmlElement element )
+    internal HtmlSelect( HtmlForm form, IHtmlElement element )
+      : base( form )
     {
-      if ( !element.Name.EqualsIgnoreCase( "select" ) )
-        throw new InvalidOperationException();
 
-      _form = form;
-
-      _element = element;
-
+      Element = element;
       options = element.Find( "option" ).Select( e => new HtmlOption( this, e ) ).ToArray();
 
     }
-
-
-
-    private readonly HtmlForm _form;
-    private readonly IHtmlElement _element;
-
-    private readonly HtmlOption[] options;
 
 
     /// <summary>
@@ -39,70 +28,48 @@ namespace Ivony.Html.Forms
     /// </summary>
     public IHtmlElement Element
     {
-      get { return _element; }
+      get;
+      private set;
     }
 
 
-    /// <summary>
-    /// 获取所属的表单对象
-    /// </summary>
-    public HtmlForm Form
-    {
-      get { return _form; }
 
-    }
+    private readonly HtmlOption[] options;
+
 
 
     /// <summary>
     /// 获取输入控件名
     /// </summary>
-    public string Name
+    public override string Name
     {
-      get { return _element.Attribute( "name" ).AttributeValue; }
-
+      get { return Element.Attribute( "name" ).Value(); }
     }
 
 
     /// <summary>
     /// 是否允许多选
     /// </summary>
-    public bool AllowMultipleSelections
+    public override bool AllowMultiple
     {
-      get { return _element.Attribute( "multiple" ) != null; }
+      get { return Element.Attribute( "multiple" ) != null; }
     }
 
 
-    /// <summary>
-    /// 获取输入组项
-    /// </summary>
-    public IHtmlInputGroupItem[] Items
+
+    protected override FormGroupControlItem[] Items
     {
       get { return options; }
     }
 
 
 
-    /// <summary>
-    /// 获取具有指定值的项
-    /// </summary>
-    /// <param name="value">指定的值</param>
-    /// <returns>具有这个值的输入项</returns>
-    public IHtmlInputGroupItem this[string value]
-    {
-      get { return options.FirstOrDefault( o => o.Value == value ); }
-    }
-
-
 
     /// <summary>
     /// 表示一个 &lt;option&gt; 元素
     /// </summary>
-    public class HtmlOption : IHtmlInputGroupItem
+    public class HtmlOption : FormGroupControlItem
     {
-
-
-      private IHtmlElement _element;
-      private HtmlSelect _select;
 
       /// <summary>
       /// 创建 HtmlOption 对象
@@ -110,28 +77,20 @@ namespace Ivony.Html.Forms
       /// <param name="select">所属的 HtmlSelect 对象</param>
       /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
       public HtmlOption( HtmlSelect select, IHtmlElement element )
+        : base( select )
       {
-        _select = select;
-        _element = element;
+        Element = element;
       }
 
 
       public IHtmlElement Element
       {
-        get { return _element; }
+        get;
+        private set;
       }
 
-      public HtmlForm Form
-      {
-        get { return Group.Form; }
-      }
 
-      public IHtmlGroupControl Group
-      {
-        get { return _select; }
-      }
-
-      public bool Selected
+      public override bool Selected
       {
         get { return Element.Attribute( "selected" ) != null; }
         set
@@ -149,7 +108,7 @@ namespace Ivony.Html.Forms
         }
       }
 
-      public string Value
+      public override string Value
       {
         get
         {
@@ -168,14 +127,5 @@ namespace Ivony.Html.Forms
       }
 
     }
-
-    #region IHtmlFocusableControl 成员
-
-    string IHtmlFocusableControl.ElementId
-    {
-      get { return Element.Identity(); }
-    }
-
-    #endregion
   }
 }

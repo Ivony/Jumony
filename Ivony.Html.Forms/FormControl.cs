@@ -13,7 +13,7 @@ namespace Ivony.Html.Forms
       Form = form;
     }
 
-    public abstract HtmlForm Form
+    public HtmlForm Form
     {
       get;
       private set;

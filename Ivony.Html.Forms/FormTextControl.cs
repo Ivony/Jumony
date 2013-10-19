@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ivony.Fluent
+using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
@@ -31,7 +31,7 @@ namespace Ivony.Html.Forms
       get { return Element.Attribute( "name" ).Value(); }
     }
 
-    public abstract string Value
+    public override string Value
     {
       get { return Element.Attribute( "value" ).Value(); }
     }

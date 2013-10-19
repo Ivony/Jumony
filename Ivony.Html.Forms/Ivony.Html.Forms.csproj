@@ -63,6 +63,9 @@
   <ItemGroup>
     <Compile Include="FormControlException.cs" />
     <Compile Include="FormExtensions.cs" />
+    <Compile Include="FormGroupControl.cs" />
+    <Compile Include="FormGroupControlBase.cs" />
+    <Compile Include="FormGroupControlItem.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="FormTextControl.cs" />
     <Compile Include="FormValueCollection.cs" />
@@ -81,14 +84,6 @@
     <Compile Include="InputControlCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardFormControlProvider.cs" />
-    <Compile Include="Validation\EmailValidator.cs" />
-    <Compile Include="Validation\HtmlFormValidator.cs" />
-    <Compile Include="Validation\IHtmlValueValidator.cs" />
-    <Compile Include="Validation\HtmlFieldValidator.cs" />
-    <Compile Include="Validation\IntegerValidator.cs" />
-    <Compile Include="Validation\ISubmitValidator.cs" />
-    <Compile Include="Validation\RequiredValidator.cs" />
-    <Compile Include="Validation\ValidationRegulars.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

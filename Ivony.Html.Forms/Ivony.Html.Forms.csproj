@@ -61,21 +61,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormControlException.cs" />
     <Compile Include="FormExtensions.cs" />
+    <Compile Include="HtmlInputText.cs" />
+    <Compile Include="FormTextControl.cs" />
     <Compile Include="FormValueCollection.cs" />
     <Compile Include="HtmlForm.cs" />
     <Compile Include="HtmlButtonGroup.cs" />
+    <Compile Include="FormConfiguration.cs" />
     <Compile Include="HtmlInputButtonGroupItem.cs" />
-    <Compile Include="HtmlFormControl.cs" />
-    <Compile Include="HtmlInputText.cs" />
+    <Compile Include="FormControl.cs" />
     <Compile Include="HtmlLabel.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
+    <Compile Include="IFormControlProvider.cs" />
     <Compile Include="IHtmlFormElement.cs" />
     <Compile Include="IHtmlGroupControl.cs" />
     <Compile Include="IHtmlTextControl.cs" />
     <Compile Include="InputControlCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StandardFormControlProvider.cs" />
     <Compile Include="Validation\EmailValidator.cs" />
     <Compile Include="Validation\HtmlFormValidator.cs" />
     <Compile Include="Validation\IHtmlValueValidator.cs" />

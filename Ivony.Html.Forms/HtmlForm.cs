@@ -90,9 +90,6 @@ namespace Ivony.Html.Forms
 
 
 
-    public 
-
-
     private InputControlCollection _inputControls;
 
     /// <summary>
@@ -127,5 +124,7 @@ namespace Ivony.Html.Forms
       return labelsTable[elementId].CastTo<HtmlLabel[]>().IfNull( new HtmlLabel[0] );
     }
 
+  
+public  FormConfiguration Configuration { get; private set; }
   }
 }

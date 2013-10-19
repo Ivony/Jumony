@@ -5,11 +5,19 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
-  public abstract class HtmlFormControl
+  public abstract class FormControl
   {
 
+    protected FormControl( HtmlForm form )
+    {
+      Form = form;
+    }
 
-    public abstract HtmlForm Form { get; }
+    public abstract HtmlForm Form
+    {
+      get;
+      private set;
+    }
 
     public abstract string Name { get; }
 

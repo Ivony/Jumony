@@ -8,7 +8,7 @@ namespace Ivony.Html.Forms
   public interface IFormControlProvider
   {
 
-    HtmlFormControl CreateControl( IHtmlElement element );
+    FormControl CreateControl( HtmlForm form, IHtmlElement element );
 
   }
 }

@@ -31,15 +31,30 @@ namespace Ivony.Html
   }
 
 
+
+
+  /// <summary>
+  /// 定义高级 HTML 节点容器，通过实现该接口可以自定义 Descendants 等方法的行为模式
+  /// </summary>
   public interface IHtmlNodeCollection : IEnumerable<IHtmlNode>
   {
+    /// <summary>
+    /// 获取所有的元素
+    /// </summary>
+    /// <returns>该节点集合中所有的元素</returns>
     IEnumerable<IHtmlElement> Elements();
 
+    /// <summary>
+    /// 获取所有的子代元素
+    /// </summary>
+    /// <returns>该节点集合中所有的元素以及这些元素的子代元素</returns>
     IEnumerable<IHtmlElement> DescendantElements();
 
+    /// <summary>
+    /// 获取所有的子代节点
+    /// </summary>
+    /// <returns>该节点集合中所有的节点以及所有的子代节点</returns>
     IEnumerable<IHtmlNode> DescendantNodes();
-
-
   }
 
 

@@ -26,6 +26,11 @@ namespace Ivony.Html
     CssStyleProperty[] ExtractProperties( string shorthand );
 
 
+    /// <summary>
+    /// 尝试获取缩写的样式
+    /// </summary>
+    /// <param name="cssStyle">要检查的样式设置，从中找出可以写成缩写形式的样式</param>
+    /// <returns>缩写后的样式</returns>
     CssStyleProperty TryGetShorthandProperty( CssStyle cssStyle );
   }
 

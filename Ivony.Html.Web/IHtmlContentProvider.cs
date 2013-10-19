@@ -173,12 +173,8 @@ namespace Ivony.Html.Web
 
       if ( content == null )
       {
-
-        var now = DateTime.UtcNow;
-
+        var dependency = HtmlProviders.CreateCacheDependency( provider, virtualPath );
         content = LoadContent( file );
-        var dependency = provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
-
 
         HttpRuntime.Cache.Insert( key, content, dependency );
       }

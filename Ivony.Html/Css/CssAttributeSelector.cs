@@ -39,7 +39,12 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 创建 CssAttributeSelector 对象
+    /// </summary>
+    /// <param name="name">属性名</param>
+    /// <param name="comparison">比较符</param>
+    /// <param name="value">属性值模板</param>
     public CssAttributeSelector( string name, string comparison, string value )
     {
 

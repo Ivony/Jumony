@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using Ivony.Fluent;
@@ -68,28 +69,43 @@ namespace Ivony.Html.Web
       return filters;
     }
 
+
+
+    private static readonly string handlerPathCachePrefix = "JumonyHandlerCache_";
+
+
+    private class HandlerPathCacheItem
+    {
+      public string HandlerPath { get; set; }
+    }
+
+
     /// <summary>
     /// 获取视图处理程序
     /// </summary>
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
-      var handler =  ViewHandlerProvider.GetViewHandler( virtualPath + ".ashx", false );
-      if ( handler != null )
-        return handler;
 
-      var head = Scope.Document.FindFirstOrDefault( "head" );
-      if ( head == null )
-        return null;
+      var cacheKey = handlerPathCachePrefix + virtualPath;
 
-      var handlerMeta = head.FindFirstOrDefault( "meta[name=handler]" );
-      if ( handlerMeta == null )
-        return null;
+      var cacheItem = HttpRuntime.Cache.Get( cacheKey );
+      if ( cacheItem == null )
+      {
+        var handlerPath = ViewHandlerProvider.GetHandlerPath( Scope );
 
-      var handlerPath = handlerMeta.Attribute( "value" ).Value();
-      return ViewHandlerProvider.GetViewHandler( handlerPath, true );
+        cacheItem = new HandlerPathCacheItem() { HandlerPath = handlerPath };
+
+        HttpRuntime.Cache.Insert( cacheKey, cacheItem, ScopeCacheDependency );
+
+      }
+
+
+      return ViewHandlerProvider.GetViewHandler( virtualPath );
 
     }
+
+
 
 
     /// <summary>

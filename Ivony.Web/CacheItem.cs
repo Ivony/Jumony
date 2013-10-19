@@ -81,7 +81,7 @@ namespace Ivony.Web
     private TimeSpan DurationWhenCreated
     {
       get;
-      private set;
+      set;
     }
 
 

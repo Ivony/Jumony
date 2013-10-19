@@ -337,12 +337,23 @@ namespace Ivony.Html
     }
 
 
+    /// <summary>
+    /// 渲染所有的子节点
+    /// </summary>
+    /// <param name="container">要渲染子节点的容器</param>
+    /// <param name="writer">用于输出的文本编写器</param>
+    /// <param name="adapters">渲染代理</param>
     public static void RenderChilds( this IHtmlContainer container, TextWriter writer, params IHtmlRenderAdapter[] adapters )
     {
       RenderChilds( container, new HtmlRenderContext( writer, adapters ) );
     }
 
 
+    /// <summary>
+    /// 渲染所有的子节点
+    /// </summary>
+    /// <param name="container">要渲染子节点的容器</param>
+    /// <param name="context">渲染上下文</param>
     public static void RenderChilds( this IHtmlContainer container, HtmlRenderContext context )
     {
       foreach ( var node in container.Nodes() )

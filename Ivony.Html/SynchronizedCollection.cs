@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 1591 
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,7 +37,9 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 内部的容器
+    /// </summary>
     protected List<T> Items
     {
       get
@@ -57,7 +61,11 @@ namespace Ivony.Html
     }
 
 
-
+    /// <summary>
+    /// 获取指定索引处的元素
+    /// </summary>
+    /// <param name="index">元素索引</param>
+    /// <returns>指定索引位置的元素</returns>
     public T this[int index]
     {
       get

@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 
 namespace Ivony.Html.Web
@@ -94,9 +95,18 @@ namespace Ivony.Html.Web
     /// 派生类可以重写此方法自定义加载虚拟路径处的文档的逻辑
     /// </summary>
     /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    protected virtual IHtmlDocument LoadDocument( string virtualPath, out CacheDependency cacheDependency )
     {
-      return MvcEnvironment.LoadDocument( virtualPath );
+      string cacheKey;
+      var document = HtmlProviders.LoadDocument( virtualPath, out cacheKey );
+
+      if ( cacheKey != null )
+        cacheDependency = new CacheDependency( new string[0], new string[] { cacheKey } );
+
+      else
+        cacheDependency = HtmlProviders.CreateCacheDependency( virtualPath );
+
+      return document;
     }
 
 
@@ -113,9 +123,10 @@ namespace Ivony.Html.Web
     /// 初始化视图渲染范畴
     /// </summary>
     /// <returns>渲染和处理的范畴，一般情况下是 IHtmlDocument</returns>
-    protected virtual IHtmlContainer InitializeScope( string virtualPath, bool partialMode )
+    protected virtual IHtmlContainer InitializeScope( string virtualPath, bool partialMode, out CacheDependency cacheDependency )
     {
-      var document = LoadDocument( virtualPath );
+
+      var document = LoadDocument( virtualPath, out cacheDependency );
 
       if ( partialMode )
         return GetPartialScope( document );
@@ -124,6 +135,14 @@ namespace Ivony.Html.Web
         return document;
 
     }
+
+
+    protected CacheDependency ScopeCacheDependency
+    {
+      get;
+      private set;
+    }
+
 
     /// <summary>
     /// 查找部分视图渲染范畴
@@ -174,9 +193,13 @@ namespace Ivony.Html.Web
       RawViewContext = viewContext;
 
 
+      CacheDependency cacheDependency;
+
       HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );
-      Scope = InitializeScope( VirtualPath, PartialMode );
+      Scope = InitializeScope( VirtualPath, PartialMode, out cacheDependency );
       HttpContext.Trace.Write( "ViewBase", "End InitializeScope" );
+
+      ScopeCacheDependency = cacheDependency;
 
     }
 

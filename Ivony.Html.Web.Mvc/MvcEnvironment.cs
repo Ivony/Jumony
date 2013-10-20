@@ -151,19 +151,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 分析和加载文档。
-    /// </summary>
-    /// <param name="virtualPath">文档的虚拟路径</param>
-    /// <returns>加载的文档对象</returns>
-    public static IHtmlDocument LoadDocument( string virtualPath )
-    {
-      return HtmlProviders.LoadDocument( virtualPath );
-    }
-
-
-
-
-    /// <summary>
     /// 获取默认的缓存储存提供程序
     /// </summary>
     public static ICacheStorageProvider CacheStorageProvider

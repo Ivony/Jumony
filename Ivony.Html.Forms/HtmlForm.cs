@@ -39,14 +39,25 @@ namespace Ivony.Html.Forms
     /// 创建一个 HTML 表单对象
     /// </summary>
     /// <param name="element"></param>
-    public HtmlForm( IHtmlElement element )
+    public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormControlProvider[] providers = null )
     {
       _element = element;
 
+      Configuration = configuration ?? FormConfiguration.Default;
 
-      RefreshForm();
-
+      Providers = providers ?? new[] { new StandardFormControlProvider() };
     }
+
+
+    /// <summary>
+    /// 表单控件提供程序
+    /// </summary>
+    protected IFormControlProvider[] Providers
+    {
+      get;
+      private set;
+    }
+
 
 
     /// <summary>
@@ -55,42 +66,11 @@ namespace Ivony.Html.Forms
     public void RefreshForm()
     {
 
-      TextControls =
-      Element.Find( "input[type=text][name] , input[type=password][name] , input[type=hidden][name]" )
-        .Select( e => new HtmlInputText( this, e ) ).Cast<IHtmlTextControl>()
-        .Union( Element.Find( "textarea[name]" ).Select( e => new HtmlTextArea( this, e ) ).Cast<IHtmlTextControl>() )
-        .ToArray();
-
-
-      GroupControls =
-      Element.Find( "select[name]" )
-        .Select( select => new HtmlSelect( this, select ) ).Cast<IHtmlGroupControl>()
-        .Union( HtmlButtonGroup.CaptureInputGroups( this ).Cast<IHtmlGroupControl>() )
-        .ToArray();
-
-
-
-
-      labels = Element.Find( "label[for]" ).Select( e => new HtmlLabel( this, e ) ).ToArray();
-
-      labels.GroupBy( l => l.ForElementId ).ForAll( grouping =>
-        labelsTable.Add( grouping.Key, grouping.ToArray() ) );
-
-
-      _inputControls = new InputControlCollection( this );
-      _formValues = new FormValueCollection( this );
+      InputControls = new InputControlCollection( this );
 
     }
 
 
-
-    internal IHtmlGroupControl[] GroupControls { get; private set; }
-
-    internal IHtmlTextControl[] TextControls { get; private set; }
-
-
-
-    private InputControlCollection _inputControls;
 
     /// <summary>
     /// 获取表单所有的输入控件
@@ -124,7 +104,7 @@ namespace Ivony.Html.Forms
       return labelsTable[elementId].CastTo<HtmlLabel[]>().IfNull( new HtmlLabel[0] );
     }
 
-  
-public  FormConfiguration Configuration { get; private set; }
+
+    public FormConfiguration Configuration { get; private set; }
   }
 }

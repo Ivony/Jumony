@@ -22,7 +22,7 @@ namespace Ivony.Html.Forms
       Form = form;
     }
 
-    
+
     /// <summary>
     /// 控件所属的表单
     /// </summary>
@@ -42,7 +42,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 控件值
     /// </summary>
-    public abstract string Value { get; }
+    public abstract string Value { get; set; }
 
 
     /// <summary>

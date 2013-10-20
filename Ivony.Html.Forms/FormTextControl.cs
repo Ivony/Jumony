@@ -50,8 +50,18 @@ namespace Ivony.Html.Forms
       SetValue( value );
     }
 
+
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <returns>该控件目前设置的值</returns>
     protected abstract string GetValue();
 
+
+    /// <summary>
+    /// 设置值
+    /// </summary>
+    /// <param name="value">需要设置在该控件上的值</param>
     protected abstract void SetValue( string value );
 
 

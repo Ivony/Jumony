@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
-  
+
   public class FormConfiguration
   {
     /// <summary>
@@ -22,5 +22,10 @@ namespace Ivony.Html.Forms
     /// 给文本输入控件设置值时，是否应当检查设置的值超出了 maxlength 属性所允许的长度。
     /// </summary>
     public bool CheckMaxLength { get; set; }
+
+    public static FormConfiguration Default
+    {
+      get { return new FormConfiguration(); }
+    }
   }
 }

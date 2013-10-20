@@ -16,7 +16,10 @@ namespace Ivony.Html.Forms
     protected FormTextControl( HtmlForm form, IHtmlElement element )
       : base( form )
     {
+
       Element = element;
+      MaxLength = GetMaxLength();
+
     }
 
     public IHtmlElement Element
@@ -33,12 +36,56 @@ namespace Ivony.Html.Forms
 
     public override string Value
     {
-      get { return Element.Attribute( "value" ).Value(); }
+      get { return GetValue(); }
+      set { SetValueInternal( value ); }
     }
+
+
+
+    private void SetValueInternal( string value )
+    {
+      if ( Form.Configuration.CheckMaxLength && value.Length > MaxLength )
+        throw new FormValueFormatException( this, "设置的值超出了 maxlength 所允许的长度" );
+
+      SetValue( value );
+    }
+
+    protected abstract string GetValue();
+
+    protected abstract void SetValue( string value );
+
 
     public override bool CanSetValue( string value )
     {
-      return true;
+
+      if ( Form.Configuration.CheckMaxLength )
+        return value.Length <= MaxLength;
+
+      else
+        return true;
     }
+
+
+    public int? MaxLength
+    {
+      get;
+      private set;
+    }
+
+
+    private int? GetMaxLength()
+    {
+      int value;
+      if ( int.TryParse( Element.Attribute( "maxlength" ).Value(), out value ) )
+        return value;
+
+
+      if ( Form.Configuration.ExceptionOnAttributeError )
+        throw new FormControlException( this, "maxlength 属性设置错误" );
+
+      Element.RemoveAttribute( "maxlength" );
+      return null;
+    }
+
   }
 }

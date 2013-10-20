@@ -9,9 +9,23 @@ namespace Ivony.Html.Forms
   public class HtmlTextArea : FormTextControl
   {
 
-    internal HtmlTextArea( HtmlForm form, IHtmlElement element ) : base( form, element )
+    internal HtmlTextArea( HtmlForm form, IHtmlElement element )
+      : base( form, element )
     {
     }
+
+
+
+    protected override string GetValue()
+    {
+      return Element.InnerText();
+    }
+
+    protected override void SetValue( string value )
+    {
+      Element.InnerText( value );
+    }
+
 
   }
 }

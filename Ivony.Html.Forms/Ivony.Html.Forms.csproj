@@ -66,6 +66,7 @@
     <Compile Include="FormGroupControl.cs" />
     <Compile Include="FormGroupControlBase.cs" />
     <Compile Include="FormGroupControlItem.cs" />
+    <Compile Include="FormValueException.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="FormTextControl.cs" />
     <Compile Include="FormValueCollection.cs" />

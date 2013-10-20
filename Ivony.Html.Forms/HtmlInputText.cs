@@ -8,33 +8,22 @@ namespace Ivony.Html.Forms
   public class HtmlInputText : FormTextControl
   {
 
-    internal HtmlInputText( HtmlForm form, IHtmlElement element )
-      : base( form, element )
+    internal HtmlInputText( HtmlForm form, IHtmlElement element ) : base( form, element ) { }
+
+
+
+    protected override string GetValue()
     {
-      MaxLength = GetMaxLength();
+      return Element.Attribute( "value" ).Value() ?? "";
     }
 
-
-    public int? MaxLength
+    protected override void SetValue( string value )
     {
-      get;
-      private set;
+      var singleline = value.Replace( "\r", "" ).Replace( "\n", "" );
+      if ( singleline.Length != value.Length && !Form.Configuration.IgnoreNewline )
+        throw new FormValueFormatException( this, "单行文本框不能输入多行文本值" );
+
+      Element.SetAttribute( "value", value );
     }
-
-
-    private int? GetMaxLength()
-    {
-      int value;
-      if ( int.TryParse( Element.Attribute( "maxlength" ).Value(), out value ) )
-        return value;
-
-
-      if ( Form.Configuration.ExceptionOnAttributeError )
-        throw new FormControlException( this, "maxlength 属性设置错误" );
-
-      Element.RemoveAttribute( "maxlength" );
-      return null;
-    }
-
   }
 }

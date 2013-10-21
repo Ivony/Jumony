@@ -12,9 +12,9 @@ namespace Ivony.Web
   public static class VirtualPathBasedProviders
   {
 
-    private static List<IVirtualPathBasedProvider> _providers;
+    private static List<IVirtualPathBasedProvider> _providers = new List<IVirtualPathBasedProvider>();
 
-    private static object _sync;
+    private static object _sync = new object();
 
 
 

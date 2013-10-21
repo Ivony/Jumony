@@ -25,40 +25,10 @@ namespace Ivony.Html.Web
 
     static HtmlProviders()
     {
-      ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
-      ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
       RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
       CachePolicyProviders = new SynchronizedCollection<ICachePolicyProvider>( _cachePoliciesSync );
 
-
-      ContentProviders.Add( new StaticFileLoader() );
-      ContentProviders.Add( new AspxFileLoader() );
-
       RequestMappers.Add( new DefaultRequestMapper() );
-    }
-
-
-    private static readonly object _parserProvidersSync = new object();
-
-    /// <summary>
-    /// 所有解析器提供程序
-    /// </summary>
-    public static ICollection<IHtmlParserProvider> ParserProviders
-    {
-      get;
-      private set;
-    }
-
-
-    private static readonly object _contentProvidersSync = new object();
-
-    /// <summary>
-    /// 所有内容提供程序
-    /// </summary>
-    public static ICollection<IHtmlContentProvider> ContentProviders
-    {
-      get;
-      private set;
     }
 
 
@@ -147,20 +117,18 @@ namespace Ivony.Html.Web
         throw VirtualPathFormatError( "virtualPath" );
 
 
-      lock ( _contentProvidersSync )
-      {
-        foreach ( var provider in ContentProviders )
-        {
-          var result = provider.LoadContent( virtualPath );
 
-          if ( result != null )
-            return result;
-        }
-      }
+      var provider = VirtualPathBasedProviders.GetService<IHtmlContentProvider>( virtualPath, Default );
 
+      if ( provider != null )
+        return provider.LoadContent( virtualPath );
 
       return null;
     }
+
+
+
+    internal static DefaultProviders Default = new DefaultProviders();
 
 
     internal static Exception VirtualPathFormatError( string paramName )
@@ -262,38 +230,14 @@ namespace Ivony.Html.Web
 
 
 
-
-      lock ( _parserProvidersSync )
-      {
-        foreach ( var provider in ParserProviders )
-        {
-          var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
-
-          if ( parser != null )
-            return parser;
-
-        }
-      }
-
-
-      //默认行为
-      return DefaultParserProvider.GetParser( contentResult.VirtualPath, contentResult.Content );
-    }
-
-
-    private static IHtmlParserProvider _defaultParserProvider = new DefaultParserProvider();
-
-    /// <summary>
-    /// 获取默认的 HTML 解析器
-    /// </summary>
-    public static IHtmlParserProvider DefaultParserProvider
-    {
-      get { return _defaultParserProvider; }
+      var provider = VirtualPathBasedProviders.GetService<IHtmlParserProvider>( contentResult.VirtualPath, Default );
+      
+      return provider.GetParser( contentResult.VirtualPath, contentResult.Content );
     }
 
 
 
-
+    
     private const string DocumentCacheKey = "HtmlProviders_HtmlDocumentCache_{0}";
 
     /// <summary>

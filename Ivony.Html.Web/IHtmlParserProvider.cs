@@ -97,7 +97,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 默认的 HTML 解析器提供程序
   /// </summary>
-  public class DefaultParserProvider : IHtmlParserProvider
+  public class JumonyParserProvider : IHtmlParserProvider
   {
 
 

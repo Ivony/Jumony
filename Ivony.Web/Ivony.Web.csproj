@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
@@ -55,12 +56,14 @@
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICachePolicyProvider.cs" />
     <Compile Include="ICacheStorageProvider.cs" />
+    <Compile Include="IVirtualPathBasedProvider.cs" />
     <Compile Include="PersistentCacheStorageProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawResponse.cs" />
     <Compile Include="SimpleRouteRule.cs" />
     <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="StandardCachePolicy.cs" />
+    <Compile Include="VirtualPathBasedProviders.cs" />
     <Compile Include="WebExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -98,13 +98,13 @@ namespace Ivony.Html.Web
     protected virtual IHtmlDocument LoadDocument( string virtualPath, out CacheDependency cacheDependency )
     {
       string cacheKey;
-      var document = HtmlHelper.LoadDocument( virtualPath, out cacheKey );
+      var document = HtmlProviders.LoadDocument( virtualPath, out cacheKey );
 
       if ( cacheKey != null )
         cacheDependency = new CacheDependency( new string[0], new string[] { cacheKey } );
 
       else
-        cacheDependency = HtmlHelper.CreateCacheDependency( virtualPath );
+        cacheDependency = HtmlProviders.CreateCacheDependency( virtualPath );
 
       return document;
     }

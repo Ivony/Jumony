@@ -182,7 +182,7 @@ namespace Ivony.Html.Web
     protected virtual ICachedResponse ResolveCache()
     {
 
-      var policy = HtmlHelper.GetCachePolicy( HttpContext );
+      var policy = HtmlProviders.GetCachePolicy( HttpContext );
 
       if ( policy == null )
         return null;

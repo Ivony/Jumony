@@ -31,7 +31,7 @@ namespace Ivony.Html.Web
 
       var request = context.Request;
 
-      var result = HtmlHelper.MapRequest( new HttpRequestWrapper( request ) );
+      var result = HtmlProviders.MapRequest( new HttpRequestWrapper( request ) );
 
       if ( result == null )
         return;

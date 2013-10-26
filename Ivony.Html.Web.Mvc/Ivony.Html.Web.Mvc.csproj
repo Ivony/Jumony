@@ -72,6 +72,7 @@
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
+    <Compile Include="FallbackCachePolicyProvider.cs" />
     <Compile Include="GlobalCacheFilter.cs" />
     <Compile Include="CachableAttribute.cs" />
     <Compile Include="HtmlViewHandlerWrapper.cs" />

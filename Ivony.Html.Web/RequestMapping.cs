@@ -89,7 +89,7 @@ namespace Ivony.Html.Web
     /// <returns>HTML 文档</returns>
     protected virtual IHtmlDocument LoadDocument( out string cacheKey )
     {
-      var document = HtmlProviders.LoadDocument( VirtualPath, out cacheKey );
+      var document = HtmlHelper.LoadDocument( VirtualPath, out cacheKey );
       return document;
     }
 

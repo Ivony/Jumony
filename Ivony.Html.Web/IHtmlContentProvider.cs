@@ -62,7 +62,7 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
+        throw HtmlHelper.VirtualPathFormatError( "virtualPath" );
 
       Provider = provider;
       Content = content;

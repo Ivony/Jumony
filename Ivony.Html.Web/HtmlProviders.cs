@@ -23,25 +23,6 @@ namespace Ivony.Html.Web
   public static class HtmlProviders
   {
 
-    static HtmlProviders()
-    {
-      CachePolicyProviders = new SynchronizedCollection<ICachePolicyProvider>( _cachePoliciesSync );
-    }
-
-
-    private static readonly object _mappersSync = new object();
-
-
-    private static readonly object _cachePoliciesSync = new object();
-
-    /// <summary>
-    /// 所有缓存策略提供程序
-    /// </summary>
-    public static ICollection<ICachePolicyProvider> CachePolicyProviders
-    {
-      get;
-      private set;
-    }
 
 
     /// <summary>
@@ -59,7 +40,7 @@ namespace Ivony.Html.Web
 
       var virtualPath = request.GetVirtualPath();
 
-      foreach ( var mapper in VirtualPathBasedProvider.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
+      foreach ( var mapper in WebServices.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
       {
         var result = mapper.MapRequest( request );
         if ( result != null )
@@ -104,7 +85,7 @@ namespace Ivony.Html.Web
 
 
 
-      var services = VirtualPathBasedProvider.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
+      var services = WebServices.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
       foreach ( var provider in services )
       {
         var result = provider.LoadContent( virtualPath );
@@ -112,8 +93,6 @@ namespace Ivony.Html.Web
         if ( result != null )
           return result;
       }
-
-
 
 
       return null;
@@ -223,7 +202,7 @@ namespace Ivony.Html.Web
 
 
 
-      foreach ( var provider in VirtualPathBasedProvider.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
+      foreach ( var provider in WebServices.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
       {
         var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
         if ( parser != null )
@@ -343,18 +322,15 @@ namespace Ivony.Html.Web
     /// <returns>适用于当前请求的缓存策略</returns>
     public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
-      lock ( _cachePoliciesSync )
+      foreach ( var provider in WebServices.GetServices<ICachePolicyProvider>() )
       {
-        foreach ( var provider in CachePolicyProviders )
-        {
-          CachePolicy policy = provider.CreateCachePolicy( context );
-          if ( policy != null )
-            return policy;
-        }
-
+        CachePolicy policy = provider.CreateCachePolicy( context );
+        if ( policy != null )
+          return policy;
       }
 
       return null;
+
     }
 
 

@@ -114,7 +114,7 @@ public class DomTreeController : Controller
 
     Stopwatch watch = new Stopwatch();
     watch.Start();
-    var document = HtmlProviders.LoadDocument( "~/Content/" + hash + ".html" );
+    var document = HtmlHelper.LoadDocument( "~/Content/" + hash + ".html" );
     watch.Stop();
 
     if ( document == null )

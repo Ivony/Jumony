@@ -68,5 +68,16 @@ namespace Ivony.Html.Web
       set;
     }
 
+
+    /// <summary>
+    /// 指示在 ASP.NET MVC 应用中，如果找不到合适的缓存策略，是否应当回溯查找传统的缓存策略提供程序。
+    /// </summary>
+    public bool FallbackCachePolicy
+    {
+      get;
+      set;
+    }
+
+
   }
 }

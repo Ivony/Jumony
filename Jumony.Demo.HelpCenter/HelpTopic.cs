@@ -150,7 +150,7 @@ namespace Jumony.Demo.HelpCenter
 
     public IHtmlDocument Document
     {
-      get { return HtmlProviders.LoadDocument( DocumentPath ); }
+      get { return HtmlHelper.LoadDocument( DocumentPath ); }
     }
 
 

@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
     <Compile Include="DefaultProviders.cs" />
+    <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />

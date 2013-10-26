@@ -8,7 +8,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
-  internal class DefaultProviders : IVirtualPathBasedProvider
+  internal class DefaultProviders
   {
 
 
@@ -16,31 +16,7 @@ namespace Ivony.Html.Web
     {
       StaticFileContentProvider = new StaticFileContentProvider();
       WebFormPageContentProvider = new WebFormPageContentProvider();
-      JumonyParserProvider = new JumonyParserProvider();
     }
-
-    public object GetService( string virtualPath, Type serviceType )
-    {
-
-      if ( serviceType == typeof( IHtmlContentProvider ) )
-      {
-        if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
-          return StaticFileContentProvider;
-
-        if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
-          return WebFormPageContentProvider;
-
-        return null;
-      }
-
-      else if ( serviceType == typeof( IHtmlParserProvider ) )
-        return JumonyParserProvider;
-
-      else
-        return null;
-
-    }
-
 
     public StaticFileContentProvider StaticFileContentProvider
     {
@@ -56,12 +32,28 @@ namespace Ivony.Html.Web
     }
 
 
-    public JumonyParserProvider JumonyParserProvider
+    public IEnumerable<IHtmlContentProvider> GetContentServices( string virtualPath )
     {
-      get;
-      private set;
+      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
+        return new IHtmlContentProvider[] { StaticFileContentProvider };
+
+      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
+        return new IHtmlContentProvider[] { WebFormPageContentProvider };
+
+      return null;
+    }
+
+    public IHtmlParser GetParser( string virtualPath )
+    {
+      return new WebParser();
     }
 
 
+    public IRequestMapper HtmlFileRequestMapper = new DefaultRequestMapper();
+
+    public IEnumerable<IRequestMapper> RequestMappers
+    {
+      get { return new[] { HtmlFileRequestMapper }; }
+    }
   }
 }

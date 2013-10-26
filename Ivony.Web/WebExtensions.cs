@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Hosting;
 
 namespace Ivony.Web
@@ -28,6 +29,19 @@ namespace Ivony.Web
 
 
     }
+
+
+
+    /// <summary>
+    /// 获取当前请求相对于应用程序根的虚拟路径
+    /// </summary>
+    /// <param name="request">HTTP 内部请求对象</param>
+    /// <returns>相对于应用程序根的虚拟路径</returns>
+    public static string GetVirtualPath( this HttpRequestBase request )
+    {
+      return request.AppRelativeCurrentExecutionFilePath + request.PathInfo;
+    }
+
 
   }
 }

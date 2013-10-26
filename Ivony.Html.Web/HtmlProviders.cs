@@ -25,23 +25,11 @@ namespace Ivony.Html.Web
 
     static HtmlProviders()
     {
-      RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
       CachePolicyProviders = new SynchronizedCollection<ICachePolicyProvider>( _cachePoliciesSync );
-
-      RequestMappers.Add( new DefaultRequestMapper() );
     }
 
 
     private static readonly object _mappersSync = new object();
-
-    /// <summary>
-    /// 所有请求映射提供程序
-    /// </summary>
-    public static ICollection<IRequestMapper> RequestMappers
-    {
-      get;
-      private set;
-    }
 
 
     private static readonly object _cachePoliciesSync = new object();
@@ -69,19 +57,17 @@ namespace Ivony.Html.Web
 
 
 
-      lock ( _mappersSync )
+      var virtualPath = request.GetVirtualPath();
+
+      foreach ( var mapper in VirtualPathBasedProvider.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
       {
-        foreach ( var mapper in RequestMappers )
+        var result = mapper.MapRequest( request );
+        if ( result != null )
         {
-          var result = mapper.MapRequest( request );
-          if ( result != null )
-          {
-            result.Mapper = mapper;
-            return result;
-          }
+          result.Mapper = mapper;
+          return result;
         }
       }
-
 
       return null;
     }
@@ -118,10 +104,17 @@ namespace Ivony.Html.Web
 
 
 
-      var provider = VirtualPathBasedProviders.GetService<IHtmlContentProvider>( virtualPath, Default );
+      var services = VirtualPathBasedProvider.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
+      foreach ( var provider in services )
+      {
+        var result = provider.LoadContent( virtualPath );
 
-      if ( provider != null )
-        return provider.LoadContent( virtualPath );
+        if ( result != null )
+          return result;
+      }
+
+
+
 
       return null;
     }
@@ -230,14 +223,19 @@ namespace Ivony.Html.Web
 
 
 
-      var provider = VirtualPathBasedProviders.GetService<IHtmlParserProvider>( contentResult.VirtualPath, Default );
-      
-      return provider.GetParser( contentResult.VirtualPath, contentResult.Content );
+      foreach ( var provider in VirtualPathBasedProvider.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
+      {
+        var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
+        if ( parser != null )
+          return parser;
+      }
+
+      return Default.GetParser( contentResult.VirtualPath );
     }
 
 
 
-    
+
     private const string DocumentCacheKey = "HtmlProviders_HtmlDocumentCache_{0}";
 
     /// <summary>

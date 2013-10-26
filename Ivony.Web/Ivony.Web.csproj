@@ -52,11 +52,11 @@
     <Compile Include="ClientCachePolicy.cs" />
     <Compile Include="ClientCachePolicyModule.cs" />
     <Compile Include="ConflictCheckList.cs" />
+    <Compile Include="HtmlServiceProvider.cs" />
     <Compile Include="ICacheDependency.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICachePolicyProvider.cs" />
     <Compile Include="ICacheStorageProvider.cs" />
-    <Compile Include="IVirtualPathBasedProvider.cs" />
     <Compile Include="PersistentCacheStorageProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawResponse.cs" />

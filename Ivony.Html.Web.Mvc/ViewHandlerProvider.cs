@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
 
 
 namespace Ivony.Html.Web
@@ -84,10 +85,12 @@ namespace Ivony.Html.Web
     /// <returns>该虚拟路径的视图处理程序</returns>
     public static IViewHandler GetViewHandler( string virtualPath )
     {
-      var handler = ViewHandlerProviders.Select( provider => provider.FindViewHandler( virtualPath ) ).NotNull().FirstOrDefault();
-
-      if ( handler != null )
-        return handler;
+      foreach ( var provider in VirtualPathBasedProvider.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
 
       return GetViewHandlerInternal( virtualPath + ".ashx", true );
     }
@@ -100,10 +103,13 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public static IViewHandler GetMasterViewHandler( string virtualPath )
     {
-      var handler = ViewHandlerProviders.Select( provider => provider.FindViewHandler( virtualPath ) ).NotNull().FirstOrDefault();
 
-      if ( handler != null )
-        return handler;
+      foreach ( var provider in VirtualPathBasedProvider.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
 
       return GetViewHandlerInternal( virtualPath + ".ashx", false );
     }
@@ -188,7 +194,7 @@ namespace Ivony.Html.Web
       return handlerMeta.Attribute( "value" ).Value();
     }
 
-    
+
 
 
   }

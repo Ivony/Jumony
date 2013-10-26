@@ -26,25 +26,32 @@ namespace Ivony.Web
     private static Hashtable servicesCache = Hashtable.Synchronized( new Hashtable() );
 
 
+
+    /// <summary>
+    /// 注册一个服务
+    /// </summary>
+    /// <param name="service">要注册的服务对象</param>
+    public static void RegisterService( object service )
+    {
+      lock ( sync )
+      {
+        globalServices.Insert( 0, service );
+        return;
+      }
+    }
+
+    
     /// <summary>
     /// 注册一个服务
     /// </summary>
     /// <param name="service">服务对象</param>
     /// <param name="virtualPath">所适用的虚拟路径范围</param>
-    public static void RegisterService( object service, string virtualPath = null )
+    public static void RegisterService( object service, string virtualPath )
     {
 
 
       if ( virtualPath == null )
-      {
-        lock ( sync )
-        {
-          globalServices.Insert( 0, service );
-          return;
-        }
-      }
-
-
+        throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
@@ -111,7 +118,6 @@ namespace Ivony.Web
     /// <summary>
     /// 从注册服务列表中检索服务
     /// </summary>
-    /// <typeparam name="T">服务类型</typeparam>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>该虚拟路径注册的所有服务对象</returns>
     private static object[] GetServicesFromServiceMap( string virtualPath )

@@ -322,7 +322,10 @@ namespace Ivony.Html.Web
     /// <returns>适用于当前请求的缓存策略</returns>
     public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
-      foreach ( var provider in WebServices.GetServices<ICachePolicyProvider>() )
+
+      var virtualPath = context.Request.GetVirtualPath();
+
+      foreach ( var provider in WebServices.GetServices<ICachePolicyProvider>( virtualPath ) )
       {
         CachePolicy policy = provider.CreateCachePolicy( context );
         if ( policy != null )

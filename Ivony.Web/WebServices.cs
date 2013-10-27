@@ -40,7 +40,7 @@ namespace Ivony.Web
       }
     }
 
-    
+
     /// <summary>
     /// 注册一个服务
     /// </summary>
@@ -135,13 +135,14 @@ namespace Ivony.Web
         parent = VirtualPathUtility.Combine( virtualPath, "../" );
 
 
-      var services = (serviceMap[virtualPath] as ArrayList).Cast<object>();
-
-      if ( services != null )
-        return services.Concat( GetServicesFromServiceMap( parent ) ).ToArray();
+      
+      var services = serviceMap[virtualPath] as ArrayList;
+      
+      if ( services != null)
+        return services.Cast<object>().Concat( GetServicesFromServiceMap( parent ) ).ToArray();
 
       else
-        return services.ToArray();
+        return GetServicesFromServiceMap( parent );
     }
 
 

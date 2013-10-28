@@ -7,6 +7,11 @@ using System.Web.Hosting;
 
 namespace Ivony.Web
 {
+
+
+  /// <summary>
+  /// 提供关于 Web 开发的一些帮助方法
+  /// </summary>
   public static class WebExtensions
   {
 

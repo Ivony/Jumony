@@ -8,6 +8,11 @@ namespace Ivony.Html.Web
   public interface IViewFilterProvider
   {
 
+    /// <summary>
+    /// 获取指定虚拟路径所使用的视图筛选器
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns>视图筛选器</returns>
     IViewFilter[] GetFilters( string virtualPath );
 
   }

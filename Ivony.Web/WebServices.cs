@@ -60,7 +60,7 @@ namespace Ivony.Web
 
       lock ( sync )
       {
-        servicesCache = null;
+        servicesCache.Clear();
 
         var serviceCollection = serviceMap[virtualPath] as ArrayList;
         if ( serviceCollection == null )
@@ -84,35 +84,37 @@ namespace Ivony.Web
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
 
-      string directory = VirtualPathUtility.GetDirectory( virtualPath );
-
       lock ( sync )
       {
 
-        var services = servicesCache[directory] as object[];
+        var services = servicesCache[virtualPath] as object[];
         if ( services == null )
-          servicesCache[directory] = services = GetServicesFromServiceMap( directory );
+        {
+          string directory = VirtualPathUtility.GetDirectory( virtualPath );
+          servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( directory ) ).ToArray();
+        }
 
         return services.OfType<T>().Concat( GetServices<T>() ).ToArray();
-
       }
     }
-
 
 
     /// <summary>
-    /// 获取注册的全局服务对象
+    /// 获取指定虚拟路径中注册的服务
     /// </summary>
-    /// <typeparam name="T">服务类型</typeparam>
-    /// <returns>服务对象</returns>
-    public static T[] GetServices<T>() where T : class
+    /// <param name="virtualPath"></param>
+    /// <returns></returns>
+    private static object[] GetServices( string virtualPath )
     {
-      lock ( sync )
-      {
-        return globalServices.OfType<T>().ToArray();
-      }
-    }
 
+      var services = serviceMap[virtualPath] as ArrayList;
+      if ( services != null )
+        return services.Cast<object>().ToArray();
+
+      else
+        return new object[0];
+
+    }
 
 
     /// <summary>
@@ -129,21 +131,37 @@ namespace Ivony.Web
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
 
+      var services = servicesCache[virtualPath] as object[];
+      if ( services == null )
+      {
 
-      string parent = null;
-      if ( virtualPath != "~/" )
-        parent = VirtualPathUtility.Combine( virtualPath, "../" );
+        string parent = null;
+        if ( virtualPath != "~/" )
+          parent = VirtualPathUtility.Combine( virtualPath, "../" );
+
+        servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( parent ) ).ToArray();
+      }
 
 
-      
-      var services = serviceMap[virtualPath] as ArrayList;
-      
-      if ( services != null)
-        return services.Cast<object>().Concat( GetServicesFromServiceMap( parent ) ).ToArray();
-
-      else
-        return GetServicesFromServiceMap( parent );
+      return services;
     }
+
+
+
+
+    /// <summary>
+    /// 获取注册的全局服务对象
+    /// </summary>
+    /// <typeparam name="T">服务类型</typeparam>
+    /// <returns>服务对象</returns>
+    public static T[] GetServices<T>() where T : class
+    {
+      lock ( sync )
+      {
+        return globalServices.OfType<T>().ToArray();
+      }
+    }
+
 
 
     /// <summary>

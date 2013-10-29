@@ -62,8 +62,6 @@ namespace Ivony.Html.Web
     protected virtual IEnumerable<IViewFilter> GetFilters( ViewContext context )
     {
       var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
-
       filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
 
       return filters;
@@ -379,7 +377,20 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void ProcessScope( IViewHandler handler )
     {
-      handler.ProcessScope( ViewContext, Scope, Url );
+      handler.ProcessScope( CreateViewContext(), Scope, Url );
+    }
+
+
+    /// <summary>
+    /// 创建一个视图上下文供视图处理器使用
+    /// </summary>
+    /// <returns>视图上下文</returns>
+    private ViewContext CreateViewContext()
+    {
+      var viewData = new ViewDataDictionary( ViewContext.ViewData );
+      viewData[ViewFiltersDataKey] = Filters.OfType<IChildViewFilter>().ToArray();
+
+      return new ViewContext( ViewContext, this, viewData, ViewContext.TempData, ViewContext.Writer );
     }
 
 

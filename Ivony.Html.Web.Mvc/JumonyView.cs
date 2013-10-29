@@ -112,11 +112,10 @@ namespace Ivony.Html.Web
     /// 获取 HTML 渲染代理
     /// </summary>
     /// <remarks>
-    /// 默认的渲染代理包含两个，分别是：
+    /// 默认的渲染代理包含一个：
     /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
-    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
     /// </remarks>
-    /// <returns>返回默认的 HTML 渲染代理</returns>
+    /// <returns>HTML 渲染代理列表</returns>
     public virtual IList<IHtmlRenderAdapter> GetRenderAdapters( IViewHandler handler )
     {
 

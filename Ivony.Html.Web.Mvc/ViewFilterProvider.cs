@@ -31,7 +31,7 @@ namespace Ivony.Html.Web
       var filterProviders = WebServices.GetServices<IViewFilterProvider>( virtualPath );
 
 
-      return filterProviders.SelectMany( p => p.GetFilters( virtualPath ) ).ToArray();
+      return filterProviders.SelectMany( p => p.GetFilters( virtualPath ) ).Reverse().ToArray();
 
     }
 

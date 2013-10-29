@@ -59,12 +59,11 @@ namespace Ivony.Html.Web
     /// 获取当前视图所需要应用的筛选器。
     /// </summary>
     /// <returns></returns>
-    protected virtual IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    protected virtual IViewFilter[] GetFilters( ViewContext context )
     {
       var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
 
-      return filters;
+      return ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
     }
 
 

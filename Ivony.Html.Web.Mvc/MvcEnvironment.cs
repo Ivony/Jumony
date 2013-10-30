@@ -29,8 +29,6 @@ namespace Ivony.Html.Web
     {
       ViewEngines.Engines.Add( _viewEngine );
 
-      GlobalFilters.Filters.Add( GlobalCacheFilter = new GlobalCacheFilter() );
-
       CacheStorageProvider = new WebCacheStorageProvider( HostingEnvironment.Cache );
     }
 
@@ -149,17 +147,6 @@ namespace Ivony.Html.Web
     }
 
 
-
-
-
-    /// <summary>
-    /// 全局缓存筛选器，用于应用缓存策略。
-    /// </summary>
-    public static GlobalCacheFilter GlobalCacheFilter
-    {
-      get;
-      private set;
-    }
 
 
 

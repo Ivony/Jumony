@@ -66,7 +66,7 @@ namespace Ivony.Web
         if ( serviceCollection == null )
           serviceMap[virtualPath] = serviceCollection = new ArrayList();
 
-        serviceCollection.Insert( 1, service );
+        serviceCollection.Insert( 0, service );
       }
     }
 

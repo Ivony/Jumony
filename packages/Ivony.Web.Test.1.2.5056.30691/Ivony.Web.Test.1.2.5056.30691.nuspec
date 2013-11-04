@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Ivony.Web.Test</id>
+    <version>1.2.5056.30691</version>
+    <title>Ivony.Web.Test</title>
+    <authors>Ivony</authors>
+    <owners>Ivony</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Description</description>
+    <releaseNotes />
+    <copyright>Copyright ©  2013</copyright>
+    <language />
+  </metadata>
+</package>

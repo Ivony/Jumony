@@ -78,7 +78,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加一个元素
+    /// 在末尾添加一个元素
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="elementName">元素名</param>
@@ -101,7 +101,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加一个元素
+    /// 添加一个元素到指定位置
     /// </summary>
     /// <param name="container">要添加元素的容器</param>
     /// <param name="index">添加的位置</param>
@@ -127,7 +127,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加一个文本节点
+    /// 在末尾添加一个文本节点
     /// </summary>
     /// <param name="container">要添加文本节点的容器</param>
     /// <param name="htmlText">HTML 文本</param>
@@ -149,7 +149,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加一个文本节点
+    /// 添加一个文本节点到指定位置
     /// </summary>
     /// <param name="container">要添加文本节点的容器</param>
     /// <param name="index">添加的位置</param>
@@ -174,7 +174,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加一个注释节点
+    /// 在末尾添加一个注释节点
     /// </summary>
     /// <param name="container">要添加注释节点的容器</param>
     /// <param name="comment">HTML 注释文本</param>
@@ -196,7 +196,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加一个注释节点
+    /// 添加一个注释节点到指定位置
     /// </summary>
     /// <param name="container">要添加注释节点的容器</param>
     /// <param name="index">添加的位置</param>
@@ -222,7 +222,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加一个文档碎片
+    /// 在末尾添加一个文档碎片
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="fragment">要添加的碎片</param>
@@ -245,7 +245,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加一个文档碎片
+    /// 添加一个文档碎片到指定位置
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -267,7 +267,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加一个文档碎片
+    /// 在末尾添加一段 HTML 片段
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="html">要分析成碎片的 HTML 文本</param>
@@ -288,7 +288,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加一个文档碎片
+    /// 添加一段 HTML 片段到指定位置
     /// </summary>
     /// <param name="container">要添加碎片的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -313,7 +313,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加节点的副本
+    /// 在末尾添加节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="textNode">要创作副本的节点</param>
@@ -334,7 +334,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加节点的副本到指定位置
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">添加的位置</param>
@@ -356,7 +356,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加注释节点的副本
+    /// 在末尾添加注释节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="comment">要创作副本的注释节点</param>
@@ -377,7 +377,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加注释节点的副本
+    /// 添加注释节点的副本到指定位置
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -398,7 +398,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加元素的副本
+    /// 在末尾添加元素的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="element">要创作副本的元素</param>
@@ -419,7 +419,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加元素的副本
+    /// 添加元素的副本到指定位置
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -450,7 +450,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加节点的副本
+    /// 在末尾添加节点的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="node">要创作副本的节点</param>
@@ -472,7 +472,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加节点的副本
+    /// 添加节点的副本到指定位置
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -506,7 +506,7 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 添加节点集合的副本
+    /// 在末尾添加节点集合的副本
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="node">要创作副本的节点集合</param>
@@ -528,7 +528,7 @@ namespace Ivony.Html
     }
 
     /// <summary>
-    /// 添加节点集合的副本
+    /// 添加节点集合的副本到指定位置
     /// </summary>
     /// <param name="container">要添加副本的容器</param>
     /// <param name="index">要添加的位置</param>
@@ -584,10 +584,10 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建碎片的副本
+    /// 创建文档片段的副本
     /// </summary>
-    /// <param name="fragment">要创建副本的碎片</param>
-    /// <returns>碎片的副本</returns>
+    /// <param name="fragment">要创建副本的文档片段</param>
+    /// <returns>文档片段的副本</returns>
     public static IHtmlFragment MakeCopy( this IHtmlFragment fragment )
     {
       if ( fragment == null )

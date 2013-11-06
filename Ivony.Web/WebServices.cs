@@ -71,6 +71,93 @@ namespace Ivony.Web
     }
 
 
+    /// <summary>
+    /// 取消注册服务
+    /// </summary>
+    /// <param name="service">要取消注册的服务对象</param>
+    /// <param name="backtracking">是否要清理所有路径的注册，如果设置为 false 则只清理注册在全局服务</param>
+    public static void UnregisterService( object service, bool backtracking = true )
+    {
+      if ( service == null )
+        throw new ArgumentNullException( "service" );
+
+
+      lock ( sync )
+      {
+        servicesCache.Clear();
+
+        globalServices.Remove( service );
+
+        if ( backtracking )
+        {
+          foreach ( string path in serviceMap.Keys )
+          {
+            UnregisterCore( path, service );
+          }
+        }
+
+      }
+    }
+
+
+    /// <summary>
+    /// 在指定虚拟路径上取消注册服务
+    /// </summary>
+    /// <param name="service">要取消注册的服务对象</param>
+    /// <param name="virtualPath">要取消注册的虚拟路径</param>
+    /// <param name="backtracking">是否要上溯清理所有父级路径的注册，如果设置为 false 则只清理当前路径的注册</param>
+    public static void UnregisterService( object service, string virtualPath, bool backtracking = true )
+    {
+
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+      if ( service == null )
+        throw new ArgumentNullException( "service" );
+
+      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
+        throw VirtualPathFormatError( "virtualPath" );
+
+
+      lock ( sync )
+      {
+        servicesCache.Clear();
+
+        UnregisterCore( virtualPath, service );
+
+        if ( backtracking )
+        {
+
+          string parent;
+
+          if ( virtualPath == "~/" )
+            parent = null;
+
+          else if ( virtualPath.EndsWith( "/" ) )
+            parent = VirtualPathUtility.Combine( virtualPath, "../" );
+
+          else
+            parent = VirtualPathUtility.GetDirectory( virtualPath );
+
+          if ( parent != null )
+            UnregisterService( service, parent, true );
+        }
+
+      }
+
+    }
+
+    private static void UnregisterCore( string virtualPath, object service )
+    {
+      var services = serviceMap[virtualPath] as ArrayList;
+      if ( services == null || services.Count == 0 )
+        return;
+
+      services.Remove( service );
+    }
+
+
+
 
     /// <summary>
     /// 获取指定虚拟路径所有服务对象

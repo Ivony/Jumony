@@ -31,7 +31,11 @@ namespace WebTest
       Assert.Contains( services, service2, "注册服务在目录失败" );
       Assert.Contains( services, service3, "注册服务在根目录失败" );
       Assert.Contains( services, globalService, "注册全局服务失败" );
+
+      WebServices.UnregisterService( service1 );
+      
     }
+
 
     public void ContentService()
     {

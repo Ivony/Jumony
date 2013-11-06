@@ -77,7 +77,7 @@ namespace Ivony.Html.Web
       }
 
 
-      return new HtmlContentResult( this, content, virtualPath, key );
+      return new HtmlContentResult( content, key );
     }
 
 

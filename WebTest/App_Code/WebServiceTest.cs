@@ -54,7 +54,7 @@ namespace WebTest
       public HtmlContentResult LoadContent( string virtualPath )
       {
         if ( virtualPath == testContentPath )
-          return new HtmlContentResult( this, testContent, virtualPath );
+          return new HtmlContentResult( testContent, virtualPath );
 
         else
           return null;

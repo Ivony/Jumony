@@ -91,7 +91,11 @@ namespace Ivony.Html.Web
         var result = provider.LoadContent( virtualPath );
 
         if ( result != null )
+        {
+          result.Provider = provider;
+          result.VirtualPath = virtualPath;
           return result;
+        }
       }
 
 

@@ -40,7 +40,7 @@ namespace Ivony.Html.Web
     /// <param name="provider">负责加载的提供程序</param>
     /// <param name="content">加载的内容</param>
     /// <param name="virtualPath">内容的虚拟路径</param>
-    public HtmlContentResult( IHtmlContentProvider provider, string content, string virtualPath ) : this( provider, content, virtualPath, null ) { }
+    public HtmlContentResult( string content ) : this( content,  null ) { }
 
     /// <summary>
     /// 创建 HtmlContentResult 实例
@@ -49,24 +49,13 @@ namespace Ivony.Html.Web
     /// <param name="content">加载的内容</param>
     /// <param name="virtualPath">内容的虚拟路径</param>
     /// <param name="cacheKey">缓存内容所使用的缓存键</param>
-    public HtmlContentResult( IHtmlContentProvider provider, string content, string virtualPath, string cacheKey )
+    public HtmlContentResult(  string content, string cacheKey )
     {
-
-      if ( provider == null )
-        throw new ArgumentNullException( "provider" );
 
       if ( content == null )
         throw new ArgumentNullException( "content" );
 
-      if ( virtualPath == null )
-        throw new ArgumentNullException( "virtualPath" );
-
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
-
-      Provider = provider;
       Content = content;
-      VirtualPath = virtualPath;
       CacheKey = cacheKey;
     }
 
@@ -82,16 +71,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取产生此结果的 HtmlContentProvider
-    /// </summary>
-    public IHtmlContentProvider Provider
-    {
-      get;
-      private set;
-    }
-
-
-    /// <summary>
     /// 获取缓存时使用的索引键
     /// </summary>
     public string CacheKey
@@ -100,13 +79,24 @@ namespace Ivony.Html.Web
       private set;
     }
 
+
+    /// <summary>
+    /// 获取产生此结果的 HtmlContentProvider
+    /// </summary>
+    public IHtmlContentProvider Provider
+    {
+      get;
+      internal set;
+    }
+
+
     /// <summary>
     /// 加载内容的虚拟路径
     /// </summary>
     public string VirtualPath
     {
       get;
-      private set;
+      internal set;
     }
 
   }

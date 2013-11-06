@@ -35,7 +35,7 @@ namespace Ivony.Html.Web
       {
         HttpContext.Current.Server.Execute( virtualPath, writer, false );
 
-        return new HtmlContentResult( this, writer.ToString(), virtualPath );
+        return new HtmlContentResult( writer.ToString(), virtualPath );
       }
     }
   }

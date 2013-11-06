@@ -36,12 +36,19 @@ namespace WebTest
     public void ContentService()
     {
 
-      WebServices.RegisterService( new TestContentService(), VirtualPathUtility.GetDirectory( testContentPath ) );
+      var provider = new TestContentService();
+
+      WebServices.RegisterService( , VirtualPathUtility.GetDirectory( testContentPath ) );
       var result = HtmlProviders.LoadContent( testContentPath );
 
       Assert.AreEqual( result.Content, testContent, "测试内容提供程序失败" );
 
+      Assert.AreEqual( result.Provider, provider, "内容结果中的提供程序错误" );
+      Assert.AreEqual( result.VirtualPath, testContentPath, "内容结果中的虚拟路径错误" );
+
     }
+
+
 
 
     private const string testContentPath = "~/test/content/1.html";

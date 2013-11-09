@@ -37,17 +37,13 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 HtmlContentResult 实例
     /// </summary>
-    /// <param name="provider">负责加载的提供程序</param>
     /// <param name="content">加载的内容</param>
-    /// <param name="virtualPath">内容的虚拟路径</param>
     public HtmlContentResult( string content ) : this( content,  null ) { }
 
     /// <summary>
     /// 创建 HtmlContentResult 实例
     /// </summary>
-    /// <param name="provider">负责加载的提供程序</param>
     /// <param name="content">加载的内容</param>
-    /// <param name="virtualPath">内容的虚拟路径</param>
     /// <param name="cacheKey">缓存内容所使用的缓存键</param>
     public HtmlContentResult(  string content, string cacheKey )
     {

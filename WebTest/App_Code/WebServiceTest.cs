@@ -24,7 +24,8 @@ namespace WebTest
       WebServices.RegisterService( service3, "~/" );
       WebServices.RegisterService( globalService );
 
-      var services = WebServices.GetServices<string>( "~/test/1.html" );
+      string path = "~/test/1.html";
+      var services = WebServices.GetServices<string>( path );
 
 
       Assert.Contains( services, service1, "注册服务在页面失败" );
@@ -32,8 +33,21 @@ namespace WebTest
       Assert.Contains( services, service3, "注册服务在根目录失败" );
       Assert.Contains( services, globalService, "注册全局服务失败" );
 
-      WebServices.UnregisterService( service1 );
-      
+      WebServices.UnregisterService( service1, path );
+      Assert.NotContains( WebServices.GetServices<string>( path ), service1, "在页面解除注册服务失败" );
+
+      WebServices.UnregisterService( service2, path );
+      Assert.NotContains( WebServices.GetServices<string>( path ), service2, "在目录解除注册服务失败" );
+
+      WebServices.UnregisterService( service3, path );
+      Assert.NotContains( WebServices.GetServices<string>( path ), service3, "在根目录解除注册服务失败" );
+
+      WebServices.UnregisterService( globalService );
+      Assert.NotContains( WebServices.GetServices<string>( path ), globalService, "解除注册全局服务失败" );
+
+
+
+
     }
 
 

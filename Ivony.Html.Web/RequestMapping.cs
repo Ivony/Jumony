@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Web;
+using Ivony.Web;
 
 namespace Ivony.Html.Web
 {
@@ -25,7 +26,7 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw new ArgumentException( "模版文件路径只能使用应用程序根相对路径，即以~/开头的路径，调用VirtualPathUtility.ToAppRelative方法或使用HttpRequest.AppRelativeCurrentExecutionFilePath属性获取", "templatePath" );
+        throw WebServices.VirtualPathFormatError( "virtualPath" );
 
       VirtualPath = virtualPath;
       Handler = handler;

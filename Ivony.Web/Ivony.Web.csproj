@@ -52,7 +52,6 @@
     <Compile Include="ClientCachePolicy.cs" />
     <Compile Include="ClientCachePolicyModule.cs" />
     <Compile Include="ConflictCheckList.cs" />
-    <Compile Include="HtmlServiceProvider.cs" />
     <Compile Include="ICacheDependency.cs" />
     <Compile Include="ICachedResponse.cs" />
     <Compile Include="ICachePolicyProvider.cs" />
@@ -64,7 +63,7 @@
     <Compile Include="SimpleRouteRule.cs" />
     <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="StandardCachePolicy.cs" />
-    <Compile Include="WebServices.cs" />
+    <Compile Include="WebServiceLocator.cs" />
     <Compile Include="WebExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

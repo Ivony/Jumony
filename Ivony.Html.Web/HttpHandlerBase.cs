@@ -29,7 +29,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取与该 Page 对象关联的 HttpResponse 对象。该对象使您得以将 HTTP 响应数据发送到客户端，并包含有关该响应的信息
+    /// 获取 HttpResponse 对象。该对象使您得以将 HTTP 响应数据发送到客户端，并包含有关该响应的信息
     /// </summary>
     protected HttpResponseBase Response
     {

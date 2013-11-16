@@ -40,7 +40,7 @@ namespace Ivony.Html.Web
 
       var virtualPath = request.GetVirtualPath();
 
-      foreach ( var mapper in WebServices.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
+      foreach ( var mapper in WebServiceLocator.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
       {
         var result = mapper.MapRequest( request );
         if ( result != null )
@@ -85,7 +85,7 @@ namespace Ivony.Html.Web
 
 
 
-      var services = WebServices.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
+      var services = WebServiceLocator.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
       foreach ( var provider in services )
       {
         var result = provider.LoadContent( virtualPath );
@@ -206,7 +206,7 @@ namespace Ivony.Html.Web
 
 
 
-      foreach ( var provider in WebServices.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
+      foreach ( var provider in WebServiceLocator.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
       {
         var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
         if ( parser != null )
@@ -329,7 +329,7 @@ namespace Ivony.Html.Web
 
       var virtualPath = context.Request.GetVirtualPath();
 
-      foreach ( var provider in WebServices.GetServices<ICachePolicyProvider>( virtualPath ) )
+      foreach ( var provider in WebServiceLocator.GetServices<ICachePolicyProvider>( virtualPath ) )
       {
         CachePolicy policy = provider.CreateCachePolicy( context );
         if ( policy != null )

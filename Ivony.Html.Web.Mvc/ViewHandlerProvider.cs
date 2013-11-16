@@ -85,7 +85,7 @@ namespace Ivony.Html.Web
     /// <returns>该虚拟路径的视图处理程序</returns>
     public static IViewHandler GetViewHandler( string virtualPath )
     {
-      foreach ( var provider in WebServices.GetServices<IViewHandlerProvider>( virtualPath ) )
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
       {
         var handler = provider.FindViewHandler( virtualPath );
         if ( handler != null )
@@ -104,7 +104,7 @@ namespace Ivony.Html.Web
     public static IViewHandler GetMasterViewHandler( string virtualPath )
     {
 
-      foreach ( var provider in WebServices.GetServices<IViewHandlerProvider>( virtualPath ) )
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
       {
         var handler = provider.FindViewHandler( virtualPath );
         if ( handler != null )

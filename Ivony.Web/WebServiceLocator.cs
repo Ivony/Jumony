@@ -13,7 +13,7 @@ namespace Ivony.Web
   /// <summary>
   /// Web 服务注册点
   /// </summary>
-  public static class WebServices
+  public static class WebServiceLocator
   {
 
     private static object sync = new object();

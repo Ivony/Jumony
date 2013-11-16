@@ -26,7 +26,7 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw WebServices.VirtualPathFormatError( "virtualPath" );
+        throw WebServiceLocator.VirtualPathFormatError( "virtualPath" );
 
       VirtualPath = virtualPath;
       Handler = handler;

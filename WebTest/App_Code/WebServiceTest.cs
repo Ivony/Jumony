@@ -19,13 +19,13 @@ namespace WebTest
 
       var globalService = "global";
 
-      WebServices.RegisterService( service1, "~/test/1.html" );
-      WebServices.RegisterService( service2, "~/test/" );
-      WebServices.RegisterService( service3, "~/" );
-      WebServices.RegisterService( globalService );
+      WebServiceLocator.RegisterService( service1, "~/test/1.html" );
+      WebServiceLocator.RegisterService( service2, "~/test/" );
+      WebServiceLocator.RegisterService( service3, "~/" );
+      WebServiceLocator.RegisterService( globalService );
 
       string path = "~/test/1.html";
-      var services = WebServices.GetServices<string>( path );
+      var services = WebServiceLocator.GetServices<string>( path );
 
 
       Assert.Contains( services, service1, "注册服务在页面失败" );
@@ -33,17 +33,17 @@ namespace WebTest
       Assert.Contains( services, service3, "注册服务在根目录失败" );
       Assert.Contains( services, globalService, "注册全局服务失败" );
 
-      WebServices.UnregisterService( service1, path );
-      Assert.NotContains( WebServices.GetServices<string>( path ), service1, "在页面解除注册服务失败" );
+      WebServiceLocator.UnregisterService( service1, path );
+      Assert.NotContains( WebServiceLocator.GetServices<string>( path ), service1, "在页面解除注册服务失败" );
 
-      WebServices.UnregisterService( service2, path );
-      Assert.NotContains( WebServices.GetServices<string>( path ), service2, "在目录解除注册服务失败" );
+      WebServiceLocator.UnregisterService( service2, path );
+      Assert.NotContains( WebServiceLocator.GetServices<string>( path ), service2, "在目录解除注册服务失败" );
 
-      WebServices.UnregisterService( service3, path );
-      Assert.NotContains( WebServices.GetServices<string>( path ), service3, "在根目录解除注册服务失败" );
+      WebServiceLocator.UnregisterService( service3, path );
+      Assert.NotContains( WebServiceLocator.GetServices<string>( path ), service3, "在根目录解除注册服务失败" );
 
-      WebServices.UnregisterService( globalService );
-      Assert.NotContains( WebServices.GetServices<string>( path ), globalService, "解除注册全局服务失败" );
+      WebServiceLocator.UnregisterService( globalService );
+      Assert.NotContains( WebServiceLocator.GetServices<string>( path ), globalService, "解除注册全局服务失败" );
 
 
 
@@ -56,7 +56,7 @@ namespace WebTest
 
       var provider = new TestContentService();
 
-      WebServices.RegisterService( provider, VirtualPathUtility.GetDirectory( testContentPath ) );
+      WebServiceLocator.RegisterService( provider, VirtualPathUtility.GetDirectory( testContentPath ) );
       var result = HtmlProviders.LoadContent( testContentPath );
 
       Assert.AreEqual( result.Content, testContent, "测试内容提供程序失败" );

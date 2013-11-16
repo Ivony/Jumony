@@ -119,7 +119,7 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public static CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
-      foreach ( var provider in WebServices.GetServices<IMvcCachePolicyProvider>() )
+      foreach ( var provider in WebServiceLocator.GetServices<IMvcCachePolicyProvider>() )
       {
         var policy = provider.CreateCachePolicy( context, action, parameters );
         if ( policy != null )

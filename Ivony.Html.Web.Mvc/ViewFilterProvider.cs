@@ -25,10 +25,10 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw WebServices.VirtualPathFormatError( "virtualPath" );
+        throw WebServiceLocator.VirtualPathFormatError( "virtualPath" );
 
 
-      var filterProviders = WebServices.GetServices<IViewFilterProvider>( virtualPath );
+      var filterProviders = WebServiceLocator.GetServices<IViewFilterProvider>( virtualPath );
 
 
       return filterProviders.SelectMany( p => p.GetFilters( virtualPath ) ).Reverse().ToArray();

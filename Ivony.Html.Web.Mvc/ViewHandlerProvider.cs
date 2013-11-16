@@ -7,6 +7,11 @@ using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Ivony.Fluent;
+using Ivony.Html;
+using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
+
 
 namespace Ivony.Html.Web
 {
@@ -73,15 +78,53 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 获取视图处理程序
+    /// </summary>
+    /// <param name="virtualPath">视图的虚拟路径</param>
+    /// <returns>该虚拟路径的视图处理程序</returns>
+    public static IViewHandler GetViewHandler( string virtualPath )
+    {
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
+
+      return GetViewHandlerInternal( virtualPath + ".ashx", true );
+    }
+
+
+    /// <summary>
+    /// 查找母板视图的处理程序
+    /// </summary>
+    /// <param name="virtualPath">母板视图虚拟路径</param>
+    /// <returns></returns>
+    public static IViewHandler GetMasterViewHandler( string virtualPath )
+    {
+
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
+
+      return GetViewHandlerInternal( virtualPath + ".ashx", false );
+    }
+
+
 
     /// <summary>
     /// 获取视图处理程序
     /// </summary>
     /// <param name="virtualPath">视图的虚拟路径</param>
-    /// <param name="excludeDefaultHandler">是否要查找默认视图处理程序</param>
+    /// <param name="includeDefaultHandler">是否要查找默认视图处理程序</param>
     /// <returns>该虚拟路径的视图处理程序</returns>
-    public static IViewHandler GetViewHandler( string virtualPath, bool includeDefaultHandler )
+    internal static IViewHandler GetViewHandlerInternal( string virtualPath, bool includeDefaultHandler )
     {
+
       var handler = GetHandlerInternal( virtualPath );
 
       if ( handler == null && !includeDefaultHandler )
@@ -89,6 +132,9 @@ namespace Ivony.Html.Web
 
       return handler ?? new ViewHandler();
     }
+
+
+
 
     private static IViewHandler GetHandlerInternal( string handlerPath )
     {
@@ -114,5 +160,42 @@ namespace Ivony.Html.Web
 
       return null;
     }
+
+
+
+    private static SynchronizedCollection<IViewHandlerProvider> _providers = new SynchronizedCollection<IViewHandlerProvider>();
+
+
+    /// <summary>
+    /// 注册的视图处理器提供程序。
+    /// </summary>
+    public static ICollection<IViewHandlerProvider> ViewHandlerProviders
+    {
+      get { return _providers; }
+    }
+
+
+
+    /// <summary>
+    /// 在 HTML 文档中查找 ViewHandler 路径设置。
+    /// </summary>
+    /// <param name="Scope">要处理的 HTML 文档范畴</param>
+    /// <returns>用于处理 HTML 的视图处理程序路径</returns>
+    internal static string GetHandlerPath( IHtmlContainer Scope )
+    {
+      var head = Scope.Document.FindFirstOrDefault( "head" );
+      if ( head == null )
+        return null;
+
+      var handlerMeta = head.FindFirstOrDefault( "meta[name=handler]" );
+      if ( handlerMeta == null )
+        return null;
+
+      return handlerMeta.Attribute( "value" ).Value();
+    }
+
+
+
+
   }
 }

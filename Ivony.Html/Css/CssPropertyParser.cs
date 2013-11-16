@@ -14,7 +14,7 @@ namespace Ivony.Html
   {
 
 
-    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?>(?![0-9-])[\-_\w]+))(?>\s*):(?>\s*)(?<value>.+?)(?<important>!important)?(;|$)";
+    private static string propertyDeclarationPattern = @"(?<=^|;)\s*(?<name>(?>(?![0-9-])[\-_\w]+))(?>\s*):(?>\s*)(?<value>.*?)(?<important>!important)?(;|$)";
 
     private static Regex propertyDeclarationRegex = new Regex( propertyDeclarationPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
 
@@ -40,6 +40,7 @@ namespace Ivony.Html
     /// 解析 CSS 样式属性
     /// </summary>
     /// <param name="styleExpression">CSS 样式设置表达式</param>
+    /// <param name="specification">所需要采用的 CSS 规范</param>
     /// <returns>CSS 样式属性</returns>
     public static CssStyle ParseCssStyle( string styleExpression, CssStyleSpecificationBase specification = null )
     {

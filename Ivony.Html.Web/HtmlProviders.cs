@@ -23,67 +23,6 @@ namespace Ivony.Html.Web
   public static class HtmlProviders
   {
 
-    static HtmlProviders()
-    {
-      ParserProviders = new SynchronizedCollection<IHtmlParserProvider>( _parserProvidersSync );
-      ContentProviders = new SynchronizedCollection<IHtmlContentProvider>( _contentProvidersSync );
-      RequestMappers = new SynchronizedCollection<IRequestMapper>( _mappersSync );
-      CachePolicyProviders = new SynchronizedCollection<ICachePolicyProvider>( _cachePoliciesSync );
-
-
-      ContentProviders.Add( new StaticFileLoader() );
-      ContentProviders.Add( new AspxFileLoader() );
-
-      RequestMappers.Add( new DefaultRequestMapper() );
-    }
-
-
-    private static readonly object _parserProvidersSync = new object();
-
-    /// <summary>
-    /// 所有解析器提供程序
-    /// </summary>
-    public static ICollection<IHtmlParserProvider> ParserProviders
-    {
-      get;
-      private set;
-    }
-
-
-    private static readonly object _contentProvidersSync = new object();
-
-    /// <summary>
-    /// 所有内容提供程序
-    /// </summary>
-    public static ICollection<IHtmlContentProvider> ContentProviders
-    {
-      get;
-      private set;
-    }
-
-
-    private static readonly object _mappersSync = new object();
-
-    /// <summary>
-    /// 所有请求映射提供程序
-    /// </summary>
-    public static ICollection<IRequestMapper> RequestMappers
-    {
-      get;
-      private set;
-    }
-
-
-    private static readonly object _cachePoliciesSync = new object();
-
-    /// <summary>
-    /// 所有缓存策略提供程序
-    /// </summary>
-    public static ICollection<ICachePolicyProvider> CachePolicyProviders
-    {
-      get;
-      private set;
-    }
 
 
     /// <summary>
@@ -99,19 +38,17 @@ namespace Ivony.Html.Web
 
 
 
-      lock ( _mappersSync )
+      var virtualPath = request.GetVirtualPath();
+
+      foreach ( var mapper in WebServiceLocator.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
       {
-        foreach ( var mapper in RequestMappers )
+        var result = mapper.MapRequest( request );
+        if ( result != null )
         {
-          var result = mapper.MapRequest( request );
-          if ( result != null )
-          {
-            result.Mapper = mapper;
-            return result;
-          }
+          result.Mapper = mapper;
+          return result;
         }
       }
-
 
       return null;
     }
@@ -147,20 +84,27 @@ namespace Ivony.Html.Web
         throw VirtualPathFormatError( "virtualPath" );
 
 
-      lock ( _contentProvidersSync )
-      {
-        foreach ( var provider in ContentProviders )
-        {
-          var result = provider.LoadContent( virtualPath );
 
-          if ( result != null )
-            return result;
+      var services = WebServiceLocator.GetServices<IHtmlContentProvider>( virtualPath ).Concat( Default.GetContentServices( virtualPath ) );
+      foreach ( var provider in services )
+      {
+        var result = provider.LoadContent( virtualPath );
+
+        if ( result != null )
+        {
+          result.Provider = provider;
+          result.VirtualPath = virtualPath;
+          return result;
         }
       }
 
 
       return null;
     }
+
+
+
+    internal static DefaultProviders Default = new DefaultProviders();
 
 
     internal static Exception VirtualPathFormatError( string paramName )
@@ -262,33 +206,14 @@ namespace Ivony.Html.Web
 
 
 
-
-      lock ( _parserProvidersSync )
+      foreach ( var provider in WebServiceLocator.GetServices<IHtmlParserProvider>( contentResult.VirtualPath ) )
       {
-        foreach ( var provider in ParserProviders )
-        {
-          var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
-
-          if ( parser != null )
-            return parser;
-
-        }
+        var parser = provider.GetParser( contentResult.VirtualPath, contentResult.Content );
+        if ( parser != null )
+          return parser;
       }
 
-
-      //默认行为
-      return DefaultParserProvider.GetParser( contentResult.VirtualPath, contentResult.Content );
-    }
-
-
-    private static IHtmlParserProvider _defaultParserProvider = new DefaultParserProvider();
-
-    /// <summary>
-    /// 获取默认的 HTML 解析器
-    /// </summary>
-    public static IHtmlParserProvider DefaultParserProvider
-    {
-      get { return _defaultParserProvider; }
+      return Default.GetParser( contentResult.VirtualPath );
     }
 
 
@@ -401,22 +326,48 @@ namespace Ivony.Html.Web
     /// <returns>适用于当前请求的缓存策略</returns>
     public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
-      lock ( _cachePoliciesSync )
-      {
-        foreach ( var provider in CachePolicyProviders )
-        {
-          CachePolicy policy = provider.CreateCachePolicy( context );
-          if ( policy != null )
-            return policy;
-        }
 
+      var virtualPath = context.Request.GetVirtualPath();
+
+      foreach ( var provider in WebServiceLocator.GetServices<ICachePolicyProvider>( virtualPath ) )
+      {
+        CachePolicy policy = provider.CreateCachePolicy( context );
+        if ( policy != null )
+          return policy;
       }
 
       return null;
+
     }
 
 
 
+    /// <summary>
+    /// 创建指定虚拟路径文件的缓存依赖项，当文件发生变化时可以清除缓存。
+    /// </summary>
+    /// <param name="virtualPath">需要监视的文件虚拟路径</param>
+    /// <returns>监视路径的缓存依赖项</returns>
+    public static CacheDependency CreateCacheDependency( string virtualPath )
+    {
+
+      return CreateCacheDependency( HostingEnvironment.VirtualPathProvider, virtualPath );
+
+    }
+
+
+    /// <summary>
+    /// 创建指定虚拟路径文件的缓存依赖项，当文件发生变化时可以清除缓存。
+    /// </summary>
+    /// <param name="provider">当前所使用的虚拟路径提供程序</param>
+    /// <param name="virtualPath">需要监视的文件虚拟路径</param>
+    /// <returns>监视路径的缓存依赖项</returns>
+    public static CacheDependency CreateCacheDependency( VirtualPathProvider provider, string virtualPath )
+    {
+      var now = DateTime.UtcNow;
+
+      return provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
+
+    }
   }
 
 

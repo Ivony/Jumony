@@ -36,18 +36,8 @@ namespace Ivony.Html.Web
       if ( result == null )
         return;
 
+      new HttpContextWrapper( context ).ApplyMapping( result );
 
-      var handler = result.Handler;
-
-      var httpHandler = handler as JumonyHandler;
-
-      if ( httpHandler == null )
-        httpHandler = new HtmlHandlerWrapper( handler );
-
-
-      context.SetMapping( result );
-
-      context.RemapHandler( httpHandler );
 
     }
 

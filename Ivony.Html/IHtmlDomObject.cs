@@ -48,6 +48,10 @@ namespace Ivony.Html
   /// </summary>
   public interface IDataContainer : IHtmlDomObject
   {
+
+    /// <summary>
+    /// 额外的数据存放容器
+    /// </summary>
     IDictionary Data { get; }
   }
 

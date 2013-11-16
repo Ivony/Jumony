@@ -70,6 +70,8 @@
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
     <Compile Include="GeneralListBinder.cs" />
+    <Compile Include="DefaultProviders.cs" />
+    <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
@@ -88,8 +90,12 @@
     <Compile Include="ListBinderProvider.cs" />
     <Compile Include="ListDataContext.cs" />
     <Compile Include="RepeatListBinder.cs" />
+    <Compile Include="JumonyRequestMapperRoute.cs" />
+    <Compile Include="JumonyRouteHandler.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="DefaultElementBinder.cs" />
+    <Compile Include="StaticFileContentProvider.cs" />
+    <Compile Include="WebFormPageContentProvider.cs" />
     <Compile Include="WebParser.cs" />
     <Compile Include="RequestMapping.cs" />
     <Compile Include="HtmlRewriteModule.cs" />

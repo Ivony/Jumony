@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20827.3
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Core", "Ivony.Core\Ivony.Core.csproj", "{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}"
 EndProject
@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{9CA214D9-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapter", "Adapter", "{AF5D7B06-51A8-4AA0-86A2-BC1FCC4D08A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelectorTest", "SelectorTest\SelectorTest.csproj", "{4AA86193-4163-4451-9E7A-3A03D925E97C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssTest", "SelectorTest\CssTest.csproj", "{4AA86193-4163-4451-9E7A-3A03D925E97C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Web.Binding", "Ivony.Html.Web.Binding\Ivony.Html.Web.Binding.csproj", "{F35F2A61-7147-43CE-8D3C-2785455064A2}"
 EndProject
@@ -179,6 +179,28 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APITest", "APITest\APITest.csproj", "{B26BA503-8721-4547-BCB7-E373C73AEB37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Xml", "Ivony.Html.Xml\Ivony.Html.Xml.csproj", "{E54EE965-72D2-400B-8410-73BEB509060A}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebTest", "http://localhost:7169", "{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{2fc154e1-e0e5-4f34-a6db-973d5332070a}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_7169"
+		Debug.AspNetCompiler.PhysicalPath = "WebTest\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7169\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_7169"
+		Release.AspNetCompiler.PhysicalPath = "WebTest\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7169\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "WebTest\"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -483,6 +505,16 @@ Global
 		{E54EE965-72D2-400B-8410-73BEB509060A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E54EE965-72D2-400B-8410-73BEB509060A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E54EE965-72D2-400B-8410-73BEB509060A}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -509,5 +541,6 @@ Global
 		{D4895FC7-B7DA-47D4-B46A-259C8E38C1FC} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
 		{9F59712A-2689-4C78-A956-33DDD11E481F} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
 		{B26BA503-8721-4547-BCB7-E373C73AEB37} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
+		{8D0D26C4-310D-42B3-9F41-52DFE149FAC1} = {5819B631-AB5E-437C-AD43-D53F8A38086B}
 	EndGlobalSection
 EndGlobal

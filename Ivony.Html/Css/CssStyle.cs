@@ -14,10 +14,13 @@ namespace Ivony.Html
   {
 
 
-    private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>();
+    private Dictionary<string, CssStyleProperty> _properties = new Dictionary<string, CssStyleProperty>( StringComparer.OrdinalIgnoreCase );
     private object _sync = new object();
 
 
+    /// <summary>
+    /// 获取用于线程同步的对象
+    /// </summary>
     public object SyncRoot { get { return _sync; } }
 
 
@@ -46,7 +49,7 @@ namespace Ivony.Html
     /// </summary>
     public const string importantFlag = "!important";
 
-    
+
     /// <summary>
     /// 设置样式属性
     /// </summary>
@@ -197,7 +200,7 @@ namespace Ivony.Html
 
 
 
-    public IEnumerator<CssStyleProperty> GetEnumerator()
+    IEnumerator<CssStyleProperty> IEnumerable<CssStyleProperty>.GetEnumerator()
     {
       return _properties.Values.GetEnumerator();
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ivony.Web;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Web.Hosting;
 
 namespace Ivony.Html.Web
 {
-  
+
   /// <summary>
   /// 提供视图筛选器
   /// </summary>
@@ -24,47 +25,16 @@ namespace Ivony.Html.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        return new IViewFilter[0];
-
-      var directory = VirtualPathUtility.GetDirectory( virtualPath );
+        throw WebServiceLocator.VirtualPathFormatError( "virtualPath" );
 
 
-      var filters = new List<IViewFilter>();
-
-      while ( true )
-      {
-
-        var handlerPath = VirtualPathUtility.Combine( directory, "_filter.ashx" );
-
-        if ( VirtualPathProvider.FileExists( handlerPath ) )
-        {
-
-          var filter = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( ViewFilterHandler ) ) as IViewFilter;
-          if ( filter != null )
-            filters.Add( filter );
-
-        }
+      var filterProviders = WebServiceLocator.GetServices<IViewFilterProvider>( virtualPath );
 
 
-        if ( directory == "~/" )
-          break;
-
-        directory = VirtualPathUtility.Combine( directory, "../" );
-      }
-
-
-      return filters.ToArray();
+      return filterProviders.SelectMany( p => p.GetFilters( virtualPath ) ).Reverse().ToArray();
 
     }
 
-
-    /// <summary>
-    /// 获取当前的虚拟路径提供程序
-    /// </summary>
-    public static VirtualPathProvider VirtualPathProvider
-    {
-      get { return HostingEnvironment.VirtualPathProvider; }
-    }
 
   }
 }

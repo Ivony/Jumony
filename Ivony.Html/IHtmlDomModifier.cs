@@ -100,6 +100,10 @@ namespace Ivony.Html
   /// </summary>
   public interface ISynchronizedDomModifier : IHtmlDomModifier
   {
+
+    /// <summary>
+    /// 同于同步操作的对象
+    /// </summary>
     object SyncRoot { get; }
   }
 
@@ -109,6 +113,10 @@ namespace Ivony.Html
   /// </summary>
   public interface IVersionControl : IHtmlDomModifier
   {
+
+    /// <summary>
+    /// 获取文档当前的版本号，每修改一次文档该版本号便累加。
+    /// </summary>
     int Version { get; }
   }
 
@@ -118,6 +126,10 @@ namespace Ivony.Html
   /// </summary>
   public interface IVersionCacheContainer : IHtmlDocument
   {
+
+    /// <summary>
+    /// 获取当前版本缓存的数据。
+    /// </summary>
     Hashtable CurrenctVersionCache { get; }
   }
 

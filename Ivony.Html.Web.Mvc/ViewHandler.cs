@@ -120,6 +120,10 @@ namespace Ivony.Html.Web
 
     }
 
+
+    /// <summary>
+    /// 执行数据绑定
+    /// </summary>
     protected virtual void DataBind()
     {
       HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( Scope, Model, ViewData );
@@ -127,7 +131,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类实现此方法处理 HTMl 文档或文档范畴
+    /// 派生类实现此方法处理 HTML 文档或文档范畴
     /// </summary>
     protected virtual void ProcessScope()
     {

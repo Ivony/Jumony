@@ -6,16 +6,21 @@ using System.Text;
 
 namespace Ivony.Html.Web
 {
-  public class ListDataContext
+
+  /// <summary>
+  /// 代表一个列表数据上下文
+  /// </summary>
+  public interface IHtmlListDataContext
   {
 
-    public ListDataContext( IEnumerable data )
+    public object[] ListData
     {
-      ListData = data.Cast<object>().ToArray();
+      get;
+      private set;
     }
 
 
-    public object[] ListData
+    public string TargetSelector
     {
       get;
       private set;

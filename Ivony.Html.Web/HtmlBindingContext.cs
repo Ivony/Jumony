@@ -94,7 +94,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 对容器进行数据绑定
     /// </summary>
-    /// <param name="element">要绑定数据的元素</param>
+    /// <param name="container">要绑定数据的容器</param>
     protected virtual void DataBind( IHtmlContainer container )
     {
       var element = container as IHtmlElement;
@@ -112,10 +112,20 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定数据的元素</param>
     protected virtual void DataBind( IHtmlElement element )
     {
-      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
-      Binders.FirstOrDefault( b => b.BindElement( element, this ) );
+      var dataContext = GetDataContext( element );
 
-      BindChilds( element );
+      var bindingContext = this;
+      if ( dataContext != null )
+      {
+        var listData = dataContext as IHtmlListDataContext;
+        if ( listData != null )
+          bindingContext = new HtmlListBindingContext( this, element, listData );
+
+        else
+          bindingContext = new HtmlBindingContext( this, element, dataContext );
+      }
+
+      bindingContext.BindElement( element );
     }
 
 
@@ -178,22 +188,12 @@ namespace Ivony.Html.Web
     /// 对元素进行数据绑定
     /// </summary>
     /// <param name="element">要绑定数据的元素</param>
-    private void BindElement( IHtmlElement element )
+    protected virtual void BindElement( IHtmlElement element )
     {
-      var dataContext = GetDataContext( element );
+      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
+      Binders.FirstOrDefault( b => b.BindElement( element, this ) );
 
-      var bindingContext = this;
-      if ( dataContext != null )
-      {
-        var listData = dataContext as IHtmlListDataContext;
-        if ( listData != null )
-          bindingContext = new HtmlListBindingContext( this, element, listData );
-
-        else
-          bindingContext = new HtmlBindingContext( this, element, dataContext );
-      }
-
-      bindingContext.DataBind();
+      BindChilds( element );
     }
 
 

@@ -19,15 +19,5 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 创建默认的绑定上下文
-    /// </summary>
-    /// <param name="handler">当前 HTML 页面处理程序</param>
-    /// <returns>当前默认的绑定上下文</returns>
-    public static HtmlBindingContext CreateBindingContext( object handler )
-    {
-      return new HtmlBindingContext( GetBinders( handler ) );
-    }
-
   }
 }

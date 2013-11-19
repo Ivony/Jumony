@@ -20,6 +20,9 @@ namespace Ivony.Html.Web
     /// 创建 HtmlBindingContext 实例
     /// </summary>
     /// <param name="binders">所有可以用于绑定的绑定器</param>
+    /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <param name="data">数据字典</param>
     public HtmlBindingContext( IHtmlElementBinder[] binders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> data = null )
     {
       Binders = binders;
@@ -29,7 +32,13 @@ namespace Ivony.Html.Web
     }
 
 
-    public HtmlBindingContext( HtmlBindingContext context, IHtmlContainer scope, object dataContext = null )
+    /// <summary>
+    /// 创建 HtmlBindingContext 实例
+    /// </summary>
+    /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <param name="data">数据字典</param>
+    protected HtmlBindingContext( HtmlBindingContext context, IHtmlContainer scope, object dataContext = null )
     {
       ParentContext = context;
       BindingScope = scope;
@@ -53,6 +62,7 @@ namespace Ivony.Html.Web
     /// </summary>
     public IHtmlContainer BindingScope { get; private set; }
 
+
     /// <summary>
     /// 当前的数据上下文
     /// </summary>
@@ -73,15 +83,41 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 进行数据绑定
     /// </summary>
-    /// <param name="scope">要进行数据绑定的范畴</param>
-    /// <param name="dataContext">数据上下文</param>
-    /// <param name="data">数据字典</param>
-    public void DataBind()
+    public virtual void DataBind()
     {
 
-      BindChilds( BindingScope );
+      DataBind( BindingScope );
 
     }
+
+
+    /// <summary>
+    /// 对容器进行数据绑定
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    protected virtual void DataBind( IHtmlContainer container )
+    {
+      var element = container as IHtmlElement;
+      if ( element != null )
+        DataBind( element );
+
+      else
+        BindChilds( container );
+
+    }
+
+    /// <summary>
+    /// 对元素进行数据绑定
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    protected virtual void DataBind( IHtmlElement element )
+    {
+      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
+      Binders.FirstOrDefault( b => b.BindElement( element, this ) );
+
+      BindChilds( element );
+    }
+
 
 
 
@@ -90,7 +126,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="element">当前正在处理的元素</param>
     /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
-    private object GetDataContext( IHtmlElement element )
+    protected virtual object GetDataContext( IHtmlElement element )
     {
       var expression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
 
@@ -157,26 +193,15 @@ namespace Ivony.Html.Web
           bindingContext = new HtmlBindingContext( this, element, dataContext );
       }
 
-      bindingContext.BindElementCore( element );
+      bindingContext.DataBind();
     }
-
-
-
-    protected virtual void BindElementCore( IHtmlElement element )
-    {
-      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
-      Binders.FirstOrDefault( b => b.BindElement( element, this ) );
-
-      BindChilds( element );
-    }
-
 
 
     /// <summary>
     /// 遍历绑定所有子元素
     /// </summary>
     /// <param name="container">要绑定子元素的容器</param>
-    private void BindChilds( IHtmlContainer container )
+    protected virtual void BindChilds( IHtmlContainer container )
     {
       foreach ( var child in container.Elements().ToArray() )
         BindElement( child );
@@ -194,7 +219,7 @@ namespace Ivony.Html.Web
     /// 进行属性绑定
     /// </summary>
     /// <param name="attribute">要绑定的属性</param>
-    private void BindAttribute( IHtmlAttribute attribute )
+    protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
       Binders.FirstOrDefault( b => b.BindAttribute( attribute, this ) );
     }

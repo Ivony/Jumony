@@ -13,17 +13,17 @@ namespace Ivony.Html.Web
   public interface IHtmlListDataContext
   {
 
-    public object[] ListData
+    object[] ListData
     {
       get;
-      private set;
+      set;
     }
 
 
-    public string TargetSelector
+    string TargetSelector
     {
       get;
-      private set;
+      set;
     }
 
   }

@@ -77,7 +77,7 @@ namespace Ivony.Html.Web
 
       var expression = new AttributeExpression( element );
 
-      object dataObject = GetDataObject( expression, context );
+      object dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
       if ( dataObject == null )
         return false;
@@ -182,7 +182,7 @@ namespace Ivony.Html.Web
       if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
         return false;
 
-      var dataObject = GetDataObject( expression, context );
+      var dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
       if ( dataObject == null )
       {

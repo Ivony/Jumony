@@ -18,7 +18,7 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定的元素</param>
     /// <param name="context">数据绑定上下文</param>
     /// <returns>是否执行了绑定，若执行了绑定，则对于这个元素其他绑定器不再运行</returns>
-    bool BindList( IHtmlElement element, HtmlBindingContext context, IHtmlListDataContext context );
+    bool BindList( IHtmlElement element, HtmlListBindingContext bindingContext );
 
 
   }

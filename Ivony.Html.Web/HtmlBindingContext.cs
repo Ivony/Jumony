@@ -36,16 +36,17 @@ namespace Ivony.Html.Web
     /// 创建 HtmlBindingContext 实例
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="bindingContext">父级数据绑定上下文</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="data">数据字典</param>
-    protected HtmlBindingContext( HtmlBindingContext context, IHtmlContainer scope, object dataContext = null )
+    protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> data = null )
     {
-      ParentContext = context;
+      ParentContext = bindingContext;
       BindingScope = scope;
-      DataContext = dataContext ?? context.DataContext;
+      DataContext = dataContext ?? bindingContext.DataContext;
+      Data = data ?? bindingContext.Data;
 
-      Binders = context.Binders;
-      Data = context.Data;
+      Binders = bindingContext.Binders;
 
     }
 
@@ -86,25 +87,27 @@ namespace Ivony.Html.Web
     public virtual void DataBind()
     {
 
-      DataBind( BindingScope );
+      var element = BindingScope as IHtmlElement;
+      if ( element != null )
+        DataBind( element );
+
+      else
+        BindChilds( BindingScope );
 
     }
 
 
     /// <summary>
-    /// 对容器进行数据绑定
+    /// 遍历绑定所有子元素
     /// </summary>
-    /// <param name="container">要绑定数据的容器</param>
-    protected virtual void DataBind( IHtmlContainer container )
+    /// <param name="container">要绑定子元素的容器</param>
+    protected virtual void BindChilds( IHtmlContainer container )
     {
-      var element = container as IHtmlElement;
-      if ( element != null )
-        DataBind( element );
-
-      else
-        BindChilds( container );
-
+      foreach ( var child in container.Elements().ToArray() )
+        DataBind( child );
     }
+
+
 
     /// <summary>
     /// 对元素进行数据绑定
@@ -127,7 +130,6 @@ namespace Ivony.Html.Web
 
       bindingContext.BindElement( element );
     }
-
 
 
 
@@ -191,28 +193,20 @@ namespace Ivony.Html.Web
     protected virtual void BindElement( IHtmlElement element )
     {
       element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
-      Binders.FirstOrDefault( b => b.BindElement( element, this ) );
+      BindElement( Binders, element );
 
       BindChilds( element );
     }
 
-
-    /// <summary>
-    /// 遍历绑定所有子元素
-    /// </summary>
-    /// <param name="container">要绑定子元素的容器</param>
-    protected virtual void BindChilds( IHtmlContainer container )
+    protected virtual void BindElement( IHtmlElementBinder[] binders, IHtmlElement element )
     {
-      foreach ( var child in container.Elements().ToArray() )
-        BindElement( child );
+      foreach ( var binder in binders )
+      {
+        if ( binder.BindElement( this, element ) )
+          break;
+      }
     }
 
-
-
-    private bool IsListItem( IHtmlElement element )
-    {
-      return element.Name.EqualsIgnoreCase( "li" ) || element.Name.EqualsIgnoreCase( "tr" ) || element.Name.EqualsIgnoreCase( "view" ) || element.Name.EqualsIgnoreCase( "binding" );
-    }
 
 
     /// <summary>
@@ -221,7 +215,7 @@ namespace Ivony.Html.Web
     /// <param name="attribute">要绑定的属性</param>
     protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
-      Binders.FirstOrDefault( b => b.BindAttribute( attribute, this ) );
+      Binders.FirstOrDefault( b => b.BindAttribute( this, attribute ) );
     }
 
   }

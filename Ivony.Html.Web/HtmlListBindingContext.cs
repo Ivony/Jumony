@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
@@ -23,6 +24,12 @@ namespace Ivony.Html.Web
     {
       private set;
       get;
+    }
+
+
+    private bool IsListItem( IHtmlElement element )
+    {
+      return element.Name.EqualsIgnoreCase( "li" ) || element.Name.EqualsIgnoreCase( "tr" ) || element.Name.EqualsIgnoreCase( "view" ) || element.Name.EqualsIgnoreCase( "binding" );
     }
 
 

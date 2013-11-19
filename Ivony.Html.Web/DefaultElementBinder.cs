@@ -29,7 +29,7 @@ namespace Ivony.Html.Web
     /// <param name="element">需要绑定数据的元素</param>
     /// <param name="context">绑定上下文</param>
     /// <returns>是否进行了绑定</returns>
-    public bool BindElement( IHtmlElement element, HtmlBindingContext context )
+    public bool BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 
       if ( element.Attribute( "binding-visible" ) != null )
@@ -171,7 +171,7 @@ namespace Ivony.Html.Web
     /// <param name="attribute">要绑定的元素属性</param>
     /// <param name="context">绑定上下文</param>
     /// <returns>是否成功绑定</returns>
-    public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
+    public bool BindAttribute( HtmlBindingContext context, IHtmlAttribute attribute )
     {
 
       if ( attribute.Name == "datacontext" )

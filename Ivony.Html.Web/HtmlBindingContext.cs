@@ -192,7 +192,7 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定数据的元素</param>
     protected virtual void BindElement( IHtmlElement element )
     {
-      element.Attributes().ToArray().ForAll( a => BindAttribute( a ) );
+      element.Attributes().ToArray().ForAll( a => BindAttribute( Binders, a ) );
       BindElement( Binders, element );
 
       BindChilds( element );
@@ -213,9 +213,9 @@ namespace Ivony.Html.Web
     /// 进行属性绑定
     /// </summary>
     /// <param name="attribute">要绑定的属性</param>
-    protected virtual void BindAttribute( IHtmlAttribute attribute )
+    protected virtual void BindAttribute( IHtmlElementBinder[] binders, IHtmlAttribute attribute )
     {
-      Binders.FirstOrDefault( b => b.BindAttribute( this, attribute ) );
+      binders.FirstOrDefault( b => b.BindAttribute( this, attribute ) );
     }
 
   }

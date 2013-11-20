@@ -224,7 +224,6 @@ namespace Ivony.Html.Web
       var action = partialElement.Attribute( "action" ).Value();
       var view = partialElement.Attribute( "view" ).Value();
       var path = partialElement.Attribute( "path" ).Value();
-      var handler = partialElement.Attribute( "handler" ).Value();
       var name = partialElement.Attribute( "name" ).Value();
 
       if ( !_partialExecutors.IsNullOrEmpty() && name != null )
@@ -267,12 +266,13 @@ namespace Ivony.Html.Web
           if ( content != null )
             return content.Content;
         }
-
       }
+
       catch ( ThreadAbortException )
       {
 
       }
+      
       catch //若渲染时发生错误
       {
         if ( MvcEnvironment.Configuration.IgnorePartialRenderException || partialElement.Attribute( "ignoreError" ) != null )

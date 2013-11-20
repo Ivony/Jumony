@@ -13,14 +13,14 @@ namespace Ivony.Html.Web
   public sealed class HtmlListBindingContext : HtmlBindingContext
   {
 
-    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, IHtmlListDataContext dataContext )
+    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, IListDataContext dataContext )
       : base( context, element, dataContext.ListData )
     {
       ListDataContext = dataContext;
     }
 
 
-    public IHtmlListDataContext ListDataContext
+    public IListDataContext ListDataContext
     {
       private set;
       get;
@@ -31,7 +31,6 @@ namespace Ivony.Html.Web
     {
       return element.Name.EqualsIgnoreCase( "li" ) || element.Name.EqualsIgnoreCase( "tr" ) || element.Name.EqualsIgnoreCase( "view" ) || element.Name.EqualsIgnoreCase( "binding" );
     }
-
 
   }
 }

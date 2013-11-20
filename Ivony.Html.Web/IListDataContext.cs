@@ -10,20 +10,18 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 代表一个列表数据上下文
   /// </summary>
-  public interface IHtmlListDataContext
+  public interface IListDataContext
   {
 
     object[] ListData
     {
       get;
-      set;
     }
 
 
     string TargetSelector
     {
       get;
-      set;
     }
 
   }

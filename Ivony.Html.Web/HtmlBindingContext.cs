@@ -104,7 +104,7 @@ namespace Ivony.Html.Web
     protected virtual void BindChilds( IHtmlContainer container )
     {
       foreach ( var child in container.Elements().ToArray() )
-        DataBind( child );
+        BindElement( child );
     }
 
 
@@ -115,12 +115,27 @@ namespace Ivony.Html.Web
     /// <param name="element">要绑定数据的元素</param>
     protected virtual void DataBind( IHtmlElement element )
     {
+      var attributes = element.Attributes().ToArray();
+      attributes.ForAll( a => BindAttribute( Binders, a ) );
+
+      BindElement( Binders, element );
+
+      BindChilds( element );
+    }
+
+
+    /// <summary>
+    /// 对元素进行数据绑定
+    /// </summary>
+    /// <param name="element">要绑定数据的元素</param>
+    protected virtual void BindElement( IHtmlElement element )
+    {
       var dataContext = GetDataContext( element );
 
       var bindingContext = this;
       if ( dataContext != null )
       {
-        var listData = dataContext as IHtmlListDataContext;
+        var listData = dataContext as IListDataContext;
         if ( listData != null )
           bindingContext = new HtmlListBindingContext( this, element, listData );
 
@@ -128,7 +143,7 @@ namespace Ivony.Html.Web
           bindingContext = new HtmlBindingContext( this, element, dataContext );
       }
 
-      bindingContext.BindElement( element );
+      bindingContext.DataBind( element );
     }
 
 
@@ -146,6 +161,10 @@ namespace Ivony.Html.Web
 
       if ( expression != null )
         dataContext = GetDataObject( expression, this );
+
+      var list = dataContext as IEnumerable;
+      if ( list != null )
+        dataContext = new ListDataContext( list );
 
       element.RemoveAttribute( "datacontext" );
 
@@ -186,18 +205,12 @@ namespace Ivony.Html.Web
 
 
 
+
     /// <summary>
-    /// 对元素进行数据绑定
+    /// 进行元素绑定
     /// </summary>
-    /// <param name="element">要绑定数据的元素</param>
-    protected virtual void BindElement( IHtmlElement element )
-    {
-      element.Attributes().ToArray().ForAll( a => BindAttribute( Binders, a ) );
-      BindElement( Binders, element );
-
-      BindChilds( element );
-    }
-
+    /// <param name="binders"></param>
+    /// <param name="element"></param>
     protected virtual void BindElement( IHtmlElementBinder[] binders, IHtmlElement element )
     {
       foreach ( var binder in binders )
@@ -215,8 +228,11 @@ namespace Ivony.Html.Web
     /// <param name="attribute">要绑定的属性</param>
     protected virtual void BindAttribute( IHtmlElementBinder[] binders, IHtmlAttribute attribute )
     {
-      binders.FirstOrDefault( b => b.BindAttribute( this, attribute ) );
+      foreach ( var binder in binders )
+      {
+        if ( binder.BindAttribute( this, attribute ) )
+          break;
+      }
     }
-
   }
 }

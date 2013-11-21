@@ -80,6 +80,7 @@
     <Compile Include="IHandlerWrapper.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
+    <Compile Include="IPartialMapper.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlHandler.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="JumonyRequestMapperRoute.cs" />
     <Compile Include="JumonyRouteHandler.cs" />
+    <Compile Include="PartialRequestMapping.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="DefaultElementBinder.cs" />
     <Compile Include="StaticFileContentProvider.cs" />

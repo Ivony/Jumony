@@ -270,9 +270,9 @@ namespace Ivony.Html.Web
 
       catch ( ThreadAbortException )
       {
-
+        throw;//不应屏蔽异常
       }
-      
+
       catch //若渲染时发生错误
       {
         if ( MvcEnvironment.Configuration.IgnorePartialRenderException || partialElement.Attribute( "ignoreError" ) != null )

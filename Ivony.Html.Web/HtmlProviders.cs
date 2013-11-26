@@ -368,99 +368,30 @@ namespace Ivony.Html.Web
       return provider.GetCacheDependency( virtualPath, new[] { virtualPath }, now ) ?? new CacheDependency( HostingEnvironment.MapPath( virtualPath ) );
 
     }
+
+
+    /// <summary>
+    /// 获取 HTML 处理程序
+    /// </summary>
+    /// <param name="virtualPath">HTML 文档虚拟路径</param>
+    /// <returns>HTML 处理程序</returns>
+    public static IHtmlHandler GetHandler( string virtualPath )
+    {
+      var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath ).Concat( new[] { Default.GetHtmlHandlerProvider() } );
+      foreach ( var provider in services )
+      {
+        var handler = provider.GetHandler( virtualPath );
+
+        if ( handler != null )
+          return handler;
+
+      }
+
+      return null;
+    }
   }
 
 
 
 
-  /// <summary>
-  /// ContentProvider 容器
-  /// </summary>
-  public class ContentProviderCollection
-  {
-
-    Dictionary<string, IHtmlContentProvider> data = new Dictionary<string, IHtmlContentProvider>( StringComparer.OrdinalIgnoreCase );
-
-
-    /// <summary>
-    /// 所有支持的扩展名
-    /// </summary>
-    public string[] SupportedExtensions
-    {
-      get { return data.Keys.ToArray(); }
-    }
-
-    /// <summary>
-    /// 检测是否能加载指定虚拟路径的文档内容
-    /// </summary>
-    /// <param name="virtualPath">虚拟路径</param>
-    /// <returns>是否能加载指定虚拟路径的文档内容</returns>
-    public bool CanLoadContent( string virtualPath )
-    {
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
-
-      return SupportedExtensions.Contains( VirtualPathUtility.GetExtension( virtualPath ) );
-    }
-
-    /// <summary>
-    /// 获取指定虚拟路径的文档内容加载程序
-    /// </summary>
-    /// <param name="virtualPath">虚拟路径</param>
-    /// <returns></returns>
-    public IHtmlContentProvider GetProvider( string virtualPath )
-    {
-
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
-
-      var extensions = VirtualPathUtility.GetExtension( virtualPath );
-      IHtmlContentProvider provider;
-      lock ( _sync )
-      {
-        if ( data.TryGetValue( extensions, out provider ) )
-          return provider;
-
-        else
-          return null;
-      }
-    }
-
-
-    /// <summary>
-    /// 加载 HTML 文档内容
-    /// </summary>
-    /// <param name="virtualPath">虚拟路径</param>
-    /// <returns></returns>
-    public HtmlContentResult LoadContent( string virtualPath )
-    {
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
-
-      var provider = GetProvider( virtualPath );
-      return provider.LoadContent( virtualPath );
-
-    }
-
-
-    /// <summary>
-    /// 注册一个 HTML 内容提供程序
-    /// </summary>
-    /// <param name="extension">所支持的扩展名</param>
-    /// <param name="provider">HTML 内容提供程序</param>
-    public void RegisterContentProvider( string extension, IHtmlContentProvider provider )
-    {
-
-      lock ( _sync )
-      {
-        if ( data.ContainsKey( extension ) )
-          throw new InvalidOperationException( "该扩展名已经被注册了" );
-
-        data.Add( extension, provider );
-      }
-
-    }
-
-    private object _sync = new object();
-  }
 }

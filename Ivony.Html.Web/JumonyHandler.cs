@@ -62,7 +62,7 @@ namespace Ivony.Html.Web
     /// 处理 HTTP 请求
     /// </summary>
     /// <param name="context">HTTP 上下文信息</param>
-    protected void ProcessRequest( HttpContextBase context )
+    protected void ProcessRequest( HttpContextBase context, IHtmlContainer scope, IHtmlHandler handler )
     {
       _httpContext = context;
 

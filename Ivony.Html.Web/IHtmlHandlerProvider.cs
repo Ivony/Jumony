@@ -17,6 +17,6 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>需要处理该 HTML 文档的 HTML 处理器</returns>
-    IHtmlHandler GetHtmlHandler( string virtualPath );
+    IHtmlHandler GetHandler( string virtualPath );
   }
 }

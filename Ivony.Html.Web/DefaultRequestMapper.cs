@@ -31,15 +31,7 @@ namespace Ivony.Html.Web
       if ( !FileExists( virtualPath ) )
         return null;
 
-      var handlerPath = virtualPath + ".ashx";
-      if ( !FileExists( handlerPath ) )
-        return null;
-
-      var handler = BuildManager.CreateInstanceFromVirtualPath( handlerPath, typeof( JumonyHandler ) ) as JumonyHandler;
-      if ( handler == null )
-        return null;
-
-      return new RequestMapping( this, virtualPath, handler );
+      return new RequestMapping( this, virtualPath, HtmlProviders.GetHandler( virtualPath ) );
     }
 
 

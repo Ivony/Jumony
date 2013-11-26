@@ -55,5 +55,10 @@ namespace Ivony.Html.Web
     {
       get { return new[] { HtmlFileRequestMapper }; }
     }
+
+    public IHtmlHandlerProvider GetHtmlHandlerProvider()
+    { 
+      return new DefaultHtmlHandlerProvider
+    }
   }
 }

@@ -69,18 +69,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
+    <Compile Include="DefaultHtmlHandlerProvider.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
+    <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HttpHandlerBase.cs" />
     <Compile Include="HtmlHandlerWrapper.cs" />
     <Compile Include="IHandlerWrapper.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
-    <Compile Include="IPartialMapper.cs" />
+    <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlHandler.cs" />

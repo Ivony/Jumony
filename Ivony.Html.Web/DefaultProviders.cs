@@ -57,8 +57,8 @@ namespace Ivony.Html.Web
     }
 
     public IHtmlHandlerProvider GetHtmlHandlerProvider()
-    { 
-      return new DefaultHtmlHandlerProvider
+    {
+      return new DefaultHtmlHandlerProvider();
     }
   }
 }

@@ -95,7 +95,7 @@ namespace Ivony.Html.Web
         _bindingDataContexts.Push( new BindingDataContext { DataContext = dataContext, Scope = element } );
 
         var listData = dataContext as IEnumerable;
-        if ( listData != null && IsListItem( element ) )
+        if ( listData != null /*&& IsListItem( element )*/ )
           BindElementList( element, listData.Cast<object>().ToArray() );
 
         else

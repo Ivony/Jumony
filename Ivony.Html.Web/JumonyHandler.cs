@@ -9,6 +9,7 @@ using Ivony.Fluent;
 using System.Web.Hosting;
 
 using Ivony.Web;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
@@ -16,7 +17,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 用于处理 HTTP 请求的处理器
   /// </summary>
-  public abstract class JumonyHandler : HtmlHandlerBase, IHttpHandler, IHtmlHandler, IRequiresSessionState
+  public abstract class JumonyHandler : IHttpHandler, IRequiresSessionState
   {
 
     /// <summary>
@@ -54,7 +55,7 @@ namespace Ivony.Html.Web
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
 
-      ProcessRequest( CreateContext( context ) );
+      ProcessRequest( context.Request.RequestContext );
 
     }
 
@@ -62,22 +63,53 @@ namespace Ivony.Html.Web
     /// 处理 HTTP 请求
     /// </summary>
     /// <param name="context">HTTP 上下文信息</param>
-    protected void ProcessRequest( HttpContextBase context )
+    protected void ProcessRequest( RequestContext context )
     {
-      _httpContext = context;
-
-      _mapping = HttpContext.GetMapping();
-
-      if ( RequestMapping == null )
-        throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+      _httpContext = context.HttpContext;
 
 
-      var response = ProcessRequestCore( context );
+      if ( context.RouteData == null || !(context.RouteData.Route is IHtmlMapRoute) )
+        DirectVisitError();
 
-      OutputResponse( response );
+      var virtualPath = context.RouteData.DataTokens[JumonyRequestMapperRoute.VirtualPathToken] as string;
+      virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
+
+      var document = HtmlProviders.LoadDocument( virtualPath );
+
+
+      ProcessRequest( context, virtualPath );
+
 
       Trace.Write( "Jumony Web", "End response." );
 
+
+
+
+    }
+
+    protected virtual void ProcessRequest( RequestContext context, string virtualPath )
+    {
+
+
+      var response = ProcessRequestCore( context.HttpContext, virtualPath );
+
+      OutputResponse( response );
+    }
+
+
+
+
+
+    private void DirectVisitError()
+    {
+      throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+    }
+
+
+
+    protected virtual TraceContext Trace
+    {
+      get { return HttpContext.Trace; }
     }
 
 
@@ -86,7 +118,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context )
+    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context, string virtualPath )
     {
 
       ICachedResponse response;
@@ -110,18 +142,36 @@ namespace Ivony.Html.Web
       }
 
 
+
+      IHtmlDocument document;
+
+
       {
         OnPreLoadDocument();
 
         Trace.Write( "Jumony Web", "Begin load page." );
-        Document = LoadDocument();
+        document = HtmlProviders.LoadDocument( virtualPath );
         Trace.Write( "Jumony Web", "End load page." );
 
         OnPostLoadDocument();
       }
 
 
-      ( (IHtmlHandler) this ).ProcessDocument( HttpContext, Document );
+
+      {
+
+        var handler = HtmlProviders.GetHandler( virtualPath );
+
+
+        OnPreProcessDocument();
+
+        Trace.Write( "Jumony Web", "Begin Process Document." );
+        handler.ProcessDocument( context, document );
+        Trace.Write( "Jumony Web", "End Process Document." );
+
+        OnPostProcessDocument();
+
+      }
 
 
       {
@@ -154,16 +204,6 @@ namespace Ivony.Html.Web
     }
 
 
-
-    /// <summary>
-    /// 创建本次请求的上下文，派生类重写此方法提供自定义上下文。
-    /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <returns>请求上下文信息</returns>
-    protected virtual HttpContextBase CreateContext( HttpContext context )
-    {
-      return new HttpContextWrapper( context );
-    }
 
 
     /// <summary>
@@ -227,40 +267,8 @@ namespace Ivony.Html.Web
     /// <param name="responseData">响应信息</param>
     protected virtual void OutputResponse( ICachedResponse responseData )
     {
-      responseData.Apply( Response );
+      responseData.Apply( HttpContext.Response );
     }
-
-
-
-    /// <summary>
-    /// 实现IHtmlHandler接口
-    /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <param name="document">要处理的文档</param>
-    void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
-    {
-
-      _httpContext = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
-      Document = document;
-
-      OnPreProcessDocument();
-
-      Trace.Write( "Jumony Web", "Begin Process Document." );
-      ProcessDocument();
-      Trace.Write( "Jumony Web", "End Process Document." );
-
-      OnPostProcessDocument();
-
-      AddGeneratorMetaData();//为处理后的文档加上Jumony生成器的meta信息。
-    }
-
-
-    /// <summary>
-    /// 派生类重写此方法处理文档
-    /// </summary>
-    protected abstract void ProcessDocument();
-
-
 
 
     /// <summary>
@@ -294,17 +302,6 @@ namespace Ivony.Html.Web
       private set;
     }
 
-
-    /// <summary>
-    /// 加载Web页面
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument()
-    {
-      var document = RequestMapping.LoadDocument();
-
-      return document;
-    }
 
 
     private HttpContextBase _httpContext;

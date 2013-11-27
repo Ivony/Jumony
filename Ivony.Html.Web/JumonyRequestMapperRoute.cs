@@ -11,9 +11,10 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 辅助实现 RequestMapping 机制的路由
   /// </summary>
-  public class JumonyRequestMapperRoute : RouteBase
+  public class JumonyRequestMapperRoute : RouteBase, IHtmlMapRoute
   {
-    public static string TokenKey
+
+    public static string VirtualPathToken
     {
       get { return "HtmlVirtualPath"; }
     }
@@ -50,5 +51,6 @@ namespace Ivony.Html.Web
     {
       return null;
     }
+
   }
 }

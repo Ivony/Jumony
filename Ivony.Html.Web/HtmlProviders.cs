@@ -327,7 +327,7 @@ namespace Ivony.Html.Web
     public static CachePolicy GetCachePolicy( HttpContextBase context )
     {
 
-      var virtualPath = context.Request.GetVirtualPath();
+      var virtualPath = context.Request.AppRelativeCurrentExecutionFilePath;
 
       foreach ( var provider in WebServiceLocator.GetServices<ICachePolicyProvider>( virtualPath ) )
       {

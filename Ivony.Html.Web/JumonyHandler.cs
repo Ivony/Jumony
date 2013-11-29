@@ -65,6 +65,9 @@ namespace Ivony.Html.Web
     /// <param name="context">HTTP 上下文信息</param>
     protected void ProcessRequest( RequestContext context )
     {
+      
+      Trace.Write( "Jumony Web" "Begin of Request" );
+      
       _httpContext = context.HttpContext;
 
 
@@ -74,24 +77,35 @@ namespace Ivony.Html.Web
       var virtualPath = context.RouteData.DataTokens[JumonyRequestMapperRoute.VirtualPathToken] as string;
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
-      var document = HtmlProviders.LoadDocument( virtualPath );
 
+      ProcessRequest( context.HttpContext, virtualPath );
 
-      ProcessRequest( context, virtualPath );
-
-
-      Trace.Write( "Jumony Web", "End response." );
-
-
-
-
+      Trace.Write( "Jumony Web", "End of Request" );
     }
 
-    protected virtual void ProcessRequest( RequestContext context, string virtualPath )
+    protected virtual void ProcessRequest( HttpContextBase context, string virtualPath )
     {
 
 
-      var response = ProcessRequestCore( context.HttpContext, virtualPath );
+      ICachedResponse response;
+
+      Trace.Write( "Jumony Web", "Begin resolve cache." );
+      response = ResolveCache();
+      Trace.Write( "Jumony Web", "End resolve cache" );
+
+      if ( response == null )
+      {
+        response = ProcessRequestCore( context, virtualPath );
+
+
+        Trace.Write( "Jumony Web", "Begin update cache" );
+        UpdateCache( response );
+        Trace.Write( "Jumony Web", "End update cache." );
+
+      }
+
+      else
+        Trace.Write( "Jumony Web", "Cache resolved." );
 
       OutputResponse( response );
     }
@@ -118,89 +132,46 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <returns>处理后的结果</returns>
+
     protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context, string virtualPath )
     {
 
-      ICachedResponse response;
-
-
-      {
-        Trace.Write( "Jumony Web", "Begin resolve cache." );
-        OnPreResolveCache();
-
-
-        response = ResolveCache();
-
-        if ( response != null )
-        {
-          Trace.Write( "Jumony Web", "Cache resolved." );
-          return response;
-        }
-
-        OnPostResolveCache();
-        Trace.Write( "Jumony Web", "Cache is not resolved." );
-      }
-
-
-
       IHtmlDocument document;
 
+      OnPreLoadDocument();
 
-      {
-        OnPreLoadDocument();
+      Trace.Write( "Jumony Web", "Begin load document." );
+      document = HtmlProviders.LoadDocument( virtualPath );
+      Trace.Write( "Jumony Web", "End load document." );
 
-        Trace.Write( "Jumony Web", "Begin load page." );
-        document = HtmlProviders.LoadDocument( virtualPath );
-        Trace.Write( "Jumony Web", "End load page." );
-
-        OnPostLoadDocument();
-      }
+      OnPostLoadDocument();
 
 
 
-      {
+      var handler = HtmlProviders.GetHandler( virtualPath );
 
-        var handler = HtmlProviders.GetHandler( virtualPath );
+      OnPreProcessDocument();
 
+      Trace.Write( "Jumony Web", "Begin process document." );
+      handler.ProcessDocument( context, document );
+      Trace.Write( "Jumony Web", "End process document." );
 
-        OnPreProcessDocument();
-
-        Trace.Write( "Jumony Web", "Begin Process Document." );
-        handler.ProcessDocument( context, document );
-        Trace.Write( "Jumony Web", "End Process Document." );
-
-        OnPostProcessDocument();
-
-      }
+      OnPostProcessDocument();
 
 
-      {
-        Trace.Write( "Jumony Web", "Begin create response." );
-
-        OnPreRender();
-
-        Trace.Write( "Jumony Web", "Begin render page." );
-        var content = Document.Render();
-        Trace.Write( "Jumony Web", "End render page." );
-
-        OnPostRender();
 
 
-        response = CreateResponse( content );
+      OnPreRender();
 
-        Trace.Write( "Jumony Web", "End create response." );
-      }
+      Trace.Write( "Jumony Web", "Begin render document." );
+      var content = document.Render();
+      Trace.Write( "Jumony Web", "End render document." );
 
-      {
-        Trace.Write( "Jumony Web", "Begin update cache." );
-
-        UpdateCache( response );
-
-        Trace.Write( "Jumony Web", "End update cache." );
-      }
+      OnPostRender();
 
 
-      return response;
+
+      return CreateResponse( content );
     }
 
 
@@ -221,7 +192,6 @@ namespace Ivony.Html.Web
     /// <returns>缓存的输出</returns>
     protected virtual ICachedResponse ResolveCache()
     {
-
       var policy = HtmlProviders.GetCachePolicy( HttpContext );
 
       if ( policy == null )
@@ -274,12 +244,12 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 这个方法是用来添加<![CDATA[<meta name="generator" value="jumony" />]]>元素的。
     /// </summary>
-    private void AddGeneratorMetaData()
+    private void AddGeneratorMetaData( IHtmlDocument document )
     {
-      var modifier = Document.DomModifier;
+      var modifier = document.DomModifier;
       if ( modifier != null )
       {
-        var header = Document.Find( "html head" ).FirstOrDefault();
+        var header = document.Find( "html head" ).FirstOrDefault();
 
         if ( header != null )
         {
@@ -293,16 +263,6 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 获取正在处理的页面文档
-    /// </summary>
-    public IHtmlDocument Document
-    {
-      get;
-      private set;
-    }
-
-
 
     private HttpContextBase _httpContext;
 
@@ -312,22 +272,6 @@ namespace Ivony.Html.Web
     protected override HttpContextBase HttpContext
     {
       get { return _httpContext; }
-    }
-
-    /// <summary>
-    /// 获取要处理的 HTML 范畴
-    /// </summary>
-    public sealed override IHtmlContainer Scope
-    {
-      get { return Document; }
-    }
-
-    /// <summary>
-    /// 获取当前文档的虚拟路径
-    /// </summary>
-    public sealed override string VirtualPath
-    {
-      get { return VirtualPath; }
     }
 
 

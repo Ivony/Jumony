@@ -79,7 +79,6 @@
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HtmlRequestContext.cs" />
     <Compile Include="HttpHandlerBase.cs" />
-    <Compile Include="HtmlHandlerWrapper.cs" />
     <Compile Include="IHandlerWrapper.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />

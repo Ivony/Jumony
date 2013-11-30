@@ -65,9 +65,9 @@ namespace Ivony.Html.Web
     /// <param name="context">HTTP 上下文信息</param>
     protected void ProcessRequest( RequestContext context )
     {
-      
-      Trace.Write( "Jumony Web" "Begin of Request" );
-      
+
+      Trace.Write( "Jumony Web", "Begin of Request" );
+
       _httpContext = context.HttpContext;
 
 
@@ -83,6 +83,12 @@ namespace Ivony.Html.Web
       Trace.Write( "Jumony Web", "End of Request" );
     }
 
+
+    /// <summary>
+    /// 处理 HTTP 请求
+    /// </summary>
+    /// <param name="context">HTTP 请求上下文</param>
+    /// <param name="virtualPath">当前要处理的虚拟路径</param>
     protected virtual void ProcessRequest( HttpContextBase context, string virtualPath )
     {
 
@@ -132,7 +138,6 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <returns>处理后的结果</returns>
-
     protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context, string virtualPath )
     {
 

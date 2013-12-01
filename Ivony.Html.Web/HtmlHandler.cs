@@ -6,15 +6,20 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public class HtmlHandler : HtmlHandlerBase, IHtmlHandler
+  public abstract class HtmlHandler : HtmlHandlerBase, IHtmlHandler, IHttpHandler
   {
 
 
-    public virtual void ProcessScope( HtmlRequestContext context, IHtmlContainer scope )
+    public void ProcessScope( HtmlRequestContext context, IHtmlContainer scope )
     {
       _context = context;
       _scope = scope;
+
+      ProcessScope();
     }
+
+    protected abstract void ProcessScope();
+
 
 
 
@@ -46,6 +51,16 @@ namespace Ivony.Html.Web
 
     public virtual void Dispose()
     {
+    }
+
+    public bool IsReusable
+    {
+      get { throw new NotImplementedException(); }
+    }
+
+    public void ProcessRequest( HttpContext context )
+    {
+      throw JumonyHandler.DirectVisitError();
     }
   }
 }

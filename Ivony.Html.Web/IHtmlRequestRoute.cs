@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Web
 {
-  public interface IHtmlMapRoute
+  public interface IHtmlRequestRoute
   {
   }
 }

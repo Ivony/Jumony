@@ -61,7 +61,7 @@ namespace Ivony.Html.Web
 
 
 
-    internal static DefaultProviders Default = new DefaultProviders();
+    public static readonly DefaultProviders Default = new DefaultProviders();
 
 
     internal static Exception VirtualPathFormatError( string paramName )

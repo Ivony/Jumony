@@ -9,10 +9,10 @@ using Ivony.Html.Web;
 using Ivony.Html.Parser;
 using Ivony.Html.Styles;
 
-public class links_aspx : JumonyHandler
+public class links_aspx : HtmlHandler
 {
 
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
 
     var dataList = Find( "#DataList" ).Single();

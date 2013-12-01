@@ -8,7 +8,7 @@ namespace Ivony.Html.Web
 {
   public class DefaultHtmlHandler : IHtmlHandler
   {
-    public void ProcessScope( HttpContextBase context, IHtmlContainer scope )
+    public void ProcessScope( HtmlRequestContext context, IHtmlContainer scope )
     {
     }
 

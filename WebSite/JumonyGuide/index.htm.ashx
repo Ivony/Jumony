@@ -8,11 +8,11 @@ using Ivony.Html;//定义了HTML DOM
 using Ivony.Html.Web;//ASP.NET支持
 using Ivony.Html.Parser;//提供HTML分析支持
 
-public class index : JumonyHandler//一个使用Jumony Parser作为分析器的标准Jumony体系的HttpHandler
+public class index : HtmlHandler//一个使用Jumony Parser作为分析器的标准Jumony体系的HttpHandler
 {
-  protected override void ProcessDocument()
+  protected override void ProcessScope()
   {
-    var body = Document.Find( "body" ).Single();
+    var body = Find( "body" ).Single();
     body.InnerText( "Hello Jumony!" );
   }
 }

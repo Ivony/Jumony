@@ -8,7 +8,7 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Web
 {
-  internal class DefaultProviders
+  public class DefaultProviders
   {
 
 
@@ -34,13 +34,16 @@ namespace Ivony.Html.Web
 
     public IEnumerable<IHtmlContentProvider> GetContentServices( string virtualPath )
     {
-      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
+      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".htm" ) )
         return new IHtmlContentProvider[] { StaticFileContentProvider };
 
       if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".html" ) )
+        return new IHtmlContentProvider[] { StaticFileContentProvider };
+
+      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".aspx" ) )
         return new IHtmlContentProvider[] { WebFormPageContentProvider };
 
-      return null;
+      return Enumerable.Empty<IHtmlContentProvider>();
     }
 
     public IHtmlParser GetParser( string virtualPath )

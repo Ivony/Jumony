@@ -14,7 +14,7 @@ namespace Ivony.Html.Web
   {
 
 
-    internal HtmlRequestContext( HttpContextBase httpContext, string virtualPath )
+    public HtmlRequestContext( HttpContextBase httpContext, string virtualPath )
     {
       HttpContext = httpContext;
       VirtualPath = virtualPath;

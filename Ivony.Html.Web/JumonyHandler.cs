@@ -47,13 +47,13 @@ namespace Ivony.Html.Web
     protected void ProcessRequest( RequestContext context )
     {
 
-      Trace.Write( "Jumony Web", "Begin of Request" );
-
       _httpContext = context.HttpContext;
 
+      
+      Trace.Write( "Jumony Web", "Begin of Request" );
 
-      if ( context.RouteData == null || !(context.RouteData.Route is IHtmlMapRoute) )
-        DirectVisitError();
+      if ( context.RouteData == null || !(context.RouteData.Route is IHtmlRequestRoute) )
+        throw DirectVisitError();
 
       var virtualPath = context.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
@@ -104,9 +104,9 @@ namespace Ivony.Html.Web
 
 
 
-    private void DirectVisitError()
+    public static Exception DirectVisitError()
     {
-      throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+      return new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
     }
 
 

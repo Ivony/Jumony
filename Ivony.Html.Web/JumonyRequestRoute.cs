@@ -11,7 +11,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 辅助实现 RequestMapping 机制的路由
   /// </summary>
-  public class JumonyRequestMapperRoute : RouteBase, IHtmlMapRoute
+  public class JumonyRequestRoute : RouteBase, IHtmlMapRoute
   {
 
     public static string VirtualPathToken
@@ -27,14 +27,7 @@ namespace Ivony.Html.Web
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
 
-      var mapping = HtmlProviders.MapRequest( httpContext.Request );
-      if ( mapping == null )
-        return null;
-
-
-
       var routeData = new RouteData( this, JumonyRouteHandler.Instance );
-      routeData.DataTokens[JumonyRouteHandler.MappingKey] = mapping;
 
       return routeData;
 

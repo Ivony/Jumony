@@ -49,14 +49,7 @@ namespace Ivony.Html.Web
     }
 
 
-    public IRequestMapper HtmlFileRequestMapper = new DefaultRequestMapper();
-
-    public IEnumerable<IRequestMapper> RequestMappers
-    {
-      get { return new[] { HtmlFileRequestMapper }; }
-    }
-
-    public IHtmlHandlerProvider GetHtmlHandlerProvider()
+    public static IHtmlHandlerProvider GetHtmlHandlerProvider()
     {
       return new DefaultHtmlHandlerProvider();
     }

@@ -14,15 +14,16 @@ namespace Ivony.Html.Web
   public class JumonyRouteHandler : IRouteHandler
   {
 
-    public static readonly string MappingKey = "JumonyRequestMapping";
-
     public IHttpHandler GetHttpHandler( RequestContext requestContext )
     {
 
-      return new HtmlHandler();
+      return new JumonyHandler();
 
     }
 
-    public static IRouteHandler Instance { get; set; }
+
+    private static readonly JumonyRouteHandler instance = new JumonyRouteHandler();
+
+    public static IRouteHandler Instance { get { return instance; } }
   }
 }

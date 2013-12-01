@@ -6,32 +6,46 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
-  public class HtmlHandler : IHttpHandler
+  public class HtmlHandler : HtmlHandlerBase, IHtmlHandler
   {
 
 
-
-    public bool IsReusable
+    public virtual void ProcessScope( HtmlRequestContext context, IHtmlContainer scope )
     {
-      get { throw new NotImplementedException(); }
-    }
-
-    public void ProcessRequest( HttpContext context )
-    {
-      ProcessRequest( new HttpContextWrapper( context ) );
+      _context = context;
+      _scope = scope;
     }
 
 
-    protected virtual void ProcessRequest( HttpContextBase context )
+
+
+    private IHtmlContainer _scope;
+
+    public override IHtmlContainer Scope
     {
-
-      var routeData = context.Request.RequestContext.RouteData;
-
-      var virtualPath = routeData.DataTokens[JumonyRequestMapperRoute.TokenKey] as string ?? context.Request.AppRelativeCurrentExecutionFilePath;
-
-
-
+      get { return _scope; }
     }
 
+
+    private HtmlRequestContext _context;
+    protected HtmlRequestContext Context
+    {
+      get { return _context; }
+    }
+
+    public override string VirtualPath
+    {
+      get { return Context.VirtualPath; }
+    }
+
+
+    protected override System.Web.HttpContextBase HttpContext
+    {
+      get { return Context.HttpContext; }
+    }
+
+    public virtual void Dispose()
+    {
+    }
   }
 }

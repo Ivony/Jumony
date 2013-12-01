@@ -16,8 +16,8 @@ namespace Ivony.Html.Web
     /// 处理 HTML 文档
     /// </summary>
     /// <param name="context">当前请求上下文</param>
-    /// <param name="document">要处理的文档</param>
-    void ProcessDocument( HttpContextBase context, IHtmlDocument document );
+    /// <param name="scope">要处理的文档范围</param>
+    void ProcessScope( HtmlRequestContext context, IHtmlContainer scope );
 
   }
 }

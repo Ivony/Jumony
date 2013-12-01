@@ -17,7 +17,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 用于处理 HTTP 请求的处理器
   /// </summary>
-  public abstract class JumonyHandler : IHttpHandler, IRequiresSessionState
+  public class JumonyHandler : IHttpHandler, IRequiresSessionState
   {
 
     /// <summary>
@@ -26,25 +26,6 @@ namespace Ivony.Html.Web
     public virtual bool IsReusable
     {
       get { return false; }
-    }
-
-
-
-
-    private RequestMapping _mapping;
-
-    /// <summary>
-    /// 获取映射的结果
-    /// </summary>
-    protected virtual RequestMapping RequestMapping
-    {
-      get
-      {
-        if ( _mapping == null )
-          _mapping = HttpContext.GetMapping();
-
-        return _mapping;
-      }
     }
 
 
@@ -74,7 +55,7 @@ namespace Ivony.Html.Web
       if ( context.RouteData == null || !(context.RouteData.Route is IHtmlMapRoute) )
         DirectVisitError();
 
-      var virtualPath = context.RouteData.DataTokens[JumonyRequestMapperRoute.VirtualPathToken] as string;
+      var virtualPath = context.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
 
@@ -101,7 +82,10 @@ namespace Ivony.Html.Web
 
       if ( response == null )
       {
-        response = ProcessRequestCore( context, virtualPath );
+
+        var htmlRequestContext = new HtmlRequestContext( context, virtualPath );
+
+        response = ProcessRequestCore( htmlRequestContext );
 
 
         Trace.Write( "Jumony Web", "Begin update cache" );
@@ -138,27 +122,29 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context, string virtualPath )
+    protected virtual ICachedResponse ProcessRequestCore( HtmlRequestContext context )
     {
+
+      string virtualPath = context.VirtualPath;
 
       IHtmlDocument document;
 
       OnPreLoadDocument();
 
       Trace.Write( "Jumony Web", "Begin load document." );
-      document = HtmlProviders.LoadDocument( virtualPath );
+      document = LoadDocument( virtualPath );
       Trace.Write( "Jumony Web", "End load document." );
 
       OnPostLoadDocument();
 
 
-
-      var handler = HtmlProviders.GetHandler( virtualPath );
+      var filters = InitailizeFilters( virtualPath, document );
+      var handler = GetHandler( virtualPath, document );
 
       OnPreProcessDocument();
 
       Trace.Write( "Jumony Web", "Begin process document." );
-      handler.ProcessDocument( context, document );
+      handler.ProcessScope( context, document );
       Trace.Write( "Jumony Web", "End process document." );
 
       OnPostProcessDocument();
@@ -177,6 +163,44 @@ namespace Ivony.Html.Web
 
 
       return CreateResponse( content );
+    }
+
+    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    {
+      return HtmlProviders.LoadDocument( virtualPath );
+    }
+
+    /// <summary>
+    /// 获取 HTML 处理程序
+    /// </summary>
+    /// <param name="virtualPath">HTML 文档虚拟路径</param>
+    /// <param name="document">HTML 文档</param>
+    /// <returns>HTML 处理程序</returns>
+    protected virtual IHtmlHandler GetHandler( string virtualPath, IHtmlDocument document )
+    {
+      var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath ).Concat( new[] { DefaultProviders.GetHtmlHandlerProvider() } );
+      foreach ( var provider in services )
+      {
+        var handler = provider.GetHandler( virtualPath );
+
+        if ( handler != null )
+          return handler;
+
+      }
+
+      return new DefaultHtmlHandler();
+    }
+
+
+    /// <summary>
+    /// 获取 HTML 筛选器
+    /// </summary>
+    /// <param name="virtualPath">HTML 文档虚拟路径</param>
+    /// <param name="document">HTML 文档</param>
+    /// <returns>HTML 筛选器</returns>
+    protected virtual IHtmlFilter[] InitailizeFilters( string virtualPath, IHtmlDocument document )
+    {
+      return WebServiceLocator.GetServices<IHtmlFilterProvider>( virtualPath ).SelectMany( p => p.GetFilters( virtualPath, document ) ).ToArray();
     }
 
 
@@ -274,7 +298,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取与该页关联的 HttpContext 对象。
     /// </summary>
-    protected override HttpContextBase HttpContext
+    protected HttpContextBase HttpContext
     {
       get { return _httpContext; }
     }
@@ -298,7 +322,10 @@ namespace Ivony.Html.Web
     public event EventHandler PostProcessDocument;
 
     /// <summary>引发 PreProcessDocument 事件</summary>
-    protected virtual void OnPreProcessDocument() { if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPreProcessDocument()
+    {
+      if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty );
+    }
     /// <summary>引发 PostProcessDocument 事件</summary>
     protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
 

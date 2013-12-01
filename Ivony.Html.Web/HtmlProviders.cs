@@ -26,49 +26,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 映射请求
-    /// </summary>
-    /// <param name="request">当前 HTTP 请求信息</param>
-    /// <returns>请求映射信息</returns>
-    public static RequestMapping MapRequest( HttpRequestBase request )
-    {
-
-      if ( request == null )
-        throw new ArgumentNullException( "request" );
-
-
-
-      var virtualPath = request.GetVirtualPath();
-
-      foreach ( var mapper in WebServiceLocator.GetServices<IRequestMapper>( virtualPath ).Concat( Default.RequestMappers ) )
-      {
-        var result = mapper.MapRequest( request );
-        if ( result != null )
-        {
-          result.Mapper = mapper;
-          return result;
-        }
-      }
-
-      return null;
-    }
-
-
-
-    /// <summary>
-    /// 分析文档内容
-    /// </summary>
-    /// <param name="parser">分析器</param>
-    /// <param name="content">文档内容加载结果</param>
-    /// <returns>分析结果</returns>
-    public static IHtmlDocument Parse( this IHtmlParser parser, HtmlContentResult content )
-    {
-      return parser.Parse( content.Content, CreateDocumentUri( content.VirtualPath ) );
-    }
-
-
-
-    /// <summary>
     /// 加载 HTML 文档内容
     /// </summary>
     /// <param name="virtualPath">文档的虚拟路径</param>
@@ -369,29 +326,5 @@ namespace Ivony.Html.Web
 
     }
 
-
-    /// <summary>
-    /// 获取 HTML 处理程序
-    /// </summary>
-    /// <param name="virtualPath">HTML 文档虚拟路径</param>
-    /// <returns>HTML 处理程序</returns>
-    public static IHtmlHandler GetHandler( string virtualPath )
-    {
-      var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath ).Concat( new[] { Default.GetHtmlHandlerProvider() } );
-      foreach ( var provider in services )
-      {
-        var handler = provider.GetHandler( virtualPath );
-
-        if ( handler != null )
-          return handler;
-
-      }
-
-      return null;
-    }
   }
-
-
-
-
 }

@@ -1,0 +1,1300 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ivony.Html.Parser</name>
+    </assembly>
+    <members>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlDoctypeDeclaration">
+            <summary>
+            DOCTYPE 声明节点
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlContentFragment">
+            <summary>
+            代表一个 HTML 文档内容片段
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlContentFragment.#ctor(Ivony.Html.Parser.IHtmlReader,System.Int32,System.Int32)">
+            <summary>
+            创建 HtmlContentFragment 对象
+            </summary>
+            <param name="reader">HTML 读取分析器</param>
+            <param name="startIndex">开始位置</param>
+            <param name="length">内容长度</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlContentFragment.ToString">
+            <summary>
+            获取 HTML 内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlContentFragment.Reader">
+            <summary>
+            创建内容片段的读取分析器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlContentFragment.StartIndex">
+            <summary>
+            内容片段的开始位置
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlContentFragment.Length">
+            <summary>
+            内容片段的长度
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlContentFragment.Html">
+            <summary>
+            HTML 内容
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlDoctypeDeclaration.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String)">
+            <summary>
+            创建 HtmlDoctypeDeclaration 对象
+            </summary>
+            <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
+            <param name="declaration">HTML 文档类型声明</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlDoctypeDeclaration.Declaration">
+            <summary>
+            HTML 文档类型声明
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlAttributeSetting">
+            <summary>
+            描述一个 HTML 标签属性
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlAttributeSetting.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String,System.String)">
+            <summary>
+            创建 HtmlAttributeSetting 对象
+            </summary>
+            <param name="info">应当被认为是 HTML 标签属性的 HTML 片段</param>
+            <param name="name">属性名</param>
+            <param name="value">属性值</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlAttributeSetting.Name">
+            <summary>
+            属性名
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlAttributeSetting.Value">
+            <summary>
+            属性值
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlCommentContent">
+            <summary>
+            描述一个 HTML 注释内容片段
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlCommentContent.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String)">
+            <summary>
+            创建 HtmlCommentContent 实例
+            </summary>
+            <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
+            <param name="comment">注释内容</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlCommentContent.Comment">
+            <summary>
+            注释内容
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlEndTag">
+            <summary>
+            描述一个 HTML 结束标签
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlEndTag.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String)">
+            <summary>
+            创建 HtmlTextContent 对象
+            </summary>
+            <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
+            <param name="tagName">标签名</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlEndTag.TagName">
+            <summary>
+            标签名
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlSpecialTag">
+            <summary>
+            描述一个特殊的 HTML 标签内容
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlSpecialTag.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String,System.String)">
+            <summary>
+            创建 HtmlSpecialTag 实例
+            </summary>
+            <param name="fragment"></param>
+            <param name="content"></param>
+            <param name="speciaSymbol"></param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlSpecialTag.Content">
+            <summary>
+            特殊标签内容
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlSpecialTag.SpecialSymbol">
+            <summary>
+            特殊标签标识字符
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlTextContent">
+            <summary>
+            描述一段 HTML 文本
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlTextContent.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment)">
+            <summary>
+            创建 HtmlTextContent 对象
+            </summary>
+            <param name="fragement">应当被认为是 HTML 文本的 HTML 片段</param>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomAttribute">
+            <summary>
+            IHtmlAttribute 的实现
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomObject">
+            <summary>
+            对 IHtmlDomObject 的实现
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomObject.Document">
+            <summary>
+            获取 DOM 对象所属的文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomObject.ContentFragment">
+            <summary>
+            分析器所提供的内容碎片
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomObject.RawHtml">
+            <summary>
+            获取原始的HTML
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomAttribute.#ctor(Ivony.Html.Parser.DomElement,System.String,System.String)">
+            <summary>
+            创建 DomAttribute 实例
+            </summary>
+            <param name="element">所属元素</param>
+            <param name="name">属性名</param>
+            <param name="value">属性值</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomAttribute.Equals(System.Object)">
+            <summary>
+            判定两个属性对象是否相同
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomAttribute.GetHashCode">
+            <summary>
+            用作特定类型的哈希函数
+            </summary>
+            <returns>当前对象的哈希代码</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomAttribute.Remove">
+            <summary>
+            尝试从元素中移除此属性
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomAttribute.Element">
+            <summary>
+            获取属性所属的元素
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomAttribute.Name">
+            <summary>
+            获取属性名
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomAttribute.AttributeValue">
+            <summary>
+            获取属性值
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomAttribute.Document">
+            <summary>
+            获取 DOM 对象所属的文档
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomComment">
+            <summary>
+            IHtmlComment 的实现
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomNode">
+            <summary>
+            IHtmlNode 的实现
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomNode.Remove">
+            <summary>
+            尝试从 DOM 中移除此节点
+            </summary>
+            <remarks>
+            一旦从 DOM 中移除节点，则节点及其子节点均会被标为已销毁
+            </remarks>
+        </member>
+        <member name="F:Ivony.Html.Parser.DomNode.removed">
+            <summary>
+            指示节点是否已经被移除
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomNode.CheckDisposed">
+            <summary>
+            检查对象是否已被销毁，如果已被销毁则抛出异常
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomNode.ToString">
+            <summary>
+            获取节点的 HTML 表达形式，默认将调用OuterHtml方法
+            </summary>
+            <returns>节点的 HTML 表达形式</returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomNode.Container">
+            <summary>
+            获取节点的容器
+            </summary>
+            <remarks>
+            若节点已从 DOM 移除，则此属性返回null
+            </remarks>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomNode.Document">
+            <summary>
+            获取节点所属的文档
+            </summary>
+            <remarks>若节点已从 DOM 移除，则返回 null</remarks>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomNode.ObjectName">
+            <summary>
+            派生类实现此属性提供对象名称，当抛出 ObjectDisposedException 异常时将使用此名称
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomComment.#ctor(System.String)">
+            <summary>
+            创建 DomComment 实例
+            </summary>
+            <param name="comment">注释内容</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomComment.ObjectName">
+            <summary>
+            获取一个名称，用于在抛出 ObjectDisposedException 异常时说明自己
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomComment.Comment">
+            <summary>
+            获取注释内容
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomDocument">
+            <summary>
+            IHtmlDocument 的实现
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.IDomContainer">
+            <summary>
+            定义特定于 Jumony Parser 的 IHtmlContainer 实现规范。
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.IDomContainer.NodeCollection">
+            <summary>
+            HTML 节点容器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomDocument.#ctor(System.Uri,Ivony.Html.Parser.IDomFragmentParserProvider)">
+            <summary>
+            创建 DomDocument 对象
+            </summary>
+            <param name="uri">文档的 URL</param>
+            <param name="fragementParserProvider">文档碎片解析器提供程序，用于提供相似行为的文档碎片解析器</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomDocument.Nodes">
+            <summary>
+            获取所有子节点
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomDocument.OnDomChanged(System.Object,Ivony.Html.HtmlDomChangedEventArgs)">
+            <summary>
+            引发 HtmlDomChanged 事件
+            </summary>
+            <param name="sender">引发事件的事件源</param>
+            <param name="e">HtmlDomChanged 事件参数</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.DocumentUri">
+            <summary>
+            获取文档的 URL
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.Document">
+            <summary>
+            获取当前对象所属的文档，总是返回自身
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.DocumentDeclaration">
+            <summary>
+            获取文档类型的声明，不支持，总是返回null
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.NodeCollection">
+            <summary>
+            获取节点容器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.FragmentManager">
+            <summary>
+            文档碎片管理器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.DomModifier">
+            <summary>
+            文档模型修改器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.Ivony#Html#IHtmlDocument#DomModifier">
+            <summary>
+            文档模型修改器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.SyncRoot">
+            <summary>
+            用于同步操作的同步对象
+            </summary>
+        </member>
+        <member name="E:Ivony.Html.Parser.DomDocument.HtmlDomChanged">
+            <summary>
+            当文档任何部分被修改时会引发的事件。
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocument.HtmlSpecification">
+            <summary>
+            文档所采用的 HTML 规范。
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomDocumentType">
+            <summary>
+            表示一个文档类型声明
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomDocumentType.ObjectName">
+            <summary>
+            对象名称
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomFragment">
+            <summary>
+            IHtmlFragment 的实现
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragment.#ctor(Ivony.Html.Parser.DomFragmentManager)">
+            <summary>
+            创建一个 DomFragment 实例
+            </summary>
+            <param name="manager">文档碎片管理器</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragment.#ctor(Ivony.Html.Parser.DomFragmentManager,System.String)">
+            <summary>
+            从指定 HTML 创建一个 DomFragment 实例
+            </summary>
+            <param name="manager">文档碎片管理器</param>
+            <param name="html">要分析成碎片的原始 HTML 文本</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragment.Nodes">
+            <summary>
+            获取所有的子节点
+            </summary>
+            <returns>所有的子节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragment.Into(Ivony.Html.IHtmlContainer,System.Int32)">
+            <summary>
+            将文本碎片置入文档
+            </summary>
+            <param name="container">要置入的容器</param>
+            <param name="index">置入的位置</param>
+            <returns>置入后在容器中所产生的节点集</returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragment.NodeCollection">
+            <summary>
+            存放子节点的容器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragment.Document">
+            <summary>
+            获取所属文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragment.Manager">
+            <summary>
+            获取文档碎片管理器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragment.SyncRoot">
+            <summary>
+            用于同步的对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomFragmentManager">
+            <summary>
+            IHtmlFragmentManager 的实现
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragmentManager.#ctor(Ivony.Html.Parser.DomDocument,Ivony.Html.Parser.IDomFragmentParserProvider)">
+            <summary>
+            构造 DomFragmentManager 对象
+            </summary>
+            <param name="document">FragmentManager 对象所属的文档</param>
+            <param name="parserProvider">文档碎片解析器提供程序</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragmentManager.CreateFragment">
+            <summary>
+            创建一个文档碎片
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragmentManager.ParseFragment(System.String)">
+            <summary>
+            分析一段 HTML 成为一个文档碎片
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragmentManager.Allocated(Ivony.Html.Parser.DomFragment)">
+            <summary>
+            当文档碎片被分配到文档上时被调用，用于释放碎片。
+            </summary>
+            <param name="fragment"></param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomFragmentManager.GetParser">
+            <summary>
+            获取用于解析文档片段的解析器
+            </summary>
+            <returns>文档片段解析器</returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragmentManager.SyncRoot">
+            <summary>
+            用于同步的对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragmentManager.Document">
+            <summary>
+            FragmentManager 所属的文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragmentManager.AllFragments">
+            <summary>
+            获取所有的文档碎片
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomFragmentManager.DomModifier">
+            <summary>
+            文档模型修改器
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomModifier">
+            <summary>
+            DOM 结构修改器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.ResolveUri(Ivony.Html.IHtmlDocument,System.Uri)">
+            <summary>
+            修改文档的 URI
+            </summary>
+            <param name="document">要修改的文档</param>
+            <param name="uri">新的文档 URI</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.AddElement(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            在容器指定位置添加一个元素
+            </summary>
+            <param name="container">要添加元素的容器</param>
+            <param name="index">要添加元素的位置</param>
+            <param name="name">添加元素的名称</param>
+            <returns>添加好的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.AddTextNode(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            在容器指定位置添加一个文本节点
+            </summary>
+            <param name="container">要添加元素的容器</param>
+            <param name="index">要添加文本节点的位置</param>
+            <param name="htmlText">添加的 HTML 文本</param>
+            <returns>添加好的文本节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.AddComment(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            在容器指定位置添加一个注释节点
+            </summary>
+            <param name="container">要添加注释的容器</param>
+            <param name="index">要添加注释的位置</param>
+            <param name="comment">添加注释的内容</param>
+            <returns>添加好的注释节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.AddSpecial(Ivony.Html.IHtmlContainer,System.Int32,System.String)">
+            <summary>
+            在容器指定位置添加一个特殊节点
+            </summary>
+            <param name="container">要添加特殊节点的容器</param>
+            <param name="index">要添加特殊节点的位置</param>
+            <param name="html">添加特殊节点的 HTML</param>
+            <returns>添加好的特殊节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.RemoveNode(Ivony.Html.IHtmlNode)">
+            <summary>
+            移除一个节点
+            </summary>
+            <param name="node">要移除的节点</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.AddAttribute(Ivony.Html.IHtmlElement,System.String,System.String)">
+            <summary>
+            为指定元素添加一个属性
+            </summary>
+            <param name="element">要添加属性的元素</param>
+            <param name="name">属性名称</param>
+            <param name="value">属性值</param>
+            <returns>添加好的属性</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.RemoveAttribute(Ivony.Html.IHtmlAttribute)">
+            <summary>
+            移除指定的属性
+            </summary>
+            <param name="attribute">要移除的属性</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomModifier.OnDomChanged(System.Object,Ivony.Html.HtmlDomChangedEventArgs)">
+            <summary>
+            引发 DomChanged 事件
+            </summary>
+            <param name="sender">事件源</param>
+            <param name="e">时间参数</param>
+        </member>
+        <member name="E:Ivony.Html.Parser.DomModifier.HtmlDomChanged">
+            <summary>
+            当 HTML DOM 结构发生改变时引发此事件
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomModifier.SyncRoot">
+            <summary>
+            用于强制同步修改的同步对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomElement">
+            <summary>
+            IHtmlElement 的实现
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            创建 DomElement 实例
+            </summary>
+            <param name="name">元素名</param>
+            <param name="attributes">属性</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+            <summary>
+            创建 DomElement 实例
+            </summary>
+            <param name="name">元素名</param>
+            <param name="attributes">属性</param>
+            <param name="argumentCheck">是否进行参数检查</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.Attributes">
+            <summary>
+            获取所有 HTML 属性
+            </summary>
+            <returns>所有属性对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.AddAttribute(System.String,System.String)">
+            <summary>
+            添加一个属性
+            </summary>
+            <param name="name">属性名</param>
+            <param name="value">属性值</param>
+            <returns>添加后的属性</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.Nodes">
+            <summary>
+            获取所有子节点
+            </summary>
+            <returns>所有子节点列表</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.Remove">
+            <summary>
+            移除这个元素
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.RemoveAttribute(Ivony.Html.Parser.DomAttribute)">
+            <summary>
+            移除一个属性
+            </summary>
+            <param name="attribute"></param>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomElement.ObjectName">
+            <summary>
+            获取一个名称，用于在抛出 ObjectDisposedException 异常时说明自己
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomElement.Name">
+            <summary>
+            获取元素名
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomElement.NodeCollection">
+            <summary>
+            获取子节点容器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomElement.SyncRoot">
+            <summary>
+            获取用于同步的对象
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomElement.DomAttributeCollection">
+            <summary>
+            元素属性容器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.#ctor(Ivony.Html.Parser.DomElement)">
+            <summary>
+            创建 DomAttributeCollection 实例
+            </summary>
+            <param name="element">所属的元素对象</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.InsertItem(System.Int32,Ivony.Html.Parser.DomAttribute)">
+            <summary>
+            重写 InsertItem 方法，将属性加入索引
+            </summary>
+            <param name="index">插入位置</param>
+            <param name="item">插入项</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.SetItem(System.Int32,Ivony.Html.Parser.DomAttribute)">
+            <summary>
+            重写 SetItem 方法，将属性加入索引
+            </summary>
+            <param name="index">插入位置</param>
+            <param name="item">插入项</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.ClearItems">
+            <summary>
+            重写 ClearItems 方法，清空索引
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.RemoveItem(System.Int32)">
+            <summary>
+            重写 RemoveItem 方法，将属性移除索引
+            </summary>
+            <param name="index">要移除的属性的位置</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.GetKeyForItem(Ivony.Html.Parser.DomAttribute)">
+            <summary>
+            获取元素属性的 Key ，即 AttributeName
+            </summary>
+            <param name="item">元素属性</param>
+            <returns>属性的 Key ，即属性名</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomElement.DomAttributeCollection.Contains(System.String)">
+            <summary>
+            检查指定名称的属性是否存在
+            </summary>
+            <param name="attributeName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomNodeCollection">
+            <summary>
+            实现一个 DomNode 的容器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomNodeCollection.#ctor(Ivony.Html.Parser.IDomContainer)">
+            <summary>
+            创建 DomNodeCollection 对象
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomNodeCollection.InsertItem(System.Int32,Ivony.Html.Parser.DomNode)">
+            <summary>
+            重写 InsertItem 方法，修改被插入节点的 Container 属相
+            </summary>
+            <param name="index"></param>
+            <param name="item"></param>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomNodeCollection.Container">
+            <summary>
+            所属的 HTML DOM 容器对象
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomNodeCollection.HtmlNodes">
+            <summary>
+            获取所有节点
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomProvider">
+            <summary>
+            标准 Jumony DOM 模型提供程序
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.#ctor(Ivony.Html.Parser.IDomFragmentParserProvider)">
+            <summary>
+            创建 DomProvider 对象
+            </summary>
+            <param name="provider">文档碎片解析器提供程序</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.CreateDocument">
+            <summary>
+            创建文档
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.CreateDocument(System.Uri)">
+            <summary>
+            创建文档
+            </summary>
+            <param name="url">文档的 URL</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.SetHtmlSpecification(Ivony.Html.IHtmlDocument,System.String)">
+            <summary>
+            设置文档所采用的文档规范
+            </summary>
+            <param name="document">文档</param>
+            <param name="specificationType">所采用的文档规范名称</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.AddElement(Ivony.Html.IHtmlContainer,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            向容器中添加元素
+            </summary>
+            <param name="container">要添加元素的容器</param>
+            <param name="name">元素名</param>
+            <param name="attributes">属性列表</param>
+            <returns>添加好的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.AddTextNode(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            向容器中添加文本节点
+            </summary>
+            <param name="container">要添加文本节点的容器</param>
+            <param name="htmlText">HTML 文本</param>
+            <returns>添加好的文本节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.AddComment(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            向容器中添加注释
+            </summary>
+            <param name="container">要添加注释的容器</param>
+            <param name="comment">要添加的注释</param>
+            <returns>添加好的注释</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.AddSpecial(Ivony.Html.IHtmlContainer,System.String)">
+            <summary>
+            向容器中添加特殊节点
+            </summary>
+            <param name="container">要添加特殊节点的容器</param>
+            <param name="html">特殊节点的 HTML</param>
+            <returns>添加好的特殊节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomProvider.CompleteDocument(Ivony.Html.IHtmlDocument)">
+            <summary>
+            完成文档的创建
+            </summary>
+            <remarks>将在此步骤注入 FragmentParserProvider 对象</remarks>
+            <param name="document">已经完成 DOM 结构部署的文档</param>
+            <returns>创建完成的文档</returns>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomSpecial">
+            <summary>
+            一个特殊的 DOM 节点，默认情况下，特殊 DOM 节点是指用尖括号括起，且首尾第一个字符为"!@%$#"这些特殊字符的标签。
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomSpecial.#ctor(System.String)">
+            <summary>
+            创建 DomSpecial 实例
+            </summary>
+            <param name="rawHtml"></param>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomSpecial.EvaluateHtml">
+            <summary>
+            在渲染时应输出什么。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomSpecial.RawHtml">
+            <summary>
+            原始的 HTML 文本，如果有的话
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomSpecial.ObjectName">
+            <summary>
+            对象名
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.DomTextNode">
+            <summary>
+            IHtmlTextNode 的一个实现
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.DomTextNode.#ctor(System.String)">
+            <summary>
+            创建 DomTextNode 对象
+            </summary>
+            <param name="rawHtml"></param>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomTextNode.ObjectName">
+            <summary>
+            获取一个名称，用于识别节点类型，此属性总是返回 "TextNode"
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomTextNode.HtmlText">
+            <summary>
+            获取文本节点所代表的 HTML 文本
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.DomTextNode.RawHtml">
+            <summary>
+            获取原始的 HTML 文本
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.ContentModels.HtmlBeginTag">
+            <summary>
+            描述一个 HTML 开始标签
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.ContentModels.HtmlBeginTag.#ctor(Ivony.Html.Parser.ContentModels.HtmlContentFragment,System.String,System.Boolean,System.Collections.Generic.IEnumerable{Ivony.Html.Parser.ContentModels.HtmlAttributeSetting})">
+            <summary>
+            创建一个 HtmlBeginTag 对象
+            </summary>
+            <param name="info">应当被认为是 HTML 结束标签的 HTML 片段</param>
+            <param name="tagName">标签名</param>
+            <param name="selfClosed">是否自结束标签</param>
+            <param name="attibutes">属性设置</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlBeginTag.TagName">
+            <summary>
+            标签名
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlBeginTag.SelfClosed">
+            <summary>
+            是否为自结束标签
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.ContentModels.HtmlBeginTag.Attributes">
+            <summary>
+            标签的属性设置
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.IDomFragmentParserProvider">
+            <summary>
+            定义 JumonyParser DOM 模型的文档碎片解析器提供程序
+            </summary>
+            <remarks>JumonyParser 实现此接口并将自身实例作为碎片解析器提供</remarks>
+        </member>
+        <member name="M:Ivony.Html.Parser.IDomFragmentParserProvider.GetFragmentParser(Ivony.Html.Parser.DomDocument)">
+            <summary>
+            获取文档碎片解析器
+            </summary>
+            <param name="document">文档对象</param>
+            <returns>文档碎片解析器</returns>
+        </member>
+        <member name="T:Ivony.Html.Parser.IDomFragmentParser">
+            <summary>
+            定义 JumonyParser DOM 模型的文档碎片解析器
+            </summary>
+            <remarks>JumonyParser 已实现此接口作为碎片解析器</remarks>
+        </member>
+        <member name="M:Ivony.Html.Parser.IDomFragmentParser.ParseToFragment(System.String,Ivony.Html.Parser.DomFragment)">
+            <summary>
+            解析 HTML 并填充文档碎片
+            </summary>
+            <param name="html">HTML 代码</param>
+            <param name="fragment">文档碎片对象</param>
+        </member>
+        <member name="T:Ivony.Html.Parser.IHtmlReader">
+            <summary>
+            HTML 内容元素读取枚举器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.IHtmlReader.EnumerateContent">
+            <summary>
+            获取 HTML 内容元素枚举器
+            </summary>
+            <returns>HTML 内容枚举器</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.IHtmlReader.EnterCDataMode(System.String)">
+            <summary>
+            进入 CData 元素读取模式
+            </summary>
+            <remarks>读取器一旦进入CData元素读取模式，便会将除了元素结束标签之外的一切 HTML 内容当作文本返回。当遇到元素结束标签时，读取器应当自动退出 CData 元素读取模式</remarks>
+            <param name="elementName">CData 元素名</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.IHtmlReader.HtmlText">
+            <summary>
+            正在读取分析的 HTML 文本
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.JumonyParser">
+            <summary>
+            一个标准 HTML 解析器的实现（基于HTML 4.01规范）
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.HtmlParserBase">
+            <summary>
+            协助实现 IHtmlParser 接口
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.Initialize">
+            <summary>
+            初始化容器
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CreateReader(System.String)">
+            <summary>
+            派生类提供 HTML 文本读取器
+            </summary>
+            <param name="html">要读取分析的 HTML 文本</param>
+            <returns>文本读取器</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.Parse(System.String,System.Uri)">
+            <summary>
+            分析 HTML 文本并创建文档
+            </summary>
+            <param name="html">HTML 文本</param>
+            <param name="url">文档的 URL</param>
+            <returns>分析好的 HTML 文档</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ParseInternal(System.String)">
+            <summary>
+            分析 HTML 文本
+            </summary>
+            <param name="html">要分析的 HTML 文本</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessText(Ivony.Html.Parser.ContentModels.HtmlTextContent)">
+            <summary>
+            处理文本节点
+            </summary>
+            <param name="textContent">HTML文本信息</param>
+            <returns>处理过程中所创建的文本节点，若不支持则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CreateTextNode(System.String)">
+            <summary>
+            创建文本节点添加到当前容器
+            </summary>
+            <param name="text">HTML 文本</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessBeginTag(Ivony.Html.Parser.ContentModels.HtmlBeginTag)">
+            <summary>
+            处理元素开始标签
+            </summary>
+            <param name="beginTag">开始标签信息</param>
+            <returns>处理过程中所创建的元素对象，若不支持则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.IsSelfCloseElement(Ivony.Html.Parser.ContentModels.HtmlBeginTag)">
+            <summary>
+            检查元素是否为自结束标签
+            </summary>
+            <param name="tag">元素开始标签</param>
+            <returns>是否为自结束标签</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.IsCDataElement(Ivony.Html.Parser.ContentModels.HtmlBeginTag)">
+            <summary>
+            检查元素是否为CDATA标签
+            </summary>
+            <param name="tag">元素开始标签</param>
+            <returns>是否为CDATA标签</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ImmediatelyClose(System.String,Ivony.Html.IHtmlElement)">
+            <summary>
+            检查当前开放的可选结束标签是否必须立即关闭
+            </summary>
+            <param name="tagName">分析器遇到的标签</param>
+            <param name="element">当前开放的可选结束标签</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CreateElement(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            创建元素并加入当前容器
+            </summary>
+            <param name="tagName">元素名</param>
+            <param name="attributes">元素属性集合</param>
+            <returns>创建好的元素</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessEndTag(Ivony.Html.Parser.ContentModels.HtmlEndTag)">
+            <summary>
+            处理结束标签
+            </summary>
+            <param name="endTag">结束标签信息</param>
+            <returns>相关的元素对象，若不支持则返回null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessEndTagMissingBeginTag(Ivony.Html.Parser.ContentModels.HtmlEndTag)">
+            <summary>
+            处理丢失了开始标签的结束标签
+            </summary>
+            <param name="endTag">结束标签信息</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessComment(Ivony.Html.Parser.ContentModels.HtmlCommentContent)">
+            <summary>
+            处理 HTML 注释
+            </summary>
+            <param name="commentContent">HTML 注释信息</param>
+            <returns>处理过程中所创建的注释对象，若不支持则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CreateCommet(System.String)">
+            <summary>
+            创建注释节点并加入当前容器
+            </summary>
+            <param name="comment">注释内容</param>
+            <returns>创建的注释节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessSpecial(Ivony.Html.Parser.ContentModels.HtmlSpecialTag)">
+            <summary>
+            处理特殊节点
+            </summary>
+            <param name="specialTag">特殊的 HTML 标签</param>
+            <returns>处理过程中所创建的特殊标签节点，若不支持则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CreateSpecial(System.String)">
+            <summary>
+            创建特殊标签节点并加入当前容器
+            </summary>
+            <param name="html">特殊标签的 HTML 内容</param>
+            <returns>创建的特殊标签节点</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.ProcessDoctypeDeclaration(Ivony.Html.Parser.ContentModels.HtmlDoctypeDeclaration)">
+            <summary>
+            处理文档类型声明
+            </summary>
+            <param name="doctype">文档类型声明</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.SetHtmlSpecification(Ivony.Html.Parser.ContentModels.HtmlDoctypeDeclaration)">
+            <summary>
+            根据 DTD 声明设置相应的 HTML 规范
+            </summary>
+            <param name="doctype">DTD 声明</param>
+            <returns>所适用的 HTML 规范</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.SetHtmlSpecification(Ivony.Html.HtmlSpecificationBase)">
+            <summary>
+            设置当前解析器所使用的 HTML 规范
+            </summary>
+            <param name="specification">要设置的 HTML 解析规范</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.HtmlParserBase.CompleteDocument(Ivony.Html.IHtmlDocument)">
+            <summary>
+            完成最终文档解析构建
+            </summary>
+            <param name="document">已经完成的文档结构</param>
+            <returns>最终完成的文档</returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.ContainerStack">
+            <summary>
+            容器堆栈
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.Reader">
+            <summary>
+            当前在使用的 HTML 文本读取器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.DomProvider">
+            <summary>
+            派生类提供 Provider 用于创建 DOM 结构
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.CurrentContainer">
+            <summary>
+            当前容器
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.SyncRoot">
+            <summary>
+            用于同步的对象，在任何公开方法中应lock，确保分析器始终只在一个线程中运行
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.Document">
+            <summary>
+            正在处理的文档
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.HtmlParserBase.HtmlSpecification">
+            <summary>
+            获取所使用的 HTML 规范
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.CreateReader(System.String)">
+            <summary>
+            创建一个 HTML 读取器
+            </summary>
+            <param name="html">要读取的 HTML</param>
+            <returns>HTML 读取器</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.ProcessEndTagMissingBeginTag(Ivony.Html.Parser.ContentModels.HtmlEndTag)">
+            <summary>
+            处理丢失了开始标签的结束标签
+            </summary>
+            <param name="endTag">结束标签信息</param>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.ProcessText(Ivony.Html.Parser.ContentModels.HtmlTextContent)">
+            <summary>
+            处理文本节点
+            </summary>
+            <param name="textContent">文本内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.ProcessComment(Ivony.Html.Parser.ContentModels.HtmlCommentContent)">
+            <summary>
+            处理注释
+            </summary>
+            <param name="commentContent">注释内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.ProcessSpecial(Ivony.Html.Parser.ContentModels.HtmlSpecialTag)">
+            <summary>
+            处理特殊标签
+            </summary>
+            <param name="specialTag">特殊标签</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.GetFragmentParser(Ivony.Html.Parser.DomDocument)">
+            <summary>
+            获取文档片段解析器
+            </summary>
+            <param name="document">要解析文档片段的文档</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyParser.ParseToFragment(System.String,Ivony.Html.Parser.DomFragment)">
+            <summary>
+            解析 HTML 文本到指定的文档碎片对象
+            </summary>
+            <param name="html">要解析的 HTML 文本</param>
+            <param name="fragment">要处理的文本碎片</param>
+        </member>
+        <member name="P:Ivony.Html.Parser.JumonyParser.DomProvider">
+            <summary>
+            获取 HTML DOM 提供程序
+            </summary>
+        </member>
+        <member name="T:Ivony.Html.Parser.JumonyReader">
+            <summary>
+            Jumony 提供的HTML文档读取器的一个实现
+            </summary>
+        </member>
+        <member name="F:Ivony.Html.Parser.JumonyReader.tagNameRegex">
+            <summary>
+            用于匹配元素标签名的正则
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.GetEndTagRegex(System.String)">
+            <summary>
+            获取匹配指定结束标签的正则表达式对象
+            </summary>
+            <param name="tagName">标签名</param>
+            <returns>匹配指定结束标签的正则表达式对象</returns>
+        </member>
+        <member name="F:Ivony.Html.Parser.JumonyReader.tagRegex">
+            <summary>
+            用于匹配 HTML 标签的正则表达式对象
+            </summary>
+        </member>
+        <member name="F:Ivony.Html.Parser.JumonyReader.attributeRegex">
+            <summary>
+            用于匹配属性设置的正则表达式对象
+            </summary>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.#ctor(System.String)">
+            <summary>
+            创建一个 JumonyReader 对象
+            </summary>
+            <param name="htmlText"></param>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.EnumerateContent">
+            <summary>
+            枚举读取到的每一个内容元素
+            </summary>
+            <returns>枚举结果</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.FindEndTag(System.Int32,System.String)">
+            <summary>
+            查找指定元素的结束标签（用于CData元素结束位置查找）
+            </summary>
+            <param name="index">查找的开始位置</param>
+            <param name="elementName">元素名称</param>
+            <returns>找到的结束标签，若已到达文档末尾，则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.NextContentNode(System.Int32)">
+            <summary>
+            读取下一个 HTML 内容节点（开始标签、结束标签、注释或特殊节点）
+            </summary>
+            <param name="index">读取开始位置</param>
+            <returns>下一个内容节点，若已经达到文档末尾，则返回 null</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateBeginTag(System.Text.RegularExpressions.Match)">
+            <summary>
+            创建开始标签内容对象
+            </summary>
+            <param name="match">开始标签的匹配</param>
+            <returns>开始标签内容对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateAttributes(System.String,System.Int32)">
+            <summary>
+            创建属性设置内容对象
+            </summary>
+            <param name="attributesExpression">属性表达式</param>
+            <param name="index">属性表达式开始位置</param>
+            <returns>HTML 属性设置的内容对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateEndTag(System.Text.RegularExpressions.Match)">
+            <summary>
+            根据匹配到的结果，创建一个结束标签
+            </summary>
+            <param name="match">正则表达式匹配结果</param>
+            <returns>用于描述结束标签内容的对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateComment(System.Text.RegularExpressions.Match)">
+            <summary>
+            根据匹配到的结果，创建一个注释标签
+            </summary>
+            <param name="match">正则表达式匹配结果</param>
+            <returns>用于描述注释标签内容的对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateSpacial(System.Text.RegularExpressions.Match)">
+            <summary>
+            根据匹配到的结果，创建一个特殊标签
+            </summary>
+            <param name="match">正则表达式匹配结果</param>
+            <returns>用于描述特殊标签内容的对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateDoctypeDeclaration(System.Text.RegularExpressions.Match)">
+            <summary>
+            根据匹配到的结果，创建一个文档声明标签
+            </summary>
+            <param name="match">正则表达式匹配结果</param>
+            <returns>用于描述文档声明标签内容的对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateText(System.Int32,System.Int32)">
+             <summary>
+             创建一段文本内容
+             </summary>
+            <param name="startIndex">文本开始位置</param>
+             <param name="endIndex">文本结束位置</param>
+             <returns>用于描述文档声明标签内容的对象</returns>
+        </member>
+        <member name="M:Ivony.Html.Parser.JumonyReader.CreateFragment(System.Text.RegularExpressions.Capture,System.Int32)">
+            <summary>
+            创建一个文档内容片段对象
+            </summary>
+            <param name="capture">捕获到的字符串</param>
+            <param name="offset">捕获对象的偏移量，用于计算真实的字符串位置</param>
+            <returns>文档内容片段对象</returns>
+        </member>
+        <member name="P:Ivony.Html.Parser.JumonyReader.HtmlText">
+            <summary>
+            要分析的 HTML 文本
+            </summary>
+        </member>
+        <member name="P:Ivony.Html.Parser.JumonyReader.CDataElement">
+            <summary>
+            若当前处于 CData 元素内部，此属性指示元素名
+            </summary>
+        </member>
+    </members>
+</doc>

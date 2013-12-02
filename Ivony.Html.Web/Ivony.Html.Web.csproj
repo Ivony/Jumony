@@ -69,29 +69,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
-    <Compile Include="DefaultListBinder.cs" />
+    <Compile Include="Binding\HtmlListBindingContext.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
-    <Compile Include="HtmlBindingContext.cs" />
-    <Compile Include="HtmlElementBinderProvider.cs" />
+    <Compile Include="Binding\HtmlBindingContext.cs" />
+    <Compile Include="Binding\HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
-    <Compile Include="HtmlListBindingContext.cs" />
+    <Compile Include="Binding\HtmlRepeatBindingContext.cs" />
     <Compile Include="HttpHandlerBase.cs" />
     <Compile Include="HtmlHandlerWrapper.cs" />
     <Compile Include="IHandlerWrapper.cs" />
-    <Compile Include="IHtmlElementBinder.cs" />
+    <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
+    <Compile Include="Binding\IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
-    <Compile Include="IHtmlListBinder.cs" />
+    <Compile Include="Binding\IListDataContext.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
-    <Compile Include="IListDataContext.cs" />
     <Compile Include="JumonyRequestMapperRoute.cs" />
     <Compile Include="JumonyRouteHandler.cs" />
-    <Compile Include="ListDataContext.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="DefaultElementBinder.cs" />
     <Compile Include="StaticFileContentProvider.cs" />

@@ -1,5 +1,7 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-[Bb]in/
+[Bb]in/*.dll
+[Bb]in/*.pdb
+[Bb]in/*.xml
 [Oo]bj/
 
 # mstest test results

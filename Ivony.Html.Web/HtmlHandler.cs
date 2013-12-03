@@ -6,14 +6,23 @@ using System.Web;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// HTML 处理程序基类，协助实现 HTML 处理程序
+  /// </summary>
   public abstract class HtmlHandler : HtmlHandlerBase, IHtmlHandler, IHttpHandler
   {
 
 
+    /// <summary>
+    /// 处理 HTML 范围
+    /// </summary>
+    /// <param name="context">当前 HTML 请求上下文</param>
+    /// <param name="scope">HTML 范围</param>
     public void ProcessScope( HtmlRequestContext context, IHtmlContainer scope )
     {
-      _context = context;
-      _scope = scope;
+      Context = context;
+      Scope = scope;
 
       ProcessScope();
     }
@@ -24,24 +33,25 @@ namespace Ivony.Html.Web
 
 
 
-    private IHtmlContainer _scope;
-
-    public override IHtmlContainer Scope
+    protected IHtmlContainer Scope
     {
-      get { return _scope; }
+      get;
+      private set;
+    }
+
+    protected override IHtmlContainer HtmlScope
+    {
+      get { return Scope; }
     }
 
 
-    private HtmlRequestContext _context;
+
     protected HtmlRequestContext Context
     {
-      get { return _context; }
+      get;
+      private set;
     }
 
-    public override string VirtualPath
-    {
-      get { return Context.VirtualPath; }
-    }
 
 
     protected override System.Web.HttpContextBase HttpContext

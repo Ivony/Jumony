@@ -52,14 +52,19 @@ namespace Ivony.Html.Web
     }
 
 
-    private IHtmlContainer _scope;
-
     /// <summary>
     /// 获取当前要处理的 HTML 范围
     /// </summary>
-    public override IHtmlContainer Scope
+    protected IHtmlContainer Scope
     {
-      get { return _scope; }
+      get;
+      private set;
+    }
+
+
+    protected sealed override IHtmlContainer HtmlScope
+    {
+      get { return Scope; }
     }
 
     /// <summary>
@@ -74,7 +79,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取当前文档的虚拟路径
     /// </summary>
-    public sealed override string VirtualPath
+    public string VirtualPath
     {
       get { return Url.VirtualPath; }
     }
@@ -111,7 +116,7 @@ namespace Ivony.Html.Web
     {
       ViewContext = viewContext;
       ViewData = viewContext.ViewData;
-      _scope = scope;
+      Scope = scope;
       Url = urlHelper;
 
       ProcessScope();

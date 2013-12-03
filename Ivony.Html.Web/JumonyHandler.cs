@@ -47,10 +47,7 @@ namespace Ivony.Html.Web
     protected void ProcessRequest( RequestContext context )
     {
 
-      _httpContext = context.HttpContext;
-
-      
-      Trace.Write( "Jumony Web", "Begin of Request" );
+      context.HttpContext.Trace.Write( "Jumony Web", "Begin of Request" );
 
       if ( context.RouteData == null || !(context.RouteData.Route is IHtmlRequestRoute) )
         throw DirectVisitError();
@@ -59,9 +56,10 @@ namespace Ivony.Html.Web
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
 
-      ProcessRequest( context.HttpContext, virtualPath );
+      var response = ProcessRequest( context.HttpContext, virtualPath );
+      OutputResponse( context.HttpContext, response );
 
-      Trace.Write( "Jumony Web", "End of Request" );
+      context.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
     }
 
 
@@ -70,9 +68,9 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <param name="virtualPath">当前要处理的虚拟路径</param>
-    protected virtual void ProcessRequest( HttpContextBase context, string virtualPath )
+    protected virtual ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath )
     {
-
+      _httpContext = context;
 
       ICachedResponse response;
 
@@ -97,7 +95,7 @@ namespace Ivony.Html.Web
       else
         Trace.Write( "Jumony Web", "Cache resolved." );
 
-      OutputResponse( response );
+      return response;
     }
 
 
@@ -264,9 +262,9 @@ namespace Ivony.Html.Web
     /// 派生类重写此方法自定义输出响应的逻辑
     /// </summary>
     /// <param name="responseData">响应信息</param>
-    protected virtual void OutputResponse( ICachedResponse responseData )
+    protected virtual void OutputResponse( HttpContextBase context, ICachedResponse responseData )
     {
-      responseData.Apply( HttpContext.Response );
+      responseData.Apply( context.Response );
     }
 
 

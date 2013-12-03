@@ -243,7 +243,10 @@ namespace Ivony.Html.Web
 
     private static void Trace( string message )
     {
-      HttpContext.Current.Trace.Write( "Jumony for ASP.NET", message );
+
+      var httpContext = HttpContext.Current;
+      if ( httpContext != null )
+        httpContext.Trace.Write( "Jumony for ASP.NET", message );
     }
 
 

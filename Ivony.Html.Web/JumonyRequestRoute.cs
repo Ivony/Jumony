@@ -27,6 +27,12 @@ namespace Ivony.Html.Web
     public override RouteData GetRouteData( HttpContextBase httpContext )
     {
 
+
+      if ( httpContext.Request.CurrentExecutionFilePath == null )
+        return null;
+
+
+
       var routeData = new RouteData( this, JumonyRouteHandler.Instance );
 
       return routeData;

@@ -172,22 +172,22 @@ namespace Ivony.Html.Web
       CreateBindingContext( this, element, dataContext ).DataBind();
     }
 
-    protected HtmlBindingContext CreateBindingContext( HtmlBindingContext parentContext, IHtmlElement element, object dataContext )
+    protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataContext )
     {
       var services = WebServiceLocator.GetServices<IHtmlBindingContextProvider>();
 
       foreach ( var provider in services )
       {
-        var context = provider.CreateBindingContext( parentContext, element, dataContext );
+        var context = provider.CreateBindingContext( bindingContext, element, dataContext, null );
         if ( context != null )
           return context;
       }
 
       var listData = dataContext as IEnumerable;
       if ( listData != null )
-        return new HtmlRepeatBindingContext( parentContext, element, listData );
+        return new HtmlRepeatBindingContext( bindingContext, element, listData );
 
-      return new HtmlBindingContext( parentContext, element, dataContext );
+      return new HtmlBindingContext( bindingContext, element, dataContext );
     }
 
 
@@ -221,10 +221,6 @@ namespace Ivony.Html.Web
     protected virtual object GetDataContext( AttributeExpression expression )
     {
       var dataContext = GetDataObject( expression, this );
-
-      var list = dataContext as IEnumerable;
-      if ( list != null )
-        dataContext = new ListDataContext( list, expression );
 
       return dataContext;
     }

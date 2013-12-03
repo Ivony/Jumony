@@ -128,7 +128,7 @@ namespace Ivony.Html.Web
     {
 
       var binders = HtmlElementBinderProvider.GetBinders( this );
-      var bindingContext = new HtmlBindingContext( binders, Scope, Model, ViewData );
+      var bindingContext = HtmlBindingContext.CreateInstance( binders, Scope, Model, ViewData );
 
       bindingContext.DataBind();
 

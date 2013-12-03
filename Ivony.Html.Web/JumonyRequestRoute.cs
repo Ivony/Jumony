@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Routing;
 
 namespace Ivony.Html.Web
@@ -28,15 +29,21 @@ namespace Ivony.Html.Web
     {
 
 
-      if ( httpContext.Request.CurrentExecutionFilePath == null )
+      var virtualPath = httpContext.Request.CurrentExecutionFilePath;
+
+      if ( !VirtualPathProvider.FileExists( virtualPath ) )//文件不存在时不路由
         return null;
-
-
 
       var routeData = new RouteData( this, JumonyRouteHandler.Instance );
 
       return routeData;
 
+    }
+
+
+    protected VirtualPathProvider VirtualPathProvider
+    {
+      get { return HostingEnvironment.VirtualPathProvider; }
     }
 
 

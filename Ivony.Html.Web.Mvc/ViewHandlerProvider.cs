@@ -163,19 +163,6 @@ namespace Ivony.Html.Web
 
 
 
-    private static SynchronizedCollection<IViewHandlerProvider> _providers = new SynchronizedCollection<IViewHandlerProvider>();
-
-
-    /// <summary>
-    /// 注册的视图处理器提供程序。
-    /// </summary>
-    public static ICollection<IViewHandlerProvider> ViewHandlerProviders
-    {
-      get { return _providers; }
-    }
-
-
-
     /// <summary>
     /// 在 HTML 文档中查找 ViewHandler 路径设置。
     /// </summary>

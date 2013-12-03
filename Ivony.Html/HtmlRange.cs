@@ -59,12 +59,15 @@ namespace Ivony.Html
 
     public IEnumerable<IHtmlNode> Nodes()
     {
-      throw new NotImplementedException();
+      lock ( SyncRoot )
+      {
+        throw new NotImplementedException();
+      }
     }
 
     public object SyncRoot
     {
-      get { throw new NotImplementedException(); }
+      get { return container.SyncRoot; }
     }
 
     public object RawObject

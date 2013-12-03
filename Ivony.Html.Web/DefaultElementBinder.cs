@@ -28,12 +28,9 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="element">需要绑定数据的元素</param>
     /// <param name="context">绑定上下文</param>
-    /// <param name="dataContext">数据上下文</param>
     /// <returns>是否进行了绑定</returns>
-    public bool BindElement( IHtmlElement element, HtmlBindingContext context, out object dataContext )
+    public bool BindElement( HtmlBindingContext context, IHtmlElement element )
     {
-
-      dataContext = null;
 
       if ( element.Attribute( "binding-visible" ) != null )
       {
@@ -74,16 +71,12 @@ namespace Ivony.Html.Web
 
       if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
       {
-        var dataContextExpression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
-        if ( dataContextExpression != null )
-          dataContext = GetDataObject( dataContextExpression, context );
-
         return false;
       }
 
       var expression = new AttributeExpression( element );
 
-      object dataObject = GetDataObject( expression, context );
+      object dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
       if ( dataObject == null )
         return false;
@@ -164,32 +157,6 @@ namespace Ivony.Html.Web
     }
 
 
-
-    private static object GetDataObject( AttributeExpression expression, HtmlBindingContext context )
-    {
-      //获取绑定数据源
-
-      string key;
-      object dataObject;
-
-      if ( expression.Arguments.TryGetValue( "key", out key ) || expression.Arguments.TryGetValue( "name", out key ) )
-        context.Data.TryGetValue( key, out dataObject );
-      else
-        dataObject = context.DataContext;
-
-      if ( dataObject == null )
-        return null;
-
-
-      string path;
-
-      if ( expression.Arguments.TryGetValue( "path", out path ) )
-        dataObject = DataBinder.Eval( dataObject, path );
-
-      return dataObject;
-    }
-
-
     private string ToJson( object dataObject )
     {
       var serializer = new JavaScriptSerializer();
@@ -204,7 +171,7 @@ namespace Ivony.Html.Web
     /// <param name="attribute">要绑定的元素属性</param>
     /// <param name="context">绑定上下文</param>
     /// <returns>是否成功绑定</returns>
-    public bool BindAttribute( IHtmlAttribute attribute, HtmlBindingContext context )
+    public bool BindAttribute( HtmlBindingContext context, IHtmlAttribute attribute )
     {
 
       if ( attribute.Name == "datacontext" )
@@ -214,7 +181,7 @@ namespace Ivony.Html.Web
       if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
         return false;
 
-      var dataObject = GetDataObject( expression, context );
+      var dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
       if ( dataObject == null )
       {

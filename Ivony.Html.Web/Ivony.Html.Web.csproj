@@ -73,11 +73,11 @@
     <Compile Include="Binding\HtmlBindingContext.cs" />
     <Compile Include="Binding\HtmlElementBinderProvider.cs" />
     <Compile Include="Binding\HtmlRepeatBindingContext.cs" />
+    <Compile Include="Binding\IHtmlBinderProvider.cs" />
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
     <Compile Include="Binding\IHtmlElementBinder.cs" />
     <Compile Include="Binding\IListDataContext.cs" />
     <Compile Include="DefaultElementBinder.cs" />
-    <Compile Include="DefaultHtmlHandler.cs" />
     <Compile Include="DefaultHtmlHandlerProvider.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />

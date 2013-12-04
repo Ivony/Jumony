@@ -27,7 +27,7 @@ namespace Ivony.Html.Web
     /// </summary>
     protected override void ProcessScope()
     {
-      _handler.ProcessScope( new HtmlRequestContext( HttpContext, VirtualPath ), Scope );
+      _handler.ProcessScope( new HtmlRequestContext( HttpContext, VirtualPath, Scope ) );
     }
 
 

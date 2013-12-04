@@ -14,7 +14,13 @@ namespace Ivony.Html.Web
   {
 
 
-    public HtmlRequestContext( HttpContextBase httpContext, string virtualPath )
+    /// <summary>
+    /// 创建 HtmlRequestContext 实例
+    /// </summary>
+    /// <param name="httpContext">当前 HTTP 请求上下文</param>
+    /// <param name="virtualPath">当前处理的文档的虚拟路径</param>
+    /// <param name="scope">当前要处理的 HTML 文档范围</param>
+    public HtmlRequestContext( HttpContextBase httpContext, string virtualPath, IHtmlContainer scope )
     {
 
       if ( httpContext == null )
@@ -23,9 +29,16 @@ namespace Ivony.Html.Web
       if ( virtualPath == null )
         throw new ArgumentNullException( "virtualPath" );
 
+      if ( scope == null )
+        throw new ArgumentException( "scope" );
+
+
       HttpContext = httpContext;
       VirtualPath = virtualPath;
+      Scope = scope;
     }
+
+
 
     /// <summary>
     /// 当前 HTTP 请求
@@ -37,6 +50,13 @@ namespace Ivony.Html.Web
     /// 当前处理的文档的虚拟路径
     /// </summary>
     public string VirtualPath { get; private set; }
+
+
+    /// <summary>
+    /// 要处理的 HTML 范围
+    /// </summary>
+    public IHtmlContainer Scope { get; private set; }
+
 
   }
 }

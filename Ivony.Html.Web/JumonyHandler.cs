@@ -81,9 +81,7 @@ namespace Ivony.Html.Web
       if ( response == null )
       {
 
-        var htmlRequestContext = new HtmlRequestContext( context, virtualPath );
-
-        response = ProcessRequestCore( htmlRequestContext );
+        response = ProcessRequestCore( context, virtualPath );
 
 
         Trace.Write( "Jumony Web", "Begin update cache" );
@@ -120,10 +118,8 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HtmlRequestContext context )
+    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase httpContext, string virtualPath )
     {
-
-      string virtualPath = context.VirtualPath;
 
       IHtmlDocument document;
 
@@ -142,7 +138,7 @@ namespace Ivony.Html.Web
       OnPreProcessDocument();
 
       Trace.Write( "Jumony Web", "Begin process document." );
-      handler.ProcessScope( context, document );
+      handler.ProcessScope( new HtmlRequestContext( httpContext, virtualPath, document ) );
       Trace.Write( "Jumony Web", "End process document." );
 
       OnPostProcessDocument();
@@ -186,7 +182,7 @@ namespace Ivony.Html.Web
 
       }
 
-      return new DefaultHtmlHandler();
+      return new HtmlHandler();
     }
 
 

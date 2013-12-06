@@ -13,6 +13,10 @@ namespace Ivony.Html.Web
   /// </summary>
   public class JumonyRequestMapperRoute : RouteBase
   {
+    public static string TokenKey
+    {
+      get { return "HtmlVirtualPath"; }
+    }
 
     /// <summary>
     /// 获取路由信息，将对请求进行 RequestMapping 的结果包装成路由信息

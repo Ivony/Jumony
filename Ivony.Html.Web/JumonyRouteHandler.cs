@@ -7,6 +7,10 @@ using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// 映射 HTML 文件路由请求到 HTML 处理器
+  /// </summary>
   public class JumonyRouteHandler : IRouteHandler
   {
 
@@ -15,14 +19,8 @@ namespace Ivony.Html.Web
     public IHttpHandler GetHttpHandler( RequestContext requestContext )
     {
 
-      var mapping = requestContext.RouteData.DataTokens[MappingKey] as RequestMapping;
-      if ( mapping == null )
-        throw new InvalidOperationException();//UNDONE 详细的异常信息
+      return new HtmlHandler();
 
-      var context = requestContext.HttpContext;
-
-      context.SetMapping( mapping );
-      return WebExtenions.GetHttpHandler( mapping.Handler );
     }
 
     public static IRouteHandler Instance { get; set; }

@@ -69,11 +69,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
+    <Compile Include="DefaultHtmlHandlerProvider.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="Binding\HtmlBindingContext.cs" />
     <Compile Include="Binding\HtmlElementBinderProvider.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
+    <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="Binding\HtmlRepeatBindingContext.cs" />
     <Compile Include="HttpHandlerBase.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
     <Compile Include="Binding\IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
+    <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlHandler.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="IHtmlParserProvider.cs" />
     <Compile Include="JumonyRequestMapperRoute.cs" />
     <Compile Include="JumonyRouteHandler.cs" />
+    <Compile Include="PartialRequestMapping.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="DefaultElementBinder.cs" />
     <Compile Include="StaticFileContentProvider.cs" />

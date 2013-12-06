@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeExpression.cs" />
-    <Compile Include="Binding\HtmlListBindingContext.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="DefaultRequestMapper.cs" />
     <Compile Include="Binding\HtmlBindingContext.cs" />
@@ -83,7 +82,6 @@
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
     <Compile Include="Binding\IHtmlElementBinder.cs" />
     <Compile Include="IHtmlDocumentProvider.cs" />
-    <Compile Include="Binding\IListDataContext.cs" />
     <Compile Include="JumonyHandler.cs" />
     <Compile Include="HtmlProviders.cs" />
     <Compile Include="IHtmlHandler.cs" />

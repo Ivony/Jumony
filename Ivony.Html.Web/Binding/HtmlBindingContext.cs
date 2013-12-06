@@ -25,7 +25,6 @@ namespace Ivony.Html.Web
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-
     public static HtmlBindingContext CreateInstance( IHtmlElementBinder[] binders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
     {
       return new HtmlBindingContext( binders, scope, dataContext, dataValues ?? new Dictionary<string, object>() );

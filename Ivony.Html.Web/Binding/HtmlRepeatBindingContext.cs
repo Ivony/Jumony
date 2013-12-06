@@ -10,7 +10,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 进行列表数据绑定的时候的绑定上下文信息
+  /// 将被绑定元素复制若干份以绑定列表的绑定上下文
   /// </summary>
   public sealed class HtmlRepeatBindingContext : HtmlBindingContext
   {

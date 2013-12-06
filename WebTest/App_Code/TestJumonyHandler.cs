@@ -12,9 +12,9 @@ using System.Web.Routing;
 public class TestJumonyHandler : JumonyHandler
 {
 
-  public ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath )
+  public ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath, bool isPartial = false )
   {
-    return base.ProcessRequest( context, virtualPath );
+    return base.ProcessRequest( context, virtualPath, isPartial );
   }
 
 }

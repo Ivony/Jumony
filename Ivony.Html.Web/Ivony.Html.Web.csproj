@@ -99,6 +99,7 @@
     <Compile Include="JumonyRequestRoute.cs" />
     <Compile Include="JumonyRouteHandler.cs" />
     <Compile Include="PartialRequestMapping.cs" />
+    <Compile Include="PartialResponse.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="StaticFileContentProvider.cs" />
     <Compile Include="WebFormPageContentProvider.cs" />

@@ -56,7 +56,7 @@ namespace Ivony.Html.Web
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
 
-      var response = ProcessRequest( context.HttpContext, virtualPath );
+      var response = ProcessRequest( context.HttpContext, virtualPath, false );
       OutputResponse( context.HttpContext, response );
 
       context.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
@@ -68,7 +68,8 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     /// <param name="virtualPath">当前要处理的虚拟路径</param>
-    protected virtual ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath )
+    /// <param name="isPartial">是否为部分视图模式</param>
+    protected virtual ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath, bool isPartial )
     {
       _httpContext = context;
 
@@ -81,7 +82,7 @@ namespace Ivony.Html.Web
       if ( response == null )
       {
 
-        response = ProcessRequestCore( context, virtualPath );
+        response = ProcessRequestCore( context, virtualPath, isPartial );
 
 
         Trace.Write( "Jumony Web", "Begin update cache" );
@@ -116,9 +117,10 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
-    /// <param name="context">HTTP 请求上下文</param>
+    /// <param name="httpContext">HTTP 请求上下文</param>
+    /// <param name="virtualPath">当前请求文档的虚拟路径</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase httpContext, string virtualPath )
+    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase httpContext, string virtualPath, bool isPartial )
     {
 
       IHtmlDocument document;
@@ -135,10 +137,19 @@ namespace Ivony.Html.Web
       var filters = InitailizeFilters( virtualPath, document );
       var handler = GetHandler( virtualPath, document );
 
+
+
+      HtmlRequestContext context;
+      if ( isPartial )
+        context = new HtmlRequestContext( httpContext, virtualPath, GetPartialScope( document ) );
+
+      else
+        context = new HtmlRequestContext( httpContext, virtualPath, document );
+
       OnPreProcessDocument();
 
       Trace.Write( "Jumony Web", "Begin process document." );
-      handler.ProcessScope( new HtmlRequestContext( httpContext, virtualPath, document ) );
+      handler.ProcessScope( context );
       Trace.Write( "Jumony Web", "End process document." );
 
       OnPostProcessDocument();
@@ -149,16 +160,48 @@ namespace Ivony.Html.Web
       OnPreRender();
 
       Trace.Write( "Jumony Web", "Begin render document." );
-      var content = document.Render();
+      string content;
+      using ( StringWriter writer = new StringWriter() )
+      {
+        context.Scope.RenderChilds( writer, GetAdapters() );
+        content = writer.ToString();
+      }
+
       Trace.Write( "Jumony Web", "End render document." );
 
       OnPostRender();
 
-
-
-      return CreateResponse( content );
+      if ( isPartial )
+        return CreatePartialResponse( content );
+      else
+        return CreateResponse( content );
     }
 
+
+    protected virtual IHtmlContainer GetPartialScope( IHtmlDocument document )
+    {
+      var body = document.Find( "body" ).SingleOrDefault();
+
+      if ( body == null )
+        return document;
+
+      else
+        return body;
+    }
+
+
+
+    protected virtual IHtmlRenderAdapter[] GetAdapters()
+    {
+      return new IHtmlRenderAdapter[0];
+    }
+
+
+    /// <summary>
+    /// 派生类重写此方法自定义加载文档的逻辑
+    /// </summary>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <returns>加载的文档对象</returns>
     protected virtual IHtmlDocument LoadDocument( string virtualPath )
     {
       return HtmlProviders.LoadDocument( virtualPath );
@@ -246,11 +289,24 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法自定义创建响应的逻辑
     /// </summary>
+    /// <param name="content">响应内容</param>
     /// <returns>响应</returns>
-    protected virtual RawResponse CreateResponse( string content )
+    protected virtual ICachedResponse CreateResponse( string content )
     {
       return new RawResponse() { Content = content };
     }
+
+
+    /// <summary>
+    /// 派生类重写此方法自定义创建部分视图响应的逻辑
+    /// </summary>
+    /// <param name="content">响应内容</param>
+    /// <returns>响应</returns>
+    protected virtual ICachedResponse CreatePartialResponse( string content )
+    {
+      return new PartialResponse() { Content = content };
+    }
+
 
 
 

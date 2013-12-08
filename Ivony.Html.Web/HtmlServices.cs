@@ -20,7 +20,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 提供 Jumony Web 所有提供程序的管理和注册的静态类
   /// </summary>
-  public static class HtmlProviders
+  public static class HtmlServices
   {
 
 
@@ -60,7 +60,9 @@ namespace Ivony.Html.Web
     }
 
 
-
+    /// <summary>
+    /// 提供所有默认服务的对象，此属性仅供测试用途。
+    /// </summary>
     public static readonly DefaultProviders Default = new DefaultProviders();
 
 
@@ -259,7 +261,7 @@ namespace Ivony.Html.Web
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw HtmlProviders.VirtualPathFormatError( "virtualPath" );
+        throw HtmlServices.VirtualPathFormatError( "virtualPath" );
 
       return new Uri( baseUri, VirtualPathUtility.ToAbsolute( virtualPath ) );
     }

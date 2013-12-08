@@ -18,7 +18,7 @@ namespace Ivony.Html.Web
 
     public CachePolicy CreateCachePolicy( HttpContextBase context )
     {
-      return HtmlProviders.GetCachePolicy( context );
+      return HtmlServices.GetCachePolicy( context );
     }
   }
 

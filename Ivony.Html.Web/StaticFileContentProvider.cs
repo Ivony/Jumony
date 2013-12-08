@@ -70,7 +70,7 @@ namespace Ivony.Html.Web
 
       if ( content == null )
       {
-        var dependency = HtmlProviders.CreateCacheDependency( provider, virtualPath );
+        var dependency = HtmlServices.CreateCacheDependency( provider, virtualPath );
         content = LoadContent( file );
 
         HttpRuntime.Cache.Insert( key, content, dependency );

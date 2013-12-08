@@ -262,7 +262,7 @@ namespace Ivony.Html.Web
           if ( !VirtualPathUtility.IsAppRelative( path ) )
             throw new FormatException( "path 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
 
-          var content = HtmlProviders.LoadContent( path );
+          var content = HtmlServices.LoadContent( path );
           if ( content != null )
             return content.Content;
         }

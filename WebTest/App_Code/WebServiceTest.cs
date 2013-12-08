@@ -57,7 +57,7 @@ namespace WebTest
       var provider = new TestContentService();
 
       WebServiceLocator.RegisterService( provider, VirtualPathUtility.GetDirectory( testContentPath ) );
-      var result = HtmlProviders.LoadContent( testContentPath );
+      var result = HtmlServices.LoadContent( testContentPath );
 
       Assert.AreEqual( result.Content, testContent, "测试内容提供程序失败" );
 

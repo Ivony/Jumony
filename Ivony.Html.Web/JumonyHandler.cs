@@ -63,6 +63,16 @@ namespace Ivony.Html.Web
     }
 
 
+    public virtual string ProcessPartial( HttpContextBase context, string virtualPath )
+    {
+
+      var response = ProcessRequest( context, virtualPath, true );
+      return response.CastTo<PartialResponse>().Content;
+
+    }
+
+
+
     /// <summary>
     /// 处理 HTTP 请求
     /// </summary>
@@ -99,19 +109,6 @@ namespace Ivony.Html.Web
 
 
 
-
-
-    public static Exception DirectVisitError()
-    {
-      return new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
-    }
-
-
-
-    protected virtual TraceContext Trace
-    {
-      get { return HttpContext.Trace; }
-    }
 
 
     /// <summary>
@@ -178,6 +175,31 @@ namespace Ivony.Html.Web
     }
 
 
+
+    /// <summary>
+    /// 产生一个异常，用于说明 HTML 处理程序不能直接访问
+    /// </summary>
+    /// <returns>HTTP 404 异常</returns>
+    public static Exception DirectVisitError()
+    {
+      return new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+    }
+
+
+    /// <summary>
+    /// 获取用于写入追踪信息的上下文
+    /// </summary>
+    protected virtual TraceContext Trace
+    {
+      get { return HttpContext.Trace; }
+    }
+
+
+    /// <summary>
+    /// 获取部分视图要处理的范围
+    /// </summary>
+    /// <param name="document"></param>
+    /// <returns></returns>
     protected virtual IHtmlContainer GetPartialScope( IHtmlDocument document )
     {
       var body = document.Find( "body" ).SingleOrDefault();
@@ -191,6 +213,10 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 获取当前适用的渲染代理
+    /// </summary>
+    /// <returns>要用于当前渲染过程的渲染代理</returns>
     protected virtual IHtmlRenderAdapter[] GetAdapters()
     {
       return new IHtmlRenderAdapter[0];
@@ -204,7 +230,7 @@ namespace Ivony.Html.Web
     /// <returns>加载的文档对象</returns>
     protected virtual IHtmlDocument LoadDocument( string virtualPath )
     {
-      return HtmlProviders.LoadDocument( virtualPath );
+      return HtmlServices.LoadDocument( virtualPath );
     }
 
     /// <summary>
@@ -258,7 +284,7 @@ namespace Ivony.Html.Web
     /// <returns>缓存的输出</returns>
     protected virtual ICachedResponse ResolveCache()
     {
-      var policy = HtmlProviders.GetCachePolicy( HttpContext );
+      var policy = HtmlServices.GetCachePolicy( HttpContext );
 
       if ( policy == null )
         return null;
@@ -313,6 +339,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法自定义输出响应的逻辑
     /// </summary>
+    /// <param name="context">HTTP 上下文</param>
     /// <param name="responseData">响应信息</param>
     protected virtual void OutputResponse( HttpContextBase context, ICachedResponse responseData )
     {
@@ -392,18 +419,6 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>在尝试缓存输出前引发此事件</summary>
-    public event EventHandler PreResolveCache;
-    /// <summary>在缓存未命中后引发此事件</summary>
-    public event EventHandler PostResolveCache;
-
-    /// <summary>引发 PreResolveCache 事件</summary>
-    protected virtual void OnPreResolveCache() { if ( PreResolveCache != null ) PreResolveCache( this, EventArgs.Empty ); }
-    /// <summary>引发 PostResolveCache 事件</summary>
-    protected virtual void OnPostResolveCache() { if ( PostResolveCache != null ) PostResolveCache( this, EventArgs.Empty ); }
-
-
-    #region IDisposable 成员
 
     /// <summary>
     /// 执行与释放或重置非托管资源相关的应用程序定义的任务
@@ -412,9 +427,6 @@ namespace Ivony.Html.Web
     {
 
     }
-
-    #endregion
-
 
   }
 }

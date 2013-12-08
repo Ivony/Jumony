@@ -13,9 +13,9 @@ public class DefaultProviderTest : TestClass
 
   public void DefaultContentService()
   {
-    Assert.HasAny( HtmlProviders.Default.GetContentServices( "~/1.htm" ).OfType<StaticFileContentProvider>(), ".htm 扩展名未能获得 StaticFileContentProvider" );
-    Assert.HasAny( HtmlProviders.Default.GetContentServices( "~/1.html" ).OfType<StaticFileContentProvider>(), ".html 扩展名未能获得 StaticFileContentProvider" );
-    Assert.HasAny( HtmlProviders.Default.GetContentServices( "~/1.aspx" ).OfType<WebFormPageContentProvider>(), ".aspx 扩展名未能获得 WebFormPageContentProvider" );
+    Assert.HasAny( HtmlServices.Default.GetContentServices( "~/1.htm" ).OfType<StaticFileContentProvider>(), ".htm 扩展名未能获得 StaticFileContentProvider" );
+    Assert.HasAny( HtmlServices.Default.GetContentServices( "~/1.html" ).OfType<StaticFileContentProvider>(), ".html 扩展名未能获得 StaticFileContentProvider" );
+    Assert.HasAny( HtmlServices.Default.GetContentServices( "~/1.aspx" ).OfType<WebFormPageContentProvider>(), ".aspx 扩展名未能获得 WebFormPageContentProvider" );
   }
 
 }

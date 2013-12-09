@@ -122,5 +122,20 @@ namespace SpeficationTest
     }
 
 
+    [TestMethod]
+    public void SpecificationTest8()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest8.html" ) );
+
+      Assert.AreEqual( document.FindSingle( "div" ).Attributes().Count(), 1, "错误的解析了非法的属性" );
+      var links = document.Find( "div a" ).ToArray();
+
+      Assert.AreEqual( links.Length, 2, "错误的解析了不属于属性值的引用内容" );
+      Assert.AreEqual( links[0].InnerText(), "Test1", "错误的解析了不属于属性值的引用内容" );
+      Assert.AreEqual( links[1].InnerText(), " \"Test2", "错误的解析了不属于属性值的引用内容" );
+
+    }
+
+
   }
 }

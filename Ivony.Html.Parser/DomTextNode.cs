@@ -43,16 +43,12 @@ namespace Ivony.Html.Parser
       get
       {
         var element = this.Parent();
-        if ( element != null )
-        {
-          if ( Document.HtmlSpecification.IsCDataElement( element.Name ) )
-            return raw;
+        if ( element != null && Document.HtmlSpecification.IsCDataElement( element.Name ) )
+          return raw;
 
-          else
-            return HtmlEncoding.HtmlEncode( HtmlEncoding.HtmlDecode( raw ) );
-        }
 
-        return raw;
+
+        return HtmlEncoding.HtmlEncode( HtmlEncoding.HtmlDecode( raw ) );
       }
     }
 

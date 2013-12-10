@@ -1,0 +1,239 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading;
+using System.Web;
+using Ivony.Fluent;
+using Ivony.Web;
+
+namespace Ivony.Html.Web
+{
+  /// <summary>
+  /// 用于渲染部分视图的 HTML 渲染代理
+  /// </summary>
+  public class PartialRenderAdapter : HtmlElementAdapter
+  {
+
+
+    /// <summary>
+    /// 创建 PartialRenderAdapter 实例
+    /// </summary>
+    /// <param name="view">需要渲染部分视图的宿主视图</param>
+    public PartialRenderAdapter( HttpContextBase context, object handler )
+    {
+      HttpContext = context;
+
+      var wrapper = handler as IHandlerWrapper;
+      if ( wrapper != null )
+        Handler = wrapper.Handler;
+      else
+        Handler = handler;
+
+      _partialExecutors = GetPartialExecutors( Handler.GetType() );
+    }
+
+
+
+    protected HttpContextBase HttpContext
+    {
+      get;
+      private set;
+    }
+
+
+    protected object Handler
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 处理 Partial 的方法名称前缀
+    /// </summary>
+    public const string partialExecutorMethodPrefix = "Partial_";
+
+
+    private static readonly KeyedCache<Type, PartialExecutor[]> _cache = new KeyedCache<Type, PartialExecutor[]>();
+
+
+    private PartialExecutor[] _partialExecutors;
+
+    private PartialExecutor[] GetPartialExecutors( Type type )
+    {
+
+      return _cache.FetchOrCreateItem( type, () => type
+        .GetMethods( BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic )
+        .Where( m => m.Name.StartsWith( partialExecutorMethodPrefix ) )
+        .Where( m => m.ReturnType == typeof( string ) )
+        .Select( m => CreateExecutor( m ) ).ToArray() );
+
+    }
+
+    private PartialExecutor CreateExecutor( MethodInfo method )
+    {
+      if ( method.Name.StartsWith( partialExecutorMethodPrefix ) )
+        return new PartialExecutor( method );
+      else
+        return null;
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// 重写 CssSelector 属性，用于选取 partial 标签
+    /// </summary>
+    protected override string CssSelector
+    {
+      get { return "partial"; }
+    }
+
+
+    /// <summary>
+    /// 渲染 partial 标签
+    /// </summary>
+    /// <param name="element">partial 标签</param>
+    /// <param name="context">渲染上下文</param>
+    protected override void Render( IHtmlElement element, HtmlRenderContext context )
+    {
+
+      var partialTag = ContentExtensions.GenerateTagHtml( element, true );
+
+      HttpContext.Trace.Write( "Jumony Partial", string.Format( "Begin Render Partial: {0}", partialTag ) );
+      RenderPartial( element, context.Writer );
+      HttpContext.Trace.Write( "Jumony Partial", string.Format( "End Render Partial: {0}", partialTag ) );
+    }
+
+
+    /// <summary>
+    /// 渲染部分视图（重写此方法接管 partial 处理逻辑）。
+    /// </summary>
+    /// <param name="partialElement">partial 元素</param>
+    /// <param name="writer">输出渲染结果的 TextWriter 对象</param>
+    protected virtual void RenderPartial( IHtmlElement partialElement, TextWriter writer )
+    {
+
+
+      var timeout = JumonyWebConfiguration.Configuration.PartialRenderTimeout;
+
+      if ( timeout > TimeSpan.Zero )
+      {
+
+        string result = null;
+        Exception exception = null;
+
+        var thread = new Thread( () => result = RenderPartialAsync( partialElement, out exception ) );
+
+        thread.Start();
+        if ( thread.Join( timeout ) )
+        {
+          if ( exception != null )
+            throw new HttpException( "渲染 Partial 时发生错误，详见内部异常", exception );
+
+          writer.Write( result );
+        }
+
+        else
+        {
+          thread.Abort();
+          writer.Write( "<!--Render partial timeout-->" );
+        }
+      }
+
+      else
+        writer.Write( RenderPartial( partialElement ) );
+    }
+
+
+    /// <summary>
+    /// 异步渲染部分视图
+    /// </summary>
+    /// <param name="partialElement">partial 元素</param>
+    /// <param name="exception">渲染过程中产生的异常</param>
+    /// <returns>渲染结果</returns>
+    [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]//捕获任何异常
+    protected string RenderPartialAsync( IHtmlElement partialElement, out Exception exception )
+    {
+      try
+      {
+        exception = null;
+        return RenderPartial( partialElement );
+      }
+      catch ( ThreadAbortException )
+      {
+        exception = null;
+        return null;
+      }
+      catch ( Exception e )
+      {
+        exception = e;
+        return null;
+      }
+    }
+
+
+
+    /// <summary>
+    /// 渲染部分视图（重写此方法以实现自定义输出 partial 元素）
+    /// </summary>
+    /// <param name="partialElement">partial 元素</param>
+    /// <returns></returns>
+    protected virtual string RenderPartial( IHtmlElement partialElement )
+    {
+      var path = partialElement.Attribute( "path" ).Value();
+      var name = partialElement.Attribute( "name" ).Value();
+
+      try
+      {
+
+        if ( !_partialExecutors.IsNullOrEmpty() && name != null )
+          RenderNamedPartial( partialElement, name );
+
+
+        else if ( path != null )
+          RenderVirtualPath( path );
+      }
+      catch //若渲染时发生错误
+      {
+        if ( JumonyWebConfiguration.Configuration.IgnorePartialRenderException || partialElement.Attribute( "ignoreError" ) != null )
+          return "<!--parital render failed-->";
+        else
+          throw;
+      }
+
+      throw new NotSupportedException( "无法处理的partial标签：" + ContentExtensions.GenerateTagHtml( partialElement, false ) );
+
+    }
+
+    protected virtual string RenderNamedPartial( IHtmlElement partialElement, string name )
+    {
+      var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
+      if ( executor != null )
+        return executor.Execute( Handler, partialElement );
+
+      throw new HttpException( 404, "找不到部分视图处理程序" );
+    }
+
+
+    protected virtual string RenderVirtualPath( string path )
+    {
+      if ( !VirtualPathUtility.IsAppRelative( path ) )
+        throw WebServiceLocator.VirtualPathFormatError( "path" );
+
+      var content = HtmlServices.LoadContent( path );
+      if ( content != null )
+        return content.Content;
+
+      else
+        throw new HttpException( 404, "找不到部分视图" );
+    }
+
+
+  }
+}

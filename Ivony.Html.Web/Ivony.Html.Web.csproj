@@ -81,6 +81,7 @@
     <Compile Include="DefaultHtmlHandlerProvider.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
+    <Compile Include="JumonyWebConfiguration.cs" />
     <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
     <Compile Include="HtmlRequestContext.cs" />
@@ -99,6 +100,8 @@
     <Compile Include="JumonyRequestRoute.cs" />
     <Compile Include="JumonyRouteHandler.cs" />
     <Compile Include="PartialResponse.cs" />
+    <Compile Include="PartialRenderAdapter.cs" />
+    <Compile Include="PartialExecutor.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="StaticFileContentProvider.cs" />
     <Compile Include="WebFormPageContentProvider.cs" />

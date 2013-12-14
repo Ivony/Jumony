@@ -84,7 +84,6 @@
     <Compile Include="JumonyWebConfiguration.cs" />
     <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
-    <Compile Include="HtmlService.cs" />
     <Compile Include="HtmlRequestContext.cs" />
     <Compile Include="HtmlServices.cs" />
     <Compile Include="HttpHandlerBase.cs" />

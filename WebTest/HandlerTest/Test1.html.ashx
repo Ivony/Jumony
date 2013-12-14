@@ -1,4 +1,4 @@
-﻿<%@ WebHandler Language="C#" Class="HandlerTest1" %>
+﻿<%@ WebHandler Language="C#" Class="Test1" %>
 
 using System;
 using System.Web;
@@ -6,7 +6,7 @@ using Ivony.Html;
 using Ivony.Html.Web;
 
 
-public class HandlerTest1 : HtmlHandler
+public class Test1 : HtmlHandler
 {
 
 

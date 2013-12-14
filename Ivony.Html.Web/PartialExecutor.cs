@@ -10,7 +10,7 @@ using Ivony.Fluent;
 namespace Ivony.Html.Web
 {
 
-  internal sealed class PartialExecutor
+  public sealed class PartialExecutor
   {
     private ParameterInfo[] _parameters;
 

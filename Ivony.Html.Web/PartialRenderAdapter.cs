@@ -32,7 +32,8 @@ namespace Ivony.Html.Web
       else
         Handler = handler;
 
-      _partialExecutors = GetPartialExecutors( Handler.GetType() );
+
+      PartialExecutors = GetPartialExecutors( Handler.GetType() ).ToDictionary( item => item.Name );
     }
 
 
@@ -51,6 +52,14 @@ namespace Ivony.Html.Web
     }
 
 
+    protected IDictionary<string, PartialExecutor> PartialExecutors
+    {
+      get;
+      private set;
+    }
+
+
+
     /// <summary>
     /// 处理 Partial 的方法名称前缀
     /// </summary>
@@ -60,7 +69,7 @@ namespace Ivony.Html.Web
     private static readonly KeyedCache<Type, PartialExecutor[]> _cache = new KeyedCache<Type, PartialExecutor[]>();
 
 
-    private PartialExecutor[] _partialExecutors;
+    private PartialExecutor[] PartialExecutors_partialExecutors;
 
     private PartialExecutor[] GetPartialExecutors( Type type )
     {
@@ -192,12 +201,12 @@ namespace Ivony.Html.Web
       try
       {
 
-        if ( !_partialExecutors.IsNullOrEmpty() && name != null )
-          RenderNamedPartial( partialElement, name );
+        if ( !PartialExecutors.IsNullOrEmpty() && name != null )
+          return RenderNamedPartial( partialElement, name );
 
 
         else if ( path != null )
-          RenderVirtualPath( path );
+          return RenderVirtualPath( path );
       }
       catch //若渲染时发生错误
       {
@@ -211,27 +220,42 @@ namespace Ivony.Html.Web
 
     }
 
+
+    /// <summary>
+    /// 渲染命名的部分视图
+    /// </summary>
+    /// <param name="partialElement">要渲染的　partial 元素</param>
+    /// <param name="name">部分视图的名称</param>
+    /// <returns>渲染结果</returns>
     protected virtual string RenderNamedPartial( IHtmlElement partialElement, string name )
     {
-      var executor = _partialExecutors.FirstOrDefault( e => e.Name.EqualsIgnoreCase( name ) );
-      if ( executor != null )
+      PartialExecutor executor;
+
+      if ( PartialExecutors.TryGetValue( name, out executor ) )
         return executor.Execute( Handler, partialElement );
 
       throw new HttpException( 404, "找不到部分视图处理程序" );
     }
 
 
+    /// <summary>
+    /// 渲染指定了路径的部分视图
+    /// </summary>
+    /// <param name="path">部分视图的路径</param>
+    /// <returns>渲染结果</returns>
     protected virtual string RenderVirtualPath( string path )
     {
       if ( !VirtualPathUtility.IsAppRelative( path ) )
         throw WebServiceLocator.VirtualPathFormatError( "path" );
 
-      var content = HtmlServices.LoadContent( path );
-      if ( content != null )
-        return content.Content;
+
+      var result = new JumonyHandler().ProcessPartial( HttpContext, path );
+
+      if ( result == null )
+        throw new HttpException( 404, "找不到部分视图" );
 
       else
-        throw new HttpException( 404, "找不到部分视图" );
+        return result;
     }
 
 

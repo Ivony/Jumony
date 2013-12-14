@@ -143,13 +143,13 @@ namespace Ivony.Html.Web
       else
         context = new HtmlRequestContext( httpContext, virtualPath, document );
 
-      OnPreProcessDocument();
+      OnPreProcess();
 
       Trace.Write( "Jumony Web", "Begin process document." );
       handler.ProcessScope( context );
       Trace.Write( "Jumony Web", "End process document." );
 
-      OnPostProcessDocument();
+      OnPostProcess();
 
 
 
@@ -160,7 +160,7 @@ namespace Ivony.Html.Web
       string content;
       using ( StringWriter writer = new StringWriter() )
       {
-        context.Scope.RenderChilds( writer, GetAdapters() );
+        context.Scope.RenderChilds( writer, GetAdapters( handler ) );
         content = writer.ToString();
       }
 
@@ -217,9 +217,9 @@ namespace Ivony.Html.Web
     /// 获取当前适用的渲染代理
     /// </summary>
     /// <returns>要用于当前渲染过程的渲染代理</returns>
-    protected virtual IHtmlRenderAdapter[] GetAdapters()
+    protected virtual IHtmlRenderAdapter[] GetAdapters( object handler )
     {
-      return new IHtmlRenderAdapter[0];
+      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( HttpContext, handler ) };
     }
 
 
@@ -399,12 +399,12 @@ namespace Ivony.Html.Web
     public event EventHandler PostProcessDocument;
 
     /// <summary>引发 PreProcessDocument 事件</summary>
-    protected virtual void OnPreProcessDocument()
+    protected virtual void OnPreProcess()
     {
       if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty );
     }
     /// <summary>引发 PostProcessDocument 事件</summary>
-    protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPostProcess() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
 
 
     /// <summary>在渲染文档前引发此事件</summary>

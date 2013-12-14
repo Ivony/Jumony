@@ -1,29 +1,27 @@
-﻿using System;
+﻿using Ivony.Fluent;
+using Ivony.Html;
+using Ivony.Html.Parser;
+using Ivony.Html.Web;
+using Ivony.Web;
+using Ivony.Web.Test;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 
-using Ivony.Fluent;
-using Ivony.Html;
-using Ivony.Html.Parser;
-using Ivony.Web.Test;
-using Ivony.Web;
-
-
 /// <summary>
-/// HtmlHandlerTest 的摘要说明
+/// PartialTest 的摘要说明
 /// </summary>
-public class HtmlHandlerTest : TestClass
+public class PartialTest : TestClass
 {
 
   public static readonly string testContent = "Test Content";
 
-  public void HandlerTest()
+  public void PartialTest1()
   {
 
-    var document = ExecuteDocument( "~/HandlerTest/Test1.html" );
-    Assert.AreEqual( document.FindFirst( "body" ).InnerText(), testContent );
+    var document = ExecuteDocument( "~/PartialTest/Test1.html" );
+    Assert.AreEqual( document.FindFirst( "body" ).InnerText().Trim(), testContent, "部分视图测试失败，没有正确渲染部分视图。" );
 
 
   }
@@ -40,7 +38,6 @@ public class HtmlHandlerTest : TestClass
 
     return new JumonyParser().Parse( ExecuteContent( virtualPath ) );
   }
-
 
 
 }

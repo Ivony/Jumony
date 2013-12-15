@@ -19,12 +19,23 @@ public class PartialTest : TestClass
 
   public void PartialTest1()
   {
-
     var document = ExecuteDocument( "~/PartialTest/Test1.html" );
     Assert.AreEqual( document.FindFirst( "body" ).InnerText().Trim(), testContent, "部分视图测试失败，没有正确渲染部分视图。" );
+  }
 
+
+
+
+  public void PartialTest2()
+  {
+
+    var document = ExecuteDocument( "~/PartialTest/Test2.html" );
+    Assert.AreEqual( document.FindFirst( "body" ).InnerText().Trim(), testContent, "测试在 Handler 中增加部分视图失败，没能正确的渲染。" );
 
   }
+
+
+
 
 
   protected string ExecuteContent( string virtualPath )

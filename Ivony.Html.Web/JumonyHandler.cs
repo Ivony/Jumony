@@ -63,6 +63,12 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 处理部分视图
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="virtualPath">部分视图的虚拟路径</param>
+    /// <returns></returns>
     public virtual string ProcessPartial( HttpContextBase context, string virtualPath )
     {
 
@@ -128,7 +134,7 @@ namespace Ivony.Html.Web
 
       document = LoadDocument( virtualPath );
       if ( document == null )
-        throw new InvalidOperationException( "加载文档失败" );
+        throw new HttpException( 404, "加载文档失败" );
 
       Trace.Write( "Jumony Web", "End load document." );
 
@@ -295,6 +301,17 @@ namespace Ivony.Html.Web
 
 
       CachePolicy = policy;
+
+      var clientCachePolicy = policy as IClientCacheablePolicy;
+
+      if ( clientCachePolicy != null )
+      {
+
+        var response = clientCachePolicy.ResolveClientCache();
+        if ( response != null )
+          return response;
+
+      }
 
       return CachePolicy.ResolveCache();
     }

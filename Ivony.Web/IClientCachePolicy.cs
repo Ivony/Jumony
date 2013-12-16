@@ -15,7 +15,7 @@ namespace Ivony.Web
     /// 尝试输出客户端缓存
     /// </summary>
     /// <returns></returns>
-    bool ResolveClientCache();
+    ICachedResponse ResolveClientCache();
 
 
     /// <summary>

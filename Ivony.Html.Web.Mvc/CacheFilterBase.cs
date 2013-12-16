@@ -74,12 +74,13 @@ namespace Ivony.Html.Web
       var cachable = policy as IClientCacheablePolicy;//尝试输出客户端缓存
       if ( cachable != null && !context.IsChildAction )//对于子请求不尝试客户端缓存。
       {
-        if ( cachable.ResolveClientCache() )
+        var _response = cachable.ResolveClientCache();
+        if ( _response != null )
         {
           context.HttpContext.Trace.Write( "Jumony for MVC - Cache Control", "Resolve Client Cache Success" );
 
           context.RouteData.DataTokens[ClientCacheResolved] = "Resolved";
-          return new EmptyResult();
+          return _response.ToCachedResult();
         }
       }
 

@@ -86,7 +86,7 @@ namespace Ivony.Html.Web
       ICachedResponse response;
 
       Trace.Write( "Jumony Web", "Begin resolve cache." );
-      response = ResolveCache();
+      response = ResolveCache( virtualPath );
       Trace.Write( "Jumony Web", "End resolve cache" );
 
       if ( response == null )
@@ -125,7 +125,11 @@ namespace Ivony.Html.Web
       OnPreLoadDocument();
 
       Trace.Write( "Jumony Web", "Begin load document." );
+
       document = LoadDocument( virtualPath );
+      if ( document == null )
+        throw new InvalidOperationException( "加载文档失败" );
+
       Trace.Write( "Jumony Web", "End load document." );
 
       OnPostLoadDocument();
@@ -282,7 +286,7 @@ namespace Ivony.Html.Web
     /// 尝试获取缓存的输出
     /// </summary>
     /// <returns>缓存的输出</returns>
-    protected virtual ICachedResponse ResolveCache()
+    protected virtual ICachedResponse ResolveCache( string virtualPath )
     {
       var policy = HtmlServices.GetCachePolicy( HttpContext );
 

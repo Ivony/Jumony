@@ -98,7 +98,6 @@
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
-    <Compile Include="PartialViewExecutor.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

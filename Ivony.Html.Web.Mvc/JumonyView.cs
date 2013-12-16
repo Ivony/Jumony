@@ -118,7 +118,7 @@ namespace Ivony.Html.Web
 
       var result = new List<IHtmlRenderAdapter>()
       {
-        new PartialRenderAdapter( ViewContext, Url, handler ),
+        new PartialViewAdapter( ViewContext, Url, handler ),
       };
 
       var customRenderAdapters = handler as ICustomRenderAdapters;

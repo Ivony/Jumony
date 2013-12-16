@@ -34,6 +34,14 @@ public class PartialTest : TestClass
 
   }
 
+  public void PartialTest3()
+  {
+
+    var document = ExecuteDocument( "~/PartialTest/Test3.html" );
+    Assert.AreEqual( document.FindFirst( "#container" ).InnerText(), testContent, "测试在部分视图中处理失败，没能正确的渲染。" );
+
+  }
+
 
 
 

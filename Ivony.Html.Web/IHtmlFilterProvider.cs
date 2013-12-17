@@ -13,7 +13,7 @@ namespace Ivony.Html.Web
   public interface IHtmlFilterProvider
   {
 
-    IHtmlFilter[] GetFilters( string virtualPath, IHtmlDocument document );
+    IHtmlFilter[] GetFilters();
 
   }
 }

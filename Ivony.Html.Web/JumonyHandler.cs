@@ -126,6 +126,57 @@ namespace Ivony.Html.Web
     protected virtual ICachedResponse ProcessRequestCore( HttpContextBase httpContext, string virtualPath, bool isPartial )
     {
 
+
+
+      var context = CreateContext( httpContext, virtualPath, isPartial );
+
+      var filters = GetFilters( virtualPath );
+      var handler = GetHandler( virtualPath );
+
+
+
+      OnPreProcess( context, filters );
+
+      Trace.Write( "Jumony Web", "Begin process document." );
+      handler.ProcessScope( context );
+      Trace.Write( "Jumony Web", "End process document." );
+
+      OnPostProcess( context, filters );
+
+
+
+
+      OnPreRender( context, filters );
+
+      Trace.Write( "Jumony Web", "Begin render document." );
+      string content;
+      using ( StringWriter writer = new StringWriter() )
+      {
+        context.Scope.RenderChilds( writer, GetAdapters( handler ) );
+        content = writer.ToString();
+      }
+
+      Trace.Write( "Jumony Web", "End render document." );
+
+      OnPostRender( context, filters );
+
+      if ( isPartial )
+        return CreatePartialResponse( content );
+      else
+        return CreateResponse( content );
+    }
+
+
+
+    /// <summary>
+    /// 创建 HTML 请求上下文
+    /// </summary>
+    /// <param name="httpContext">HTTP 请求上下文</param>
+    /// <param name="virtualPath">HTML 文件虚拟路径</param>
+    /// <param name="isPartial"></param>
+    /// <returns></returns>
+    protected virtual HtmlRequestContext CreateContext( HttpContextBase httpContext, string virtualPath, bool isPartial )
+    {
       IHtmlDocument document;
 
       OnPreLoadDocument();
@@ -141,11 +192,6 @@ namespace Ivony.Html.Web
       OnPostLoadDocument();
 
 
-      var filters = InitailizeFilters( virtualPath, document );
-      var handler = GetHandler( virtualPath, document );
-
-
-
       HtmlRequestContext context;
       if ( isPartial )
         context = new HtmlRequestContext( httpContext, virtualPath, GetPartialScope( document ) );
@@ -153,35 +199,7 @@ namespace Ivony.Html.Web
       else
         context = new HtmlRequestContext( httpContext, virtualPath, document );
 
-      OnPreProcess();
-
-      Trace.Write( "Jumony Web", "Begin process document." );
-      handler.ProcessScope( context );
-      Trace.Write( "Jumony Web", "End process document." );
-
-      OnPostProcess();
-
-
-
-
-      OnPreRender();
-
-      Trace.Write( "Jumony Web", "Begin render document." );
-      string content;
-      using ( StringWriter writer = new StringWriter() )
-      {
-        context.Scope.RenderChilds( writer, GetAdapters( handler ) );
-        content = writer.ToString();
-      }
-
-      Trace.Write( "Jumony Web", "End render document." );
-
-      OnPostRender();
-
-      if ( isPartial )
-        return CreatePartialResponse( content );
-      else
-        return CreateResponse( content );
+      return context;
     }
 
 
@@ -249,7 +267,7 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">HTML 文档虚拟路径</param>
     /// <param name="document">HTML 文档</param>
     /// <returns>HTML 处理程序</returns>
-    protected virtual IHtmlHandler GetHandler( string virtualPath, IHtmlDocument document )
+    protected virtual IHtmlHandler GetHandler( string virtualPath )
     {
       var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath ).Concat( new[] { DefaultProviders.GetHtmlHandlerProvider() } );
       foreach ( var provider in services )
@@ -271,12 +289,12 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">HTML 文档虚拟路径</param>
     /// <param name="document">HTML 文档</param>
     /// <returns>HTML 筛选器</returns>
-    protected virtual IHtmlFilter[] InitailizeFilters( string virtualPath, IHtmlDocument document )
+    protected virtual IHtmlFilter[] GetFilters( string virtualPath )
     {
       return WebServiceLocator
         .GetServices<IHtmlFilterProvider>( virtualPath )
-        .SelectMany( p => p.GetFilters( virtualPath, document ) )
-        .ToArray();
+        .SelectMany( p => p.GetFilters() )
+        .Reverse().ToArray();
     }
 
 
@@ -423,12 +441,34 @@ namespace Ivony.Html.Web
     public event EventHandler PostProcessDocument;
 
     /// <summary>引发 PreProcessDocument 事件</summary>
-    protected virtual void OnPreProcess()
+    protected virtual void OnPreProcess( HtmlRequestContext context, IHtmlFilter[] filters )
     {
+      foreach ( var filter in filters )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
       if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty );
     }
+
     /// <summary>引发 PostProcessDocument 事件</summary>
-    protected virtual void OnPostProcess() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPostProcess( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters.Reverse() )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty );
+    }
 
 
     /// <summary>在渲染文档前引发此事件</summary>
@@ -437,9 +477,34 @@ namespace Ivony.Html.Web
     public event EventHandler PostRender;
 
     /// <summary>引发 PreRender 事件</summary>
-    protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
+    protected virtual void OnPreRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PreRender != null ) PreRender( this, EventArgs.Empty );
+    }
+
     /// <summary>引发 PostRender 事件</summary>
-    protected virtual void OnPostRender() { if ( PostRender != null ) PostRender( this, EventArgs.Empty ); }
+    protected virtual void OnPostRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters.Reverse() )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PostRender != null ) PostRender( this, EventArgs.Empty );
+    }
 
 
 

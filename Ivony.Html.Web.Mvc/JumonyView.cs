@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
 
 
 namespace Ivony.Html.Web
@@ -61,9 +62,13 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     protected virtual IViewFilter[] GetFilters( ViewContext context )
     {
-      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
 
-      return ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
+      var filterProviders = WebServiceLocator.GetServices<IViewFilterProvider>( VirtualPath );
+      var filters = filterProviders.SelectMany( p => p.GetFilters( VirtualPath ) ).Reverse();
+
+      filters = filters.Concat( context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>() );
+
+      return filters.ToArray();
     }
 
 

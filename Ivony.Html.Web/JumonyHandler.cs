@@ -273,7 +273,10 @@ namespace Ivony.Html.Web
     /// <returns>HTML 筛选器</returns>
     protected virtual IHtmlFilter[] InitailizeFilters( string virtualPath, IHtmlDocument document )
     {
-      return WebServiceLocator.GetServices<IHtmlFilterProvider>( virtualPath ).SelectMany( p => p.GetFilters( virtualPath, document ) ).ToArray();
+      return WebServiceLocator
+        .GetServices<IHtmlFilterProvider>( virtualPath )
+        .SelectMany( p => p.GetFilters( virtualPath, document ) )
+        .ToArray();
     }
 
 

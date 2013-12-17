@@ -7,6 +7,7 @@ using System.Web;
 using Ivony.Fluent;
 using System.Globalization;
 using System.Web.Hosting;
+using System.Text.RegularExpressions;
 
 namespace Ivony.Web
 {
@@ -167,6 +168,8 @@ namespace Ivony.Web
     /// <returns>该虚拟路径注册的所有服务对象</returns>
     public static T[] GetServices<T>( string virtualPath ) where T : class
     {
+      if ( virtualPath == null )
+        throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
@@ -174,12 +177,12 @@ namespace Ivony.Web
       lock ( sync )
       {
 
+        string directory = VirtualPathUtility.GetDirectory( virtualPath );
+
+        
         var services = servicesCache[virtualPath] as object[];
         if ( services == null )
-        {
-          string directory = VirtualPathUtility.GetDirectory( virtualPath );
           servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( directory ) ).ToArray();
-        }
 
         return services.OfType<T>().Concat( GetServices<T>() ).ToArray();
       }
@@ -260,6 +263,39 @@ namespace Ivony.Web
     {
       return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );
     }
+
+
+
+    private static Dictionary<string, Type> serviceFilenameMapping = new Dictionary<string, Type>( StringComparer.OrdinalIgnoreCase );
+
+    private static Regex filenameRegex = new Regex( @"^\w+(\.\w+)*$" );
+
+
+    /// <summary>
+    /// 注册一个文件名，系统将尝试编译这个文件作为服务对象
+    /// </summary>
+    /// <param name="filename">要注册的文件名</param>
+    /// <param name="serviceType">服务类型，省略或设置为 null 表示不限制服务对象的类型</param>
+    public static void RegisterServiceFilename( string filename, Type serviceType = null )
+    {
+      if ( filename == null )
+        throw new ArgumentNullException( "virtualPath" );
+
+
+      if ( !filenameRegex.IsMatch( filename ) )
+        throw new ArgumentException( "filename", string.Format( "{0} 不是一个合法的文件名" ) );
+
+
+      lock ( sync )
+      {
+        if ( serviceFilenameMapping.ContainsKey( filename ) )
+          throw new InvalidOperationException( "文件名 {0} 已经被注册" );
+
+
+        serviceFilenameMapping.Add( filename, serviceType );
+      }
+    }
+
 
   }
 }

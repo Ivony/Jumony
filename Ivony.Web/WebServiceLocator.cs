@@ -8,6 +8,7 @@ using Ivony.Fluent;
 using System.Globalization;
 using System.Web.Hosting;
 using System.Text.RegularExpressions;
+using System.Web.Compilation;
 
 namespace Ivony.Web
 {
@@ -179,10 +180,10 @@ namespace Ivony.Web
 
         string directory = VirtualPathUtility.GetDirectory( virtualPath );
 
-        
+
         var services = servicesCache[virtualPath] as object[];
         if ( services == null )
-          servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( directory ) ).ToArray();
+          servicesCache[virtualPath] = services = GetServicesCore( virtualPath ).Concat( GetServicesFromServiceMap( directory ) ).ToArray();
 
         return services.OfType<T>().Concat( GetServices<T>() ).ToArray();
       }
@@ -192,9 +193,9 @@ namespace Ivony.Web
     /// <summary>
     /// 获取指定虚拟路径中注册的服务
     /// </summary>
-    /// <param name="virtualPath"></param>
+    /// <param name="virtualPath">要获取服务的虚拟路径</param>
     /// <returns></returns>
-    private static object[] GetServices( string virtualPath )
+    private static object[] GetServicesCore( string virtualPath )
     {
 
       var services = serviceMap[virtualPath] as ArrayList;
@@ -229,11 +230,34 @@ namespace Ivony.Web
         if ( virtualPath != "~/" )
           parent = VirtualPathUtility.Combine( virtualPath, "../" );
 
-        servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( parent ) ).ToArray();
+        servicesCache[virtualPath] = services = GetServicesFromFiles( virtualPath ).Concat( GetServicesCore( virtualPath ) ).Concat( GetServicesFromServiceMap( parent ) ).ToArray();
       }
 
 
       return services;
+    }
+
+    private static object[] GetServicesFromFiles( string virtualPath )
+    {
+
+
+
+
+      foreach ( var item in serviceFilenameMapping )
+      {
+        var filename = item.Key;
+        var type = item.Value;
+
+        var filepath = VirtualPathUtility.Combine( virtualPath, filename );
+        try
+        {
+          BuildManager.CreateInstanceFromVirtualPath( filepath, type );
+        }
+        catch
+        {
+        
+        }
+      }
     }
 
 

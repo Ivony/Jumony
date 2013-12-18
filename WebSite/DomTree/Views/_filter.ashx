@@ -8,13 +8,13 @@ using System.Linq;
 using System.Web.Mvc;
 
 
-public class _filter : ViewFilterHandler
+public class _filter : IHttpHandler, IViewFilter
 {
 
 
   private static readonly ResourceManager resourceManager = new ResourceManager( "~/Views" );
 
-  public override void OnPreRender( ViewContext context, JumonyView view )
+  public void OnPreRender( ViewContext context, JumonyView view )
   {
     var document = view.Scope as IHtmlDocument;
     if ( document != null )
@@ -22,4 +22,26 @@ public class _filter : ViewFilterHandler
   }
 
 
+
+  bool IHttpHandler.IsReusable
+  {
+    get { return true; }
+  }
+
+  void IHttpHandler.ProcessRequest( HttpContext context )
+  {
+    throw new NotSupportedException();
+  }
+
+  public void OnPreProcess( ViewContext context, JumonyView view )
+  {
+  }
+
+  public void OnPostProcess( ViewContext context, JumonyView view )
+  {
+  }
+
+  public void OnPostRender( ViewContext context, JumonyView view )
+  {
+  }
 }

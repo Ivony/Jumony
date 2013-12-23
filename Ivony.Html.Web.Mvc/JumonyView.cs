@@ -73,36 +73,12 @@ namespace Ivony.Html.Web
 
 
 
-    private static readonly string handlerPathCachePrefix = "JumonyHandlerCache_";
-
-
-    private class HandlerPathCacheItem
-    {
-      public string HandlerPath { get; set; }
-    }
-
-
     /// <summary>
     /// 获取视图处理程序
     /// </summary>
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
-
-      var cacheKey = handlerPathCachePrefix + virtualPath;
-
-      var cacheItem = HttpRuntime.Cache.Get( cacheKey );
-      if ( cacheItem == null )
-      {
-        var handlerPath = ViewHandlerProvider.GetHandlerPath( Scope );
-
-        cacheItem = new HandlerPathCacheItem() { HandlerPath = handlerPath };
-
-        HttpRuntime.Cache.Insert( cacheKey, cacheItem, ScopeCacheDependency );
-
-      }
-
-
       return ViewHandlerProvider.GetViewHandler( virtualPath );
 
     }

@@ -246,7 +246,7 @@ namespace Ivony.Html.Web
     protected virtual string RenderVirtualPath( string path )
     {
       if ( !VirtualPathUtility.IsAppRelative( path ) )
-        throw WebServiceLocator.VirtualPathFormatError( "path" );
+        throw VirtualPathHelper.VirtualPathFormatError( "path" );
 
 
       var result = new JumonyHandler().ProcessPartial( HttpContext, path );

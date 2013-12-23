@@ -63,6 +63,7 @@
     <Compile Include="SimpleRouteRule.cs" />
     <Compile Include="SimpleRouteTable.cs" />
     <Compile Include="StandardCachePolicy.cs" />
+    <Compile Include="VirtualPathHelper.cs" />
     <Compile Include="WebServiceLocator.cs" />
     <Compile Include="WebExtensions.cs" />
   </ItemGroup>

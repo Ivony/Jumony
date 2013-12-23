@@ -54,7 +54,7 @@ namespace Ivony.Web
         throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
+        throw VirtualPathHelper.VirtualPathFormatError( "virtualPath" );
 
 
 
@@ -116,7 +116,7 @@ namespace Ivony.Web
         throw new ArgumentNullException( "service" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
+        throw VirtualPathHelper.VirtualPathFormatError( "virtualPath" );
 
 
       lock ( sync )
@@ -169,7 +169,7 @@ namespace Ivony.Web
     {
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
+        throw VirtualPathHelper.VirtualPathFormatError( "virtualPath" );
 
       lock ( sync )
       {
@@ -216,7 +216,7 @@ namespace Ivony.Web
         return new object[0];
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
+        throw VirtualPathHelper.VirtualPathFormatError( "virtualPath" );
 
       var services = servicesCache[virtualPath] as object[];
       if ( services == null )
@@ -256,10 +256,5 @@ namespace Ivony.Web
     /// </summary>
     /// <param name="paramName">参数名称</param>
     /// <returns></returns>
-    public static Exception VirtualPathFormatError( string paramName )
-    {
-      return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );
-    }
-
   }
 }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Compilation;
 using System.Web;
 using System.Web.Hosting;
+using Ivony.Web;
 
 namespace Ivony.Html.Web
 {
@@ -103,7 +104,7 @@ namespace Ivony.Html.Web
       string masterPath;
 
       if ( MvcEnvironment.Configuration.FallbackDefaultMaster )
-        masterPath = ViewHandlerProvider.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
+        masterPath = VirtualPathHelper.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
 
       else
       {

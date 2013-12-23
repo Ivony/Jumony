@@ -40,6 +40,34 @@ namespace Ivony.Html.Web
 
     }
 
+
+
+    private RequestContext _requestContext;
+
+
+
+    /// <summary>
+    /// 获取当前请求上下文
+    /// </summary>
+    protected RequestContext RequestContext
+    {
+      get { return _requestContext; }
+    }
+
+
+    /// <summary>
+    /// 获取当前 HTTP 请求上下文
+    /// </summary>
+    protected HttpContextBase HttpContext
+    {
+      get { return RequestContext.HttpContext; }
+    }
+
+
+
+
+
+
     /// <summary>
     /// 处理 HTTP 请求
     /// </summary>
@@ -47,20 +75,29 @@ namespace Ivony.Html.Web
     protected void ProcessRequest( RequestContext context )
     {
 
+      _requestContext = context;
+
+
+
       context.HttpContext.Trace.Write( "Jumony Web", "Begin of Request" );
 
       if ( context.RouteData == null || !(context.RouteData.Route is IHtmlRequestRoute) )
+      {
+        context.HttpContext.Trace.Write( "Jumony Web", "Request Error: route type error." );
         throw DirectVisitError();
+      }
+
 
       var virtualPath = context.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
 
-      var response = ProcessRequest( context.HttpContext, virtualPath, false );
+      var response = ProcessRequest( virtualPath );
       OutputResponse( context.HttpContext, response );
 
       context.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
     }
+
 
 
     /// <summary>
@@ -72,8 +109,10 @@ namespace Ivony.Html.Web
     public virtual string ProcessPartial( HttpContextBase context, string virtualPath )
     {
 
-      var response = ProcessRequest( context, virtualPath, true );
-      return response.CastTo<PartialResponse>().Content;
+      throw new NotImplementedException();
+
+      //var response = ProcessRequest( context, virtualPath, true );
+      //return response.CastTo<PartialResponse>().Content;
 
     }
 
@@ -85,10 +124,8 @@ namespace Ivony.Html.Web
     /// <param name="context">HTTP 请求上下文</param>
     /// <param name="virtualPath">当前要处理的虚拟路径</param>
     /// <param name="isPartial">是否为部分视图模式</param>
-    protected virtual ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath, bool isPartial )
+    protected virtual ICachedResponse ProcessRequest( string virtualPath )
     {
-      _httpContext = context;
-
       ICachedResponse response;
 
       Trace.Write( "Jumony Web", "Begin resolve cache." );
@@ -98,7 +135,7 @@ namespace Ivony.Html.Web
       if ( response == null )
       {
 
-        response = ProcessRequestCore( context, virtualPath, isPartial );
+        response = ProcessRequest( new HtmlRequestContext( HttpContext, virtualPath, CreateScope( virtualPath ) ) );
 
 
         Trace.Write( "Jumony Web", "Begin update cache" );
@@ -120,18 +157,13 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
-    /// <param name="httpContext">HTTP 请求上下文</param>
     /// <param name="virtualPath">当前请求文档的虚拟路径</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase httpContext, string virtualPath, bool isPartial )
+    protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context )
     {
 
-
-
-      var context = CreateContext( httpContext, virtualPath, isPartial );
-
-      var filters = GetFilters( virtualPath );
-      var handler = GetHandler( virtualPath );
+      var filters = GetFilters( context.VirtualPath );
+      var handler = GetHandler( context.VirtualPath );
 
 
 
@@ -160,10 +192,7 @@ namespace Ivony.Html.Web
 
       OnPostRender( context, filters );
 
-      if ( isPartial )
-        return CreatePartialResponse( content );
-      else
-        return CreateResponse( content );
+      return CreateResponse( content );
     }
 
 
@@ -175,7 +204,13 @@ namespace Ivony.Html.Web
     /// <param name="virtualPath">HTML 文件虚拟路径</param>
     /// <param name="isPartial"></param>
     /// <returns></returns>
-    protected virtual HtmlRequestContext CreateContext( HttpContextBase httpContext, string virtualPath, bool isPartial )
+    protected virtual HtmlRequestContext CreateContext( HttpContextBase httpContext, string virtualPath )
+    {
+      return new HtmlRequestContext( httpContext, virtualPath, CreateScope( virtualPath ) );
+    }
+
+
+    protected virtual IHtmlContainer CreateScope( string virtualPath )
     {
       IHtmlDocument document;
 
@@ -191,16 +226,31 @@ namespace Ivony.Html.Web
 
       OnPostLoadDocument();
 
-
-      HtmlRequestContext context;
-      if ( isPartial )
-        context = new HtmlRequestContext( httpContext, virtualPath, GetPartialScope( document ) );
-
-      else
-        context = new HtmlRequestContext( httpContext, virtualPath, document );
-
-      return context;
+      return document;
     }
+
+
+
+
+
+
+    /// <summary>
+    /// 获取 HTML 处理器
+    /// </summary>
+    /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
+    /// <returns>HTML 处理器</returns>
+    protected IHtmlHandler GetHandler( string virtualPath )
+    {
+
+      IHtmlHandler handler = null;
+
+      object handlerObject;
+      if ( RequestContext.RouteData.DataTokens.TryGetValue( HtmlHandlerProvider.HtmlHandlerRouteKey, out handlerObject ) )
+        handler = handlerObject as IHtmlHandler;
+
+      return handler ?? HtmlHandlerProvider.GetHandler( virtualPath );
+    }
+
 
 
 
@@ -224,24 +274,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取部分视图要处理的范围
-    /// </summary>
-    /// <param name="document"></param>
-    /// <returns></returns>
-    protected virtual IHtmlContainer GetPartialScope( IHtmlDocument document )
-    {
-      var body = document.Find( "body" ).SingleOrDefault();
-
-      if ( body == null )
-        return document;
-
-      else
-        return body;
-    }
-
-
-
-    /// <summary>
     /// 获取当前适用的渲染代理
     /// </summary>
     /// <returns>要用于当前渲染过程的渲染代理</returns>
@@ -261,26 +293,6 @@ namespace Ivony.Html.Web
       return HtmlServices.LoadDocument( virtualPath );
     }
 
-    /// <summary>
-    /// 获取 HTML 处理程序
-    /// </summary>
-    /// <param name="virtualPath">HTML 文档虚拟路径</param>
-    /// <param name="document">HTML 文档</param>
-    /// <returns>HTML 处理程序</returns>
-    protected virtual IHtmlHandler GetHandler( string virtualPath )
-    {
-      var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath ).Concat( new[] { DefaultProviders.GetHtmlHandlerProvider() } );
-      foreach ( var provider in services )
-      {
-        var handler = provider.GetHandler( virtualPath );
-
-        if ( handler != null )
-          return handler;
-
-      }
-
-      return new HtmlHandler();
-    }
 
 
     /// <summary>
@@ -365,18 +377,6 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 派生类重写此方法自定义创建部分视图响应的逻辑
-    /// </summary>
-    /// <param name="content">响应内容</param>
-    /// <returns>响应</returns>
-    protected virtual ICachedResponse CreatePartialResponse( string content )
-    {
-      return new PartialResponse() { Content = content };
-    }
-
-
-
 
     /// <summary>
     /// 派生类重写此方法自定义输出响应的逻辑
@@ -410,17 +410,6 @@ namespace Ivony.Html.Web
       }
     }
 
-
-
-    private HttpContextBase _httpContext;
-
-    /// <summary>
-    /// 获取与该页关联的 HttpContext 对象。
-    /// </summary>
-    protected HttpContextBase HttpContext
-    {
-      get { return _httpContext; }
-    }
 
 
 

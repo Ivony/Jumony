@@ -50,11 +50,5 @@ namespace Ivony.Html.Web
     {
       return new WebParser();
     }
-
-
-    public static IHtmlHandlerProvider GetHtmlHandlerProvider()
-    {
-      return new DefaultHtmlHandlerProvider();
-    }
   }
 }

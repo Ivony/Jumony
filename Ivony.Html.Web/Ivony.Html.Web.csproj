@@ -78,9 +78,10 @@
     <Compile Include="Binding\IHtmlElementBinder.cs" />
     <Compile Include="Binding\IListDataContext.cs" />
     <Compile Include="DefaultElementBinder.cs" />
-    <Compile Include="DefaultHtmlHandlerProvider.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
+    <Compile Include="HtmlHandlerProvider.cs" />
+    <Compile Include="JumonyPartialHandler.cs" />
     <Compile Include="JumonyWebConfiguration.cs" />
     <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />

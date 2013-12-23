@@ -137,6 +137,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 当前 HTML 文档或处理范畴缓存依赖项
+    /// </summary>
     protected CacheDependency ScopeCacheDependency
     {
       get;

@@ -16,6 +16,10 @@ namespace Ivony.Html.Web
   public static class HtmlHandlerProvider
   {
 
+
+    internal static readonly string HtmlHandlerRouteKey = "Jumony_HtmlHandler_RouteKey";
+
+
     /// <summary>
     /// 获取指定虚拟路径的 HTML 处理程序
     /// </summary>
@@ -23,6 +27,17 @@ namespace Ivony.Html.Web
     /// <returns>HTML 处理程序</returns>
     public static IHtmlHandler GetHandler( string virtualPath )
     {
+
+      var services = WebServiceLocator.GetServices<IHtmlHandlerProvider>( virtualPath );
+      foreach ( var provider in services )
+      {
+        var handler = provider.GetHandler( virtualPath );
+
+        if ( handler != null )
+          return handler;
+
+      }
+
 
       return
         GetHandlerInternal<IHtmlHandler>( virtualPath + ".ashx" ) ??

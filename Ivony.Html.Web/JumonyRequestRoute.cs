@@ -20,6 +20,9 @@ namespace Ivony.Html.Web
       get { return "HtmlVirtualPath"; }
     }
 
+
+
+
     /// <summary>
     /// 获取路由信息，将对请求进行 RequestMapping 的结果包装成路由信息
     /// </summary>
@@ -34,7 +37,12 @@ namespace Ivony.Html.Web
       if ( !VirtualPathProvider.FileExists( virtualPath ) )//文件不存在时不路由
         return null;
 
-      var routeData = new RouteData( this, JumonyRouteHandler.Instance );
+      var handler = HtmlHandlerProvider.GetHandler( virtualPath );
+      if ( handler == null )
+        return null;
+
+      var routeData = new RouteData( this, new JumonyRouteHandler() );
+      routeData.Values[HtmlHandlerProvider.HtmlHandlerRouteKey] = handler;
 
       return routeData;
 

@@ -7,9 +7,6 @@ using System.Web;
 using Ivony.Fluent;
 using System.Globalization;
 using System.Web.Hosting;
-using System.Text.RegularExpressions;
-using System.Web.Compilation;
-using System.Web.Caching;
 
 namespace Ivony.Web
 {
@@ -170,8 +167,6 @@ namespace Ivony.Web
     /// <returns>该虚拟路径注册的所有服务对象</returns>
     public static T[] GetServices<T>( string virtualPath ) where T : class
     {
-      if ( virtualPath == null )
-        throw new ArgumentNullException( "virtualPath" );
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
@@ -179,7 +174,12 @@ namespace Ivony.Web
       lock ( sync )
       {
 
-        var services = GetServicesCore<T>( virtualPath ).Concat( GetServicesFallback<T>( VirtualPathUtility.GetDirectory( virtualPath ) ) );
+        var services = servicesCache[virtualPath] as object[];
+        if ( services == null )
+        {
+          string directory = VirtualPathUtility.GetDirectory( virtualPath );
+          servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( directory ) ).ToArray();
+        }
 
         return services.OfType<T>().Concat( GetServices<T>() ).ToArray();
       }
@@ -189,21 +189,17 @@ namespace Ivony.Web
     /// <summary>
     /// 获取指定虚拟路径中注册的服务
     /// </summary>
-    /// <param name="virtualPath">要获取服务的虚拟路径</param>
+    /// <param name="virtualPath"></param>
     /// <returns></returns>
-    private static IEnumerable<T> GetServicesCore<T>( string virtualPath )
+    private static object[] GetServices( string virtualPath )
     {
-
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
-
 
       var services = serviceMap[virtualPath] as ArrayList;
       if ( services != null )
-        return services.OfType<T>();
+        return services.Cast<object>().ToArray();
 
       else
-        return Enumerable.Empty<T>();
+        return new object[0];
 
     }
 
@@ -213,109 +209,29 @@ namespace Ivony.Web
     /// </summary>
     /// <param name="virtualPath">虚拟路径</param>
     /// <returns>该虚拟路径注册的所有服务对象</returns>
-    private static IEnumerable<T> GetServicesFallback<T>( string virtualPath )
+    private static object[] GetServicesFromServiceMap( string virtualPath )
     {
 
       if ( virtualPath == null )
-        return Enumerable.Empty<T>();
-
+        return new object[0];
 
       if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
         throw VirtualPathFormatError( "virtualPath" );
 
-      virtualPath = VirtualPathUtility.AppendTrailingSlash( virtualPath );
-
-
-
-      string parent = null;
-      if ( virtualPath != "~/" )
-        parent = VirtualPathUtility.Combine( virtualPath, "../" );
-
-      return GetServicesCore<T>( virtualPath ).Concat( GetServicesFallback<T>( parent ) );
-    }
-
-
-
-
-    private static IEnumerable<string> GetParents( string virtualPath )
-    {
-
-      while ( true )
+      var services = servicesCache[virtualPath] as object[];
+      if ( services == null )
       {
-        yield return virtualPath;
 
-        if ( virtualPath == "~/" )
-          yield break;
-        virtualPath = VirtualPathUtility.Combine( virtualPath, "../" );
-      }
-    }
+        string parent = null;
+        if ( virtualPath != "~/" )
+          parent = VirtualPathUtility.Combine( virtualPath, "../" );
 
-
-
-
-    private static readonly string serviceFromDirectoryCachePrefix = "WebServiceLocator_DirectoryService_";
-
-    /// <summary>
-    /// 获取指定虚拟目录的服务
-    /// </summary>
-    /// <typeparam name="T">要获取的服务类型</typeparam>
-    /// <param name="virtualPath">虚拟目录</param>
-    /// <returns>在该虚拟目录下注册的服务</returns>
-    private static IEnumerable<T> GetServicesFromDirectory<T>( string virtualPath ) where T : class
-    {
-
-      if ( virtualPath == null )
-        throw new ArgumentNullException();
-
-      virtualPath = VirtualPathUtility.AppendTrailingSlash( virtualPath );
-
-
-      foreach ( var item in defaultServiceFilenameMapping )
-      {
-        var filename = item.Key;
-        var type = item.Value;
-
-        if ( !typeof( T ).IsAssignableFrom( type ) )
-          continue;
-
-        var filepath = VirtualPathUtility.Combine( virtualPath, filename );
-
-        var serviceInstance = CreateServiceInstanceFromPath<T>( filepath );
-        if ( serviceInstance == null )
-          continue;
-
-        yield return serviceInstance;
-      }
-    }
-
-
-
-    private static T CreateServiceInstanceFromPath<T>( string vritualPath ) where T : class
-    {
-      if ( !HostingEnvironment.VirtualPathProvider.FileExists( vritualPath ) )
-        return null;
-
-
-      var cacheKey = serviceFromDirectoryCachePrefix + vritualPath;
-
-      var instance = HttpRuntime.Cache.Get( cacheKey );
-      if ( instance != null )
-        return instance as T;
-
-
-      try
-      {
-        instance = BuildManager.CreateInstanceFromVirtualPath( vritualPath, typeof( object ) );
-      }
-      catch
-      {
-        return null;
+        servicesCache[virtualPath] = services = GetServices( virtualPath ).Concat( GetServicesFromServiceMap( parent ) ).ToArray();
       }
 
-      HttpRuntime.Cache.Insert( cacheKey, instance, new CacheDependency( vritualPath ) );
-      return instance as T;
-    }
 
+      return services;
+    }
 
 
 
@@ -344,48 +260,6 @@ namespace Ivony.Web
     {
       return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );
     }
-
-
-
-    private static readonly Dictionary<string, Type> defaultServiceFilenameMapping = new Dictionary<string, Type>( StringComparer.OrdinalIgnoreCase );
-    private static readonly HashSet<Type> registeredFilenameServiceTypes = new HashSet<Type>();
-
-    private static Regex filenameRegex = new Regex( @"^\w+(\.\w+)*$" );
-
-
-    /// <summary>
-    /// 注册一个文件名，系统将尝试编译这个文件作为服务对象
-    /// </summary>
-    /// <param name="filename">要注册的文件名</param>
-    /// <param name="serviceType">服务类型</param>
-    public static void RegisterServiceFilename( string filename, Type serviceType )
-    {
-
-      if ( filename == null )
-        throw new ArgumentNullException( "virtualPath" );
-
-      if ( serviceType == null )
-        throw new ArgumentNullException( "serviceType" );
-
-
-      if ( !filenameRegex.IsMatch( filename ) )
-        throw new ArgumentException( "filename", string.Format( "{0} 不是一个合法的文件名" ) );
-
-      if ( serviceType.IsValueType )
-        throw new ArgumentException( "serviceType", "服务类型不能是一个值类型" );
-
-
-      lock ( sync )
-      {
-        if ( defaultServiceFilenameMapping.ContainsKey( filename ) )
-          throw new InvalidOperationException( "文件名 {0} 已经被注册" );
-
-
-        defaultServiceFilenameMapping.Add( filename, serviceType );
-        registeredFilenameServiceTypes.Add( serviceType );
-      }
-    }
-
 
   }
 }

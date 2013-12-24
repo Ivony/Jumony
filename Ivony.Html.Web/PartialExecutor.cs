@@ -10,10 +10,17 @@ using Ivony.Fluent;
 namespace Ivony.Html.Web
 {
 
+  /// <summary>
+  /// 定义部分视图执行程序
+  /// </summary>
   public sealed class PartialExecutor
   {
     private ParameterInfo[] _parameters;
 
+    /// <summary>
+    /// 创建 PartialExecutor 对象
+    /// </summary>
+    /// <param name="method"></param>
     public PartialExecutor( MethodInfo method )
     {
       var name = method.Name;

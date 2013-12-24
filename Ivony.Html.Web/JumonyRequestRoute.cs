@@ -66,5 +66,26 @@ namespace Ivony.Html.Web
       return null;
     }
 
+
+
+    private static readonly JumonyRequestRoute _instance = new JumonyRequestRoute();
+
+    public static JumonyRequestRoute Instance
+    {
+      get { return _instance; }
+    }
+
+    /// <summary>
+    /// 根据当前 HTTP 请求和需要处理的虚拟路径，创建 RequestContext 对象
+    /// </summary>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <returns>创建的 RequestContetx 对象</returns>
+    public static RequestContext CreateRequestContext( HttpContextBase context, string virtualPath )
+    {
+      var routeData = new RouteData( Instance, JumonyRouteHandler.Instance );
+      routeData.DataTokens[VirtualPathToken] = virtualPath;
+      return new RequestContext( context, routeData );
+    }
   }
 }

@@ -249,7 +249,7 @@ namespace Ivony.Html.Web
         throw VirtualPathHelper.VirtualPathFormatError( "path" );
 
 
-      var result = new JumonyHandler().ProcessPartial( HttpContext, path );
+      var result = JumonyPartialHandler.RenderPartial( HttpContext, path );
 
       if ( result == null )
         throw new HttpException( 404, "找不到部分视图" );

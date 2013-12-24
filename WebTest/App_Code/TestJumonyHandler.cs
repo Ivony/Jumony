@@ -12,9 +12,26 @@ using System.Web.Routing;
 public class TestJumonyHandler : JumonyHandler
 {
 
-  public ICachedResponse ProcessRequest( HttpContextBase context, string virtualPath, bool isPartial = false )
+  public static ICachedResponse Render( HttpContextBase context, string virtualPath )
   {
-    return base.ProcessRequest( context, virtualPath, isPartial );
+    return Render( JumonyRequestRoute.CreateRequestContext( context, virtualPath ) );
+  }
+
+
+  public static ICachedResponse Render( RequestContext context )
+  {
+    var instance = new TestJumonyHandler();
+    instance.ProcessRequest( context );
+    return instance.response;
+  }
+
+
+  private ICachedResponse response;
+
+  protected override void OutputResponse( HttpContextBase context, ICachedResponse responseData )
+  {
+    response = responseData;
+
   }
 
 }

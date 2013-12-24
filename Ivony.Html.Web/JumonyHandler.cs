@@ -42,23 +42,20 @@ namespace Ivony.Html.Web
 
 
 
-    private RequestContext _requestContext;
-
-
-
     /// <summary>
     /// 获取当前请求上下文
     /// </summary>
     protected RequestContext RequestContext
     {
-      get { return _requestContext; }
+      get;
+      private set;
     }
 
 
     /// <summary>
     /// 获取当前 HTTP 请求上下文
     /// </summary>
-    protected HttpContextBase HttpContext
+    protected virtual HttpContextBase HttpContext
     {
       get { return RequestContext.HttpContext; }
     }
@@ -75,8 +72,7 @@ namespace Ivony.Html.Web
     protected void ProcessRequest( RequestContext context )
     {
 
-      _requestContext = context;
-
+      RequestContext = context;
 
 
       context.HttpContext.Trace.Write( "Jumony Web", "Begin of Request" );
@@ -88,6 +84,7 @@ namespace Ivony.Html.Web
       }
 
 
+
       var virtualPath = context.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
       virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
@@ -95,35 +92,17 @@ namespace Ivony.Html.Web
       var response = ProcessRequest( virtualPath );
       OutputResponse( context.HttpContext, response );
 
+
       context.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
     }
 
-
-
-    /// <summary>
-    /// 处理部分视图
-    /// </summary>
-    /// <param name="context">当前 HTTP 请求上下文</param>
-    /// <param name="virtualPath">部分视图的虚拟路径</param>
-    /// <returns></returns>
-    public virtual string ProcessPartial( HttpContextBase context, string virtualPath )
-    {
-
-      throw new NotImplementedException();
-
-      //var response = ProcessRequest( context, virtualPath, true );
-      //return response.CastTo<PartialResponse>().Content;
-
-    }
 
 
 
     /// <summary>
     /// 处理 HTTP 请求
     /// </summary>
-    /// <param name="context">HTTP 请求上下文</param>
     /// <param name="virtualPath">当前要处理的虚拟路径</param>
-    /// <param name="isPartial">是否为部分视图模式</param>
     protected virtual ICachedResponse ProcessRequest( string virtualPath )
     {
       ICachedResponse response;
@@ -135,7 +114,7 @@ namespace Ivony.Html.Web
       if ( response == null )
       {
 
-        response = ProcessRequest( new HtmlRequestContext( HttpContext, virtualPath, CreateScope( virtualPath ) ) );
+        response = ProcessRequest( new HtmlRequestContext( HttpContext, virtualPath, LoadDocument( virtualPath ) ), GetHandler( virtualPath ) );
 
 
         Trace.Write( "Jumony Web", "Begin update cache" );
@@ -157,13 +136,12 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
-    /// <param name="virtualPath">当前请求文档的虚拟路径</param>
+    /// <param name="context">当前 HTML 请求上下文</param>
     /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context )
+    protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context, IHtmlHandler handler )
     {
 
       var filters = GetFilters( context.VirtualPath );
-      var handler = GetHandler( context.VirtualPath );
 
 
 
@@ -198,19 +176,11 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 创建 HTML 请求上下文
+    /// 派生类重写此方法自定义加载文档的逻辑
     /// </summary>
-    /// <param name="httpContext">HTTP 请求上下文</param>
-    /// <param name="virtualPath">HTML 文件虚拟路径</param>
-    /// <param name="isPartial"></param>
-    /// <returns></returns>
-    protected virtual HtmlRequestContext CreateContext( HttpContextBase httpContext, string virtualPath )
-    {
-      return new HtmlRequestContext( httpContext, virtualPath, CreateScope( virtualPath ) );
-    }
-
-
-    protected virtual IHtmlContainer CreateScope( string virtualPath )
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <returns>加载的文档对象</returns>
+    protected virtual IHtmlDocument LoadDocument( string virtualPath )
     {
       IHtmlDocument document;
 
@@ -218,9 +188,11 @@ namespace Ivony.Html.Web
 
       Trace.Write( "Jumony Web", "Begin load document." );
 
-      document = LoadDocument( virtualPath );
+
+      document = HtmlServices.LoadDocument( virtualPath );
       if ( document == null )
         throw new HttpException( 404, "加载文档失败" );
+
 
       Trace.Write( "Jumony Web", "End load document." );
 
@@ -283,15 +255,6 @@ namespace Ivony.Html.Web
     }
 
 
-    /// <summary>
-    /// 派生类重写此方法自定义加载文档的逻辑
-    /// </summary>
-    /// <param name="virtualPath">文档的虚拟路径</param>
-    /// <returns>加载的文档对象</returns>
-    protected virtual IHtmlDocument LoadDocument( string virtualPath )
-    {
-      return HtmlServices.LoadDocument( virtualPath );
-    }
 
 
 

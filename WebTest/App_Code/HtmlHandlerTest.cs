@@ -31,7 +31,7 @@ public class HtmlHandlerTest : TestClass
 
   protected string ExecuteContent( string virtualPath )
   {
-    var response = new TestJumonyHandler().ProcessRequest( new HttpContextWrapper( HttpContext ), virtualPath );
+    var response = TestJumonyHandler.Render( new HttpContextWrapper( HttpContext ), virtualPath );
     return response.CastTo<RawResponse>().Content;
   }
 

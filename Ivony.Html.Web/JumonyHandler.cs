@@ -36,7 +36,7 @@ namespace Ivony.Html.Web
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
 
-      ProcessRequest( context.Request.RequestContext );
+      ProcessRequest( new HttpContextWrapper( context ) );
 
     }
 
@@ -45,19 +45,22 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取当前请求上下文
     /// </summary>
-    protected RequestContext RequestContext
+    protected virtual RequestContext RequestContext
     {
-      get;
-      private set;
+      get { return HttpContext.Request.RequestContext; }
     }
 
+
+
+
+    private HttpContextBase _httpContext;
 
     /// <summary>
     /// 获取当前 HTTP 请求上下文
     /// </summary>
     protected virtual HttpContextBase HttpContext
     {
-      get { return RequestContext.HttpContext; }
+      get { return _httpContext; }
     }
 
 
@@ -69,31 +72,36 @@ namespace Ivony.Html.Web
     /// 处理 HTTP 请求
     /// </summary>
     /// <param name="context">HTTP 上下文信息</param>
-    protected void ProcessRequest( RequestContext context )
+    protected void ProcessRequest( HttpContextBase context )
     {
 
-      RequestContext = context;
+      _httpContext = context;
+
+      Trace.Write( "Jumony Web", "Begin of Request" );
+
+      if ( RequestContext == null )
+        throw DirectVisitError();
 
 
-      context.HttpContext.Trace.Write( "Jumony Web", "Begin of Request" );
-
-      if ( context.RouteData == null || !(context.RouteData.Route is IHtmlRequestRoute) )
+      if ( RequestContext.RouteData == null || !(RequestContext.RouteData.Route is IHtmlRequestRoute) )
       {
-        context.HttpContext.Trace.Write( "Jumony Web", "Request Error: route type error." );
+        Trace.Write( "Jumony Web", "Request Error: route type error." );
         throw DirectVisitError();
       }
 
 
 
-      var virtualPath = context.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
-      virtualPath = virtualPath ?? context.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
+      var virtualPath = RequestContext.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
+      RequestContext.RouteData.DataTokens.Remove( JumonyRequestRoute.VirtualPathToken );
+
+      virtualPath = virtualPath ?? RequestContext.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
 
 
       var response = ProcessRequest( virtualPath );
-      OutputResponse( context.HttpContext, response );
+      OutputResponse( RequestContext.HttpContext, response );
 
 
-      context.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
+      RequestContext.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
     }
 
 
@@ -211,14 +219,16 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
     /// <returns>HTML 处理器</returns>
-    protected IHtmlHandler GetHandler( string virtualPath )
+    protected virtual IHtmlHandler GetHandler( string virtualPath )
     {
 
       IHtmlHandler handler = null;
 
-      object handlerObject;
-      if ( RequestContext.RouteData.DataTokens.TryGetValue( HtmlHandlerProvider.HtmlHandlerRouteKey, out handlerObject ) )
-        handler = handlerObject as IHtmlHandler;
+      if ( RequestContext != null )
+      {
+        handler = RequestContext.RouteData.DataTokens[HtmlHandlerProvider.HtmlHandlerRouteKey] as IHtmlHandler;
+        RequestContext.RouteData.DataTokens.Remove( HtmlHandlerProvider.HtmlHandlerRouteKey );
+      }
 
       return handler ?? HtmlHandlerProvider.GetHandler( virtualPath );
     }

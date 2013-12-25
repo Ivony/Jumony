@@ -14,15 +14,12 @@ public class TestJumonyHandler : JumonyHandler
 
   public static ICachedResponse Render( HttpContextBase context, string virtualPath )
   {
-    return Render( JumonyRequestRoute.CreateRequestContext( context, virtualPath ) );
-  }
 
-
-  public static ICachedResponse Render( RequestContext context )
-  {
+    context.Request.RequestContext = JumonyRequestRoute.CreateRequestContext( context, virtualPath );
     var instance = new TestJumonyHandler();
     instance.ProcessRequest( context );
     return instance.response;
+
   }
 
 

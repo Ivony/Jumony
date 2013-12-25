@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
 
 
 namespace Ivony.Html.Web
@@ -58,15 +60,18 @@ namespace Ivony.Html.Web
     /// 获取当前视图所需要应用的筛选器。
     /// </summary>
     /// <returns></returns>
-    protected virtual IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    protected virtual IViewFilter[] GetFilters( ViewContext context )
     {
-      var filters = context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>();
-      context.ViewData[ViewFiltersDataKey] = filters.OfType<IChildViewFilter>();//重设 Filters 使其只剩下可用于子视图的筛选器。
 
-      filters = ViewFilterProvider.GetViewFilters( VirtualPath ).Concat( filters ).ToArray();
+      var filterProviders = WebServiceLocator.GetServices<IViewFilterProvider>( VirtualPath );
+      var filters = filterProviders.SelectMany( p => p.GetFilters( VirtualPath ) ).Reverse();
 
-      return filters;
+      filters = filters.Concat( context.ViewData[ViewFiltersDataKey] as IEnumerable<IViewFilter> ?? Enumerable.Empty<IViewFilter>() );
+
+      return filters.ToArray();
     }
+
+
 
     /// <summary>
     /// 获取视图处理程序
@@ -74,39 +79,27 @@ namespace Ivony.Html.Web
     /// <returns>视图处理程序</returns>
     protected virtual IViewHandler GetHandler( string virtualPath )
     {
-      var handler =  ViewHandlerProvider.GetViewHandler( virtualPath, false );
-      if ( handler != null )
-        return handler;
-
-      var head = Scope.Document.FindFirstOrDefault( "head" );
-      if ( head == null )
-        return null;
-
-      var handlerMeta = head.FindFirstOrDefault( "meta[name=handler]" );
-      if ( handlerMeta == null )
-        return null;
-
-      var handlerPath = handlerMeta.Attribute( "value" ).Value();
       return ViewHandlerProvider.GetViewHandler( virtualPath );
 
     }
+
+
 
 
     /// <summary>
     /// 获取 HTML 渲染代理
     /// </summary>
     /// <remarks>
-    /// 默认的渲染代理包含两个，分别是：
+    /// 默认的渲染代理包含一个：
     /// 1. 部分视图渲染代理，处理 &lt;partial&gt; 标签
-    /// 2. 视图绑定元素渲染代理，处理 &lt;view&gt; 标签
     /// </remarks>
-    /// <returns>返回默认的 HTML 渲染代理</returns>
+    /// <returns>HTML 渲染代理列表</returns>
     public virtual IList<IHtmlRenderAdapter> GetRenderAdapters( IViewHandler handler )
     {
 
       var result = new List<IHtmlRenderAdapter>()
       {
-        new PartialRenderAdapter( ViewContext, Url, handler ),
+        new PartialViewAdapter( ViewContext, Url, handler ),
       };
 
       var customRenderAdapters = handler as ICustomRenderAdapters;
@@ -363,7 +356,20 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void ProcessScope( IViewHandler handler )
     {
-      handler.ProcessScope( ViewContext, Scope, Url );
+      handler.ProcessScope( CreateViewContext(), Scope, Url );
+    }
+
+
+    /// <summary>
+    /// 创建一个视图上下文供视图处理器使用
+    /// </summary>
+    /// <returns>视图上下文</returns>
+    private ViewContext CreateViewContext()
+    {
+      var viewData = new ViewDataDictionary( ViewContext.ViewData );
+      viewData[ViewFiltersDataKey] = Filters.OfType<IChildViewFilter>().ToArray();
+
+      return new ViewContext( ViewContext, this, viewData, ViewContext.TempData, ViewContext.Writer );
     }
 
 

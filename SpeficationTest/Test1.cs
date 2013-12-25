@@ -5,6 +5,7 @@ using Ivony.Html.Parser;
 using System.IO;
 using System.Linq;
 using Ivony.Html.Parser.ContentModels;
+using Ivony.Html.ExpandedAPI;
 
 namespace SpeficationTest
 {
@@ -30,7 +31,7 @@ namespace SpeficationTest
       Assert.AreEqual( element.Attribute( "abc" ).AttributeValue, "abc" );//属性值为"abc"
       var textNode = document.Nodes().ElementAt( 0 ) as IHtmlTextNode;
       Assert.IsNotNull( textNode );
-      Assert.IsTrue( textNode.HtmlText.Contains( '<' ) );//第一个文本节点包含了那个孤立的 '<'
+      Assert.IsTrue( textNode.HtmlText.Contains( "&lt;" ) );//第一个文本节点包含了那个孤立的 '<'
 
     }
 
@@ -104,6 +105,34 @@ namespace SpeficationTest
       var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest6.html" ) );
 
       Assert.AreEqual( document.Elements().Count(), 0, "无元素名的开始或结束标签解析错误" );
+
+    }
+
+    [TestMethod]
+    public void SpecificationTest7()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest7.html" ) );
+
+      var link = document.FindFirstOrDefault( "a" );
+      Assert.IsNotNull( link, "属性或内容包含特殊字符的标签解析失败" );
+      Assert.AreEqual( link.Attribute( "href" ).Value(), "#", "属性内容包含 > 时解析失败。" );
+      Assert.AreEqual( link.Attribute( "title" ).Value(), "this is a <a> tag", "属性内容包含 > 时解析失败。" );
+      //Assert.AreEqual( link.Elements().Count(), 0, "错误的解析了以特殊字符为标签名的标签" );
+
+    }
+
+
+    [TestMethod]
+    public void SpecificationTest8()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest8.html" ) );
+
+      Assert.AreEqual( document.FindSingle( "div" ).Attributes().Count(), 1, "错误的解析了非法的属性" );
+      var links = document.Find( "div a" ).ToArray();
+
+      Assert.AreEqual( links.Length, 2, "错误的解析了不属于属性值的引用内容" );
+      Assert.AreEqual( links[0].InnerText(), "Test1", "错误的解析了不属于属性值的引用内容" );
+      Assert.AreEqual( links[1].InnerText(), " \"Test2", "错误的解析了不属于属性值的引用内容" );
 
     }
 

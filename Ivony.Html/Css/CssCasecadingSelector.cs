@@ -20,6 +20,11 @@ namespace Ivony.Html
   public partial class CssCasecadingSelector : ISelector
   {
 
+    /// <summary>
+    /// 创建 CSS 层叠选择器对象
+    /// </summary>
+    /// <param name="relativeSelector">关系选择器</param>
+    /// <param name="lastSelector">附加的最后一个选择器</param>
     public CssCasecadingSelector( CssRelativeSelector relativeSelector, ISelector lastSelector )
     {
 

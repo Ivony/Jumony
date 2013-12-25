@@ -72,9 +72,11 @@
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
-    <Compile Include="GlobalCacheFilter.cs" />
+    <Compile Include="FallbackCachePolicyProvider.cs" />
     <Compile Include="CachableAttribute.cs" />
     <Compile Include="HtmlViewHandlerWrapper.cs" />
+    <Compile Include="IViewFilterProvider.cs" />
+    <Compile Include="IViewHandlerProvider.cs" />
     <Compile Include="MvcHelpers.cs" />
     <Compile Include="ViewHandlerProvider.cs" />
     <Compile Include="ICachableResult.cs" />
@@ -96,12 +98,9 @@
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
-    <Compile Include="PartialViewExecutor.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
-    <Compile Include="ViewFilterHandler.cs" />
-    <Compile Include="ViewFilterProvider.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -50,6 +50,10 @@ namespace Ivony.Html
     public bool Important { get; private set; }
 
 
+    /// <summary>
+    /// 重写 ToString 方法，输出 CSS 属性的字符串设置形式
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
       if ( Important )

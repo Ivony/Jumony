@@ -78,10 +78,10 @@ namespace Ivony.Web
     /// <summary>
     /// 创建缓存项时设置的缓存持续时间
     /// </summary>
-    protected TimeSpan DurationWhenCreated
+    private TimeSpan DurationWhenCreated
     {
       get;
-      private set;
+      set;
     }
 
 

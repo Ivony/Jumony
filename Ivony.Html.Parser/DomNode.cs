@@ -63,26 +63,22 @@ namespace Ivony.Html.Parser
     /// </remarks>
     public virtual void Remove()
     {
-      lock ( _sync )
+      if ( removed )
+        return;
+
+      if ( _container == null )
+        throw new InvalidOperationException();
+
+      lock ( _container.SyncRoot )
       {
-        if ( removed )
-          return;
 
-        if ( Container == null )
-          throw new InvalidOperationException();
+        _container.NodeCollection.Remove( this );
+        _container = null;
+        removed = true;
 
-        lock ( Container )
-        {
-
-          _container.NodeCollection.Remove( this );
-          _container = null;
-          removed = true;
-
-        }
       }
     }
 
-    private object _sync = new object();
 
 
     private IHtmlDocument _document;
@@ -99,7 +95,7 @@ namespace Ivony.Html.Parser
           return null;
 
 
-        return _document ?? ( _document = Container.Document );
+        return _document ?? (_document = _container.Document);
       }
     }
 

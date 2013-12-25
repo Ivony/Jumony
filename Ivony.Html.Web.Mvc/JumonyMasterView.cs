@@ -55,10 +55,10 @@ namespace Ivony.Html.Web
     /// 重写 InitializeFilters 方法，只返回支持母板页的筛选器
     /// </summary>
     /// <param name="context">视图上下文</param>
-    /// <returns>所需要适用的筛选器</returns>
-    protected override IEnumerable<IViewFilter> GetFilters( ViewContext context )
+    /// <returns>所适用的筛选器</returns>
+    protected override IViewFilter[] GetFilters( ViewContext context )
     {
-      return base.GetFilters( context ).OfType<IMasterViewFiler>();
+      return base.GetFilters( context ).OfType<IMasterViewFiler>().ToArray();
     }
 
 
@@ -108,10 +108,16 @@ namespace Ivony.Html.Web
     }
 
 
+
+    /// <summary>
+    /// 重写 GetHandler 方法，使用母板视图的查找规则
+    /// </summary>
+    /// <param name="virtualPath">当前视图的虚拟路径</param>
+    /// <returns></returns>
     protected override IViewHandler GetHandler( string virtualPath )
     {
 
-      return ViewHandlerProvider.GetViewHandler( virtualPath, false );
+      return ViewHandlerProvider.GetMasterViewHandler( virtualPath );
 
     }
 

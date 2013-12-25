@@ -111,16 +111,21 @@ namespace Ivony.Web
     /// 尝试输出客户端缓存
     /// </summary>
     /// <returns>是否成功</returns>
-    public virtual bool ResolveClientCache()
+    public virtual ICachedResponse ResolveClientCache()
     {
       if ( !EnableClientCache )
-        return false;
+        return null;
 
       var cacheItem = GetCacheItem();
       if ( cacheItem == null )
-        return false;
+        return null;
 
-      return CacheHelper.IsNotModified( HttpContext, cacheItem.ETag );
+      RawResponse response;
+      if ( CacheHelper.IsNotModified( HttpContext, cacheItem.ETag, out response ) )
+        return response;
+
+      else
+        return null;
     }
 
 

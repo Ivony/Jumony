@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Compilation;
 using System.Web;
 using System.Web.Hosting;
+using Ivony.Web;
 
 namespace Ivony.Html.Web
 {
@@ -78,43 +79,43 @@ namespace Ivony.Html.Web
     {
       var view = CreateViewCore( controllerContext, viewPath, false );
 
-      if ( string.IsNullOrEmpty( masterPath ) )
-      {
-
-        var directory = VirtualPathUtility.GetDirectory( viewPath );
-
-        if ( MvcEnvironment.Configuration.FallbackDefaultMaster )
-          masterPath = ViewHandlerProvider.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
-        else
-          masterPath = VirtualPathUtility.Combine( directory, "_master.html" );
-
-        if ( VirtualPathProvider.FileExists( masterPath ) )
-        {
-          var contentView = view as IContentView;
-
-          if ( contentView != null )
-          {
-
-            contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
-            return contentView;
-
-          }
-        }
-
+      var contentView = view as IContentView;
+      if ( contentView == null )
         return view;
-      }
+
+      if ( string.IsNullOrEmpty( masterPath ) )
+        masterPath = FindMasterView( VirtualPathUtility.GetDirectory( viewPath ) );
+
+      if ( masterPath == null )
+        throw new InvalidOperationException( "未能找到母板视图，无法渲染内容视图" );
+
+
+      var master = CreateMaster( controllerContext, masterPath );
+
+      contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
+
+      return contentView;
+
+
+    }
+
+    private string FindMasterView( string directory )
+    {
+      string masterPath;
+
+      if ( MvcEnvironment.Configuration.FallbackDefaultMaster )
+        masterPath = VirtualPathHelper.FallbackSearch( VirtualPathProvider, directory, "_master.html" );
 
       else
       {
-        var contentView = view as IContentView;
+        masterPath = VirtualPathUtility.Combine( directory, "_master.html" );
+        if ( !VirtualPathProvider.FileExists( masterPath ) )
+          masterPath = null;
 
-        if ( contentView == null )
-          throw new InvalidOperationException( "视图不支持母板" );
-
-        contentView.InitializeMaster( CreateMaster( controllerContext, masterPath ) );
-
-        return contentView;
       }
+
+
+      return masterPath;
     }
 
 

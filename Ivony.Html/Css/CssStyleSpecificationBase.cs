@@ -22,6 +22,10 @@ namespace Ivony.Html
       SyncRoot = new object();
     }
 
+
+    /// <summary>
+    /// 获取 CSS 样式缩写规则
+    /// </summary>
     protected CssStyleShorthandRuleCollection StyleShorthandRules
     {
       get;

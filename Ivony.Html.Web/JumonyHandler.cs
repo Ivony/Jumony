@@ -9,6 +9,7 @@ using Ivony.Fluent;
 using System.Web.Hosting;
 
 using Ivony.Web;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
@@ -16,7 +17,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// Jumony 用于处理 HTTP 请求的处理器
   /// </summary>
-  public abstract class JumonyHandler : HtmlHandlerBase, IHttpHandler, IHtmlHandler, IRequiresSessionState
+  public class JumonyHandler : IHttpHandler, IRequiresSessionState
   {
 
     /// <summary>
@@ -28,25 +29,6 @@ namespace Ivony.Html.Web
     }
 
 
-
-
-    private RequestMapping _mapping;
-
-    /// <summary>
-    /// 获取映射的结果
-    /// </summary>
-    protected virtual RequestMapping RequestMapping
-    {
-      get
-      {
-        if ( _mapping == null )
-          _mapping = HttpContext.GetMapping();
-
-        return _mapping;
-      }
-    }
-
-
     /// <summary>
     /// 实现 IHttpHandler.ProcessRequest
     /// </summary>
@@ -54,9 +36,37 @@ namespace Ivony.Html.Web
     void IHttpHandler.ProcessRequest( HttpContext context )
     {
 
-      ProcessRequest( CreateContext( context ) );
+      ProcessRequest( new HttpContextWrapper( context ) );
 
     }
+
+
+
+    /// <summary>
+    /// 获取当前请求上下文
+    /// </summary>
+    protected virtual RequestContext RequestContext
+    {
+      get { return HttpContext.Request.RequestContext; }
+    }
+
+
+
+
+    private HttpContextBase _httpContext;
+
+    /// <summary>
+    /// 获取当前 HTTP 请求上下文
+    /// </summary>
+    protected virtual HttpContextBase HttpContext
+    {
+      get { return _httpContext; }
+    }
+
+
+
+
+
 
     /// <summary>
     /// 处理 HTTP 请求
@@ -64,106 +74,215 @@ namespace Ivony.Html.Web
     /// <param name="context">HTTP 上下文信息</param>
     protected void ProcessRequest( HttpContextBase context )
     {
+
       _httpContext = context;
 
-      _mapping = HttpContext.GetMapping();
+      Trace.Write( "Jumony Web", "Begin of Request" );
 
-      if ( RequestMapping == null )
-        throw new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+      if ( RequestContext == null )
+        throw DirectVisitError();
 
 
-      var response = ProcessRequestCore( context );
+      if ( RequestContext.RouteData == null || !(RequestContext.RouteData.Route is IHtmlRequestRoute) )
+      {
+        Trace.Write( "Jumony Web", "Request Error: route type error." );
+        throw DirectVisitError();
+      }
 
-      OutputResponse( response );
 
-      Trace.Write( "Jumony Web", "End response." );
 
+      var virtualPath = RequestContext.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken] as string;
+      RequestContext.RouteData.DataTokens.Remove( JumonyRequestRoute.VirtualPathToken );
+
+      virtualPath = virtualPath ?? RequestContext.HttpContext.Request.AppRelativeCurrentExecutionFilePath;
+
+
+      var response = ProcessRequest( virtualPath );
+      OutputResponse( RequestContext.HttpContext, response );
+
+
+      RequestContext.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
     }
 
 
-    /// <summary>
-    /// 派生类重写此方法接管 HTTP 请求处理流程
-    /// </summary>
-    /// <param name="context">HTTP 请求上下文</param>
-    /// <returns>处理后的结果</returns>
-    protected virtual ICachedResponse ProcessRequestCore( HttpContextBase context )
-    {
 
+
+    /// <summary>
+    /// 处理 HTTP 请求
+    /// </summary>
+    /// <param name="virtualPath">当前要处理的虚拟路径</param>
+    protected virtual ICachedResponse ProcessRequest( string virtualPath )
+    {
       ICachedResponse response;
 
+      Trace.Write( "Jumony Web", "Begin resolve cache." );
+      response = ResolveCache( virtualPath );
+      Trace.Write( "Jumony Web", "End resolve cache" );
 
+      if ( response == null )
       {
-        Trace.Write( "Jumony Web", "Begin resolve cache." );
-        OnPreResolveCache();
+
+        response = ProcessRequest( new HtmlRequestContext( HttpContext, virtualPath, LoadDocument( virtualPath ) ), GetHandler( virtualPath ) );
 
 
-        response = ResolveCache();
-
-        if ( response != null )
-        {
-          Trace.Write( "Jumony Web", "Cache resolved." );
-          return response;
-        }
-
-        OnPostResolveCache();
-        Trace.Write( "Jumony Web", "Cache is not resolved." );
-      }
-
-
-      {
-        OnPreLoadDocument();
-
-        Trace.Write( "Jumony Web", "Begin load page." );
-        Document = LoadDocument();
-        Trace.Write( "Jumony Web", "End load page." );
-
-        OnPostLoadDocument();
-      }
-
-
-      ( (IHtmlHandler) this ).ProcessDocument( HttpContext, Document );
-
-
-      {
-        Trace.Write( "Jumony Web", "Begin create response." );
-
-        OnPreRender();
-
-        Trace.Write( "Jumony Web", "Begin render page." );
-        var content = Document.Render();
-        Trace.Write( "Jumony Web", "End render page." );
-
-        OnPostRender();
-
-
-        response = CreateResponse( content );
-
-        Trace.Write( "Jumony Web", "End create response." );
-      }
-
-      {
-        Trace.Write( "Jumony Web", "Begin update cache." );
-
+        Trace.Write( "Jumony Web", "Begin update cache" );
         UpdateCache( response );
-
         Trace.Write( "Jumony Web", "End update cache." );
+
       }
 
+      else
+        Trace.Write( "Jumony Web", "Cache resolved." );
 
       return response;
     }
 
 
 
+
+
     /// <summary>
-    /// 创建本次请求的上下文，派生类重写此方法提供自定义上下文。
+    /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
-    /// <param name="context">HTTP 上下文</param>
-    /// <returns>请求上下文信息</returns>
-    protected virtual HttpContextBase CreateContext( HttpContext context )
+    /// <param name="context">当前 HTML 请求上下文</param>
+    /// <returns>处理后的结果</returns>
+    protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context, IHtmlHandler handler )
     {
-      return new HttpContextWrapper( context );
+
+      var filters = GetFilters( context.VirtualPath );
+
+
+
+      OnPreProcess( context, filters );
+
+      Trace.Write( "Jumony Web", "Begin process document." );
+      handler.ProcessScope( context );
+      Trace.Write( "Jumony Web", "End process document." );
+
+      OnPostProcess( context, filters );
+
+
+
+
+      OnPreRender( context, filters );
+
+      Trace.Write( "Jumony Web", "Begin render document." );
+      string content;
+      using ( StringWriter writer = new StringWriter() )
+      {
+        context.Scope.RenderChilds( writer, GetAdapters( handler ) );
+        content = writer.ToString();
+      }
+
+      Trace.Write( "Jumony Web", "End render document." );
+
+      OnPostRender( context, filters );
+
+      return CreateResponse( content );
     }
+
+
+
+    /// <summary>
+    /// 派生类重写此方法自定义加载文档的逻辑
+    /// </summary>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <returns>加载的文档对象</returns>
+    protected virtual IHtmlDocument LoadDocument( string virtualPath )
+    {
+      IHtmlDocument document;
+
+      OnPreLoadDocument();
+
+      Trace.Write( "Jumony Web", "Begin load document." );
+
+
+      document = HtmlServices.LoadDocument( virtualPath );
+      if ( document == null )
+        throw new HttpException( 404, "加载文档失败" );
+
+
+      Trace.Write( "Jumony Web", "End load document." );
+
+      OnPostLoadDocument();
+
+      return document;
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// 获取 HTML 处理器
+    /// </summary>
+    /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
+    /// <returns>HTML 处理器</returns>
+    protected virtual IHtmlHandler GetHandler( string virtualPath )
+    {
+
+      IHtmlHandler handler = null;
+
+      if ( RequestContext != null )
+      {
+        handler = RequestContext.RouteData.DataTokens[HtmlHandlerProvider.HtmlHandlerRouteKey] as IHtmlHandler;
+        RequestContext.RouteData.DataTokens.Remove( HtmlHandlerProvider.HtmlHandlerRouteKey );
+      }
+
+      return handler ?? HtmlHandlerProvider.GetHandler( virtualPath );
+    }
+
+
+
+
+    /// <summary>
+    /// 产生一个异常，用于说明 HTML 处理程序不能直接访问
+    /// </summary>
+    /// <returns>HTTP 404 异常</returns>
+    public static Exception DirectVisitError()
+    {
+      return new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
+    }
+
+
+    /// <summary>
+    /// 获取用于写入追踪信息的上下文
+    /// </summary>
+    protected virtual TraceContext Trace
+    {
+      get { return HttpContext.Trace; }
+    }
+
+
+    /// <summary>
+    /// 获取当前适用的渲染代理
+    /// </summary>
+    /// <returns>要用于当前渲染过程的渲染代理</returns>
+    protected virtual IHtmlRenderAdapter[] GetAdapters( object handler )
+    {
+      return new IHtmlRenderAdapter[] { new PartialRenderAdapter( HttpContext, handler ) };
+    }
+
+
+
+
+
+    /// <summary>
+    /// 获取 HTML 筛选器
+    /// </summary>
+    /// <param name="virtualPath">HTML 文档虚拟路径</param>
+    /// <param name="document">HTML 文档</param>
+    /// <returns>HTML 筛选器</returns>
+    protected virtual IHtmlFilter[] GetFilters( string virtualPath )
+    {
+      return WebServiceLocator
+        .GetServices<IHtmlFilterProvider>( virtualPath )
+        .SelectMany( p => p.GetFilters() )
+        .Reverse().ToArray();
+    }
+
+
 
 
     /// <summary>
@@ -179,16 +298,26 @@ namespace Ivony.Html.Web
     /// 尝试获取缓存的输出
     /// </summary>
     /// <returns>缓存的输出</returns>
-    protected virtual ICachedResponse ResolveCache()
+    protected virtual ICachedResponse ResolveCache( string virtualPath )
     {
-
-      var policy = HtmlProviders.GetCachePolicy( HttpContext );
+      var policy = HtmlServices.GetCachePolicy( HttpContext );
 
       if ( policy == null )
         return null;
 
 
       CachePolicy = policy;
+
+      var clientCachePolicy = policy as IClientCacheablePolicy;
+
+      if ( clientCachePolicy != null )
+      {
+
+        var response = clientCachePolicy.ResolveClientCache();
+        if ( response != null )
+          return response;
+
+      }
 
       return CachePolicy.ResolveCache();
     }
@@ -213,8 +342,9 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法自定义创建响应的逻辑
     /// </summary>
+    /// <param name="content">响应内容</param>
     /// <returns>响应</returns>
-    protected virtual RawResponse CreateResponse( string content )
+    protected virtual ICachedResponse CreateResponse( string content )
     {
       return new RawResponse() { Content = content };
     }
@@ -224,54 +354,23 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 派生类重写此方法自定义输出响应的逻辑
     /// </summary>
-    /// <param name="responseData">响应信息</param>
-    protected virtual void OutputResponse( ICachedResponse responseData )
-    {
-      responseData.Apply( Response );
-    }
-
-
-
-    /// <summary>
-    /// 实现IHtmlHandler接口
-    /// </summary>
     /// <param name="context">HTTP 上下文</param>
-    /// <param name="document">要处理的文档</param>
-    void IHtmlHandler.ProcessDocument( HttpContextBase context, IHtmlDocument document )
+    /// <param name="responseData">响应信息</param>
+    protected virtual void OutputResponse( HttpContextBase context, ICachedResponse responseData )
     {
-
-      _httpContext = context;//如果这里是入口，即被当作IHtmlHandler调用时，需要设置Context供派生类使用
-      Document = document;
-
-      OnPreProcessDocument();
-
-      Trace.Write( "Jumony Web", "Begin Process Document." );
-      ProcessDocument();
-      Trace.Write( "Jumony Web", "End Process Document." );
-
-      OnPostProcessDocument();
-
-      AddGeneratorMetaData();//为处理后的文档加上Jumony生成器的meta信息。
+      responseData.Apply( context.Response );
     }
-
-
-    /// <summary>
-    /// 派生类重写此方法处理文档
-    /// </summary>
-    protected abstract void ProcessDocument();
-
-
 
 
     /// <summary>
     /// 这个方法是用来添加<![CDATA[<meta name="generator" value="jumony" />]]>元素的。
     /// </summary>
-    private void AddGeneratorMetaData()
+    private void AddGeneratorMetaData( IHtmlDocument document )
     {
-      var modifier = Document.DomModifier;
+      var modifier = document.DomModifier;
       if ( modifier != null )
       {
-        var header = Document.Find( "html head" ).FirstOrDefault();
+        var header = document.Find( "html head" ).FirstOrDefault();
 
         if ( header != null )
         {
@@ -284,54 +383,6 @@ namespace Ivony.Html.Web
       }
     }
 
-
-    /// <summary>
-    /// 获取正在处理的页面文档
-    /// </summary>
-    public IHtmlDocument Document
-    {
-      get;
-      private set;
-    }
-
-
-    /// <summary>
-    /// 加载Web页面
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IHtmlDocument LoadDocument()
-    {
-      var document = RequestMapping.LoadDocument();
-
-      return document;
-    }
-
-
-    private HttpContextBase _httpContext;
-
-    /// <summary>
-    /// 获取与该页关联的 HttpContext 对象。
-    /// </summary>
-    protected override HttpContextBase HttpContext
-    {
-      get { return _httpContext; }
-    }
-
-    /// <summary>
-    /// 获取要处理的 HTML 范畴
-    /// </summary>
-    public sealed override IHtmlContainer Scope
-    {
-      get { return Document; }
-    }
-
-    /// <summary>
-    /// 获取当前文档的虚拟路径
-    /// </summary>
-    public sealed override string VirtualPath
-    {
-      get { return VirtualPath; }
-    }
 
 
 
@@ -352,9 +403,34 @@ namespace Ivony.Html.Web
     public event EventHandler PostProcessDocument;
 
     /// <summary>引发 PreProcessDocument 事件</summary>
-    protected virtual void OnPreProcessDocument() { if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPreProcess( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty );
+    }
+
     /// <summary>引发 PostProcessDocument 事件</summary>
-    protected virtual void OnPostProcessDocument() { if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty ); }
+    protected virtual void OnPostProcess( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters.Reverse() )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty );
+    }
 
 
     /// <summary>在渲染文档前引发此事件</summary>
@@ -363,24 +439,37 @@ namespace Ivony.Html.Web
     public event EventHandler PostRender;
 
     /// <summary>引发 PreRender 事件</summary>
-    protected virtual void OnPreRender() { if ( PreRender != null ) PreRender( this, EventArgs.Empty ); }
+    protected virtual void OnPreRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PreRender != null ) PreRender( this, EventArgs.Empty );
+    }
+
     /// <summary>引发 PostRender 事件</summary>
-    protected virtual void OnPostRender() { if ( PostRender != null ) PostRender( this, EventArgs.Empty ); }
+    protected virtual void OnPostRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    {
+      foreach ( var filter in filters.Reverse() )
+      {
+        try
+        {
+          filter.OnProcessing( context );
+        }
+        catch { }
+      }
+
+      if ( PostRender != null ) PostRender( this, EventArgs.Empty );
+    }
 
 
 
-    /// <summary>在尝试缓存输出前引发此事件</summary>
-    public event EventHandler PreResolveCache;
-    /// <summary>在缓存未命中后引发此事件</summary>
-    public event EventHandler PostResolveCache;
-
-    /// <summary>引发 PreResolveCache 事件</summary>
-    protected virtual void OnPreResolveCache() { if ( PreResolveCache != null ) PreResolveCache( this, EventArgs.Empty ); }
-    /// <summary>引发 PostResolveCache 事件</summary>
-    protected virtual void OnPostResolveCache() { if ( PostResolveCache != null ) PostResolveCache( this, EventArgs.Empty ); }
-
-
-    #region IDisposable 成员
 
     /// <summary>
     /// 执行与释放或重置非托管资源相关的应用程序定义的任务
@@ -389,9 +478,6 @@ namespace Ivony.Html.Web
     {
 
     }
-
-    #endregion
-
 
   }
 }

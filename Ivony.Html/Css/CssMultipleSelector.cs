@@ -45,13 +45,5 @@ namespace Ivony.Html
 
     }
 
-
-
-    public static ISelector Combine( CssRelativeSelector relativeSelector, CssMultipleSelector multipleSelector )
-    {
-
-      return new CssMultipleSelector( multipleSelector._selectors.Select( selector => CssCasecadingSelector.Create( relativeSelector, selector ) ).ToArray() );
-
-    }
   }
 }

@@ -21,37 +21,31 @@ namespace Ivony.Html
   {
 
 
+
+    public delegate bool CssSelectorCombinatorSelector( ISelector leftSelector, IHtmlElement element );
+
+
+    public CssElementSelector RightSelector { get; private set; }
+
+    public ISelector LeftSelector { get; private set; }
+
+    public char CombinatorSymbol { get; private set; }
+
+    protected CssSelectorCombinatorSelector Combinator
+    {
+      get;
+      private set;
+    }
+
+
     /// <summary>
     /// 创建 CSS 层叠选择器对象
     /// </summary>
     /// <param name="relativeSelector">关系选择器</param>
     /// <param name="lastSelector">附加的最后一个选择器</param>
-    public CssCasecadingSelector( CssRelativeSelector relativeSelector, ISelector lastSelector )
+    private CssCasecadingSelector( ISelector leftSelector, char combinator, CssElementSelector rightSelector )
     {
 
-      if ( relativeSelector == null )
-        throw new ArgumentNullException( "relativeSelector" );
-
-      if ( lastSelector == null )
-        throw new ArgumentNullException( "lastSelector" );
-
-
-      RelativeSelector = relativeSelector;
-      LastSelector = lastSelector;
-
-    }
-
-
-
-
-    /// <summary>
-    /// 创建层叠选择器实例
-    /// </summary>
-    /// <param name="leftSelector">左选择器</param>
-    /// <param name="combinator">结合符</param>
-    /// <param name="rightSelector">右选择器</param>
-    public static CssCasecadingSelector Create( ISelector leftSelector, char combinator, ISelector rightSelector )
-    {
       if ( leftSelector == null )
         throw new ArgumentNullException( "leftSelector" );
 
@@ -59,37 +53,48 @@ namespace Ivony.Html
         throw new ArgumentNullException( "rightSelector" );
 
 
-      var relativeSelctor = CreateRelativeSelector( leftSelector, combinator );
-      var casecadingSelector = rightSelector as CssCasecadingSelector;
+      RightSelector = rightSelector;
+      LeftSelector = leftSelector;
+      Combinator = CreateCombinator( combinator );
+      CombinatorSymbol = combinator;
 
-      if ( casecadingSelector != null )
-        return Combine( relativeSelctor, casecadingSelector );
-
-      return new CssCasecadingSelector( relativeSelctor, rightSelector );
     }
 
-    /// <summary>
-    /// 合并关系选择器和层叠选择器
-    /// </summary>
-    /// <param name="relativeSelector">关系选择器</param>
-    /// <param name="selector">层叠选择器</param>
-    /// <returns></returns>
-    internal static CssCasecadingSelector Combine( CssRelativeSelector relativeSelector, CssCasecadingSelector selector )
+    protected CssSelectorCombinatorSelector CreateCombinator( char combinator )
     {
-      relativeSelector = Combine( relativeSelector, selector.RelativeSelector );
-      return new CssCasecadingSelector( relativeSelector, selector.LastSelector );
+
+      switch ( combinator )
+      {
+        case '>':
+          return ( selector, element ) => selector.IsEligible( element.Parent() );
+
+        case ' ':
+          return ( selector, element ) => element.Ancestors().Any( e => selector.IsEligible( e ) );
+
+        case '+':
+          return ( selector, element ) => selector.IsEligible( element.PreviousElement() );
+
+        case '~':
+          return ( selector, element ) => element.SiblingsBeforeSelf().Any( e => selector.IsEligible( e ) );
+
+        default:
+          throw new NotSupportedException();
+
+      }
+
     }
 
 
-    /// <summary>
-    /// 合并两个关系选择器
-    /// </summary>
-    /// <param name="left">左关系选择器</param>
-    /// <param name="right">右关系选择器</param>
-    /// <returns>合并后的关系选择器</returns>
-    public static CssRelativeSelector Combine( CssRelativeSelector left, CssRelativeSelector right )
-    {
 
+    /// <summary>
+    /// 将层叠选择器与另一个选择器使用指定连接符合并为一个
+    /// </summary>
+    /// <param name="left">合并后在左边的选择器</param>
+    /// <param name="combinator">连接符</param>
+    /// <param name="right">合并后在右边的选择器</param>
+    /// <returns>合并后的选择器</returns>
+    public static CssCasecadingSelector Combine( CssCasecadingSelector left, char combinator, ISelector right )
+    {
       if ( left == null )
         throw new ArgumentNullException( "left" );
 
@@ -97,72 +102,54 @@ namespace Ivony.Html
         throw new ArgumentNullException( "right" );
 
 
-      var selector = right.LeftSelector;
-      var combinator = right.Combinator;
+      var casecadingSelector = right as CssCasecadingSelector;
+      if ( casecadingSelector != null )
+        return Combine( left, combinator, casecadingSelector );
 
-
-      var casecadingSelector = selector as CssCasecadingSelector;
-      if ( casecadingSelector != null )                                                                        //如果右边关系选择器的左选择器是一个层叠选择器
-        return CreateRelativeSelector( CssCasecadingSelector.Combine( left, casecadingSelector ), combinator );//将层叠选择器与左边的关系选择器合并，得到一个新的层叠选择器，再根据结合符创建新的关系选择器。
-      
-      /*
-       * 举例说明如下：
-       * 假设左关系选择器是 p>，右关系选择器是 div>ul>li+
-       * 则右关系选择器的左选择器(selector)是div>ul>li，结合符(combinator)是+。
-       * 将selector与左边的关系选择器合并，得到：p>div>ul>li，再与结合符结合得到新的关系选择器：p>div>ul>li+
-       */
-
-      var elementSelector = selector as CssElementSelector;
-      if ( elementSelector != null )
-        return CreateRelativeSelector( new CssCasecadingSelector( left, elementSelector ), combinator );
-
+      var elementSelector = right as CssElementSelector;
+      if ( casecadingSelector != null )
+        return Combine( left, combinator, elementSelector );
 
       throw new NotSupportedException();
     }
 
 
-
     /// <summary>
-    /// 关系选择器
+    /// 将层叠选择器与另一个选择器使用指定连接符合并为一个
     /// </summary>
-    public CssRelativeSelector RelativeSelector
+    /// <param name="left">合并后在左边的选择器</param>
+    /// <param name="combinator">连接符</param>
+    /// <param name="right">合并后在右边的选择器</param>
+    /// <returns>合并后的选择器</returns>
+    public static CssCasecadingSelector Combine( CssCasecadingSelector left, char combinator, CssCasecadingSelector right )
     {
-      get;
-      private set;
+      if ( left == null )
+        throw new ArgumentNullException( "left" );
+
+      if ( right == null )
+        throw new ArgumentNullException( "right" );
+
+
+      return Combine( Combine( left, combinator, right.LeftSelector ), right.CombinatorSymbol, right.RightSelector );
     }
 
+
     /// <summary>
-    /// 最后一个选择器
+    /// 将层叠选择器与另一个选择器使用指定连接符合并为一个
     /// </summary>
-    public ISelector LastSelector
+    /// <param name="left">合并后在左边的选择器</param>
+    /// <param name="combinator">连接符</param>
+    /// <param name="right">合并后在右边的选择器</param>
+    /// <returns>合并后的选择器</returns>
+    public static CssCasecadingSelector Combine( CssCasecadingSelector left, char combinator, CssElementSelector right )
     {
-      get;
-      private set;
+      return new CssCasecadingSelector( left, combinator, right );
     }
 
 
-    /// <summary>
-    /// 创建关系选择器
-    /// </summary>
-    /// <param name="leftSelector">左选择器</param>
-    /// <param name="combanitor">关系结合符</param>
-    /// <returns>关系选择器</returns>
-    private static CssRelativeSelector CreateRelativeSelector( ISelector leftSelector, char combanitor )
-    {
-      if ( combanitor == '>' )
-        return new CssParentRelativeSelector( leftSelector );
 
-      else if ( combanitor == ' ' )
-        return new CssAncetorRelativeSelector( leftSelector );
 
-      else if ( combanitor == '+' )
-        return new CssPreviousRelativeSelector( leftSelector );
 
-      else if ( combanitor == '~' )
-        return new CssSiblingsRelativeSelector( leftSelector );
-
-      throw new NotSupportedException( "不支持的关系运算符" );
-    }
 
 
 
@@ -180,10 +167,10 @@ namespace Ivony.Html
 
 
 
-      if ( !LastSelector.IsEligible( element ) )
+      if ( !RightSelector.IsEligible( element ) )
         return false;
 
-      return RelativeSelector.IsEligibleBuffered( element );
+      return Combinator( LeftSelector, element );
 
     }
 
@@ -195,66 +182,7 @@ namespace Ivony.Html
     /// <returns>表示当前选择器的表达式</returns>
     public override string ToString()
     {
-      return string.Format( CultureInfo.InvariantCulture, "{0}{1}", RelativeSelector, LastSelector );
-    }
-
-
-    /// <summary>
-    /// 创建层叠选择器
-    /// </summary>
-    /// <param name="relativeSelector">前置关系选择器</param>
-    /// <param name="selector">右选择器</param>
-    /// <returns></returns>
-    public static ISelector Create( CssRelativeSelector relativeSelector, ISelector selector )
-    {
-
-      if ( relativeSelector == null )
-        throw new ArgumentNullException( "relativeSelector" );
-
-      if ( selector == null )
-        throw new ArgumentNullException( "selector" );
-
-
-      var elementSelector = selector as CssElementSelector;
-      if ( elementSelector != null )
-        return new CssCasecadingSelector( relativeSelector, elementSelector );
-
-      var casecadingSelector = selector as CssCasecadingSelector;
-      if ( casecadingSelector != null )
-        return Combine( relativeSelector, casecadingSelector );
-
-      var multipleSelector = selector as CssMultipleSelector;
-      if ( multipleSelector != null )
-        return CssMultipleSelector.Combine( relativeSelector, multipleSelector );
-
-
-      throw new NotSupportedException();
-    }
-
-
-    /// <summary>
-    /// 创建层叠选择器
-    /// </summary>
-    /// <param name="elements">作为范畴限定的元素集</param>
-    /// <param name="expression">选择器表达式</param>
-    /// <returns>层叠选择器</returns>
-    public static ISelector Create( IEnumerable<IHtmlElement> elements, string expression )
-    {
-
-      if ( elements == null )
-        throw new ArgumentNullException( "elements" );
-
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-      var selector = CssParser.ParseSelector( expression );
-
-      if ( elements.IsNullOrEmpty() )
-        return selector;
-
-      var relativeSelector = new CssAncetorRelativeSelector( new CssElementsRestrictionSelector( elements ) );
-
-      return Create( relativeSelector, selector );
+      return string.Format( CultureInfo.InvariantCulture, "{0}{1}{2}", LeftSelector, CombinatorSymbol, RightSelector );
     }
 
 

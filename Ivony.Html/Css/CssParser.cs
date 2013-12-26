@@ -64,25 +64,6 @@ namespace Ivony.Html
 
 
     /// <summary>
-    /// 创建带范畴限定的选择器
-    /// </summary>
-    /// <param name="expression">选择器表达式</param>
-    /// <param name="scope">范畴限定，上溯时不超出此范畴</param>
-    /// <returns>带范畴限定的层叠选择器</returns>
-    public static ISelector Create( IHtmlContainer scope, string expression )
-    {
-      if ( scope == null )
-        throw new ArgumentNullException( "scope" );
-
-      if ( expression == null )
-        throw new ArgumentNullException( "expression" );
-
-      return CssCasecadingSelector.Create( new CssAncetorRelativeSelector( new ContainerRestrict( scope ) ), CssParser.ParseSelector( expression ) );
-    }
-
-
-
-    /// <summary>
     /// 解析并创建选择器对象
     /// </summary>
     /// <param name="enumerator">用于读取选择器表达式的枚举器</param>

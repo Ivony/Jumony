@@ -67,6 +67,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Css\CssSelector.cs" />
+    <Compile Include="Css\CssSpecificity.cs" />
     <Compile Include="Css\CssPropertyParser.cs" />
     <Compile Include="Css\CssStyleSpecificationBase.cs" />
     <Compile Include="Css\CssStyle.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="HtmlRange.cs" />
     <Compile Include="HtmlRenderContext.cs" />
     <Compile Include="HtmlSpecificationBase.cs" />
+    <Compile Include="ICssSelector.cs" />
     <Compile Include="IHtmlRenderAdapter.cs" />
     <Compile Include="IHtmlCollection.cs" />
     <Compile Include="IHtmlDomModifier.cs" />
@@ -119,12 +122,12 @@
     <Compile Include="Css\CssElementsRestrictionSelector.cs" />
     <Compile Include="Css\CssMultipleSelector.cs" />
     <Compile Include="Css\CssParser.cs" />
-    <Compile Include="Css\CssSelector.cs" />
+    <Compile Include="Css\SelectorExtensions.cs" />
     <Compile Include="Css\CssElementSelector.cs" />
     <Compile Include="Css\ICssPseudoClassProvider.cs" />
     <Compile Include="Css\ICssPseudoClassSelector.cs" />
     <Compile Include="Css\InternalPseudoClassProvider.cs" />
-    <Compile Include="Css\ICssSelector.cs" />
+    <Compile Include="Css\ISelector.cs" />
     <Compile Include="Css\CssRelativeSelector.cs" />
     <Compile Include="Css\NegationPseudoClass.cs" />
     <Compile Include="Css\TraceEnumerable.cs" />

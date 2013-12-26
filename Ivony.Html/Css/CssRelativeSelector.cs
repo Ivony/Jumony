@@ -9,14 +9,14 @@ namespace Ivony.Html
   /// <summary>
   /// CSS 关系选择器基类
   /// </summary>
-  public abstract class CssRelativeSelector : ICssSelector
+  public abstract class CssRelativeSelector : ISelector
   {
 
     /// <summary>
     /// 创建 CssRelativeSelector 对象
     /// </summary>
     /// <param name="leftSelector"></param>
-    protected CssRelativeSelector( ICssSelector leftSelector )
+    protected CssRelativeSelector( ISelector leftSelector )
     {
       LeftSelector = leftSelector;
     }
@@ -24,7 +24,7 @@ namespace Ivony.Html
     /// <summary>
     /// 获取左选择器
     /// </summary>
-    public virtual ICssSelector LeftSelector
+    public virtual ISelector LeftSelector
     {
       get;
       private set;
@@ -49,7 +49,7 @@ namespace Ivony.Html
     /// <param name="leftSelector">左选择器</param>
     /// <param name="element">要检验的元素</param>
     /// <returns>是否符合选择器</returns>
-    protected abstract bool IsEligible( ICssSelector leftSelector, IHtmlElement element );
+    protected abstract bool IsEligible( ISelector leftSelector, IHtmlElement element );
 
 
     /// <summary>
@@ -74,10 +74,10 @@ namespace Ivony.Html
   internal class CssParentRelativeSelector : CssRelativeSelector
   {
 
-    public CssParentRelativeSelector( ICssSelector leftSelector ) : base( leftSelector ) { }
+    public CssParentRelativeSelector( ISelector leftSelector ) : base( leftSelector ) { }
 
 
-    protected override bool IsEligible( ICssSelector leftSelector, IHtmlElement element )
+    protected override bool IsEligible( ISelector leftSelector, IHtmlElement element )
     {
       var restrict = leftSelector as ContainerRestrict;
       if ( restrict != null )
@@ -96,9 +96,9 @@ namespace Ivony.Html
   /// </summary>
   internal class CssAncetorRelativeSelector : CssRelativeSelector
   {
-    public CssAncetorRelativeSelector( ICssSelector leftSelector ) : base( leftSelector ) { }
+    public CssAncetorRelativeSelector( ISelector leftSelector ) : base( leftSelector ) { }
 
-    protected override bool IsEligible( ICssSelector leftSelector, IHtmlElement element )
+    protected override bool IsEligible( ISelector leftSelector, IHtmlElement element )
     {
 
       var restrict = leftSelector as ContainerRestrict;
@@ -122,9 +122,9 @@ namespace Ivony.Html
   /// </summary>
   internal class CssPreviousRelativeSelector : CssRelativeSelector
   {
-    public CssPreviousRelativeSelector( ICssSelector leftSelector ) : base( leftSelector ) { }
+    public CssPreviousRelativeSelector( ISelector leftSelector ) : base( leftSelector ) { }
 
-    protected override bool IsEligible( ICssSelector leftSelector, IHtmlElement element )
+    protected override bool IsEligible( ISelector leftSelector, IHtmlElement element )
     {
       return leftSelector.IsEligibleBuffered( element.PreviousElement() );
     }
@@ -140,9 +140,9 @@ namespace Ivony.Html
   internal class CssSiblingsRelativeSelector : CssRelativeSelector
   {
 
-    public CssSiblingsRelativeSelector( ICssSelector leftSelector ) : base( leftSelector ) { }
+    public CssSiblingsRelativeSelector( ISelector leftSelector ) : base( leftSelector ) { }
 
-    protected override bool IsEligible( ICssSelector leftSelector, IHtmlElement element )
+    protected override bool IsEligible( ISelector leftSelector, IHtmlElement element )
     {
       var previous = element.PreviousElement();
 
@@ -154,7 +154,7 @@ namespace Ivony.Html
 
 
 
-  internal class ContainerRestrict : ICssSelector
+  internal class ContainerRestrict : ISelector
   {
 
     public ContainerRestrict( IHtmlContainer container )
@@ -168,7 +168,7 @@ namespace Ivony.Html
       private set;
     }
 
-    bool ICssSelector.IsEligible( IHtmlElement element )
+    bool ISelector.IsEligible( IHtmlElement element )
     {
       throw new NotSupportedException();
     }

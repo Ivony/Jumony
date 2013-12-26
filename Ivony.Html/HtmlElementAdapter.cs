@@ -50,7 +50,7 @@ namespace Ivony.Html
 
 
     private string _selectorExpression;
-    private ICssSelector _selectorCache;
+    private ISelector _selectorCache;
 
 
 

@@ -10,10 +10,10 @@ namespace Ivony.Html
   internal class TraceEnumerable<T> : IEnumerable<T>
   {
 
-    private ICssSelector _selector;
+    private ISelector _selector;
     private IEnumerable<T> _enumerable;
 
-    public TraceEnumerable( ICssSelector selector, IEnumerable<T> enumerable )
+    public TraceEnumerable( ISelector selector, IEnumerable<T> enumerable )
     {
       _selector = selector;
       _enumerable = enumerable;
@@ -22,10 +22,10 @@ namespace Ivony.Html
     private class Enumerator : IEnumerator<T>
     {
 
-      private ICssSelector coreSelector;
+      private ISelector coreSelector;
       private IEnumerator<T> coreEnumerator;
 
-      public Enumerator( ICssSelector selector, IEnumerator<T> enumerator )
+      public Enumerator( ISelector selector, IEnumerator<T> enumerator )
       {
         coreSelector = selector;
         coreEnumerator = enumerator;

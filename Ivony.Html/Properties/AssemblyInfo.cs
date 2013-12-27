@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle( "Jumony Core" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyDescription( "jumony core API and HTML spec." )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "" )]
-[assembly: AssemblyCopyright( "Copyright ©  2010" )]
+[assembly: AssemblyCopyright( "Copyright © 2010  by Ivony" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 

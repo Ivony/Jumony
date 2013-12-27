@@ -342,7 +342,11 @@ namespace Ivony.Html
 
 
 
-
+    /// <summary>
+    /// 获取当前节点的文本模式
+    /// </summary>
+    /// <param name="node">要获取文本模式的节点</param>
+    /// <returns>节点当前适用的文本模式</returns>
     public static TextMode ElementTextMode( this IHtmlNode node )
     {
       if ( node == null )

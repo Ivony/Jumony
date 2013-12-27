@@ -53,7 +53,7 @@ namespace Ivony.Html.Web
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="bindingContext">父级数据绑定上下文</param>
     /// <param name="dataContext">数据上下文</param>
-    /// <param name="data">数据字典</param>
+    /// <param name="dataValues">数据字典</param>
     protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
     {
 

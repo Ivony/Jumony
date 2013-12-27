@@ -6,11 +6,21 @@ using Ivony.Fluent;
 
 namespace Ivony.Html
 {
+
+  /// <summary>
+  /// 定义 CSS 选择器的特异性
+  /// </summary>
   public struct CssSpecificity : IComparable<CssSpecificity>, IComparable, IEquatable<CssSpecificity>
   {
 
     private int a, b, c;
 
+    /// <summary>
+    /// 创建 CssSpecificity 对象
+    /// </summary>
+    /// <param name="a">特异性 a 值</param>
+    /// <param name="b">特异性 b 值</param>
+    /// <param name="c">特异性 c 值</param>
     public CssSpecificity( int a, int b, int c )
     {
       this.a = a;
@@ -45,6 +55,10 @@ namespace Ivony.Html
         return Equals( (CssSpecificity) obj );
     }
 
+    /// <summary>
+    /// 重写 GetHashCode 方法，获取哈希值
+    /// </summary>
+    /// <returns></returns>
     public override int GetHashCode()
     {
       return a.GetHashCode() ^ b.GetHashCode() ^ c.GetHashCode();
@@ -54,7 +68,7 @@ namespace Ivony.Html
     /// <summary>
     /// 比较两个 CSS 选择器特异性之间的优先级
     /// </summary>
-    /// <param name="other">要进行比较的特异性</param>
+    /// <param name="obj">要进行比较的特异性</param>
     /// <returns>比较结果</returns>
     public int CompareTo( object obj )
     {

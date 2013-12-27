@@ -144,6 +144,10 @@ namespace Ivony.Html
     }
   }
 
+
+  /// <summary>
+  /// 定义 CSS 样式缩写规则容器
+  /// </summary>
   public class CssStyleShorthandRuleCollection : KeyedCollection<string, ICssStyleShorthandRule>
   {
     protected override string GetKeyForItem( ICssStyleShorthandRule item )

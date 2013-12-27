@@ -7,7 +7,7 @@ namespace Ivony.Html
 {
 
   /// <summary>
-  /// 代表一个 CSS 选择器的抽象
+  /// 定义 HTML 元素选择器的抽象
   /// </summary>
   public interface ISelector
   {

@@ -82,6 +82,11 @@ namespace Ivony.Html.Web
 
     private static IViewHandler GetHandlerInternal( string handlerPath )
     {
+
+      if ( handlerPath == null )
+        return null;
+
+
       if ( HostingEnvironment.VirtualPathProvider.FileExists( handlerPath ) )
       {
         try

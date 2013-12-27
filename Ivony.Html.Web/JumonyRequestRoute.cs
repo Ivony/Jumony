@@ -15,11 +15,23 @@ namespace Ivony.Html.Web
   public class JumonyRequestRoute : RouteBase, IHtmlRequestRoute
   {
 
+    /// <summary>
+    /// 用于在路由数据中标识虚拟路径的键值
+    /// </summary>
     public static string VirtualPathToken
     {
       get { return "HtmlVirtualPath"; }
     }
 
+
+
+    /// <summary>
+    /// 用于在路由数据中标识处理程序的键值
+    /// </summary>
+    public static string HtmlHandlerToken
+    {
+      get { return "Jumony_HtmlHandler_RouteKey"; }
+    }
 
 
 
@@ -42,13 +54,16 @@ namespace Ivony.Html.Web
         return null;
 
       var routeData = new RouteData( this, new JumonyRouteHandler() );
-      routeData.Values[HtmlHandlerProvider.HtmlHandlerRouteKey] = handler;
+      routeData.Values[HtmlHandlerToken] = handler;
 
       return routeData;
 
     }
 
 
+    /// <summary>
+    /// 获取当前的虚拟路径提供程序
+    /// </summary>
     protected VirtualPathProvider VirtualPathProvider
     {
       get { return HostingEnvironment.VirtualPathProvider; }

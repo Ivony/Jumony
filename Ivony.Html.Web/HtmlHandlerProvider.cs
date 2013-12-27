@@ -13,11 +13,12 @@ using Ivony.Web;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// 提供一组方法，用于查找对文档进行处理的 IHtmlHandler 实例。
+  /// </summary>
   public static class HtmlHandlerProvider
   {
-
-
-    internal static readonly string HtmlHandlerRouteKey = "Jumony_HtmlHandler_RouteKey";
 
 
     /// <summary>

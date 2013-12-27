@@ -226,8 +226,8 @@ namespace Ivony.Html.Web
 
       if ( RequestContext != null )
       {
-        handler = RequestContext.RouteData.DataTokens[HtmlHandlerProvider.HtmlHandlerRouteKey] as IHtmlHandler;
-        RequestContext.RouteData.DataTokens.Remove( HtmlHandlerProvider.HtmlHandlerRouteKey );
+        handler = RequestContext.RouteData.DataTokens[JumonyRequestRoute.HtmlHandlerToken] as IHtmlHandler;
+        RequestContext.RouteData.DataTokens.Remove( JumonyRequestRoute.HtmlHandlerToken );
       }
 
       return handler ?? HtmlHandlerProvider.GetHandler( virtualPath );

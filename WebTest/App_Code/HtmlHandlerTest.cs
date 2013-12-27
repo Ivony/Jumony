@@ -9,6 +9,7 @@ using Ivony.Html;
 using Ivony.Html.Parser;
 using Ivony.Web.Test;
 using Ivony.Web;
+using Ivony.Html.Web;
 
 
 /// <summary>
@@ -25,6 +26,8 @@ public class HtmlHandlerTest : TestClass
     var document = ExecuteDocument( "~/HandlerTest/Test1.html" );
     Assert.AreEqual( document.FindFirst( "body" ).InnerText(), testContent );
 
+    Assert.IsNull( HttpContext.Request.RequestContext.RouteData.DataTokens[JumonyRequestRoute.VirtualPathToken], "VirtualPath token 没有清理" );
+    Assert.IsNull( HttpContext.Request.RequestContext.RouteData.DataTokens[JumonyRequestRoute.HtmlHandlerToken], "HtmlHandler token 没有清理" );
 
   }
 

@@ -74,7 +74,7 @@ namespace Ivony.Html.Web
         return false;
       }
 
-      var expression = new AttributeExpression( element );
+      var expression = new ElementBindingExpression( element );
 
       object dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
@@ -171,34 +171,30 @@ namespace Ivony.Html.Web
     /// <param name="attribute">要绑定的元素属性</param>
     /// <param name="context">绑定上下文</param>
     /// <returns>是否成功绑定</returns>
-    public bool BindAttribute( HtmlBindingContext context, IHtmlAttribute attribute )
+    public bool BindAttribute( HtmlBindingContext context, AttributeBindingExpression expression )
     {
 
-      if ( attribute.Name == "datacontext" )
-        return false;
-
-      var expression = AttributeExpression.ParseExpression( attribute );
-      if ( expression == null || !expression.Name.EqualsIgnoreCase( "Binding" ) )
+      if ( expression.Attribute.Name == "datacontext" )
         return false;
 
       var dataObject = HtmlBindingContext.GetDataObject( expression, context );
 
       if ( dataObject == null )
       {
-        attribute.Remove();
+        expression.Attribute.Remove();
         return true;
       }
 
 
       string value = GetBindingValue( expression, dataObject );
 
-      attribute.SetValue( value );
+      expression.Attribute.SetValue( value );
 
       return true;
     }
 
 
-    private static string GetBindingValue( AttributeExpression expression, object dataObject )
+    private static string GetBindingValue( AttributeBindingExpression expression, object dataObject )
     {
 
       {

@@ -109,6 +109,26 @@ namespace Ivony.Html.Web
     public virtual void DataBind()
     {
 
+      if ( ParentContext == null )
+      {
+
+        var modifier = BindingScope.Document.DomModifier as ISynchronizedDomModifier;
+
+        if ( modifier == null )
+          throw new InvalidOperationException( "需要绑定的范畴是只读的，或者无法进行同步访问" );
+
+        lock ( modifier.SyncRoot )
+        {
+          DataBindInternal();
+        }
+      }
+
+      else
+        DataBindInternal();
+    }
+
+    private void DataBindInternal()
+    {
       var element = BindingScope as IHtmlElement;
       if ( element != null )
         DataBind( element );
@@ -137,7 +157,7 @@ namespace Ivony.Html.Web
     protected virtual void DataBind( IHtmlElement element )
     {
       var attributes = element.Attributes().ToArray();
-      attributes.ForAll( a => BindAttribute( Binders, a ) );
+      attributes.Select( a => AttributeBindingExpression.ParseExpression( a ) ).NotNull().ForAll( a => BindAttribute( Binders, a ) );
 
       BindElement( Binders, element );
 
@@ -171,6 +191,14 @@ namespace Ivony.Html.Web
       CreateBindingContext( this, element, dataContext ).DataBind();
     }
 
+
+    /// <summary>
+    /// 创建一个绑定上下文
+    /// </summary>
+    /// <param name="bindingContext"></param>
+    /// <param name="element"></param>
+    /// <param name="dataContext"></param>
+    /// <returns></returns>
     protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataContext )
     {
       var services = WebServiceLocator.GetServices<IHtmlBindingContextProvider>();
@@ -200,7 +228,7 @@ namespace Ivony.Html.Web
     /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
     protected virtual object GetDataContext( IHtmlElement element )
     {
-      var expression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
+      var expression = AttributeBindingExpression.ParseExpression( element.Attribute( "datacontext" ) );
       if ( expression == null )
         return null;
 
@@ -217,7 +245,13 @@ namespace Ivony.Html.Web
     }
 
 
-    protected virtual object GetDataContext( AttributeExpression expression )
+
+    /// <summary>
+    /// 从绑定表达式中获取数据上下文
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <returns></returns>
+    protected virtual object GetDataContext( BindingExpression expression )
     {
       var dataContext = GetDataObject( expression, this );
 
@@ -232,7 +266,7 @@ namespace Ivony.Html.Web
     /// <param name="expression">属性表达式</param>
     /// <param name="context">当前绑定上下文</param>
     /// <returns>数据对象</returns>
-    internal static object GetDataObject( AttributeExpression expression, HtmlBindingContext context )
+    internal static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
     {
       //获取绑定数据源
 
@@ -280,7 +314,7 @@ namespace Ivony.Html.Web
     /// 进行属性绑定
     /// </summary>
     /// <param name="attribute">要绑定的属性</param>
-    protected virtual void BindAttribute( IHtmlElementBinder[] binders, IHtmlAttribute attribute )
+    protected virtual void BindAttribute( IHtmlElementBinder[] binders, AttributeBindingExpression attribute )
     {
       foreach ( var binder in binders )
       {

@@ -19,7 +19,7 @@ namespace Ivony.Html.Web
     /// <param name="context">数据绑定上下文</param>
     /// <param name="attribute">要绑定的属性</param>
     /// <returns>是否执行了绑定，若执行了绑定，则对于这个属性其他绑定器不再运行</returns>
-    bool BindAttribute( HtmlBindingContext context, IHtmlAttribute attribute );
+    bool BindAttribute( HtmlBindingContext context, AttributeBindingExpression attribute );
 
 
     /// <summary>

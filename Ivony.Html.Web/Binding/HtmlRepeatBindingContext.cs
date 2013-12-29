@@ -27,6 +27,9 @@ namespace Ivony.Html.Web
     private object[] _dataList;
 
 
+    /// <summary>
+    /// 重写 DataBind 方法，执行绑定时将被绑定元素复制适当份数，再进行绑定。
+    /// </summary>
     public override void DataBind()
     {
       var count = _dataList.Length;

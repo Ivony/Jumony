@@ -40,6 +40,10 @@ namespace Ivony.Html.Web
       }
 
 
+      if ( !HostingEnvironment.VirtualPathProvider.FileExists( virtualPath ) )//如果文件不存在，则直接返回 null　。
+        return null;
+
+
       return
         GetHandlerInternal<IHtmlHandler>( virtualPath + ".ashx" ) ??
         GetHandlerInternal<IHtmlHandler>( GetHandlerPath( virtualPath ) ) ??

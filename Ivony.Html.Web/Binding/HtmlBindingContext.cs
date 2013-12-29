@@ -8,6 +8,7 @@ using System.Collections;
 using Ivony.Html.ExpandedAPI;
 using System.Web.UI;
 using Ivony.Web;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Binding
 {
@@ -157,7 +158,7 @@ namespace Ivony.Html.Web.Binding
     protected virtual void DataBind( IHtmlElement element )
     {
       var attributes = element.Attributes().ToArray();
-      attributes.Select( a => AttributeBindingExpression.ParseExpression( a ) ).NotNull().ForAll( a => BindAttribute( Binders, a ) );
+      attributes.ForAll( a => BindAttribute( a ) );
 
       BindElement( Binders, element );
 
@@ -268,26 +269,8 @@ namespace Ivony.Html.Web.Binding
     /// <returns>数据对象</returns>
     internal static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
     {
-      //获取绑定数据源
+      return BindingExpressionBinder.GetDataObject( context, expression.Arguments );
 
-      string key;
-      object dataObject;
-
-      if ( expression.Arguments.TryGetValue( "key", out key ) || expression.Arguments.TryGetValue( "name", out key ) )
-        context.Data.TryGetValue( key, out dataObject );
-      else
-        dataObject = context.DataContext;
-
-      if ( dataObject == null )
-        return null;
-
-
-      string path;
-
-      if ( expression.Arguments.TryGetValue( "path", out path ) )
-        dataObject = DataBinder.Eval( dataObject, path );
-
-      return dataObject;
     }
 
 
@@ -301,6 +284,17 @@ namespace Ivony.Html.Web.Binding
     /// <param name="element"></param>
     protected virtual void BindElement( IHtmlElementBinder[] binders, IHtmlElement element )
     {
+
+      var expression = new ElementBindingExpression( element );
+
+      string value;
+      if ( TryGetBindingValue( expression, out value ) )
+      {
+        element.ReplaceWith( value );
+        return;
+      }
+
+
       foreach ( var binder in binders )
       {
         if ( binder.BindElement( this, element ) )
@@ -314,13 +308,68 @@ namespace Ivony.Html.Web.Binding
     /// 进行属性绑定
     /// </summary>
     /// <param name="attribute">要绑定的属性</param>
-    protected virtual void BindAttribute( IHtmlElementBinder[] binders, AttributeBindingExpression attribute )
+    protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
-      foreach ( var binder in binders )
+
+      var expression = AttributeBindingExpression.ParseExpression( attribute );
+      if ( expression == null )
+        return;
+
+      string value;
+      if ( !TryGetBindingValue( expression, out value ) )
+        return;
+
+      if ( value == null )
+        attribute.Remove();
+
+      else
+        attribute.SetValue( value );
+    }
+
+    private bool TryGetBindingValue( BindingExpression expression, out string value )
+    {
+
+      var binder = expressionBinders[expression.Name];
+
+      if ( binder != null )
       {
-        if ( binder.BindAttribute( this, attribute ) )
-          break;
+        value = binder.Bind( this, expression.Arguments );
+        return true;
+      }
+
+      value = null;
+      return false;
+    }
+
+
+
+    public ICollection<IExpressionBinder> ExpressionBinders
+    {
+      get { return expressionBinders; }
+    }
+
+
+    private ExpressionBinderCollection expressionBinders = new ExpressionBinderCollection();
+
+
+
+    private class ExpressionBinderCollection : SynchronizedKeyedCollection<string, IExpressionBinder>
+    {
+
+
+      /// <summary>
+      /// 创建 ExpressionBinderCollection 对象
+      /// </summary>
+      public ExpressionBinderCollection() : base( new object(), StringComparer.OrdinalIgnoreCase ) { }
+
+
+      protected override string GetKeyForItem( IExpressionBinder item )
+      {
+        return item.ExpressionName;
       }
     }
+
+
+
   }
 }

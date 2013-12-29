@@ -70,6 +70,9 @@
   <ItemGroup>
     <Compile Include="Binding\BindingExpression.cs" />
     <Compile Include="Binding\AttributeBindingExpression.cs" />
+    <Compile Include="Binding\BindingExpressionBinder.cs" />
+    <Compile Include="Binding\ExpressionType.cs" />
+    <Compile Include="Binding\IExpressionBinder.cs" />
     <Compile Include="Binding\ElementBindingExpression.cs" />
     <Compile Include="Binding\HtmlBindingContext.cs" />
     <Compile Include="Binding\HtmlElementBinderProvider.cs" />
@@ -77,7 +80,7 @@
     <Compile Include="Binding\IHtmlBinderProvider.cs" />
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
     <Compile Include="Binding\IHtmlElementBinder.cs" />
-    <Compile Include="DefaultElementBinder.cs" />
+    <Compile Include="Binding\DefaultElementBinder.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlHandlerProvider.cs" />

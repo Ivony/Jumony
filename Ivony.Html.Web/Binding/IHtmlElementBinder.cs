@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Web
+namespace Ivony.Html.Web.Binding
 {
   /// <summary>
   /// 定义 HTML 元素绑定器

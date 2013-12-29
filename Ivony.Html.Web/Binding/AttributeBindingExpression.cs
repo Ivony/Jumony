@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Ivony.Html.Web
+namespace Ivony.Html.Web.Binding
 {
 
 
@@ -40,6 +40,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 定义属性绑定表达式的属性
+    /// </summary>
     public IHtmlAttribute Attribute
     {
       get;
@@ -63,12 +66,6 @@ namespace Ivony.Html.Web
 
         return _name;
       }
-    }
-
-    private void CheckAttribute()
-    {
-      if ( Attribute.AttributeValue != _expression )
-        throw new InvalidOperationException( "属性值已经发生变化" );
     }
 
 
@@ -126,5 +123,18 @@ namespace Ivony.Html.Web
       return new AttributeBindingExpression( attribute, expression, _name, args );
 
     }
+
+
+    /// <summary>
+    /// 检查并确认属性值没有被修改
+    /// </summary>
+    protected void CheckAttribute()
+    {
+      if ( Attribute.AttributeValue != _expression )
+        throw new InvalidOperationException( "属性值已经发生变化" );
+    }
+
+
+
   }
 }

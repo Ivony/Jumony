@@ -9,7 +9,7 @@ using Ivony.Html.ExpandedAPI;
 using System.Web.UI;
 using Ivony.Web;
 
-namespace Ivony.Html.Web
+namespace Ivony.Html.Web.Binding
 {
 
   /// <summary>

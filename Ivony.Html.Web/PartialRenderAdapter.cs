@@ -38,6 +38,9 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 获取当前 HTTP 请求上下文
+    /// </summary>
     protected HttpContextBase HttpContext
     {
       get;
@@ -45,6 +48,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取当前 HTML 处理程序
+    /// </summary>
     protected object Handler
     {
       get;
@@ -52,6 +58,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 当前处理程序中定义的部分视图执行程序
+    /// </summary>
     protected IDictionary<string, PartialExecutor> PartialExecutors
     {
       get;

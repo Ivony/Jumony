@@ -116,7 +116,7 @@
     <Compile Include="IHtmlTextNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regulars.cs" />
-    <Compile Include="Css\CssCacheableSelector.cs" />
+    <Compile Include="Css\CacheableSelector.cs" />
     <Compile Include="Css\CssCasecadingSelector.cs" />
     <Compile Include="Css\CssAttributeSelector.cs" />
     <Compile Include="Css\CssElementsRestrictionSelector.cs" />

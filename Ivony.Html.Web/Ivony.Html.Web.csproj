@@ -71,6 +71,9 @@
     <Compile Include="Binding\BindingExpression.cs" />
     <Compile Include="Binding\AttributeExpression.cs" />
     <Compile Include="Binding\BindingExpressionBinder.cs" />
+    <Compile Include="Binding\ExpressionBinderCollection.cs" />
+    <Compile Include="Binding\FormBinder.cs" />
+    <Compile Include="Binding\GlobalExpressionBinders.cs" />
     <Compile Include="Binding\IDataContextExpressionBinder.cs" />
     <Compile Include="Binding\IElementExpressionBinder.cs" />
     <Compile Include="Binding\IExpressionBinder.cs" />
@@ -80,7 +83,8 @@
     <Compile Include="Binding\HtmlRepeatBindingContext.cs" />
     <Compile Include="Binding\IHtmlBinderProvider.cs" />
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
-    <Compile Include="Binding\IHtmlElementBinder.cs" />
+    <Compile Include="Binding\IHtmlBinder.cs" />
+    <Compile Include="Binding\ScriptBinder.cs" />
     <Compile Include="Binding\StyleBinder.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />

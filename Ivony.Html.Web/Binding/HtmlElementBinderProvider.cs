@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Web.Binding
 {
+
+  /// <summary>
+  /// HTML 绑定器提供程序
+  /// </summary>
   public static class HtmlElementBinderProvider
   {
 
@@ -13,7 +17,7 @@ namespace Ivony.Html.Web.Binding
     /// </summary>
     /// <param name="handler">当前 HTML 页面处理程序</param>
     /// <returns>所有可用的元素绑定器</returns>
-    public static IHtmlElementBinder[] GetBinders( object handler )
+    public static IHtmlBinder[] GetBinders( object handler )
     {
       return new[] { new StyleBinder() };
     }

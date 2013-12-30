@@ -15,7 +15,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// 默认的元素绑定器，处理 &lt;view&gt; 或者 &lt;binding&gt; 元素，以及属性绑定表达式和绑定属性处理。
   /// </summary>
-  public class StyleBinder : IHtmlElementBinder
+  public class StyleBinder : IHtmlBinder
   {
 
 

@@ -7,25 +7,24 @@ using System.Web.UI;
 
 namespace Ivony.Html.Web.Binding
 {
-  public class BindingExpressionBinder : IExpressionBinder
+
+  /// <summary>
+  /// 处理{Binding xxx}表达式的绑定器
+  /// </summary>
+  public class BindingExpressionBinder : IDataContextExpressionBinder
   {
-    public string ExpressionName
+    string IExpressionBinder.ExpressionName
     {
       get { return "Binding"; }
     }
 
-    public ExpressionType ExpressionType
-    {
-      get { return ExpressionType.Both; }
-    }
 
-    public string Bind( HtmlBindingContext context, IDictionary<string, string> arguments )
-    {
-      return GetValue( GetDataObject( context, arguments ), arguments );
-    }
-
-
-
+    /// <summary>
+    /// 根据绑定参数获取数据对象
+    /// </summary>
+    /// <param name="context">绑定上下文</param>
+    /// <param name="arguments">绑定参数</param>
+    /// <returns>数据对象</returns>
     public static object GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
       string key;
@@ -50,13 +49,18 @@ namespace Ivony.Html.Web.Binding
 
 
     /// <summary>
-    /// 将数据对象转换为绑定值
+    /// 获取绑定值
     /// </summary>
-    /// <param name="dataObject">数据对象</param>
+    /// <param name="context">绑定上下文</param>
     /// <param name="arguments">绑定参数</param>
     /// <returns>绑定值</returns>
-    public static string GetValue( object dataObject, IDictionary<string, string> arguments )
+    public static string GetValue( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
+
+      var dataObject = GetDataObject( context, arguments );
+
+      if ( dataObject == null )
+        return null;
 
       {
         string format;
@@ -89,8 +93,19 @@ namespace Ivony.Html.Web.Binding
 
 
       return dataObject.ToString();
+
     }
 
+
+    object IDataContextExpressionBinder.GetDataContext( HtmlBindingContext context, IDictionary<string, string> arguments )
+    {
+      return GetDataObject( context, arguments );
+    }
+
+    string IExpressionBinder.GetValue( HtmlBindingContext context, IDictionary<string, string> arguments )
+    {
+      return GetValue( context, arguments );
+    }
 
   }
 }

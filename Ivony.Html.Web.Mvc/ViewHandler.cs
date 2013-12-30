@@ -7,6 +7,7 @@ using System.Web;
 using System.IO;
 using System.Web.Routing;
 using Ivony.Fluent;
+using Ivony.Html.Web.Binding;
 
 namespace Ivony.Html.Web
 {

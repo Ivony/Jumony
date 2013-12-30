@@ -11,7 +11,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// 属性表达式
   /// </summary>
-  public sealed class AttributeBindingExpression : BindingExpression
+  public sealed class AttributeExpression : BindingExpression
   {
 
     /// <summary>
@@ -30,7 +30,7 @@ namespace Ivony.Html.Web.Binding
     private IDictionary<string, string> _args;
 
 
-    private AttributeBindingExpression( IHtmlAttribute attribute, string expression, string name, IDictionary<string, string> args )
+    private AttributeExpression( IHtmlAttribute attribute, string expression, string name, IDictionary<string, string> args )
     {
       Attribute = attribute;
       _expression = expression;
@@ -89,7 +89,7 @@ namespace Ivony.Html.Web.Binding
     /// </summary>
     /// <param name="attribute">要解析的属性</param>
     /// <returns>绑定表达式</returns>
-    public static AttributeBindingExpression ParseExpression( IHtmlAttribute attribute )
+    public static AttributeExpression ParseExpression( IHtmlAttribute attribute )
     {
       var expression = attribute.Value();
 
@@ -105,7 +105,7 @@ namespace Ivony.Html.Web.Binding
 
 
 
-    private static AttributeBindingExpression ParseExpression( IHtmlAttribute attribute, string expression, Match match )
+    private static AttributeExpression ParseExpression( IHtmlAttribute attribute, string expression, Match match )
     {
 
       var _name = match.Groups["ename"].Value;
@@ -120,7 +120,7 @@ namespace Ivony.Html.Web.Binding
         args[name] = value;
       }
 
-      return new AttributeBindingExpression( attribute, expression, _name, args );
+      return new AttributeExpression( attribute, expression, _name, args );
 
     }
 

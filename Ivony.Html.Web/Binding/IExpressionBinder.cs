@@ -18,12 +18,6 @@ namespace Ivony.Html.Web.Binding
     string ExpressionName { get; }
 
 
-    /// <summary>
-    /// 可以处理的绑定表达式的类型
-    /// </summary>
-    ExpressionType ExpressionType { get; }
-
-
 
     /// <summary>
     /// 进行绑定，根据给定的参数获取需要绑定的值
@@ -31,7 +25,7 @@ namespace Ivony.Html.Web.Binding
     /// <param name="context">当前绑定上下文</param>
     /// <param name="arguments">绑定参数</param>
     /// <returns>绑定的值</returns>
-    string Bind( HtmlBindingContext context, IDictionary<string, string> arguments );
+    string GetValue( HtmlBindingContext context, IDictionary<string, string> arguments );
 
 
   }

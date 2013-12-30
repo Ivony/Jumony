@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Ivony.Fluent;
+using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ivony.Fluent;
-using System.Collections;
-
-using Ivony.Html.ExpandedAPI;
 using System.Web.UI;
-using Ivony.Web;
-using Ivony.Fluent;
 
 namespace Ivony.Html.Web.Binding
 {
@@ -32,6 +30,7 @@ namespace Ivony.Html.Web.Binding
 
     }
 
+
     private HtmlBindingContext( IHtmlElementBinder[] binders, IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
     {
 
@@ -45,6 +44,7 @@ namespace Ivony.Html.Web.Binding
       BindingScope = scope;
       DataContext = dataContext;
       Data = dataValues;
+      expressionBinders.Add( new BindingExpressionBinder() );
     }
 
 
@@ -70,6 +70,7 @@ namespace Ivony.Html.Web.Binding
       Data = dataValues ?? bindingContext.Data;
 
       Binders = bindingContext.Binders;
+      expressionBinders = new ExpressionBinderCollection( bindingContext.expressionBinders );
 
     }
 
@@ -229,7 +230,7 @@ namespace Ivony.Html.Web.Binding
     /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
     protected virtual object GetDataContext( IHtmlElement element )
     {
-      var expression = AttributeBindingExpression.ParseExpression( element.Attribute( "datacontext" ) );
+      var expression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
       if ( expression == null )
         return null;
 
@@ -254,26 +255,8 @@ namespace Ivony.Html.Web.Binding
     /// <returns></returns>
     protected virtual object GetDataContext( BindingExpression expression )
     {
-      var dataContext = GetDataObject( expression, this );
-
-      return dataContext;
+      return BindingExpressionBinder.GetDataObject( this, expression.Arguments );
     }
-
-
-
-    /// <summary>
-    /// 解析属性表达式，获取数据对象
-    /// </summary>
-    /// <param name="expression">属性表达式</param>
-    /// <param name="context">当前绑定上下文</param>
-    /// <returns>数据对象</returns>
-    internal static object GetDataObject( BindingExpression expression, HtmlBindingContext context )
-    {
-      return BindingExpressionBinder.GetDataObject( context, expression.Arguments );
-
-    }
-
-
 
 
 
@@ -285,17 +268,27 @@ namespace Ivony.Html.Web.Binding
     protected virtual void BindElement( IHtmlElementBinder[] binders, IHtmlElement element )
     {
 
-      var expression = new ElementBindingExpression( element );
+      var expression = new ElementExpression( element );
 
-      string value;
-      if ( TryGetBindingValue( expression, out value ) )
+
+      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
+
+      if ( expressionBinder != null )
       {
-        element.ReplaceWith( value );
+        var value = expressionBinder.GetValue( this, expression.Arguments );
+
+        if ( value == null )
+          element.Remove();
+
+        else
+          element.ReplaceWith( value );
+
         return;
       }
 
 
-      foreach ( var binder in binders )
+
+      foreach ( var binder in Binders )
       {
         if ( binder.BindElement( this, element ) )
           break;
@@ -311,13 +304,19 @@ namespace Ivony.Html.Web.Binding
     protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
 
-      var expression = AttributeBindingExpression.ParseExpression( attribute );
+      var expression = AttributeExpression.ParseExpression( attribute );
       if ( expression == null )
         return;
 
       string value;
-      if ( !TryGetBindingValue( expression, out value ) )
+      var binder = GetExpressionBinder( expression );
+
+      if ( binder == null )
         return;
+
+
+
+      value = binder.GetValue( this, expression.Arguments );
 
       if ( value == null )
         attribute.Remove();
@@ -326,24 +325,30 @@ namespace Ivony.Html.Web.Binding
         attribute.SetValue( value );
     }
 
-    private bool TryGetBindingValue( BindingExpression expression, out string value )
+
+    /// <summary>
+    /// 获取绑定表达式绑定器
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <returns>绑定表达式绑定器</returns>
+    protected virtual IExpressionBinder GetExpressionBinder( BindingExpression expression )
     {
-
-      var binder = expressionBinders[expression.Name];
-
-      if ( binder != null )
+      var name = expression.Name;
+      lock ( expressionBinders.SyncRoot )
       {
-        value = binder.Bind( this, expression.Arguments );
-        return true;
-      }
+        if ( expressionBinders.Contains( name ) )
+          return expressionBinders[expression.Name];
 
-      value = null;
-      return false;
+        else
+          return null;
+      }
     }
 
 
-
-    public ICollection<IExpressionBinder> ExpressionBinders
+    /// <summary>
+    /// 当前上下文可用于处理绑定表达式的绑定器
+    /// </summary>
+    protected ICollection<IExpressionBinder> ExpressionBinders
     {
       get { return expressionBinders; }
     }
@@ -361,6 +366,16 @@ namespace Ivony.Html.Web.Binding
       /// 创建 ExpressionBinderCollection 对象
       /// </summary>
       public ExpressionBinderCollection() : base( new object(), StringComparer.OrdinalIgnoreCase ) { }
+
+      /// <summary>
+      /// 创建 ExpressionBinderCollection 对象
+      /// </summary>
+      public ExpressionBinderCollection( ExpressionBinderCollection binders )
+        : this()
+      {
+        foreach ( var item in binders )
+          Add( item );
+      }
 
 
       protected override string GetKeyForItem( IExpressionBinder item )

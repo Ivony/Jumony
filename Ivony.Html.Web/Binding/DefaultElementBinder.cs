@@ -68,68 +68,61 @@ namespace Ivony.Html.Web.Binding
 
 
 
-
-      if ( !element.Name.EqualsIgnoreCase( "view" ) && !element.Name.EqualsIgnoreCase( "binding" ) )
-      {
-        return false;
-      }
-
-      var expression = new ElementBindingExpression( element );
-
-      object dataObject = HtmlBindingContext.GetDataObject( expression, context );
-
-      if ( dataObject == null )
-        return false;
-
-
-
-
-
-      var format = element.Attribute( "format" ).Value();
-
-
-      //绑定到客户端脚本对象
-      var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
-      if ( variableName != null )
+      if ( element.Name.EqualsIgnoreCase( "Binding" ) )
       {
 
-        if ( format != null )
-          dataObject = string.Format( format, dataObject );
+        var expression = new ElementExpression( element );
+        object dataObject = BindingExpressionBinder.GetDataObject( context, expression.Arguments );
+
+        if ( dataObject == null )
+        {
+          element.Remove();
+          return true;
+        }
 
 
-        var hostName = element.Attribute( "host" ).Value();
+        var format = element.Attribute( "format" ).Value();
 
-        var script = (string) null;
 
-        if ( hostName == null )
-          script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
+        //绑定到客户端脚本对象
+        var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
+        if ( variableName != null )
+        {
+
+          if ( format != null )
+            dataObject = string.Format( format, dataObject );
+
+
+          var hostName = element.Attribute( "host" ).Value();
+
+          var script = (string) null;
+
+          if ( hostName == null )
+            script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
+
+          else
+            script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
+
+
+          element.ReplaceWith( string.Format( "<script type=\"text/javascript\">{0}</script>", script ) );
+          return true;
+        }
 
         else
-          script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
+        {
 
+          //绑定为 HTML 文本
+          var bindValue = string.Format( format ?? "{0}", dataObject );
 
-        element.ReplaceWith( string.Format( "<script type=\"text/javascript\">{0}</script>", script ) );
-        return true;
+          element.ReplaceWith( bindValue );
+          return true;
+        }
+
       }
 
+      else
+        return false;
 
-
-      //绑定为 HTML 文本
-      var bindValue = string.Format( format ?? "{0}", dataObject );
-
-      var attributeName = element.Attribute( "attribute" ).Value() ?? element.Attribute( "attr" ).Value();
-      if ( attributeName != null )
-      {
-        var nextElement = element.NextElement();
-        if ( nextElement == null )
-          return false;
-
-        nextElement.SetAttribute( attributeName, bindValue );
-        return true;
-      }
-
-      element.ReplaceWith( bindValue );
-      return true;
     }
 
     /// <summary>
@@ -171,63 +164,23 @@ namespace Ivony.Html.Web.Binding
     /// <param name="attribute">要绑定的元素属性</param>
     /// <param name="context">绑定上下文</param>
     /// <returns>是否成功绑定</returns>
-    public bool BindAttribute( HtmlBindingContext context, AttributeBindingExpression expression )
+    public bool BindAttribute( HtmlBindingContext context, AttributeExpression expression )
     {
 
       if ( expression.Attribute.Name == "datacontext" )
         return false;
 
-      var dataObject = HtmlBindingContext.GetDataObject( expression, context );
+      var value = BindingExpressionBinder.GetValue( context, expression.Arguments );
 
-      if ( dataObject == null )
-      {
+      if ( value == null )
         expression.Attribute.Remove();
-        return true;
-      }
+      
+      else
+        expression.Attribute.SetValue( value );
 
-
-      string value = GetBindingValue( expression, dataObject );
-
-      expression.Attribute.SetValue( value );
-
+      
       return true;
     }
 
-
-    private static string GetBindingValue( AttributeBindingExpression expression, object dataObject )
-    {
-
-      {
-        string format;
-        if ( expression.Arguments.TryGetValue( "format", out format ) )
-        {
-          var formattable = dataObject as IFormattable;
-
-          if ( formattable != null )
-            return ((IFormattable) dataObject).ToString( format, CultureInfo.InvariantCulture );
-        }
-      }
-
-
-
-      {
-        string value;
-        if ( expression.Arguments.TryGetValue( "value", out value ) )
-        {
-          if ( Convert.ToBoolean( dataObject ) )
-            return value;
-
-          else if ( expression.Arguments.TryGetValue( "alternativeValue", out value ) )
-            return value;
-
-          else
-            return null;
-        }
-      }
-
-
-
-      return dataObject.ToString();
-    }
   }
 }

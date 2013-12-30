@@ -69,11 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\BindingExpression.cs" />
-    <Compile Include="Binding\AttributeBindingExpression.cs" />
+    <Compile Include="Binding\AttributeExpression.cs" />
     <Compile Include="Binding\BindingExpressionBinder.cs" />
-    <Compile Include="Binding\ExpressionType.cs" />
+    <Compile Include="Binding\IDataContextExpressionBinder.cs" />
+    <Compile Include="Binding\IElementExpressionBinder.cs" />
     <Compile Include="Binding\IExpressionBinder.cs" />
-    <Compile Include="Binding\ElementBindingExpression.cs" />
+    <Compile Include="Binding\ElementExpression.cs" />
     <Compile Include="Binding\HtmlBindingContext.cs" />
     <Compile Include="Binding\HtmlElementBinderProvider.cs" />
     <Compile Include="Binding\HtmlRepeatBindingContext.cs" />

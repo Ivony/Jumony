@@ -9,7 +9,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// 代表用元素表示的绑定表达式
   /// </summary>
-  public class ElementBindingExpression : BindingExpression
+  public class ElementExpression : BindingExpression
   {
 
 
@@ -24,7 +24,7 @@ namespace Ivony.Html.Web.Binding
     /// 根据元素创建一个元素绑定表达式
     /// </summary>
     /// <param name="element"></param>
-    public ElementBindingExpression( IHtmlElement element )
+    public ElementExpression( IHtmlElement element )
     {
       Element = element;
     }

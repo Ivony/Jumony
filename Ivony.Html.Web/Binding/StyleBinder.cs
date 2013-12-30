@@ -15,7 +15,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// 默认的元素绑定器，处理 &lt;view&gt; 或者 &lt;binding&gt; 元素，以及属性绑定表达式和绑定属性处理。
   /// </summary>
-  public class DefaultElementBinder : IHtmlElementBinder
+  public class StyleBinder : IHtmlElementBinder
   {
 
 
@@ -68,68 +68,16 @@ namespace Ivony.Html.Web.Binding
 
 
 
-      if ( element.Name.EqualsIgnoreCase( "Binding" ) )
-      {
-
-        var expression = new ElementExpression( element );
-        object dataObject = BindingExpressionBinder.GetDataObject( context, expression.Arguments );
-
-        if ( dataObject == null )
-        {
-          element.Remove();
-          return true;
-        }
 
 
-        var format = element.Attribute( "format" ).Value();
-
-
-        //绑定到客户端脚本对象
-        var variableName = element.Attribute( "var" ).Value() ?? element.Attribute( "variable" ).Value();
-        if ( variableName != null )
-        {
-
-          if ( format != null )
-            dataObject = string.Format( format, dataObject );
-
-
-          var hostName = element.Attribute( "host" ).Value();
-
-          var script = (string) null;
-
-          if ( hostName == null )
-            script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
-
-          else
-            script = string.Format( "(function(){{ this['{0}'] = {1} }})();", variableName, ToJson( dataObject ) );
-
-
-          element.ReplaceWith( string.Format( "<script type=\"text/javascript\">{0}</script>", script ) );
-          return true;
-        }
-
-        else
-        {
-
-          //绑定为 HTML 文本
-          var bindValue = string.Format( format ?? "{0}", dataObject );
-
-          element.ReplaceWith( bindValue );
-          return true;
-        }
-
-      }
-
-      else
-        return false;
-
+      return false;
     }
 
     /// <summary>
     /// 绑定元素样式
     /// </summary>
     /// <param name="element">要处理的元素</param>
-    /// <param name="styleAttributes">样式属性值</param>
+    /// <param name="styleAttributes">样式属性</param>
     private static void BindElementStyles( IHtmlElement element, IHtmlAttribute[] styleAttributes )
     {
       foreach ( var attribute in styleAttributes )
@@ -154,32 +102,6 @@ namespace Ivony.Html.Web.Binding
     {
       var serializer = new JavaScriptSerializer();
       return serializer.Serialize( dataObject );
-    }
-
-
-
-    /// <summary>
-    /// 对元素属性进行绑定操作
-    /// </summary>
-    /// <param name="attribute">要绑定的元素属性</param>
-    /// <param name="context">绑定上下文</param>
-    /// <returns>是否成功绑定</returns>
-    public bool BindAttribute( HtmlBindingContext context, AttributeExpression expression )
-    {
-
-      if ( expression.Attribute.Name == "datacontext" )
-        return false;
-
-      var value = BindingExpressionBinder.GetValue( context, expression.Arguments );
-
-      if ( value == null )
-        expression.Attribute.Remove();
-      
-      else
-        expression.Attribute.SetValue( value );
-
-      
-      return true;
     }
 
   }

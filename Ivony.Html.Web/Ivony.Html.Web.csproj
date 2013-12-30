@@ -81,7 +81,7 @@
     <Compile Include="Binding\IHtmlBinderProvider.cs" />
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />
     <Compile Include="Binding\IHtmlElementBinder.cs" />
-    <Compile Include="Binding\DefaultElementBinder.cs" />
+    <Compile Include="Binding\StyleBinder.cs" />
     <Compile Include="DefaultProviders.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
     <Compile Include="HtmlHandlerProvider.cs" />

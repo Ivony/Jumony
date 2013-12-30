@@ -15,7 +15,7 @@ namespace Ivony.Html.Web.Binding
     /// <returns>所有可用的元素绑定器</returns>
     public static IHtmlElementBinder[] GetBinders( object handler )
     {
-      return new[] { new DefaultElementBinder() };
+      return new[] { new StyleBinder() };
     }
 
 

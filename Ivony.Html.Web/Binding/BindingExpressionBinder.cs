@@ -11,7 +11,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// 处理{Binding xxx}表达式的绑定器
   /// </summary>
-  public class BindingExpressionBinder : IDataContextExpressionBinder
+  public class BindingExpressionBinder : IDataContextExpressionBinder, IElementExpressionBinder
   {
     string IExpressionBinder.ExpressionName
     {

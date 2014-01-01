@@ -79,7 +79,7 @@
     <Compile Include="Binding\IExpressionBinder.cs" />
     <Compile Include="Binding\ElementExpression.cs" />
     <Compile Include="Binding\HtmlBindingContext.cs" />
-    <Compile Include="Binding\HtmlElementBinderProvider.cs" />
+    <Compile Include="Binding\HtmlBinderProvider.cs" />
     <Compile Include="Binding\HtmlRepeatBindingContext.cs" />
     <Compile Include="Binding\IHtmlBinderProvider.cs" />
     <Compile Include="Binding\IHtmlBindingContextProvider.cs" />

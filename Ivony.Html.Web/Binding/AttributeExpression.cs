@@ -14,17 +14,6 @@ namespace Ivony.Html.Web.Binding
   public sealed class AttributeExpression : BindingExpression
   {
 
-    /// <summary>
-    /// 用于解析属性表达式参数的正则表达式
-    /// </summary>
-    public static readonly string ExpressionArgumentPattern = @"(?<args>(?<name>\w+)(=(?<value>[^\,]+))?)";
-
-    /// <summary>
-    /// 用于解析属性表达式的正则表达式
-    /// </summary>
-    public static readonly string AttributeExpressionPattern = string.Format( @"(?<expression>\{{(?<ename>\w+)\s*({0}(\,\s*{0})*)?\}})", ExpressionArgumentPattern );
-
-
     private static readonly Regex attributeExpressionRegex = new Regex( "^" + AttributeExpressionPattern + "$", RegexOptions.IgnoreCase | RegexOptions.Compiled );
     private string _name;
     private IDictionary<string, string> _args;

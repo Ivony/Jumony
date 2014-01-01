@@ -133,7 +133,7 @@ namespace Ivony.Html.Web
     protected virtual void DataBind()
     {
 
-      var binders = HtmlElementBinderProvider.GetBinders( this );
+      var binders = HtmlBinderProvider.GetBinders( this );
       var bindingContext = HtmlBindingContext.CreateInstance( binders, Scope, Model, ViewData );
 
       bindingContext.DataBind();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ivony.Html.Web.Binding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,27 @@ namespace Ivony.Html.Web
     public void ProcessScope( HtmlRequestContext context )
     {
       Context = context;
+      DataValues = new Dictionary<string, object>();
 
       ProcessScope();
+
+      DataBind();
     }
+
+    /// <summary>
+    /// 进行数据绑定
+    /// </summary>
+    protected virtual void DataBind()
+    {
+      var binding = HtmlBindingContext.CreateInstance( HtmlBinderProvider.GetBinders( this ), Context.Scope, DataContext, DataValues );
+      binding.DataBind();
+    }
+
+
+
+    protected object DataContext { get; set; }
+
+    protected IDictionary<string, object> DataValues { get; private set; }
 
 
 

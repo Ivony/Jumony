@@ -12,7 +12,9 @@ namespace Ivony.Html.Web.Binding
   public interface IHtmlBinderProvider
   {
 
-    IHtmlBinder[] GetBinders();
+    IHtmlBinder[] GetHtmlBinders();
+
+    IExpressionBinder[] GetExpressionBinders();
 
   }
 }

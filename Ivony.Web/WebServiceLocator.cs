@@ -249,12 +249,5 @@ namespace Ivony.Web
       }
     }
 
-
-
-    /// <summary>
-    /// 此方法仅供框架调用
-    /// </summary>
-    /// <param name="paramName">参数名称</param>
-    /// <returns></returns>
   }
 }

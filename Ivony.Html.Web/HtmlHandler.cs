@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using Ivony.Fluent;
 using System.Reflection;
+using Ivony.Web;
 
 namespace Ivony.Html.Web
 {
@@ -68,7 +69,9 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void DataBind()
     {
-      var binding = HtmlBindingContext.CreateInstance( HtmlBinderProvider.GetBinders( this ), Context.Scope, DataContext, DataValues );
+      var provider = this as IHtmlBinderProvider ?? WebServiceLocator.GetServices<IHtmlBinderProvider>().FirstOrDefault() ?? new DefaultBinderProvider();
+
+      var binding = HtmlBindingContext.CreateInstance( provider, Context.Scope, DataContext, DataValues );
       binding.DataBind();
     }
 

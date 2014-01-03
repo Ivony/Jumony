@@ -18,6 +18,10 @@ namespace Ivony.Html.Web.Binding
   {
 
 
+
+
+
+
     /// <summary>
     /// 创建 HtmlBindingContext 实例
     /// </summary>
@@ -25,27 +29,27 @@ namespace Ivony.Html.Web.Binding
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext CreateInstance( IHtmlBinder[] binders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
+    public static HtmlBindingContext CreateInstance( IHtmlBinderProvider provider, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
     {
-      return new HtmlBindingContext( binders, scope, dataContext, dataValues ?? new Dictionary<string, object>() );
+      return new HtmlBindingContext( provider.GetHtmlBinders(), provider.GetExpressionBinders(), scope, dataContext, dataValues ?? new Dictionary<string, object>() );
 
     }
 
 
-    private HtmlBindingContext( IHtmlBinder[] binders, IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    private HtmlBindingContext( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
     {
 
-      if ( binders == null )
+      if ( htmlBinders == null )
         throw new ArgumentNullException( "binders" );
 
       if ( scope == null )
         throw new ArgumentNullException( "scope" );
 
-      Binders = binders;
+      Binders = htmlBinders;
       BindingScope = scope;
       DataContext = dataContext;
       Data = dataValues;
-      expressionBinders = new ExpressionBinderCollection( GlobalExpressionBinders.Binders );
+      _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 
 
@@ -71,7 +75,7 @@ namespace Ivony.Html.Web.Binding
       Data = dataValues ?? bindingContext.Data;
 
       Binders = bindingContext.Binders;
-      expressionBinders = new ExpressionBinderCollection( bindingContext.expressionBinders );
+      _expressionBinders = new ExpressionBinderCollection( bindingContext._expressionBinders );
 
     }
 
@@ -335,10 +339,10 @@ namespace Ivony.Html.Web.Binding
     protected IExpressionBinder GetExpressionBinder( BindingExpression expression )
     {
       var name = expression.Name;
-      lock ( expressionBinders.SyncRoot )
+      lock ( _expressionBinders.SyncRoot )
       {
-        if ( expressionBinders.Contains( name ) )
-          return expressionBinders[expression.Name];
+        if ( _expressionBinders.Contains( name ) )
+          return _expressionBinders[expression.Name];
 
         else
           return null;
@@ -347,14 +351,14 @@ namespace Ivony.Html.Web.Binding
 
 
 
-    private ExpressionBinderCollection expressionBinders;
+    private ExpressionBinderCollection _expressionBinders;
 
     /// <summary>
     /// 当前上下文可用于处理绑定表达式的绑定器
     /// </summary>
     protected ICollection<IExpressionBinder> ExpressionBinders
     {
-      get { return expressionBinders; }
+      get { return _expressionBinders; }
     }
 
 

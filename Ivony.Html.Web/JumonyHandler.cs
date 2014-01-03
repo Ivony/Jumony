@@ -153,18 +153,18 @@ namespace Ivony.Html.Web
 
 
 
-      OnPreProcess( context, filters );
+      OnProcessing( context, filters );
 
       Trace.Write( "Jumony Web", "Begin process document." );
       handler.ProcessScope( context );
       Trace.Write( "Jumony Web", "End process document." );
 
-      OnPostProcess( context, filters );
+      OnProcessed( context, filters );
 
 
 
 
-      OnPreRender( context, filters );
+      OnRendering( context, filters );
 
       Trace.Write( "Jumony Web", "Begin render document." );
       string content;
@@ -176,7 +176,7 @@ namespace Ivony.Html.Web
 
       Trace.Write( "Jumony Web", "End render document." );
 
-      OnPostRender( context, filters );
+      OnRendered( context, filters );
 
       return CreateResponse( content );
     }
@@ -192,8 +192,6 @@ namespace Ivony.Html.Web
     {
       IHtmlDocument document;
 
-      OnPreLoadDocument();
-
       Trace.Write( "Jumony Web", "Begin load document." );
 
 
@@ -203,8 +201,6 @@ namespace Ivony.Html.Web
 
 
       Trace.Write( "Jumony Web", "End load document." );
-
-      OnPostLoadDocument();
 
       return document;
     }
@@ -386,24 +382,8 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>在加载文档前引发此事件</summary>
-    public event EventHandler PreLoadDocument;
-    /// <summary>在加载文档后引发此事件</summary>
-    public event EventHandler PostLoadDocument;
-
-    /// <summary>引发 PreLoadDocument 事件</summary>
-    protected virtual void OnPreLoadDocument() { if ( PreLoadDocument != null ) PreLoadDocument( this, EventArgs.Empty ); }
-    /// <summary>引发 PostLoadDocument 事件</summary>
-    protected virtual void OnPostLoadDocument() { if ( PostLoadDocument != null ) PostLoadDocument( this, EventArgs.Empty ); }
-
-
-    /// <summary>在处理文档前引发此事件</summary>
-    public event EventHandler PreProcessDocument;
-    /// <summary>在处理文档后引发此事件</summary>
-    public event EventHandler PostProcessDocument;
-
-    /// <summary>引发 PreProcessDocument 事件</summary>
-    protected virtual void OnPreProcess( HtmlRequestContext context, IHtmlFilter[] filters )
+    /// <summary>引发 Processing 事件</summary>
+    protected virtual void OnProcessing( HtmlRequestContext context, IHtmlFilter[] filters )
     {
       foreach ( var filter in filters )
       {
@@ -413,59 +393,46 @@ namespace Ivony.Html.Web
         }
         catch { }
       }
-
-      if ( PreProcessDocument != null ) PreProcessDocument( this, EventArgs.Empty );
     }
 
-    /// <summary>引发 PostProcessDocument 事件</summary>
-    protected virtual void OnPostProcess( HtmlRequestContext context, IHtmlFilter[] filters )
+    /// <summary>引发 Processed 事件</summary>
+    protected virtual void OnProcessed( HtmlRequestContext context, IHtmlFilter[] filters )
     {
       foreach ( var filter in filters.Reverse() )
       {
         try
         {
-          filter.OnProcessing( context );
+          filter.OnProcessed( context );
         }
         catch { }
       }
-
-      if ( PostProcessDocument != null ) PostProcessDocument( this, EventArgs.Empty );
     }
 
 
-    /// <summary>在渲染文档前引发此事件</summary>
-    public event EventHandler PreRender;
-    /// <summary>在渲染文档后引发此事件</summary>
-    public event EventHandler PostRender;
-
-    /// <summary>引发 PreRender 事件</summary>
-    protected virtual void OnPreRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    /// <summary>引发 Rendering 事件</summary>
+    protected virtual void OnRendering( HtmlRequestContext context, IHtmlFilter[] filters )
     {
       foreach ( var filter in filters )
       {
         try
         {
-          filter.OnProcessing( context );
+          filter.OnRendering( context );
         }
         catch { }
       }
-
-      if ( PreRender != null ) PreRender( this, EventArgs.Empty );
     }
 
-    /// <summary>引发 PostRender 事件</summary>
-    protected virtual void OnPostRender( HtmlRequestContext context, IHtmlFilter[] filters )
+    /// <summary>引发 Rendered 事件</summary>
+    protected virtual void OnRendered( HtmlRequestContext context, IHtmlFilter[] filters )
     {
       foreach ( var filter in filters.Reverse() )
       {
         try
         {
-          filter.OnProcessing( context );
+          filter.OnRendered( context );
         }
         catch { }
       }
-
-      if ( PostRender != null ) PostRender( this, EventArgs.Empty );
     }
 
 

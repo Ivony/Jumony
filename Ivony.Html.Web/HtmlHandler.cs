@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Ivony.Fluent;
+using System.Reflection;
 
 namespace Ivony.Html.Web
 {
@@ -15,6 +17,28 @@ namespace Ivony.Html.Web
   {
 
 
+    protected static readonly string PostbackFormSign = "Jumony_Web_Postback";
+
+
+    private static readonly MethodInfo GetMethod;
+    private static readonly MethodInfo PostMethod;
+
+
+
+    static HtmlHandler()
+    {
+      GetMethod = typeof( HtmlHandler ).GetMethod( "GetRequest", BindingFlags.Instance );
+      PostMethod = typeof( HtmlHandler ).GetMethod( "PostRequest", BindingFlags.Instance );
+    }
+
+
+
+    public HtmlHandler()
+    {
+      DataValues = new Dictionary<string, object>();
+    }
+
+
     /// <summary>
     /// 处理 HTML 范围
     /// </summary>
@@ -22,12 +46,22 @@ namespace Ivony.Html.Web
     public void ProcessScope( HtmlRequestContext context )
     {
       Context = context;
-      DataValues = new Dictionary<string, object>();
 
-      ProcessScope();
+      PreProcess();
 
       DataBind();
+
+
+      if ( Request.HttpMethod.Equals( "GET" ) )
+        ProcessGet();
+
+      if ( Request.HttpMethod.Equals( "POST" ) )
+        ProcessPost();
+
+
+      PostProcess();
     }
+
 
     /// <summary>
     /// 进行数据绑定
@@ -47,10 +81,39 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 派生类实现此方法对 HTML 范围进行处理
+    /// 派生类重写此方法对页面元素进行初始化。
     /// </summary>
-    protected virtual void ProcessScope() { }
+    protected virtual void PreProcess()
+    {
 
+    }
+
+
+    /// <summary>
+    /// 派生类重写此方法对 GET 请求进行处理。
+    /// </summary>
+    protected virtual void ProcessGet()
+    {
+
+    }
+
+
+    /// <summary>
+    /// 派生类重写此方法对 POST 请求进行处理。
+    /// </summary>
+    protected virtual void ProcessPost()
+    {
+      throw new HttpException( 404, "该页面禁止 POST 方式访问" );
+    }
+
+
+    /// <summary>
+    /// 派生类重写此方法，在页面处理的最后阶段进行处理。
+    /// </summary>
+    protected virtual void PostProcess()
+    {
+
+    }
 
 
 

@@ -10,7 +10,7 @@ using Ivony.Html.Parser;
 
 public class ranks : HtmlHandler
 {
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
 
     var data = new[]

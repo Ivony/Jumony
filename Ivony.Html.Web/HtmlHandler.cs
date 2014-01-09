@@ -34,9 +34,15 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 创建 HtmlHandler 对象
+    /// </summary>
     public HtmlHandler()
     {
       DataValues = new Dictionary<string, object>();
+
+      HtmlBinders = new List<IHtmlBinder>() { HtmlBinding.StyleBinder };
+      ExpressionBinders = new ExpressionBinderCollection() { HtmlBinding.BindingExpressionBinder };
     }
 
 
@@ -64,14 +70,29 @@ namespace Ivony.Html.Web
     }
 
 
+
+
+    protected ICollection<IHtmlBinder> HtmlBinders
+    {
+      get;
+      private set;
+    }
+
+
+    protected ExpressionBinderCollection ExpressionBinders
+    {
+      get;
+      private set;
+    }
+
+
+
     /// <summary>
     /// 进行数据绑定
     /// </summary>
     protected virtual void DataBind()
     {
-      var provider = this as IHtmlBinderProvider ?? WebServiceLocator.GetServices<IHtmlBinderProvider>().FirstOrDefault() ?? new DefaultBinderProvider();
-
-      var binding = HtmlBindingContext.CreateInstance( provider, Context.Scope, DataContext, DataValues );
+      var binding = HtmlBindingContext.Create( HtmlBinders.ToArray(), ExpressionBinders.ToArray(), Context.Scope, DataContext, DataValues );
       binding.DataBind();
     }
 

@@ -20,18 +20,29 @@ namespace Ivony.Html.Web.Binding
 
 
 
+    /// <summary>
+    /// 使用默认的绑定器设置创建 HtmlBindingContext 实例
+    /// </summary>
+    /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <param name="dataValues">数据字典</param>
+    public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    {
+      return Create( new IHtmlBinder[] { HtmlBinding.StyleBinder }, new IExpressionBinder[] { HtmlBinding.BindingExpressionBinder }, scope, dataContext, dataValues );
+    }
 
 
     /// <summary>
     /// 创建 HtmlBindingContext 实例
     /// </summary>
-    /// <param name="binders">所有可以用于绑定的绑定器</param>
+    /// <param name="htmlBinders">要使用的 HTML 绑定器</param>
+    /// <param name="expressionBinders">要使用的绑定表达式绑定器</param>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext CreateInstance( IHtmlBinderProvider provider, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
+    public static HtmlBindingContext Create( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
     {
-      return new HtmlBindingContext( provider.GetHtmlBinders(), provider.GetExpressionBinders(), scope, dataContext, dataValues ?? new Dictionary<string, object>() );
+      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataContext, dataValues ?? new Dictionary<string, object>() );
 
     }
 
@@ -217,9 +228,9 @@ namespace Ivony.Html.Web.Binding
           return context;
       }
 
-      var listData = dataContext as IEnumerable;
+      var listData = dataContext as ListDataContext;
       if ( listData != null )
-        return new HtmlRepeatBindingContext( bindingContext, element, listData );
+        return new HtmlListBindingContext( bindingContext, element, listData );
 
       return new HtmlBindingContext( bindingContext, element, dataContext );
     }
@@ -260,7 +271,10 @@ namespace Ivony.Html.Web.Binding
     /// <returns></returns>
     protected virtual object GetDataContext( BindingExpression expression )
     {
-      return BindingExpressionBinder.GetDataObject( this, expression.Arguments );
+
+      var binder = GetExpressionBinder( expression ) as IDataContextExpressionBinder;
+
+      return binder.GetDataContext( this, expression.Arguments );
     }
 
 
@@ -360,6 +374,7 @@ namespace Ivony.Html.Web.Binding
     {
       get { return _expressionBinders; }
     }
+
 
 
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Web.Binding
 {
-  internal class ExpressionBinderCollection : SynchronizedKeyedCollection<string, IExpressionBinder>
+  public class ExpressionBinderCollection : SynchronizedKeyedCollection<string, IExpressionBinder>
   {
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -43,6 +44,13 @@ namespace Ivony.Html.Web.Binding
 
       if ( arguments.TryGetValue( "path", out path ) )
         dataObject = DataBinder.Eval( dataObject, path );
+
+      
+      
+      var listData = dataObject as IEnumerable;//如果是列表，则包装成 ListDataContext 对象。
+      if ( listData != null )
+        return new ListDataContext( listData, ListBindingMode.Repeat );
+
 
       return dataObject;
     }

@@ -9,7 +9,7 @@ namespace Ivony.Html.Web.Binding
   /// <summary>
   /// HTML 绑定上下文提供程序
   /// </summary>
-  public interface IHtmlBindingContextProvider
+  internal interface IHtmlBindingContextProvider
   {
 
     /// <summary>

@@ -10,7 +10,7 @@ using Ivony.Html.Parser;//提供HTML分析支持
 
 public class index : HtmlHandler//一个使用Jumony Parser作为分析器的标准Jumony体系的HttpHandler
 {
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
     var body = Find( "body" ).Single();
     body.InnerText( "Hello Jumony!" );

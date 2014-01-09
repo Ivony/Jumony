@@ -8,7 +8,7 @@ using Ivony.Html;
 public class Partial2 : HtmlHandler
 {
 
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
     FindFirst( "#container" ).InnerText( PartialTest.testContent );
   }

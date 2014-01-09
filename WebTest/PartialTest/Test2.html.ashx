@@ -11,7 +11,7 @@ using System.Web;
 public class Test2 : HtmlHandler
 {
 
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
     FindFirst( "body" ).AddElement( "partial" ).SetAttribute( "path", "~/PartialTest/Partial1.html" );
   }

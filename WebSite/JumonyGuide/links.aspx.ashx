@@ -12,7 +12,7 @@ using Ivony.Html.Styles;
 public class links_aspx : HtmlHandler
 {
 
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
 
     var dataList = Find( "#DataList" ).Single();

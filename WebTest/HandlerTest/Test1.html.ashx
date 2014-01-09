@@ -10,7 +10,7 @@ public class Test1 : HtmlHandler
 {
 
 
-  protected override void ProcessScope()
+  protected override void ProcessGet()
   {
     FindFirst( "body" ).InnerText( HtmlHandlerTest.testContent );
   }

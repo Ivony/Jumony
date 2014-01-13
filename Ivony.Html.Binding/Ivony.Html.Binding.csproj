@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Ivony.Html.Binding.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />

@@ -72,9 +72,10 @@
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
-    <Compile Include="GlobalCacheFilter.cs" />
+    <Compile Include="FallbackCachePolicyProvider.cs" />
     <Compile Include="CachableAttribute.cs" />
     <Compile Include="HtmlViewHandlerWrapper.cs" />
+    <Compile Include="IViewFilterProvider.cs" />
     <Compile Include="IViewHandlerProvider.cs" />
     <Compile Include="MvcHelpers.cs" />
     <Compile Include="ViewHandlerProvider.cs" />
@@ -97,12 +98,9 @@
     <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
-    <Compile Include="PartialViewExecutor.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />
-    <Compile Include="ViewFilterHandler.cs" />
-    <Compile Include="ViewFilterProvider.cs" />
     <Compile Include="ViewHandler.cs" />
     <Compile Include="MvcEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +109,10 @@
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
+      <Project>{ea844798-6870-4b11-bc4d-4dfef2da69e0}</Project>
+      <Name>Ivony.Html.Binding</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
       <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>

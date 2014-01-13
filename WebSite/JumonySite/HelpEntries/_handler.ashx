@@ -28,11 +28,11 @@ public class _handler : IHtmlHandler, IHttpHandler
     throw new HttpException( 404, "不能直接访问" );
   }
 
-  public void ProcessDocument( HttpContextBase context, IHtmlDocument document )
+  public void ProcessScope( HtmlRequestContext context )
   {
   }
 
-  
+
   public void ProcessCode( IHtmlElement element )
   {
     var code = element.InnerText();

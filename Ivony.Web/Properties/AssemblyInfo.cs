@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("Ivony.Web")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription( "a web utils" )]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct("Ivony.Web")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright( "Copyright © 2013 by Ivony" )]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

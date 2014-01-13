@@ -7,6 +7,7 @@ using System.Web;
 using System.IO;
 using System.Web.Routing;
 using Ivony.Fluent;
+using Ivony.Html.Binding;
 
 namespace Ivony.Html.Web
 {
@@ -52,14 +53,19 @@ namespace Ivony.Html.Web
     }
 
 
-    private IHtmlContainer _scope;
-
     /// <summary>
     /// 获取当前要处理的 HTML 范围
     /// </summary>
-    public override IHtmlContainer Scope
+    protected IHtmlContainer Scope
     {
-      get { return _scope; }
+      get;
+      private set;
+    }
+
+
+    protected sealed override IHtmlContainer HtmlScope
+    {
+      get { return Scope; }
     }
 
     /// <summary>
@@ -74,7 +80,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取当前文档的虚拟路径
     /// </summary>
-    public sealed override string VirtualPath
+    public string VirtualPath
     {
       get { return Url.VirtualPath; }
     }
@@ -111,7 +117,7 @@ namespace Ivony.Html.Web
     {
       ViewContext = viewContext;
       ViewData = viewContext.ViewData;
-      _scope = scope;
+      Scope = scope;
       Url = urlHelper;
 
       ProcessScope();
@@ -120,14 +126,22 @@ namespace Ivony.Html.Web
 
     }
 
+
+    /// <summary>
+    /// 执行数据绑定
+    /// </summary>
     protected virtual void DataBind()
     {
-      HtmlElementBinderProvider.CreateBindingContext( this ).DataBind( Scope, Model, ViewData );
+
+      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
+
+      bindingContext.DataBind();
+
     }
 
 
     /// <summary>
-    /// 派生类实现此方法处理 HTMl 文档或文档范畴
+    /// 派生类实现此方法处理 HTML 文档或文档范畴
     /// </summary>
     protected virtual void ProcessScope()
     {

@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Ivony.Fluent;
 using Ivony.Html;
 using Ivony.Html.ExpandedAPI;
+using Ivony.Web;
 
 
 namespace Ivony.Html.Web
@@ -21,62 +22,6 @@ namespace Ivony.Html.Web
   {
 
 
-
-    internal static Exception VirtualPathFormatError( string paramName )
-    {
-      return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );
-    }
-
-
-    /// <summary>
-    /// 在指定虚拟路径上溯搜索指定文件名的文件
-    /// </summary>
-    /// <param name="virtualPath">要搜索的虚拟路径</param>
-    /// <param name="fileNames">要搜索的文件名列表</param>
-    /// <returns>返回找到的文件路径，若无法找到匹配的文件，则返回null</returns>
-    internal static string FallbackSearch( string virtualPath, params string[] fileNames )
-    {
-      return FallbackSearch( HostingEnvironment.VirtualPathProvider, virtualPath, fileNames );
-    }
-
-
-    /// <summary>
-    /// 在指定虚拟路径上溯搜索指定文件名的文件
-    /// </summary>
-    /// <param name="provider">自定义的虚拟路径提供程序</param>
-    /// <param name="virtualPath">要搜索的虚拟路径</param>
-    /// <param name="fileNames">要搜索的文件名列表</param>
-    /// <returns>返回找到的文件路径，若无法找到匹配的文件，则返回null</returns>
-    internal static string FallbackSearch( VirtualPathProvider provider, string virtualPath, params string[] fileNames )
-    {
-      if ( !VirtualPathUtility.IsAppRelative( virtualPath ) )
-        throw VirtualPathFormatError( "virtualPath" );
-
-      var directory = VirtualPathUtility.GetDirectory( virtualPath );
-
-      while ( true )
-      {
-
-        foreach ( var name in fileNames )
-        {
-          var filePath = VirtualPathUtility.Combine( directory, name );
-          if ( provider.FileExists( filePath ) )
-            return filePath;
-        }
-
-        if ( directory == "~/" )
-          break;
-
-        directory = VirtualPathUtility.Combine( directory, "../" );
-
-      }
-
-      return null;
-    }
-
-
-
-
     /// <summary>
     /// 获取视图处理程序
     /// </summary>
@@ -84,10 +29,12 @@ namespace Ivony.Html.Web
     /// <returns>该虚拟路径的视图处理程序</returns>
     public static IViewHandler GetViewHandler( string virtualPath )
     {
-      var handler = ViewHandlerProviders.Select( provider => provider.FindViewHandler( virtualPath ) ).NotNull().FirstOrDefault();
-
-      if ( handler != null )
-        return handler;
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
 
       return GetViewHandlerInternal( virtualPath + ".ashx", true );
     }
@@ -97,13 +44,16 @@ namespace Ivony.Html.Web
     /// 查找母板视图的处理程序
     /// </summary>
     /// <param name="virtualPath">母板视图虚拟路径</param>
-    /// <returns></returns>
+    /// <returns>视图处理程序</returns>
     public static IViewHandler GetMasterViewHandler( string virtualPath )
     {
-      var handler = ViewHandlerProviders.Select( provider => provider.FindViewHandler( virtualPath ) ).NotNull().FirstOrDefault();
 
-      if ( handler != null )
-        return handler;
+      foreach ( var provider in WebServiceLocator.GetServices<IViewHandlerProvider>( virtualPath ) )
+      {
+        var handler = provider.FindViewHandler( virtualPath );
+        if ( handler != null )
+          return handler;
+      }
 
       return GetViewHandlerInternal( virtualPath + ".ashx", false );
     }
@@ -122,7 +72,7 @@ namespace Ivony.Html.Web
       var handler = GetHandlerInternal( virtualPath );
 
       if ( handler == null && !includeDefaultHandler )
-        handler = GetHandlerInternal( VirtualPathUtility.Combine( VirtualPathUtility.GetDirectory( virtualPath ), "_handler.ashx" ) );
+        handler = GetHandlerInternal( VirtualPathHelper.FallbackSearch( virtualPath, "_handler.ashx" ) );
 
       return handler ?? new ViewHandler();
     }
@@ -132,6 +82,11 @@ namespace Ivony.Html.Web
 
     private static IViewHandler GetHandlerInternal( string handlerPath )
     {
+
+      if ( handlerPath == null )
+        return null;
+
+
       if ( HostingEnvironment.VirtualPathProvider.FileExists( handlerPath ) )
       {
         try
@@ -157,19 +112,6 @@ namespace Ivony.Html.Web
 
 
 
-    private static SynchronizedCollection<IViewHandlerProvider> _providers = new SynchronizedCollection<IViewHandlerProvider>();
-
-
-    /// <summary>
-    /// 注册的视图处理器提供程序。
-    /// </summary>
-    public static ICollection<IViewHandlerProvider> ViewHandlerProviders
-    {
-      get { return _providers; }
-    }
-
-
-
     /// <summary>
     /// 在 HTML 文档中查找 ViewHandler 路径设置。
     /// </summary>
@@ -188,7 +130,7 @@ namespace Ivony.Html.Web
       return handlerMeta.Attribute( "value" ).Value();
     }
 
-    
+
 
 
   }

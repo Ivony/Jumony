@@ -98,13 +98,13 @@ namespace Ivony.Html.Web
     protected virtual IHtmlDocument LoadDocument( string virtualPath, out CacheDependency cacheDependency )
     {
       string cacheKey;
-      var document = HtmlProviders.LoadDocument( virtualPath, out cacheKey );
+      var document = HtmlServices.LoadDocument( virtualPath, out cacheKey );
 
       if ( cacheKey != null )
         cacheDependency = new CacheDependency( new string[0], new string[] { cacheKey } );
 
       else
-        cacheDependency = HtmlProviders.CreateCacheDependency( virtualPath );
+        cacheDependency = HtmlServices.CreateCacheDependency( virtualPath );
 
       return document;
     }
@@ -137,6 +137,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 当前 HTML 文档或处理范畴缓存依赖项
+    /// </summary>
     protected CacheDependency ScopeCacheDependency
     {
       get;

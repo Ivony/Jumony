@@ -68,27 +68,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributeExpression.cs" />
-    <Compile Include="HtmlBindingContext.cs" />
-    <Compile Include="HtmlElementBinderProvider.cs" />
+    <Compile Include="DefaultProviders.cs" />
+    <Compile Include="HtmlBinding.cs" />
     <Compile Include="HtmlBuildProvider.cs" />
+    <Compile Include="HtmlHandlerProvider.cs" />
+    <Compile Include="JumonyPartialHandler.cs" />
+    <Compile Include="JumonyWebConfiguration.cs" />
+    <Compile Include="HtmlHandler.cs" />
     <Compile Include="HtmlHandlerBase.cs" />
+    <Compile Include="HtmlRequestContext.cs" />
+    <Compile Include="HtmlServices.cs" />
     <Compile Include="HttpHandlerBase.cs" />
-    <Compile Include="HtmlHandlerWrapper.cs" />
     <Compile Include="IHandlerWrapper.cs" />
-    <Compile Include="IHtmlElementBinder.cs" />
-    <Compile Include="IHtmlDocumentProvider.cs" />
-    <Compile Include="JumonyHandler.cs" />
-    <Compile Include="HtmlProviders.cs" />
-    <Compile Include="IHtmlHandler.cs" />
     <Compile Include="IHtmlContentProvider.cs" />
+    <Compile Include="IHtmlDocumentProvider.cs" />
+    <Compile Include="IHtmlFilter.cs" />
+    <Compile Include="IHtmlFilterProvider.cs" />
+    <Compile Include="IHtmlHandler.cs" />
+    <Compile Include="IHtmlHandlerProvider.cs" />
     <Compile Include="IHtmlParserProvider.cs" />
+    <Compile Include="IHtmlRequestRoute.cs" />
+    <Compile Include="JumonyHandler.cs" />
+    <Compile Include="JumonyRequestRoute.cs" />
+    <Compile Include="JumonyRouteHandler.cs" />
+    <Compile Include="PartialResponse.cs" />
+    <Compile Include="PartialRenderAdapter.cs" />
+    <Compile Include="PartialExecutor.cs" />
     <Compile Include="ResourceManager.cs" />
-    <Compile Include="DefaultElementBinder.cs" />
+    <Compile Include="StaticFileContentProvider.cs" />
+    <Compile Include="WebFormPageContentProvider.cs" />
     <Compile Include="WebParser.cs" />
-    <Compile Include="RequestMapping.cs" />
-    <Compile Include="HtmlRewriteModule.cs" />
-    <Compile Include="IRequestMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebExtenions.cs" />
   </ItemGroup>
@@ -96,6 +105,10 @@
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
+      <Project>{ea844798-6870-4b11-bc4d-4dfef2da69e0}</Project>
+      <Name>Ivony.Html.Binding</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
       <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
@@ -126,6 +139,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Binding\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

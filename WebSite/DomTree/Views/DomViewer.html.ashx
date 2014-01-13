@@ -9,13 +9,13 @@ using Ivony.Html.Web;
 public class DomViewer_html : ViewHandler
 {
 
-  private ICssSelector selector;
+  private ISelector selector;
   private IHtmlDocument document;
 
   protected override void ProcessScope()
   {
 
-    selector = ViewData["Selector"] as ICssSelector;
+    selector = ViewData["Selector"] as ISelector;
     document = ViewData["Document"] as IHtmlDocument;
 
     foreach ( var node in document.Nodes() )

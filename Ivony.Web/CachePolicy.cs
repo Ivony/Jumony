@@ -10,40 +10,17 @@ namespace Ivony.Web
 
 
   /// <summary>
-  /// 实现此接口以实现客户端缓存策略
-  /// </summary>
-  public interface IClientCacheablePolicy
-  {
-
-    /// <summary>
-    /// 尝试输出客户端缓存
-    /// </summary>
-    /// <returns></returns>
-    bool ResolveClientCache();
-
-
-    /// <summary>
-    /// 尝试应用客户端缓存策略
-    /// </summary>
-    void ApplyClientCachePolicy();
-
-  }
-
-
-  /// <summary>
   /// 缓存策略
   /// </summary>
   public abstract class CachePolicy
   {
 
-
-
     /// <summary>
     /// 创建 CachePolicy 实例
     /// </summary>
-    /// <param name="context"></param>
-    /// <param name="token"></param>
-    /// <param name="provider"></param>
+    /// <param name="context">HTTP 上下文</param>
+    /// <param name="token">缓存标识</param>
+    /// <param name="provider">缓存策略提供程序</param>
     public CachePolicy( HttpContextBase context, CacheToken token, ICachePolicyProvider provider )
     {
       HttpContext = context;

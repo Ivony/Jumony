@@ -52,7 +52,7 @@ namespace Ivony.Web
       if ( DebugMode )
         httpContext.Trace.Write( "Begin GetRouteData", "SimpleRouteTable" );
 
-      var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath + httpContext.Request.PathInfo;
+      var virtualPath = httpContext.Request.GetVirtualPath();
 
       var cacheKey = RouteUrlCacheKeyPrefix + httpContext.Request.Url.AbsoluteUri;
 

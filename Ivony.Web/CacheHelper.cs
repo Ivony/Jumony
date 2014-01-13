@@ -23,7 +23,7 @@ namespace Ivony.Web
     /// <param name="context">HTTP 上下文</param>
     /// <param name="etag">用于与客户端 ETag 比较的，生成的请求内容的 ETag</param>
     /// <returns>是否已经发出 HTTP 304</returns>
-    public static bool IsNotModified( HttpContextBase context, string etag )
+    public static bool IsNotModified( HttpContextBase context, string etag, out RawResponse response )
     {
       if ( context == null )
         throw new ArgumentNullException( "context" );
@@ -38,15 +38,16 @@ namespace Ivony.Web
 
       if ( string.Equals( requestETag, etag ) )
       {
-
-        NotModified( context );
-
+        response = NotModified();
         return true;
 
       }
 
       else
+      {
+        response = null;
         return false;
+      }
 
     }
 
@@ -57,10 +58,21 @@ namespace Ivony.Web
     /// <param name="context"></param>
     public static void NotModified( HttpContextBase context )
     {
-      context.Response.StatusCode = 304;
-      context.Response.StatusDescription = "Not Modified";
-      context.Response.Cache.SetCacheability( HttpCacheability.Public );
-      context.Response.End();
+      var response = NotModified();
+      response.Apply( context.Response );
+    }
+
+    /// <summary>
+    /// 产生一个  HTTP 304 响应通知浏览器此页未被修改
+    /// </summary>
+    /// <param name="context"></param>
+    public static RawResponse NotModified()
+    {
+      return new RawResponse()
+      {
+        StatusCode = 304,
+        Status = "Not Modified"
+      };
     }
 
     /// <summary>

@@ -29,10 +29,6 @@ namespace Ivony.Html.Web
     {
       ViewEngines.Engines.Add( _viewEngine );
 
-      CachePolicyProviders = new SynchronizedCollection<IMvcCachePolicyProvider>( _cachePolicyProvidersSync );
-
-      GlobalFilters.Filters.Add( GlobalCacheFilter = new GlobalCacheFilter() );
-
       CacheStorageProvider = new WebCacheStorageProvider( HostingEnvironment.Cache );
     }
 
@@ -113,17 +109,6 @@ namespace Ivony.Html.Web
 
 
 
-    private static object _cachePolicyProvidersSync = new object();
-
-    /// <summary>
-    /// 全局缓存策略提供程序
-    /// </summary>
-    public static ICollection<IMvcCachePolicyProvider> CachePolicyProviders
-    {
-      get;
-      private set;
-    }
-
 
     /// <summary>
     /// 获取当前请求的缓存策略
@@ -134,17 +119,19 @@ namespace Ivony.Html.Web
     /// <returns></returns>
     public static CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
     {
-      lock ( _cachePolicyProvidersSync )
+      foreach ( var provider in WebServiceLocator.GetServices<IMvcCachePolicyProvider>() )
       {
-        foreach ( var provider in CachePolicyProviders )
-        {
-          var policy = provider.CreateCachePolicy( context, action, parameters );
-          if ( policy != null )
-            return policy;
-        }
-
-        return DefaultCachePolicyProvider.CreateCachePolicy( context, action, parameters );
+        var policy = provider.CreateCachePolicy( context, action, parameters );
+        if ( policy != null )
+          return policy;
       }
+
+
+      if ( Configuration.FallbackCachePolicy )
+        return FallbackCachePolicyProvider.CreateCachePolicy( context, action, parameters );
+
+      else
+        return null;
     }
 
 
@@ -163,41 +150,18 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>
-    /// 全局缓存筛选器，在 ASP.NET MVC 3 中，将此过滤器加入全局过滤器集合中，即可对所有请求执行输出缓存。
-    /// </summary>
-    public static GlobalCacheFilter GlobalCacheFilter
-    {
-      get;
-      private set;
-    }
-
-
-
-    private static readonly IMvcCachePolicyProvider _defaultCachePolicyProvider = new HtmlCachePolicyProvider();
+    private static readonly IMvcCachePolicyProvider _fallbackCache = new FallbackCachePolicyProvider();
 
     /// <summary>
-    /// 默认的缓存策略，由 HtmlProviders 提供
+    /// 回溯到传统的缓存策略，如果要获取当前请求的传统缓存策略，则使用这个缓存策略提供程序。
     /// </summary>
-    public static IMvcCachePolicyProvider DefaultCachePolicyProvider
+    public static IMvcCachePolicyProvider FallbackCachePolicyProvider
     {
-      get { return _defaultCachePolicyProvider; }
+      get { return _fallbackCache; }
     }
 
 
 
-    private class HtmlCachePolicyProvider : IMvcCachePolicyProvider
-    {
-      public CachePolicy CreateCachePolicy( ControllerContext context, ActionDescriptor action, IDictionary<string, object> parameters )
-      {
-        return CreateCachePolicy( context.HttpContext );
-      }
-
-      public CachePolicy CreateCachePolicy( HttpContextBase context )
-      {
-        return HtmlProviders.GetCachePolicy( context );
-      }
-    }
 
 
     /// <summary>

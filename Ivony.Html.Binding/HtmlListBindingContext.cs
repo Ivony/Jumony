@@ -6,7 +6,7 @@ using Ivony.Fluent;
 using System.Collections;
 using Ivony.Html.ExpandedAPI;
 
-namespace Ivony.Html.Web.Binding
+namespace Ivony.Html.Binding
 {
 
   /// <summary>

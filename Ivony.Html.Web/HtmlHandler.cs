@@ -1,4 +1,4 @@
-﻿using Ivony.Html.Web.Binding;
+﻿using Ivony.Html.Binding;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ivony.Html.Web.Binding
+namespace Ivony.Html.Binding
 {
   /// <summary>
   /// 定义可用于解析 datacontext 属性绑定表达式的绑定器

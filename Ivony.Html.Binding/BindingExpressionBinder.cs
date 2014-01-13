@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web.UI;
 
-namespace Ivony.Html.Web.Binding
+namespace Ivony.Html.Binding
 {
 
   /// <summary>

@@ -7,7 +7,7 @@ using System.Web;
 using System.IO;
 using System.Web.Routing;
 using Ivony.Fluent;
-using Ivony.Html.Web.Binding;
+using Ivony.Html.Binding;
 
 namespace Ivony.Html.Web
 {
@@ -133,7 +133,7 @@ namespace Ivony.Html.Web
     protected virtual void DataBind()
     {
 
-      var bindingContext = HtmlBindingContext.Create( Scope, Model, ViewData );
+      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
 
       bindingContext.DataBind();
 

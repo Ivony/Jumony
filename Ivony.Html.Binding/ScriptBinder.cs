@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web.Binding
+namespace Ivony.Html.Binding
 {
 
   /// <summary>

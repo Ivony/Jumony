@@ -52,7 +52,7 @@
     <Compile Include="BindingExpression.cs" />
     <Compile Include="BindingExpressionBinder.cs" />
     <Compile Include="ElementExpression.cs" />
-    <Compile Include="ElementLiteralBinder.cs" />
+    <Compile Include="LiteralBinder.cs" />
     <Compile Include="ExpressionBinderCollection.cs" />
     <Compile Include="FormBinder.cs" />
     <Compile Include="GlobalExpressionBinders.cs" />

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ivony.Html.Binding;
 
-namespace Ivony.Html.Web
+namespace Ivony.Html.Binding
 {
 
 
@@ -38,7 +37,7 @@ namespace Ivony.Html.Web
     /// <param name="dataValues">数据字典</param>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
     {
-      return HtmlBindingContext.Create( new IHtmlBinder[] { HtmlBinding.StyleBinder }, new IExpressionBinder[] { HtmlBinding.BindingExpressionBinder }, scope, dataContext, dataValues );
+      return HtmlBindingContext.Create( new IHtmlBinder[] { StyleBinder, LiteralBinder }, new IExpressionBinder[] { BindingExpressionBinder }, scope, dataContext, dataValues );
     }
 
 

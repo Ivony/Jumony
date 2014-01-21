@@ -13,6 +13,7 @@ namespace Ivony.Html.Web
 
 
     public static StyleBinder StyleBinder { get; private set; }
+    public static LiteralBinder LiteralBinder { get; private set; }
     public static FormBinder FormBinder { get; private set; }
     public static ScriptBinder ScriptBinder { get; private set; }
     public static BindingExpressionBinder BindingExpressionBinder { get; private set; }
@@ -25,6 +26,7 @@ namespace Ivony.Html.Web
 
       FormBinder = new FormBinder();
       ScriptBinder = new ScriptBinder();
+      LiteralBinder = new LiteralBinder();
     }
 
 

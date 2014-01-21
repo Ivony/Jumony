@@ -178,10 +178,9 @@ namespace Ivony.Html.Binding
     {
       var dataContext = GetDataContext( element );
 
-      var bindingContext = this;
       if ( dataContext == null )
       {
-        bindingContext.DataBind( element );
+        DataBind( element );
         return;
       }
 

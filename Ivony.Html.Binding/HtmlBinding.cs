@@ -28,16 +28,6 @@ namespace Ivony.Html.Web
     }
 
 
-    internal static IHtmlBinder[] GetHtmlBinders( HtmlRequestContext requestContext )
-    {
-      return new IHtmlBinder[] { StyleBinder };
-    }
-
-    internal static ExpressionBinderCollection GetExpressionBinders( HtmlRequestContext requestContext )
-    {
-      return new ExpressionBinderCollection(){ BindingExpressionBinder };
-    }
-
     /// <summary>
     /// 使用默认的绑定器设置创建 HtmlBindingContext 实例
     /// </summary>

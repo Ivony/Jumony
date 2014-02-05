@@ -13,7 +13,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 绑定上下文
   /// </summary>
-  public class HtmlBindingContext
+  public class HtmlBindingContext : IBindingExpressionEvaluator
   {
 
 
@@ -225,7 +225,7 @@ namespace Ivony.Html.Binding
     /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
     protected virtual object GetDataContext( IHtmlElement element )
     {
-      var expression = AttributeExpression.ParseExpression( element.Attribute( "datacontext" ) );
+      var expression = BindingExpression.ParseExpression( this, element.Attribute( "datacontext" ).Value() );
       if ( expression == null )
         return null;
 
@@ -285,7 +285,6 @@ namespace Ivony.Html.Binding
       }
 
 
-
       foreach ( var binder in Binders )
       {
         if ( binder.BindElement( this, element ) )
@@ -302,19 +301,12 @@ namespace Ivony.Html.Binding
     protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
 
-      var expression = AttributeExpression.ParseExpression( attribute );
+      var expression = BindingExpression.ParseExpression( this, attribute.Value() );
       if ( expression == null )
         return;
 
-      string value;
-      var binder = GetExpressionBinder( expression );
+      string value = GetValue( expression );
 
-      if ( binder == null )
-        return;
-
-
-
-      value = binder.GetValue( this, expression.Arguments );
 
       if ( value == null )
         attribute.Remove();
@@ -357,5 +349,21 @@ namespace Ivony.Html.Binding
 
 
 
+
+    /// <summary>
+    /// 从 BindingExpression 获取需要绑定的值
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <returns>绑定值</returns>
+    public string GetValue( BindingExpression expression )
+    {
+      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
+
+      if ( expressionBinder == null )
+        return null;
+
+      return expressionBinder.GetValue( this, expression.Arguments );
+
+    }
   }
 }

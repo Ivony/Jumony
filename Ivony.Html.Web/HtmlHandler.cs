@@ -40,9 +40,6 @@ namespace Ivony.Html.Web
     public HtmlHandler()
     {
       DataValues = new Dictionary<string, object>();
-
-      HtmlBinders = new List<IHtmlBinder>() { HtmlBinding.StyleBinder };
-      ExpressionBinders = new ExpressionBinderCollection() { HtmlBinding.BindingExpressionBinder };
     }
 
 
@@ -71,29 +68,12 @@ namespace Ivony.Html.Web
 
 
 
-
-    protected ICollection<IHtmlBinder> HtmlBinders
-    {
-      get;
-      private set;
-    }
-
-
-    protected ExpressionBinderCollection ExpressionBinders
-    {
-      get;
-      private set;
-    }
-
-
-
     /// <summary>
     /// 进行数据绑定
     /// </summary>
     protected virtual void DataBind()
     {
-      var binding = HtmlBindingContext.Create( HtmlBinders.ToArray(), ExpressionBinders.ToArray(), Context.Scope, DataContext, DataValues );
-      binding.DataBind();
+      HtmlBinding.DataBind( HtmlScope, DataContext, DataValues );
     }
 
 

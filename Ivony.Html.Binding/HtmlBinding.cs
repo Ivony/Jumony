@@ -41,5 +41,16 @@ namespace Ivony.Html.Binding
     }
 
 
+
+    /// <summary>
+    /// 使用默认的绑定器设置进行数据绑定
+    /// </summary>
+    /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="dataContext">数据上下文</param>
+    /// <param name="dataValues">数据字典</param>
+    public static void DataBind( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    {
+      Create( scope, dataContext, dataValues ).DataBind();
+    }
   }
 }

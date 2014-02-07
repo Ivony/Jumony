@@ -68,6 +68,7 @@
     <Compile Include="Fluent\EnumerableExtension.cs" />
     <Compile Include="Fluent\StringExtensions.cs" />
     <Compile Include="KeyedCache.cs" />
+    <Compile Include="Parser\TokenizerBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadOnlyEnumerable.cs" />
   </ItemGroup>

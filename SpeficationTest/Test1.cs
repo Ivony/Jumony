@@ -10,7 +10,7 @@ using Ivony.Html.ExpandedAPI;
 namespace SpeficationTest
 {
   [TestClass]
-  public class Test1
+  public class SpecificationTest
   {
 
 

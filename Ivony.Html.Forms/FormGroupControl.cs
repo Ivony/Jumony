@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
@@ -40,6 +41,17 @@ namespace Ivony.Html.Forms
     protected FormGroupControlItem this[string value]
     {
       get { return Items.FirstOrDefault( o => o.Value == value ); }
+    }
+
+
+
+    /// <summary>
+    /// 设置值
+    /// </summary>
+    /// <param name="values">要设置的值列表</param>
+    protected override void SetValues( HashSet<string> values )
+    {
+      Items.ForAll( i => i.Selected = values.Contains( i.Value ) );
     }
 
   }

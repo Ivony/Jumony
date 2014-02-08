@@ -44,7 +44,7 @@ namespace Ivony.Html.Forms
 
     private void SetValueInternal( string value )
     {
-      if ( Form.Configuration.CheckMaxLength && value.Length > MaxLength )
+      if ( Form.Configuration.ExceptionOnOverflowOfLength && value.Length > MaxLength )
         throw new FormValueFormatException( this, "设置的值超出了 maxlength 所允许的长度" );
 
       SetValue( value );
@@ -68,7 +68,7 @@ namespace Ivony.Html.Forms
     public override bool CanSetValue( string value )
     {
 
-      if ( Form.Configuration.CheckMaxLength )
+      if ( Form.Configuration.ExceptionOnOverflowOfLength )
         return value.Length <= MaxLength;
 
       else

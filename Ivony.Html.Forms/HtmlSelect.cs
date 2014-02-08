@@ -62,70 +62,71 @@ namespace Ivony.Html.Forms
       get { return options; }
     }
 
+  }
 
-
+  
+  
+  /// <summary>
+  /// 表示一个 &lt;option&gt; 元素
+  /// </summary>
+  public class HtmlOption : FormGroupControlItem
+  {
 
     /// <summary>
-    /// 表示一个 &lt;option&gt; 元素
+    /// 创建 HtmlOption 对象
     /// </summary>
-    public class HtmlOption : FormGroupControlItem
+    /// <param name="select">所属的 HtmlSelect 对象</param>
+    /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
+    public HtmlOption( HtmlSelect select, IHtmlElement element )
+      : base( select )
     {
-
-      /// <summary>
-      /// 创建 HtmlOption 对象
-      /// </summary>
-      /// <param name="select">所属的 HtmlSelect 对象</param>
-      /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
-      public HtmlOption( HtmlSelect select, IHtmlElement element )
-        : base( select )
-      {
-        Element = element;
-      }
-
-
-      public IHtmlElement Element
-      {
-        get;
-        private set;
-      }
-
-
-      public override bool Selected
-      {
-        get { return Element.Attribute( "selected" ) != null; }
-        set
-        {
-          if ( value )
-          {
-            Element.SetAttribute( "selected", "selected" );
-          }
-          else
-          {
-            var attribute = Element.Attribute( "selected" );
-            if ( attribute != null )
-              attribute.Remove();
-          }
-        }
-      }
-
-      public override string Value
-      {
-        get
-        {
-          var value = Element.Attribute( "value" ).Value();
-
-          if ( value == null )
-            return Element.InnerText();
-          else
-            return value;
-        }
-      }
-
-      public string Text
-      {
-        get { return Element.InnerText(); }
-      }
-
+      Element = element;
     }
+
+
+    public IHtmlElement Element
+    {
+      get;
+      private set;
+    }
+
+
+    public override bool Selected
+    {
+      get { return Element.Attribute( "selected" ) != null; }
+      set
+      {
+        if ( value )
+        {
+          Element.SetAttribute( "selected", "selected" );
+        }
+        else
+        {
+          var attribute = Element.Attribute( "selected" );
+          if ( attribute != null )
+            attribute.Remove();
+        }
+      }
+    }
+
+    public override string Value
+    {
+      get
+      {
+        var value = Element.Attribute( "value" ).Value();
+
+        if ( value == null )
+          return Element.InnerText();
+        else
+          return value;
+      }
+    }
+
+    public string Text
+    {
+      get { return Element.InnerText(); }
+    }
+
   }
+
 }

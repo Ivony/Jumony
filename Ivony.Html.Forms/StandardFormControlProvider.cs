@@ -13,9 +13,9 @@ namespace Ivony.Html.Forms
   {
 
 
-    private ICssSelector inputTextSelector = CssParser.ParseSelector( "input[type=text], input[type=password], input[type=hidden]" );
-    private ICssSelector textareaSelector = CssParser.ParseSelector( "textarea" );
-    private ICssSelector selectControlSelector = CssParser.ParseSelector( "select" );
+    private ISelector inputTextSelector = CssParser.ParseSelector( "input[type=text], input[type=password], input[type=hidden]" );
+    private ISelector textareaSelector = CssParser.ParseSelector( "textarea" );
+    private ISelector selectControlSelector = CssParser.ParseSelector( "select" );
 
     public FormControl CreateControl( HtmlForm form, IHtmlElement element )
     {

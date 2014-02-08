@@ -42,7 +42,30 @@ namespace Ivony.Html.Forms
     public override string Value
     {
       get { return string.Join( ",", Values ); }
+      set { SetValue( value ); }
     }
 
+
+
+    protected virtual void SetValue( string valuesExpression )
+    {
+
+      valuesExpression = valuesExpression ?? "";
+
+      var values = valuesExpression.Split( ',' );
+
+
+      var invalidValue = values.Except( CandidateValues );
+
+      if ( invalidValue.Any() )//如果有一个设置的值不在候选值列表
+      {
+        if ( Form.Configuration.ExceptionOnInvailidValues )
+          throw new InvalidOperationException( string.Format( "不能对控件设置值 \"{0}\"", invalidValue.First() ) );
+      }
+
+      SetValues( new HashSet<string>( values.Except( invalidValue ) ) );
+    }
+
+    protected abstract void SetValues( HashSet<string> values );
   }
 }

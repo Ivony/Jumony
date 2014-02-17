@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Ivony.Parser;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.UI;
 
 namespace Ivony.Html.Binding
@@ -49,7 +51,7 @@ namespace Ivony.Html.Binding
 
       if ( dataObject is string )
         return dataObject;
-      
+
       var listData = dataObject as IEnumerable;//如果是列表，则包装成 ListDataContext 对象。
       if ( listData != null )
         return new ListDataContext( listData, ListBindingMode.Repeat );
@@ -58,6 +60,9 @@ namespace Ivony.Html.Binding
       return dataObject;
     }
 
+
+
+    private static Regex formatExpressionEscape = new Regex( @"\#\#|\#(?<format>.+?)\#", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
 
     /// <summary>
     /// 获取绑定值
@@ -77,10 +82,9 @@ namespace Ivony.Html.Binding
         string format;
         if ( arguments.TryGetValue( "format", out format ) )
         {
-          var formattable = dataObject as IFormattable;
 
-          if ( formattable != null )
-            return ((IFormattable) dataObject).ToString( format, CultureInfo.InvariantCulture );
+          format = formatExpressionEscape.Replace( format, ResolveFormatExpressionEscape );
+          return string.Format( CultureInfo.InvariantCulture, format, dataObject );
         }
       }
 
@@ -105,6 +109,15 @@ namespace Ivony.Html.Binding
 
       return dataObject.ToString();
 
+    }
+
+    private static string ResolveFormatExpressionEscape( Match match )
+    {
+      if ( match.Groups["format"].Success )
+        return "{0:" + match.Groups["format"].Value.Replace( "{", "{{" ).Replace( "}", "}}" ) + "}";
+
+      else
+        return "#";
     }
 
 

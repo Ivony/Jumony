@@ -91,6 +91,22 @@ namespace Ivony.Html.Web
 
     private static HashSet<string> failedHtmlProviders = new HashSet<string>();
 
+
+    /// <summary>
+    /// 加载 HTML 文档
+    /// </summary>
+    /// <param name="virtualPath">文档的虚拟路径</param>
+    /// <param name="cacheDependency">若文档已被缓存，获取缓存依赖项</param>
+    /// <returns>HTML 文档对象</returns>
+    public static IHtmlDocument LoadDocument( string virtualPath, out CacheDependency cacheDependency )
+    {
+      string cacheKey;
+      var result = LoadDocument( virtualPath, out cacheKey );
+      cacheDependency = new CacheDependency( null, new[] { cacheKey } );
+      return result;
+    }
+
+
     /// <summary>
     /// 加载 HTML 文档
     /// </summary>

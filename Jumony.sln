@@ -107,7 +107,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "JumonySite", "http://localhost:1629", "{41B8513A-6921-422B-9A76-345B6335B666}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		ProjectReferences = "{2fc154e1-e0e5-4f34-a6db-973d5332070a}|Ivony.Html.Web.Mvc.dll;{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}|Ivony.Core.dll;{E775B408-605F-4B66-87B6-98596069B703}|Ivony.Html.dll;{1DAB4B96-D944-46FE-BC73-7B618DEE169F}|Ivony.Html.Forms.dll;{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}|Ivony.Html.Parser.dll;{6CE7336E-D881-40B2-9495-C06CF9A61AC6}|Ivony.Html.Web.dll;{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}|Ivony.Web.dll;{157c4483-5593-400d-8f2c-87745ae46704}|Jumony.Demo.HelpCenter.dll;{EA844798-6870-4B11-BC4D-4DFEF2DA69E0}|Ivony.Html.Binding.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_1629"
 		Debug.AspNetCompiler.PhysicalPath = "WebSite\JumonySite\"

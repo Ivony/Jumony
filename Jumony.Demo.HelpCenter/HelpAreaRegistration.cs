@@ -1,27 +1,26 @@
-﻿using Jumony.Demo.HelpCenter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Routing;
-using Ivony.Web;
+using System.Web.Mvc;
 using Ivony.Html.Web;
 
-[assembly: PreApplicationStartMethod( typeof( Initializer ), "Initialize" )]
 namespace Jumony.Demo.HelpCenter
 {
-  public static class Initializer
+  public class HelpAreaRegistration : AreaRegistration
   {
 
-    public static void Initialize()
+    public override string AreaName
     {
+      get { return "Help"; }
+    }
 
-      RouteTable.Routes.SimpleRouteTable()
+    public override void RegisterArea( AreaRegistrationContext context )
+    {
+      context.SimpleRouteTable()
         .MapRoute( "~/help", new { controller = "Help", action = "Entry" } )
         .MapRoute( "~/help/{action}", new { controller = "Help" } );
     }
-
   }
 }

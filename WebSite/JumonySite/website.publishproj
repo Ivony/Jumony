@@ -19,9 +19,9 @@ website.publishproj
     <ProjectGuid>{73db9117-fd67-4775-ab13-5df546d6581c}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
     <SourceWebVirtualPath>/JumonySite</SourceWebVirtualPath>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <SourceWebProject>http://localhost:1629</SourceWebProject>
-    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/8/ROOT</SourceWebMetabasePath>
+    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/4/ROOT</SourceWebMetabasePath>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -45,6 +45,10 @@ website.publishproj
     <ProjectReference Include="..\..\Ivony.Core\Ivony.Core.csproj">
       <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
       <Name>Ivony.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ivony.Html.Binding\Ivony.Html.Binding.csproj">
+      <Project>{EA844798-6870-4B11-BC4D-4DFEF2DA69E0}</Project>
+      <Name>Ivony.Html.Binding</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
       <Project>{1DAB4B96-D944-46FE-BC73-7B618DEE169F}</Project>

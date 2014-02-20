@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelpAreaRegistration.cs" />
     <Compile Include="HelpController.cs" />
     <Compile Include="HelpLink.cs" />
     <Compile Include="HelpTopic.cs" />
-    <Compile Include="Initializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

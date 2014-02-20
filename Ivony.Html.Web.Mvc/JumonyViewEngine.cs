@@ -43,7 +43,7 @@ namespace Ivony.Html.Web
       AreaPartialViewLocationFormats = AreaViewLocationFormats;
 
       MasterLocationFormats = ViewLocationFormats;
-      AreaMasterLocationFormats = AreaMasterLocationFormats;
+      AreaMasterLocationFormats = AreaViewLocationFormats;
 
       ViewLocationCache = new JumonyViewLocationCache();
     }

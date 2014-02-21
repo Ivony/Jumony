@@ -102,7 +102,21 @@ namespace Ivony.Html.Web
     {
       string cacheKey;
       var result = LoadDocument( virtualPath, out cacheKey );
-      cacheDependency = new CacheDependency( null, new[] { cacheKey } );
+
+
+      if ( result == null )
+      {
+        cacheDependency = null;
+        return result;
+      }
+
+
+      if ( cacheKey != null )
+        cacheDependency = new CacheDependency( new string[0], new string[] { cacheKey } );
+
+      else
+        cacheDependency = HtmlServices.CreateCacheDependency( virtualPath );
+
       return result;
     }
 

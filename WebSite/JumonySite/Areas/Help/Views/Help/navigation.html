@@ -1,10 +1,12 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title></title>
 </head>
 <body>
-
+  <div class="parent" datacontext="{binding key=Parents}"><a action=Entry _path="{binding path=VirtualPath}"><binding path="Title"></binding></a></div>
+  <div class="current" datacontext="{binding key=Current}"><binding path="Title"></binding></div>
+  <div class="child" datacontext="{binding key=Childs}"><a action=Entry _path="{binding path=VirtualPath}"><binding path="Title"></binding></a></div>
 </body>
 </html>

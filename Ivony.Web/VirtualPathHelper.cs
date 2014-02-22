@@ -8,6 +8,10 @@ using System.Web.Hosting;
 
 namespace Ivony.Web
 {
+
+  /// <summary>
+  /// 为常见的虚拟路径操作提供额外的实用工具方法。
+  /// </summary>
   public static class VirtualPathHelper
   {
 
@@ -67,9 +71,16 @@ namespace Ivony.Web
         return null;
 
       return VirtualPathUtility.GetDirectory( VirtualPathUtility.RemoveTrailingSlash( virtualPath ) );
+
     }
 
 
+    /// <summary>
+    /// 此方法仅供系统调用
+    /// </summary>
+    /// <param name="paramName">参数名称</param>
+    /// <returns></returns>
+    [System.ComponentModel.EditorBrowsable( System.ComponentModel.EditorBrowsableState.Never )]
     public static Exception VirtualPathFormatError( string paramName )
     {
       return new ArgumentException( string.Format( CultureInfo.InvariantCulture, "{0} 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取", paramName ), paramName );

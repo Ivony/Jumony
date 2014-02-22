@@ -61,6 +61,11 @@ namespace Ivony.Web
 
       if ( routeData != null )
       {
+
+        if ( routeData.Route != this )
+          return null;
+
+
         if ( DebugMode )
         {
           httpContext.Trace.Write( "Hit cache", "SimpleRouteTable" );

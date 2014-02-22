@@ -118,7 +118,7 @@ namespace Ivony.Web
     /// <summary>
     /// 最大可能的偏移量
     /// </summary>
-    protected static readonly TimeSpan maxShake = TimeSpan.FromMinutes( 3 );
+    private static readonly TimeSpan maxShake = TimeSpan.FromMinutes( 3 );
 
 
     /// <summary>

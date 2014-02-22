@@ -62,8 +62,6 @@ namespace Ivony.Html.Binding
 
 
 
-    private static Regex formatExpressionEscape = new Regex( @"\#\#|\#(?<format>.+?)\#", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
-
     /// <summary>
     /// 获取绑定值
     /// </summary>
@@ -83,8 +81,19 @@ namespace Ivony.Html.Binding
         if ( arguments.TryGetValue( "format", out format ) )
         {
 
-          format = formatExpressionEscape.Replace( format, ResolveFormatExpressionEscape );
-          return string.Format( CultureInfo.InvariantCulture, format, dataObject );
+          if ( format.Contains( "{0" ) )
+            return string.Format( CultureInfo.InvariantCulture, format, dataObject );
+
+          else
+          {
+            var formattable = dataObject as IFormattable;
+
+            if ( formattable != null )
+              return formattable.ToString( format, CultureInfo.InvariantCulture );
+
+            else
+              return dataObject.ToString();
+          }
         }
       }
 

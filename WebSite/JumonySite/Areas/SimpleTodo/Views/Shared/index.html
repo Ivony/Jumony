@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0026)http://api.yongwo.de:3888/ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Node TODO</title>
+  <link href="styles/reset.css" rel="stylesheet" type="text/css">
+  <link href="styles/style.css" rel="stylesheet" type="text/css">
+</head>
+<body content-body="content-body">
+  <div class="page">
+
+    <div class="main box" id="content-body">
+      <div class="box">
+        <div class="box todos">
+          <h2 class="box">待办事项</h2>
+          <ul>
+            <li datacontext="{Binding}">
+              <span binding-class="{Binding path=Completed, value=finished}"><binding path="Title">标题</binding></span>
+              &nbsp;
+                <a action="complete" binding-visible="{Binding path=Completed, value=false, alternativevalue=true}" _taskid="{Binding path=ID}">完成</a>
+              <a action="revert" binding-visible="{Binding path=Completed}" _taskid="{Binding path=ID}">恢复</a> , 
+                <a action="modify" _taskid="{Binding path=ID}">修改</a>,
+                <a action="remove" _taskid="{Binding path=ID}" onclick="return confirm('删除以后不能恢复的，确定？')">删除</a>
+            </li>
+          </ul>
+        </div>
+        <div class="box post">
+          <h2>新增</h2>
+
+          <form method="post" id="post_new" action="Add" controller>
+          <p>
+            <input type="text" name="title" class="long_txt" /><span class="tips"></span>
+          </p>
+          <p>
+            <input type="submit" class="submit" value="添加" />
+          </p>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

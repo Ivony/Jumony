@@ -16,12 +16,12 @@ website.publishproj
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.30319</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{73db9117-fd67-4775-ab13-5df546d6581c}</ProjectGuid>
+    <ProjectGuid>{e29b52c0-8cb9-4e00-8d74-b33d73c2cde2}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
-    <SourceWebVirtualPath>/JumonySite</SourceWebVirtualPath>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SourceWebProject>http://localhost:1629</SourceWebProject>
-    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/4/ROOT</SourceWebMetabasePath>
+    <SourceWebVirtualPath>/MvcSimpleTodo</SourceWebVirtualPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SourceWebProject>http://localhost:1888</SourceWebProject>
+    <SourceWebMetabasePath>/IISExpress/7.5/LM/W3SVC/6/ROOT</SourceWebMetabasePath>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -58,6 +58,14 @@ website.publishproj
       <Project>{D05D58D3-5C3A-41BD-BA9E-2AA532A3B1BE}</Project>
       <Name>Ivony.Html.Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ivony.Html.Styles\Ivony.Html.Styles.csproj">
+      <Project>{297CF6F8-CDDB-4BD6-ACF8-E7A2E4D9E804}</Project>
+      <Name>Ivony.Html.Styles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ivony.Html.Templates\Ivony.Html.Templates.csproj">
+      <Project>{1B363540-4F50-48CC-93C8-19EB85024AC2}</Project>
+      <Name>Ivony.Html.Templates</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ivony.Html.Web.Mvc\Ivony.Html.Web.Mvc.csproj">
       <Project>{2FC154E1-E0E5-4F34-A6DB-973D5332070A}</Project>
       <Name>Ivony.Html.Web.Mvc</Name>
@@ -73,14 +81,6 @@ website.publishproj
     <ProjectReference Include="..\..\Ivony.Web\Ivony.Web.csproj">
       <Project>{82C4EE66-01F7-44C8-B9FF-A6AC3694E459}</Project>
       <Name>Ivony.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Jumony.Demo.HelpCenter\Jumony.Demo.HelpCenter.csproj">
-      <Project>{157C4483-5593-400D-8F2C-87745AE46704}</Project>
-      <Name>Jumony.Demo.HelpCenter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Jumony.Demo.SimpleTodo\Jumony.Demo.SimpleTodo.csproj">
-      <Project>{25E8565E-39C3-44B0-923F-A991CD94EE49}</Project>
-      <Name>Jumony.Demo.SimpleTodo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.WebSite.Publishing.targets" />

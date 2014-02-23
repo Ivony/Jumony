@@ -80,14 +80,24 @@ namespace Ivony.Html.Web
       var view = CreateViewCore( controllerContext, viewPath, false );
 
       var contentView = view as IContentView;
-      if ( contentView == null )
+
+
+
+      if ( contentView == null )//若视图不支持模板
+      {
+        if ( masterPath != null )//若指定了母板视图，则抛出异常
+          throw new InvalidOperationException( "指定了母板视图，但当前视图不支持模板" );
+
+        else
+          return view;
+      }
+
+
+
+      masterPath = masterPath ?? FindMasterView( VirtualPathUtility.GetDirectory( viewPath ) );
+
+      if ( masterPath == null )//若找不到默认母板视图，则放弃
         return view;
-
-      if ( string.IsNullOrEmpty( masterPath ) )
-        masterPath = FindMasterView( VirtualPathUtility.GetDirectory( viewPath ) );
-
-      if ( masterPath == null )
-        throw new InvalidOperationException( "未能找到母板视图，无法渲染内容视图" );
 
 
       var master = CreateMaster( controllerContext, masterPath );

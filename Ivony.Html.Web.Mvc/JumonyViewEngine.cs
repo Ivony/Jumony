@@ -78,8 +78,10 @@ namespace Ivony.Html.Web
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {
       var view = CreateViewCore( controllerContext, viewPath, false );
-
       var contentView = view as IContentView;
+
+      if ( string.IsNullOrEmpty( masterPath ) )//修正 MVC 框架在没有提供或找不到 masterPath 的时候，会提供空字符串而不是 null 的 Bug。
+        masterPath = null;
 
 
 

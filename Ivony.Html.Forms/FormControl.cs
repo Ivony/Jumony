@@ -40,7 +40,7 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
-    /// 控件值
+    /// 获取或设置控件目前的值
     /// </summary>
     public abstract string Value { get; set; }
 
@@ -48,8 +48,8 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 检查值是否可以设置到控件
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">要设置的值</param>
+    /// <returns>是否可以设置</returns>
     public abstract bool CanSetValue( string value );
 
 

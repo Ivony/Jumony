@@ -13,6 +13,12 @@ namespace Ivony.Html.Forms
   public abstract class FormTextControl : FormControl
   {
 
+
+    /// <summary>
+    /// 派生类调用此构造函数初始化 FormTextControl 实例
+    /// </summary>
+    /// <param name="form">所属表单</param>
+    /// <param name="element">定义文本控件的元素</param>
     protected FormTextControl( HtmlForm form, IHtmlElement element )
       : base( form )
     {
@@ -22,6 +28,10 @@ namespace Ivony.Html.Forms
 
     }
 
+
+    /// <summary>
+    /// 获取定义文本控件的元素
+    /// </summary>
     public IHtmlElement Element
     {
       get;
@@ -29,11 +39,17 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 实现 Name 属性，输出定义文本控件的元素的 name 属性（attribute）
+    /// </summary>
     public override string Name
     {
       get { return Element.Attribute( "name" ).Value(); }
     }
 
+    /// <summary>
+    /// 实现 Value 属性，获取文本控件目前设置的值
+    /// </summary>
     public override string Value
     {
       get { return GetValue(); }
@@ -65,6 +81,12 @@ namespace Ivony.Html.Forms
     protected abstract void SetValue( string value );
 
 
+
+    /// <summary>
+    /// 确定能否设置指定的文本值
+    /// </summary>
+    /// <param name="value">要设置的文本值</param>
+    /// <returns>是否能够设置</returns>
     public override bool CanSetValue( string value )
     {
 
@@ -76,6 +98,9 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 获取 maxlength 的设置
+    /// </summary>
     public int? MaxLength
     {
       get;

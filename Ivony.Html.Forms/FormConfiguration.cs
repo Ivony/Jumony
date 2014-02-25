@@ -33,6 +33,9 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 获取默认的表单设置
+    /// </summary>
     public static FormConfiguration Default
     {
       get { return new FormConfiguration(); }

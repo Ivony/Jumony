@@ -687,6 +687,17 @@ namespace Ivony.Html
         il.Emit( OpCodes.Ldloc_0 );       //ld container
         //        il.Emit( OpCodes.Ldc_I4, index ); //ld index
 
+        var specialNode = node as IHtmlSpecial;
+        if ( specialNode != null )
+        {
+          il.Emit( OpCodes.Ldstr, specialNode.RawHtml );
+          il.Emit( OpCodes.Callvirt, AddSpecial );
+          il.Emit( OpCodes.Pop );
+          return;
+        }
+
+
+
         var textNode = node as IHtmlTextNode;
         if ( textNode != null )
         {
@@ -749,6 +760,7 @@ namespace Ivony.Html
       private static readonly MethodInfo CreateDocument = typeof( IHtmlDomProvider ).GetMethod( "CreateDocument" );
       private static readonly MethodInfo SetHtmlSpecification = typeof( IHtmlDomProvider ).GetMethod( "SetHtmlSpecification" );
       private static readonly MethodInfo CreateFragment = typeof( IHtmlFragmentManager ).GetMethod( "CreateFragment" );
+      private static readonly MethodInfo AddSpecial = typeof( IHtmlDomProvider ).GetMethod( "AddSpecial" );
       private static readonly MethodInfo AddTextNode = typeof( IHtmlDomProvider ).GetMethod( "AddTextNode" );
       private static readonly MethodInfo AddComment = typeof( IHtmlDomProvider ).GetMethod( "AddComment" );
       private static readonly MethodInfo AddElement = typeof( IHtmlDomProvider ).GetMethod( "AddElement" );

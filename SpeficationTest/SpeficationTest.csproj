@@ -79,6 +79,9 @@
     <Content Include="SpecificationTest7.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SpecificationTest9.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

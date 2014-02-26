@@ -137,5 +137,18 @@ namespace SpeficationTest
     }
 
 
+    [TestMethod]
+    public void SpecificationTest9()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest9.html" ) );
+
+      Assert.AreEqual( document.FindFirst( "body" ).InnerText(), "<-anc> <_test> <中文> <1a> <:abc>", "特殊字符解析错误" );
+
+
+    }
+
+
+
+
   }
 }

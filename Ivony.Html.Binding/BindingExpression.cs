@@ -56,7 +56,7 @@ namespace Ivony.Html.Binding
       if ( expression == null )
         return null;
 
-      var tokenizer = new BindingExpressionTokenier( evaluator );
+      var tokenizer = new BindingExpressionTokenizer( evaluator );
 
       return tokenizer.Parse( expression, index );
 
@@ -68,7 +68,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 绑定表达式解析器
     /// </summary>
-    private class BindingExpressionTokenier : TokenizerBase
+    private class BindingExpressionTokenizer : TokenizerBase
     {
 
 
@@ -82,11 +82,11 @@ namespace Ivony.Html.Binding
 
 
       /// <summary>
-      /// 创建 BindingExpressionTokenier 对象
+      /// 创建 BindingExpressionTokenizer 对象
       /// </summary>
       /// <param name="text">要分析的文本</param>
       /// <param name="index">开始分析的位置</param>
-      public BindingExpressionTokenier( IBindingExpressionEvaluator evaluator )
+      public BindingExpressionTokenizer( IBindingExpressionEvaluator evaluator )
       {
         Evaluator = evaluator;
       }

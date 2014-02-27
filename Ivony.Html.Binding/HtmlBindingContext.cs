@@ -216,7 +216,7 @@ namespace Ivony.Html.Binding
 
 
 
-    private class NoneDataContext { }
+    protected class NoneDataContext { }
 
     /// <summary>
     /// 获取数据上下文
@@ -230,8 +230,12 @@ namespace Ivony.Html.Binding
         return null;
 
 
-      var dataContext = GetDataContext( expression );
+
+      object dataContext;
+      if ( !TryGetDataObject( expression, out dataContext ) )
+        throw new InvalidOperationException( "处理元素数据上下文绑定时出现错误，绑定表达式不支持获取数据对象" );
       //此处不检测dataContext是否等于当前dataContext的原因是，如果元素中写下datacontext属性并指向当前datacontext，表示需要在此处重新创建一个绑定上下文。
+
 
       if ( dataContext == null )
         return new NoneDataContext();//如果 dataContext 获取失败，通知直接删除整个元素。
@@ -239,21 +243,6 @@ namespace Ivony.Html.Binding
 
       element.RemoveAttribute( "datacontext" );//成功取得dataContext后，应删除该属性。
       return dataContext;
-    }
-
-
-
-    /// <summary>
-    /// 从绑定表达式中获取数据上下文
-    /// </summary>
-    /// <param name="expression">绑定表达式</param>
-    /// <returns></returns>
-    protected virtual object GetDataContext( BindingExpression expression )
-    {
-
-      var binder = GetExpressionBinder( expression ) as IDataContextExpressionBinder;
-
-      return binder.GetDataContext( this, expression.Arguments );
     }
 
 
@@ -365,5 +354,25 @@ namespace Ivony.Html.Binding
       return expressionBinder.GetValue( this, expression.Arguments );
 
     }
+
+
+    /// <summary>
+    /// 从绑定表达式中获取数据上下文
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <param name="dataObject">数据对象</param>
+    /// <returns></returns>
+    public virtual bool TryGetDataObject( BindingExpression expression, out object dataObject )
+    {
+      dataObject = null;
+      var binder = GetExpressionBinder( expression ) as IDataObjectExpressionBinder;
+      if ( binder == null )
+        return false;
+
+      dataObject = binder.GetDataContext( this, expression.Arguments );
+      return true;
+    }
+
+
   }
 }

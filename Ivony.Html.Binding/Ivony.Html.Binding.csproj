@@ -59,7 +59,7 @@
     <Compile Include="HtmlBinding.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlListBindingContext.cs" />
-    <Compile Include="IDataContextExpressionBinder.cs" />
+    <Compile Include="IDataObjectExpressionBinder.cs" />
     <Compile Include="IElementExpressionBinder.cs" />
     <Compile Include="IExpressionBinder.cs" />
     <Compile Include="IHtmlBinder.cs" />

@@ -37,7 +37,7 @@ namespace Ivony.Html.Binding
     /// <param name="dataValues">数据字典</param>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
     {
-      return HtmlBindingContext.Create( new IHtmlBinder[] { StyleBinder, LiteralBinder }, new IExpressionBinder[] { BindingExpressionBinder }, scope, dataContext, dataValues );
+      return HtmlBindingContext.Create( new IHtmlBinder[] { StyleBinder, LiteralBinder, ScriptBinder }, new IExpressionBinder[] { BindingExpressionBinder }, scope, dataContext, dataValues );
     }
 
 

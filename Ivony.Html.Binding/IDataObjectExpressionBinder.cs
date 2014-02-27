@@ -8,7 +8,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 定义可用于解析 datacontext 属性绑定表达式的绑定器
   /// </summary>
-  public interface IDataContextExpressionBinder : IExpressionBinder
+  public interface IDataObjectExpressionBinder : IExpressionBinder
   {
 
     /// <summary>

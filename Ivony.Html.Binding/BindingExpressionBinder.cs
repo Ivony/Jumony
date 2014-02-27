@@ -14,7 +14,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理{Binding xxx}表达式的绑定器
   /// </summary>
-  public class BindingExpressionBinder : IDataContextExpressionBinder, IElementExpressionBinder
+  public class BindingExpressionBinder : IDataObjectExpressionBinder, IElementExpressionBinder
   {
     string IExpressionBinder.ExpressionName
     {
@@ -130,7 +130,7 @@ namespace Ivony.Html.Binding
     }
 
 
-    object IDataContextExpressionBinder.GetDataContext( HtmlBindingContext context, IDictionary<string, string> arguments )
+    object IDataObjectExpressionBinder.GetDataContext( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
       return GetDataObject( context, arguments );
     }

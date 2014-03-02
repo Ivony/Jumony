@@ -14,6 +14,9 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理{Binding xxx}表达式的绑定器
   /// </summary>
+  /// <example>
+  /// &lt;a href="{binding path=Link}"&gt;Link&lt;/a&gt;;
+  /// </example>
   public class BindingExpressionBinder : IDataObjectExpressionBinder, IElementExpressionBinder
   {
     string IExpressionBinder.ExpressionName

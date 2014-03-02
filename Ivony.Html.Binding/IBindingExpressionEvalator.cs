@@ -7,17 +7,17 @@ namespace Ivony.Html.Binding
 {
 
   /// <summary>
-  /// 定义一个可以将 BindingExpression 对象转换为字符串值的对象
+  /// 定义一个可以将 BindingExpression 对象转换为值的转换器，一般是绑定上下文
   /// </summary>
   public interface IBindingExpressionEvaluator
   {
 
     /// <summary>
-    /// 从 BindingExpression 获取需要绑定的值
+    /// 尝试从 BindingExpression 获取需要绑定的字符串值
     /// </summary>
     /// <param name="expression">绑定表达式</param>
-    /// <returns>绑定值</returns>
-    string GetValue( BindingExpression bindingExpression );
+    /// <returns>获取到的值，若不支持该绑定表达式或者无法解析，则返回null</returns>
+    string GetValue( BindingExpression expression );
 
   }
 }

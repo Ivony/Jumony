@@ -150,6 +150,12 @@ namespace Ivony.Html
   /// </summary>
   public class CssStyleShorthandRuleCollection : KeyedCollection<string, ICssStyleShorthandRule>
   {
+
+    /// <summary>
+    /// 重写此方法从样式规则中提取键
+    /// </summary>
+    /// <param name="item">要提取键（即样式名）的样式缩写规则</param>
+    /// <returns>提取的键</returns>
     protected override string GetKeyForItem( ICssStyleShorthandRule item )
     {
       return item.Name;

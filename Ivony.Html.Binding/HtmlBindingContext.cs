@@ -17,8 +17,6 @@ namespace Ivony.Html.Binding
   {
 
 
-
-
     /// <summary>
     /// 创建 HtmlBindingContext 实例
     /// </summary>

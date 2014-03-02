@@ -26,6 +26,13 @@ namespace Ivony.Html.Binding
 
     private JavaScriptSerializer serializer = new JavaScriptSerializer();
 
+
+    /// <summary>
+    /// 对 HTML 中的 script 元素进行绑定
+    /// </summary>
+    /// <param name="context">当前绑定上下文</param>
+    /// <param name="element">当前绑定的元素（仅会对 script 元素起作用）</param>
+    /// <returns>永远返回 false，表示其他绑定器可以继续执行</returns>
     public bool BindElement( HtmlBindingContext context, IHtmlElement element )
     {
       if ( !element.Name.EqualsIgnoreCase( "script" ) )
@@ -46,7 +53,7 @@ namespace Ivony.Html.Binding
           return match.Groups["declare"].Value + valueExpression + ";";
         } );
 
-      
+
       element.InnerHtml( script );
 
       return false;

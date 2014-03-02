@@ -214,7 +214,7 @@ namespace Ivony.Html.Binding
 
 
 
-    protected class NoneDataContext { }
+    private class NoneDataContext { }
 
     /// <summary>
     /// 获取数据上下文
@@ -248,8 +248,8 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 进行元素绑定
     /// </summary>
-    /// <param name="binders"></param>
-    /// <param name="element"></param>
+    /// <param name="binders">当前可用的绑定器</param>
+    /// <param name="element">要进行绑定的元素</param>
     protected virtual void BindElement( IHtmlBinder[] binders, IHtmlElement element )
     {
 

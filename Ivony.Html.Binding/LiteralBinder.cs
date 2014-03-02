@@ -22,7 +22,7 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="context">当前绑定上下文</param>
     /// <param name="element">要绑定的元素</param>
-    /// <returns>是否继续进行后面的绑定</returns>
+    /// <returns>永远返回 false，表示继续进行后面的绑定</returns>
     public bool BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 

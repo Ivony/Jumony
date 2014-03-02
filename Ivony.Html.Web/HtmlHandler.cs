@@ -18,6 +18,9 @@ namespace Ivony.Html.Web
   {
 
 
+    /// <summary>
+    /// 定义用于确定回发表单的标识。
+    /// </summary>
     protected static readonly string PostbackFormSign = "Jumony_Web_Postback";
 
 
@@ -78,8 +81,14 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 获取或设置当前数据上下文
+    /// </summary>
     protected object DataContext { get; set; }
 
+    /// <summary>
+    /// 获取或设置稍候进行绑定的数据值
+    /// </summary>
     protected IDictionary<string, object> DataValues { get; private set; }
 
 

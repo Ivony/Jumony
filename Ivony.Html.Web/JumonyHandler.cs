@@ -268,7 +268,6 @@ namespace Ivony.Html.Web
     /// 获取 HTML 筛选器
     /// </summary>
     /// <param name="virtualPath">HTML 文档虚拟路径</param>
-    /// <param name="document">HTML 文档</param>
     /// <returns>HTML 筛选器</returns>
     protected virtual IHtmlFilter[] GetFilters( string virtualPath )
     {

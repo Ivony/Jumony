@@ -12,16 +12,16 @@ namespace Ivony.Html.Binding
 {
 
   /// <summary>
-  /// 处理{Binding xxx}表达式的绑定器
+  /// 处理{eval xxx}表达式的绑定器
   /// </summary>
   /// <example>
-  /// &lt;a href="{binding path=Link}"&gt;Link&lt;/a&gt;;
+  /// &lt;a href="{eval path=Link}"&gt;Link&lt;/a&gt;;
   /// </example>
-  public class BindingExpressionBinder : IDataObjectExpressionBinder, IElementExpressionBinder
+  public class EvalExpressionBinder : IDataObjectExpressionBinder, IElementExpressionBinder
   {
     string IExpressionBinder.ExpressionName
     {
-      get { return "Binding"; }
+      get { return "Eval"; }
     }
 
 

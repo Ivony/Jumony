@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <title literal:text="abc">Test Title #text# text</title>
 </head>
-<body class="{binding key=StyleClass}" test="{binding format=this time is {{0:yyyy-MM-dd}} #, key=ThisTime}">
+<body class="{eval key=StyleClass}" test="{eval format=this time is {{0:yyyy-MM-dd}} #, key=ThisTime}">
   <div id="content"></div>
   <script>
-    var value1 = "abc";//{binding key=ScriptValue1}
+    var value1 = "abc";//{eval key=ScriptValue1}
   </script>
 </body>
 </html>

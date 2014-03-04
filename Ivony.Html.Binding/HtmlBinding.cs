@@ -38,13 +38,13 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 获取默认的绑定表达式绑定器
     /// </summary>
-    public static BindingExpressionBinder BindingExpressionBinder { get; private set; }
+    public static EvalExpressionBinder BindingExpressionBinder { get; private set; }
 
 
     static HtmlBinding()
     {
       StyleBinder = new StyleBinder();
-      BindingExpressionBinder = new BindingExpressionBinder();
+      BindingExpressionBinder = new EvalExpressionBinder();
 
       FormBinder = new FormBinder();
       ScriptBinder = new ScriptBinder();

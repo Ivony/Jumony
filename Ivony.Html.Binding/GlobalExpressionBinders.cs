@@ -17,7 +17,7 @@ namespace Ivony.Html.Binding
     static GlobalExpressionBinders()
     {
       _binders = new ExpressionBinderCollection();
-      _binders.Add( new BindingExpressionBinder() );
+      _binders.Add( new EvalExpressionBinder() );
     }
 
     private static ExpressionBinderCollection _binders;

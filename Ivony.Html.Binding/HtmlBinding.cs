@@ -38,17 +38,52 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 获取默认的绑定表达式绑定器
     /// </summary>
-    public static EvalExpressionBinder BindingExpressionBinder { get; private set; }
+    public static EvalExpressionBinder EvalExpressionBinder { get; private set; }
 
 
     static HtmlBinding()
     {
       StyleBinder = new StyleBinder();
-      BindingExpressionBinder = new EvalExpressionBinder();
-
-      FormBinder = new FormBinder();
       ScriptBinder = new ScriptBinder();
       LiteralBinder = new LiteralBinder();
+
+
+      FormBinder = new FormBinder();
+
+
+      EvalExpressionBinder = new EvalExpressionBinder();
+
+      
+      
+      ExpressionBinders = new ExpressionBinderCollection();
+      ElementBinders = new List<IHtmlElementBinder>();
+
+      ElementBinders.Add( StyleBinder );
+      ElementBinders.Add( ScriptBinder );
+      ElementBinders.Add( LiteralBinder );
+
+      ExpressionBinders.Add( EvalExpressionBinder );
+    }
+
+
+
+    /// <summary>
+    /// 获取或注册表达式绑定器
+    /// </summary>
+    public static ICollection<IExpressionBinder> ExpressionBinders
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 获取或设置所有元素绑定器
+    /// </summary>
+    public static ICollection<IHtmlElementBinder> ElementBinders
+    {
+      get;
+      private set;
     }
 
 
@@ -60,7 +95,7 @@ namespace Ivony.Html.Binding
     /// <param name="dataValues">数据字典</param>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
     {
-      return HtmlBindingContext.Create( new IHtmlBinder[] { StyleBinder, LiteralBinder, ScriptBinder }, new IExpressionBinder[] { BindingExpressionBinder }, scope, dataContext, dataValues );
+      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataContext, dataValues );
     }
 
 

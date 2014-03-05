@@ -62,7 +62,7 @@
     <Compile Include="IDataObjectExpressionBinder.cs" />
     <Compile Include="IElementExpressionBinder.cs" />
     <Compile Include="IExpressionBinder.cs" />
-    <Compile Include="IHtmlBinder.cs" />
+    <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IHtmlBindingContextProvider.cs" />
     <Compile Include="ListBindMode.cs" />
     <Compile Include="ListDataContext.cs" />

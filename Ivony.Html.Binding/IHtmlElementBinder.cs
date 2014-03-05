@@ -8,7 +8,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 定义 HTML 元素绑定器
   /// </summary>
-  public interface IHtmlBinder
+  public interface IHtmlElementBinder
   {
 
     /// <summary>
@@ -17,7 +17,7 @@ namespace Ivony.Html.Binding
     /// <param name="context">数据绑定上下文</param>
     /// <param name="element">要绑定的元素</param>
     /// <returns>返回一个值，是否禁止后面的绑定器的执行</returns>
-    bool BindElement( HtmlBindingContext context, IHtmlElement element );
+    void BindElement( HtmlBindingContext context, IHtmlElement element );
 
   }
 }

@@ -9,7 +9,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 实现进行表单绑定的绑定器
   /// </summary>
-  public class FormBinder : IHtmlBinder
+  public class FormBinder : IHtmlElementBinder
   {
 
     /// <summary>
@@ -18,7 +18,7 @@ namespace Ivony.Html.Binding
     /// <param name="context">绑定上下文</param>
     /// <param name="element">要绑定的元素</param>
     /// <returns>是否应当继续处理后面的绑定器</returns>
-    public bool BindElement( HtmlBindingContext context, IHtmlElement element )
+    public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
       throw new NotImplementedException();
     }

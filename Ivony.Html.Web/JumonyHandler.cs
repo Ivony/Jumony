@@ -145,6 +145,7 @@ namespace Ivony.Html.Web
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
     /// <param name="context">当前 HTML 请求上下文</param>
+    /// <param name="handler">用于处理 HTML 文档的处理程序</param>
     /// <returns>处理后的结果</returns>
     protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context, IHtmlHandler handler )
     {

@@ -12,7 +12,7 @@ namespace Ivony.Html.Web
 
 
   /// <summary>
-  /// Jumony 用于处理部分视图请求的处理器
+  /// Jumony 用于处理部分视图请求的处理程序
   /// </summary>
   public class JumonyPartialHandler : JumonyHandler
   {
@@ -88,7 +88,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="context">当前 HTTP 请求上下文</param>
     /// <param name="virtualPath">当前要处理的部分视图的虚拟路径</param>
-    /// <param name="handler">当前部分视图的 HTML 处理器</param>
+    /// <param name="handler">当前部分视图的 HTML 处理程序</param>
     /// <returns>渲染结果</returns>
     public string RenderPartial( HttpContextBase context, string virtualPath, IHtmlHandler handler )
     {

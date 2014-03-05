@@ -275,7 +275,7 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 获取或设置一个值，指定元素绑定已经完成，无需遍历后面的绑定处理器。
+    /// 获取或设置一个值，指定元素绑定已经完成，无需遍历后面的绑定处理程序。
     /// </summary>
     public bool BindCompleted { get; set; }
 

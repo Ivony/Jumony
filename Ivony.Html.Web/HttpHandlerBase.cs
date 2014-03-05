@@ -9,7 +9,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// 所有处理 HTTP 请求的处理器基类
+  /// 所有处理 HTTP 请求的处理程序基类
   /// </summary>
   public abstract class HttpHandlerBase
   {

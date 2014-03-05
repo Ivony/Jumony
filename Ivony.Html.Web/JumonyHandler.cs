@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// Jumony 用于处理 HTTP 请求的处理器
+  /// Jumony 用于处理 HTTP 请求的处理程序
   /// </summary>
   public class JumonyHandler : IHttpHandler, IRequiresSessionState
   {
@@ -212,10 +212,10 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取 HTML 处理器
+    /// 获取 HTML 处理程序
     /// </summary>
     /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
-    /// <returns>HTML 处理器</returns>
+    /// <returns>HTML 处理程序</returns>
     protected virtual IHtmlHandler GetHandler( string virtualPath )
     {
 

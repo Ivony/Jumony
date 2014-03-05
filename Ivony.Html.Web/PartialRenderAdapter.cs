@@ -21,7 +21,8 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 PartialRenderAdapter 实例
     /// </summary>
-    /// <param name="view">需要渲染部分视图的宿主视图</param>
+    /// <param name="context">当前 HTTP 请求上下文</param>
+    /// <param name="handler">视图处理程序对象，用于获取自定义分部视图处理方法</param>
     public PartialRenderAdapter( HttpContextBase context, object handler )
     {
       HttpContext = context;

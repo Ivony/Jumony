@@ -169,7 +169,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 此属性指示该处理器是否可以重用，其始终返回 false。
+    /// 此属性指示该处理程序是否可以重用，其始终返回 false。
     /// </summary>
     public bool IsReusable
     {
@@ -178,7 +178,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 实现此方法当使用此处理器直接处理 HTTP 请求时，直接抛出异常。
+    /// 实现此方法当使用此处理程序直接处理 HTTP 请求时，直接抛出异常。
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     public void ProcessRequest( HttpContext context )

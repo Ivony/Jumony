@@ -27,7 +27,11 @@ namespace Ivony.Html.Web
 
 
     private static JumonyWebConfiguration _configuration = new JumonyWebConfiguration();
-    
+
+
+    /// <summary>
+    /// 获取当前的配置
+    /// </summary>
     public static JumonyWebConfiguration Configuration
     {
       get { return _configuration; }

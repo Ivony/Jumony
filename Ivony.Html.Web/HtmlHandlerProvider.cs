@@ -92,7 +92,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 在 HTML 文档中查找 ViewHandler 路径设置。
     /// </summary>
-    /// <param name="Scope">要处理的 HTML 文档范畴</param>
+    /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
     /// <returns>用于处理 HTML 的视图处理程序路径</returns>
     public static string GetHandlerPath( string virtualPath )
     {

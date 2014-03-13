@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Ivony.Html.Web
 {
+
+  /// <summary>
+  /// 定义视图筛选器提供程序
+  /// </summary>
   public interface IViewFilterProvider
   {
 

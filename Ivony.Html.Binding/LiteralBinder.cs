@@ -9,7 +9,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理文本替换的绑定器
   /// </summary>
-  public sealed class LiteralBinder : IHtmlBinder
+  public sealed class LiteralBinder : IHtmlElementBinder
   {
 
     /// <summary>
@@ -22,12 +22,12 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="context">当前绑定上下文</param>
     /// <param name="element">要绑定的元素</param>
-    /// <returns>是否继续进行后面的绑定</returns>
-    public bool BindElement( HtmlBindingContext context, IHtmlElement element )
+    /// <returns>永远返回 false，表示继续进行后面的绑定</returns>
+    public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 
       if ( !element.Document.HtmlSpecification.IsCDataElement( element.Name ) )
-        return false;
+        return;
 
       lock ( element.SyncRoot )
       {
@@ -39,7 +39,6 @@ namespace Ivony.Html.Binding
         attributes.Remove();
 
       }
-      return false;
     }
 
     private void BindElement( IHtmlElement element, Dictionary<string, string> dictionary )

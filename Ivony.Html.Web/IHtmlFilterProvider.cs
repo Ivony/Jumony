@@ -13,6 +13,11 @@ namespace Ivony.Html.Web
   public interface IHtmlFilterProvider
   {
 
+
+    /// <summary>
+    /// 获取当前可用的筛选器列表
+    /// </summary>
+    /// <returns></returns>
     IHtmlFilter[] GetFilters();
 
   }

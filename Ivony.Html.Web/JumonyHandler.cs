@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
 {
 
   /// <summary>
-  /// Jumony 用于处理 HTTP 请求的处理器
+  /// Jumony 用于处理 HTTP 请求的处理程序
   /// </summary>
   public class JumonyHandler : IHttpHandler, IRequiresSessionState
   {
@@ -145,6 +145,7 @@ namespace Ivony.Html.Web
     /// 派生类重写此方法接管 HTTP 请求处理流程
     /// </summary>
     /// <param name="context">当前 HTML 请求上下文</param>
+    /// <param name="handler">用于处理 HTML 文档的处理程序</param>
     /// <returns>处理后的结果</returns>
     protected virtual ICachedResponse ProcessRequest( HtmlRequestContext context, IHtmlHandler handler )
     {
@@ -211,10 +212,10 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 获取 HTML 处理器
+    /// 获取 HTML 处理程序
     /// </summary>
     /// <param name="virtualPath">要处理的 HTML 文档的虚拟路径</param>
-    /// <returns>HTML 处理器</returns>
+    /// <returns>HTML 处理程序</returns>
     protected virtual IHtmlHandler GetHandler( string virtualPath )
     {
 
@@ -268,7 +269,6 @@ namespace Ivony.Html.Web
     /// 获取 HTML 筛选器
     /// </summary>
     /// <param name="virtualPath">HTML 文档虚拟路径</param>
-    /// <param name="document">HTML 文档</param>
     /// <returns>HTML 筛选器</returns>
     protected virtual IHtmlFilter[] GetFilters( string virtualPath )
     {

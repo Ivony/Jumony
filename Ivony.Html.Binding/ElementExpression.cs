@@ -9,7 +9,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 代表用元素表示的绑定表达式
   /// </summary>
-  public class ElementExpression : BindingExpression
+  internal sealed class ElementExpression : BindingExpression
   {
 
 

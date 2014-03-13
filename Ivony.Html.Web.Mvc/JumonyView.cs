@@ -361,7 +361,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 创建一个视图上下文供视图处理器使用
+    /// 创建一个视图上下文供视图处理程序使用
     /// </summary>
     /// <returns>视图上下文</returns>
     private ViewContext CreateViewContext()

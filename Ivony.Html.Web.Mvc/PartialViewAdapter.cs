@@ -36,7 +36,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="urlHelper">用于产生 URL 的 URL 帮助器</param>
     /// <param name="viewContext">当前视图上下文</param>
-    /// <param name="viewHandler">当前视图处理器</param>
+    /// <param name="viewHandler">当前视图处理程序</param>
     public PartialViewAdapter( ViewContext viewContext, JumonyUrlHelper urlHelper, IViewHandler viewHandler )
       : base( viewContext.HttpContext, viewHandler )
     {

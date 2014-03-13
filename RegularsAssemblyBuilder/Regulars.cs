@@ -12,7 +12,7 @@ namespace RegularsAssemblyBuilder
   {
 
     /// <summary>用于匹配 HTML 元素标签名的正则表达式</summary>
-    public static readonly string tagNamePattern = @"(?<tagName>(?!\d)[\w:_\-\.]+)";
+    public static readonly string tagNamePattern = @"(?<tagName>[A-Za-z][A-Za-z0-9\-_:\.]*)";
 
 
     /// <summary>用于匹配一般属性值的正则表达式</summary>
@@ -35,7 +35,7 @@ namespace RegularsAssemblyBuilder
     public static readonly string beginTagPattern = @"<#tagName(?<attributes>([^=]|(?>=\w*'[^']*')|(?>=\w*""[^""]*"")|=)*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern ).Replace( "#attribute", attributePattern );
 
     /// <summary>用于匹配用结束标签的正则表达式</summary>
-    public static readonly string endTagPattern = @"</#tagName\s*>".Replace( "#tagName", tagNamePattern );
+    public static readonly string endTagPattern = @"</(#tagName)?[^>]*>".Replace( "#tagName", tagNamePattern );
 
     /// <summary>用于匹配用注释标签的正则表达式</summary>
     public static readonly string commentPattern = @"<!--(?<commentText>(.|\n)*?)-->";

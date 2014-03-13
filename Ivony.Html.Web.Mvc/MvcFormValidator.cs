@@ -71,7 +71,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 尝试显示错误信息
     /// </summary>
-    /// <returns></returns>
+    /// <returns>是否有任何错误信息显示</returns>
     public bool ShowErrorMessage()
     {
       Validate();

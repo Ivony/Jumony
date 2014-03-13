@@ -64,12 +64,12 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 显示表单验证失败信息，如果有的话
+    /// 尝试在表单上显示模型验证失败信息
     /// </summary>
-    /// <param name="form">要显示验证失败信息的表单</param>
-    /// <param name="modelStates">Model 验证信息</param>
-    /// <param name="inputControlFinder">提示容器查找器，指定错误信息显示的位置</param>
-    /// <returns>是否存在错误信息</returns>
+    /// <param name="form">要显示错误信息的表单</param>
+    /// <param name="modelStates">模型状态信息</param>
+    /// <param name="inputControlFinder">提供一个方法，通过输入控件查找要显示错误信息的位置</param>
+    /// <returns>是否有任何错误信息可以显示</returns>
     public static bool ShowErrorMessage( this HtmlForm form, ModelStateDictionary modelStates, Func<IHtmlInputControl, IHtmlElement> inputControlFinder )
     {
       return new GenericMvcFormValidator( form, modelStates )

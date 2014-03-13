@@ -7,11 +7,23 @@ using System.Text.RegularExpressions;
 
 namespace Ivony.Parser
 {
+
+
+  /// <summary>
+  /// 协助实现 Tokenizer 的基类
+  /// </summary>
   public abstract class TokenizerBase
   {
 
 
+    /// <summary>
+    /// 用于匹配 CName 的正则表达式
+    /// </summary>
     protected static readonly Regex CName = new Regex( @"\G[a-zA-z_][a-zA-Z_0-9]*", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+    /// <summary>
+    /// 用于匹配空白字符的正则表达式
+    /// </summary>
     protected static readonly Regex WhiteSpace = new Regex( @"\G\s*", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
@@ -28,6 +40,10 @@ namespace Ivony.Parser
 
     private object _sync = new object();
 
+
+    /// <summary>
+    /// 获取用于同步的对象
+    /// </summary>
     public object SyncRoot
     {
       get { return _sync; }
@@ -99,7 +115,7 @@ namespace Ivony.Parser
     /// <summary>
     /// 判断扫描器当前位置是否为指定的字符
     /// </summary>
-    /// <param name="ch">指定的字符</param>
+    /// <param name="chars">指定的字符</param>
     /// <returns>当前位置是否为指定的字符</returns>
     public bool IsMatchAny( params char[] chars )
     {
@@ -114,7 +130,7 @@ namespace Ivony.Parser
     /// <summary>
     /// 确定扫描器当前位置必须为指定的字符
     /// </summary>
-    /// <param name="ch">指定的字符</param>
+    /// <param name="chars">指定的字符</param>
     public void EnsureMatchAny( params char[] chars )
     {
 
@@ -164,6 +180,7 @@ namespace Ivony.Parser
     /// 确保在扫描器当前位置必须满足正则匹配
     /// </summary>
     /// <param name="regularExpression">正则表达式</param>
+    /// <param name="description">关于该匹配的描述</param>
     /// <returns>当前位置是否满足正则匹配</returns>
     public Match EnsureMatch( Regex regularExpression, string description = null )
     {
@@ -176,6 +193,10 @@ namespace Ivony.Parser
 
 
 
+    /// <summary>
+    /// 构建一个字符串格式错误的异常，报告解析器在当前位置遇到格式错误
+    /// </summary>
+    /// <returns>异常信息</returns>
     protected FormatException FormatError()
     {
 
@@ -189,6 +210,13 @@ namespace Ivony.Parser
       return new FormatException( message );
     }
 
+
+
+    /// <summary>
+    /// 构建一个字符串格式错误的异常，报告解析器在当前位置遇到格式错误
+    /// </summary>
+    /// <param name="desired">在当前位置期望的字符</param>
+    /// <returns>异常信息</returns>
     protected FormatException FormatError( char desired )
     {
       string message;
@@ -202,6 +230,11 @@ namespace Ivony.Parser
       return new FormatException( message );
     }
 
+    /// <summary>
+    /// 构建一个字符串格式错误的异常，报告解析器在当前位置遇到格式错误
+    /// </summary>
+    /// <param name="description">在当前位置期望遇到的匹配的描述</param>
+    /// <returns>异常信息</returns>
     protected FormatException FormatError( string description )
     {
       string message;
@@ -234,18 +267,20 @@ namespace Ivony.Parser
       /// <summary>
       /// 构建 TextScaner 对象
       /// </summary>
-      /// <param name="str">要扫描的字符串</param>
-      public TextScaner( object syncRoot, string str ) : this( syncRoot, str, 0 ) { }
+      /// <param name="syncRoot">用于同步的对象</param>
+      /// <param name="text">要扫描的字符串</param>
+      public TextScaner( object syncRoot, string text ) : this( syncRoot, text, 0 ) { }
 
       /// <summary>
       /// 构建 TextScaner 对象
       /// </summary>
-      /// <param name="str">要扫描的字符串</param>
+      /// <param name="syncRoot">用于同步的对象</param>
+      /// <param name="text">要扫描的字符串</param>
       /// <param name="index">开始扫描的位置，默认为 0 </param>
-      public TextScaner( object syncRoot, string str, int index )
+      public TextScaner( object syncRoot, string text, int index )
       {
         SyncRoot = syncRoot;
-        _text = str;
+        _text = text;
         _initializeIndex = _index = index;
       }
 
@@ -268,9 +303,14 @@ namespace Ivony.Parser
         }
       }
 
+
+      /// <summary>
+      /// 销毁当前对象，释放所有资源
+      /// </summary>
       public void Dispose()
       {
       }
+
 
       object System.Collections.IEnumerator.Current
       {
@@ -369,6 +409,9 @@ namespace Ivony.Parser
       }
 
 
+      /// <summary>
+      /// 获取用于同步的对象
+      /// </summary>
       public object SyncRoot { get; private set; }
     }
 

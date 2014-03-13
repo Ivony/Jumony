@@ -18,6 +18,9 @@ namespace Ivony.Html.Web
   {
 
 
+    /// <summary>
+    /// 定义用于确定回发表单的标识。
+    /// </summary>
     protected static readonly string PostbackFormSign = "Jumony_Web_Postback";
 
 
@@ -78,8 +81,14 @@ namespace Ivony.Html.Web
 
 
 
+    /// <summary>
+    /// 获取或设置当前数据上下文
+    /// </summary>
     protected object DataContext { get; set; }
 
+    /// <summary>
+    /// 获取或设置稍候进行绑定的数据值
+    /// </summary>
     protected IDictionary<string, object> DataValues { get; private set; }
 
 
@@ -160,7 +169,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 此属性指示该处理器是否可以重用，其始终返回 false。
+    /// 此属性指示该处理程序是否可以重用，其始终返回 false。
     /// </summary>
     public bool IsReusable
     {
@@ -169,7 +178,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 实现此方法当使用此处理器直接处理 HTTP 请求时，直接抛出异常。
+    /// 实现此方法当使用此处理程序直接处理 HTTP 请求时，直接抛出异常。
     /// </summary>
     /// <param name="context">HTTP 请求上下文</param>
     public void ProcessRequest( HttpContext context )

@@ -43,7 +43,7 @@ namespace Ivony.Html.Web
       AreaPartialViewLocationFormats = AreaViewLocationFormats;
 
       MasterLocationFormats = ViewLocationFormats;
-      AreaMasterLocationFormats = AreaMasterLocationFormats;
+      AreaMasterLocationFormats = AreaViewLocationFormats;
 
       ViewLocationCache = new JumonyViewLocationCache();
     }
@@ -78,16 +78,28 @@ namespace Ivony.Html.Web
     protected override IView CreateView( ControllerContext controllerContext, string viewPath, string masterPath )
     {
       var view = CreateViewCore( controllerContext, viewPath, false );
-
       var contentView = view as IContentView;
-      if ( contentView == null )
+
+      if ( string.IsNullOrEmpty( masterPath ) )//修正 MVC 框架在没有提供或找不到 masterPath 的时候，会提供空字符串而不是 null 的 Bug。
+        masterPath = null;
+
+
+
+      if ( contentView == null )//若视图不支持模板
+      {
+        if ( masterPath != null )//若指定了母板视图，则抛出异常
+          throw new InvalidOperationException( "指定了母板视图，但当前视图不支持模板" );
+
+        else
+          return view;
+      }
+
+
+
+      masterPath = masterPath ?? FindMasterView( VirtualPathUtility.GetDirectory( viewPath ) );
+
+      if ( masterPath == null )//若找不到默认母板视图，则放弃
         return view;
-
-      if ( string.IsNullOrEmpty( masterPath ) )
-        masterPath = FindMasterView( VirtualPathUtility.GetDirectory( viewPath ) );
-
-      if ( masterPath == null )
-        throw new InvalidOperationException( "未能找到母板视图，无法渲染内容视图" );
 
 
       var master = CreateMaster( controllerContext, masterPath );

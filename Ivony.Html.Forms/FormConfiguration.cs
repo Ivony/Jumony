@@ -6,6 +6,10 @@ using System.Text;
 namespace Ivony.Html.Forms
 {
 
+
+  /// <summary>
+  /// 提供一些设置项，可以自定义 Jumony Forms 的行为。
+  /// </summary>
   public class FormConfiguration
   {
     /// <summary>

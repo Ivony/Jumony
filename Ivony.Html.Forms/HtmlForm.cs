@@ -26,33 +26,26 @@ namespace Ivony.Html.Forms
 
 
 
-    private IHtmlTextControl[] textControls;
-    private IHtmlGroupControl[] groupControls;
-
-    private HtmlLabel[] labels;
-
-    private Hashtable labelsTable = Hashtable.Synchronized( new Hashtable() );
-
+    private FormControlCollection controls;
 
 
     /// <summary>
     /// 创建一个 HTML 表单对象
     /// </summary>
     /// <param name="element"></param>
-    public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormControlProvider[] providers = null )
+    public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {
       _element = element;
 
       Configuration = configuration ?? FormConfiguration.Default;
-
-      Providers = providers ?? new[] { new StandardFormControlProvider() };
+      Provider = provider ?? new StandardFormProvider();
     }
 
 
     /// <summary>
     /// 表单控件提供程序
     /// </summary>
-    protected IFormControlProvider[] Providers
+    protected IFormProvider Provider
     {
       get;
       private set;
@@ -66,42 +59,26 @@ namespace Ivony.Html.Forms
     public void RefreshForm()
     {
 
-      InputControls = new InputControlCollection( this );
+      controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
+
 
     }
 
-
-
-    /// <summary>
-    /// 获取表单所有的输入控件
-    /// </summary>
-    public InputControlCollection InputControls
+    IEnumerable<FormControl> DiscoveryControls( IHtmlContainer container )
     {
-      get;
-      private set;
-    }
+      foreach ( var element in container.Elements() )
+      {
+        {
+          var control = Providers.TryCreateControl( element );
+          if ( control != null )
+            yield return control;
+        }
 
-
-    private FormValueCollection _formValues;
-
-
-    public FormValueCollection Values
-    {
-      get { return _formValues; }
-    }
-
-
-    /// <summary>
-    /// 检索指定HTML元素绑定的 Label
-    /// </summary>
-    /// <param name="element">要检索 Label 的元素</param>
-    /// <returns></returns>
-    internal HtmlLabel[] FindLabels( string elementId )
-    {
-      if ( elementId == null )
-        return new HtmlLabel[0];
-
-      return labelsTable[elementId].CastTo<HtmlLabel[]>().IfNull( new HtmlLabel[0] );
+        {
+          foreach ( var control in DiscoveryControls( element ) )
+            yield return control;
+        }
+      }
     }
 
 

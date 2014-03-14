@@ -27,5 +27,15 @@ namespace Ivony.Html.Forms
     {
       return item.Name;
     }
+
+
+    /// <summary>
+    /// 获取所有控件的名称
+    /// </summary>
+    public string[] ControlNames
+    {
+      get { return Dictionary.Keys.ToArray(); }
+    }
+
   }
 }

@@ -95,7 +95,6 @@
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormExtensions.cs" />
-    <Compile Include="MvcFormValidator.cs" />
     <Compile Include="MvcRouteExtensions.cs" />
     <Compile Include="SimpleAreaRouteTable.cs" />
     <Compile Include="PartialViewAdapter.cs" />

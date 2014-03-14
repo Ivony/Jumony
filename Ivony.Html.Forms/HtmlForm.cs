@@ -26,7 +26,11 @@ namespace Ivony.Html.Forms
 
 
 
-    private FormControlCollection controls;
+    public FormControlCollection Controls
+    {
+        get;
+        private set;
+    }
 
 
     /// <summary>
@@ -39,6 +43,9 @@ namespace Ivony.Html.Forms
 
       Configuration = configuration ?? FormConfiguration.Default;
       Provider = provider ?? new StandardFormProvider();
+
+
+      RefreshForm();
     }
 
 
@@ -59,27 +66,11 @@ namespace Ivony.Html.Forms
     public void RefreshForm()
     {
 
-      controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
+      Controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
 
 
     }
 
-    IEnumerable<FormControl> DiscoveryControls( IHtmlContainer container )
-    {
-      foreach ( var element in container.Elements() )
-      {
-        {
-          var control = Providers.TryCreateControl( element );
-          if ( control != null )
-            yield return control;
-        }
-
-        {
-          foreach ( var control in DiscoveryControls( element ) )
-            yield return control;
-        }
-      }
-    }
 
 
     public FormConfiguration Configuration { get; private set; }

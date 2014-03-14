@@ -27,11 +27,11 @@ namespace Ivony.Html.Web
 
       var data = dataModel.ToPropertiesMap();
 
-      foreach ( var key in form.InputControls.Select( c => c.Name ) )
+      foreach ( var control in form.Controls )
       {
 
-        if ( data.ContainsKey( key ) )
-          form.Values[key] = data[key];
+        if ( data.ContainsKey( control.Name ) )
+          control.Value = data[control.Name];
 
       }
 
@@ -50,103 +50,15 @@ namespace Ivony.Html.Web
     public static HtmlForm ApplyValues( this HtmlForm form, IValueProvider valueProvider )
     {
 
-      foreach ( var key in form.InputControls.Select( c => c.Name ) )
+      foreach (var control in form.Controls)
       {
-        if ( valueProvider.ContainsPrefix( key ) )
-        {
-          form.Values[key] = valueProvider.GetValue( key ).AttemptedValue;
-        }
+        if (valueProvider.ContainsPrefix(control.Name))
+          control.Value = valueProvider.GetValue(control.Name).AttemptedValue;
       }
 
       return form;
 
     }
 
-
-    /// <summary>
-    /// 尝试在表单上显示模型验证失败信息
-    /// </summary>
-    /// <param name="form">要显示错误信息的表单</param>
-    /// <param name="modelStates">模型状态信息</param>
-    /// <param name="inputControlFinder">提供一个方法，通过输入控件查找要显示错误信息的位置</param>
-    /// <returns>是否有任何错误信息可以显示</returns>
-    public static bool ShowErrorMessage( this HtmlForm form, ModelStateDictionary modelStates, Func<IHtmlInputControl, IHtmlElement> inputControlFinder )
-    {
-      return new GenericMvcFormValidator( form, modelStates )
-      {
-        InputControlFinder = inputControlFinder
-      }.ShowErrorMessage();
-    }
-
-    private class GenericMvcFormValidator : MvcFormValidator
-    {
-      public GenericMvcFormValidator( HtmlForm form, ModelStateDictionary modelStates )
-        : base( form, modelStates )
-      {
-
-      }
-
-
-      public Func<IHtmlInputControl, IHtmlElement> InputControlFinder
-      {
-        get;
-        set;
-      }
-
-      public Func<IHtmlElement, IHtmlElement> InputElementFinder
-      {
-        get;
-        set;
-      }
-
-      public IHtmlElement SummaryContainer
-      {
-        get;
-        set;
-      }
-
-      protected override IHtmlElement FailedMessageContainer( IHtmlInputControl input )
-      {
-
-        if ( InputControlFinder != null )
-          return InputControlFinder( input );
-
-        if ( InputElementFinder != null )
-        {
-          var element = GetInputElement( input );
-
-          if ( element == null )
-            return null;
-
-          return InputElementFinder( element );
-        }
-
-        return base.FailedMessageContainer( input );
-      }
-
-      protected override IHtmlElement FailedSummaryContainer()
-      {
-
-        if ( SummaryContainer != null )
-          return SummaryContainer;
-        return base.FailedSummaryContainer();
-      }
-
-      private IHtmlElement GetInputElement( IHtmlInputControl input )
-      {
-        var inputText = input as HtmlInputText;
-        if ( inputText != null )
-          return inputText.Element;
-
-        var select = input as HtmlSelect;
-        if ( select != null )
-          return select.Element;
-
-        var textaera = input as HtmlTextArea;
-        return textaera.Element;
-
-      }
-
-    }
   }
 }

@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormButtonGroup.cs" />
+    <Compile Include="FormButtonGroupItem.cs" />
     <Compile Include="FormControlCollection.cs" />
     <Compile Include="FormControlException.cs" />
     <Compile Include="FormExtensions.cs" />

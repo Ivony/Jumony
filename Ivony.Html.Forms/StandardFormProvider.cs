@@ -20,9 +20,18 @@ namespace Ivony.Html.Forms
     public FormControl[] DiscoveryControls( HtmlForm form )
     {
 
-      return DiscoveryControls( form, form.Element ).ToArray();
+      var controls = DiscoveryControls( form, form.Element );
+
+      var buttons = form.Element.Find( "input[type=radio], input[type=checkbox]" )
+        .GroupBy( element => element.Attribute( "name" ).Value(), StringComparer.OrdinalIgnoreCase )
+        .Select( group => new FormButtonGroup( form, group.Key, group.ToArray() ) )
+        .ToArray();
 
 
+      if ( controls.Select( c => c.Name ).Intersect( buttons.Select( c => c.Name ) ).Any() )
+        throw new InvalidOperationException();
+
+      return controls.Concat( buttons ).ToArray();
     }
 
     protected virtual IEnumerable<FormControl> DiscoveryControls( HtmlForm form, IHtmlContainer container )

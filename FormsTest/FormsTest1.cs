@@ -1,6 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Specialized;
+using Ivony.Html;
+using Ivony.Html.Parser;
+using Ivony.Html.Forms;
+using System.IO;
 
 namespace FormsTest
 {
@@ -11,13 +15,26 @@ namespace FormsTest
     public void TestNVC()
     {
 
-      var collection = new NameValueCollection();
 
-      collection.Add( "Test", "A" );
-      collection.Add( "Test", "B" );
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "FormsTest1.html" ) );
 
-      Assert.AreEqual( collection.GetValues( "Test" ).Length, 2 );
-      Assert.AreEqual( collection.GetValues( "TEST" ).Length, 0 );
+
+      Exception e = null;
+
+      try
+      {
+
+        document.FindFirst( "form" ).AsForm();
+
+      }
+      catch ( Exception exception )
+      {
+        e = exception;
+      }
+
+
+      Assert.IsNotNull( e, "表单中存在重复的文本输入框未能引发异常" );
+      Assert.IsInstanceOfType( e, typeof( InvalidOperationException ), "表单中存在重复的文本输入框未能引发正确的异常" );
 
 
     }

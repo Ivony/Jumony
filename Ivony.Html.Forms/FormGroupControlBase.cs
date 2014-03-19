@@ -90,7 +90,7 @@ namespace Ivony.Html.Forms
 
       if ( invalidValue.Any() )//如果有一个设置的值不在候选值列表
       {
-        if ( Form.Configuration.ExceptionOnInvailidValues )
+        if ( !Form.Configuration.IgnoreInvailidValuesInGroupControl )
           throw new InvalidOperationException( string.Format( "不能对控件设置值 \"{0}\"", invalidValue.First() ) );
       }
 

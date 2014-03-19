@@ -26,10 +26,13 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 获取所有表单控件
+    /// </summary>
     public FormControlCollection Controls
     {
-        get;
-        private set;
+      get;
+      private set;
     }
 
 
@@ -41,7 +44,7 @@ namespace Ivony.Html.Forms
     {
       _element = element;
 
-      Configuration = configuration ?? FormConfiguration.Default;
+      Configuration = configuration ?? new FormConfiguration();
       Provider = provider ?? new StandardFormProvider();
 
 
@@ -73,6 +76,9 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 获取该表单的配置对象
+    /// </summary>
     public FormConfiguration Configuration { get; private set; }
   }
 }

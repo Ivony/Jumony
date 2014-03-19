@@ -13,7 +13,7 @@ namespace Ivony.Html.Forms
   public class FormButtonGroup : FormGroupControl
   {
 
-    public FormButtonGroup( HtmlForm form, string name, IHtmlElement[] buttonElements )
+    internal FormButtonGroup( HtmlForm form, string name, IHtmlElement[] buttonElements )
       : base( form )
     {
       _name = name;

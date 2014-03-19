@@ -50,11 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FormsTest1.cs" />
+    <Compile Include="FormsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FormsTest1.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextControlTest.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

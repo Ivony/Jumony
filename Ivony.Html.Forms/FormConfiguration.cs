@@ -12,37 +12,50 @@ namespace Ivony.Html.Forms
   /// </summary>
   public class FormConfiguration
   {
+
     /// <summary>
-    /// 发现控件的必要属性设置了错误的值时，是否应当抛出异常
+    /// 创建 FormCongfiguration 实例。
     /// </summary>
-    public bool ExceptionOnAttributeError { get; set; }
+    public FormConfiguration()
+    {
+      IgnoreInvalidMaxlength = true;
+    }
 
 
     /// <summary>
-    /// 给组输入控件设置无效的值（Value）时，是否应当抛出异常
+    /// 分析表单时是否忽略控件的 maxlength 属性设置的值格式错误。
     /// </summary>
-    public bool ExceptionOnInvailidValues { get; set; }
+    public bool IgnoreInvalidMaxlength { get; set; }
+
+
+    /// <summary>
+    /// 给输入组控件设置值超出了组控件的可选值范围时，是否忽略非法值的设置。
+    /// </summary>
+    public bool IgnoreInvailidValuesInGroupControl { get; set; }
 
     /// <summary>
     /// 给文本输入控件设置的值超出了 maxlength 的限制时，是否应当抛出异常。
     /// </summary>
-    public bool ExceptionOnOverflowOfLength { get; set; }
-
-
+    public bool IgnoreOverflowOfLength { get; set; }
 
     /// <summary>
     /// 给单行文本框设置多行文本值，是否直接忽略所有换行符
     /// </summary>
-    public bool IgnoreNewline { get; set; }
-
+    public bool IgnoreNewlineInTextbox { get; set; }
 
 
     /// <summary>
-    /// 获取默认的表单设置
+    /// 分析表单时是否忽略输入控件设置的值不满足控件的限制的情况
     /// </summary>
-    public static FormConfiguration Default
+    public bool IgnoreInvalidValueInTextControl { get; set; }
+
+
+
+    private bool _readonly = false;
+
+    internal void MakeReadonly()
     {
-      get { return new FormConfiguration(); }
+      _readonly = true;
     }
 
 

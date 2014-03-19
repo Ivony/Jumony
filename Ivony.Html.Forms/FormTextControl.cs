@@ -53,17 +53,24 @@ namespace Ivony.Html.Forms
     public override string Value
     {
       get { return GetValue(); }
-      set { SetValueInternal( value ); }
+      set
+      {
+        EnsureValue( value );
+        SetValue( value );
+      }
     }
 
 
 
-    private void SetValueInternal( string value )
+    /// <summary>
+    /// 确保设置的值是合法的
+    /// </summary>
+    /// <param name="value">要设置的值</param>
+    protected virtual void EnsureValue( string value )
     {
-      if ( Form.Configuration.ExceptionOnOverflowOfLength && value.Length > MaxLength )
-        throw new FormValueFormatException( this, "设置的值超出了 maxlength 所允许的长度" );
-
-      SetValue( value );
+      string message;
+      if ( !CanSetValue( value, out message ) )
+        throw new FormValueFormatException( this, message );
     }
 
 
@@ -89,12 +96,32 @@ namespace Ivony.Html.Forms
     /// <returns>是否能够设置</returns>
     public override bool CanSetValue( string value )
     {
+      string message;
+      return CanSetValue( value, out message );
 
-      if ( Form.Configuration.ExceptionOnOverflowOfLength )
-        return value.Length <= MaxLength;
+    }
+
+
+    /// <summary>
+    /// 确定能够设置指定的文本值
+    /// </summary>
+    /// <param name="value">要设置的文本值</param>
+    /// <param name="message">不能设置的错误信息</param>
+    /// <returns>是否能够设置</returns>
+    protected virtual bool CanSetValue( string value, out string message )
+    {
+
+      if ( Form.Configuration.IgnoreOverflowOfLength && value.Length <= MaxLength )
+      {
+        message = "设置的值超出了 maxlength 所允许的长度";
+        return false;
+      }
 
       else
+      {
+        message = null;
         return true;
+      }
     }
 
 
@@ -110,12 +137,18 @@ namespace Ivony.Html.Forms
 
     private int? GetMaxLength()
     {
+
+      var maxlength = Element.Attribute( "maxlength" ).Value();
+
+      if ( maxlength == null )
+        return null;
+
       int value;
-      if ( int.TryParse( Element.Attribute( "maxlength" ).Value(), out value ) )
+      if ( int.TryParse( maxlength, out value ) )
         return value;
 
 
-      if ( Form.Configuration.ExceptionOnAttributeError )
+      if ( !Form.Configuration.IgnoreInvalidMaxlength )
         throw new FormControlException( this, "maxlength 属性设置错误" );
 
       Element.RemoveAttribute( "maxlength" );

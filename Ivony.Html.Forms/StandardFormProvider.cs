@@ -28,10 +28,13 @@ namespace Ivony.Html.Forms
         .ToArray();
 
 
-      if ( controls.Select( c => c.Name ).Intersect( buttons.Select( c => c.Name ) ).Any() )
-        throw new InvalidOperationException();
+      controls = controls.Concat( buttons );
 
-      return controls.Concat( buttons ).ToArray();
+      var dunplicate = controls.GroupBy( c => c.Name, StringComparer.OrdinalIgnoreCase ).Where( g => g.Count() > 1 ).FirstOrDefault();
+      if ( dunplicate != null )
+        throw new InvalidOperationException( string.Format( "表单中发现多个名为 \"{0}\" 的控件", dunplicate.Key ) );
+
+      return controls.ToArray();
     }
 
     protected virtual IEnumerable<FormControl> DiscoveryControls( HtmlForm form, IHtmlContainer container )

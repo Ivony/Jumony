@@ -34,9 +34,9 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 实现 Values 属性，获取当前所设置的值
     /// </summary>
-    public override string[] Values
+    protected override string[] GetValues()
     {
-      get { return Items.Where( i => i.Selected ).Select( i => i.Value ).ToArray(); }
+      return Items.Where( i => i.Selected ).Select( i => i.Value ).ToArray();
     }
 
 

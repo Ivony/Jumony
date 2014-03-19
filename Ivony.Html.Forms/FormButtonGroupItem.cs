@@ -40,8 +40,6 @@ namespace Ivony.Html.Forms
     }
 
 
-    private string _value;
-
 
     public IHtmlElement Element
     {

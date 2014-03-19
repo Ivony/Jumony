@@ -14,7 +14,7 @@ namespace FormsTest
     [TestMethod]
     public void FormTest1()
     {
-      var document = LoadDocument( "FormTest1.html" );
+      var document = LoadDocument( "FormsTest1.html" );
 
 
       Exception e = null;
@@ -51,6 +51,32 @@ namespace FormsTest
       Assert.AreEqual( form.Controls["textbox1"].Value, "Test1", "获取 textbox1 控件值失败" );
       Assert.AreEqual( form.Controls["textbox2"].Value, "Test2", "获取 textbox2 控件值失败" );
 
+      form.Controls["textbox1"].Value = "Test";
+      form.Controls["textbox2"].Value = "Test";
+
+      Assert.AreEqual( form.Controls["textbox1"].Value, "Test", "设置 textbox1 控件值失败" );
+      Assert.AreEqual( form.Controls["textbox2"].Value, "Test", "设置 textbox2 控件值失败" );
+
+      Assert.AreEqual( form.Element.FindFirst( "[name=textbox1]" ).Attribute( "value" ).Value(), "Test", "设置 textbox1 控件值失败" );
+      Assert.AreEqual( form.Element.FindFirst( "[name=textbox2]" ).InnerText(), "Test", "设置 textbox2 控件值失败" );
+
+
+      var value = "Text\nText";
+
+      Assert.IsFalse( form.Controls["textbox1"].CanSetValue( value ), "尝试设置多行文本值成功，这是错误的" );
+
+      try
+      {
+        form.Controls["textbox1"].Value = value;
+      }
+      catch ( Exception e )
+      {
+        Assert.IsInstanceOfType( e, typeof( FormatException ), "尝试设置多行文本值引发了错误的异常" );
+
+        return;
+      }
+
+      Assert.Fail( "尝试设置多行文本值未能引发异常" );
     }
 
 

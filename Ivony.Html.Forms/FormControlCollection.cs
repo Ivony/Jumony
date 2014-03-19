@@ -10,9 +10,9 @@ namespace Ivony.Html.Forms
   /// <summary>
   /// 表单控件容器
   /// </summary>
-  public sealed class FormControlCollection : KeyedCollection<string, FormControl>
+  public sealed class FormControlCollection : KeyedCollection<string, FormControlBase>
   {
-    public FormControlCollection( FormControl[] controls )
+    public FormControlCollection( FormControlBase[] controls )
     {
       foreach ( var c in controls )
         Add( c );
@@ -23,7 +23,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="item">要提取名称的表单控件</param>
     /// <returns>表单控件的名称</returns>
-    protected override string GetKeyForItem( FormControl item )
+    protected override string GetKeyForItem( FormControlBase item )
     {
       return item.Name;
     }

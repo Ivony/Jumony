@@ -20,14 +20,14 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="element">要转换为表单的元素</param>
     /// <returns></returns>
-    public static HtmlForm AsForm( this IHtmlElement element )
+    public static HtmlForm AsForm( this IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {
 
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
 
-      return new HtmlForm( element );
+      return new HtmlForm( element, configuration, provider );
     }
 
 

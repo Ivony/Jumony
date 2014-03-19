@@ -42,13 +42,19 @@ namespace Ivony.Html.Forms
     }
 
 
+
+
+
     /// <summary>
-    /// 获取目前所设置的值
+    /// 按照逗号拆分控件值表达式
     /// </summary>
-    public abstract string[] Values
+    /// <param name="valuesExpression">要拆分的值表达式</param>
+    /// <returns>拆分后的值集合</returns>
+    protected static HashSet<string> SplitValues( string valuesExpression )
     {
-      get;
+      return new HashSet<string>( valuesExpression.Split( ',' ) );
     }
+
 
 
 
@@ -56,21 +62,32 @@ namespace Ivony.Html.Forms
     /// 实现 CanSetValue 方法，检查要设置的值是否存在于候选值列表中
     /// </summary>
     /// <param name="value">所要设置的值</param>
+    /// <param name="message">若不能设置，获取错误信息</param>
     /// <returns>是否可以设置</returns>
-    public override bool CanSetValue( string value )
+    protected override bool CanSetValue( string value, out string message )
     {
-      var values = value.Split( ',' );
-      return values.All( v => CandidateValues.Contains( v ) );
+      return CanSetValues( SplitValues( value ), out message );
     }
 
 
     /// <summary>
-    /// 获取目前所设置的值的字符串表达形式（多个值以逗号分隔）。
+    /// 检查要设置的值是否存在于候选值列表中
     /// </summary>
-    public override string Value
+    /// <param name="values">所要设置的值</param>
+    /// <param name="message">若不能设置，获取错误信息</param>
+    /// <returns>是否可以设置</returns>
+    protected virtual bool CanSetValues( HashSet<string> values, out string message )
     {
-      get { return string.Join( ",", Values ); }
-      set { SetValue( value ); }
+      var invalidValue = values.Except( CandidateValues ).FirstOrDefault();
+
+      if ( invalidValue != null && !Form.Configuration.IgnoreInvailidValuesInGroupControl )//如果有一个设置的值不在候选值列表
+      {
+        message = string.Format( "不能对控件设置值 \"{0}\"", invalidValue.First() );
+        return false;
+      }
+
+      message = null;
+      return true;
     }
 
 
@@ -78,29 +95,54 @@ namespace Ivony.Html.Forms
     /// 设置控件的值
     /// </summary>
     /// <param name="valuesExpression">值表达式，可以是单个值，也可以是多个用逗号分隔的值</param>
-    protected virtual void SetValue( string valuesExpression )
+    protected override void SetValue( string valuesExpression )
     {
-
-      valuesExpression = valuesExpression ?? "";
-
-      var values = valuesExpression.Split( ',' );
-
-
-      var invalidValue = values.Except( CandidateValues );
-
-      if ( invalidValue.Any() )//如果有一个设置的值不在候选值列表
-      {
-        if ( !Form.Configuration.IgnoreInvailidValuesInGroupControl )
-          throw new InvalidOperationException( string.Format( "不能对控件设置值 \"{0}\"", invalidValue.First() ) );
-      }
-
-      SetValues( new HashSet<string>( values.Except( invalidValue ) ) );
+      SetValues( SplitValues( valuesExpression ) );
     }
+
 
     /// <summary>
     /// 设置控件值
     /// </summary>
     /// <param name="values">要设置的值列表</param>
     protected abstract void SetValues( HashSet<string> values );
+
+
+
+
+
+    /// <summary>
+    /// 获取目前所设置的值
+    /// </summary>
+    /// <returns></returns>
+    protected override string GetValue()
+    {
+      return string.Join( ",", GetValues() );
+    }
+
+
+    /// <summary>
+    /// 获取目前所设置的值
+    /// </summary>
+    protected abstract string[] GetValues();
+
+
+
+
+    public string[] Values
+    {
+      get { return GetValues(); }
+      set
+      {
+        var values = new HashSet<string>( value );
+        string message;
+        if ( !CanSetValues( values, out message ) )
+          throw new FormValueFormatException( this, message );
+
+        SetValues( values );
+      }
+    }
+
+
   }
 }

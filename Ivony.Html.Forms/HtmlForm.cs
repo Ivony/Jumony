@@ -39,7 +39,9 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 创建一个 HTML 表单对象
     /// </summary>
-    /// <param name="element"></param>
+    /// <param name="element">表单元素</param>
+    /// <param name="configuration">表单配置</param>
+    /// <param name="provider">表单控件提供程序</param>
     public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {
       _element = element;

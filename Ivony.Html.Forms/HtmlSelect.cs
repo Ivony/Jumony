@@ -64,8 +64,8 @@ namespace Ivony.Html.Forms
 
   }
 
-  
-  
+
+
   /// <summary>
   /// 表示一个 &lt;option&gt; 元素
   /// </summary>
@@ -84,6 +84,9 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 获取 &lt;option&gt; 元素
+    /// </summary>
     public IHtmlElement Element
     {
       get;
@@ -91,6 +94,9 @@ namespace Ivony.Html.Forms
     }
 
 
+    /// <summary>
+    /// 是否为选中状态
+    /// </summary>
     public override bool Selected
     {
       get { return Element.Attribute( "selected" ) != null; }
@@ -109,6 +115,10 @@ namespace Ivony.Html.Forms
       }
     }
 
+
+    /// <summary>
+    /// 当前项的值
+    /// </summary>
     public override string Value
     {
       get
@@ -122,6 +132,10 @@ namespace Ivony.Html.Forms
       }
     }
 
+
+    /// <summary>
+    /// 当前项的文本表现形式
+    /// </summary>
     public string Text
     {
       get { return Element.InnerText(); }

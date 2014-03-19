@@ -16,7 +16,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 设置错误格式值的表单控件
     /// </summary>
-    public FormControl Control
+    public FormControlBase Control
     {
       get;
       private set;
@@ -28,7 +28,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="control">设置错误值的表单控件</param>
     /// <param name="message">异常消息</param>
-    public FormValueFormatException( FormControl control, string message )
+    public FormValueFormatException( FormControlBase control, string message )
       : base( message )
     {
       Control = control;

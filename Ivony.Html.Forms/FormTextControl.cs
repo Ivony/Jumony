@@ -47,59 +47,6 @@ namespace Ivony.Html.Forms
       get { return Element.Attribute( "name" ).Value(); }
     }
 
-    /// <summary>
-    /// 实现 Value 属性，获取文本控件目前设置的值
-    /// </summary>
-    public override string Value
-    {
-      get { return GetValue(); }
-      set
-      {
-        EnsureValue( value );
-        SetValue( value );
-      }
-    }
-
-
-
-    /// <summary>
-    /// 确保设置的值是合法的
-    /// </summary>
-    /// <param name="value">要设置的值</param>
-    protected virtual void EnsureValue( string value )
-    {
-      string message;
-      if ( !CanSetValue( value, out message ) )
-        throw new FormValueFormatException( this, message );
-    }
-
-
-    /// <summary>
-    /// 获取值
-    /// </summary>
-    /// <returns>该控件目前设置的值</returns>
-    protected abstract string GetValue();
-
-
-    /// <summary>
-    /// 设置值
-    /// </summary>
-    /// <param name="value">需要设置在该控件上的值</param>
-    protected abstract void SetValue( string value );
-
-
-
-    /// <summary>
-    /// 确定能否设置指定的文本值
-    /// </summary>
-    /// <param name="value">要设置的文本值</param>
-    /// <returns>是否能够设置</returns>
-    public override bool CanSetValue( string value )
-    {
-      string message;
-      return CanSetValue( value, out message );
-
-    }
 
 
     /// <summary>
@@ -108,7 +55,7 @@ namespace Ivony.Html.Forms
     /// <param name="value">要设置的文本值</param>
     /// <param name="message">不能设置的错误信息</param>
     /// <returns>是否能够设置</returns>
-    protected virtual bool CanSetValue( string value, out string message )
+    protected override bool CanSetValue( string value, out string message )
     {
 
       if ( Form.Configuration.IgnoreOverflowOfLength && value.Length <= MaxLength )

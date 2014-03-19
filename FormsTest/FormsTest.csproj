@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FormsTest1.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TextControlTest.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

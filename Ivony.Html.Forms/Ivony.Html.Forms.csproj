@@ -38,6 +38,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,6 +65,7 @@
   <ItemGroup>
     <Compile Include="FormButtonGroup.cs" />
     <Compile Include="FormButtonGroupItem.cs" />
+    <Compile Include="FormControl.cs" />
     <Compile Include="FormControlCollection.cs" />
     <Compile Include="FormControlException.cs" />
     <Compile Include="FormExtensions.cs" />
@@ -74,7 +77,7 @@
     <Compile Include="FormTextControl.cs" />
     <Compile Include="HtmlForm.cs" />
     <Compile Include="FormConfiguration.cs" />
-    <Compile Include="FormControl.cs" />
+    <Compile Include="FormControlBase.cs" />
     <Compile Include="HtmlModelForm.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />

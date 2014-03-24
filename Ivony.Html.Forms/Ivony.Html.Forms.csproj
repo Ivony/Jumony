@@ -68,10 +68,17 @@
     <Compile Include="FormControl.cs" />
     <Compile Include="FormControlCollection.cs" />
     <Compile Include="FormControlException.cs" />
+    <Compile Include="FormFieldMetadata.cs" />
+    <Compile Include="FormFieldValidatorCollection.cs" />
     <Compile Include="FormExtensions.cs" />
     <Compile Include="FormGroupControl.cs" />
     <Compile Include="FormGroupControlBase.cs" />
     <Compile Include="FormGroupControlItem.cs" />
+    <Compile Include="FormValidation.cs" />
+    <Compile Include="FormValidationErrorCollection.cs" />
+    <Compile Include="FormValidationError.cs" />
+    <Compile Include="FormValidationResult.cs" />
+    <Compile Include="FormValidator.cs" />
     <Compile Include="FormValueFormatException.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="FormTextControl.cs" />
@@ -81,7 +88,11 @@
     <Compile Include="HtmlModelForm.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
+    <Compile Include="IFormFieldValidator.cs" />
     <Compile Include="IFormProvider.cs" />
+    <Compile Include="IFormValidationPresenter.cs" />
+    <Compile Include="IFormValidationResult.cs" />
+    <Compile Include="IFormValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardFormProvider.cs" />
   </ItemGroup>

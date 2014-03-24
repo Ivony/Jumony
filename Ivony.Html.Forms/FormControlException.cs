@@ -17,7 +17,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="control">引发异常的表单控件</param>
     /// <param name="message">异常信息</param>
-    public FormControlException( FormControlBase control, string message )
+    public FormControlException( IFormControl control, string message )
       : base( message )
     {
       Control = control;
@@ -27,7 +27,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 引发异常的表单控件
     /// </summary>
-    public FormControlBase Control
+    public IFormControl Control
     {
       get;
       private set;

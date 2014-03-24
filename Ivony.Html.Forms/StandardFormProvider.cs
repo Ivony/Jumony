@@ -17,7 +17,7 @@ namespace Ivony.Html.Forms
     private ISelector textareaSelector = CssParser.ParseSelector( "textarea[name]" );
     private ISelector selectControlSelector = CssParser.ParseSelector( "select[name]" );
 
-    public FormControlBase[] DiscoveryControls( HtmlForm form )
+    public IFormControl[] DiscoveryControls( HtmlForm form )
     {
 
       var controls = DiscoveryControls( form, form.Element );
@@ -37,7 +37,7 @@ namespace Ivony.Html.Forms
       return controls.ToArray();
     }
 
-    protected virtual IEnumerable<FormControlBase> DiscoveryControls( HtmlForm form, IHtmlContainer container )
+    protected virtual IEnumerable<IFormControl> DiscoveryControls( HtmlForm form, IHtmlContainer container )
     {
 
       foreach ( var element in container.Elements() )

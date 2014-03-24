@@ -74,7 +74,6 @@
     <Compile Include="FormGroupControl.cs" />
     <Compile Include="FormGroupControlBase.cs" />
     <Compile Include="FormGroupControlItem.cs" />
-    <Compile Include="FormValidation.cs" />
     <Compile Include="FormValidationErrorCollection.cs" />
     <Compile Include="FormValidationError.cs" />
     <Compile Include="FormValidationResult.cs" />
@@ -84,7 +83,7 @@
     <Compile Include="FormTextControl.cs" />
     <Compile Include="HtmlForm.cs" />
     <Compile Include="FormConfiguration.cs" />
-    <Compile Include="FormControlBase.cs" />
+    <Compile Include="IFormControl.cs" />
     <Compile Include="HtmlModelForm.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />

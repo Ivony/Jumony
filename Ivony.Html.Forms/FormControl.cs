@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
-  public abstract class FormControl : FormControlBase
+  public abstract class FormControl : IFormControl
   {
 
 
@@ -14,12 +14,39 @@ namespace Ivony.Html.Forms
     /// 构建 FormControl 实例
     /// </summary>
     /// <param name="form">控件所属表单</param>
-    protected FormControl( HtmlForm form ) : base( form ) { }
+    protected FormControl( HtmlForm form )
+    {
+
+      Form = form;
+
+    }
+
+
+
+
+    /// <summary>
+    /// 控件所属表单
+    /// </summary>
+    public HtmlForm Form
+    {
+      get;
+      private set;
+    }
+
+
+
+    /// <summary>
+    /// 控件名称
+    /// </summary>
+    public abstract string Name { get; }
+
+
+
 
     /// <summary>
     /// 实现 Value 属性，调用 SetValue 和 GetValue 方法
     /// </summary>
-    public override string Value
+    public virtual string Value
     {
       get
       {
@@ -66,7 +93,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="value">要设置的文本值</param>
     /// <returns>是否能够设置</returns>
-    public override bool CanSetValue( string value )
+    public virtual bool CanSetValue( string value )
     {
       string message = null;
       return CanSetValue( value, out message );
@@ -80,5 +107,8 @@ namespace Ivony.Html.Forms
     /// <param name="message">不能设置的错误信息</param>
     /// <returns>是否能够设置</returns>
     protected abstract bool CanSetValue( string value, out string message );
+
+
+
   }
 }

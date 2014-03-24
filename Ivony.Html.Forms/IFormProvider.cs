@@ -18,7 +18,7 @@ namespace Ivony.Html.Forms
     /// <param name="form">要创建控件的表单</param>
     /// <param name="element">要创建控件的元素</param>
     /// <returns></returns>
-    FormControlBase[] DiscoveryControls( HtmlForm form );
+    IFormControl[] DiscoveryControls( HtmlForm form );
 
   }
 }

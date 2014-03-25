@@ -91,6 +91,7 @@
     <Compile Include="IFormProvider.cs" />
     <Compile Include="IFormValidationPresenter.cs" />
     <Compile Include="IFormValidationResult.cs" />
+    <Compile Include="IFormValidationRule.cs" />
     <Compile Include="IFormValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardFormProvider.cs" />

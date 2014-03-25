@@ -41,9 +41,7 @@ namespace Ivony.Html.Forms
     /// <returns>字段验证器</returns>
     public IFormFieldValidator GetValidator()
     {
-
       return new FormFieldMeatadataValidator( this );
-
     }
 
 

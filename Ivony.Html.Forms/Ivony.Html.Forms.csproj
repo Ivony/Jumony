@@ -12,7 +12,8 @@
     <AssemblyName>Ivony.Html.Forms</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -56,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAnnotationMeatadataProvider.cs" />
     <Compile Include="FormButtonGroup.cs" />
     <Compile Include="FormButtonGroupItem.cs" />
     <Compile Include="FormControl.cs" />
@@ -74,6 +77,7 @@
     <Compile Include="FormGroupControl.cs" />
     <Compile Include="FormGroupControlBase.cs" />
     <Compile Include="FormGroupControlItem.cs" />
+    <Compile Include="FormMetadata.cs" />
     <Compile Include="FormValidationErrorCollection.cs" />
     <Compile Include="FormValidationError.cs" />
     <Compile Include="FormValidationResult.cs" />
@@ -88,6 +92,7 @@
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
     <Compile Include="IFormFieldValidator.cs" />
+    <Compile Include="IFormMetadataProvider.cs" />
     <Compile Include="IFormProvider.cs" />
     <Compile Include="IFormValidationPresenter.cs" />
     <Compile Include="IFormValidationResult.cs" />

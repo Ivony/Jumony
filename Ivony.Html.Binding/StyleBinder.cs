@@ -36,9 +36,11 @@ namespace Ivony.Html.Binding
       {
         var visible = element.Attribute( "binding-visible" ).Value();
         if ( visible.EqualsIgnoreCase( "false" ) || visible.EqualsIgnoreCase( "hidden" ) || visible.EqualsIgnoreCase( "invisible" ) )
+        {
           element.Remove();
-
-        context.ChildsBindCompleted = context.BindCompleted = true;
+          
+          context.CancelChildsBinding = context.BindCompleted = true;
+        }
       }
 
 

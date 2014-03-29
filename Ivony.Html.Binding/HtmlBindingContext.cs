@@ -258,7 +258,7 @@ namespace Ivony.Html.Binding
       }
 
 
-      ChildsBindCompleted = BindCompleted = false;//重置绑定状态
+      CancelChildsBinding = BindCompleted = false;//重置绑定状态
 
 
       foreach ( var binder in Binders )
@@ -269,7 +269,7 @@ namespace Ivony.Html.Binding
           break;
       }
 
-      if ( !ChildsBindCompleted )
+      if ( !CancelChildsBinding )
         BindChilds( element );
     }
 
@@ -280,9 +280,9 @@ namespace Ivony.Html.Binding
     public bool BindCompleted { get; set; }
 
     /// <summary>
-    /// 获取或设置一个值，指定子元素的绑定业已完成，禁止对子元素进行绑定。
+    /// 获取或设置一个值，指定是否取消子元素的绑定。
     /// </summary>
-    public bool ChildsBindCompleted { get; set; }
+    public bool CancelChildsBinding { get; set; }
 
 
 

@@ -100,6 +100,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Html.Binding", "Ivony
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindingTest", "BindingTest\BindingTest.csproj", "{92AB60D7-E49A-42EC-9640-12CA298AF843}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Web.Mvc", "Ivony.Web.Mvc\Ivony.Web.Mvc.csproj", "{24D6DB95-9B9A-4BC0-9F90-42319FADB812}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,6 +351,16 @@ Global
 		{92AB60D7-E49A-42EC-9640-12CA298AF843}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{92AB60D7-E49A-42EC-9640-12CA298AF843}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{92AB60D7-E49A-42EC-9640-12CA298AF843}.Release|x86.ActiveCfg = Release|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

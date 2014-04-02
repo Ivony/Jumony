@@ -46,6 +46,7 @@ namespace Ivony.Web
       return new WebSocketResult( processer );
     }
 
+
     private void EnsureWebSocketRequest()
     {
       if ( !HttpContext.IsWebSocketRequest )

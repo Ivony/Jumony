@@ -34,25 +34,6 @@ namespace Ivony.Html.Web
 
 
 
-    /// <summary>
-    /// 调用此方法确保路由在简单路由表实例前注册。
-    /// </summary>
-    /// <param name="route"></param>
-    public static void RegisterRouteBeforeSimpleRouteTable( RouteBase route )
-    {
-      lock ( Routes )
-      {
-        var index = Routes.IndexOf( SimpleRouteTable );
-        if ( index == -1 )
-          Routes.Add( route );
-
-        else
-          Routes.Insert( index, route );
-      }
-    }
-
-
-
 
     private static JumonyViewEngine _viewEngine = new JumonyViewEngine();
 

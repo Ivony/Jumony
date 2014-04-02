@@ -7,7 +7,7 @@ using System.Web.Routing;
 using Ivony.Web;
 using Ivony.Fluent;
 
-namespace Ivony.Html.Web
+namespace Ivony.Web
 {
 
   /// <summary>
@@ -182,6 +182,26 @@ namespace Ivony.Html.Web
       routeTable.AddRule( name, urlPattern, routeValues, queryKeys );
       return routeTable;
     }
+
+
+
+    /// <summary>
+    /// 调用此方法确保路由在简单路由表实例前注册。
+    /// </summary>
+    /// <param name="route"></param>
+    public static void RegisterRouteBeforeSimpleRouteTable( this RouteCollection routes, RouteBase route )
+    {
+      lock ( routes )
+      {
+        var index = routes.IndexOf( routes.SimpleRouteTable() );
+        if ( index == -1 )
+          routes.Add( route );
+
+        else
+          routes.Insert( index, route );
+      }
+    }
+
 
   }
 }

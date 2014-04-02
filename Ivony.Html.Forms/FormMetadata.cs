@@ -13,6 +13,14 @@ namespace Ivony.Html.Forms
   public class FormMetadata
   {
 
+
+    public FormMetadata( HtmlForm form, IFormMetadataProvider provider )
+    {
+      Form = form;
+      MetadataProvider = provider;
+    }
+
+
     public HtmlForm Form
     {
       get;

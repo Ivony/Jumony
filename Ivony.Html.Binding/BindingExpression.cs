@@ -53,7 +53,10 @@ namespace Ivony.Html.Binding
     public static BindingExpression ParseExpression( IBindingExpressionEvaluator evaluator, string expression, int index )
     {
 
-      if ( expression == null )
+      if ( string.IsNullOrEmpty( expression ) )
+        return null;
+
+      if ( expression[index] != '{' )
         return null;
 
       var tokenizer = new BindingExpressionTokenizer( evaluator );

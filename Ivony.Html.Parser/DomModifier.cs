@@ -26,7 +26,7 @@ namespace Ivony.Html.Parser
       {
 
         unchecked { _version++; }
-        
+
         var domDocument = document as DomDocument;
 
         if ( domDocument == null )
@@ -49,12 +49,23 @@ namespace Ivony.Html.Parser
       {
         unchecked { _version++; }
 
-        var element = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomElement( name, null ) );
 
-        OnDomChanged( this, new HtmlDomChangedEventArgs( element, container, HtmlDomChangedAction.Add ) );
-
-        return element;
+        return AddNode( container, index, new DomElement( name, null ) );
       }
+    }
+
+    private T AddNode<T>( IHtmlContainer container, int index, T node ) where T : DomNode
+    {
+      var comContainer = DomProvider.EnsureDomContainer( container );
+      if ( index == -1 )
+        comContainer.AddNode( node );
+      else
+        comContainer.InsertNode( index, node );
+
+
+      OnDomChanged( this, new HtmlDomChangedEventArgs( node, container, HtmlDomChangedAction.Add ) );
+
+      return node;
     }
 
 
@@ -71,11 +82,7 @@ namespace Ivony.Html.Parser
       {
         unchecked { _version++; }
 
-        var textNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomTextNode( htmlText ) );
-
-        OnDomChanged( this, new HtmlDomChangedEventArgs( textNode, container, HtmlDomChangedAction.Add ) );
-
-        return textNode;
+        return AddNode( container, index, new DomTextNode( htmlText ) );
       }
     }
 
@@ -92,11 +99,7 @@ namespace Ivony.Html.Parser
       {
         unchecked { _version++; }
 
-        var commentNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomComment( comment ) );
-
-        OnDomChanged( this, new HtmlDomChangedEventArgs( commentNode, container, HtmlDomChangedAction.Add ) );
-
-        return commentNode;
+        return AddNode( container, index, new DomComment( comment ) );
       }
     }
 
@@ -113,13 +116,7 @@ namespace Ivony.Html.Parser
       {
         unchecked { _version++; }
 
-        var specialNode = DomProvider.EnsureDomContainer( container ).InsertNode( index, new DomSpecial( html ) );
-
-        //UNDONE 未确定special node具体是什么
-
-        OnDomChanged( this, new HtmlDomChangedEventArgs( specialNode, container, HtmlDomChangedAction.Add ) );
-
-        return specialNode;
+        return AddNode( container, index, new DomSpecial( html ) );
       }
     }
 
@@ -187,7 +184,7 @@ namespace Ivony.Html.Parser
       lock ( _sync )
       {
         unchecked { _version++; }
-        
+
         var domAttribute = attribute as DomAttribute;
         if ( domAttribute == null )
           throw new InvalidOperationException();

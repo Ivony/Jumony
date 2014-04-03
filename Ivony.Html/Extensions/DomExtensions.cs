@@ -94,10 +94,7 @@ namespace Ivony.Html
 
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddElement( container, container.Nodes().Count(), elementName );
-      }
+      return EnsureModifiable( container ).AddElement( container, -1, elementName );
     }
 
     /// <summary>
@@ -118,9 +115,7 @@ namespace Ivony.Html
 
 
 
-      var modifier = EnsureModifiable( container );
-
-      return modifier.AddElement( container, index, elementName );
+      return EnsureModifiable( container ).AddElement( container, index, elementName );
     }
 
 
@@ -142,10 +137,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "htmlText" );
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddTextNode( container, container.Nodes().Count(), htmlText );
-      }
+      return EnsureModifiable( container ).AddTextNode( container, -1, htmlText );
     }
 
     /// <summary>
@@ -166,9 +158,7 @@ namespace Ivony.Html
 
 
 
-      var modifier = EnsureModifiable( container );
-
-      return modifier.AddTextNode( container, index, htmlText );
+      return EnsureModifiable( container ).AddTextNode( container, index, htmlText );
     }
 
 
@@ -189,10 +179,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "comment" );
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddComment( container, container.Nodes().Count(), comment );
-      }
+      return EnsureModifiable( container ).AddComment( container, -1, comment );
     }
 
     /// <summary>
@@ -213,9 +200,7 @@ namespace Ivony.Html
 
 
 
-      var modifier = EnsureModifiable( container );
-
-      return modifier.AddComment( container, index, comment );
+      return EnsureModifiable( container ).AddComment( container, index, comment );
     }
 
 
@@ -327,10 +312,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "textNode" );
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddCopy( container, container.Nodes().Count(), textNode );
-      }
+      return AddCopy( container, -1, textNode );
     }
 
     /// <summary>
@@ -370,10 +352,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "comment" );
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddCopy( container, container.Nodes().Count(), comment );
-      }
+      return AddCopy( container, -1, comment );
     }
 
     /// <summary>
@@ -412,10 +391,7 @@ namespace Ivony.Html
         throw new ArgumentNullException( "element" );
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddCopy( container, container.Nodes().Count(), element );
-      }
+      return AddCopy( container, -1, element );
     }
 
     /// <summary>
@@ -465,10 +441,7 @@ namespace Ivony.Html
 
 
 
-      lock ( container.SyncRoot )
-      {
-        return AddCopy( container, container.Nodes().Count(), node );
-      }
+      return AddCopy( container, -1, node );
     }
 
     /// <summary>

@@ -133,10 +133,12 @@ namespace Ivony.Html.Web
     protected virtual void DataBind()
     {
 
-      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
+      Trace.Write( "Jumony Binding", "Begin DataBind" );
 
+      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
       bindingContext.DataBind();
 
+      Trace.Write( "Jumony Binding", "End DataBind" );
     }
 
 

@@ -136,29 +136,29 @@ namespace Ivony.Html.Web
     protected override string RenderCore( IHtmlContainer scope )
     {
 
-      HttpContext.Trace.Write( "JumonyView", "Begin GetViewHandler" );
+      HttpContext.Trace.Write( "Jumony View", "Begin GetViewHandler" );
       var handler = GetHandler( VirtualPath );
-      HttpContext.Trace.Write( "JumonyView", "End GetViewHandler" );
+      HttpContext.Trace.Write( "Jumony View", "End GetViewHandler" );
 
-      HttpContext.Trace.Write( "JumonyView", "Begin Process" );
+      HttpContext.Trace.Write( "Jumony View", "Begin Process" );
       OnPreProcess();
       ProcessScope( handler );
       OnPostProcess();
-      HttpContext.Trace.Write( "JumonyView", "End Process" );
+      HttpContext.Trace.Write( "Jumony View", "End Process" );
 
-      HttpContext.Trace.Write( "JumonyView", "Begin ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
       Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "JumonyView", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "End ProcessActionRoutes" );
 
 
-      HttpContext.Trace.Write( "JumonyView", "Begin ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View", "Begin ResolveUri" );
       Scope.Find( "form[postback]" )
         .SetAttribute( "action", RawViewContext.HttpContext.Request.RawUrl )
         .SetAttribute( "method", "post" )
         .RemoveAttribute( "postback" );
 
       Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "JumonyView", "End ResolveUri" );
+      HttpContext.Trace.Write( "Jumony View", "End ResolveUri" );
 
       AddGeneratorMetaData();
 
@@ -169,32 +169,32 @@ namespace Ivony.Html.Web
 
       if ( MasterView != null )
       {
-        HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Initialize Master" );
         MasterView.Initialize( ViewContext );
-        HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
+        HttpContext.Trace.Write( "Jumony View", "End Initialize Master" );
 
 
         var jumonyMaster = MasterView as JumonyMasterView;
         if ( jumonyMaster != null )
         {
-          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
           ProcessMaster( jumonyMaster );
-          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
         }
 
-        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Render" );
         OnPreRender();
         result = MasterView.Render( this );
         OnPostRender();
-        HttpContext.Trace.Write( "JumonyView", "End Render" );
+        HttpContext.Trace.Write( "Jumony View", "End Render" );
       }
       else
       {
-        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Render" );
         OnPreRender();
         result = RenderContent( RenderAdapters.ToArray() );
         OnPostRender();
-        HttpContext.Trace.Write( "JumonyView", "End Render" );
+        HttpContext.Trace.Write( "Jumony View", "End Render" );
       }
 
 

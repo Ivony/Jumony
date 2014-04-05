@@ -20,7 +20,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 PartialExecutor 对象
     /// </summary>
-    /// <param name="method"></param>
+    /// <param name="method">用于处理分部视图的执行方法</param>
     public PartialExecutor( MethodInfo method )
     {
       var name = method.Name;
@@ -60,14 +60,24 @@ namespace Ivony.Html.Web
     }
 
 
-    private delegate string Executor( object handler, object[] parameters );
+    private delegate string Executor( object host, object[] parameters );
 
+
+    /// <summary>
+    /// 名称
+    /// </summary>
     public string Name { get; private set; }
 
 
     private Executor _executor;
 
-    public string Execute( object handler, IHtmlElement partialElement )
+    /// <summary>
+    /// 执行分部页获取渲染结果
+    /// </summary>
+    /// <param name="host">分部视图执行方法所属的对象</param>
+    /// <param name="partialElement">定义分部页的元素</param>
+    /// <returns></returns>
+    public string Execute( object host, IHtmlElement partialElement )
     {
 
       object[] parameterValues = new object[_parameters.Length];
@@ -81,7 +91,7 @@ namespace Ivony.Html.Web
           parameterValues[parameter.Position] = parameter.DefaultValue.IfNull( null );
       }
 
-      return _executor( handler, parameterValues );
+      return _executor( host, parameterValues );
 
     }
 

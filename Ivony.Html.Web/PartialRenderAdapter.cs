@@ -79,8 +79,6 @@ namespace Ivony.Html.Web
     private static readonly KeyedCache<Type, PartialExecutor[]> _cache = new KeyedCache<Type, PartialExecutor[]>();
 
 
-    private PartialExecutor[] PartialExecutors_partialExecutors;
-
     private PartialExecutor[] GetPartialExecutors( Type type )
     {
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -21,7 +22,7 @@ namespace Ivony.Web
     /// <param name="data">数据对象</param>
     /// <param name="callback">回调方法（若没有或者为null，则此方法行为与　Json　方法相同）。</param>
     /// <returns></returns>
-    protected ActionResult Jsonp( object data, string callback = null )
+    protected ActionResult Jsonp( object data, string callback = null, CancellationToken token = default( CancellationToken ) )
     {
       if ( callback == null )
         return Json( data, JsonRequestBehavior.AllowGet );

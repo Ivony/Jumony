@@ -25,14 +25,14 @@ namespace Ivony.Html.Binding
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
+    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext = null )
     {
-      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataContext, dataValues ?? new Dictionary<string, object>() );
+      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataContext );
 
     }
 
 
-    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext )
     {
 
       if ( htmlBinders == null )
@@ -44,7 +44,6 @@ namespace Ivony.Html.Binding
       Binders = htmlBinders;
       BindingScope = scope;
       DataContext = dataContext;
-      Data = dataValues;
       _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 
@@ -67,7 +66,6 @@ namespace Ivony.Html.Binding
       ParentContext = bindingContext;
       BindingScope = scope;
       DataContext = dataContext ?? bindingContext.DataContext;
-      Data = bindingContext.Data;
 
       Binders = bindingContext.Binders;
       _expressionBinders = new ExpressionBinderCollection( bindingContext._expressionBinders );
@@ -93,11 +91,6 @@ namespace Ivony.Html.Binding
     /// </summary>
     public object DataContext { get; private set; }
 
-
-    /// <summary>
-    /// 进行绑定的范畴的数据容器
-    /// </summary>
-    public IDictionary<string, object> Data { get; private set; }
 
     /// <summary>
     /// 元素绑定器

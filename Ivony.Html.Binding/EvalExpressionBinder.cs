@@ -33,13 +33,9 @@ namespace Ivony.Html.Binding
     /// <returns>数据对象</returns>
     public static object GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
-      string key;
       object dataObject;
 
-      if ( arguments.TryGetValue( "key", out key ) || arguments.TryGetValue( "name", out key ) )
-        context.Data.TryGetValue( key, out dataObject );
-      else
-        dataObject = context.DataContext;
+      dataObject = context.DataContext;
 
       if ( dataObject == null )
         return null;

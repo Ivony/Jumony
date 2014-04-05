@@ -53,8 +53,8 @@ namespace Ivony.Html.Binding
 
       EvalExpressionBinder = new EvalExpressionBinder();
 
-      
-      
+
+
       ExpressionBinders = new ExpressionBinderCollection();
       ElementBinders = new List<IHtmlElementBinder>();
 
@@ -93,9 +93,9 @@ namespace Ivony.Html.Binding
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext )
     {
-      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataContext, dataValues );
+      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataContext );
     }
 
 
@@ -106,9 +106,9 @@ namespace Ivony.Html.Binding
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataContext">数据上下文</param>
     /// <param name="dataValues">数据字典</param>
-    public static void DataBind( IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    public static void DataBind( this IHtmlContainer scope, object dataContext )
     {
-      Create( scope, dataContext, dataValues ).DataBind();
+      Create( scope, dataContext ).DataBind();
     }
   }
 }

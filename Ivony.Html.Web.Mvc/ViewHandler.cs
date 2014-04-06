@@ -135,8 +135,7 @@ namespace Ivony.Html.Web
 
       Trace.Write( "Jumony Binding", "Begin DataBind" );
 
-      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
-      bindingContext.DataBind();
+      HtmlBinding.DataBind( Scope, ViewData );
 
       Trace.Write( "Jumony Binding", "End DataBind" );
     }

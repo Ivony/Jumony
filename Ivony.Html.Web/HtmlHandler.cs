@@ -38,15 +38,6 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 创建 HtmlHandler 对象
-    /// </summary>
-    public HtmlHandler()
-    {
-      DataValues = new Dictionary<string, object>();
-    }
-
-
-    /// <summary>
     /// 处理 HTML 范围
     /// </summary>
     /// <param name="context">当前 HTML 请求上下文</param>
@@ -76,7 +67,7 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void DataBind()
     {
-      HtmlBinding.DataBind( HtmlScope, DataContext, DataValues );
+      HtmlBinding.DataBind( HtmlScope, DataModel );
     }
 
 
@@ -84,12 +75,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 获取或设置当前数据上下文
     /// </summary>
-    protected object DataContext { get; set; }
-
-    /// <summary>
-    /// 获取或设置稍候进行绑定的数据值
-    /// </summary>
-    protected IDictionary<string, object> DataValues { get; private set; }
+    protected object DataModel { get; set; }
 
 
 

@@ -122,8 +122,6 @@ namespace Ivony.Html.Web
 
       ProcessScope();
 
-      DataBind();
-
     }
 
 
@@ -146,6 +144,8 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void ProcessScope()
     {
+
+      DataBind();
 
     }
 

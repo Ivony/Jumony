@@ -13,12 +13,28 @@ namespace Ivony.Html.Forms
   /// </summary>
   public class FormFieldValidatorCollection : KeyedCollection<string, IFormFieldValidator>
   {
+    private   IEnumerable<IFormFieldValidator> enumerable;
+
 
 
     /// <summary>
     /// 创建 FormControlValidatorCollection 对象
     /// </summary>
     public FormFieldValidatorCollection() : base( StringComparer.OrdinalIgnoreCase ) { }
+
+
+    /// <summary>
+    /// 创建 FormControlValidatorCollection 对象
+    /// </summary>
+    /// <param name="validators">字段验证器集合</param>
+    public FormFieldValidatorCollection( IEnumerable<IFormFieldValidator> validators )
+      : this()
+    {
+      foreach ( var v in validators )
+      {
+        Add( v );
+      }
+    }
 
 
     /// <summary>

@@ -35,11 +35,42 @@ namespace Ivony.Html.Forms
     }
 
 
-    public IFormValidator GetFormValidator()
+
+
+    private string formhash;
+
+    private FormFieldMetadata[] fieldMetadata;
+
+    public FormFieldMetadata[] GetFieldMetadata()
     {
-      throw new NotImplementedException();
+      lock ( Form.SyncRoot )
+      {
+
+        if ( fieldMetadata == null || formhash != string.Join( ",", Form.Controls.ControlNames ) )
+          fieldMetadata = Form.Controls.ControlNames.Select( field => MetadataProvider.GetFieldMetadata( field ) ).ToArray();
+
+
+        return fieldMetadata;
+      }
     }
 
-    
+
+    private FormValidator formValidator;
+
+    public IFormValidator GetFormValidator()
+    {
+
+      lock ( Form.SyncRoot )
+      {
+        if ( formValidator == null )
+        {
+          var validators = new FormFieldValidatorCollection( GetFieldMetadata().Select( metadata => metadata.GetValidator() ) );
+          formValidator = new FormValidator( validators );
+        }
+        return formValidator;
+      }
+    }
+
+
   }
 }

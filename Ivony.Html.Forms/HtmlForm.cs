@@ -44,6 +44,23 @@ namespace Ivony.Html.Forms
     /// <param name="provider">表单控件提供程序</param>
     public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      var document = element.Document;
+
+      if ( document == null )
+        throw new InvalidOperationException();
+
+
+      var modifier = document.DomModifier as ISynchronizedDomModifier;
+      if ( modifier == null )
+        throw new InvalidOperationException();
+
+
+      SyncRoot = modifier.SyncRoot;
+      
       _element = element;
 
       Configuration = configuration ?? new FormConfiguration();
@@ -71,9 +88,23 @@ namespace Ivony.Html.Forms
     public void RefreshForm()
     {
 
-      Controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
+      lock ( SyncRoot )
+      {
+        Controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
+      }
+
+    }
 
 
+
+
+    /// <summary>
+    /// 提供一个容器，可以对当前表单数据进行暂存，
+    /// </summary>
+    public Hashtable FormData
+    {
+      get;
+      private set;
     }
 
 
@@ -82,5 +113,27 @@ namespace Ivony.Html.Forms
     /// 获取该表单的配置对象
     /// </summary>
     public FormConfiguration Configuration { get; private set; }
+
+
+
+
+    /// <summary>
+    /// 用于 HTML DOM 同步的对象，当对表单进行扫描时，将锁住 HTML DOM 避免出现问题
+    /// </summary>
+    public object SyncRoot
+    {
+      get;
+      private set;
+    }
+
+
+    byte[] ComputeFormHash()
+    {
+      lock ( SyncRoot )
+      { 
+      
+      }
+    }
+
   }
 }

@@ -6,7 +6,7 @@ using System.Text;
 namespace Ivony.Html.Binding
 {
   /// <summary>
-  /// 定义可用于解析 datacontext 属性绑定表达式的绑定器
+  /// 定义可以解析为一个对象而非字符串的绑定表达式
   /// </summary>
   public interface IDataObjectExpressionBinder : IExpressionBinder
   {
@@ -17,7 +17,7 @@ namespace Ivony.Html.Binding
     /// <param name="context">当前绑定上下文</param>
     /// <param name="arguments">绑定参数</param>
     /// <returns>数据上下文</returns>
-    object GetDataContext( HtmlBindingContext context, IDictionary<string, string> arguments );
+    object GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments );
 
   }
 }

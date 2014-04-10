@@ -56,7 +56,7 @@ namespace Ivony.Html.Binding
     private static object GetValue( HtmlBindingContext context, BindingExpression expression )
     {
       object dataObject;
-      if ( !context.TryGetDataObject( expression, out dataObject ) )
+      if ( !context.TryGetDataModel( expression, out dataObject ) )
         dataObject = context.GetValue( expression );
 
       return dataObject;

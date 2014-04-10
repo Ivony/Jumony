@@ -129,7 +129,7 @@ namespace Ivony.Html.Binding
     }
 
 
-    object IDataObjectExpressionBinder.GetDataContext( HtmlBindingContext context, IDictionary<string, string> arguments )
+    object IDataObjectExpressionBinder.GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
       return GetDataObject( context, arguments );
     }

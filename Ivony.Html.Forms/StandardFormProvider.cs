@@ -37,8 +37,17 @@ namespace Ivony.Html.Forms
       return controls.ToArray();
     }
 
+
+    /// <summary>
+    /// 发现容器中所有可能是控件的元素并包装成控件返回
+    /// </summary>
+    /// <param name="form">控件所属的表单</param>
+    /// <param name="container">要搜索的容器</param>
+    /// <returns>找到的控件</returns>
     protected virtual IEnumerable<IFormControl> DiscoveryControls( HtmlForm form, IHtmlContainer container )
     {
+
+      //UNDONE 没有检查 name 是否包含特殊字符
 
       foreach ( var element in container.Elements() )
       {

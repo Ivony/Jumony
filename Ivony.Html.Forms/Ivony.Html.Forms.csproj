@@ -83,6 +83,7 @@
     <Compile Include="FormValidationResult.cs" />
     <Compile Include="FormValidator.cs" />
     <Compile Include="FormValueFormatException.cs" />
+    <Compile Include="GenericFormPresenter.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="FormTextControl.cs" />
     <Compile Include="HtmlForm.cs" />
@@ -93,8 +94,8 @@
     <Compile Include="HtmlTextArea.cs" />
     <Compile Include="IFormFieldValidator.cs" />
     <Compile Include="IFormMetadataProvider.cs" />
+    <Compile Include="IFormPresenter.cs" />
     <Compile Include="IFormProvider.cs" />
-    <Compile Include="IFormValidationPresenter.cs" />
     <Compile Include="IFormValidationResult.cs" />
     <Compile Include="IFormValidationRule.cs" />
     <Compile Include="IFormValidator.cs" />

@@ -8,7 +8,7 @@ namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// 实现 IFormValidationResult
+  /// IFormValidationResult 的标准实现
   /// </summary>
   public class FormValidationResult : IFormValidationResult
   {
@@ -16,19 +16,18 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 创建 FormValidationResult 对象
     /// </summary>
-    /// <param name="validator">表单验证器</param>
+    /// <param name="form">所验证的表单</param>
     /// <param name="errors">验证错误信息</param>
-    public FormValidationResult( FormValidator validator, IEnumerable<FormValidationError> errors )
+    public FormValidationResult( HtmlForm form, IEnumerable<FormValidationError> errors )
     {
 
-      if ( validator == null )
-        throw new ArgumentNullException( "validator" );
+      if ( form == null )
+        throw new ArgumentNullException( "form" );
 
-      Validator = validator;
+      
+      Form = form;
+
       Errors = new FormValidationErrorCollection();
-
-
-
 
       if ( errors != null )
       {
@@ -47,10 +46,13 @@ namespace Ivony.Html.Forms
     }
 
 
-    /// <summary>
-    /// 获取执行验证的验证器
-    /// </summary>
-    public IFormValidator Validator { get; private set; }
+
+    public HtmlForm Form
+    {
+      get;
+      private set;
+    }
+
 
 
     /// <summary>
@@ -63,6 +65,7 @@ namespace Ivony.Html.Forms
     /// 验证错误信息
     /// </summary>
     public FormValidationErrorCollection Errors { get; private set; }
+
 
   }
 }

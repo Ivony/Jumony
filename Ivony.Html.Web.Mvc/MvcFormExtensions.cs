@@ -52,10 +52,10 @@ namespace Ivony.Html.Web
     public static HtmlForm ApplyValues( this HtmlForm form, IValueProvider valueProvider )
     {
 
-      foreach (var control in form.Controls)
+      foreach ( var control in form.Controls )
       {
-        if (valueProvider.ContainsPrefix(control.Name))
-          control.Value = valueProvider.GetValue(control.Name).AttemptedValue;
+        if ( valueProvider.ContainsPrefix( control.Name ) )
+          control.Value = valueProvider.GetValue( control.Name ).AttemptedValue;
       }
 
       return form;

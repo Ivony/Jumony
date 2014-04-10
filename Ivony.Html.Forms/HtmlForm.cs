@@ -127,13 +127,5 @@ namespace Ivony.Html.Forms
     }
 
 
-    byte[] ComputeFormHash()
-    {
-      lock ( SyncRoot )
-      { 
-      
-      }
-    }
-
   }
 }

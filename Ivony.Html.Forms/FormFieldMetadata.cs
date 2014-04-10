@@ -101,6 +101,7 @@ namespace Ivony.Html.Forms
       {
         _fieldName = fieldName;
         _displayName = displayName;
+        _description = description;
         _rules = rules;
       }
 

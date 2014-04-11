@@ -20,12 +20,13 @@ namespace Ivony.Html.Web
     /// 创建 MvcFormValidationResult 对象
     /// </summary>
     /// <param name="modelStates">要包装的模型验证状态</param>
-    public MvcFormValidationResult( ModelStateDictionary modelStates )
+    public MvcFormValidationResult( HtmlForm form, ModelStateDictionary modelStates )
     {
       if ( modelStates == null )
         throw new ArgumentNullException( "modelState" );
 
       Errors = new FormValidationErrorCollection();
+      Form = form;
 
 
       modelStates.Select( CreateValidationError ).NotNull().ForAll( e => Errors.Add( e ) );
@@ -58,6 +59,15 @@ namespace Ivony.Html.Web
     /// 表单验证错误
     /// </summary>
     public FormValidationErrorCollection Errors
+    {
+      get;
+      private set;
+    }
+
+    /// <summary>
+    /// 所验证的表单
+    /// </summary>
+    public HtmlForm Form
     {
       get;
       private set;

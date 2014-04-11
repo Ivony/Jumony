@@ -87,5 +87,23 @@ namespace FormsTest
 
 
 
+    [TestMethod]
+    public void ValidationTest()
+    {
+      var document = LoadDocument( "FormValidationTest.html" );
+
+      var form = document.FindFirst( "form" ).AsForm();
+
+      var presenter = new FormPresenter();
+
+      var result = new FormValidationResult( form, new[] { new FormValidationError( "FirstName", "First Name is required!" ) } );
+
+      presenter.ShowValidationResult( result );
+
+      Assert.AreEqual( form.Element.FindFirst( "#error_FirstName ul li" ).InnerText(), "First Name is required!" );
+
+    }
+
+
   }
 }

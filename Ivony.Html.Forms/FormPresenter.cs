@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Html.ExpandedAPI;
 
 namespace Ivony.Html.Forms
 {
@@ -14,18 +15,21 @@ namespace Ivony.Html.Forms
     public void ShowValidationResult( IFormValidationResult result )
     {
 
+      if ( result == null )
+        throw new ArgumentNullException( "result" );
+
       if ( !result.HasError )//若没有验证失败的消息，则什么也不做
         return;
 
 
       foreach ( var error in result.Errors )
-        ShowError( error );
+        ShowError( result.Form, error );
 
 
       if ( RemoveErrorMessageContainer )
       {
         foreach ( var fieldName in result.Form.Controls.ControlNames.Except( result.Errors.Select( e => e.Name ) ) )
-          RemoveErrorMessage( fieldName );
+          RemoveErrorMessage( result.Form, fieldName );
       }
 
 
@@ -55,11 +59,12 @@ namespace Ivony.Html.Forms
     /// 显示字段验证错误信息
     /// </summary>
     /// <param name="error">错误信息</param>
-    protected virtual void ShowError( FormValidationError error )
+    protected virtual void ShowError( HtmlForm form, FormValidationError error )
     {
-      var container = FindErrorMessageContainer( error.Name );
+      var container = FindErrorMessageContainer( form, error.Name );
 
-      ShowErrorMessage( container, error.Messages );
+      if ( container != null )
+        ShowErrorMessage( container, error.Messages );
     }
 
     /// <summary>
@@ -67,9 +72,11 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="fieldName">字段名称</param>
     /// <returns>错误信息显示容器</returns>
-    protected virtual IHtmlElement FindErrorMessageContainer( string fieldName )
+    protected virtual IHtmlElement FindErrorMessageContainer( HtmlForm form, string fieldName )
     {
-      throw new NotImplementedException();
+      return form.Element.FindFirstOrDefault( "#error_" + fieldName )
+        ?? form.Element.FindFirstOrDefault( ".error_" + fieldName );
+
     }
 
 
@@ -91,9 +98,12 @@ namespace Ivony.Html.Forms
     /// 移除没有错误信息的字段的错误信息呈现容器
     /// </summary>
     /// <param name="fieldName">字段名</param>
-    protected virtual void RemoveErrorMessage( string fieldName )
+    protected virtual void RemoveErrorMessage( HtmlForm form, string fieldName )
     {
-      FindErrorMessageContainer( fieldName ).Remove();
+      var container = FindErrorMessageContainer( form, fieldName );
+
+      if ( container != null )
+        container.Remove();
     }
 
 

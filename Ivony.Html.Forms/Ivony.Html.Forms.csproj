@@ -83,7 +83,7 @@
     <Compile Include="FormValidationResult.cs" />
     <Compile Include="FormValidator.cs" />
     <Compile Include="FormValueFormatException.cs" />
-    <Compile Include="GenericFormPresenter.cs" />
+    <Compile Include="FormPresenter.cs" />
     <Compile Include="HtmlInputText.cs" />
     <Compile Include="FormTextControl.cs" />
     <Compile Include="HtmlForm.cs" />

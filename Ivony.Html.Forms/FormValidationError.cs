@@ -18,7 +18,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     /// <param name="name">字段名</param>
     /// <param name="messages">错误消息</param>
-    public FormValidationError( string name, string[] messages )
+    public FormValidationError( string name, params string[] messages )
     {
 
       if ( name == null )

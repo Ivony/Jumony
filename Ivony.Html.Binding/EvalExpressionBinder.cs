@@ -47,15 +47,6 @@ namespace Ivony.Html.Binding
         dataObject = DataBinder.Eval( dataObject, path );
 
 
-
-      if ( dataObject is string )
-        return dataObject;
-
-      var listData = dataObject as IEnumerable;//如果是列表，则包装成 ListDataContext 对象。
-      if ( listData != null )
-        return new ListDataContext( listData, ListBindingMode.Repeat );
-
-
       return dataObject;
     }
 

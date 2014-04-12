@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +21,20 @@ namespace Ivony.Html.Binding
 
     string IExpressionBinder.GetValue( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
-      throw new NotImplementedException();
+      throw new NotSupportedException();
     }
 
     object IDataObjectExpressionBinder.GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
-      throw new NotImplementedException();
+
+      var dataModel = GetDataObject( context, arguments );
+
+      if ( dataModel == null )
+        return null;
+
+
+      return new ListDataContext( (IEnumerable) dataModel, ListBindingMode.Repeat );
+
     }
   }
 }

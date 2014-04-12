@@ -18,10 +18,11 @@ namespace BindingTest
 
       var dataValues = new Dictionary<string, object>() { 
         { "StyleClass", "Test" },
-        { "ThisTime", new DateTime( 2000,1,2 ) }
+        { "ThisTime", new DateTime( 2000,1,2 ) },
+        { "ScriptValue1", null }
       };
 
-      HtmlBinding.Create( document, null, dataValues ).DataBind();
+      HtmlBinding.Create( document, dataValues ).DataBind();
 
       Assert.AreEqual( document.FindFirst( "body" ).Attribute( "class" ).Value(), "Test", "针对属性的表达式绑定不成功" );
       Assert.AreEqual( document.FindFirst( "body" ).Attribute( "test" ).Value(), "this time is 2000-01-02 #", "格式表达式测试失败" );

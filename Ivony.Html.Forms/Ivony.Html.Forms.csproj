@@ -12,7 +12,8 @@
     <AssemblyName>Ivony.Html.Forms</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -38,6 +39,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,25 +65,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAnnotationMeatadataProvider.cs" />
+    <Compile Include="FormButtonGroup.cs" />
+    <Compile Include="FormButtonGroupItem.cs" />
+    <Compile Include="FormControl.cs" />
+    <Compile Include="FormControlCollection.cs" />
+    <Compile Include="FormControlException.cs" />
+    <Compile Include="FormFieldMetadata.cs" />
+    <Compile Include="FormFieldValidatorCollection.cs" />
     <Compile Include="FormExtensions.cs" />
-    <Compile Include="HtmlForm.cs" />
-    <Compile Include="HtmlButtonGroup.cs" />
+    <Compile Include="FormGroupControl.cs" />
+    <Compile Include="FormGroupControlBase.cs" />
+    <Compile Include="FormGroupControlItem.cs" />
+    <Compile Include="FormMetadata.cs" />
+    <Compile Include="FormValidationErrorCollection.cs" />
+    <Compile Include="FormValidationError.cs" />
+    <Compile Include="FormValidationResult.cs" />
+    <Compile Include="FormValidator.cs" />
+    <Compile Include="FormValueFormatException.cs" />
+    <Compile Include="FormPresenter.cs" />
     <Compile Include="HtmlInputText.cs" />
-    <Compile Include="HtmlLabel.cs" />
+    <Compile Include="FormTextControl.cs" />
+    <Compile Include="HtmlForm.cs" />
+    <Compile Include="FormConfiguration.cs" />
+    <Compile Include="IFormControl.cs" />
+    <Compile Include="HtmlModelForm.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
-    <Compile Include="IHtmlFormElement.cs" />
-    <Compile Include="IHtmlGroupControl.cs" />
-    <Compile Include="IHtmlInputControl.cs" />
+    <Compile Include="IFormFieldValidator.cs" />
+    <Compile Include="IFormMetadataProvider.cs" />
+    <Compile Include="IFormPresenter.cs" />
+    <Compile Include="IFormProvider.cs" />
+    <Compile Include="IFormValidationResult.cs" />
+    <Compile Include="IFormValidationRule.cs" />
+    <Compile Include="IFormValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\EmailValidator.cs" />
-    <Compile Include="Validation\HtmlFormValidator.cs" />
-    <Compile Include="Validation\IHtmlValueValidator.cs" />
-    <Compile Include="Validation\HtmlFieldValidator.cs" />
-    <Compile Include="Validation\IntegerValidator.cs" />
-    <Compile Include="Validation\ISubmitValidator.cs" />
-    <Compile Include="Validation\RequiredValidator.cs" />
-    <Compile Include="Validation\ValidationRegulars.cs" />
+    <Compile Include="StandardFormProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">

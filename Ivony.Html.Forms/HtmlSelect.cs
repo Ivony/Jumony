@@ -10,28 +10,17 @@ namespace Ivony.Html.Forms
   /// <summary>
   /// 表示一个 &lt;select&gt; 元素
   /// </summary>
-  public class HtmlSelect : IHtmlGroupControl, IHtmlFocusableControl
+  public class HtmlSelect : FormGroupControl
   {
 
-    public HtmlSelect( HtmlForm form, IHtmlElement element )
+    internal HtmlSelect( HtmlForm form, IHtmlElement element )
+      : base( form )
     {
-      if ( !element.Name.EqualsIgnoreCase( "select" ) )
-        throw new InvalidOperationException();
 
-      _form = form;
-
-      _element = element;
-
+      Element = element;
       options = element.Find( "option" ).Select( e => new HtmlOption( this, e ) ).ToArray();
 
     }
-
-
-
-    private readonly HtmlForm _form;
-    private readonly IHtmlElement _element;
-
-    private readonly HtmlOption[] options;
 
 
     /// <summary>
@@ -39,131 +28,119 @@ namespace Ivony.Html.Forms
     /// </summary>
     public IHtmlElement Element
     {
-      get { return _element; }
+      get;
+      private set;
     }
 
 
-    /// <summary>
-    /// 获取所属的表单对象
-    /// </summary>
-    public HtmlForm Form
-    {
-      get { return _form; }
 
-    }
+    private readonly HtmlOption[] options;
+
 
 
     /// <summary>
     /// 获取输入控件名
     /// </summary>
-    public string Name
+    public override string Name
     {
-      get { return _element.Attribute( "name" ).AttributeValue; }
-
+      get { return Element.Attribute( "name" ).Value(); }
     }
 
 
     /// <summary>
     /// 是否允许多选
     /// </summary>
-    public bool AllowMultipleSelections
+    public override bool AllowMultiple
     {
-      get { return _element.Attribute( "multiple" ) != null; }
+      get { return Element.Attribute( "multiple" ) != null; }
     }
 
 
-    /// <summary>
-    /// 获取输入组项
-    /// </summary>
-    public IHtmlInputGroupItem[] Items
+
+    protected override FormGroupControlItem[] Items
     {
       get { return options; }
     }
 
+  }
+
+
+
+  /// <summary>
+  /// 表示一个 &lt;option&gt; 元素
+  /// </summary>
+  public class HtmlOption : FormGroupControlItem
+  {
+
+    /// <summary>
+    /// 创建 HtmlOption 对象
+    /// </summary>
+    /// <param name="select">所属的 HtmlSelect 对象</param>
+    /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
+    public HtmlOption( HtmlSelect select, IHtmlElement element )
+      : base( select )
+    {
+      Element = element;
+    }
 
 
     /// <summary>
-    /// 表示一个 &lt;option&gt; 元素
+    /// 获取 &lt;option&gt; 元素
     /// </summary>
-    public class HtmlOption : IHtmlInputGroupItem
+    public IHtmlElement Element
     {
-
-
-      private IHtmlElement _element;
-      private HtmlSelect _select;
-
-      /// <summary>
-      /// 创建 HtmlOption 对象
-      /// </summary>
-      /// <param name="select">所属的 HtmlSelect 对象</param>
-      /// <param name="element">DOM 上对应的 &lt;option&gt; 元素</param>
-      public HtmlOption( HtmlSelect select, IHtmlElement element )
-      {
-        _select = select;
-        _element = element;
-      }
-
-
-      public IHtmlElement Element
-      {
-        get { return _element; }
-      }
-
-      public HtmlForm Form
-      {
-        get { return Group.Form; }
-      }
-
-      public IHtmlGroupControl Group
-      {
-        get { return _select; }
-      }
-
-      public bool Selected
-      {
-        get { return Element.Attribute( "selected" ) != null; }
-        set
-        {
-          if ( value )
-          {
-            Element.SetAttribute( "selected", "selected" );
-          }
-          else
-          {
-            var attribute = Element.Attribute( "selected" );
-            if ( attribute != null )
-              attribute.Remove();
-          }
-        }
-      }
-
-      public string Value
-      {
-        get
-        {
-          var value = Element.Attribute( "value" ).Value();
-
-          if ( value == null )
-            return Element.InnerText();
-          else
-            return value;
-        }
-      }
-
-      public string Text
-      {
-        get { return Element.InnerText(); }
-      }
-
+      get;
+      private set;
     }
 
-    #region IHtmlFocusableControl 成员
 
-    string IHtmlFocusableControl.ElementId
+    /// <summary>
+    /// 是否为选中状态
+    /// </summary>
+    public override bool Selected
     {
-      get { return Element.Identity(); }
+      get { return Element.Attribute( "selected" ) != null; }
+      set
+      {
+        if ( value )
+        {
+          Element.SetAttribute( "selected", "selected" );
+        }
+        else
+        {
+          var attribute = Element.Attribute( "selected" );
+          if ( attribute != null )
+            attribute.Remove();
+        }
+      }
     }
 
-    #endregion
+
+    /// <summary>
+    /// 当前项的值
+    /// </summary>
+    public override string Value
+    {
+      get
+      {
+        var value = Element.Attribute( "value" ).Value();
+
+        if ( value == null )
+          return Element.InnerText();
+        else
+          return value;
+      }
+    }
+
+
+    /// <summary>
+    /// 当前项的文本表现形式
+    /// </summary>
+    public string Text
+    {
+      get { return Element.InnerText(); }
+    }
+
   }
+
 }

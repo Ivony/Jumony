@@ -77,6 +77,9 @@ namespace Ivony.Html.Binding
 
 
 
+      private static readonly Regex EName = new Regex( @"\G[a-zA-z_][a-zA-Z_0-9-]*", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
       /// <summary>
       /// 获取绑定表达式值转换器
       /// </summary>
@@ -126,7 +129,7 @@ namespace Ivony.Html.Binding
         if ( !Match( '{' ).HasValue )
           return null;
 
-        var match = Match( CName );
+        var match = Match( EName );
         if ( match == null )
           return null;
 
@@ -148,7 +151,7 @@ namespace Ivony.Html.Binding
 
           string argName, argValue;
 
-          match = Match( CName );
+          match = Match( EName );
           if ( match == null )
             return null;
 

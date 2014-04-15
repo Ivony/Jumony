@@ -40,6 +40,12 @@ namespace Ivony.Html.Binding
     /// </summary>
     public static EvalExpressionBinder EvalExpressionBinder { get; private set; }
 
+    /// <summary>
+    /// 获取默认的列表绑定表达式绑定器
+    /// </summary>
+    public static EvalListExpressionBinder EvalListExpressionBinder { get; private set; }
+
+
 
     static HtmlBinding()
     {
@@ -52,6 +58,7 @@ namespace Ivony.Html.Binding
 
 
       EvalExpressionBinder = new EvalExpressionBinder();
+      EvalListExpressionBinder = new EvalListExpressionBinder();
 
 
 
@@ -63,6 +70,7 @@ namespace Ivony.Html.Binding
       ElementBinders.Add( LiteralBinder );
 
       ExpressionBinders.Add( EvalExpressionBinder );
+      ExpressionBinders.Add( EvalListExpressionBinder );
     }
 
 

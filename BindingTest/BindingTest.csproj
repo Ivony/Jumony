@@ -58,6 +58,7 @@
     <Compile Include="ExpressionBinderTest.cs" />
     <Compile Include="BindingExpressionParserTest.cs" />
     <Compile Include="ScriptBinderTest.cs" />
+    <Compile Include="ListTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
@@ -78,6 +79,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ListTest1.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Test1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

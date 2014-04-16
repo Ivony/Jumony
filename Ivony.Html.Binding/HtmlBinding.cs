@@ -49,12 +49,21 @@ namespace Ivony.Html.Binding
 
     static HtmlBinding()
     {
+
+      Providers = new HtmlBindingContextProviderCollection();
+      ExpressionBinders = new ExpressionBinderCollection();
+      ElementBinders = new List<IHtmlElementBinder>();
+
+      Providers.Add( new HtmlListBindingContextProvider() );
+
+
+
+
       StyleBinder = new StyleBinder();
       ScriptBinder = new ScriptBinder();
       LiteralBinder = new LiteralBinder();
-
-
       FormBinder = new FormBinder();
+
 
 
       EvalExpressionBinder = new EvalExpressionBinder();
@@ -62,8 +71,6 @@ namespace Ivony.Html.Binding
 
 
 
-      ExpressionBinders = new ExpressionBinderCollection();
-      ElementBinders = new List<IHtmlElementBinder>();
 
       ElementBinders.Add( StyleBinder );
       ElementBinders.Add( ScriptBinder );
@@ -95,15 +102,55 @@ namespace Ivony.Html.Binding
     }
 
 
+
+    internal static HtmlBindingContextProviderCollection Providers
+    {
+      get;
+      private set;
+    }
+
+
+
+
+    /// <summary>
+    /// 注册一个绑定上下文提供程序
+    /// </summary>
+    /// <param name="provider">要注册的绑定上下文提供程序</param>
+    public static void RegisterBindingContextProvider( IHtmlBindingContextProvider provider )
+    {
+      lock ( Providers.SyncRoot )
+      {
+        if ( Providers.Contains( provider.ModelType ) )
+          throw new InvalidOperationException();
+
+        Providers.Add( provider );
+      }
+    }
+
+
+    /// <summary>
+    /// 解除绑定上下文提供程序注册
+    /// </summary>
+    /// <param name="modelType">模型类型</param>
+    public static void UnregisterBindingContextProvider( Type modelType )
+    {
+      lock ( Providers.SyncRoot )
+      {
+        if ( Providers.Contains( modelType ) )
+          Providers.Remove( modelType );
+      }
+    }
+
+
+
     /// <summary>
     /// 使用默认的绑定器设置创建 HtmlBindingContext 实例
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
-    /// <param name="dataContext">数据上下文</param>
-    /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext Create( IHtmlContainer scope, object dataContext )
+    /// <param name="dataModel">数据模型</param>
+    public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel )
     {
-      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataContext );
+      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataModel );
     }
 
 
@@ -112,11 +159,10 @@ namespace Ivony.Html.Binding
     /// 使用默认的绑定器设置进行数据绑定
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
-    /// <param name="dataContext">数据上下文</param>
-    /// <param name="dataValues">数据字典</param>
-    public static void DataBind( this IHtmlContainer scope, object dataContext )
+    /// <param name="dataModel">数据模型</param>
+    public static void DataBind( this IHtmlContainer scope, object dataModel )
     {
-      Create( scope, dataContext ).DataBind();
+      Create( scope, dataModel ).DataBind();
     }
   }
 }

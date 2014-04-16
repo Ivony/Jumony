@@ -15,7 +15,7 @@ namespace Ivony.Html.Binding
   internal sealed class HtmlListBindingContext : HtmlBindingContext
   {
 
-    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, ListDataContext dataContext )
+    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, ListDataModel dataContext )
       : base( context, element, dataContext )
     {
       _element = element;
@@ -24,7 +24,7 @@ namespace Ivony.Html.Binding
 
 
     private IHtmlElement _element;
-    private ListDataContext _dataContext;
+    private ListDataModel _dataContext;
 
 
     /// <summary>

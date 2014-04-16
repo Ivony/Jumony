@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExpression.cs" />
+    <Compile Include="HtmlBindingContextProviderCollection.cs" />
+    <Compile Include="HtmlListBindingContextProvider.cs" />
     <Compile Include="EvalExpressionBinder.cs" />
     <Compile Include="ElementExpression.cs" />
     <Compile Include="EvalListExpressionBinder.cs" />
@@ -65,7 +67,7 @@
     <Compile Include="IExpressionBinder.cs" />
     <Compile Include="IHtmlBindingContextProvider.cs" />
     <Compile Include="ListBindMode.cs" />
-    <Compile Include="ListDataContext.cs" />
+    <Compile Include="ListDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptBinder.cs" />
     <Compile Include="StyleBinder.cs" />

@@ -171,7 +171,7 @@ namespace Ivony.Html.Binding
     protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataModel )
     {
 
-      var listData = dataModel as ListDataContext;
+      var listData = dataModel as ListDataModel;
       if ( listData != null )
         return new HtmlListBindingContext( bindingContext, element, listData );
 

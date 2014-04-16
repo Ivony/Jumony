@@ -6,11 +6,10 @@ using System.Text;
 
 namespace Ivony.Html.Binding
 {
-  internal sealed class ListDataContext
+  internal sealed class ListDataModel
   {
 
-
-    public ListDataContext( IEnumerable listData, ListBindingMode mode )
+    public ListDataModel( IEnumerable listData, ListBindingMode mode )
     {
       ListData = listData.Cast<object>().ToArray();
       BindingMode = mode;
@@ -18,6 +17,9 @@ namespace Ivony.Html.Binding
 
 
     public ListBindingMode BindingMode { get; private set; }
+
+
+    public ISelector Selector { get; private set; }
 
 
     public object[] ListData { get; private set; }

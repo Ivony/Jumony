@@ -33,7 +33,7 @@ namespace Ivony.Html.Binding
         return null;
 
 
-      return new ListDataContext( (IEnumerable) dataModel, ListBindingMode.Repeat );
+      return new ListDataModel( (IEnumerable) dataModel, ListBindingMode.Repeat );
 
     }
   }

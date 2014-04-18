@@ -45,6 +45,14 @@ namespace BindingTest
       Assert.AreEqual( expression.Arguments["key"], "abc", "测试解析绑定表达式失败" );
 
 
+      expression = BindingExpression.ParseExpression( evaluator, "{eval a, b=}" );
+      Assert.AreEqual( expression.Name, "eval", "测试解析绑定表达式失败" );
+      Assert.IsTrue( expression.Arguments.ContainsKey( "a" ), "测试解析绑定表达式失败" );
+      Assert.IsNull( expression.Arguments["a"], "测试解析绑定表达式失败" );
+      Assert.IsTrue( expression.Arguments.ContainsKey( "b" ), "测试解析绑定表达式失败" );
+      Assert.AreEqual( expression.Arguments["b"], "", "测试解析绑定表达式失败" );
+
+
     }
 
     private class TestEvaluator : IBindingExpressionEvaluator

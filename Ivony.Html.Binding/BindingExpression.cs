@@ -157,25 +157,31 @@ namespace Ivony.Html.Binding
 
           argName = match.Value;
 
-          if ( !Match( '=' ).HasValue )
-            return null;
-
-
-          match = Match( ArgumentValue );
-          if ( match == null )
+          if ( Match( '=' ).HasValue )
           {
 
-            argValue = null;
-
-            if ( IsMatch( '{' ) )
+            match = Match( ArgumentValue );
+            if ( match == null )
             {
-              var expression = Parse();
-              argValue = Evaluator.GetValue( expression );
+
+              argValue = "";
+
+              if ( IsMatch( '{' ) )
+              {
+                var expression = Parse();
+                argValue = Evaluator.GetValue( expression );
+              }
+
 
             }
+
+            else
+              argValue = match.Value.Replace( "{{", "{" ).Replace( "}}", "}" ).Replace( ",,", "," );
           }
+
           else
-            argValue = match.Value.Replace( "{{", "{" ).Replace( "}}", "}" ).Replace( ",,", "," );
+            argValue = null;
+
 
           args.Add( argName, argValue );
 

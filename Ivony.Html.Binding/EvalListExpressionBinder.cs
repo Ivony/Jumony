@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Binding
 {
@@ -19,6 +20,7 @@ namespace Ivony.Html.Binding
       get { return "eval-list"; }
     }
 
+
     string IExpressionBinder.GetValue( HtmlBindingContext context, IDictionary<string, string> arguments )
     {
       throw new NotSupportedException();
@@ -31,6 +33,15 @@ namespace Ivony.Html.Binding
 
       if ( dataModel == null )
         return null;
+
+
+      CssElementSelector elementSelector = null;
+      string selector;
+
+      if ( arguments.TryGetValue( "selector", out selector ) )
+      {
+        elementSelector = CssParser.ParseElementSelector( selector );
+      }
 
 
       return new ListDataModel( (IEnumerable) dataModel, ListBindingMode.Repeat );

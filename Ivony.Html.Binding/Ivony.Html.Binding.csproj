@@ -56,6 +56,7 @@
     <Compile Include="EvalListExpressionBinder.cs" />
     <Compile Include="IBindingExpressionEvaluator.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
+    <Compile Include="ListGrowthMode.cs" />
     <Compile Include="LiteralBinder.cs" />
     <Compile Include="ExpressionBinderCollection.cs" />
     <Compile Include="FormBinder.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="IElementExpressionBinder.cs" />
     <Compile Include="IExpressionBinder.cs" />
     <Compile Include="IHtmlBindingContextProvider.cs" />
-    <Compile Include="ListBindMode.cs" />
+    <Compile Include="ListBindingMode.cs" />
     <Compile Include="ListDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptBinder.cs" />

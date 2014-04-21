@@ -9,9 +9,10 @@ namespace Ivony.Html.Binding
   internal sealed class ListDataModel
   {
 
-    public ListDataModel( IEnumerable listData, ListBindingMode mode )
+    public ListDataModel( IEnumerable listData, CssElementSelector selector, ListBindingMode mode )
     {
       ListData = listData.Cast<object>().ToArray();
+      Selector = selector;
       BindingMode = mode;
     }
 
@@ -19,7 +20,7 @@ namespace Ivony.Html.Binding
     public ListBindingMode BindingMode { get; private set; }
 
 
-    public ISelector Selector { get; private set; }
+    public CssElementSelector Selector { get; private set; }
 
 
     public object[] ListData { get; private set; }

@@ -32,5 +32,34 @@ namespace BindingTest
     {
       return new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, filename ) );
     }
+
+
+
+    [TestMethod]
+    public void AdvancedList()
+    {
+
+
+      var document = LoadDocument( "ListTest2.html" );
+
+      document.DataBind( new int[] { 1, 2, 3 } );
+
+
+      var container = document.FindFirst( "body > div" );
+
+      Assert.IsTrue( container.Elements().ElementAt( 0 ).Class().Contains( "header" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 1 ).Class().Contains( "item" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 2 ).Class().Contains( "separator" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 3 ).Class().Contains( "item" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 4 ).Class().Contains( "separator" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 5 ).Class().Contains( "item" ), "高级列表绑定测试失败" );
+      Assert.IsTrue( container.Elements().ElementAt( 6 ).Class().Contains( "footer" ), "高级列表绑定测试失败" );
+
+      Assert.AreEqual( container.Elements( ".item" ).ElementAt( 0 ).InnerText(), "1", "高级列表绑定测试失败" );
+      Assert.AreEqual( container.Elements( ".item" ).ElementAt( 1 ).InnerText(), "2", "高级列表绑定测试失败" );
+      Assert.AreEqual( container.Elements( ".item" ).ElementAt( 2 ).InnerText(), "3", "高级列表绑定测试失败" );
+
+    }
+
   }
 }

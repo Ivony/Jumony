@@ -39,12 +39,19 @@ namespace Ivony.Html.Binding
       string selector;
 
       if ( arguments.TryGetValue( "selector", out selector ) )
-      {
         elementSelector = CssParser.ParseElementSelector( selector );
-      }
+
+      ListBindingMode mode;
+
+      string modeSetting;
+      if ( arguments.TryGetValue( "mode", out modeSetting ) && modeSetting.EqualsIgnoreCase( "static" ) )
+        mode = ListBindingMode.StaticContent;
+      else
+        mode = ListBindingMode.DynamicContent;
 
 
-      return new ListDataModel( (IEnumerable) dataModel, ListBindingMode.Repeat );
+
+      return new ListDataModel( (IEnumerable) dataModel, elementSelector, mode );
 
     }
   }

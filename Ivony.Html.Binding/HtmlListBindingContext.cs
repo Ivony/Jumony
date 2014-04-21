@@ -5,6 +5,7 @@ using System.Text;
 using Ivony.Fluent;
 using System.Collections;
 using Ivony.Html.ExpandedAPI;
+using Ivony.Html;
 
 namespace Ivony.Html.Binding
 {
@@ -15,16 +16,22 @@ namespace Ivony.Html.Binding
   internal sealed class HtmlListBindingContext : HtmlBindingContext
   {
 
-    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, ListDataModel dataContext )
-      : base( context, element, dataContext )
+    internal HtmlListBindingContext( HtmlBindingContext context, IHtmlElement element, ListDataModel dataModel )
+      : base( context, element, dataModel )
     {
-      _element = element;
-      _dataContext = dataContext;
+      DataModel = dataModel;
     }
 
 
     private IHtmlElement _element;
-    private ListDataModel _dataContext;
+
+
+
+    public ListDataModel DataModel
+    {
+      get;
+      private set;
+    }
 
 
     /// <summary>
@@ -33,14 +40,74 @@ namespace Ivony.Html.Binding
     public override void DataBind()
     {
 
-      if ( _dataContext.BindingMode != ListBindingMode.Repeat )
-        throw new NotSupportedException();//暂不支持 Repeat 之外的绑定方式
+      if ( DataModel.Selector == null )
+      {
+        var count = DataModel.ListData.Length;
+        var list = _element.Repeat( count );
 
-      var count = _dataContext.ListData.Length;
-      var list = _element.Repeat( count );
+        for ( int i = 0; i < count; i++ )
+          DataBind( list[i], DataModel.ListData[i] );
 
-      for ( int i = 0; i < count; i++ )
-        CreateBindingContext( ParentContext, list[i], _dataContext.ListData[i] ).DataBind();
+        return;
+      }
+
+
+      if ( DataModel.BindingMode == ListBindingMode.DynamicContent )
+        DynamicContent();
+
+
+
+      int index = 0;
+
+      foreach ( var element in BindingScope.Elements() )
+      {
+        if ( DataModel.Selector.IsEligible( element ) )
+          DataBind( element, DataModel.ListData[index++] );
+      }
+
+
+
+
+    }
+
+
+    private void DynamicContent()
+    {
+      var dataLength = DataModel.ListData.Length;
+
+      var items = BindingScope.Elements().FilterBy( DataModel.Selector ).ToArray();
+
+      if ( items.Length == 1 )
+        items.Single().Repeat( dataLength );
+
+      else if ( dataLength != items.Length )
+      {
+        if ( dataLength < items.Length )//如果数据项少于绑定项
+        {
+
+          var tail = items.Last().NextNode();//确定尾部
+
+
+          var lastItem = items.ElementAt( dataLength );
+
+          while ( lastItem.NextNode() != tail )//将最后一个元素到尾部之间的所有元素清除。
+            lastItem.NextNode().Remove();
+
+        }
+
+        else
+        { 
+
+
+        
+        }
+
+      }
+    }
+
+    private void DataBind( IHtmlElement element, object dataModel )
+    {
+      CreateBindingContext( ParentContext, element, dataModel ).DataBind();
     }
 
   }

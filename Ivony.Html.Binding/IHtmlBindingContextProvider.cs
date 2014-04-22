@@ -23,6 +23,9 @@ namespace Ivony.Html.Binding
     HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object datamodel );
 
 
+    /// <summary>
+    /// 可以创建绑定上下文的模型类型
+    /// </summary>
     Type ModelType { get; }
 
   }

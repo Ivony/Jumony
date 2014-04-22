@@ -23,11 +23,10 @@ namespace Ivony.Html.Binding
     /// <param name="htmlBinders">要使用的 HTML 绑定器</param>
     /// <param name="expressionBinders">要使用的绑定表达式绑定器</param>
     /// <param name="scope">要进行数据绑定的范畴</param>
-    /// <param name="dataContext">数据上下文</param>
-    /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext = null )
+    /// <param name="dataModel">数据上下文</param>
+    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel = null )
     {
-      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataContext );
+      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataModel );
 
     }
 
@@ -183,10 +182,11 @@ namespace Ivony.Html.Binding
     private class NoneDataContext { }
 
     /// <summary>
-    /// 获取数据上下文
+    /// 尝试获取数据模型
     /// </summary>
     /// <param name="element">当前正在处理的元素</param>
-    /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
+    /// <param name="dataModel">获取到的数据模型</param>
+    /// <returns>是否成功获取数据模型</returns>
     protected virtual bool TryGetDataModel( IHtmlElement element, out object dataModel )
     {
       dataModel = null;

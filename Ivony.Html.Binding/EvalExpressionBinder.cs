@@ -110,15 +110,6 @@ namespace Ivony.Html.Binding
 
     }
 
-    private static string ResolveFormatExpressionEscape( Match match )
-    {
-      if ( match.Groups["format"].Success )
-        return "{0:" + match.Groups["format"].Value.Replace( "{", "{{" ).Replace( "}", "}}" ) + "}";
-
-      else
-        return "#";
-    }
-
 
     object IDataObjectExpressionBinder.GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
     {

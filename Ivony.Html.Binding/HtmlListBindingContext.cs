@@ -20,18 +20,14 @@ namespace Ivony.Html.Binding
       : base( context, element, dataModel )
     {
       DataModel = dataModel;
+      BindingElement = element;
     }
 
 
-    private IHtmlElement _element;
+    public IHtmlElement BindingElement { get; private set; }
 
 
-
-    public ListDataModel DataModel
-    {
-      get;
-      private set;
-    }
+    public ListDataModel DataModel { get; private set; }
 
 
     /// <summary>
@@ -43,7 +39,7 @@ namespace Ivony.Html.Binding
       if ( DataModel.Selector == null )
       {
         var count = DataModel.ListData.Length;
-        var list = _element.Repeat( count );
+        var list = BindingElement.Repeat( count );
 
         for ( int i = 0; i < count; i++ )
           DataBind( list[i], DataModel.ListData[i] );
@@ -52,17 +48,22 @@ namespace Ivony.Html.Binding
       }
 
 
+
+
+      IHtmlElement[] elements;
       if ( DataModel.BindingMode == ListBindingMode.DynamicContent )
-        DynamicContent();
+        elements = DynamicContent();
+      
+      else
+        elements = BindingScope.Elements().FilterBy( DataModel.Selector ).ToArray();
 
 
 
       int index = 0;
 
-      foreach ( var element in BindingScope.Elements() )
+      foreach ( var e in elements )
       {
-        if ( DataModel.Selector.IsEligible( element ) )
-          DataBind( element, DataModel.ListData[index++] );
+        DataBind( e, DataModel.ListData[index++] );
       }
 
 
@@ -71,38 +72,67 @@ namespace Ivony.Html.Binding
     }
 
 
-    private void DynamicContent()
+    private IHtmlElement[] DynamicContent()
     {
+
+      var container = BindingScope;
+
       var dataLength = DataModel.ListData.Length;
 
-      var items = BindingScope.Elements().FilterBy( DataModel.Selector ).ToArray();
+      var items = container.Elements().FilterBy( DataModel.Selector ).ToArray();//先找出所有目标元素
 
-      if ( items.Length == 1 )
-        items.Single().Repeat( dataLength );
+      if ( items.Length == 1 )//若目标元素只有一个，则退化到简单复制模式。
+        return items.Single().Repeat( dataLength );
 
-      else if ( dataLength != items.Length )
+
+      var tail = items.Last().NextNode();//确定尾部
+
+
+      if ( dataLength < items.Length )//如果数据项少于绑定项
       {
-        if ( dataLength < items.Length )//如果数据项少于绑定项
-        {
-
-          var tail = items.Last().NextNode();//确定尾部
 
 
-          var lastItem = items.ElementAt( dataLength );
 
-          while ( lastItem.NextNode() != tail )//将最后一个元素到尾部之间的所有元素清除。
-            lastItem.NextNode().Remove();
+        var lastItem = items[dataLength - 1];
 
-        }
-
-        else
-        { 
+        while ( lastItem.NextNode() != tail )//将最后一个元素到尾部之间的所有元素清除。
+          lastItem.NextNode().Remove();
 
 
-        
-        }
-
+        return items.Take( dataLength ).ToArray();
       }
+
+
+
+
+      var result = new List<IHtmlElement>( dataLength );
+      result.AddRange( items );
+
+      int index = items.Length, itemIndex = 1;
+
+      int[] indexer = items.Select( i => i.NodesIndexOfSelf() + 1 ).ToArray();//对所有的目标项位置建立索引
+      var nodes = container.Nodes().ToArray();                                //缓存当前所有节点为复制做准备
+
+
+      while ( index < dataLength )
+      {
+        if ( itemIndex == items.Length )
+          itemIndex = 1;
+
+
+        var range = nodes.Skip( indexer[itemIndex - 1] ).Take( indexer[itemIndex] - indexer[itemIndex - 1] );
+
+        if ( tail == null )
+          result.Add( container.AddCopy( range ).Last().CastTo<IHtmlElement>() );
+        
+        else
+          result.Add( tail.AddCopyBeforeSelf( range ).Last().CastTo<IHtmlElement>() );
+
+        index++;
+        itemIndex++;
+      }
+
+      return result.ToArray();
     }
 
     private void DataBind( IHtmlElement element, object dataModel )

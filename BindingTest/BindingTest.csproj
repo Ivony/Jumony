@@ -79,6 +79,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ListTest3.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ListTest2.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

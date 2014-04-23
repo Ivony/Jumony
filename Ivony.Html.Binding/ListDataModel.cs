@@ -6,12 +6,12 @@ using System.Text;
 
 namespace Ivony.Html.Binding
 {
-  internal sealed class ListDataModel
+  internal sealed class ListDataModel : ICollection
   {
 
     public ListDataModel( IEnumerable listData, CssElementSelector selector, ListBindingMode mode )
     {
-      ListData = listData.Cast<object>().ToArray();
+      list = listData.Cast<object>().ToArray();
       Selector = selector;
       BindingMode = mode;
     }
@@ -23,7 +23,37 @@ namespace Ivony.Html.Binding
     public CssElementSelector Selector { get; private set; }
 
 
-    public object[] ListData { get; private set; }
+    private object[] list;
 
+
+    public void CopyTo( Array array, int index )
+    {
+      list.CopyTo( array, index );
+    }
+
+    public int Count
+    {
+      get { return list.Length; }
+    }
+
+    public bool IsSynchronized
+    {
+      get { return false; }
+    }
+
+    public object SyncRoot
+    {
+      get { return list.SyncRoot; }
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+      return list.GetEnumerator();
+    }
+
+    public object this[int index]
+    {
+      get { return list[index]; }
+    }
   }
 }

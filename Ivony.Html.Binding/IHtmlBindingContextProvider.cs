@@ -18,7 +18,6 @@ namespace Ivony.Html.Binding
     /// <param name="bindingContext">当前绑定上下文（即父级上下文）</param>
     /// <param name="scope">要创建绑定上下文的 HTML 范围</param>
     /// <param name="datamodel">要创建绑定上下文的数据上下文</param>
-    /// <param name="dataValues">要创建绑定上下文的扩展数据</param>
     /// <returns>绑定上下文</returns>
     HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object datamodel );
 

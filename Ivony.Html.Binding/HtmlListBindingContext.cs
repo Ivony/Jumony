@@ -38,11 +38,11 @@ namespace Ivony.Html.Binding
 
       if ( DataModel.Selector == null )
       {
-        var count = DataModel.ListData.Length;
+        var count = DataModel.Count;
         var list = BindingElement.Repeat( count );
 
         for ( int i = 0; i < count; i++ )
-          DataBind( list[i], DataModel.ListData[i] );
+          DataBind( list[i], DataModel[i] );
 
         return;
       }
@@ -63,11 +63,8 @@ namespace Ivony.Html.Binding
 
       foreach ( var e in elements )
       {
-        DataBind( e, DataModel.ListData[index++] );
+        DataBind( e, DataModel[index++] );
       }
-
-
-
 
     }
 
@@ -77,7 +74,7 @@ namespace Ivony.Html.Binding
 
       var container = BindingScope;
 
-      var dataLength = DataModel.ListData.Length;
+      var dataLength = DataModel.Count;
 
       var items = container.Elements().FilterBy( DataModel.Selector ).ToArray();//先找出所有目标元素
 
@@ -90,9 +87,7 @@ namespace Ivony.Html.Binding
 
       if ( dataLength < items.Length )//如果数据项少于绑定项
       {
-
-
-
+        
         var lastItem = items[dataLength - 1];
 
         while ( lastItem.NextNode() != tail )//将最后一个元素到尾部之间的所有元素清除。

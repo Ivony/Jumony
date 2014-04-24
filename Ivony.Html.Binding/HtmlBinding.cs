@@ -164,5 +164,16 @@ namespace Ivony.Html.Binding
     {
       Create( scope, dataModel ).DataBind();
     }
+
+    
+    /// <summary>
+    /// 使用指定的绑定器设置进行数据绑定
+    /// </summary>
+    /// <param name="scope">要进行数据绑定的范畴</param>
+    /// <param name="dataModel">数据模型</param>
+    public static void DataBind( this IHtmlContainer scope, object dataModel, params IHtmlElementBinder[] binders )
+    {
+      HtmlBindingContext.Create( ElementBinders.Union( binders ).ToArray(), ExpressionBinders.ToArray(), scope, dataModel ).DataBind();
+    }
   }
 }

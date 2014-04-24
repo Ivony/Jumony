@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionUrlBinder.cs" />
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />

@@ -67,6 +67,8 @@ namespace BindingTest
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 3 ).InnerText(), "4", "列表增长绑定测试失败" );
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 4 ).InnerText(), "5", "列表增长绑定测试失败" );
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 5 ).InnerText(), "6", "列表增长绑定测试失败" );
+      
+      Assert.AreEqual( container.Elements( ".footer" ).First().InnerText(), "6", "高级列表绑定测试失败" );
 
     }
 

@@ -35,7 +35,7 @@ namespace Ivony.Html.Binding
     {
       object dataObject;
 
-      dataObject = context.DataContext;
+      dataObject = context.DataModel;
 
       if ( dataObject == null )
         return null;

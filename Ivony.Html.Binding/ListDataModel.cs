@@ -11,6 +11,7 @@ namespace Ivony.Html.Binding
 
     public ListDataModel( IEnumerable listData, CssElementSelector selector, ListBindingMode mode )
     {
+      RawObject = listData;
       list = listData.Cast<object>().ToArray();
       Selector = selector;
       BindingMode = mode;
@@ -18,7 +19,6 @@ namespace Ivony.Html.Binding
 
 
     public ListBindingMode BindingMode { get; private set; }
-
 
     public CssElementSelector Selector { get; private set; }
 
@@ -55,5 +55,7 @@ namespace Ivony.Html.Binding
     {
       get { return list[index]; }
     }
+
+    public object RawObject { get; private set; }
   }
 }

@@ -42,7 +42,7 @@ namespace Ivony.Html.Binding
 
       Binders = htmlBinders;
       BindingScope = scope;
-      DataContext = dataContext;
+      DataModel = dataContext;
       _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 
@@ -52,8 +52,8 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="bindingContext">父级数据绑定上下文</param>
-    /// <param name="dataContext">数据上下文</param>
-    protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataContext = null )
+    /// <param name="dataModel">数据模型，若不提供则使用当前的数据模型</param>
+    protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataModel = null )
     {
 
       if ( bindingContext == null )
@@ -64,7 +64,7 @@ namespace Ivony.Html.Binding
 
       ParentContext = bindingContext;
       BindingScope = scope;
-      DataContext = dataContext ?? bindingContext.DataContext;
+      DataModel = dataModel ?? bindingContext.DataModel;
 
       Binders = bindingContext.Binders;
       _expressionBinders = new ExpressionBinderCollection( bindingContext._expressionBinders );
@@ -88,7 +88,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 当前的数据上下文
     /// </summary>
-    public object DataContext { get; private set; }
+    public object DataModel { get; private set; }
 
 
     /// <summary>

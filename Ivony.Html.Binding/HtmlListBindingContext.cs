@@ -30,13 +30,22 @@ namespace Ivony.Html.Binding
     public ListDataModel DataModel { get; private set; }
 
 
+
     /// <summary>
-    /// 重写 DataBind 方法，执行绑定时将被绑定元素复制适当份数，再进行绑定。
+    /// 重写 DataBind 方法，直接对元素进行绑定
     /// </summary>
     public override void DataBind()
     {
+      DataBind( BindingElement );
+    }
 
-      if ( DataModel.Selector == null )
+
+    /// <summary>
+    /// 重写 BindElement 方法，执行绑定时将被绑定元素复制适当份数，再进行绑定。
+    /// </summary>
+    protected override void BindElement( IHtmlElement element )
+    {
+      if ( DataModel.Selector == null )//如果没有选择器，执行简单绑定
       {
         var count = DataModel.Count;
         var list = BindingElement.Repeat( count );
@@ -50,10 +59,26 @@ namespace Ivony.Html.Binding
 
 
 
+      //对元素进行数据绑定
+      CancelChildsBinding = BindCompleted = false;//重置绑定状态
+
+      foreach ( var binder in Binders )
+      {
+        binder.BindElement( this, element );
+
+        if ( BindCompleted )
+          break;
+      }
+
+      if ( CancelChildsBinding )//如果取消子元素绑定，则不再进行下面的列表绑定操作
+        return;
+
+
+
       IHtmlElement[] elements;
       if ( DataModel.BindingMode == ListBindingMode.DynamicContent )
         elements = DynamicContent();
-      
+
       else
         elements = BindingScope.Elements().FilterBy( DataModel.Selector ).ToArray();
 
@@ -61,11 +86,14 @@ namespace Ivony.Html.Binding
 
       int index = 0;
 
-      foreach ( var e in elements )
+      foreach ( var e in BindingElement.Elements() )//遍历所有子元素，对其进行数据绑定。
       {
-        DataBind( e, DataModel[index++] );
+        if ( elements.Contains( e ) )               //若该元素是数据项元素，则取出相应数据项进行绑定
+          DataBind( e, DataModel[index++] );
+        
+        else
+          DataBind( e, DataModel.RawObject );       //若该元素不是数据项元素，则使用列表的原始对象作为数据上下文进行绑定
       }
-
     }
 
 
@@ -87,7 +115,7 @@ namespace Ivony.Html.Binding
 
       if ( dataLength < items.Length )//如果数据项少于绑定项
       {
-        
+
         var lastItem = items[dataLength - 1];
 
         while ( lastItem.NextNode() != tail )//将最后一个元素到尾部之间的所有元素清除。
@@ -119,7 +147,7 @@ namespace Ivony.Html.Binding
 
         if ( tail == null )
           result.Add( container.AddCopy( range ).Last().CastTo<IHtmlElement>() );
-        
+
         else
           result.Add( tail.AddCopyBeforeSelf( range ).Last().CastTo<IHtmlElement>() );
 

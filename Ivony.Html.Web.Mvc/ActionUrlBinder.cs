@@ -26,7 +26,7 @@ namespace Ivony.Html.Web
     /// 创建 ActionUrlBinder 对象
     /// </summary>
     /// <param name="urlHelper">协助生成 ASP.NET MVC URL 的帮助器</param>
-    public ActionUrlBinder( JumonyUrlHelper urlHelper, IHtmlDocument document )
+    public ActionUrlBinder( JumonyUrlHelper urlHelper, HtmlSpecificationBase specification )
     {
 
       if ( urlHelper == null )
@@ -34,7 +34,7 @@ namespace Ivony.Html.Web
 
       UrlHelper = urlHelper;
 
-      Specification = document.HtmlSpecification;
+      Specification = specification;
       DocumentPath = VirtualPathUtility.ToAbsolute( UrlHelper.VirtualPath );
     }
 

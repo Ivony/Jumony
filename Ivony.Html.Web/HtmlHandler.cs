@@ -67,7 +67,8 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void DataBind()
     {
-      HtmlBinding.DataBind( HtmlScope, DataModel );
+      if ( DataModel != null )
+        HtmlBinding.DataBind( HtmlScope, DataModel );
     }
 
 

@@ -11,6 +11,7 @@ using System.Web.Mvc.Html;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
 using Ivony.Web;
+using Ivony.Html.Binding;
 
 
 namespace Ivony.Html.Web
@@ -146,22 +147,19 @@ namespace Ivony.Html.Web
       OnPostProcess();
       HttpContext.Trace.Write( "Jumony View", "End Process" );
 
-      HttpContext.Trace.Write( "Jumony View", "Begin ProcessActionRoutes" );
-      Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "Jumony View", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "Begin DataBind" );
+      Scope.DataBind( ViewContext.ViewData, HtmlBinding.ElementBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Scope.Document.HtmlSpecification ) );
+      HttpContext.Trace.Write( "Jumony View", "End DataBind" );
 
 
-      HttpContext.Trace.Write( "Jumony View", "Begin ResolveUri" );
       Scope.Find( "form[postback]" )
         .SetAttribute( "action", RawViewContext.HttpContext.Request.RawUrl )
         .SetAttribute( "method", "post" )
         .RemoveAttribute( "postback" );
 
-      Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "Jumony View", "End ResolveUri" );
+
 
       AddGeneratorMetaData();
-
 
       RenderAdapters = GetRenderAdapters( handler );
 

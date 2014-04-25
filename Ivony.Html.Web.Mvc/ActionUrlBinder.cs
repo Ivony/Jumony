@@ -26,7 +26,7 @@ namespace Ivony.Html.Web
     /// 创建 ActionUrlBinder 对象
     /// </summary>
     /// <param name="urlHelper">协助生成 ASP.NET MVC URL 的帮助器</param>
-    public ActionUrlBinder( JumonyUrlHelper urlHelper )
+    public ActionUrlBinder( JumonyUrlHelper urlHelper, IHtmlDocument document )
     {
 
       if ( urlHelper == null )
@@ -34,6 +34,21 @@ namespace Ivony.Html.Web
 
       UrlHelper = urlHelper;
 
+      Specification = document.HtmlSpecification;
+      DocumentPath = VirtualPathUtility.ToAbsolute( UrlHelper.VirtualPath );
+    }
+
+
+    protected HtmlSpecificationBase Specification
+    {
+      get;
+      private set;
+    }
+
+    protected string DocumentPath
+    {
+      get;
+      private set;
     }
 
 
@@ -68,20 +83,9 @@ namespace Ivony.Html.Web
       if ( ProcessActionLink( element ) )//对元素进行 Action URL 处理，若处理成功，则跳过元素。
         return;
 
-
-      if ( element.Attributes().Any() )//仅当元素有属性时才进行处理
-      {
-
-        var specification = element.Document.HtmlSpecification;
-        element.Attributes().Where( attribute => specification.IsUriValue( attribute ) ).ForAll( ResolveUrl );
-      
-      }
-    }
-
-    private void ResolveUrl( IHtmlAttribute attribute )
-    {
-      var absoluteBase = VirtualPathUtility.ToAbsolute( UrlHelper.VirtualPath );
-      UrlHelper.ResolveUri( attribute, absoluteBase );
+      element.Attributes()
+        .Where( attribute => Specification.IsUriValue( attribute ) )
+        .ForAll( attribute => UrlHelper.ResolveUri( attribute, DocumentPath ) );
     }
 
 

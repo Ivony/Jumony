@@ -39,12 +39,19 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 当前在处理文档的 HTML 规范
+    /// </summary>
     protected HtmlSpecificationBase Specification
     {
       get;
       private set;
     }
 
+
+    /// <summary>
+    /// 当前文档的绝对虚拟路径
+    /// </summary>
     protected string DocumentPath
     {
       get;

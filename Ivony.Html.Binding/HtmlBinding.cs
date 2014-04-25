@@ -154,6 +154,60 @@ namespace Ivony.Html.Binding
     }
 
 
+    public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel, params object[] binders )
+    {
+      var elementBinders = new List<IHtmlElementBinder>();
+      var expressionBinders = new List<IExpressionBinder>();
+
+
+      foreach ( var item in binders )
+      {
+        {
+          var binder = item as IHtmlElementBinder;
+          if ( binder != null )
+          {
+            elementBinders.Add( binder );
+            continue;
+          }
+        }
+
+        {
+          var binder = item as IExpressionBinder;
+          if ( binder != null )
+          {
+            expressionBinders.Add( binder );
+            continue;
+          }
+        }
+
+        {
+          var list = item as IEnumerable<IHtmlElementBinder>;
+          if ( list != null )
+          {
+            elementBinders.AddRange( list );
+            continue;
+          }
+        }
+
+        {
+          var list = item as IEnumerable<IExpressionBinder>;
+          if ( list != null )
+          {
+            expressionBinders.AddRange( list );
+            continue;
+          }
+        }
+
+
+        throw new ArgumentException( string.Format( "不支持 \"{0}\" 类型的绑定器", item.GetType().ToString() ), "binders" );
+      }
+
+
+      var context = HtmlBindingContext.Create( elementBinders.ToArray(), expressionBinders.ToArray(), scope, dataModel );
+      return context;
+    }
+
+
 
     /// <summary>
     /// 使用默认的绑定器设置进行数据绑定
@@ -165,15 +219,19 @@ namespace Ivony.Html.Binding
       Create( scope, dataModel ).DataBind();
     }
 
-    
+
     /// <summary>
     /// 使用指定的绑定器设置进行数据绑定
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataModel">数据模型</param>
-    public static void DataBind( this IHtmlContainer scope, object dataModel, params IHtmlElementBinder[] binders )
+    /// <param name="binders">在这一次绑定中要用到的绑定器列表</param>
+    public static void DataBind( this IHtmlContainer scope, object dataModel, params object[] binders )
     {
-      HtmlBindingContext.Create( ElementBinders.Union( binders ).ToArray(), ExpressionBinders.ToArray(), scope, dataModel ).DataBind();
+
+      Create( scope, dataModel, binders ).DataBind();
+
     }
+
   }
 }

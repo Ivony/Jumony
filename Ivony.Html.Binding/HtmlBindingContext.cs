@@ -24,14 +24,14 @@ namespace Ivony.Html.Binding
     /// <param name="expressionBinders">要使用的绑定表达式绑定器</param>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataModel">数据上下文</param>
-    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel = null )
+    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
       return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataModel );
 
     }
 
 
-    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext )
+    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
 
       if ( htmlBinders == null )
@@ -40,9 +40,13 @@ namespace Ivony.Html.Binding
       if ( scope == null )
         throw new ArgumentNullException( "scope" );
 
+      if ( dataModel == null )
+        throw new ArgumentNullException( "dataModel" );
+
       Binders = htmlBinders;
       BindingScope = scope;
-      DataModel = dataContext;
+      DataModel = dataModel;
+      
       _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 

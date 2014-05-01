@@ -57,6 +57,9 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 选项列表
+    /// </summary>
     protected override FormGroupControlItem[] Items
     {
       get { return options; }

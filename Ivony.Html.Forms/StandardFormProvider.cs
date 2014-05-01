@@ -17,6 +17,12 @@ namespace Ivony.Html.Forms
     private ISelector textareaSelector = CssParser.ParseSelector( "textarea[name]" );
     private ISelector selectControlSelector = CssParser.ParseSelector( "select[name]" );
 
+
+    /// <summary>
+    /// 在表单中发现所有标准控件
+    /// </summary>
+    /// <param name="form">要从中发现空间的表单</param>
+    /// <returns>发现的所有标准控件</returns>
     public IFormControl[] DiscoveryControls( HtmlForm form )
     {
 

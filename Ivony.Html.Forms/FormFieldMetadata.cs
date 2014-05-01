@@ -82,6 +82,14 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 创建表单字段元数据
+    /// </summary>
+    /// <param name="fieldName">字段名称</param>
+    /// <param name="displayName">字段显示名称</param>
+    /// <param name="description">字段规则描述</param>
+    /// <param name="rules">字段验证规则</param>
+    /// <returns>表单字段元数据</returns>
     public static FormFieldMetadata CreateMetaData( string fieldName, string displayName, string description, IFormValidationRule[] rules )
     {
       return new GenericFormFieldMetadata( fieldName, displayName, description, rules );

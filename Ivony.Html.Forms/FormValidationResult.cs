@@ -47,6 +47,9 @@ namespace Ivony.Html.Forms
 
 
 
+    /// <summary>
+    /// 所验证的表单
+    /// </summary>
     public HtmlForm Form
     {
       get;

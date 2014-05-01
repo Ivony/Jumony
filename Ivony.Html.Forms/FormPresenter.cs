@@ -8,10 +8,15 @@ namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// IFormPresenter 的一个标准实现
+  /// IFormPresenter 的标准实现
   /// </summary>
   public class FormPresenter : IFormPresenter
   {
+
+    /// <summary>
+    /// 呈现表单的验证结果
+    /// </summary>
+    /// <param name="result">表单验证结果</param>
     public void ShowValidationResult( IFormValidationResult result )
     {
 
@@ -40,7 +45,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 显示表单验证的错误的摘要信息
     /// </summary>
-    /// <param name="result"></param>
+    /// <param name="errors">错误信息</param>
     protected void ShowErrorSummary( FormValidationErrorCollection errors )
     {
     }
@@ -58,7 +63,8 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 显示字段验证错误信息
     /// </summary>
-    /// <param name="error">错误信息</param>
+    /// <param name="form">要呈现错误信息的表单</param>
+    /// <param name="error">要呈现的错误信息</param>
     protected virtual void ShowError( HtmlForm form, FormValidationError error )
     {
       var container = FindErrorMessageContainer( form, error.Name );
@@ -70,6 +76,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 找到指定字段的错误信息显示容器
     /// </summary>
+    /// <param name="form">字段所属的表单</param>
     /// <param name="fieldName">字段名称</param>
     /// <returns>错误信息显示容器</returns>
     protected virtual IHtmlElement FindErrorMessageContainer( HtmlForm form, string fieldName )
@@ -97,6 +104,7 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 移除没有错误信息的字段的错误信息呈现容器
     /// </summary>
+    /// <param name="form">字段所属的表单</param>
     /// <param name="fieldName">字段名</param>
     protected virtual void RemoveErrorMessage( HtmlForm form, string fieldName )
     {

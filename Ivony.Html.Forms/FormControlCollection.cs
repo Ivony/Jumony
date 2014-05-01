@@ -12,7 +12,18 @@ namespace Ivony.Html.Forms
   /// </summary>
   public sealed class FormControlCollection : KeyedCollection<string, IFormControl>
   {
+    /// <summary>
+    /// 创建 FormControlCollection 对象
+    /// </summary>
+    public FormControlCollection() { }
+
+
+    /// <summary>
+    /// 创建 FormControlCollection 对象
+    /// </summary>
+    /// <param name="controls">要添加的控件</param>
     public FormControlCollection( IFormControl[] controls )
+      : this()
     {
       foreach ( var c in controls )
         Add( c );

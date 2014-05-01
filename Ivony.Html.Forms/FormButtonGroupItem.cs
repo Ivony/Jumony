@@ -6,7 +6,11 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
-  public class FormButtonGroupItem : FormGroupControlItem
+
+  /// <summary>
+  /// 定义按钮组组控件的项，即单个按钮
+  /// </summary>
+  public sealed class FormButtonGroupItem : FormGroupControlItem
   {
 
     internal FormButtonGroupItem( FormButtonGroup groupControl, IHtmlElement element )
@@ -40,18 +44,26 @@ namespace Ivony.Html.Forms
     }
 
 
-
+    /// <summary>
+    /// 定义按钮的元素
+    /// </summary>
     public IHtmlElement Element
     {
       get;
       private set;
     }
 
+    /// <summary>
+    /// 控件值，当按钮处于被选中状态时应当提供的值
+    /// </summary>
     public override string Value
     {
       get { throw new NotImplementedException(); }
     }
 
+    /// <summary>
+    /// 按钮是否处于选中状态
+    /// </summary>
     public override bool Selected
     {
       get
@@ -67,6 +79,9 @@ namespace Ivony.Html.Forms
       }
     }
 
+    /// <summary>
+    /// 按钮类型
+    /// </summary>
     public FormGroupButtonType ButtonType
     {
       get;
@@ -74,9 +89,16 @@ namespace Ivony.Html.Forms
     }
   }
 
+
+  /// <summary>
+  /// 定义按钮组控件类型
+  /// </summary>
   public enum FormGroupButtonType
   {
+
+    /// <summary>单选按钮</summary>
     RadioButton,
+    /// <summary>多选按钮</summary>
     CheckBox
   }
 

@@ -128,7 +128,9 @@ namespace Ivony.Html.Forms
 
 
 
-
+    /// <summary>
+    /// 获取控件目前所设置的值列表
+    /// </summary>
     public string[] Values
     {
       get { return GetValues(); }

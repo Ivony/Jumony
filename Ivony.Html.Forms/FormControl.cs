@@ -5,6 +5,11 @@ using System.Text;
 
 namespace Ivony.Html.Forms
 {
+
+
+  /// <summary>
+  /// IFormControl 的抽象实现
+  /// </summary>
   public abstract class FormControl : IFormControl
   {
 

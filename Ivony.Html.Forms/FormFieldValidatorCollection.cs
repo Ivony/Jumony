@@ -13,8 +13,6 @@ namespace Ivony.Html.Forms
   /// </summary>
   public class FormFieldValidatorCollection : KeyedCollection<string, IFormFieldValidator>
   {
-    private   IEnumerable<IFormFieldValidator> enumerable;
-
 
 
     /// <summary>

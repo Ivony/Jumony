@@ -19,6 +19,8 @@ namespace Ivony.Html.Forms
     /// 尝试将一个HTML元素转换为表单
     /// </summary>
     /// <param name="element">要转换为表单的元素</param>
+    /// <param name="configuration">表单配置</param>
+    /// <param name="provider">表单控件提供程序</param>
     /// <returns></returns>
     public static HtmlForm AsForm( this IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {

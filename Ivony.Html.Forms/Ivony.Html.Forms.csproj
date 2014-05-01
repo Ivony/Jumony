@@ -89,7 +89,6 @@
     <Compile Include="HtmlForm.cs" />
     <Compile Include="FormConfiguration.cs" />
     <Compile Include="IFormControl.cs" />
-    <Compile Include="HtmlModelForm.cs" />
     <Compile Include="HtmlSelect.cs" />
     <Compile Include="HtmlTextArea.cs" />
     <Compile Include="IFormFieldValidator.cs" />

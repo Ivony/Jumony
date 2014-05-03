@@ -47,7 +47,21 @@ namespace Ivony.Html.Forms
     /// <summary>
     /// 分析表单时是否忽略输入控件设置的值不满足控件的限制的情况
     /// </summary>
-    public bool IgnoreInvalidValueInTextControl { get; set; }
+    public bool IgnoreInvalidValueInTextControl
+    {
+      get { return _ignoreInvalidValueInTextControl; }
+      set
+      {
+        if ( _readonly )
+          throw new InvalidOperationException();
+        
+        _ignoreInvalidValueInTextControl = value;
+      }
+    }
+
+    private bool _ignoreInvalidValueInTextControl;
+
+    
 
 
 

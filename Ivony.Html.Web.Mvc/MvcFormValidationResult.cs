@@ -19,6 +19,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 创建 MvcFormValidationResult 对象
     /// </summary>
+    /// <param name="form">所验证的表单</param>
     /// <param name="modelStates">要包装的模型验证状态</param>
     public MvcFormValidationResult( HtmlForm form, ModelStateDictionary modelStates )
     {

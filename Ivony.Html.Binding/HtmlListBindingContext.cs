@@ -24,10 +24,16 @@ namespace Ivony.Html.Binding
     }
 
 
+    /// <summary>
+    /// 当前正在进行绑定的元素
+    /// </summary>
     public IHtmlElement BindingElement { get; private set; }
 
 
-    public ListDataModel DataModel { get; private set; }
+    /// <summary>
+    /// 列表数据模型
+    /// </summary>
+    public new ListDataModel DataModel { get; private set; }
 
 
 
@@ -90,7 +96,7 @@ namespace Ivony.Html.Binding
       {
         if ( elements.Contains( e ) )               //若该元素是数据项元素，则取出相应数据项进行绑定
           DataBind( e, DataModel[index++] );
-        
+
         else
           DataBind( e, DataModel.RawObject );       //若该元素不是数据项元素，则使用列表的原始对象作为数据上下文进行绑定
       }

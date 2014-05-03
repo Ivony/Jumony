@@ -1,14 +1,12 @@
-﻿using Ivony.Html.Binding;
+﻿using Ivony.Fluent;
+using Ivony.Html.Binding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Routing;
-using Ivony.Fluent;
-
-using Ivony.Fluent;
 using System.Web;
+using System.Web.Routing;
 
 namespace Ivony.Html.Web
 {
@@ -26,6 +24,7 @@ namespace Ivony.Html.Web
     /// 创建 ActionUrlBinder 对象
     /// </summary>
     /// <param name="urlHelper">协助生成 ASP.NET MVC URL 的帮助器</param>
+    /// <param name="specification">要处理的文档所遵循的 HTML 规范</param>
     public ActionUrlBinder( JumonyUrlHelper urlHelper, HtmlSpecificationBase specification )
     {
 

@@ -63,6 +63,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取当前要处理的 HTML 范围
+    /// </summary>
     protected sealed override IHtmlContainer HtmlScope
     {
       get { return Scope; }

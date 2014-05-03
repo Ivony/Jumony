@@ -59,11 +59,16 @@ namespace Ivony.Html.Binding
       if ( expression[index] != '{' )
         return null;
 
-      var tokenizer = new BindingExpressionTokenizer( evaluator );
+      if ( tokenizer == null )
+        tokenizer = new BindingExpressionTokenizer();
 
-      return tokenizer.Parse( expression, index );
+      return tokenizer.Parse( evaluator, expression, index );
 
     }
+
+
+    [ThreadStatic]
+    private static BindingExpressionTokenizer tokenizer;//设置为线程内单例，提高利用率。
 
 
 
@@ -81,39 +86,20 @@ namespace Ivony.Html.Binding
 
 
       /// <summary>
-      /// 获取绑定表达式值转换器
-      /// </summary>
-      public IBindingExpressionEvaluator Evaluator
-      {
-        get;
-        private set;
-      }
-
-
-      /// <summary>
-      /// 创建 BindingExpressionTokenizer 对象
-      /// </summary>
-      /// <param name="evaluator">用于解析绑定表达式并计算绑定值的计算器</param>
-      public BindingExpressionTokenizer( IBindingExpressionEvaluator evaluator )
-      {
-        Evaluator = evaluator;
-      }
-
-
-      /// <summary>
       /// 解析绑定表达式为 BindingExpression 对象
       /// </summary>
+      /// <param name="evaluator">用于计算绑定表达式值的计算器</param>
       /// <param name="text">要分析的文本</param>
       /// <param name="index">开始分析的位置</param>
       /// <returns>解析出的 BindingExpression 对象</returns>
-      public BindingExpression Parse( string text, int index )
+      public BindingExpression Parse( IBindingExpressionEvaluator evaluator, string text, int index )
       {
         lock ( SyncRoot )
         {
 
           Initialize( text, index );
 
-          var expression = Parse();
+          var expression = Parse( evaluator );
           if ( expression == null )
             return null;
 
@@ -124,7 +110,7 @@ namespace Ivony.Html.Binding
         }
       }
 
-      private BindingExpression Parse()
+      private BindingExpression Parse( IBindingExpressionEvaluator evaluator )
       {
         if ( !Match( '{' ).HasValue )
           return null;
@@ -168,8 +154,8 @@ namespace Ivony.Html.Binding
 
               if ( IsMatch( '{' ) )
               {
-                var expression = Parse();
-                argValue = Evaluator.GetValue( expression );
+                var expression = Parse( evaluator );
+                argValue = evaluator.GetValue( expression );
               }
 
 

@@ -18,7 +18,7 @@ namespace Ivony.Html
 
     private static Regex propertyDeclarationRegex = new Regex( propertyDeclarationPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
 
-    private static string nonasciiPattern = @"[^\0-\237]";
+    //private static string nonasciiPattern = @"[^\0-\237]";
     private static string unicodePattern = @"\\[0-9a-f]{1,6}(\r\n|[ \n\r\t\f])?";
     private static string escapePattern = "{unicode}|\\[^\n\r\f0-9a-f]".Replace( "{unicode}", "(?:" + unicodePattern + ")" );
 

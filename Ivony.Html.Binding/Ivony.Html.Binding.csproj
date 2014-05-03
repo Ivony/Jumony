@@ -58,7 +58,6 @@
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="LiteralBinder.cs" />
     <Compile Include="ExpressionBinderCollection.cs" />
-    <Compile Include="FormBinder.cs" />
     <Compile Include="HtmlBinding.cs" />
     <Compile Include="HtmlBindingContext.cs" />
     <Compile Include="HtmlListBindingContext.cs" />

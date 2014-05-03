@@ -12,6 +12,10 @@ using System.Web.WebSockets;
 
 namespace Ivony.Web
 {
+
+  /// <summary>
+  /// 扩展 Controller ，提供WebSocket和JSONP支持
+  /// </summary>
   public class ExtController : Controller
   {
 
@@ -22,7 +26,7 @@ namespace Ivony.Web
     /// <param name="data">数据对象</param>
     /// <param name="callback">回调方法（若没有或者为null，则此方法行为与　Json　方法相同）。</param>
     /// <returns></returns>
-    protected ActionResult Jsonp( object data, string callback = null, CancellationToken token = default( CancellationToken ) )
+    protected ActionResult Jsonp( object data, string callback = null )
     {
       if ( callback == null )
         return Json( data, JsonRequestBehavior.AllowGet );

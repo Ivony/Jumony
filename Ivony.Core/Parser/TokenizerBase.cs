@@ -44,7 +44,7 @@ namespace Ivony.Parser
     /// <summary>
     /// 获取用于同步的对象
     /// </summary>
-    public object SyncRoot
+    public virtual object SyncRoot
     {
       get { return _sync; }
     }

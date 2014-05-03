@@ -26,11 +26,6 @@ namespace Ivony.Html.Binding
     public static LiteralBinder LiteralBinder { get; private set; }
 
     /// <summary>
-    /// 获取表单绑定器
-    /// </summary>
-    public static FormBinder FormBinder { get; private set; }
-
-    /// <summary>
     /// 获取脚本绑定器
     /// </summary>
     public static ScriptBinder ScriptBinder { get; private set; }
@@ -62,7 +57,6 @@ namespace Ivony.Html.Binding
       StyleBinder = new StyleBinder();
       ScriptBinder = new ScriptBinder();
       LiteralBinder = new LiteralBinder();
-      FormBinder = new FormBinder();
 
 
 
@@ -154,6 +148,13 @@ namespace Ivony.Html.Binding
     }
 
 
+    /// <summary>
+    /// 创建绑定上下文
+    /// </summary>
+    /// <param name="scope">要进行数据绑定的范围</param>
+    /// <param name="dataModel">数据模型</param>
+    /// <param name="binders">在这一次数据绑定中要用到的绑定器列表</param>
+    /// <returns>绑定上下文</returns>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel, params object[] binders )
     {
       var elementBinders = new List<IHtmlElementBinder>();
@@ -225,7 +226,7 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataModel">数据模型</param>
-    /// <param name="binders">在这一次绑定中要用到的绑定器列表</param>
+    /// <param name="binders">在这一次数据绑定中要用到的绑定器列表</param>
     public static void DataBind( this IHtmlContainer scope, object dataModel, params object[] binders )
     {
 

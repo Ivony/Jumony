@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 
 namespace Ivony.Html.Binding
@@ -244,7 +245,7 @@ namespace Ivony.Html.Binding
           element.Remove();
 
         else
-          element.ReplaceWith( value );
+          element.ReplaceWith( HttpUtility.HtmlEncode( value ) );
 
         return;
       }

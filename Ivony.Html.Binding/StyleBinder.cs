@@ -20,7 +20,8 @@ namespace Ivony.Html.Binding
 
 
     private const string styleAttributePrefix = "binding-style-";
-    private const string classAttributeName = "binding-class";
+    private const string classAttributeName = "binding-class-";
+    private const string classAttributePrefix = "binding-class-";
 
 
     /// <summary>
@@ -38,7 +39,7 @@ namespace Ivony.Html.Binding
         if ( visible.EqualsIgnoreCase( "false" ) || visible.EqualsIgnoreCase( "hidden" ) || visible.EqualsIgnoreCase( "invisible" ) )
         {
           element.Remove();
-          
+
           context.CancelChildsBinding = context.BindCompleted = true;
         }
       }
@@ -46,27 +47,36 @@ namespace Ivony.Html.Binding
 
 
 
-      //处理样式类
-      var classAttribute = element.Attribute( classAttributeName );
-      if ( classAttribute != null )
-      {
-        if ( !string.IsNullOrWhiteSpace( classAttribute.AttributeValue ) )
-        {
 
-          var classes = Regulars.whiteSpaceSeparatorRegex.Split( classAttribute.AttributeValue ).Where( c => c != "" ).ToArray();
-          if ( classes.Any() )
-            element.Class( classes );
+      {
+        //处理样式类
+        var classAttribute = element.Attribute( classAttributePrefix );
+        if ( classAttribute != null )
+        {
+          if ( !string.IsNullOrWhiteSpace( classAttribute.AttributeValue ) )
+          {
+
+            var classes = Regulars.whiteSpaceSeparatorRegex.Split( classAttribute.AttributeValue ).Where( c => c != "" ).ToArray();
+            if ( classes.Any() )
+              element.Class( classes );
+          }
+
+          element.RemoveAttribute( classAttributePrefix );
         }
 
-        element.RemoveAttribute( classAttributeName );
       }
 
+      {
+        var classAttributes = element.Attributes().Where( a => a.Name.StartsWith( classAttributePrefix ) ).ToArray();
+        BindElementClasses( element, classAttributes );
+      }
 
       //处理CSS样式
       var styleAttributes = element.Attributes().Where( a => a.Name.StartsWith( styleAttributePrefix ) ).ToArray();
       BindElementStyles( element, styleAttributes );
     }
 
+    
     /// <summary>
     /// 绑定元素样式
     /// </summary>
@@ -80,16 +90,45 @@ namespace Ivony.Html.Binding
         var value = attribute.AttributeValue;
         var name = attribute.Name.Substring( styleAttributePrefix.Length );
 
+        attribute.Remove();
+
         if ( string.IsNullOrEmpty( value ) )
           continue;
 
         else
           element.Style( name, value );
-
-
-        attribute.Remove();
       }
     }
+
+
+    /// <summary>
+    /// 绑定元素样式类
+    /// </summary>
+    /// <param name="element">要处理的元素</param>
+    /// <param name="classAttributes">样式类属性</param>
+    private static void BindElementClasses( IHtmlElement element, IHtmlAttribute[] classAttributes )
+    {
+      foreach ( var attribute in classAttributes )
+      {
+
+        var value = attribute.AttributeValue;
+        var name = attribute.Name.Substring( classAttributePrefix.Length );
+
+        attribute.Remove();
+
+
+        if ( string.IsNullOrEmpty( value ) )
+          continue;
+
+        else if ( value.EqualsIgnoreCase( "false" ) )
+          element.Class().Remove( name );
+
+        else
+          element.Class().Add( name );
+
+      }
+    }
+
 
 
     private string ToJson( object dataObject )

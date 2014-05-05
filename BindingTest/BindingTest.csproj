@@ -59,6 +59,7 @@
     <Compile Include="BindingExpressionParserTest.cs" />
     <Compile Include="ScriptBinderTest.cs" />
     <Compile Include="ListTest.cs" />
+    <Compile Include="StyleBinderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
@@ -86,6 +87,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ListTest1.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StyleTest1.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Test1.html">

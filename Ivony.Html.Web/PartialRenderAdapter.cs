@@ -122,9 +122,9 @@ namespace Ivony.Html.Web
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-      HttpContext.Trace.Write( "Jumony Partial", string.Format( "Begin Render Partial: {0}", partialTag ) );
+      HttpContext.Trace.Write( "Jumony Web", string.Format( "Begin Render Partial: {0}", partialTag ) );
       RenderPartial( element, context.Writer );
-      HttpContext.Trace.Write( "Jumony Partial", string.Format( "End Render Partial: {0}", partialTag ) );
+      HttpContext.Trace.Write( "Jumony Web", string.Format( "End Render Partial: {0}", partialTag ) );
     }
 
 

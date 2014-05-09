@@ -280,7 +280,7 @@ namespace Ivony.Html.Web
 
       var httpContext = HttpContext.Current;
       if ( httpContext != null )
-        httpContext.Trace.Write( "Jumony for ASP.NET", message );
+        httpContext.Trace.Write( "Jumony Web", message );
     }
 
 

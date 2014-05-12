@@ -354,7 +354,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="container">要渲染子节点的容器</param>
     /// <param name="context">渲染上下文</param>
-    public static void RenderChilds( this IHtmlContainer container, HtmlRenderContext context )
+    public static void RenderChilds( this IHtmlContainer container, IHtmlRenderContext context )
     {
       foreach ( var node in container.Nodes() )
       {
@@ -407,13 +407,13 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="node">要呈现的节点</param>
     /// <param name="context">渲染上下文</param>
-    public static void Render( this IHtmlNode node, HtmlRenderContext context )
+    public static void Render( this IHtmlNode node, IHtmlRenderContext context )
     {
       if ( node == null )
         throw new ArgumentNullException( "node" );
 
 
-      foreach ( var a in context.Adapters )
+      foreach ( var a in context.RenderAdapters )
       {
         if ( a.Render( node, context ) )
           return;
@@ -435,7 +435,7 @@ namespace Ivony.Html
         return;
       }
 
-      context.Write( node.OuterHtml() );
+      context.Writer.Write( node.OuterHtml() );
     }
 
 
@@ -444,7 +444,7 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要渲染的元素</param>
     /// <param name="context">渲染上下文</param>
-    private static void RenderElementAndChilds( IHtmlElement element, HtmlRenderContext context )
+    private static void RenderElementAndChilds( IHtmlElement element, IHtmlRenderContext context )
     {
 
       var writer = context.Writer;

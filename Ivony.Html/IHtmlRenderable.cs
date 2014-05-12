@@ -17,7 +17,7 @@ namespace Ivony.Html
     /// 呈现这个节点
     /// </summary>
     /// <param name="context">呈现渲染上下文</param>
-    void Render( HtmlRenderContext context );
+    void Render( IHtmlRenderContext context );
 
   }
 }

@@ -47,7 +47,7 @@ namespace Ivony.Html.Web
       RenderAdapters = view.RenderAdapters.ToArray();
     }
 
-    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, IHtmlRenderContext context )
     {
       var element = node as IHtmlElement;
 

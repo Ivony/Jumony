@@ -117,7 +117,7 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="element">partial 标签</param>
     /// <param name="context">渲染上下文</param>
-    protected override void Render( IHtmlElement element, HtmlRenderContext context )
+    protected override void Render( IHtmlElement element, IHtmlRenderContext context )
     {
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );

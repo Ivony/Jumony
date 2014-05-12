@@ -89,7 +89,7 @@ namespace Ivony.Html.Web
       if ( ProcessActionLink( element ) )//对元素进行 Action URL 处理，若处理成功，则跳过元素。
         return;
 
-      element.Attributes()
+      element.Attributes().ToArray()
         .Where( attribute => Specification.IsUriValue( attribute ) )
         .ForAll( attribute => UrlHelper.ResolveUri( attribute, DocumentPath ) );
     }

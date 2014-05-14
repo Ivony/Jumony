@@ -34,6 +34,16 @@ namespace Ivony.Html.Web
     }
 
 
+
+    /// <summary>
+    /// 获取一个值，指示当前视图是否为内容视图（即有母版页）
+    /// </summary>
+    public bool IsContentView
+    {
+      get { return MasterView != null; }
+    }
+
+
     /// <summary>
     /// 重写 InitializeView 方法，增加 Jumony 视图初始化步骤
     /// </summary>
@@ -175,9 +185,9 @@ namespace Ivony.Html.Web
         var jumonyMaster = MasterView as JumonyMasterView;
         if ( jumonyMaster != null )
         {
-          HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Jumony Master View" );
           ProcessMaster( jumonyMaster );
-          HttpContext.Trace.Write( "Jumony View", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Jumony Master View" );
         }
 
         HttpContext.Trace.Write( "Jumony View", "Begin Render" );
@@ -213,7 +223,7 @@ namespace Ivony.Html.Web
     private void AddGeneratorMetaData()
     {
 
-      if ( MvcEnvironment.Configuration.DisableGeneratorTag || PartialMode || MasterView != null )
+      if ( MvcEnvironment.Configuration.DisableGeneratorTag || IsPartialView || MasterView != null )
         return;
 
       var document = Scope as IHtmlDocument;
@@ -387,7 +397,7 @@ namespace Ivony.Html.Web
     /// <returns>渲染结果</returns>
     protected virtual string RenderContent( IHtmlRenderAdapter[] adapters )
     {
-      return RenderContent( Scope, PartialMode, adapters );
+      return RenderContent( Scope, IsPartialView, adapters );
     }
 
     /// <summary>

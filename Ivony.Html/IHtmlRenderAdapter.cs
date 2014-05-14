@@ -20,7 +20,7 @@ namespace Ivony.Html
     /// <param name="context">当前渲染上下文</param>
     /// <returns>是否进行了自定义渲染，若返回false，则使用默认渲染</returns>
     /// <remarks>
-    /// 若返回值为 false ，则系统其后会自行渲染这个节点，所以不应对 writer 写入一些东西后返回 false。
+    /// 若返回值为 false ，则系统其后会自行渲染这个节点，所以不应对 Writer 写入一些东西后返回 false。
     /// </remarks>
     bool Render( IHtmlNode node, IHtmlRenderContext context );
 

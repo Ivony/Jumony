@@ -15,7 +15,7 @@ namespace Ivony.Html.Web
   /// <summary>
   /// 对值为 URL 的属性进行 MVC 转换的绑定器
   /// </summary>
-  public class ActionUrlBinder : IHtmlElementBinder
+  public class ActionUrlBinder : IHtmlBinder
   {
 
 

@@ -9,7 +9,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理文本替换的绑定器
   /// </summary>
-  public sealed class LiteralBinder : IHtmlElementBinder
+  public sealed class LiteralBinder : IHtmlBinder
   {
 
     /// <summary>

@@ -13,7 +13,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 脚本绑定器，用于解析脚本中的绑定表达式。
   /// </summary>
-  public class ScriptBinder : IHtmlElementBinder
+  public class ScriptBinder : IHtmlBinder
   {
 
     private static Regex scriptBindingExpression = new Regex( @"^(?<declare>\s*var\s+[a-zA-z_][a-zA-Z_0-9]+\s*=).*?//\s*(?<expression>{.*})\s*$", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );

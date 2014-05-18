@@ -47,7 +47,7 @@ namespace Ivony.Html.Binding
 
       Providers = new HtmlBindingContextProviderCollection();
       ExpressionBinders = new ExpressionBinderCollection();
-      ElementBinders = new List<IHtmlElementBinder>();
+      ElementBinders = new List<IHtmlBinder>();
 
       Providers.Add( new HtmlListBindingContextProvider() );
 
@@ -89,7 +89,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 获取或设置所有元素绑定器
     /// </summary>
-    public static ICollection<IHtmlElementBinder> ElementBinders
+    public static ICollection<IHtmlBinder> ElementBinders
     {
       get;
       private set;
@@ -157,14 +157,14 @@ namespace Ivony.Html.Binding
     /// <returns>绑定上下文</returns>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel, params object[] binders )
     {
-      var elementBinders = new List<IHtmlElementBinder>();
+      var elementBinders = new List<IHtmlBinder>();
       var expressionBinders = new List<IExpressionBinder>();
 
 
       foreach ( var item in binders )
       {
         {
-          var binder = item as IHtmlElementBinder;
+          var binder = item as IHtmlBinder;
           if ( binder != null )
           {
             elementBinders.Add( binder );
@@ -182,7 +182,7 @@ namespace Ivony.Html.Binding
         }
 
         {
-          var list = item as IEnumerable<IHtmlElementBinder>;
+          var list = item as IEnumerable<IHtmlBinder>;
           if ( list != null )
           {
             elementBinders.AddRange( list );

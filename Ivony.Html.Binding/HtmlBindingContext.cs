@@ -25,14 +25,14 @@ namespace Ivony.Html.Binding
     /// <param name="expressionBinders">要使用的绑定表达式绑定器</param>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="dataModel">数据上下文</param>
-    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
+    public static HtmlBindingContext Create( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
       return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataModel );
 
     }
 
 
-    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
+    private HtmlBindingContext( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
 
       if ( htmlBinders == null )
@@ -47,7 +47,7 @@ namespace Ivony.Html.Binding
       Binders = htmlBinders;
       BindingScope = scope;
       DataModel = dataModel;
-      
+
       _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 
@@ -99,7 +99,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 元素绑定器
     /// </summary>
-    public IHtmlElementBinder[] Binders { get; private set; }
+    public IHtmlBinder[] Binders { get; private set; }
 
 
     /// <summary>
@@ -150,11 +150,11 @@ namespace Ivony.Html.Binding
         if ( TryGetDataModel( element, out dataModel ) )
         {
 
-          if ( dataModel == null )//如果获取到的数据对象是 null ，则直接移除整个元素
+          if ( dataModel == null )//如果获取到的数据模型是 null ，则直接移除整个元素
             element.Remove();
 
           else
-            CreateBindingContext( this, element, dataModel ).DataBind();//若存在新的数据上下文，创建一个新的绑定上下文并绑定。
+            CreateBindingContext( this, element, dataModel ).DataBind();//若在当前元素定义了数据模型，创建一个新的绑定上下文并绑定。
 
         }
 
@@ -183,8 +183,6 @@ namespace Ivony.Html.Binding
     }
 
 
-
-    private class NoneDataContext { }
 
     /// <summary>
     /// 尝试获取数据模型
@@ -217,13 +215,40 @@ namespace Ivony.Html.Binding
     /// 对元素进行数据绑定
     /// </summary>
     /// <param name="element">要绑定数据的元素</param>
-    protected virtual void DataBind( IHtmlElement element )
+    public virtual void DataBind( IHtmlElement element )
     {
+
       var attributes = element.Attributes().ToArray();
       attributes.ForAll( a => BindAttribute( a ) );
 
+      if ( BindExpressionElement( element ) )
+        return;
+
       BindElement( element );
     }
+
+
+
+    protected bool BindExpressionElement( IHtmlElement element )
+    {
+      var expression = new ElementExpression( element );
+
+      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
+
+      if ( expressionBinder == null )
+        return false;
+
+      var value = expressionBinder.GetValue( this, expression.Arguments );
+
+      if ( value == null )
+        element.Remove();
+
+      else
+        element.ReplaceWith( HttpUtility.HtmlEncode( value ) );
+
+      return true;
+    }
+
 
 
     /// <summary>
@@ -232,24 +257,6 @@ namespace Ivony.Html.Binding
     /// <param name="element">要进行绑定的元素</param>
     protected virtual void BindElement( IHtmlElement element )
     {
-
-      var expression = new ElementExpression( element );
-
-      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
-
-      if ( expressionBinder != null )
-      {
-        var value = expressionBinder.GetValue( this, expression.Arguments );
-
-        if ( value == null )
-          element.Remove();
-
-        else
-          element.ReplaceWith( HttpUtility.HtmlEncode( value ) );
-
-        return;
-      }
-
 
       CancelChildsBinding = BindCompleted = false;//重置绑定状态
 
@@ -265,7 +272,6 @@ namespace Ivony.Html.Binding
       if ( !CancelChildsBinding )
         BindChilds( element );
     }
-
 
     /// <summary>
     /// 获取或设置一个值，指定元素绑定已经完成，无需遍历后面的绑定处理程序。

@@ -194,7 +194,7 @@ namespace Ivony.Html.Binding
     {
       dataModel = null;
 
-      var expression = BindingExpression.ParseExpression( this, element.Attribute( "datamodel" ).Value() );
+      var expression = BindingExpression.ParseExpression( element.Attribute( "datamodel" ).Value() );
       if ( expression == null )//若datamodel属性不是一个合法的数据绑定表达式，则忽略之。
         return false;
 
@@ -202,7 +202,7 @@ namespace Ivony.Html.Binding
       element.RemoveAttribute( "datamodel" );//成功取得dataModel后，应删除该属性。
 
 
-      if ( !TryGetDataModel( expression, out dataModel ) )
+      if ( !TryGetValue( expression, out dataModel ) )
         throw new InvalidOperationException( "处理元素数据上下文绑定时出现错误，绑定表达式不支持获取数据对象" );
       //此处不检测dataContext是否等于当前dataContext的原因是，如果元素中写下datacontext属性并指向当前datacontext，表示需要在此处重新创建一个绑定上下文。
 
@@ -238,7 +238,7 @@ namespace Ivony.Html.Binding
       if ( expressionBinder == null )
         return false;
 
-      var value = expressionBinder.GetValue( this, expression.Arguments );
+      var value = expressionBinder.GetValue( this, expression );
 
       if ( value == null )
         element.Remove();
@@ -293,14 +293,12 @@ namespace Ivony.Html.Binding
     protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
 
-      var expression = BindingExpression.ParseExpression( this, attribute.Value() );
+      var expression = BindingExpression.ParseExpression( attribute.Value() );
       if ( expression == null )
         return;
 
-      string value = GetValue( expression );
-
-
-      if ( value == null )
+      string value;
+      if ( !TryGetValue( expression, out value ) )
         attribute.Remove();
 
       else
@@ -340,42 +338,50 @@ namespace Ivony.Html.Binding
 
 
 
+    public object GetValue( BindingExpression expression )
+    {
+      object value;
+      if ( TryGetValue( expression, out value ) )
+        return value;
+
+      else
+        return null;
+    }
 
 
-    /// <summary>
-    /// 从 BindingExpression 获取需要绑定的值
-    /// </summary>
-    /// <param name="expression">绑定表达式</param>
-    /// <returns>绑定值</returns>
-    public string GetValue( BindingExpression expression )
+    public bool TryGetValue<T>( BindingExpression expression, out T value )
     {
       var expressionBinder = GetExpressionBinder( expression );
 
       if ( expressionBinder == null )
-        return null;
-
-      return expressionBinder.GetValue( this, expression.Arguments );
-
-    }
-
-
-    /// <summary>
-    /// 从绑定表达式中获取数据对象
-    /// </summary>
-    /// <param name="expression">绑定表达式</param>
-    /// <param name="dataModel">数据对象</param>
-    /// <returns></returns>
-    public virtual bool TryGetDataModel( BindingExpression expression, out object dataModel )
-    {
-      dataModel = null;
-      var binder = GetExpressionBinder( expression ) as IDataObjectExpressionBinder;
-      if ( binder == null )
+      {
+        value = default( T );
         return false;
+      }
 
-      dataModel = binder.GetDataObject( this, expression.Arguments );
+      var obj = expressionBinder.GetValue( this, expression );
+
+      //UNDONE
+      value = (T) obj;
       return true;
     }
 
+
+    public bool TryConvertValue<T>( object obj, out T value )
+    {
+      if ( typeof( T ).IsAssignableFrom( obj.GetType() ) )
+      {
+        value = (T) obj;
+        return true;
+      }
+      else
+      {
+        value = default( T );
+        return false;
+      }
+
+
+    }
 
   }
 }

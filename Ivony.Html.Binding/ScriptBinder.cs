@@ -39,11 +39,11 @@ namespace Ivony.Html.Binding
 
       script = scriptBindingExpression.Replace( script, match =>
         {
-          var expression = BindingExpression.ParseExpression( context, match.Groups["expression"].Value );
+          var expression = BindingExpression.ParseExpression( match.Groups["expression"].Value );
           if ( expression == null )
             return match.Value;
 
-          object dataObject = GetValue( context, expression );
+          object dataObject = context.GetValue( expression );
           var valueExpression = serializer.Serialize( dataObject );
 
           return match.Groups["declare"].Value + valueExpression + ";";
@@ -53,13 +53,5 @@ namespace Ivony.Html.Binding
       element.InnerHtml( script );
     }
 
-    private static object GetValue( HtmlBindingContext context, BindingExpression expression )
-    {
-      object dataObject;
-      if ( !context.TryGetDataModel( expression, out dataObject ) )
-        dataObject = context.GetValue( expression );
-
-      return dataObject;
-    }
   }
 }

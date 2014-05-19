@@ -11,7 +11,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理{eval-list xxx}绑定表达式的绑定器
   /// </summary>
-  public class EvalListExpressionBinder : EvalExpressionBinder, IExpressionBinder, IDataObjectExpressionBinder
+  public class EvalListExpressionBinder : EvalExpressionBinder, IExpressionBinder
   {
 
 
@@ -21,15 +21,10 @@ namespace Ivony.Html.Binding
     }
 
 
-    string IExpressionBinder.GetValue( HtmlBindingContext context, IDictionary<string, string> arguments )
-    {
-      throw new NotSupportedException();
-    }
-
-    object IDataObjectExpressionBinder.GetDataObject( HtmlBindingContext context, IDictionary<string, string> arguments )
+    object IExpressionBinder.GetValue( HtmlBindingContext context, BindingExpression expression )
     {
 
-      var dataModel = GetDataObject( context, arguments );
+      var dataModel = GetDataObject( context, expression );
 
       if ( dataModel == null )
         return null;
@@ -38,14 +33,15 @@ namespace Ivony.Html.Binding
       CssElementSelector elementSelector = null;
       string selector;
 
-      if ( arguments.TryGetValue( "selector", out selector ) )
+      if ( expression.Arguments.TryGetValue( context, "selector", out selector ) )
         elementSelector = CssParser.ParseElementSelector( selector );
 
       ListBindingMode mode;
 
       string modeSetting;
-      if ( arguments.TryGetValue( "mode", out modeSetting ) && modeSetting.EqualsIgnoreCase( "static" ) )
+      if ( expression.Arguments.TryGetValue( context, "mode", out modeSetting ) && modeSetting.EqualsIgnoreCase( "static" ) )
         mode = ListBindingMode.StaticContent;
+      
       else
         mode = ListBindingMode.DynamicContent;
 

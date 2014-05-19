@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Binding
 {
@@ -42,9 +43,25 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 绑定表达式参数
     /// </summary>
-    public override IDictionary<string, string> Arguments
+    public override BindingExpressionArgumentCollection Arguments
     {
-      get { return Element.Attributes().ToDictionary( a => a.Name, a => a.AttributeValue, StringComparer.OrdinalIgnoreCase ); }
+      get
+      {
+        var arguments = new BindingExpressionArgumentCollection();
+        Element.Attributes().ForAll( attribute => AddArgument( attribute, arguments ) );
+        arguments.SetCompleted();
+        return arguments;
+      }
+    }
+
+    private void AddArgument( IHtmlAttribute attribute, BindingExpressionArgumentCollection arguments )
+    {
+      var expression = BindingExpression.ParseExpression( attribute.Value() );
+      if ( expression != null )
+        arguments.Add( attribute.Name, expression );
+
+      else
+        arguments.Add( attribute.Name, attribute.Value() );
     }
   }
 }

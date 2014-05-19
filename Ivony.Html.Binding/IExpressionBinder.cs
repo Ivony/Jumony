@@ -23,9 +23,9 @@ namespace Ivony.Html.Binding
     /// 进行绑定，根据给定的参数获取需要绑定的值
     /// </summary>
     /// <param name="context">当前绑定上下文</param>
-    /// <param name="arguments">绑定参数</param>
+    /// <param name="expression">绑定表达式</param>
     /// <returns>绑定的值</returns>
-    string GetValue( HtmlBindingContext context, IDictionary<string, string> arguments );
+    object GetValue( HtmlBindingContext context, BindingExpression expression );
 
 
   }

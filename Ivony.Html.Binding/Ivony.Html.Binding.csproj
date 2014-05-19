@@ -49,12 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExpression.cs" />
+    <Compile Include="BindingExpressionArgumentCollection.cs" />
     <Compile Include="HtmlBindingContextProviderCollection.cs" />
     <Compile Include="HtmlListBindingContextProvider.cs" />
     <Compile Include="EvalExpressionBinder.cs" />
     <Compile Include="ElementExpression.cs" />
     <Compile Include="EvalListExpressionBinder.cs" />
     <Compile Include="IBindingExpressionEvaluator.cs" />
+    <Compile Include="IHtmlBinder.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="LiteralBinder.cs" />
     <Compile Include="ExpressionBinderCollection.cs" />

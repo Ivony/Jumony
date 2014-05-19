@@ -1,5 +1,6 @@
 ﻿using Ivony.Parser;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,11 +26,15 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 参数值
+    /// 派生类实现此属性提供参数值列表
     /// </summary>
-    public abstract IDictionary<string, string> Arguments { get; }
+    public abstract BindingExpressionArgumentCollection Arguments { get; }
 
 
+    public bool TryGetValue<T>( IBindingExpressionEvaluator evaluator, string name, out T value )
+    {
+      return Arguments.TryGetValue( evaluator, name, out value );
+    }
 
 
     /// <summary>
@@ -38,9 +43,9 @@ namespace Ivony.Html.Binding
     /// <param name="evaluator">用于解析绑定表达式并计算绑定值的计算器</param>
     /// <param name="expression">要从中解析的绑定表达式的字符串</param>
     /// <returns>解析后的结果</returns>
-    public static BindingExpression ParseExpression( IBindingExpressionEvaluator evaluator, string expression )
+    public static BindingExpression ParseExpression( string expression )
     {
-      return ParseExpression( evaluator, expression, 0 );
+      return ParseExpression( expression, 0 );
     }
 
     /// <summary>
@@ -50,7 +55,7 @@ namespace Ivony.Html.Binding
     /// <param name="expression">要从中解析的绑定表达式的字符串</param>
     /// <param name="index">解析绑定表达式的开始位置</param>
     /// <returns>解析后的结果</returns>
-    public static BindingExpression ParseExpression( IBindingExpressionEvaluator evaluator, string expression, int index )
+    public static BindingExpression ParseExpression( string expression, int index )
     {
 
       if ( string.IsNullOrEmpty( expression ) )
@@ -62,7 +67,7 @@ namespace Ivony.Html.Binding
       if ( tokenizer == null )
         tokenizer = new BindingExpressionTokenizer();
 
-      return tokenizer.Parse( evaluator, expression, index );
+      return tokenizer.Parse( expression, index );
 
     }
 
@@ -83,6 +88,7 @@ namespace Ivony.Html.Binding
 
 
       private static readonly Regex EName = new Regex( @"\G[a-zA-z_][a-zA-Z_0-9-]*", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+      private static readonly Regex ArgumentValue = new Regex( @"\G([^{},]|\{\{|\}\}|,,)+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
 
 
       /// <summary>
@@ -92,14 +98,14 @@ namespace Ivony.Html.Binding
       /// <param name="text">要分析的文本</param>
       /// <param name="index">开始分析的位置</param>
       /// <returns>解析出的 BindingExpression 对象</returns>
-      public BindingExpression Parse( IBindingExpressionEvaluator evaluator, string text, int index )
+      public BindingExpression Parse( string text, int index )
       {
         lock ( SyncRoot )
         {
 
           Initialize( text, index );
 
-          var expression = Parse( evaluator );
+          var expression = Parse();
           if ( expression == null )
             return null;
 
@@ -110,7 +116,7 @@ namespace Ivony.Html.Binding
         }
       }
 
-      private BindingExpression Parse( IBindingExpressionEvaluator evaluator )
+      private BindingExpression Parse()
       {
         if ( !Match( '{' ).HasValue )
           return null;
@@ -119,61 +125,24 @@ namespace Ivony.Html.Binding
         if ( match == null )
           return null;
 
-        var name = match.Value;
 
+        var expression = new ParsedBindingExpression( match.Value );
 
         if ( Match( '}' ).HasValue )
-          return new ParsedBindingExpression( name );//解析成功
+          return expression;//解析成功
 
 
         match = Match( WhiteSpace );
         if ( match == null || match.Value.Length == 0 )
           return null;
 
-        Dictionary<string, string> args = new Dictionary<string, string>();
-
         while ( true )
         {
-
-          string argName, argValue;
-
           match = Match( EName );
           if ( match == null )
             return null;
 
-          argName = match.Value;
-
-          if ( Match( '=' ).HasValue )
-          {
-
-            match = Match( ArgumentValue );
-            if ( match == null )
-            {
-
-              argValue = "";
-
-              if ( IsMatch( '{' ) )
-              {
-                var expression = Parse( evaluator );
-                argValue = evaluator.GetValue( expression );
-              }
-
-
-            }
-
-            else
-              argValue = match.Value.Replace( "{{", "{" ).Replace( "}}", "}" ).Replace( ",,", "," );
-          }
-
-          else
-            argValue = null;
-
-
-          args.Add( argName, argValue );
-
-
-          if ( Match( '}' ).HasValue )
-            return new ParsedBindingExpression( name, args );//解析成功
+          ParseValue( match.Value, expression.Arguments );
 
 
           if ( Match( ',' ).HasValue )
@@ -182,12 +151,38 @@ namespace Ivony.Html.Binding
             continue;
           }
 
-          return null;
+          else if ( Match( '}' ).HasValue )//解析成功
+          {
+            expression.Arguments.SetCompleted();
+            return expression;
+          }
+
+
+          else
+            return null;                   //解析失败
         }
+
+
       }
 
+      private void ParseValue( string argumentName, BindingExpressionArgumentCollection arguments )
+      {
+        if ( Match( '=' ) == null )
+          arguments.Add( argumentName );
 
-      Regex ArgumentValue = new Regex( @"\G([^{},]|\{\{|\}\}|,,)+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
+
+
+        Match match = Match( ArgumentValue );
+        if ( match != null )
+          arguments.Add( argumentName, match.Value.Replace( "{{", "{" ).Replace( "}}", "}" ).Replace( ",,", "," ) );
+
+        else if ( IsMatch( '{' ) )
+          arguments.Add( argumentName, Parse() );
+
+        else
+          arguments.Add( argumentName, "" );
+
+      }
     }
 
 
@@ -196,16 +191,11 @@ namespace Ivony.Html.Binding
     {
 
       private string _name;
-      private Dictionary<string, string> _arguments;
+      private BindingExpressionArgumentCollection _arguments = new BindingExpressionArgumentCollection();
 
 
-      public ParsedBindingExpression( string expressionName ) : this( expressionName, new Dictionary<string, string>() ) { }
+      public ParsedBindingExpression( string expressionName ) { _name = expressionName; }
 
-      public ParsedBindingExpression( string expressionName, Dictionary<string, string> arguments )
-      {
-        _name = expressionName;
-        _arguments = arguments;
-      }
 
 
       public override string Name
@@ -213,12 +203,12 @@ namespace Ivony.Html.Binding
         get { return _name; }
       }
 
-      public override IDictionary<string, string> Arguments
+      public override BindingExpressionArgumentCollection Arguments
       {
-        get { return new Dictionary<string, string>( _arguments ); }
+        get { return _arguments; }
       }
-    }
 
+    }
 
   }
 }

@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Web.Caching;
 using System.Web.Hosting;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ivony.Web
 {
@@ -50,7 +51,7 @@ namespace Ivony.Web
     {
 
       if ( DebugMode )
-        httpContext.Trace.Write( "SimpleRouteTable", "Begin GetRouteData" );
+        Trace( "Begin GetRouteData" );
 
       var virtualPath = httpContext.Request.GetVirtualPath();
 
@@ -73,9 +74,9 @@ namespace Ivony.Web
 
         if ( DebugMode )
         {
-          httpContext.Trace.Write( "SimpleRouteTable", "Hit cache" );
+          Trace( "Hit cache" );
           var routeValues = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ).ToArray() );
-          httpContext.Trace.Write( "SimpleRouteTable", string.Format( "RouteData: {{{0}}}", routeValues ) );
+          Trace( string.Format( "RouteData: {{{0}}}", routeValues ) );
         }
 
         return CloneRouteData( routeData );
@@ -111,11 +112,22 @@ namespace Ivony.Web
       if ( DebugMode )
       {
         var values = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ).ToArray() );
-        httpContext.Trace.Write( "SimpleRouteTable", string.Format( "RouteData: {{{0}}}", values ) );
+        Trace( string.Format( "RouteData: {{{0}}}", values ) );
       }
 
       return CloneRouteData( routeData );
 
+    }
+
+
+    /// <summary>
+    /// 写入追踪消息
+    /// </summary>
+    /// <param name="message">消息内容</param>
+    /// <param name="level">消息级别</param>
+    protected void Trace( string message, TraceLevel level = TraceLevel.Info )
+    {
+      WebServiceLocator.GetTraceService().Trace( level, "Simple Route Table", message );
     }
 
 
@@ -203,7 +215,7 @@ namespace Ivony.Web
       if ( IsIgnoredPath( virtualPath ) )//如果产生的虚拟路径是被忽略的，则返回 null
       {
         if ( DebugMode )
-          requestContext.HttpContext.Trace.Warn( "SimpleRouteTable", string.Format( "名为 \"{0}\" 路由表的 \"{1}\" 路由规则产生的虚拟路径 {2} 被该路由表忽略", Name, bestRule.Name, virtualPath ) );
+          Trace( string.Format( "名为 \"{0}\" 路由表的 \"{1}\" 路由规则产生的虚拟路径 {2} 被该路由表忽略", Name, bestRule.Name, virtualPath ), TraceLevel.Warning );
 
         else
           return null;

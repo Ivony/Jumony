@@ -58,6 +58,7 @@
     <Compile Include="IBindingExpressionEvaluator.cs" />
     <Compile Include="IHtmlBinder.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
+    <Compile Include="IBindingExpressionValueObject.cs" />
     <Compile Include="LiteralBinder.cs" />
     <Compile Include="ExpressionBinderCollection.cs" />
     <Compile Include="HtmlBinding.cs" />

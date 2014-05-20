@@ -15,7 +15,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 定义绑定表达式，绑定表达式可以由属性值或者元素来定义。
   /// </summary>
-  public abstract class BindingExpression
+  public abstract class BindingExpression : IBindingExpressionValueObject
   {
 
 
@@ -35,6 +35,13 @@ namespace Ivony.Html.Binding
     {
       return Arguments.TryGetValue( evaluator, name, out value );
     }
+
+
+    public T GetValue<T>( IBindingExpressionEvaluator evaluator, string name )
+    {
+      return Arguments.GetValue<T>( evaluator, name );
+    }
+
 
 
     /// <summary>
@@ -210,5 +217,9 @@ namespace Ivony.Html.Binding
 
     }
 
+    object IBindingExpressionValueObject.GetValue( IBindingExpressionEvaluator evaluator )
+    {
+      return evaluator.GetValue( this );
+    }
   }
 }

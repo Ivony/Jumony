@@ -16,7 +16,7 @@ namespace Ivony.Html.Binding
 
     private bool _completed = false;
     private object _sync = new object();
-    private Hashtable _dictionary = new Hashtable();
+    private Dictionary<string, IBindingExpressionValueObject> _dictionary = new Dictionary<string, IBindingExpressionValueObject>();
 
 
     internal BindingExpressionArgumentCollection() { }
@@ -55,7 +55,7 @@ namespace Ivony.Html.Binding
       if ( _completed )
         throw new InvalidOperationException();
 
-      _dictionary.Add( name, value );
+      _dictionary.Add( name, new LiteralValue( value ) );
     }
 
     internal void Add( string name, BindingExpression expression )
@@ -64,13 +64,10 @@ namespace Ivony.Html.Binding
         throw new InvalidOperationException();
 
       if ( expression == null )
-      {
-        Add( name, (string) null );
-        return;
-      }
+        _dictionary.Add( name, new LiteralValue( null ) );
 
-
-      _dictionary.Add( name, expression );
+      else
+        _dictionary.Add( name, expression );
     }
 
 
@@ -143,6 +140,9 @@ namespace Ivony.Html.Binding
     public bool TryGetValue( IBindingExpressionEvaluator evaluator, string name, out object value )
     {
 
+      if ( !_completed )
+        throw new InvalidOperationException();
+
       if ( !_dictionary.ContainsKey( name ) )
       {
         value = null;
@@ -150,19 +150,8 @@ namespace Ivony.Html.Binding
       }
 
 
-      var rawObject = _dictionary[name];
-      var expression = rawObject as BindingExpression;
-
-      if ( expression != null )
-        value = evaluator.GetValue( (BindingExpression) rawObject );
-
-
-      else
-        value = (string) rawObject;
-
-
+      value = _dictionary[name].GetValue( evaluator );
       return true;
-
     }
 
 

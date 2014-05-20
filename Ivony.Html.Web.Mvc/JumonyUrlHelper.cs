@@ -84,7 +84,9 @@ namespace Ivony.Html.Web
       }
 
 
-      CustomRouteValues( element, "_", routeValues, clearRouteAttributes );
+      if ( !MvcEnvironment.Configuration.DisableUnderscorePrefix )
+        CustomRouteValues( element, "_", routeValues, clearRouteAttributes );
+      
       CustomRouteValues( element, "route-", routeValues, clearRouteAttributes );
 
       return routeValues;

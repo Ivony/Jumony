@@ -80,7 +80,7 @@ namespace Ivony.Html.Web
 
 
     /// <summary>
-    /// 指示禁用下划线开头的路由值设置，如_id将不被识别为名为id的路由值，而必须使用route-id。
+    /// 指示是否禁用下划线开头的路由值设置，如_id将不被识别为名为id的路由值，而必须使用route-id。
     /// </summary>
     public bool DisableUnderscorePrefix
     {

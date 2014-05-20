@@ -8,6 +8,7 @@ using System.Threading;
 using System.Web;
 using Ivony.Fluent;
 using Ivony.Web;
+using System.Diagnostics;
 
 namespace Ivony.Html.Web
 {
@@ -122,14 +123,25 @@ namespace Ivony.Html.Web
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-      HttpContext.Trace.Write( "Jumony Web", string.Format( "Begin Render Partial: {0}", partialTag ) );
+      Trace( string.Format( "Begin Render Partial: {0}", partialTag ) );
       RenderPartial( element, context.Writer );
-      HttpContext.Trace.Write( "Jumony Web", string.Format( "End Render Partial: {0}", partialTag ) );
+      Trace( string.Format( "End Render Partial: {0}", partialTag ) );
+    }
+
+
+
+    /// <summary>
+    /// 写入一条追踪信息
+    /// </summary>
+    /// <param name="message">追踪消息</param>
+    protected virtual void Trace( string message )
+    {
+      WebServiceLocator.GetTraceService().Trace( TraceLevel.Info, "Jumony Partial", message );
     }
 
 
     /// <summary>
-    /// 渲染部分视图（重写此方法接管 partial 处理逻辑）。
+    /// 渲染部分视图（派生类可以重写此方法接管 partial 处理逻辑）。
     /// </summary>
     /// <param name="partialElement">partial 元素</param>
     /// <param name="writer">输出渲染结果的 TextWriter 对象</param>

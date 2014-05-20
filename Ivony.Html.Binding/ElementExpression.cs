@@ -43,25 +43,22 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 绑定表达式参数
     /// </summary>
-    public override BindingExpressionArgumentCollection Arguments
+    internal override IDictionary<string, IBindingExpressionValueObject> Arguments
     {
       get
       {
-        var arguments = new BindingExpressionArgumentCollection();
-        Element.Attributes().ForAll( attribute => AddArgument( attribute, arguments ) );
-        arguments.SetCompleted();
-        return arguments;
+        return Element.Attributes().ToDictionary( attribute => attribute.Name, attribute => GetValue( attribute.Value() ) );
       }
     }
 
-    private void AddArgument( IHtmlAttribute attribute, BindingExpressionArgumentCollection arguments )
+    private IBindingExpressionValueObject GetValue( string value )
     {
-      var expression = BindingExpression.ParseExpression( attribute.Value() );
+      var expression = BindingExpression.ParseExpression( value );
       if ( expression != null )
-        arguments.Add( attribute.Name, expression );
+        return expression;
 
       else
-        arguments.Add( attribute.Name, attribute.Value() );
+        return new LiteralValue( value );
     }
   }
 }

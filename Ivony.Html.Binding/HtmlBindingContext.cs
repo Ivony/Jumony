@@ -41,9 +41,6 @@ namespace Ivony.Html.Binding
       if ( scope == null )
         throw new ArgumentNullException( "scope" );
 
-      if ( dataModel == null )
-        throw new ArgumentNullException( "dataModel" );
-
       Binders = htmlBinders;
       BindingScope = scope;
       DataModel = dataModel;
@@ -297,12 +294,12 @@ namespace Ivony.Html.Binding
       if ( expression == null )
         return;
 
-      string value;
-      if ( !TryGetValue( expression, out value ) )
+      var value = GetValue( expression );
+      if ( value == null )
         attribute.Remove();
 
       else
-        attribute.SetValue( value );
+        attribute.SetValue( value.ToString() );
     }
 
 
@@ -338,6 +335,11 @@ namespace Ivony.Html.Binding
 
 
 
+    /// <summary>
+    /// 获取绑定表达式的值
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <returns>绑定值</returns>
     public object GetValue( BindingExpression expression )
     {
       object value;
@@ -349,21 +351,27 @@ namespace Ivony.Html.Binding
     }
 
 
-    public bool TryGetValue<T>( BindingExpression expression, out T value )
+    /// <summary>
+    /// 尝试获取绑定表达式的值
+    /// </summary>
+    /// <param name="expression">绑定表达式</param>
+    /// <param name="value">绑定值</param>
+    /// <returns>是否成功获取</returns>
+    public bool TryGetValue( BindingExpression expression, out object value )
     {
       var expressionBinder = GetExpressionBinder( expression );
 
       if ( expressionBinder == null )
       {
-        value = default( T );
+        value = null;
         return false;
       }
 
-      var obj = expressionBinder.GetValue( this, expression );
-
-      //UNDONE
-      value = (T) obj;
-      return true;
+      else
+      {
+        value = expressionBinder.GetValue( this, expression );
+        return true;
+      }
     }
 
 

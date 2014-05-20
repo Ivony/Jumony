@@ -33,16 +33,18 @@ namespace Ivony.Html.Binding
     /// <returns>数据对象</returns>
     public static object GetDataObject( HtmlBindingContext context, BindingExpression expression )
     {
-      object dataObject;
+      object dataObject  = context.DataModel;
 
-      dataObject = context.DataModel;
 
+
+
+      if ( dataObject != null )
       {
         string path;
 
         if ( expression.TryGetValue( context, "path", out path ) )
         {
-          
+
           if ( dataObject == null )
             return null;
 
@@ -50,22 +52,18 @@ namespace Ivony.Html.Binding
         }
       }
 
+      object value;
+      if ( expression.TryGetValue( context, "value", out value ) )
       {
-        object value;
-        if ( expression.TryGetValue( context, "value", out value ) )
-        {
-          if ( Convert.ToBoolean( dataObject ) )
-            return value;
+        if ( dataObject != null && Convert.ToBoolean( dataObject ) == true )
+          return value;
 
-          else if ( expression.TryGetValue( context, "alternativeValue", out value ) )
-            return value;
+        else if ( expression.TryGetValue( context, "alternativeValue", out value ) )
+          return value;
 
-          else
-            return null;
-        }
+        else
+          return null;
       }
-
-
 
       return dataObject;
     }

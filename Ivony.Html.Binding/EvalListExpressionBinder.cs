@@ -33,13 +33,13 @@ namespace Ivony.Html.Binding
       CssElementSelector elementSelector = null;
       string selector;
 
-      if ( expression.Arguments.TryGetValue( context, "selector", out selector ) )
+      if ( expression.TryGetValue( context, "selector", out selector ) )
         elementSelector = CssParser.ParseElementSelector( selector );
 
       ListBindingMode mode;
 
       string modeSetting;
-      if ( expression.Arguments.TryGetValue( context, "mode", out modeSetting ) && modeSetting.EqualsIgnoreCase( "static" ) )
+      if ( expression.TryGetValue( context, "mode", out modeSetting ) && modeSetting.EqualsIgnoreCase( "static" ) )
         mode = ListBindingMode.StaticContent;
       
       else

@@ -15,7 +15,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 定义绑定表达式，绑定表达式可以由属性值或者元素来定义。
   /// </summary>
-  public abstract class BindingExpression : IBindingExpressionValueObject
+  public abstract partial class BindingExpression : IBindingExpressionValueObject
   {
 
 
@@ -28,18 +28,100 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 派生类实现此属性提供参数值列表
     /// </summary>
-    public abstract BindingExpressionArgumentCollection Arguments { get; }
+    internal abstract IDictionary<string, IBindingExpressionValueObject> Arguments { get; }
 
 
-    public bool TryGetValue<T>( IBindingExpressionEvaluator evaluator, string name, out T value )
+
+
+    /// <summary>
+    /// 获取所有参数的值
+    /// </summary>
+    /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
+    /// <returns>所有参数和参数值</returns>
+    public IDictionary<string, object> GetValues( IBindingExpressionEvaluator evaluator )
     {
-      return Arguments.TryGetValue( evaluator, name, out value );
+      return Arguments.ToDictionary( pair => pair.Key, pair => pair.Value.GetValue( evaluator ) );
     }
 
 
+    /// <summary>
+    /// 尝试获取指定类型的值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="value">获取到的参数值</param>
+    /// <returns>是否成功获取</returns>
+    public bool TryGetValue<T>( IBindingExpressionEvaluator evaluator, string name, out T value, bool throwIfConvertFailed = false )
+    {
+      if ( typeof( BindingExpression ).IsAssignableFrom( typeof( T ) ) )
+        throw new InvalidOperationException();
+
+
+      object obj;
+
+      if ( !TryGetValue( evaluator, name, out obj ) )   //尝试获取值，若不成功直接返回 false
+      {
+        value = default( T );
+        return false;
+      }
+
+
+
+      if ( evaluator.TryConvertValue( obj, out value ) )//尝试转换值类型，若成功直接返回 true
+        return true;
+
+
+      if ( throwIfConvertFailed )                       //若值类型转换失败，且需要抛出异常
+      {
+        if ( obj == null )
+          throw new InvalidCastException( string.Format( "无法将 null 值转换为类型为 {0} 的对象，找不到合适的类型转换器。", typeof( T ).AssemblyQualifiedName ) );
+
+        else
+          throw new InvalidCastException( string.Format( "无法将类型为 {0} 的对象转换为类型为 {1} 的对象，不存在类型转换或找不到合适的类型转换器。", obj.GetType().AssemblyQualifiedName, typeof( T ).AssemblyQualifiedName ) );
+      }
+
+
+      return false;
+    }
+
+
+    /// <summary>
+    /// 尝试获取参数原始值对象
+    /// </summary>
+    /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="value">获取到的参数值</param>
+    /// <returns>是否成功获取</returns>
+    public bool TryGetValue( IBindingExpressionEvaluator evaluator, string name, out object value )
+    {
+
+      if ( !Arguments.ContainsKey( name ) )
+      {
+        value = null;
+        return false;
+      }
+
+      value = Arguments[name].GetValue( evaluator );
+      return true;
+    }
+
+
+    /// <summary>
+    /// 获取指定类型的值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="value">获取到的参数值</param>
+    /// <returns>是否成功获取</returns>
     public T GetValue<T>( IBindingExpressionEvaluator evaluator, string name )
     {
-      return Arguments.GetValue<T>( evaluator, name );
+      T value;
+      if ( !TryGetValue( evaluator, name, out value, true ) )
+        throw new KeyNotFoundException();
+
+      return value;
     }
 
 
@@ -72,125 +154,18 @@ namespace Ivony.Html.Binding
         return null;
 
       if ( tokenizer == null )
-        tokenizer = new BindingExpressionTokenizer();
+        tokenizer = new BindingExpressionParser();
 
       return tokenizer.Parse( expression, index );
 
     }
 
 
+
+
     [ThreadStatic]
-    private static BindingExpressionTokenizer tokenizer;//设置为线程内单例，提高利用率。
+    private static BindingExpressionParser tokenizer;//设置为线程内单例，提高利用率。
 
-
-
-
-    /// <summary>
-    /// 绑定表达式解析器
-    /// </summary>
-    private class BindingExpressionTokenizer : TokenizerBase
-    {
-
-
-
-
-      private static readonly Regex EName = new Regex( @"\G[a-zA-z_][a-zA-Z_0-9-]*", RegexOptions.Compiled | RegexOptions.CultureInvariant );
-      private static readonly Regex ArgumentValue = new Regex( @"\G([^{},]|\{\{|\}\}|,,)+", RegexOptions.Compiled | RegexOptions.CultureInvariant );
-
-
-      /// <summary>
-      /// 解析绑定表达式为 BindingExpression 对象
-      /// </summary>
-      /// <param name="evaluator">用于计算绑定表达式值的计算器</param>
-      /// <param name="text">要分析的文本</param>
-      /// <param name="index">开始分析的位置</param>
-      /// <returns>解析出的 BindingExpression 对象</returns>
-      public BindingExpression Parse( string text, int index )
-      {
-        lock ( SyncRoot )
-        {
-
-          Initialize( text, index );
-
-          var expression = Parse();
-          if ( expression == null )
-            return null;
-
-          if ( Scaner.IsEnd )
-            return expression;
-
-          return null;
-        }
-      }
-
-      private BindingExpression Parse()
-      {
-        if ( !Match( '{' ).HasValue )
-          return null;
-
-        var match = Match( EName );
-        if ( match == null )
-          return null;
-
-
-        var expression = new ParsedBindingExpression( match.Value );
-
-        if ( Match( '}' ).HasValue )
-          return expression;//解析成功
-
-
-        match = Match( WhiteSpace );
-        if ( match == null || match.Value.Length == 0 )
-          return null;
-
-        while ( true )
-        {
-          match = Match( EName );
-          if ( match == null )
-            return null;
-
-          ParseValue( match.Value, expression.Arguments );
-
-
-          if ( Match( ',' ).HasValue )
-          {
-            Match( WhiteSpace );
-            continue;
-          }
-
-          else if ( Match( '}' ).HasValue )//解析成功
-          {
-            expression.Arguments.SetCompleted();
-            return expression;
-          }
-
-
-          else
-            return null;                   //解析失败
-        }
-
-
-      }
-
-      private void ParseValue( string argumentName, BindingExpressionArgumentCollection arguments )
-      {
-        if ( Match( '=' ) == null )
-          arguments.Add( argumentName );
-
-
-
-        Match match = Match( ArgumentValue );
-        if ( match != null )
-          arguments.Add( argumentName, match.Value.Replace( "{{", "{" ).Replace( "}}", "}" ).Replace( ",,", "," ) );
-
-        else if ( IsMatch( '{' ) )
-          arguments.Add( argumentName, Parse() );
-
-        else
-          arguments.Add( argumentName, "" );
-
-      }
-    }
 
 
 
@@ -198,10 +173,16 @@ namespace Ivony.Html.Binding
     {
 
       private string _name;
-      private BindingExpressionArgumentCollection _arguments = new BindingExpressionArgumentCollection();
+      private Dictionary<string, IBindingExpressionValueObject> _arguments;
 
 
-      public ParsedBindingExpression( string expressionName ) { _name = expressionName; }
+      public ParsedBindingExpression( string name ) : this( name, new Dictionary<string, IBindingExpressionValueObject>() ) { }
+
+      internal ParsedBindingExpression( string name, Dictionary<string, IBindingExpressionValueObject> arguments )
+      {
+        _name = name;
+        _arguments = arguments;
+      }
 
 
 
@@ -210,7 +191,7 @@ namespace Ivony.Html.Binding
         get { return _name; }
       }
 
-      public override BindingExpressionArgumentCollection Arguments
+      internal override IDictionary<string, IBindingExpressionValueObject> Arguments
       {
         get { return _arguments; }
       }
@@ -221,5 +202,6 @@ namespace Ivony.Html.Binding
     {
       return evaluator.GetValue( this );
     }
+
   }
 }

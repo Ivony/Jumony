@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExpression.cs" />
-    <Compile Include="BindingExpressionArgumentCollection.cs" />
+    <Compile Include="BindingExpressionParser.cs" />
     <Compile Include="HtmlBindingContextProviderCollection.cs" />
     <Compile Include="HtmlListBindingContextProvider.cs" />
     <Compile Include="EvalExpressionBinder.cs" />

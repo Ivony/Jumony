@@ -13,14 +13,6 @@ namespace Ivony.Html.Binding
   {
 
     /// <summary>
-    /// 尝试从 BindingExpression 获取需要绑定的值
-    /// </summary>
-    /// <param name="expression">绑定表达式</param>
-    /// <param name="value">绑定的值</param>
-    /// <returns>是否成功获取</returns>
-    bool TryGetValue<T>( BindingExpression expression, out T value );
-
-    /// <summary>
     /// 尝试将字符串转换为指定类型的值
     /// </summary>
     /// <typeparam name="T">值类型</typeparam>
@@ -32,7 +24,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 从 BindingExpression 获取需要绑定的值
     /// </summary>
-    /// <param name="bindingExpression">绑定表达式</param>
+    /// <param name="expression">绑定表达式</param>
     /// <returns>获取到的绑定值</returns>
     object GetValue( BindingExpression expression );
   }

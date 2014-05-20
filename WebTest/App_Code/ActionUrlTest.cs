@@ -17,15 +17,6 @@ using Ivony.Html.Parser;
 public class ActionUrlTest : TestClass
 {
 
-  public override void Initialize( HttpContext context )
-  {
-    RouteTable.Routes.SimpleRouteTable().MapDefaultRoute();
-
-    if ( context == null )
-      throw new InvalidOperationException();
-
-    base.Initialize( context );
-  }
 
 
   public override void MethodInitialize()

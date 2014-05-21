@@ -20,7 +20,7 @@ namespace Ivony.Html
   {
 
     /// <summary>所有 CDATA 元素，其内部文本不被当作 HTML 文本解释</summary>
-    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "style", "textarea", "title" } );
+    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "style" } );
     /// <summary>所有自结束元素，没有内容和结束标签</summary>
     public static readonly ICollection<string> fobiddenEndTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
 
@@ -47,7 +47,7 @@ namespace Ivony.Html
     /// <summary>所有定义列表的元素</summary>
     public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol", "dl" } );
     /// <summary>预格式化元素</summary>
-    public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre" } );
+    public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre", "textarea", "title" } );
 
     /// <summary>所有块级元素</summary>
     public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );

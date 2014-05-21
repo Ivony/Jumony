@@ -20,60 +20,60 @@ namespace Ivony.Html
   {
 
     /// <summary>所有 CDATA 元素，其内部文本不被当作 HTML 文本解释</summary>
-    public static readonly ICollection<string> cdataTags = new ReadOnlyCollection<string>( new[] { "script", "style" } );
+    private static readonly HashSet<string> cdataTags = new HashSet<string>( new[] { "script", "style" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有自结束元素，没有内容和结束标签</summary>
-    public static readonly ICollection<string> fobiddenEndTags = new ReadOnlyCollection<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" } );
+    private static readonly HashSet<string> fobiddenEndTags = new HashSet<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" }, StringComparer.OrdinalIgnoreCase );
 
     /// <summary>所有可选结束元素，其在何处结束由 ImmediatelyClose 方法确定</summary>
-    public static readonly ICollection<string> optionalCloseTags = new ReadOnlyCollection<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" } );
+    private static readonly HashSet<string> optionalCloseTags = new HashSet<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" }, StringComparer.OrdinalIgnoreCase );
 
 
 
     /// <summary>所有设置字体和样式的元素</summary>
-    public static readonly ICollection<string> stylingElements = new ReadOnlyCollection<string>( new[] { "tt", "i", "b", "big", "small" } );
+    private static readonly HashSet<string> stylingElements = new HashSet<string>( new[] { "tt", "i", "b", "big", "small" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有界定文本段落的元素</summary>
-    public static readonly ICollection<string> phraseElements = new ReadOnlyCollection<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" } );
+    private static readonly HashSet<string> phraseElements = new HashSet<string>( new[] { "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr", "acronym" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有用于特殊目的的 HTML 元素</summary>
-    public static readonly ICollection<string> specialElements = new ReadOnlyCollection<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" } );
+    private static readonly HashSet<string> specialElements = new HashSet<string>( new[] { "a", "img", "object", "br", "script", "map", "q", "sub", "sup", "span", "bdo" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有表单控件元素</summary>
-    public static readonly ICollection<string> inputControlElements = new ReadOnlyCollection<string>( new[] { "input", "select", "textarea", "label", "button" } );
+    private static readonly HashSet<string> inputControlElements = new HashSet<string>( new[] { "input", "select", "textarea", "label", "button" }, StringComparer.OrdinalIgnoreCase );
 
     /// <summary>所有行内呈现的元素</summary>
-    public static readonly ICollection<string> inlineElements = new ReadOnlyCollection<string>( stylingElements.Union( phraseElements ).Union( specialElements ).Union( inputControlElements ).ToArray() );
+    private static readonly HashSet<string> inlineElements = new HashSet<string>( stylingElements.Union( phraseElements ).Union( specialElements ).Union( inputControlElements ).ToArray(), StringComparer.OrdinalIgnoreCase );
 
 
     /// <summary>所有定义章节标题元素</summary>
-    public static readonly ICollection<string> headingElements = new ReadOnlyCollection<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" } );
+    private static readonly HashSet<string> headingElements = new HashSet<string>( new[] { "h1", "h2", "h3", "h4", "h5", "h6" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有定义列表的元素</summary>
-    public static readonly ICollection<string> listElements = new ReadOnlyCollection<string>( new[] { "ul", "ol", "dl" } );
+    private static readonly HashSet<string> listElements = new HashSet<string>( new[] { "ul", "ol", "dl" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>预格式化元素</summary>
-    public static readonly ICollection<string> preformatedElements = new ReadOnlyCollection<string>( new[] { "pre", "textarea", "title" } );
+    private static readonly HashSet<string> preformatedElements = new HashSet<string>( new[] { "pre", "textarea", "title" }, StringComparer.OrdinalIgnoreCase );
 
     /// <summary>所有块级元素</summary>
-    public static readonly ICollection<string> blockElements = new ReadOnlyCollection<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" } ).ToArray() );
+    private static readonly HashSet<string> blockElements = new HashSet<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" }, StringComparer.OrdinalIgnoreCase ).ToArray() );
 
     /// <summary>所有文本流元素</summary>
-    public static readonly ICollection<string> flowElements = new ReadOnlyCollection<string>( blockElements.Union( inlineElements ).ToArray() );
+    private static readonly HashSet<string> flowElements = new HashSet<string>( blockElements.Union( inlineElements ).ToArray(), StringComparer.OrdinalIgnoreCase );
 
     /// <summary>所有非显示文本元素</summary>
-    public static readonly ICollection<string> nonTextElements = new ReadOnlyCollection<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" } );
+    private static readonly HashSet<string> nonTextElements = new HashSet<string>( new[] { "table", "tr", "input", "style", "title", "map", "head", "meta", "script", "br", "frame" }, StringComparer.OrdinalIgnoreCase );
 
 
 
 
     public override bool IsCDataElement( string elementName )
     {
-      return cdataTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
+      return cdataTags.Contains( elementName );
     }
 
     public override bool IsOptionalEndTag( string elementName )
     {
-      return optionalCloseTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
+      return optionalCloseTags.Contains( elementName );
     }
 
     public override bool IsForbiddenEndTag( string elementName )
     {
-      return fobiddenEndTags.Contains( elementName, StringComparer.OrdinalIgnoreCase );
+      return fobiddenEndTags.Contains( elementName );
     }
 
     public override bool ImmediatelyClose( string openTag, string nextTag )
@@ -132,7 +132,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return blockElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return blockElements.Contains( element.Name );
     }
 
     public override bool IsInlineElement( IHtmlElement element )
@@ -140,7 +140,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return inlineElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return inlineElements.Contains( element.Name );
     }
 
     public override bool IsSpecialElement( IHtmlElement element )
@@ -148,7 +148,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return specialElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return specialElements.Contains( element.Name );
     }
 
     public override bool IsFormInputElement( IHtmlElement element )
@@ -156,7 +156,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return inputControlElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return inputControlElements.Contains( element.Name );
     }
 
     public override bool IsStylingElement( IHtmlElement element )
@@ -164,7 +164,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return stylingElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return stylingElements.Contains( element.Name );
     }
 
     public override bool IsListElement( IHtmlElement element )
@@ -172,7 +172,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return listElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return listElements.Contains( element.Name );
     }
 
     public override bool IsPhraseElement( IHtmlElement element )
@@ -180,7 +180,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      return phraseElements.Contains( element.Name, StringComparer.OrdinalIgnoreCase );
+      return phraseElements.Contains( element.Name );
     }
 
 
@@ -308,7 +308,7 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      if ( element.AncestorsAndSelf().Any( e => preformatedElements.Contains( e.Name, StringComparer.OrdinalIgnoreCase ) ) )
+      if ( element.AncestorsAndSelf().Any( e => preformatedElements.Contains( e.Name ) ) )
         return TextMode.Preformated;
 
       else if ( cdataTags.Contains( element.Name ) )

@@ -6,55 +6,35 @@ using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
-  public class HtmlTextArea : IHtmlTextControl
+
+  /// <summary>
+  /// 定义 &lt;textarea&gt; 控件
+  /// </summary>
+  public sealed class HtmlTextArea : FormTextControl
   {
 
 
-    private readonly HtmlForm _form;
-    private readonly IHtmlElement _element;
+    internal HtmlTextArea( HtmlForm form, IHtmlElement element ) : base( form, element ) { }
 
 
-
-    public HtmlTextArea( HtmlForm form, IHtmlElement element )
+    /// <summary>
+    /// 获取控件值
+    /// </summary>
+    /// <returns>控件目前设置的值</returns>
+    protected override string GetValue()
     {
-      if ( !element.Name.EqualsIgnoreCase( "textarea" ) )
-        throw new InvalidOperationException( "只有 <textarea> 元素才能转换为 HtmlTextArea 对象" );
+      return Element.InnerText();
+    }
 
-      _form = form;
-      _element = element;
+    /// <summary>
+    /// 设置控件值
+    /// </summary>
+    /// <param name="value">要设置的控件的值</param>
+    protected override void SetValue( string value )
+    {
+      Element.InnerText( value );
     }
 
 
-    public IHtmlElement Element
-    {
-      get { return _element; }
-    }
-
-
-    public string TextValue
-    {
-      get { return _element.InnerText(); }
-      set { _element.InnerText( value ); }
-    }
-
-    public string Name
-    {
-      get { return _element.Attribute( "name" ).AttributeValue; }
-    }
-
-    public HtmlForm Form
-    {
-      get { return _form; }
-    }
-
-
-    #region IHtmlFocusableControl 成员
-
-    string IHtmlFocusableControl.ElementId
-    {
-      get { return Element.Identity(); }
-    }
-
-    #endregion
   }
 }

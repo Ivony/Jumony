@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using Ivony.Html.Binding;
 
 namespace Ivony.Html.Web
 {
@@ -81,14 +82,7 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 
-      HttpContext.Trace.Write( "JumonyMasterView", "Begin ProcessActionRoutes" );
-      Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "JumonyMasterView", "End ProcessActionRoutes" );
-
-
-      HttpContext.Trace.Write( "JumonyMasterView", "Begin ResolveUri" );
-      Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "JumonyMasterView", "End ResolveUri" );
+      Document.DataBind( ViewContext.ViewData, HtmlBinding.ElementBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Document.HtmlSpecification ) );
 
 
       RenderAdapters = GetRenderAdapters( handler );

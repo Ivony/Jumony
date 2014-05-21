@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.UI;
 
 namespace Ivony.Html.Binding
@@ -23,16 +24,15 @@ namespace Ivony.Html.Binding
     /// <param name="htmlBinders">要使用的 HTML 绑定器</param>
     /// <param name="expressionBinders">要使用的绑定表达式绑定器</param>
     /// <param name="scope">要进行数据绑定的范畴</param>
-    /// <param name="dataContext">数据上下文</param>
-    /// <param name="dataValues">数据字典</param>
-    public static HtmlBindingContext Create( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext = null, IDictionary<string, object> dataValues = null )
+    /// <param name="dataModel">数据上下文</param>
+    public static HtmlBindingContext Create( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
-      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataContext, dataValues ?? new Dictionary<string, object>() );
+      return new HtmlBindingContext( htmlBinders, expressionBinders, scope, dataModel );
 
     }
 
 
-    private HtmlBindingContext( IHtmlElementBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataContext, IDictionary<string, object> dataValues )
+    private HtmlBindingContext( IHtmlBinder[] htmlBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
 
       if ( htmlBinders == null )
@@ -43,8 +43,8 @@ namespace Ivony.Html.Binding
 
       Binders = htmlBinders;
       BindingScope = scope;
-      DataContext = dataContext;
-      Data = dataValues;
+      DataModel = dataModel;
+
       _expressionBinders = new ExpressionBinderCollection( expressionBinders );
     }
 
@@ -54,8 +54,8 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="scope">要进行数据绑定的范畴</param>
     /// <param name="bindingContext">父级数据绑定上下文</param>
-    /// <param name="dataContext">数据上下文</param>
-    protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataContext = null )
+    /// <param name="dataModel">数据模型，若不提供则使用当前的数据模型</param>
+    protected HtmlBindingContext( HtmlBindingContext bindingContext, IHtmlContainer scope, object dataModel = null )
     {
 
       if ( bindingContext == null )
@@ -66,8 +66,7 @@ namespace Ivony.Html.Binding
 
       ParentContext = bindingContext;
       BindingScope = scope;
-      DataContext = dataContext ?? bindingContext.DataContext;
-      Data = bindingContext.Data;
+      DataModel = dataModel ?? bindingContext.DataModel;
 
       Binders = bindingContext.Binders;
       _expressionBinders = new ExpressionBinderCollection( bindingContext._expressionBinders );
@@ -91,18 +90,13 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 当前的数据上下文
     /// </summary>
-    public object DataContext { get; private set; }
+    public object DataModel { get; private set; }
 
-
-    /// <summary>
-    /// 进行绑定的范畴的数据容器
-    /// </summary>
-    public IDictionary<string, object> Data { get; private set; }
 
     /// <summary>
     /// 元素绑定器
     /// </summary>
-    public IHtmlElementBinder[] Binders { get; private set; }
+    public IHtmlBinder[] Binders { get; private set; }
 
 
     /// <summary>
@@ -149,22 +143,20 @@ namespace Ivony.Html.Binding
     {
       foreach ( var element in container.Elements().ToArray() )
       {
-        var dataContext = GetDataContext( element );
-
-        if ( dataContext == null )
+        object dataModel;
+        if ( TryGetDataModel( element, out dataModel ) )
         {
+
+          if ( dataModel == null )//如果获取到的数据模型是 null ，则直接移除整个元素
+            element.Remove();
+
+          else
+            CreateBindingContext( this, element, dataModel ).DataBind();//若在当前元素定义了数据模型，创建一个新的绑定上下文并绑定。
+
+        }
+
+        else
           DataBind( element );
-          continue;
-        }
-
-
-        if ( dataContext is NoneDataContext )//如果绑定的 DataContext 是空，则直接移除整个元素
-        {
-          element.Remove();
-          continue;
-        }
-
-        CreateBindingContext( this, element, dataContext ).DataBind();//若存在新的数据上下文，创建一个新的绑定上下文并绑定。
       }
     }
 
@@ -173,49 +165,45 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 创建一个绑定上下文
     /// </summary>
-    /// <param name="bindingContext"></param>
-    /// <param name="element"></param>
-    /// <param name="dataContext"></param>
+    /// <param name="bindingContext">目前的绑定上下文</param>
+    /// <param name="element">目前正在进行绑定的元素</param>
+    /// <param name="dataModel">元素上绑定的数据对象</param>
     /// <returns></returns>
-    protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataContext )
+    protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataModel )
     {
 
-      var listData = dataContext as ListDataContext;
+      var listData = dataModel as ListDataModel;
       if ( listData != null )
         return new HtmlListBindingContext( bindingContext, element, listData );
 
-      return new HtmlBindingContext( bindingContext, element, dataContext );
+      return new HtmlBindingContext( bindingContext, element, dataModel );
     }
 
 
 
-    private class NoneDataContext { }
-
     /// <summary>
-    /// 获取数据上下文
+    /// 尝试获取数据模型
     /// </summary>
     /// <param name="element">当前正在处理的元素</param>
-    /// <returns>数据上下文，如果在当前元素被设置的话。</returns>
-    protected virtual object GetDataContext( IHtmlElement element )
+    /// <param name="dataModel">获取到的数据模型</param>
+    /// <returns>是否成功获取数据模型</returns>
+    protected virtual bool TryGetDataModel( IHtmlElement element, out object dataModel )
     {
-      var expression = BindingExpression.ParseExpression( this, element.Attribute( "datacontext" ).Value() );
-      if ( expression == null )
-        return null;
+      dataModel = null;
+
+      var expression = BindingExpression.ParseExpression( element.Attribute( "datamodel" ).Value() );
+      if ( expression == null )//若datamodel属性不是一个合法的数据绑定表达式，则忽略之。
+        return false;
 
 
+      element.RemoveAttribute( "datamodel" );//成功取得dataModel后，应删除该属性。
 
-      object dataContext;
-      if ( !TryGetDataObject( expression, out dataContext ) )
+
+      if ( !TryGetValue( expression, out dataModel ) )
         throw new InvalidOperationException( "处理元素数据上下文绑定时出现错误，绑定表达式不支持获取数据对象" );
       //此处不检测dataContext是否等于当前dataContext的原因是，如果元素中写下datacontext属性并指向当前datacontext，表示需要在此处重新创建一个绑定上下文。
 
-
-      if ( dataContext == null )
-        return new NoneDataContext();//如果 dataContext 获取失败，通知直接删除整个元素。
-
-
-      element.RemoveAttribute( "datacontext" );//成功取得dataContext后，应删除该属性。
-      return dataContext;
+      return true;
     }
 
 
@@ -224,13 +212,40 @@ namespace Ivony.Html.Binding
     /// 对元素进行数据绑定
     /// </summary>
     /// <param name="element">要绑定数据的元素</param>
-    protected virtual void DataBind( IHtmlElement element )
+    public virtual void DataBind( IHtmlElement element )
     {
+
       var attributes = element.Attributes().ToArray();
       attributes.ForAll( a => BindAttribute( a ) );
 
+      if ( BindExpressionElement( element ) )
+        return;
+
       BindElement( element );
     }
+
+
+
+    protected bool BindExpressionElement( IHtmlElement element )
+    {
+      var expression = new ElementExpression( element );
+
+      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
+
+      if ( expressionBinder == null )
+        return false;
+
+      var value = expressionBinder.GetValue( this, expression );
+
+      if ( value == null )
+        element.Remove();
+
+      else
+        element.ReplaceWith( HttpUtility.HtmlEncode( value ) );
+
+      return true;
+    }
+
 
 
     /// <summary>
@@ -239,24 +254,6 @@ namespace Ivony.Html.Binding
     /// <param name="element">要进行绑定的元素</param>
     protected virtual void BindElement( IHtmlElement element )
     {
-
-      var expression = new ElementExpression( element );
-
-      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
-
-      if ( expressionBinder != null )
-      {
-        var value = expressionBinder.GetValue( this, expression.Arguments );
-
-        if ( value == null )
-          element.Remove();
-
-        else
-          element.ReplaceWith( value );
-
-        return;
-      }
-
 
       CancelChildsBinding = BindCompleted = false;//重置绑定状态
 
@@ -272,7 +269,6 @@ namespace Ivony.Html.Binding
       if ( !CancelChildsBinding )
         BindChilds( element );
     }
-
 
     /// <summary>
     /// 获取或设置一个值，指定元素绑定已经完成，无需遍历后面的绑定处理程序。
@@ -294,18 +290,16 @@ namespace Ivony.Html.Binding
     protected virtual void BindAttribute( IHtmlAttribute attribute )
     {
 
-      var expression = BindingExpression.ParseExpression( this, attribute.Value() );
+      var expression = BindingExpression.ParseExpression( attribute.Value() );
       if ( expression == null )
         return;
 
-      string value = GetValue( expression );
-
-
+      var value = GetValue( expression );
       if ( value == null )
         attribute.Remove();
 
       else
-        attribute.SetValue( value );
+        attribute.SetValue( value.ToString() );
     }
 
 
@@ -341,42 +335,61 @@ namespace Ivony.Html.Binding
 
 
 
-
-
     /// <summary>
-    /// 从 BindingExpression 获取需要绑定的值
+    /// 获取绑定表达式的值
     /// </summary>
     /// <param name="expression">绑定表达式</param>
     /// <returns>绑定值</returns>
-    public string GetValue( BindingExpression expression )
+    public object GetValue( BindingExpression expression )
     {
-      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
+      object value;
+      if ( TryGetValue( expression, out value ) )
+        return value;
 
-      if ( expressionBinder == null )
+      else
         return null;
-
-      return expressionBinder.GetValue( this, expression.Arguments );
-
     }
 
 
     /// <summary>
-    /// 从绑定表达式中获取数据上下文
+    /// 尝试获取绑定表达式的值
     /// </summary>
     /// <param name="expression">绑定表达式</param>
-    /// <param name="dataObject">数据对象</param>
-    /// <returns></returns>
-    public virtual bool TryGetDataObject( BindingExpression expression, out object dataObject )
+    /// <param name="value">绑定值</param>
+    /// <returns>是否成功获取</returns>
+    public bool TryGetValue( BindingExpression expression, out object value )
     {
-      dataObject = null;
-      var binder = GetExpressionBinder( expression ) as IDataObjectExpressionBinder;
-      if ( binder == null )
-        return false;
+      var expressionBinder = GetExpressionBinder( expression );
 
-      dataObject = binder.GetDataContext( this, expression.Arguments );
-      return true;
+      if ( expressionBinder == null )
+      {
+        value = null;
+        return false;
+      }
+
+      else
+      {
+        value = expressionBinder.GetValue( this, expression );
+        return true;
+      }
     }
 
+
+    public bool TryConvertValue<T>( object obj, out T value )
+    {
+      if ( typeof( T ).IsAssignableFrom( obj.GetType() ) )
+      {
+        value = (T) obj;
+        return true;
+      }
+      else
+      {
+        value = default( T );
+        return false;
+      }
+
+
+    }
 
   }
 }

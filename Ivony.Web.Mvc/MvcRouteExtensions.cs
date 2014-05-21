@@ -188,7 +188,8 @@ namespace Ivony.Web
     /// <summary>
     /// 调用此方法确保路由在简单路由表实例前注册。
     /// </summary>
-    /// <param name="route"></param>
+    /// <param name="routes">系统路由表</param>
+    /// <param name="route">要注册的路由</param>
     public static void RegisterRouteBeforeSimpleRouteTable( this RouteCollection routes, RouteBase route )
     {
       lock ( routes )

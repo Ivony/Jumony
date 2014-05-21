@@ -63,6 +63,9 @@ namespace Ivony.Html.Web
     }
 
 
+    /// <summary>
+    /// 获取当前要处理的 HTML 范围
+    /// </summary>
     protected sealed override IHtmlContainer HtmlScope
     {
       get { return Scope; }
@@ -122,8 +125,6 @@ namespace Ivony.Html.Web
 
       ProcessScope();
 
-      DataBind();
-
     }
 
 
@@ -133,10 +134,11 @@ namespace Ivony.Html.Web
     protected virtual void DataBind()
     {
 
-      var bindingContext = HtmlBinding.Create( Scope, Model, ViewData );
+      Trace.Write( "Jumony Binding", "Begin DataBind" );
 
-      bindingContext.DataBind();
+      HtmlBinding.DataBind( Scope, ViewData );
 
+      Trace.Write( "Jumony Binding", "End DataBind" );
     }
 
 
@@ -145,7 +147,6 @@ namespace Ivony.Html.Web
     /// </summary>
     protected virtual void ProcessScope()
     {
-
     }
 
 

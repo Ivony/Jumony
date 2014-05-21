@@ -8,6 +8,7 @@ using System.Threading;
 using System.Web;
 using Ivony.Fluent;
 using Ivony.Web;
+using System.Diagnostics;
 
 namespace Ivony.Html.Web
 {
@@ -79,8 +80,6 @@ namespace Ivony.Html.Web
     private static readonly KeyedCache<Type, PartialExecutor[]> _cache = new KeyedCache<Type, PartialExecutor[]>();
 
 
-    private PartialExecutor[] PartialExecutors_partialExecutors;
-
     private PartialExecutor[] GetPartialExecutors( Type type )
     {
 
@@ -119,19 +118,30 @@ namespace Ivony.Html.Web
     /// </summary>
     /// <param name="element">partial 标签</param>
     /// <param name="context">渲染上下文</param>
-    protected override void Render( IHtmlElement element, HtmlRenderContext context )
+    protected override void Render( IHtmlElement element, IHtmlRenderContext context )
     {
 
       var partialTag = ContentExtensions.GenerateTagHtml( element, true );
 
-      HttpContext.Trace.Write( "Jumony Partial", string.Format( "Begin Render Partial: {0}", partialTag ) );
+      Trace( string.Format( "Begin Render Partial: {0}", partialTag ) );
       RenderPartial( element, context.Writer );
-      HttpContext.Trace.Write( "Jumony Partial", string.Format( "End Render Partial: {0}", partialTag ) );
+      Trace( string.Format( "End Render Partial: {0}", partialTag ) );
+    }
+
+
+
+    /// <summary>
+    /// 写入一条追踪信息
+    /// </summary>
+    /// <param name="message">追踪消息</param>
+    protected virtual void Trace( string message )
+    {
+      WebServiceLocator.GetTraceService().Trace( TraceLevel.Info, "Jumony Partial", message );
     }
 
 
     /// <summary>
-    /// 渲染部分视图（重写此方法接管 partial 处理逻辑）。
+    /// 渲染部分视图（派生类可以重写此方法接管 partial 处理逻辑）。
     /// </summary>
     /// <param name="partialElement">partial 元素</param>
     /// <param name="writer">输出渲染结果的 TextWriter 对象</param>

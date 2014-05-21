@@ -13,7 +13,7 @@ namespace Ivony.Html
   public abstract class HtmlElementAdapter : IHtmlRenderAdapter
   {
 
-    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, IHtmlRenderContext context )
     {
       var element = node as IHtmlElement;
 
@@ -67,6 +67,6 @@ namespace Ivony.Html
     /// </summary>
     /// <param name="element">要渲染的元素</param>
     /// <param name="context">渲染上下文</param>
-    protected abstract void Render( IHtmlElement element, HtmlRenderContext context );
+    protected abstract void Render( IHtmlElement element, IHtmlRenderContext context );
   }
 }

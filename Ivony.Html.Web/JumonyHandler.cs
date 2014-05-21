@@ -10,6 +10,7 @@ using System.Web.Hosting;
 
 using Ivony.Web;
 using System.Web.Routing;
+using System.Diagnostics;
 
 namespace Ivony.Html.Web
 {
@@ -77,7 +78,7 @@ namespace Ivony.Html.Web
 
       _httpContext = context;
 
-      Trace.Write( "Jumony Web", "Begin of Request" );
+      Trace( "Begin of Request" );
 
       if ( RequestContext == null )
         throw DirectVisitError();
@@ -85,7 +86,7 @@ namespace Ivony.Html.Web
 
       if ( RequestContext.RouteData == null || !(RequestContext.RouteData.Route is IHtmlRequestRoute) )
       {
-        Trace.Write( "Jumony Web", "Request Error: route type error." );
+        Trace( "Request Error: route type error.", level: TraceLevel.Error );
         throw DirectVisitError();
       }
 
@@ -101,9 +102,22 @@ namespace Ivony.Html.Web
       OutputResponse( RequestContext.HttpContext, response );
 
 
-      RequestContext.HttpContext.Trace.Write( "Jumony Web", "End of Request" );
+      Trace( "End of Request" );
     }
 
+
+
+
+    /// <summary>
+    /// 写入追踪信息
+    /// </summary>
+    /// <param name="message">消息内容</param>
+    /// <param name="category">消息分类</param>
+    /// <param name="level">消息级别</param>
+    protected void Trace( string message, string category = null, TraceLevel level = TraceLevel.Info )
+    {
+      WebServiceLocator.GetTraceService().Trace( level, category ?? "Jumony Web", message );
+    }
 
 
 
@@ -115,9 +129,9 @@ namespace Ivony.Html.Web
     {
       ICachedResponse response;
 
-      Trace.Write( "Jumony Web", "Begin resolve cache." );
+      Trace( "Begin resolve cache." );
       response = ResolveCache( virtualPath );
-      Trace.Write( "Jumony Web", "End resolve cache" );
+      Trace( "End resolve cache" );
 
       if ( response == null )
       {
@@ -125,14 +139,14 @@ namespace Ivony.Html.Web
         response = ProcessRequest( new HtmlRequestContext( HttpContext, virtualPath, LoadDocument( virtualPath ) ), GetHandler( virtualPath ) );
 
 
-        Trace.Write( "Jumony Web", "Begin update cache" );
+        Trace( "Begin update cache" );
         UpdateCache( response );
-        Trace.Write( "Jumony Web", "End update cache." );
+        Trace( "End update cache." );
 
       }
 
       else
-        Trace.Write( "Jumony Web", "Cache resolved." );
+        Trace( "Cache resolved." );
 
       return response;
     }
@@ -156,9 +170,9 @@ namespace Ivony.Html.Web
 
       OnProcessing( context, filters );
 
-      Trace.Write( "Jumony Web", "Begin process document." );
+      Trace( "Begin process document." );
       handler.ProcessScope( context );
-      Trace.Write( "Jumony Web", "End process document." );
+      Trace( "End process document." );
 
       OnProcessed( context, filters );
 
@@ -167,7 +181,7 @@ namespace Ivony.Html.Web
 
       OnRendering( context, filters );
 
-      Trace.Write( "Jumony Web", "Begin render document." );
+      Trace( "Begin render document." );
       string content;
       using ( StringWriter writer = new StringWriter() )
       {
@@ -175,7 +189,7 @@ namespace Ivony.Html.Web
         content = writer.ToString();
       }
 
-      Trace.Write( "Jumony Web", "End render document." );
+      Trace( "End render document." );
 
       OnRendered( context, filters );
 
@@ -193,7 +207,7 @@ namespace Ivony.Html.Web
     {
       IHtmlDocument document;
 
-      Trace.Write( "Jumony Web", "Begin load document." );
+      Trace( "Begin load document." );
 
 
       document = HtmlServices.LoadDocument( virtualPath );
@@ -201,7 +215,7 @@ namespace Ivony.Html.Web
         throw new HttpException( 404, "加载文档失败" );
 
 
-      Trace.Write( "Jumony Web", "End load document." );
+      Trace( "End load document." );
 
       return document;
     }
@@ -240,15 +254,6 @@ namespace Ivony.Html.Web
     public static Exception DirectVisitError()
     {
       return new HttpException( 404, "不能直接访问 Jumony 页处理程序。" );
-    }
-
-
-    /// <summary>
-    /// 获取用于写入追踪信息的上下文
-    /// </summary>
-    protected virtual TraceContext Trace
-    {
-      get { return HttpContext.Trace; }
     }
 
 

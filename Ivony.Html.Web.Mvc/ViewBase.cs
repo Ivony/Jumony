@@ -66,7 +66,7 @@ namespace Ivony.Html.Web
         throw new FormatException( "VirtualPath 只能使用应用程序根相对路径，即以 \"~/\" 开头的路径，调用 VirtualPathUtility.ToAppRelative 方法或使用 HttpRequest.AppRelativeCurrentExecutionFilePath 属性获取" );
 
       VirtualPath = virtualPath;
-      PartialMode = partialMode;
+      IsPartialView = partialMode;
 
       _initialized = true;
     }
@@ -83,7 +83,7 @@ namespace Ivony.Html.Web
     /// <summary>
     /// 是否为部分视图
     /// </summary>
-    public bool PartialMode
+    public bool IsPartialView
     {
       get;
       private set;
@@ -199,7 +199,7 @@ namespace Ivony.Html.Web
       CacheDependency cacheDependency;
 
       HttpContext.Trace.Write( "ViewBase", "Begin InitializeScope" );
-      Scope = InitializeScope( VirtualPath, PartialMode, out cacheDependency );
+      Scope = InitializeScope( VirtualPath, IsPartialView, out cacheDependency );
       HttpContext.Trace.Write( "ViewBase", "End InitializeScope" );
 
       ScopeCacheDependency = cacheDependency;

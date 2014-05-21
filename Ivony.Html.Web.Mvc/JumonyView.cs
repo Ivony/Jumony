@@ -11,6 +11,7 @@ using System.Web.Mvc.Html;
 using Ivony.Fluent;
 using Ivony.Html.ExpandedAPI;
 using Ivony.Web;
+using Ivony.Html.Binding;
 
 
 namespace Ivony.Html.Web
@@ -30,6 +31,16 @@ namespace Ivony.Html.Web
     {
       get;
       private set;
+    }
+
+
+
+    /// <summary>
+    /// 获取一个值，指示当前视图是否为内容视图（即有母版页）
+    /// </summary>
+    public bool IsContentView
+    {
+      get { return MasterView != null; }
     }
 
 
@@ -136,32 +147,29 @@ namespace Ivony.Html.Web
     protected override string RenderCore( IHtmlContainer scope )
     {
 
-      HttpContext.Trace.Write( "JumonyView", "Begin GetViewHandler" );
+      HttpContext.Trace.Write( "Jumony View", "Begin GetViewHandler" );
       var handler = GetHandler( VirtualPath );
-      HttpContext.Trace.Write( "JumonyView", "End GetViewHandler" );
+      HttpContext.Trace.Write( "Jumony View", "End GetViewHandler" );
 
-      HttpContext.Trace.Write( "JumonyView", "Begin Process" );
+      HttpContext.Trace.Write( "Jumony View", "Begin Process" );
       OnPreProcess();
       ProcessScope( handler );
       OnPostProcess();
-      HttpContext.Trace.Write( "JumonyView", "End Process" );
+      HttpContext.Trace.Write( "Jumony View", "End Process" );
 
-      HttpContext.Trace.Write( "JumonyView", "Begin ProcessActionRoutes" );
-      Url.ProcessActionUrls( Scope );
-      HttpContext.Trace.Write( "JumonyView", "End ProcessActionRoutes" );
+      HttpContext.Trace.Write( "Jumony View", "Begin DataBind" );
+      Scope.DataBind( ViewContext.ViewData, HtmlBinding.ElementBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Scope.Document.HtmlSpecification ) );
+      HttpContext.Trace.Write( "Jumony View", "End DataBind" );
 
 
-      HttpContext.Trace.Write( "JumonyView", "Begin ResolveUri" );
       Scope.Find( "form[postback]" )
         .SetAttribute( "action", RawViewContext.HttpContext.Request.RawUrl )
         .SetAttribute( "method", "post" )
         .RemoveAttribute( "postback" );
 
-      Url.ResolveUri( Scope, VirtualPath );
-      HttpContext.Trace.Write( "JumonyView", "End ResolveUri" );
+
 
       AddGeneratorMetaData();
-
 
       RenderAdapters = GetRenderAdapters( handler );
 
@@ -169,32 +177,32 @@ namespace Ivony.Html.Web
 
       if ( MasterView != null )
       {
-        HttpContext.Trace.Write( "JumonyView", "Begin Initialize Master" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Initialize Master" );
         MasterView.Initialize( ViewContext );
-        HttpContext.Trace.Write( "JumonyView", "End Initialize Master" );
+        HttpContext.Trace.Write( "Jumony View", "End Initialize Master" );
 
 
         var jumonyMaster = MasterView as JumonyMasterView;
         if ( jumonyMaster != null )
         {
-          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Jumony Master View" );
           ProcessMaster( jumonyMaster );
-          HttpContext.Trace.Write( "JumonyView", "Begin Process Master" );
+          HttpContext.Trace.Write( "Jumony View", "Begin Process Jumony Master View" );
         }
 
-        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Render" );
         OnPreRender();
         result = MasterView.Render( this );
         OnPostRender();
-        HttpContext.Trace.Write( "JumonyView", "End Render" );
+        HttpContext.Trace.Write( "Jumony View", "End Render" );
       }
       else
       {
-        HttpContext.Trace.Write( "JumonyView", "Begin Render" );
+        HttpContext.Trace.Write( "Jumony View", "Begin Render" );
         OnPreRender();
         result = RenderContent( RenderAdapters.ToArray() );
         OnPostRender();
-        HttpContext.Trace.Write( "JumonyView", "End Render" );
+        HttpContext.Trace.Write( "Jumony View", "End Render" );
       }
 
 
@@ -215,7 +223,7 @@ namespace Ivony.Html.Web
     private void AddGeneratorMetaData()
     {
 
-      if ( MvcEnvironment.Configuration.DisableGeneratorTag || PartialMode || MasterView != null )
+      if ( MvcEnvironment.Configuration.DisableGeneratorTag || IsPartialView || MasterView != null )
         return;
 
       var document = Scope as IHtmlDocument;
@@ -389,7 +397,7 @@ namespace Ivony.Html.Web
     /// <returns>渲染结果</returns>
     protected virtual string RenderContent( IHtmlRenderAdapter[] adapters )
     {
-      return RenderContent( Scope, PartialMode, adapters );
+      return RenderContent( Scope, IsPartialView, adapters );
     }
 
     /// <summary>

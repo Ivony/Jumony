@@ -40,14 +40,14 @@ namespace Ivony.Html.Web
     /// <param name="view">要渲染的内容视图</param>
     public ContentAdapter( JumonyView view )
     {
-      if ( view.PartialMode )
+      if ( view.IsPartialView )
         throw new InvalidOperationException( "部分视图不能套用母板" );
 
       View = view;
       RenderAdapters = view.RenderAdapters.ToArray();
     }
 
-    bool IHtmlRenderAdapter.Render( IHtmlNode node, HtmlRenderContext context )
+    bool IHtmlRenderAdapter.Render( IHtmlNode node, IHtmlRenderContext context )
     {
       var element = node as IHtmlElement;
 

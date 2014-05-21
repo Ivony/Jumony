@@ -9,7 +9,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 处理文本替换的绑定器
   /// </summary>
-  public sealed class LiteralBinder : IHtmlElementBinder
+  public sealed class LiteralBinder : IHtmlBinder
   {
 
     /// <summary>
@@ -29,16 +29,24 @@ namespace Ivony.Html.Binding
       if ( !element.Document.HtmlSpecification.IsCDataElement( element.Name ) )
         return;
 
+      if ( element.Attribute( "literal-binder" ) == null )
+        return;
+
       lock ( element.SyncRoot )
       {
-        var attributes = element.Attributes().Where( a => a.Name.StartsWith( literalNamespace ) );
-        var dictionary = attributes.ToDictionary( a => a.Name.Substring( literalNamespace.Length ), a => a.Value() );
 
-        BindElement( element, dictionary );
+        var text = element.InnerHtml();
 
-        attributes.Remove();
-
+        text = LiteralBind( text );
       }
+    }
+
+    private string LiteralBind( string text )
+    {
+
+      throw new NotImplementedException();
+
+      //BindingExpression.ParseExpression
     }
 
     private void BindElement( IHtmlElement element, Dictionary<string, string> dictionary )

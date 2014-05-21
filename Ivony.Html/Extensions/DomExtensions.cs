@@ -548,6 +548,7 @@ namespace Ivony.Html
           throw new NotSupportedException();
         }
 
+        result.Reverse();
         return result.ToArray();
       }
     }

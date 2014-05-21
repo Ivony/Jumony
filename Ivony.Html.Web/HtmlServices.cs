@@ -13,6 +13,7 @@ using System.Web.Configuration;
 using Ivony.Fluent;
 using System.Collections.ObjectModel;
 using Ivony.Web;
+using System.Diagnostics;
 
 namespace Ivony.Html.Web
 {
@@ -252,7 +253,7 @@ namespace Ivony.Html.Web
           return createDocument( domProvider );
         }
 
-        Trace( "Document cache missed" );
+        WebServiceLocator.GetTraceService().Trace( TraceLevel.Info, "Jumony Web", "Document cache missed" );
 
 
         var document = ParseDocument( parser, contentResult.Content, contentResult.VirtualPath );
@@ -275,13 +276,6 @@ namespace Ivony.Html.Web
         return ParseDocument( parser, contentResult.Content, contentResult.VirtualPath );
     }
 
-    private static void Trace( string message )
-    {
-
-      var httpContext = HttpContext.Current;
-      if ( httpContext != null )
-        httpContext.Trace.Write( "Jumony for ASP.NET", message );
-    }
 
 
     private static readonly Uri baseUri = new Uri( "virtualpath://" + Guid.NewGuid().ToString( "N" ) + "/" );

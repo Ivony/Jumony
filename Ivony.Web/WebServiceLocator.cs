@@ -19,11 +19,11 @@ namespace Ivony.Web
     private static object sync = new object();
 
 
-    private static ArrayList globalServices = ArrayList.Synchronized( new ArrayList() );
+    private static ArrayList globalServices = new ArrayList();
 
-    private static Hashtable serviceMap = Hashtable.Synchronized( new Hashtable() );
+    private static Hashtable serviceMap = new Hashtable();
 
-    private static Hashtable servicesCache = Hashtable.Synchronized( new Hashtable() );
+    private static Hashtable servicesCache =  new Hashtable();
 
 
 
@@ -90,9 +90,9 @@ namespace Ivony.Web
 
         if ( backtracking )
         {
-          foreach ( string path in serviceMap.Keys )
+          foreach ( string virtualpath in serviceMap.Keys )
           {
-            UnregisterCore( path, service );
+            UnregisterCore( virtualpath, service );
           }
         }
 
@@ -149,6 +149,8 @@ namespace Ivony.Web
 
     private static void UnregisterCore( string virtualPath, object service )
     {
+
+      //调用方已经开启同步锁，此处不必
       var services = serviceMap[virtualPath] as ArrayList;
       if ( services == null || services.Count == 0 )
         return;
@@ -189,11 +191,12 @@ namespace Ivony.Web
     /// <summary>
     /// 获取指定虚拟路径中注册的服务
     /// </summary>
-    /// <param name="virtualPath"></param>
-    /// <returns></returns>
+    /// <param name="virtualPath">虚拟路径，将在这个路径下查找所注册的服务</param>
+    /// <returns>注册的所有服务对象</returns>
     private static object[] GetServices( string virtualPath )
     {
 
+      //调用方已经开启同步锁，此处不必
       var services = serviceMap[virtualPath] as ArrayList;
       if ( services != null )
         return services.Cast<object>().ToArray();
@@ -248,6 +251,20 @@ namespace Ivony.Web
         return globalServices.OfType<T>().ToArray();
       }
     }
+
+
+
+    /// <summary>
+    /// 获取日志记录追踪服务
+    /// </summary>
+    /// <returns>追踪服务实例</returns>
+    public static ITraceService GetTraceService()
+    {
+      return WebServiceLocator.GetServices<ITraceService>().FirstOrDefault() ?? defaultTraceService;
+    }
+
+    private static readonly ITraceService defaultTraceService = new AspNetTraceService();
+
 
   }
 }

@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionUrlBinder.cs" />
     <Compile Include="CacheFilterBase.cs" />
     <Compile Include="ContentAdapter.cs" />
     <Compile Include="ControllerCachePolicyProvider.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="HtmlViewHandlerWrapper.cs" />
     <Compile Include="IViewFilterProvider.cs" />
     <Compile Include="IViewHandlerProvider.cs" />
+    <Compile Include="MvcFormValidationResult.cs" />
     <Compile Include="ViewHandlerProvider.cs" />
     <Compile Include="ICachableResult.cs" />
     <Compile Include="IContentView.cs" />
@@ -121,7 +123,6 @@
     <Compile Include="MvcCachePolicyProviderWrapper.cs" />
     <Compile Include="MvcConfiguration.cs" />
     <Compile Include="MvcFormExtensions.cs" />
-    <Compile Include="MvcFormValidator.cs" />
     <Compile Include="PartialViewAdapter.cs" />
     <Compile Include="ViewBase.cs" />
     <Compile Include="JumonyViewEngine.cs" />

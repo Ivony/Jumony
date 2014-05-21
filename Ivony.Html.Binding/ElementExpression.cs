@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Ivony.Fluent;
 
 namespace Ivony.Html.Binding
 {
@@ -42,9 +43,22 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 绑定表达式参数
     /// </summary>
-    public override IDictionary<string, string> Arguments
+    internal override IDictionary<string, IBindingExpressionValueObject> Arguments
     {
-      get { return Element.Attributes().ToDictionary( a => a.Name, a => a.AttributeValue, StringComparer.OrdinalIgnoreCase ); }
+      get
+      {
+        return Element.Attributes().ToDictionary( attribute => attribute.Name, attribute => GetValue( attribute.Value() ) );
+      }
+    }
+
+    private IBindingExpressionValueObject GetValue( string value )
+    {
+      var expression = BindingExpression.ParseExpression( value );
+      if ( expression != null )
+        return expression;
+
+      else
+        return new LiteralValue( value );
     }
   }
 }

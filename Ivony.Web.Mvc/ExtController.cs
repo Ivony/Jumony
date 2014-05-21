@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -11,6 +12,10 @@ using System.Web.WebSockets;
 
 namespace Ivony.Web
 {
+
+  /// <summary>
+  /// 扩展 Controller ，提供WebSocket和JSONP支持
+  /// </summary>
   public class ExtController : Controller
   {
 

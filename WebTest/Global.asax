@@ -7,6 +7,8 @@
     System.Web.Routing.RouteTable.Routes.RouteExistingFiles = true;
     System.Web.Routing.RouteTable.Routes.Add( new JumonyRequestRoute() );
 
+    System.Web.Routing.RouteTable.Routes.SimpleRouteTable().MapDefaultRoute();
+
   }
 
   void Application_End( object sender, EventArgs e )

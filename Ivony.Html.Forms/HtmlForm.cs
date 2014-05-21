@@ -8,6 +8,10 @@ using System.Web;
 
 namespace Ivony.Html.Forms
 {
+
+  /// <summary>
+  /// 抽象化 HTML 表单，提供有用的功能。
+  /// </summary>
   public class HtmlForm
   {
     private IHtmlElement _element;
@@ -22,104 +26,55 @@ namespace Ivony.Html.Forms
 
 
 
-    private IHtmlTextControl[] textControls;
-    private IHtmlGroupControl[] groupControls;
-
-    private HtmlLabel[] labels;
-
-    private Hashtable labelsTable = Hashtable.Synchronized( new Hashtable() );
-    private Hashtable controlsTable = Hashtable.Synchronized( new Hashtable() );
-
+    /// <summary>
+    /// 获取所有表单控件
+    /// </summary>
+    public FormControlCollection Controls
+    {
+      get;
+      private set;
+    }
 
 
     /// <summary>
     /// 创建一个 HTML 表单对象
     /// </summary>
-    /// <param name="element"></param>
-    public HtmlForm( IHtmlElement element )
+    /// <param name="element">表单元素</param>
+    /// <param name="configuration">表单配置</param>
+    /// <param name="provider">表单控件提供程序</param>
+    public HtmlForm( IHtmlElement element, FormConfiguration configuration = null, IFormProvider provider = null )
     {
+
+      if ( element == null )
+        throw new ArgumentNullException( "element" );
+
+      var document = element.Document;
+
+      if ( document == null )
+        throw new InvalidOperationException();
+
+
+      var modifier = document.DomModifier as ISynchronizedDomModifier;
+      if ( modifier == null )
+        throw new InvalidOperationException();
+
+
+      SyncRoot = modifier.SyncRoot;
+      
       _element = element;
+
+      Configuration = configuration ?? new FormConfiguration();
+      Provider = provider ?? new StandardFormProvider();
 
 
       RefreshForm();
-
     }
 
 
     /// <summary>
-    /// 重新扫描表单中所有控件
+    /// 表单控件提供程序
     /// </summary>
-    public void RefreshForm()
-    {
-      textControls =
-      Element.Find( "input[type=text][name] , input[type=password][name] , input[type=hidden][name]" )
-        .Select( e => new HtmlInputText( this, e ) ).Cast<IHtmlTextControl>()
-        .Union( Element.Find( "textarea[name]" ).Select( e => new HtmlTextArea( this, e ) ).Cast<IHtmlTextControl>() )
-        .ForAll( control => controlsTable.Add( control.Name, control ) )
-        .ToArray();
-
-
-      groupControls =
-      Element.Find( "select[name]" )
-        .Select( select => new HtmlSelect( this, select ) ).Cast<IHtmlGroupControl>()
-        .Union( HtmlButtonGroup.CaptureInputGroups( this ).Cast<IHtmlGroupControl>() )
-        .ForAll( control => controlsTable.Add( control.Name, control ) )
-        .ToArray();
-
-
-
-
-      labels = Element.Find( "label[for]" ).Select( e => new HtmlLabel( this, e ) ).ToArray();
-
-      labels.GroupBy( l => l.ForElementId ).ForAll( grouping =>
-        labelsTable.Add( grouping.Key, grouping.ToArray() ) );
-    }
-
-
-
-
-    /// <summary>
-    /// 尝试提交表单
-    /// </summary>
-    /// <param name="data">提交的数据</param>
-    /// <returns>被提交的表单</returns>
-    public HtmlForm Submit( NameValueCollection data )
-    {
-      return Submit( data, true );
-    }
-
-
-    /// <summary>
-    /// 尝试提交表单
-    /// </summary>
-    /// <param name="data">提交的数据</param>
-    /// <param name="validateInputs">指示是否应当验证表单提交的数据是否与表单吻合</param>
-    /// <returns>被提交的表单</returns>
-    public HtmlForm Submit( NameValueCollection data, bool validateInputs )
-    {
-
-      if ( data == null )
-        throw new ArgumentNullException( "data" );
-
-
-      if ( SubmittedValues != null )
-        throw new InvalidOperationException( "表单已经被提交过一次了" );
-
-      var inputControlNames = InputControls.Select( input => input.Name ).ToArray();
-
-      if ( validateInputs && data.AllKeys.Any( key => !inputControlNames.Contains( key ) ) )
-        throw new InvalidOperationException();//如果表单尚有一些控件没有提交值，那么这是错误的。
-
-      SubmittedValues = data;
-
-      return this;
-    }
-
-
-    /// <summary>
-    /// 获取表单提交的值，若表单尚未提交，则为 null
-    /// </summary>
-    public NameValueCollection SubmittedValues
+    protected IFormProvider Provider
     {
       get;
       private set;
@@ -128,62 +83,49 @@ namespace Ivony.Html.Forms
 
 
     /// <summary>
-    /// 获取表单所有的输入控件
+    /// 重新扫描表单中所有控件
     /// </summary>
-    public IEnumerable<IHtmlInputControl> InputControls
+    public void RefreshForm()
     {
-      get { return controlsTable.Values.Cast<IHtmlInputControl>(); }
+
+      lock ( SyncRoot )
+      {
+        Controls = new FormControlCollection( Provider.DiscoveryControls( this ) );
+      }
+
     }
+
+
 
 
     /// <summary>
-    /// 获取指定名称的输入控件
+    /// 提供一个容器，可以对当前表单数据进行暂存，
     /// </summary>
-    /// <param name="name">输入控件名</param>
-    /// <returns>输入控件</returns>
-    public IHtmlInputControl this[string name]
+    public Hashtable FormData
     {
-      get { return InputControl( name ); }
-    }
-
-
-
-    public IHtmlInputControl InputControl( string name )
-    {
-      return controlsTable[name].CastTo<IHtmlInputControl>();
-    }
-
-
-    /// <summary>
-    /// 所有文本输入控件
-    /// </summary>
-    private IHtmlTextControl[] TextInputs
-    {
-      get { return textControls; }
-    }
-
-    /// <summary>
-    /// 所有组合输入控件
-    /// </summary>
-    private IHtmlGroupControl[] GroupInputs
-    {
-      get { return groupControls; }
+      get;
+      private set;
     }
 
 
 
     /// <summary>
-    /// 检索指定HTML元素绑定的 Label
+    /// 获取该表单的配置对象
     /// </summary>
-    /// <param name="element">要检索 Label 的元素</param>
-    /// <returns></returns>
-    internal HtmlLabel[] FindLabels( string elementId )
-    {
-      if ( elementId == null )
-        return new HtmlLabel[0];
+    public FormConfiguration Configuration { get; private set; }
 
-      return labelsTable[elementId].CastTo<HtmlLabel[]>().IfNull( new HtmlLabel[0] );
+
+
+
+    /// <summary>
+    /// 用于 HTML DOM 同步的对象，当对表单进行扫描时，将锁住 HTML DOM 避免出现问题
+    /// </summary>
+    public object SyncRoot
+    {
+      get;
+      private set;
     }
+
 
   }
 }

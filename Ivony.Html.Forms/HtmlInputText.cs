@@ -2,89 +2,68 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ivony.Fluent;
 
 namespace Ivony.Html.Forms
 {
 
   /// <summary>
-  /// 定义一个文本输入框元素
+  /// 定义文本输入控件
   /// </summary>
-  public class HtmlInputText : IHtmlTextControl
+  /// <remarks>
+  /// 文本输入控件包括&lt;input type="text"&gt;和&lt;input type="password"&gt;
+  /// </remarks>
+  public sealed class HtmlInputText : FormTextControl
   {
 
-    private readonly HtmlForm _form;
-    private readonly IHtmlElement _element;
-    private readonly string _type;
-
-    private string[] allowTypes = new[] { "text", "password", "hidden" };
-
-
     internal HtmlInputText( HtmlForm form, IHtmlElement element )
+      : base( form, element )
     {
-      if ( !element.Name.EqualsIgnoreCase( "input" ) )
-        throw new InvalidOperationException( "只有input元素才能转换为HtmlTextInput对象" );
+      var value = element.Attribute( "value" ).Value() ?? "";
+    }
 
 
-      _type = element.Attribute( "type" ).Value();
-      if ( !allowTypes.Contains( _type, StringComparer.OrdinalIgnoreCase ) )
-        throw new InvalidOperationException( "只有type为text、password或hidden的input元素才能转换为HtmlTextInput对象" );
 
-      _form = form;
-      _element = element;
+    /// <summary>
+    /// 获取控件值
+    /// </summary>
+    /// <returns>控件目前设置的值</returns>
+    protected override string GetValue()
+    {
+      return Element.Attribute( "value" ).Value() ?? "";
     }
 
 
     /// <summary>
-    /// 输入框所属的表单
+    /// 设置控件值
     /// </summary>
-    public HtmlForm Form
+    /// <param name="value">要设置的值</param>
+    protected override void SetValue( string value )
     {
-      get { return _form; }
+      value = value.Replace( "\r", "" ).Replace( "\n", "" );
+      Element.SetAttribute( "value", value );
     }
 
 
     /// <summary>
-    /// 描述输入框的元素
+    /// 确定能够设置指定的文本值
     /// </summary>
-    public IHtmlElement Element
+    /// <param name="value">要设置的控件值</param>
+    /// <param name="message">若无法设置，获取错误信息</param>
+    /// <returns>是否能够设置这个控件值</returns>
+    protected override bool CanSetValue( string value, out string message )
     {
-      get { return _element; }
-    }
+      if ( !base.CanSetValue( value, out message ) )
+        return false;
 
 
-    /// <summary>
-    /// 输入框的名称
-    /// </summary>
-    public string Name
-    {
-      get { return _element.Attribute( "name" ).AttributeValue; }
-    }
-
-
-    /// <summary>
-    /// 输入框的文本值
-    /// </summary>
-    public string TextValue
-    {
-      get { return _element.Attribute( "value" ).Value(); }
-      set
+      if ( !Form.Configuration.IgnoreNewlineInTextbox && (value.Contains( "\r" ) || value.Contains( "\n" )) )
       {
-        if ( !_type.EqualsIgnoreCase( "password" ) )
-          _element.SetAttribute( "value", value );
+        message = "单行文本框不能输入多行文本值";
+        return false;
       }
+
+      else
+        return true;
     }
-
-
-    #region IHtmlFocusableControl 成员
-
-    string IHtmlFocusableControl.ElementId
-    {
-      get { return Element.Identity(); }
-    }
-
-    #endregion
-
-
   }
 }

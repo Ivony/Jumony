@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Web.Caching;
 using System.Web.Hosting;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ivony.Web
 {
@@ -50,9 +51,14 @@ namespace Ivony.Web
     {
 
       if ( DebugMode )
-        httpContext.Trace.Write( "Begin GetRouteData", "SimpleRouteTable" );
+        Trace( "Begin GetRouteData" );
 
       var virtualPath = httpContext.Request.GetVirtualPath();
+
+
+      if ( IsIgnoredPath( virtualPath ) )
+        return null;
+
 
       var cacheKey = RouteUrlCacheKeyPrefix + httpContext.Request.Url.AbsoluteUri;
 
@@ -68,9 +74,9 @@ namespace Ivony.Web
 
         if ( DebugMode )
         {
-          httpContext.Trace.Write( "Hit cache", "SimpleRouteTable" );
+          Trace( "Hit cache" );
           var routeValues = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ).ToArray() );
-          httpContext.Trace.Write( string.Format( "RouteData: {{{0}}}", routeValues ), "SimpleRouteTable" );
+          Trace( string.Format( "RouteData: {{{0}}}", routeValues ) );
         }
 
         return CloneRouteData( routeData );
@@ -106,11 +112,37 @@ namespace Ivony.Web
       if ( DebugMode )
       {
         var values = string.Join( ",", routeData.Values.Select( pair => string.Format( "\"{0}\" : \"{1}\"", pair.Key, pair.Value ) ).ToArray() );
-        httpContext.Trace.Write( string.Format( "RouteData: {{{0}}}", values ), "SimpleRouteTable" );
+        Trace( string.Format( "RouteData: {{{0}}}", values ) );
       }
 
       return CloneRouteData( routeData );
 
+    }
+
+
+    /// <summary>
+    /// 写入追踪消息
+    /// </summary>
+    /// <param name="message">消息内容</param>
+    /// <param name="level">消息级别</param>
+    protected void Trace( string message, TraceLevel level = TraceLevel.Info )
+    {
+      WebServiceLocator.GetTraceService().Trace( level, "Simple Route Table", message );
+    }
+
+
+    /// <summary>
+    /// 确定指定的虚拟路径是否应当是被忽略的
+    /// </summary>
+    /// <param name="virtualPath">要检查的虚拟路径</param>
+    /// <returns>该虚拟路径是否应当被忽略</returns>
+    protected virtual bool IsIgnoredPath( string virtualPath )
+    {
+      if ( VirtualPathUtility.GetExtension( virtualPath ).EqualsIgnoreCase( ".axd" ) )
+        return true;
+
+      else
+        return false;
     }
 
 
@@ -179,6 +211,17 @@ namespace Ivony.Web
 
       virtualPath = bestRule.CreateVirtualPath( _values );
 
+
+      if ( IsIgnoredPath( virtualPath ) )//如果产生的虚拟路径是被忽略的，则返回 null
+      {
+        if ( DebugMode )
+          Trace( string.Format( "名为 \"{0}\" 路由表的 \"{1}\" 路由规则产生的虚拟路径 {2} 被该路由表忽略", Name, bestRule.Name, virtualPath ), TraceLevel.Warning );
+
+        else
+          return null;
+      }
+
+
       if ( MvcCompatible )
         virtualPath = virtualPath.Substring( 2 );
 
@@ -186,14 +229,24 @@ namespace Ivony.Web
 
       cache.Insert( cacheKey, virtualPath, CacheItemPriority.AboveNormal );
 
+      return CreateVirtualPathData( virtualPath, bestRule );
+    }
 
+    /// <summary>
+    /// 创建 VirtualPathData 对象
+    /// </summary>
+    /// <param name="virtualPath">虚拟路径</param>
+    /// <param name="rule">产生该虚拟路径的路由规则</param>
+    /// <returns>VirtualPathData 对象</returns>
+    protected VirtualPathData CreateVirtualPathData( string virtualPath, SimpleRouteRule rule )
+    {
       var data = new VirtualPathData( this, virtualPath );
 
 
-      foreach ( var pair in bestRule.DataTokens )
+      foreach ( var pair in rule.DataTokens )
         data.DataTokens.Add( pair.Key, pair.Value );
 
-      data.DataTokens["RoutingRuleName"] = bestRule.Name;
+      data.DataTokens["RoutingRuleName"] = rule.Name;
 
       return data;
     }

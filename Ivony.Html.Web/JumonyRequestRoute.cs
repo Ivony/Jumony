@@ -85,6 +85,9 @@ namespace Ivony.Html.Web
 
     private static readonly JumonyRequestRoute _instance = new JumonyRequestRoute();
 
+    /// <summary>
+    /// 获取 JumonyRequestRoute 的实例
+    /// </summary>
     public static JumonyRequestRoute Instance
     {
       get { return _instance; }

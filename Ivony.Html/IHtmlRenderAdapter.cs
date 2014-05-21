@@ -22,7 +22,7 @@ namespace Ivony.Html
     /// <remarks>
     /// 若返回值为 false ，则系统其后会自行渲染这个节点，所以不应对 writer 写入一些东西后返回 false。
     /// </remarks>
-    bool Render( IHtmlNode node, HtmlRenderContext context );
+    bool Render( IHtmlNode node, IHtmlRenderContext context );
 
   }
 }

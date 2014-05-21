@@ -112,3 +112,5 @@ Content
 StaticCaches
 *.mdf
 *.ldf
+
+.localhistory

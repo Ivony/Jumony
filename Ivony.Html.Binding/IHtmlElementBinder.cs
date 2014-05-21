@@ -5,19 +5,23 @@ using System.Text;
 
 namespace Ivony.Html.Binding
 {
+
   /// <summary>
-  /// 定义 HTML 元素绑定器
+  /// 定义特定元素数据绑定器，对特定的元素直接接管数据绑定。
   /// </summary>
   public interface IHtmlElementBinder
   {
 
     /// <summary>
-    /// 绑定元素
+    /// 要进行处理的元素的名称
     /// </summary>
-    /// <param name="context">数据绑定上下文</param>
-    /// <param name="element">要绑定的元素</param>
-    /// <returns>返回一个值，是否禁止后面的绑定器的执行</returns>
-    void BindElement( HtmlBindingContext context, IHtmlElement element );
+    string ElementName { get; }
 
+    /// <summary>
+    /// 接管元素的数据绑定
+    /// </summary>
+    /// <param name="context">当前数据绑定上下文</param>
+    /// <param name="element">当前正在执行数据绑定的元素</param>
+    void BindElement( HtmlBindingContext context, IHtmlElement element );
   }
 }

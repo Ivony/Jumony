@@ -13,11 +13,19 @@ namespace Ivony.Html.Binding
   {
 
     /// <summary>
-    /// 尝试从 BindingExpression 获取需要绑定的字符串值
+    /// 尝试将字符串转换为指定类型的值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="obj">要转换的源对象</param>
+    /// <param name="value">转换后的值</param>
+    /// <returns>是否转换成功</returns>
+    bool TryConvertValue<T>( object obj, out T value );
+
+    /// <summary>
+    /// 从 BindingExpression 获取需要绑定的值
     /// </summary>
     /// <param name="expression">绑定表达式</param>
-    /// <returns>获取到的值，若不支持该绑定表达式或者无法解析，则返回null</returns>
-    string GetValue( BindingExpression expression );
-
+    /// <returns>获取到的绑定值</returns>
+    object GetValue( BindingExpression expression );
   }
 }

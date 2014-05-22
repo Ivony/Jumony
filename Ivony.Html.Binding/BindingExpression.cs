@@ -45,14 +45,15 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 尝试获取指定类型的值
+    /// 尝试获取参数指定类型的值
     /// </summary>
     /// <typeparam name="T">值类型</typeparam>
     /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
     /// <param name="name">参数名称</param>
     /// <param name="value">获取到的参数值</param>
+    /// <param name="throwIfConvertFailed">当类型转换失败的时候是否应当抛出异常</param>
     /// <returns>是否成功获取</returns>
-    public bool TryGetValue<T>( IBindingExpressionEvaluator evaluator, string name, out T value, bool throwIfConvertFailed = false )
+    public bool TryGetValue<T>( IBindingExpressionEvaluator evaluator, string name, out T value, bool throwIfConvertFailed = true )
     {
       if ( typeof( BindingExpression ).IsAssignableFrom( typeof( T ) ) )
         throw new InvalidOperationException();
@@ -87,7 +88,7 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 尝试获取参数原始值对象
+    /// 尝试获取参数值
     /// </summary>
     /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
     /// <param name="name">参数名称</param>
@@ -113,7 +114,6 @@ namespace Ivony.Html.Binding
     /// <typeparam name="T">值类型</typeparam>
     /// <param name="evaluator">绑定表达式计算转换器 （一般是BindingContext）</param>
     /// <param name="name">参数名称</param>
-    /// <param name="value">获取到的参数值</param>
     /// <returns>是否成功获取</returns>
     public T GetValue<T>( IBindingExpressionEvaluator evaluator, string name )
     {
@@ -129,7 +129,6 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 解析绑定表达式
     /// </summary>
-    /// <param name="evaluator">用于解析绑定表达式并计算绑定值的计算器</param>
     /// <param name="expression">要从中解析的绑定表达式的字符串</param>
     /// <returns>解析后的结果</returns>
     public static BindingExpression ParseExpression( string expression )
@@ -140,7 +139,6 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 解析绑定表达式
     /// </summary>
-    /// <param name="evaluator">用于解析绑定表达式并计算绑定值的计算器</param>
     /// <param name="expression">要从中解析的绑定表达式的字符串</param>
     /// <param name="index">解析绑定表达式的开始位置</param>
     /// <returns>解析后的结果</returns>

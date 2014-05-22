@@ -26,7 +26,6 @@ namespace Ivony.Html.Binding
       /// <summary>
       /// 解析绑定表达式为 BindingExpression 对象
       /// </summary>
-      /// <param name="evaluator">用于计算绑定表达式值的计算器</param>
       /// <param name="text">要分析的文本</param>
       /// <param name="index">开始分析的位置</param>
       /// <returns>解析出的 BindingExpression 对象</returns>

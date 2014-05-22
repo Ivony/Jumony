@@ -44,6 +44,10 @@ namespace Ivony.Html
       Data = Hashtable.Synchronized( new Hashtable() );
     }
 
+
+    /// <summary>
+    /// 获取本次渲染所使用的渲染代理
+    /// </summary>
     public IHtmlRenderAdapter[] RenderAdapters { get; private set; }
 
     /// <summary>

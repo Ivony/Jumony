@@ -29,7 +29,7 @@ namespace Ivony.Html.Binding
     /// 根据绑定参数获取数据对象
     /// </summary>
     /// <param name="context">绑定上下文</param>
-    /// <param name="arguments">绑定参数</param>
+    /// <param name="expression">绑定表达式</param>
     /// <returns>数据对象</returns>
     public static object GetDataObject( HtmlBindingContext context, BindingExpression expression )
     {
@@ -74,7 +74,7 @@ namespace Ivony.Html.Binding
     /// 获取绑定值
     /// </summary>
     /// <param name="context">绑定上下文</param>
-    /// <param name="arguments">绑定参数</param>
+    /// <param name="expression">绑定表达式</param>
     /// <returns>绑定值</returns>
     public static string GetValue( HtmlBindingContext context, BindingExpression expression )
     {

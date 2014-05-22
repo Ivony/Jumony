@@ -226,6 +226,11 @@ namespace Ivony.Html.Binding
 
 
 
+    /// <summary>
+    /// 尝试将元素作为绑定表达式来进行绑定
+    /// </summary>
+    /// <param name="element">要当做绑定表达式绑定的元素</param>
+    /// <returns>是否成功当做绑定表达式来绑定</returns>
     protected bool BindExpressionElement( IHtmlElement element )
     {
       var expression = new ElementExpression( element );
@@ -357,7 +362,7 @@ namespace Ivony.Html.Binding
     /// <param name="expression">绑定表达式</param>
     /// <param name="value">绑定值</param>
     /// <returns>是否成功获取</returns>
-    public bool TryGetValue( BindingExpression expression, out object value )
+    protected bool TryGetValue( BindingExpression expression, out object value )
     {
       var expressionBinder = GetExpressionBinder( expression );
 
@@ -375,6 +380,13 @@ namespace Ivony.Html.Binding
     }
 
 
+    /// <summary>
+    /// 尝试转换值类型
+    /// </summary>
+    /// <typeparam name="T">转换的目标类型</typeparam>
+    /// <param name="obj">要转换的值对象</param>
+    /// <param name="value">转换后的结果</param>
+    /// <returns>是否成功完成类型转换</returns>
     public bool TryConvertValue<T>( object obj, out T value )
     {
       if ( typeof( T ).IsAssignableFrom( obj.GetType() ) )

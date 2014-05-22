@@ -47,7 +47,7 @@ namespace Ivony.Html.Binding
 
       Providers = new HtmlBindingContextProviderCollection();
       ExpressionBinders = new ExpressionBinderCollection();
-      ElementBinders = new List<IHtmlBinder>();
+      HtmlBinders = new List<IHtmlBinder>();
 
       Providers.Add( new HtmlListBindingContextProvider() );
 
@@ -66,9 +66,9 @@ namespace Ivony.Html.Binding
 
 
 
-      ElementBinders.Add( StyleBinder );
-      ElementBinders.Add( ScriptBinder );
-      ElementBinders.Add( LiteralBinder );
+      HtmlBinders.Add( StyleBinder );
+      HtmlBinders.Add( ScriptBinder );
+      HtmlBinders.Add( LiteralBinder );
 
       ExpressionBinders.Add( EvalExpressionBinder );
       ExpressionBinders.Add( EvalListExpressionBinder );
@@ -87,9 +87,9 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 获取或设置所有元素绑定器
+    /// 获取或注册元素绑定器
     /// </summary>
-    public static ICollection<IHtmlBinder> ElementBinders
+    public static ICollection<IHtmlBinder> HtmlBinders
     {
       get;
       private set;
@@ -144,7 +144,7 @@ namespace Ivony.Html.Binding
     /// <param name="dataModel">数据模型</param>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel )
     {
-      return HtmlBindingContext.Create( ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataModel );
+      return HtmlBindingContext.Create( HtmlBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataModel );
     }
 
 

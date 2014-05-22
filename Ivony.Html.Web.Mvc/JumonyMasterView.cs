@@ -82,7 +82,7 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "JumonyMasterView", "End Process" );
 
 
-      Document.DataBind( ViewContext.ViewData, HtmlBinding.ElementBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Document.HtmlSpecification ) );
+      Document.DataBind( ViewContext.ViewData, HtmlBinding.HtmlBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Document.HtmlSpecification ) );
 
 
       RenderAdapters = GetRenderAdapters( handler );

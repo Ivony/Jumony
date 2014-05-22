@@ -20,12 +20,13 @@ namespace Ivony.Html
   {
 
     /// <summary>所有 CDATA 元素，其内部文本不被当作 HTML 文本解释</summary>
-    private static readonly HashSet<string> cdataTags = new HashSet<string>( new[] { "script", "style" }, StringComparer.OrdinalIgnoreCase );
+    private static readonly HashSet<string> cdataElements = new HashSet<string>( new[] { "script", "style" }, StringComparer.OrdinalIgnoreCase );
+    /// <summary>所有 PCDATA 元素，其内部文本不被当作 HTML 文本解释，但会进行HTML Entity解析</summary>
+    private static readonly HashSet<string> pcdataElements = new HashSet<string>( new[] { "textarea", "title" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有自结束元素，没有内容和结束标签</summary>
-    private static readonly HashSet<string> fobiddenEndTags = new HashSet<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" }, StringComparer.OrdinalIgnoreCase );
-
+    private static readonly HashSet<string> fobiddenEndTagElements = new HashSet<string>( new[] { "area", "base", "basefont", "br", "col", "frame", "hr", "img", "input", "isindex", "link", "meta", "param", "wbr", "bgsound", "spacer", "keygen" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>所有可选结束元素，其在何处结束由 ImmediatelyClose 方法确定</summary>
-    private static readonly HashSet<string> optionalCloseTags = new HashSet<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" }, StringComparer.OrdinalIgnoreCase );
+    private static readonly HashSet<string> optionalEndTagElements = new HashSet<string>( new[] { "body", "colgroup", "dd", "dt", "head", "html", "li", "option", "p", "tbody", "td", "tfoot", "th", "thead", "tr" }, StringComparer.OrdinalIgnoreCase );
 
 
 
@@ -47,7 +48,7 @@ namespace Ivony.Html
     /// <summary>所有定义列表的元素</summary>
     private static readonly HashSet<string> listElements = new HashSet<string>( new[] { "ul", "ol", "dl" }, StringComparer.OrdinalIgnoreCase );
     /// <summary>预格式化元素</summary>
-    private static readonly HashSet<string> preformatedElements = new HashSet<string>( new[] { "pre", "textarea", "title" }, StringComparer.OrdinalIgnoreCase );
+    private static readonly HashSet<string> preformatedElements = new HashSet<string>( new[] { "pre" }, StringComparer.OrdinalIgnoreCase );
 
     /// <summary>所有块级元素</summary>
     private static readonly HashSet<string> blockElements = new HashSet<string>( headingElements.Union( listElements ).Union( preformatedElements ).Union( new[] { "p", "div", "noscript", "blockquote", "form", "hr", "table", "fieldset", "address" }, StringComparer.OrdinalIgnoreCase ).ToArray() );
@@ -63,17 +64,17 @@ namespace Ivony.Html
 
     public override bool IsCDataElement( string elementName )
     {
-      return cdataTags.Contains( elementName );
+      return cdataElements.Contains( elementName ) || pcdataElements.Contains( elementName );
     }
 
     public override bool IsOptionalEndTag( string elementName )
     {
-      return optionalCloseTags.Contains( elementName );
+      return optionalEndTagElements.Contains( elementName );
     }
 
     public override bool IsForbiddenEndTag( string elementName )
     {
-      return fobiddenEndTags.Contains( elementName );
+      return fobiddenEndTagElements.Contains( elementName );
     }
 
     public override bool ImmediatelyClose( string openTag, string nextTag )
@@ -121,6 +122,7 @@ namespace Ivony.Html
 
         case "head":
           return nextTag == "body";
+
 
         default:
           return false;
@@ -308,10 +310,10 @@ namespace Ivony.Html
       if ( element == null )
         throw new ArgumentNullException( "element" );
 
-      if ( element.AncestorsAndSelf().Any( e => preformatedElements.Contains( e.Name ) ) )
+      if ( element.AncestorsAndSelf().Any( e => preformatedElements.Contains( e.Name ) ) || pcdataElements.Contains( element.Name ) )
         return TextMode.Preformated;
 
-      else if ( cdataTags.Contains( element.Name ) )
+      else if ( cdataElements.Contains( element.Name ) )
         return TextMode.CData;
 
       else if ( nonTextElements.Contains( element.Name ) )

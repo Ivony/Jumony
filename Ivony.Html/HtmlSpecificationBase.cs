@@ -18,6 +18,7 @@ namespace Ivony.Html
     /// </summary>
     /// <remarks>
     /// 对于 CData 元素，解析器不会将开始标签到结束标签之间的任何符号视为 HTML 符号的一部分。
+    /// PCData 元素同时也是 CData 元素
     /// </remarks>
     /// <param name="elementName">元素名</param>
     /// <returns>是否为 CData 元素</returns>

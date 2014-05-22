@@ -47,7 +47,7 @@ namespace Ivony.Html.Binding
     {
       get
       {
-        return Element.Attributes().ToDictionary( attribute => attribute.Name, attribute => GetValue( attribute.Value() ) );
+        return Element.Attributes().ToDictionary( attribute => attribute.Name, attribute => GetValue( attribute.Value() ), StringComparer.OrdinalIgnoreCase );
       }
     }
 

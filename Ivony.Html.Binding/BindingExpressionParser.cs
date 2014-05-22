@@ -67,7 +67,7 @@ namespace Ivony.Html.Binding
           return null;
 
 
-        var arguments = new Dictionary<string, IBindingExpressionValueObject>();
+        var arguments = new Dictionary<string, IBindingExpressionValueObject>( StringComparer.OrdinalIgnoreCase );
 
         while ( true )
         {

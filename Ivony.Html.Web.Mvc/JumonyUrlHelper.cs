@@ -43,12 +43,6 @@ namespace Ivony.Html.Web
     private RouteData RouteData { get { return RequestContext.RouteData; } }
 
 
-    /// <summary>
-    /// 处理所有 Action 路由
-    /// </summary>
-    /// <param name="container">包含所有要处理元素的 HTML 容器</param>
-
-
     private Dictionary<IHtmlElement, IDictionary<string, string>> elementRouteValuesTable = new Dictionary<IHtmlElement, IDictionary<string, string>>();
 
 

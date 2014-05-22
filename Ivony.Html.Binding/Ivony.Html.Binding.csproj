@@ -51,6 +51,7 @@
     <Compile Include="BindingExpression.cs" />
     <Compile Include="BindingExpressionParser.cs" />
     <Compile Include="HtmlBindingContextProviderCollection.cs" />
+    <Compile Include="HtmlElementBinderCollection.cs" />
     <Compile Include="HtmlListBindingContextProvider.cs" />
     <Compile Include="EvalExpressionBinder.cs" />
     <Compile Include="ElementExpression.cs" />

@@ -20,6 +20,17 @@ namespace Ivony.Html.Binding
     internal HtmlElementBinderCollection() : base( StringComparer.OrdinalIgnoreCase ) { }
 
     /// <summary>
+    /// 创建 HtmlElementBinderCollection 对象
+    /// </summary>
+    /// <param name="binders">要添加的绑定器</param>
+    internal HtmlElementBinderCollection( IEnumerable<IHtmlElementBinder> binders )
+      : this()
+    {
+      foreach ( var item in binders )
+        Add( item );
+    }
+
+    /// <summary>
     /// 从 IHtmlElementBinder 对象中提取用作键的元素名称
     /// </summary>
     /// <param name="item">IHtmlElementBinder 对象</param>

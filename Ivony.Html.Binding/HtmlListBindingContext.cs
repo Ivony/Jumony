@@ -37,19 +37,7 @@ namespace Ivony.Html.Binding
 
 
 
-    /// <summary>
-    /// 重写 DataBind 方法，直接对元素进行绑定
-    /// </summary>
-    public override void DataBind()
-    {
-      DataBind( BindingElement );
-    }
-
-
-    /// <summary>
-    /// 重写 BindElement 方法，执行绑定时将被绑定元素复制适当份数，再进行绑定。
-    /// </summary>
-    protected override void BindElement( IHtmlElement element )
+    public override void DataBind( IHtmlElement element )
     {
       if ( DataModel.Selector == null )//如果没有选择器，执行简单绑定
       {
@@ -58,28 +46,23 @@ namespace Ivony.Html.Binding
 
         for ( int i = 0; i < count; i++ )
           DataBind( list[i], DataModel[i] );
-
-        return;
       }
 
+      else
+        base.DataBind( element );
+
+    }
 
 
 
-      //对元素进行数据绑定
-      CancelChildsBinding = BindCompleted = false;//重置绑定状态
+    /// <summary>
+    /// 重写 BindChilds 方法，进行高级绑定。
+    /// </summary>
+    protected override void BindChilds( IHtmlContainer container )
+    {
 
-      foreach ( var binder in Binders )
-      {
-        binder.BindElement( this, element );
-
-        if ( BindCompleted )
-          break;
-      }
-
-      if ( CancelChildsBinding )//如果取消子元素绑定，则不再进行下面的列表绑定操作
-        return;
-
-
+      if ( DataModel.Selector == null || container != BindingElement )
+        throw new InvalidOperationException();
 
       IHtmlElement[] elements;
       if ( DataModel.BindingMode == ListBindingMode.DynamicContent )
@@ -100,7 +83,9 @@ namespace Ivony.Html.Binding
         else
           DataBind( e, DataModel.RawObject );       //若该元素不是数据项元素，则使用列表的原始对象作为数据上下文进行绑定
       }
+
     }
+
 
 
     private IHtmlElement[] DynamicContent()

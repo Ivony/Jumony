@@ -46,8 +46,10 @@ namespace Ivony.Html.Binding
     {
 
       Providers = new HtmlBindingContextProviderCollection();
-      ExpressionBinders = new ExpressionBinderCollection();
       HtmlBinders = new List<IHtmlBinder>();
+      ElementBinders = new HtmlElementBinderCollection();
+      ExpressionBinders = new ExpressionBinderCollection();
+
 
       Providers.Add( new HtmlListBindingContextProvider() );
 
@@ -77,17 +79,7 @@ namespace Ivony.Html.Binding
 
 
     /// <summary>
-    /// 获取或注册表达式绑定器
-    /// </summary>
-    public static ICollection<IExpressionBinder> ExpressionBinders
-    {
-      get;
-      private set;
-    }
-
-
-    /// <summary>
-    /// 获取或注册元素绑定器
+    /// 获取或注册 HTML 绑定器
     /// </summary>
     public static ICollection<IHtmlBinder> HtmlBinders
     {
@@ -95,6 +87,25 @@ namespace Ivony.Html.Binding
       private set;
     }
 
+
+    /// <summary>
+    /// 获取或注册特定元素的绑定器
+    /// </summary>
+    public static ICollection<IHtmlElementBinder> ElementBinders
+    {
+      get;
+      private set;
+    }
+
+
+    /// <summary>
+    /// 获取或注册表达式绑定器
+    /// </summary>
+    public static ICollection<IExpressionBinder> ExpressionBinders
+    {
+      get;
+      private set;
+    }
 
 
     internal static HtmlBindingContextProviderCollection Providers
@@ -144,7 +155,7 @@ namespace Ivony.Html.Binding
     /// <param name="dataModel">数据模型</param>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel )
     {
-      return HtmlBindingContext.Create( HtmlBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataModel );
+      return HtmlBindingContext.Create( HtmlBinders.ToArray(), ElementBinders.ToArray(), ExpressionBinders.ToArray(), scope, dataModel );
     }
 
 
@@ -157,8 +168,9 @@ namespace Ivony.Html.Binding
     /// <returns>绑定上下文</returns>
     public static HtmlBindingContext Create( IHtmlContainer scope, object dataModel, params object[] binders )
     {
-      var elementBinders = new List<IHtmlBinder>();
+      var htmlBinders = new List<IHtmlBinder>();
       var expressionBinders = new List<IExpressionBinder>();
+      var elementBinders = new List<IHtmlElementBinder>();
 
 
       foreach ( var item in binders )
@@ -167,7 +179,7 @@ namespace Ivony.Html.Binding
           var binder = item as IHtmlBinder;
           if ( binder != null )
           {
-            elementBinders.Add( binder );
+            htmlBinders.Add( binder );
             continue;
           }
         }
@@ -185,7 +197,7 @@ namespace Ivony.Html.Binding
           var list = item as IEnumerable<IHtmlBinder>;
           if ( list != null )
           {
-            elementBinders.AddRange( list );
+            htmlBinders.AddRange( list );
             continue;
           }
         }
@@ -204,7 +216,7 @@ namespace Ivony.Html.Binding
       }
 
 
-      var context = HtmlBindingContext.Create( elementBinders.ToArray(), expressionBinders.ToArray(), scope, dataModel );
+      var context = HtmlBindingContext.Create( htmlBinders.ToArray(), elementBinders.ToArray(), expressionBinders.ToArray(), scope, dataModel );
       return context;
     }
 

@@ -22,6 +22,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 创建 ExpressionBinderCollection 对象
     /// </summary>
+    /// <param name="binders">要添加的绑定器</param>
     public ExpressionBinderCollection( IEnumerable<IExpressionBinder> binders )
       : this()
     {

@@ -159,7 +159,7 @@ namespace Ivony.Html
       var id = identity;
       var postfix = 0;
 
-      while ( ExistsIdentities.Any( _id => _id == id ) )
+      while ( ExistsIdentities.Contains( id ) )
         id = identity + "_" + postfix++;
 
       return id;
@@ -405,19 +405,19 @@ namespace Ivony.Html
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IHtmlDocument ), "document", new CodeMethodInvokeExpression( providerVariable, "CreateDocument", urlExpression ) ) );//var document = provider.CreateDocument();
 
         var documentVariable = new CodeVariableReferenceExpression( "document" );
-        
+
         constructor.Statements.Add( new CodeMethodInvokeExpression( providerVariable, "SetHtmlSpecification", documentVariable, new CodePrimitiveExpression( document.HtmlSpecification.ToString() ) ) );// provider.SetHtmlSpecification( document, spec );
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
-        BuildChildNodesStatement( document, documentVariable, constructor.Statements, new List<string>() );//build document
+        BuildChildNodesStatement( document, documentVariable, constructor.Statements, new HashSet<string>() );//build document
 
         constructor.Statements.Add( new CodeMethodReturnStatement( new CodeMethodInvokeExpression( providerVariable, "CompleteDocument", documentVariable ) ) );
 
         return constructor;
       }
 
-      private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression containerVariable, CodeStatementCollection statements, IList<string> existsElements )
+      private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression containerVariable, CodeStatementCollection statements, HashSet<string> existsElements )
       {
 
 

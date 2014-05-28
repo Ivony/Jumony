@@ -28,6 +28,15 @@ namespace APITest
 
     }
 
+    [TestMethod]
+    public void GenerateCodeTest()
+    {
+      var document = new JumonyParser().LoadDocument( "http://www.cnblogs.com" );
+
+      var method = document.GenerateCodeMethod( "CreateDocument" );
+    
+    }
+
 
     private class DomNodeComparer : IEqualityComparer<IHtmlNode>
     {

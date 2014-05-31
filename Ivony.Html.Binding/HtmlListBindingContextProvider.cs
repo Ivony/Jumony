@@ -16,6 +16,10 @@ namespace Ivony.Html.Binding
 
     private readonly static Type _modelType = typeof( ListDataModel );
 
+
+    /// <summary>
+    /// 获取所适用的数据模型类型
+    /// </summary>
     public Type ModelType
     {
       get { return _modelType; }

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BindingExpression.cs" />
     <Compile Include="BindingExpressionParser.cs" />
+    <Compile Include="ExpressionElementBinder.cs" />
     <Compile Include="HtmlBindingContextProviderCollection.cs" />
     <Compile Include="HtmlElementBinderCollection.cs" />
     <Compile Include="HtmlListBindingContextProvider.cs" />

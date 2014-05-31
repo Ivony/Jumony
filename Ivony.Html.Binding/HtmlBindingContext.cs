@@ -28,7 +28,13 @@ namespace Ivony.Html.Binding
     /// <param name="dataModel">数据上下文</param>
     public static HtmlBindingContext Create( IHtmlBinder[] htmlBinders, IHtmlElementBinder[] elementBinders, IExpressionBinder[] expressionBinders, IHtmlContainer scope, object dataModel )
     {
-      return new HtmlBindingContext( htmlBinders, new HtmlElementBinderCollection( elementBinders ), new ExpressionBinderCollection( expressionBinders ), scope, dataModel );
+
+      var _elementBinders = new HtmlElementBinderCollection( elementBinders );
+      var _expressionBinders = new ExpressionBinderCollection( expressionBinders );
+      foreach ( var item in _expressionBinders.OfType<IElementExpressionBinder>() )
+        _elementBinders.Add( new ExpressionElementBinder( item ) );
+
+      return new HtmlBindingContext( htmlBinders, _elementBinders, _expressionBinders, scope, dataModel );
 
     }
 
@@ -240,7 +246,7 @@ namespace Ivony.Html.Binding
     /// <param name="element">要绑定数据的元素</param>
     public virtual void DataBind( IHtmlElement element )
     {
-      if ( BindExpressionElement( element ) )
+      if ( TryBindElement( element ) )
         return;
 
       BindElement( element );
@@ -251,31 +257,21 @@ namespace Ivony.Html.Binding
 
 
 
+
     /// <summary>
-    /// 尝试将元素作为绑定表达式来进行绑定
+    /// 尝试使用特定元素绑定器进行数据绑定
     /// </summary>
-    /// <param name="element">要当做绑定表达式绑定的元素</param>
-    /// <returns>是否成功当做绑定表达式来绑定</returns>
-    protected bool BindExpressionElement( IHtmlElement element )
+    /// <param name="element">要进行数据绑定的元素</param>
+    /// <returns>是否完成数据绑定</returns>
+    protected bool TryBindElement( IHtmlElement element )
     {
-      var expression = new ElementExpression( element );
-
-      var expressionBinder = GetExpressionBinder( expression ) as IElementExpressionBinder;
-
-      if ( expressionBinder == null )
+      var binder = GetElementBinder( element );
+      if ( binder == null )
         return false;
 
-      var value = expressionBinder.GetValue( this, expression );
-
-      if ( value == null )
-        element.Remove();
-
-      else
-        element.ReplaceWith( HttpUtility.HtmlEncode( value ) );
-
+      binder.BindElement( this, element );
       return true;
     }
-
 
 
     /// <summary>
@@ -344,11 +340,27 @@ namespace Ivony.Html.Binding
       lock ( ExpressionBinders.SyncRoot )
       {
         if ( ExpressionBinders.Contains( name ) )
-          return ExpressionBinders[expression.Name];
+          return ExpressionBinders[name];
 
         else
           return null;
       }
+    }
+
+
+    /// <summary>
+    /// 获取用于特定元素的绑定器
+    /// </summary>
+    /// <param name="element">要进行数据绑定的元素</param>
+    /// <returns>元素绑定器</returns>
+    protected IHtmlElementBinder GetElementBinder( IHtmlElement element )
+    {
+      var name = element.Name;
+      if ( ElementBinders.Contains( name ) )
+        return ElementBinders[name];
+
+      else
+        return null;
     }
 
 

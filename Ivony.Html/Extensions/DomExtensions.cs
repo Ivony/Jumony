@@ -928,19 +928,7 @@ namespace Ivony.Html
         }
         else if ( mode == TextMode.Normal )
         {
-          var encoded = HtmlEncoding.HtmlEncode( text );
-
-          encoded = encoded.Replace( "  ", "&nbsp; " );
-
-          if ( encoded.EndsWith( "  " ) )
-            encoded = encoded.Substring( 0, encoded.Length - 1 ) + "&nbsp;";//如果末尾多出一个空格，则替换为&nbsp;
-
-          encoded = encoded.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
-
-          encoded = encoded.Replace( "\n", "<br />" );
-
-
-          element.Document.ParseFragment( encoded ).Into( element, 0 );
+          ParseText( text, element.Document.FragmentManager ).Into( element, 0 );
         }
         else
           throw new InvalidOperationException( "元素不包含任何文本内容，无法设置 InnerText" );
@@ -948,6 +936,35 @@ namespace Ivony.Html
 
       return element;
 
+    }
+
+
+    /// <summary>
+    /// 将文本解析为产生同样文本流效果的 HTML 片段
+    /// </summary>
+    /// <param name="text">要解析的文本</param>
+    /// <param name="manager">HTML 片段管理器</param>
+    /// <returns>HTML 片段</returns>
+    public static IHtmlFragment ParseText( string text, IHtmlFragmentManager manager )
+    {
+
+      if ( text == null )
+        throw new ArgumentNullException( "text" );
+
+      if ( manager == null )
+        throw new ArgumentNullException( "manager" );
+
+      var parsed = HtmlEncoding.HtmlEncode( text );
+
+      parsed = parsed.Replace( "  ", "&nbsp; " );
+
+      if ( parsed.EndsWith( "  " ) )
+        parsed = parsed.Substring( 0, parsed.Length - 1 ) + "&nbsp;";//如果末尾多出一个空格，则替换为&nbsp;
+
+      parsed = parsed.Replace( "\r\n", "\n" ).Replace( "\r", "\n" );
+
+      parsed = parsed.Replace( "\n", "<br />" );
+      return manager.ParseFragment( parsed );
     }
 
 

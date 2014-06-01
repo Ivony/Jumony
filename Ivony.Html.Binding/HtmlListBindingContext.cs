@@ -6,6 +6,7 @@ using Ivony.Fluent;
 using System.Collections;
 using Ivony.Html.ExpandedAPI;
 using Ivony.Html;
+using System.Diagnostics.Contracts;
 
 namespace Ivony.Html.Binding
 {
@@ -20,14 +21,7 @@ namespace Ivony.Html.Binding
       : base( context, element, dataModel )
     {
       DataModel = dataModel;
-      BindingElement = element;
     }
-
-
-    /// <summary>
-    /// 当前正在进行绑定的元素
-    /// </summary>
-    public IHtmlElement BindingElement { get; private set; }
 
 
     /// <summary>
@@ -42,14 +36,19 @@ namespace Ivony.Html.Binding
       if ( DataModel.Selector == null )//如果没有选择器，执行简单绑定
       {
         var count = DataModel.Count;
-        var list = BindingElement.Repeat( count );
+        var list = element.Repeat( count );
 
         for ( int i = 0; i < count; i++ )
           DataBind( list[i], DataModel[i] );
       }
 
       else
+      {
+        if ( GetElementBinder( element ) != null )
+          throw new NotSupportedException( string.Format( "高级列表绑定不支持 \"{0}\" 元素，因为该元素已经自定义绑定逻辑。", element.Name ) );
+
         base.DataBind( element );
+      }
 
     }
 
@@ -61,23 +60,27 @@ namespace Ivony.Html.Binding
     protected override void BindChilds( IHtmlContainer container )
     {
 
-      if ( DataModel.Selector == null || container != BindingElement )
+      if ( DataModel.Selector == null || container != BindingScope )   //考虑改为Contract。
         throw new InvalidOperationException();
 
-      IHtmlElement[] elements;
+
+      //Contract.Assert( DataModel.Selector != null && container == BindingScope );
+
+
+      HashSet<IHtmlElement> dataItemElements;
       if ( DataModel.BindingMode == ListBindingMode.DynamicContent )
-        elements = DynamicContent();
+        dataItemElements = new HashSet<IHtmlElement>( DynamicContent() );
 
       else
-        elements = BindingScope.Elements().FilterBy( DataModel.Selector ).ToArray();
+        dataItemElements = new HashSet<IHtmlElement>( BindingScope.Elements().FilterBy( DataModel.Selector ) );
 
 
 
       int index = 0;
 
-      foreach ( var e in BindingElement.Elements() )//遍历所有子元素，对其进行数据绑定。
+      foreach ( var e in BindingScope.Elements() )  //遍历所有子元素，对其进行数据绑定。
       {
-        if ( elements.Contains( e ) )               //若该元素是数据项元素，则取出相应数据项进行绑定
+        if ( dataItemElements.Contains( e ) )       //若该元素是数据项元素，则取出相应数据项进行绑定
           DataBind( e, DataModel[index++] );
 
         else
@@ -88,7 +91,7 @@ namespace Ivony.Html.Binding
 
 
 
-    private IHtmlElement[] DynamicContent()
+    private IEnumerable<IHtmlElement> DynamicContent()
     {
 
       var container = BindingScope;
@@ -113,7 +116,7 @@ namespace Ivony.Html.Binding
           lastItem.NextNode().Remove();
 
 
-        return items.Take( dataLength ).ToArray();
+        return items.Take( dataLength );
       }
 
 
@@ -146,7 +149,7 @@ namespace Ivony.Html.Binding
         itemIndex++;
       }
 
-      return result.ToArray();
+      return result;
     }
 
     private void DataBind( IHtmlElement element, object dataModel )

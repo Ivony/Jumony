@@ -246,7 +246,7 @@ namespace Ivony.Html.Binding
     /// <param name="element">要绑定数据的元素</param>
     public virtual void DataBind( IHtmlElement element )
     {
-      if ( TryBindElement( element ) )
+      if ( TryBindElement( element ) )//尝试获取元素绑定器进行绑定，若成功，则认为数据绑定已经完成
         return;
 
       BindElement( element );

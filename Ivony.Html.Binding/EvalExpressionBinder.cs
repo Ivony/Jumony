@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.UI;
 
 namespace Ivony.Html.Binding
@@ -33,7 +34,7 @@ namespace Ivony.Html.Binding
     /// <returns>数据对象</returns>
     public static object GetDataObject( HtmlBindingContext context, BindingExpression expression )
     {
-      object dataObject  = context.DataModel;
+      object dataObject = context.DataModel;
 
 
 
@@ -76,7 +77,7 @@ namespace Ivony.Html.Binding
     /// <param name="context">绑定上下文</param>
     /// <param name="expression">绑定表达式</param>
     /// <returns>绑定值</returns>
-    public static string GetValue( HtmlBindingContext context, BindingExpression expression )
+    public static object GetValue( HtmlBindingContext context, BindingExpression expression )
     {
 
       var dataObject = GetDataObject( context, expression );
@@ -84,33 +85,72 @@ namespace Ivony.Html.Binding
       if ( dataObject == null )
         return null;
 
-      {
-        string format;
-        if ( expression.TryGetValue( context, "format", out format ) )
-        {
 
-          if ( format.Contains( "{0" ) )
-            return string.Format( CultureInfo.InvariantCulture, format, dataObject );
+      string format;
+      string formattedValue = null;
+      if ( expression.TryGetValue( context, "format", out format ) )
+      {
+        if ( format.Contains( "{0" ) )
+          formattedValue = string.Format( CultureInfo.InvariantCulture, format, dataObject );
+
+        else
+        {
+          var formattable = dataObject as IFormattable;
+
+          if ( formattable != null )
+            formattedValue = formattable.ToString( format, CultureInfo.InvariantCulture );
 
           else
-          {
-            var formattable = dataObject as IFormattable;
-
-            if ( formattable != null )
-              return formattable.ToString( format, CultureInfo.InvariantCulture );
-
-            else
-              return dataObject.ToString();
-          }
+            formattedValue = dataObject.ToString();
         }
       }
 
+      if ( expression.Arguments.ContainsKey( "encoded" ) )
+      {
+
+        if ( formattedValue != null )
+          return new HtmlString( formattedValue );
+
+        else
+          return new HtmlString( dataObject.ToString() );
+      }
 
 
-      return dataObject.ToString();
+      return formattedValue ?? dataObject;
 
     }
 
+    /// <summary>
+    /// 尝试格式化绑定值
+    /// </summary>
+    /// <param name="dataObject">要进行格式化的数据对象</param>
+    /// <param name="context">当前绑定上下文</param>
+    /// <param name="expression">绑定表达式</param>
+    /// <returns>若绑定表达式定义了 format 参数，则返回格式化后的结果，否则返回 null</returns>
+    protected static string TryFormatValue( object dataObject, HtmlBindingContext context, BindingExpression expression )
+    {
+
+      string format;
+      if ( !expression.TryGetValue( context, "format", out format ) )
+        return null;
+
+
+      if ( format == null )
+        return dataObject.ToString();
+
+
+      if ( format.Contains( "{0" ) )
+        return string.Format( CultureInfo.InvariantCulture, format, dataObject );
+
+
+      var formattable = dataObject as IFormattable;
+
+      if ( formattable != null )
+        return formattable.ToString( format, CultureInfo.InvariantCulture );
+
+      else
+        return dataObject.ToString();
+    }
 
 
 

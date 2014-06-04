@@ -424,8 +424,6 @@ namespace Ivony.Html
         var providerVariable = new CodeVariableReferenceExpression( "provider" );
         var attributesVariable = new CodeVariableReferenceExpression( "attributes" );
 
-        int index = 0;
-
         foreach ( var node in container.Nodes() )
         {
 
@@ -466,8 +464,6 @@ namespace Ivony.Html
             BuildChildNodesStatement( element, elementVariable, statements, existsElements );
 
           }
-
-          index++;
         }
       }
 

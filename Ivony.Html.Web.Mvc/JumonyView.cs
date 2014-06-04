@@ -223,7 +223,7 @@ namespace Ivony.Html.Web
     private void AddGeneratorMetaData()
     {
 
-      if ( MvcEnvironment.Configuration.DisableGeneratorTag || IsPartialView || MasterView != null )
+      if ( MvcEnvironment.Configuration.DisableGeneratorTag || IsPartialView || IsContentView )
         return;
 
       var document = Scope as IHtmlDocument;
@@ -375,7 +375,7 @@ namespace Ivony.Html.Web
     private ViewContext CreateViewContext()
     {
       var viewData = new ViewDataDictionary( ViewContext.ViewData );
-      viewData[ViewFiltersDataKey] = Filters.OfType<IChildViewFilter>().ToArray();
+      viewData[ViewFiltersDataKey] = Filters.OfType<IChildViewFilter>().ToList();
 
       return new ViewContext( ViewContext, this, viewData, ViewContext.TempData, ViewContext.Writer );
     }

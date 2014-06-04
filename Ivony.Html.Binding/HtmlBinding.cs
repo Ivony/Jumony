@@ -69,8 +69,9 @@ namespace Ivony.Html.Binding
 
 
       HtmlBinders.Add( StyleBinder );
-      HtmlBinders.Add( ScriptBinder );
       HtmlBinders.Add( LiteralBinder );
+
+      ElementBinders.Add( ScriptBinder );
 
       ExpressionBinders.Add( EvalExpressionBinder );
       ExpressionBinders.Add( EvalListExpressionBinder );
@@ -185,6 +186,15 @@ namespace Ivony.Html.Binding
         }
 
         {
+          var binder = item as IHtmlElementBinder;
+          if ( binder != null )
+          {
+            elementBinders.Add( binder );
+            continue;
+          }
+        }
+
+        {
           var binder = item as IExpressionBinder;
           if ( binder != null )
           {
@@ -198,6 +208,15 @@ namespace Ivony.Html.Binding
           if ( list != null )
           {
             htmlBinders.AddRange( list );
+            continue;
+          }
+        }
+
+        {
+          var list = item as IEnumerable<IHtmlElementBinder>;
+          if ( list != null )
+          {
+            elementBinders.AddRange( list );
             continue;
           }
         }
@@ -246,5 +265,14 @@ namespace Ivony.Html.Binding
 
     }
 
+
+    public static object[] DefaultBinders
+    {
+      get
+      {
+        return HtmlBinders.Cast<object>().Concat( ElementBinders ).Concat( ExpressionBinders ).ToArray();
+
+      }
+    }
   }
 }

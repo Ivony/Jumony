@@ -158,7 +158,7 @@ namespace Ivony.Html.Web
       HttpContext.Trace.Write( "Jumony View", "End Process" );
 
       HttpContext.Trace.Write( "Jumony View", "Begin DataBind" );
-      Scope.DataBind( ViewContext.ViewData, HtmlBinding.HtmlBinders, HtmlBinding.ExpressionBinders, new ActionUrlBinder( Url, Scope.Document.HtmlSpecification ) );
+      Scope.DataBind( ViewContext.ViewData, HtmlBinding.DefaultBinders, new ActionUrlBinder( Url, Scope.Document.HtmlSpecification ) );
       HttpContext.Trace.Write( "Jumony View", "End DataBind" );
 
 

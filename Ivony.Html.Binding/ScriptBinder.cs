@@ -13,7 +13,7 @@ namespace Ivony.Html.Binding
   /// <summary>
   /// 脚本绑定器，用于解析脚本中的绑定表达式。
   /// </summary>
-  public class ScriptBinder : IHtmlBinder
+  public class ScriptBinder : IHtmlElementBinder
   {
 
     private static Regex scriptBindingExpression = new Regex( @"^(?<declare>\s*var\s+[a-zA-z_][a-zA-Z_0-9]+\s*=).*?//\s*(?<expression>{.*})\s*$", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture );
@@ -31,8 +31,9 @@ namespace Ivony.Html.Binding
     /// <returns>永远返回 false，表示其他绑定器可以继续执行</returns>
     public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
-      if ( !element.Name.EqualsIgnoreCase( "script" ) )
-        return;
+
+      if ( element.ElementTextMode() != TextMode.CData )
+        throw new InvalidOperationException();
 
 
       var script = element.InnerHtml();
@@ -53,5 +54,10 @@ namespace Ivony.Html.Binding
       element.InnerHtml( script );
     }
 
+
+    public string ElementName
+    {
+      get { return "script"; }
+    }
   }
 }

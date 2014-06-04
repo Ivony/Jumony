@@ -281,8 +281,7 @@ namespace Ivony.Html.Binding
     protected virtual void BindElement( IHtmlElement element )
     {
 
-      var attributes = element.Attributes().ToArray();
-      attributes.ForAll( a => BindAttribute( a ) );
+      BindAttributes( element );
 
 
       CancelChildsBinding = BindCompleted = false;//重置绑定状态
@@ -294,6 +293,12 @@ namespace Ivony.Html.Binding
         if ( BindCompleted )
           break;
       }
+    }
+
+    public void BindAttributes( IHtmlElement element )
+    {
+      var attributes = element.Attributes().ToArray();
+      attributes.ForAll( a => BindAttribute( a ) );
     }
 
     /// <summary>

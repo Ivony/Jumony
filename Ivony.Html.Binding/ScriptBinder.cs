@@ -32,6 +32,10 @@ namespace Ivony.Html.Binding
     public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 
+
+      context.BindAttributes( element );
+
+
       if ( element.ElementTextMode() != TextMode.CData )
         throw new InvalidOperationException();
 

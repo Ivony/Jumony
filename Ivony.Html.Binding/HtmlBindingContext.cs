@@ -249,6 +249,8 @@ namespace Ivony.Html.Binding
       if ( TryBindElement( element ) )//尝试获取元素绑定器进行绑定，若成功，则认为数据绑定已经完成
         return;
 
+      BindAttributes( element );
+
       BindElement( element );
 
       if ( !CancelChildsBinding )
@@ -280,9 +282,6 @@ namespace Ivony.Html.Binding
     /// <param name="element">要进行绑定的元素</param>
     protected virtual void BindElement( IHtmlElement element )
     {
-
-      BindAttributes( element );
-
 
       CancelChildsBinding = BindCompleted = false;//重置绑定状态
 

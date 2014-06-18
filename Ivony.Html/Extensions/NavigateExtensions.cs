@@ -276,7 +276,7 @@ namespace Ivony.Html
     /// <returns>在这之后的所有兄弟（同级）节点</returns>
     public static IEnumerable<IHtmlNode> SiblingNodesBeforeSelf( this IHtmlNode node )
     {
-      return node.SiblingNodes().TakeWhile( n => !n.RawObject.Equals( node.RawObject ) );
+      return node.SiblingNodes().TakeWhile( n => !n.Equals( node ) );
     }
 
     /// <summary>
@@ -286,7 +286,7 @@ namespace Ivony.Html
     /// <returns>之后的所有兄弟（同级）节点</returns>
     public static IEnumerable<IHtmlNode> SiblingNodesAfterSelf( this IHtmlNode node )
     {
-      return node.SiblingNodes().SkipWhile( n => !n.RawObject.Equals( node.RawObject ) ).Skip( 1 );
+      return node.SiblingNodes().SkipWhile( n => !n.Equals( node ) ).Skip( 1 );
     }
 
 

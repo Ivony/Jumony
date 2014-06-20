@@ -135,17 +135,19 @@ namespace Ivony.Html
 
       builder.Append( name );
 
+
+
+      string identity;
+
       if ( element.Siblings().Where( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) ).IsSingle() )
-        return builder.ToString();
+        identity = builder.ToString();
 
 
 
       var index = element.SiblingsBeforeSelf().Count( e => GetElementName( e ).EqualsIgnoreCase( GetElementName( element ) ) );
-
       builder.Append( index + 1 );
 
-      var identity = builder.ToString();
-
+      identity = builder.ToString();
       return EnsureUniqueness( identity, element.Document );
     }
 

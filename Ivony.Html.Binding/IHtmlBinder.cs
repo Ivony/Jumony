@@ -16,7 +16,6 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="context">数据绑定上下文</param>
     /// <param name="element">要绑定的元素</param>
-    /// <returns>返回一个值，是否禁止后面的绑定器的执行</returns>
     void BindElement( HtmlBindingContext context, IHtmlElement element );
 
   }

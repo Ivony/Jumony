@@ -266,6 +266,9 @@ namespace Ivony.Html.Binding
     }
 
 
+    /// <summary>
+    /// 获取所有默认的绑定器
+    /// </summary>
     public static object[] DefaultBinders
     {
       get

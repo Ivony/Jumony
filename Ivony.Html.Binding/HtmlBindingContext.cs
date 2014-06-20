@@ -294,6 +294,12 @@ namespace Ivony.Html.Binding
       }
     }
 
+
+
+    /// <summary>
+    /// 对元素的所有 Attribute 进行数据绑定
+    /// </summary>
+    /// <param name="element">要进行数据绑定的元素</param>
     public void BindAttributes( IHtmlElement element )
     {
       var attributes = element.Attributes().ToArray();

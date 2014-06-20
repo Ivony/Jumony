@@ -410,14 +410,14 @@ namespace Ivony.Html
 
         constructor.Statements.Add( new CodeVariableDeclarationStatement( typeof( IDictionary<string, string> ), "attributes" ) );//var attributes
 
-        BuildChildNodesStatement( document, documentVariable, constructor.Statements, new HashSet<string>() );//build document
+        BuildChildNodesStatement( document, documentVariable, constructor.Statements );//build document
 
         constructor.Statements.Add( new CodeMethodReturnStatement( new CodeMethodInvokeExpression( providerVariable, "CompleteDocument", documentVariable ) ) );
 
         return constructor;
       }
 
-      private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression containerVariable, CodeStatementCollection statements, HashSet<string> existsElements )
+      private static void BuildChildNodesStatement( IHtmlContainer container, CodeVariableReferenceExpression containerVariable, CodeStatementCollection statements )
       {
 
 
@@ -441,13 +441,7 @@ namespace Ivony.Html
 
           if ( element != null )
           {
-            var elementId = CreateIdentity( element, false );
-
-            elementId = EnsureUniqueness( elementId, existsElements );
-            existsElements.Add( elementId );
-
-            elementId = "element_" + elementId;
-
+            var elementId = "element_" + Guid.NewGuid().ToString( "n" );
 
             statements.Add( new CodeCommentStatement( ContentExtensions.GenerateTagHtml( element, false ) ) );
 
@@ -461,7 +455,7 @@ namespace Ivony.Html
             var elementVariable = new CodeVariableReferenceExpression( elementId );
 
 
-            BuildChildNodesStatement( element, elementVariable, statements, existsElements );
+            BuildChildNodesStatement( element, elementVariable, statements );
 
           }
         }

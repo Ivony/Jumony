@@ -76,7 +76,7 @@ namespace Ivony.Html.ExpandedAPI
         throw new ArgumentNullException( "expression" );
 
 
-      return container.Find( expression ).FirstOrDefault() ?? defaultElement;
+      return container.Find( expression ).LastOrDefault() ?? defaultElement;
     }
 
 

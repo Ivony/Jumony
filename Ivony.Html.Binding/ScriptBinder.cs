@@ -28,7 +28,6 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="context">当前绑定上下文</param>
     /// <param name="element">当前绑定的元素（仅会对 script 元素起作用）</param>
-    /// <returns>永远返回 false，表示其他绑定器可以继续执行</returns>
     public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 

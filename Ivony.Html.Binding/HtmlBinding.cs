@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -174,6 +175,15 @@ namespace Ivony.Html.Binding
       var elementBinders = new List<IHtmlElementBinder>();
 
 
+      AddBinders( binders, htmlBinders, expressionBinders, elementBinders );
+
+
+      var context = HtmlBindingContext.Create( htmlBinders.ToArray(), elementBinders.ToArray(), expressionBinders.ToArray(), scope, dataModel );
+      return context;
+    }
+
+    private static void AddBinders( IEnumerable binders, List<IHtmlBinder> htmlBinders, List<IExpressionBinder> expressionBinders, List<IHtmlElementBinder> elementBinders )
+    {
       foreach ( var item in binders )
       {
         {
@@ -203,40 +213,13 @@ namespace Ivony.Html.Binding
           }
         }
 
-        {
-          var list = item as IEnumerable<IHtmlBinder>;
-          if ( list != null )
-          {
-            htmlBinders.AddRange( list );
-            continue;
-          }
-        }
+        var list = item as IEnumerable;
+        if ( list != null )
+          AddBinders( list, htmlBinders, expressionBinders, elementBinders );
 
-        {
-          var list = item as IEnumerable<IHtmlElementBinder>;
-          if ( list != null )
-          {
-            elementBinders.AddRange( list );
-            continue;
-          }
-        }
-
-        {
-          var list = item as IEnumerable<IExpressionBinder>;
-          if ( list != null )
-          {
-            expressionBinders.AddRange( list );
-            continue;
-          }
-        }
-
-
-        throw new ArgumentException( string.Format( "不支持 \"{0}\" 类型的绑定器", item.GetType().ToString() ), "binders" );
+        else
+          throw new ArgumentException( string.Format( "不支持 \"{0}\" 类型的绑定器", item.GetType().ToString() ), "binders" );
       }
-
-
-      var context = HtmlBindingContext.Create( htmlBinders.ToArray(), elementBinders.ToArray(), expressionBinders.ToArray(), scope, dataModel );
-      return context;
     }
 
 

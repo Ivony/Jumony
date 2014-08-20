@@ -58,7 +58,7 @@ namespace Ivony.Html.Forms
     /// </summary>
     public override string Value
     {
-      get { throw new NotImplementedException(); }
+      get { return Element.Attribute( "value" ).Value(); }
     }
 
     /// <summary>

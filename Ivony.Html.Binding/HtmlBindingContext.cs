@@ -314,7 +314,7 @@ namespace Ivony.Html.Binding
     /// <summary>
     /// 获取或设置一个值，指定是否取消子元素的绑定。
     /// </summary>
-    public bool CancelChildsBinding { get; set; }
+    internal bool CancelChildsBinding { get; set; }
 
 
 

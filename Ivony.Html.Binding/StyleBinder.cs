@@ -13,7 +13,7 @@ namespace Ivony.Html.Binding
 {
 
   /// <summary>
-  /// 默认的元素绑定器，处理 &lt;view&gt; 或者 &lt;binding&gt; 元素，以及属性绑定表达式和绑定属性处理。
+  /// 样式绑定器，负责 CSS 样式绑定处理。
   /// </summary>
   public class StyleBinder : IHtmlBinder
   {
@@ -29,7 +29,6 @@ namespace Ivony.Html.Binding
     /// </summary>
     /// <param name="element">需要绑定数据的元素</param>
     /// <param name="context">绑定上下文</param>
-    /// <returns>返回是否对元素进行了不可逆转的操作（例如移除），故而禁止后续的绑定操作</returns>
     public void BindElement( HtmlBindingContext context, IHtmlElement element )
     {
 

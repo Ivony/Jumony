@@ -90,7 +90,7 @@ namespace Ivony.Html.ExpandedAPI
 
       lock ( container.SyncRoot )
       {
-        return container.AddFragment( node.NodesIndexOfSelf(), html );
+        return container.AddFragment( node.NodesIndexOfSelf() + 1, html );
       }
     }
 

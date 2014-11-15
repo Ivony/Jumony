@@ -114,3 +114,4 @@ StaticCaches
 *.ldf
 
 .localhistory
+*.sln.ide

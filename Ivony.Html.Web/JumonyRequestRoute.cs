@@ -15,6 +15,29 @@ namespace Ivony.Html.Web
   public class JumonyRequestRoute : RouteBase, IHtmlRequestRoute
   {
 
+
+
+
+    private static object sync = new object();
+    private static bool initialized = false;
+
+    /// <summary>
+    /// 初始化 Jumony 路由，针对所有文件进行 Jumony 重定向
+    /// </summary>
+    public static void InitailizeJumonyRoute()
+    {
+      lock ( sync )
+      {
+        if ( initialized )
+          return;
+
+        RouteTable.Routes.Add( Instance );
+        RouteTable.Routes.RouteExistingFiles = true;
+        initialized = true;
+      }
+    }
+
+
     /// <summary>
     /// 用于在路由数据中标识虚拟路径的键值
     /// </summary>
@@ -49,7 +72,7 @@ namespace Ivony.Html.Web
       if ( !VirtualPathProvider.FileExists( virtualPath ) )//文件不存在时不路由
         return null;
 
-      var handler = HtmlHandlerProvider.GetHandler( virtualPath );
+      var handler = HtmlHandlerProvider.GetHandler( VirtualPathUtility.ToAppRelative( virtualPath ) );
       if ( handler == null )
         return null;
 

@@ -67,12 +67,12 @@ namespace Ivony.Html.Web
     {
 
 
-      var virtualPath = httpContext.Request.CurrentExecutionFilePath;
+      var virtualPath = httpContext.Request.AppRelativeCurrentExecutionFilePath;
 
       if ( !VirtualPathProvider.FileExists( virtualPath ) )//文件不存在时不路由
         return null;
 
-      var handler = HtmlHandlerProvider.GetHandler( VirtualPathUtility.ToAppRelative( virtualPath ) );
+      var handler = HtmlHandlerProvider.GetHandler( virtualPath );
       if ( handler == null )
         return null;
 

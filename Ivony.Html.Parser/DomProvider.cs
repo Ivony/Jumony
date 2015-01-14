@@ -24,12 +24,6 @@ namespace Ivony.Html.Parser
     /// 创建 DomProvider 对象
     /// </summary>
     /// <param name="provider">文档碎片解析器提供程序</param>
-    public DomProvider() : this( new JumonyParser() ) { }
-
-    /// <summary>
-    /// 创建 DomProvider 对象
-    /// </summary>
-    /// <param name="provider">文档碎片解析器提供程序</param>
     public DomProvider( IDomFragmentParserProvider provider )
     {
       _fragmentParserProvider = provider;

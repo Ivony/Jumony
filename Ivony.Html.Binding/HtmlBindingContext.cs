@@ -411,8 +411,20 @@ namespace Ivony.Html.Binding
 
       else
       {
-        value = expressionBinder.GetValue( this, expression );
+        value = GetValue( this, expression, expressionBinder );
         return true;
+      }
+    }
+
+    internal static object GetValue( HtmlBindingContext context, BindingExpression expression, IExpressionBinder expressionBinder )
+    {
+      try
+      {
+        return expressionBinder.GetValue( context, expression );
+      }
+      catch ( Exception e )
+      {
+        throw new Exception( string.Format( "对绑定表达式 {0} 使用 {1} 类型的绑定器进行数据绑定时出现错误，详细错误信息请参考 InnerException 属性", expression, expressionBinder.GetType() ), e );
       }
     }
 

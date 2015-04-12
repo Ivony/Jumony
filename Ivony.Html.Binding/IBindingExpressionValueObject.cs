@@ -27,6 +27,11 @@ namespace Ivony.Html.Binding
     {
       return literalValue;
     }
+
+    public override string ToString()
+    {
+      return literalValue;
+    }
   }
 
 }

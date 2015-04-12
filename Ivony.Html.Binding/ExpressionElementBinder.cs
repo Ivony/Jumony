@@ -25,7 +25,7 @@ namespace Ivony.Html.Binding
     {
       var expression = new ElementExpression( element );
 
-      BindWithValue( element, _binder.GetValue( context, expression ) );
+      BindWithValue( element, HtmlBindingContext.GetValue( context, expression, _binder ) );
     }
 
 
@@ -56,7 +56,7 @@ namespace Ivony.Html.Binding
         fragment.AddTextNode( HtmlEncoding.HtmlEncode( text ) );
         element.ReplaceWith( fragment );
       }
-      
+
       else if ( mode == TextMode.Normal )
       {
         var fragment = DomExtensions.ParseText( text, fragmentManager );

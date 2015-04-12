@@ -194,6 +194,12 @@ namespace Ivony.Html.Binding
         get { return _arguments; }
       }
 
+
+      public override string ToString()
+      {
+        return string.Format( "{{{0} {1}}}", Name, string.Join( ",", Arguments.Select( pair => pair.Key + "=" + pair.Value ) ) );
+      }
+
     }
 
     object IBindingExpressionValueObject.GetValue( IBindingExpressionEvaluator evaluator )

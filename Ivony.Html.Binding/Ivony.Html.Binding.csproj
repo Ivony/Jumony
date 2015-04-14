@@ -37,6 +37,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -51,6 +54,7 @@
   <ItemGroup>
     <Compile Include="BindingExpression.cs" />
     <Compile Include="BindingExpressionParser.cs" />
+    <Compile Include="DataBinder.cs" />
     <Compile Include="DynamicBinder.cs" />
     <Compile Include="ExpressionElementBinder.cs" />
     <Compile Include="HtmlBindingContextProviderCollection.cs" />
@@ -86,6 +90,9 @@
       <Project>{e775b408-605f-4b66-87b6-98596069b703}</Project>
       <Name>Ivony.Html</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

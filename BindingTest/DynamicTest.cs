@@ -18,7 +18,7 @@ namespace BindingTest
     {
 
       var a = JObject.FromObject( new { A = 1 } );
-      Assert.AreEqual( (int) DynamicBinder.GetMember( a, "A" ), 1 );
+      Assert.AreEqual( (int) DynamicBinder.GetPropertyValue( a, "A" ), 1 );
 
 
     }

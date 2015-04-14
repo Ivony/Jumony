@@ -11,22 +11,7 @@ namespace Ivony.Html.Binding
   public static class DynamicBinder
   {
 
-    public static object Eval( dynamic obj, string expression )
-    {
-
-      throw new NotImplementedException();
-
-    }
-
-
-    public static dynamic EvalDyanmic( dynamic obj, string expression )
-    {
-
-      throw new NotImplementedException();
-
-    }
-
-    public static dynamic GetMember( object obj, string memberName )
+    public static dynamic GetPropertyValue( object obj, string memberName )
     {
 
       var site = CallSite<Func<CallSite, object, object>>.Create( new HtmlBindingGetMemberBinder( memberName ) );
@@ -66,7 +51,7 @@ namespace Ivony.Html.Binding
       {
 
         if ( errorSuggestion == null )
-          return DynamicMetaObject.Create( "[dynamic binding error]", Expression.Constant( "[dynamic binding error]" ) );
+          return DynamicMetaObject.Create( null, Expression.Constant( null ) );
 
         else
           return errorSuggestion;
@@ -85,6 +70,7 @@ namespace Ivony.Html.Binding
         throw new NotImplementedException();
       }
     }
+
 
 
 

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Ivony.Html.Binding
 {
-  internal sealed class ListDataModel : ICollection
+  internal sealed class ListDataModel : ICollection, ICustomBindingContextModel
   {
 
     public ListDataModel( IEnumerable listData, CssElementSelector selector, ListBindingMode mode )
@@ -57,5 +57,15 @@ namespace Ivony.Html.Binding
     }
 
     public object RawObject { get; private set; }
+
+    HtmlBindingContext ICustomBindingContextModel.CreateBindingContext( HtmlBindingContext context, IHtmlContainer scope )
+    {
+
+      var element = scope as IHtmlElement;
+      if ( element == null )
+        return null;
+
+      return new HtmlListBindingContext( context, element, this );
+    }
   }
 }

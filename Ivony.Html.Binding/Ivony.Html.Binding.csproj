@@ -57,13 +57,12 @@
     <Compile Include="DataBinder.cs" />
     <Compile Include="DynamicBinder.cs" />
     <Compile Include="ExpressionElementBinder.cs" />
-    <Compile Include="HtmlBindingContextProviderCollection.cs" />
     <Compile Include="HtmlElementBinderCollection.cs" />
-    <Compile Include="HtmlListBindingContextProvider.cs" />
     <Compile Include="EvalExpressionBinder.cs" />
     <Compile Include="ElementExpression.cs" />
     <Compile Include="EvalListExpressionBinder.cs" />
     <Compile Include="IBindingExpressionEvaluator.cs" />
+    <Compile Include="ICustomBindingContextModel.cs" />
     <Compile Include="IHtmlBinder.cs" />
     <Compile Include="IHtmlElementBinder.cs" />
     <Compile Include="IBindingExpressionValueObject.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="HtmlListBindingContext.cs" />
     <Compile Include="IElementExpressionBinder.cs" />
     <Compile Include="IExpressionBinder.cs" />
-    <Compile Include="IHtmlBindingContextProvider.cs" />
     <Compile Include="ListBindingMode.cs" />
     <Compile Include="ListDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

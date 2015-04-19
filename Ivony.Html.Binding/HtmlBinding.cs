@@ -46,14 +46,9 @@ namespace Ivony.Html.Binding
     static HtmlBinding()
     {
 
-      Providers = new HtmlBindingContextProviderCollection();
       HtmlBinders = new List<IHtmlBinder>();
       ElementBinders = new HtmlElementBinderCollection();
       ExpressionBinders = new ExpressionBinderCollection();
-
-
-      Providers.Add( new HtmlListBindingContextProvider() );
-
 
 
 
@@ -109,44 +104,6 @@ namespace Ivony.Html.Binding
       private set;
     }
 
-
-    internal static HtmlBindingContextProviderCollection Providers
-    {
-      get;
-      private set;
-    }
-
-
-
-
-    /// <summary>
-    /// 注册一个绑定上下文提供程序
-    /// </summary>
-    /// <param name="provider">要注册的绑定上下文提供程序</param>
-    public static void RegisterBindingContextProvider( IHtmlBindingContextProvider provider )
-    {
-      lock ( Providers.SyncRoot )
-      {
-        if ( Providers.Contains( provider.ModelType ) )
-          throw new InvalidOperationException();
-
-        Providers.Add( provider );
-      }
-    }
-
-
-    /// <summary>
-    /// 解除绑定上下文提供程序注册
-    /// </summary>
-    /// <param name="modelType">模型类型</param>
-    public static void UnregisterBindingContextProvider( Type modelType )
-    {
-      lock ( Providers.SyncRoot )
-      {
-        if ( Providers.Contains( modelType ) )
-          Providers.Remove( modelType );
-      }
-    }
 
 
 

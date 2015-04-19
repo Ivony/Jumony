@@ -202,11 +202,13 @@ namespace Ivony.Html.Binding
     protected HtmlBindingContext CreateBindingContext( HtmlBindingContext bindingContext, IHtmlElement element, object dataModel )
     {
 
-      var listData = dataModel as ListDataModel;
-      if ( listData != null )
-        return new HtmlListBindingContext( bindingContext, element, listData );
+      HtmlBindingContext result = null;
 
-      return new HtmlBindingContext( bindingContext, element, dataModel );
+      var customContext = dataModel as ICustomBindingContextModel;
+      if ( customContext != null )
+        result = customContext.CreateBindingContext( bindingContext, element );
+
+      return result ?? new HtmlBindingContext( bindingContext, element, dataModel );
     }
 
 

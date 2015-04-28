@@ -11,13 +11,24 @@ namespace Ivony.Html.Binding
   public static class DynamicBinder
   {
 
-    public static dynamic GetPropertyValue( object obj, string memberName )
+    public static dynamic GetPropertyValue( object obj, string name )
     {
 
-      var site = CallSite<Func<CallSite, object, object>>.Create( new HtmlBindingGetMemberBinder( memberName ) );
+      var site = CallSite<Func<CallSite, object, object>>.Create( new HtmlBindingGetMemberBinder( name ) );
       return site.Target( site, obj );
 
     }
+
+
+
+    public static dynamic GetIndexPropertyValue( object obj, string name )
+    {
+
+      var site = CallSite<Func<CallSite, object, object>>.Create( new HtmlBindingGetMemberBinder( name ) );
+      return site.Target( site, obj );
+
+    }
+
 
 
 
@@ -67,7 +78,11 @@ namespace Ivony.Html.Binding
 
       public override DynamicMetaObject FallbackGetIndex( DynamicMetaObject target, DynamicMetaObject[] indexes, DynamicMetaObject errorSuggestion )
       {
-        throw new NotImplementedException();
+        if ( errorSuggestion == null )
+          return DynamicMetaObject.Create( null, Expression.Constant( null ) );
+
+        else
+          return errorSuggestion;
       }
     }
 

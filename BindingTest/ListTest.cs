@@ -5,6 +5,7 @@ using System.IO;
 using Ivony.Html.Parser;
 using Ivony.Html.Binding;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace BindingTest
 {
@@ -24,6 +25,18 @@ namespace BindingTest
       Assert.AreEqual( document.Find( "div span" ).ElementAt( 0 ).InnerText(), "1" );
       Assert.AreEqual( document.Find( "div span" ).ElementAt( 1 ).InnerText(), "2" );
       Assert.AreEqual( document.Find( "div span" ).ElementAt( 2 ).InnerText(), "3" );
+
+
+
+      document.DataBind( JToken.Parse( "[1,2,3]" ) );
+
+      Assert.AreEqual( document.Find( "div" ).Count(), 3 );
+
+      Assert.AreEqual( document.Find( "div span" ).ElementAt( 0 ).InnerText(), "1" );
+      Assert.AreEqual( document.Find( "div span" ).ElementAt( 1 ).InnerText(), "2" );
+      Assert.AreEqual( document.Find( "div span" ).ElementAt( 2 ).InnerText(), "3" );
+
+
 
     }
 
@@ -67,10 +80,10 @@ namespace BindingTest
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 3 ).InnerText(), "4", "列表增长绑定测试失败" );
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 4 ).InnerText(), "5", "列表增长绑定测试失败" );
       Assert.AreEqual( container.Elements( ".item" ).ElementAt( 5 ).InnerText(), "6", "列表增长绑定测试失败" );
-      
-      Assert.AreEqual( container.Elements( ".footer" ).First().InnerText(), "6", "高级列表绑定测试失败" );
 
+      Assert.AreEqual( container.Elements( ".footer" ).First().InnerText(), "6", "高级列表绑定测试失败" );
     }
+
 
     [TestMethod]
     public void ListTruncate()

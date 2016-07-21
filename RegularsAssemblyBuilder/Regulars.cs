@@ -32,7 +32,7 @@ namespace RegularsAssemblyBuilder
     public static readonly string attributePattern = @"(\G|\s)(?<attribute>#attrName#attrValue)".Replace( "#attrName", attributeNamePattern ).Replace( "#attrValue", attributeValuePattern );
 
     /// <summary>用于匹配用开始标签的正则表达式</summary>
-    public static readonly string beginTagPattern = @"<#tagName(?<attributes>([^=]|(?>=\w*'[^']*')|(?>=\w*""[^""]*"")|=)*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern ).Replace( "#attribute", attributePattern );
+    public static readonly string beginTagPattern = @"<#tagName(?<attributes>([^=]|(?>=\w*'[^']*')|(?>=\w*""[^""]*"")|=)*?)(?<selfClosed>/)?>".Replace( "#tagName", tagNamePattern );
 
     /// <summary>用于匹配用结束标签的正则表达式</summary>
     public static readonly string endTagPattern = @"</(#tagName)?[^>]*>".Replace( "#tagName", tagNamePattern );
@@ -45,9 +45,6 @@ namespace RegularsAssemblyBuilder
 
     /// <summary>用于匹配用特殊标签的正则表达式</summary>
     public static readonly string specialTagPattern = @"(<\?(?<specialText>(.|\n)*?)\?>)|(<\%(?<specialText>(.|\n)*?)\%>)|(<\#(?<specialText>(.|\n)*?)\#>)|(<\$(?<specialText>(.|\n)*?)\$>)";
-
-    /// <summary>用于匹配用任意标签的正则表达式</summary>
-    public static readonly string tagPattern = string.Format( @"(?<beginTag>{0})|(?<endTag>{1})|(?<comment>{2})|(?<special>{3})|(?<doctype>{4})", Regulars.beginTagPattern, Regulars.endTagPattern, Regulars.commentPattern, Regulars.specialTagPattern, Regulars.doctypeDeclarationPattern );
 
   }
 }

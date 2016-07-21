@@ -16,7 +16,7 @@ namespace TestConsole
 
 
 
-      var document = new JumonyParser().LoadDocument( "http://www.sina.com.cn/", Encoding.GetEncoding( "GB2312" ) );
+      var document = new JumonyParser().LoadDocument( "http://www.sina.com.cn/", Encoding.UTF8 );
 
       Stopwatch watch = new Stopwatch();
       watch.Restart();

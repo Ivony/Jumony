@@ -53,6 +53,24 @@ namespace Ivony.Html.Parser
       }
     }
 
+
+
+    /// <summary>用于匹配 HTML 开始标签的正则表达式对象</summary>
+    protected static readonly Regex beginTagRegex = new Regulars.BeginTag();
+
+    /// <summary>用于匹配 HTML 结束标签的正则表达式对象</summary>
+    protected static readonly Regex endTagRegex = new Regulars.EndTag();
+
+    /// <summary>用于匹配 HTML 注释的正则表达式对象</summary>
+    protected static readonly Regex commentTagRegex = new Regulars.CommentTag();
+
+    /// <summary>用于匹配 HTML 特殊标签的正则表达式对象</summary>
+    protected static readonly Regex specialTagRegex = new Regulars.SpecialTag();
+
+    /// <summary>用于匹配 HTML 规范声明的正则表达式对象</summary>
+    protected static readonly Regex doctypeRegex = new Regulars.DoctypeDeclaration();
+
+
     /// <summary>
     /// 用于匹配 HTML 标签的正则表达式对象
     /// </summary>
@@ -190,40 +208,38 @@ namespace Ivony.Html.Parser
 
       while ( true )
       {
-        index = HtmlText.IndexOf( '<', index );
-        if ( index == -1 )//如果再也找不到 '<'， 则认为已经匹配结束
-          return null;
-
-
         match = tagRegex.Match( HtmlText, index );
-        if ( match.Success )//如果找到标签匹配，继续执行
-          break;
 
-        index++;//否则从下一个字符继续搜索
+        if ( match.Success == false )
+          return null;//如果再也找不到标签，则认为已经匹配结束
+
+
+        //如果无法匹配任何类型的标签，稍后从下一个位置再进行尝试
+        index = match.Index + 1;
+
+        var capture = match.Groups["tag"];
+
+        match = beginTagRegex.Match( HtmlText, capture.Index, capture.Length );
+        if ( match.Success )
+          return CreateBeginTag( match );
+
+        match = endTagRegex.Match( HtmlText, capture.Index, capture.Length );
+        if ( match.Success )
+          return CreateEndTag( match );
+
+        match = commentTagRegex.Match( HtmlText, capture.Index, capture.Length );
+        if ( match.Success )
+          return CreateComment( match );
+
+        match = specialTagRegex.Match( HtmlText, capture.Index, capture.Length );
+        if ( match.Success )
+          return CreateSpacial( match );
+
+        match = doctypeRegex.Match( HtmlText, capture.Index, capture.Length );
+        if ( match.Success )
+          return CreateDoctypeDeclaration( match );
       }
-
-
-
-      if ( match.Groups["beginTag"].Success )
-        return CreateBeginTag( match );
-
-      else if ( match.Groups["endTag"].Success )
-        return CreateEndTag( match );
-
-      else if ( match.Groups["comment"].Success )
-        return CreateComment( match );
-
-      else if ( match.Groups["special"].Success )
-        return CreateSpacial( match );
-
-      else if ( match.Groups["doctype"].Success )
-        return CreateDoctypeDeclaration( match );
-
-      else
-        throw new InvalidOperationException();
     }
-
-
 
 
     /// <summary>

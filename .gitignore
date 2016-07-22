@@ -1,8 +1,8 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-[Bb]in/*.dll
-[Bb]in/*.pdb
-[Bb]in/*.xml
-[Oo]bj/
+**/[Bb]in/*.[Dd][Ll][Ll]
+**/[Bb]in/*.[Pp][Dd][Bb]
+**/[Bb]in/*.[Xx][Mm][Ll]
+**/[Oo]bj/
 
 # mstest test results
 TestResults
@@ -88,8 +88,6 @@ csx
 AppPackages/
 
 # Others
-[Bb]in
-[Oo]bj
 sql
 TestResults
 [Tt]est[Rr]esult*
@@ -99,6 +97,7 @@ ClientBin
 ~$*
 *.dbmdl
 Generated_Code #added for RIA/Silverlight projects
+.vs
 
 # Backup & report files from converting an old project file to a newer
 # Visual Studio version. Backup files are not needed, because we have git ;-)

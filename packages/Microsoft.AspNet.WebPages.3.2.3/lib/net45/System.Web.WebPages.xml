@@ -64,6 +64,9 @@
       <summary>Gets or sets a value that indicates whether the anti-forgery system should skip checking for conditions that might indicate misuse of the system.</summary>
       <returns>true if the anti-forgery system should not check for possible misuse; otherwise, false.</returns>
     </member>
+    <member name="P:System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader">
+      <summary>Specifies whether to suppress the generation of X-Frame-Options header which is used to prevent ClickJacking. By default, the X-Frame-Options header is generated with the value SAMEORIGIN. If this setting is 'true', the X-Frame-Options header will not be generated for the response.</summary>
+    </member>
     <member name="P:System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier">
       <summary>If claims-based authorization is in use, gets or sets the claim type from the identity that is used to uniquely identify the user.</summary>
       <returns>The claim type.</returns>
@@ -145,6 +148,10 @@
       <param name="errorMessage">The error message.</param>
       <param name="other">The other.</param>
     </member>
+    <member name="T:System.Web.Mvc.ModelClientValidationMaxLengthRule"></member>
+    <member name="M:System.Web.Mvc.ModelClientValidationMaxLengthRule.#ctor(System.String,System.Int32)"></member>
+    <member name="T:System.Web.Mvc.ModelClientValidationMinLengthRule"></member>
+    <member name="M:System.Web.Mvc.ModelClientValidationMinLengthRule.#ctor(System.String,System.Int32)"></member>
     <member name="T:System.Web.Mvc.ModelClientValidationRangeRule">
       <summary>This type/member supports the .NET Framework infrastructure and is not intended to be used directly from your code.</summary>
     </member>
@@ -1346,7 +1353,9 @@
       <returns>The new <see cref="T:System.Web.WebPages.WebPageBase" /> object.</returns>
       <param name="virtualPath">The virtual path to use to create the instance.</param>
     </member>
-    <member name="M:System.Web.WebPages.WebPageBase.CreatePageFromVirtualPath(System.String,System.Web.HttpContextBase,System.Func{System.String,System.Boolean},System.Web.WebPages.DisplayModeProvider,System.Web.WebPages.IDisplayMode)"></member>
+    <member name="M:System.Web.WebPages.WebPageBase.CreatePageFromVirtualPath(System.String,System.Web.HttpContextBase,System.Func{System.String,System.Boolean},System.Web.WebPages.DisplayModeProvider,System.Web.WebPages.IDisplayMode)">
+      <summary>Attempts to create a WebPageBase instance from a virtualPath and wraps complex compiler exceptions with simpler messages</summary>
+    </member>
     <member name="M:System.Web.WebPages.WebPageBase.DefineSection(System.String,System.Web.WebPages.SectionWriter)">
       <summary>Called by content pages to create named content sections.</summary>
       <param name="name">The name of the section to create.</param>
@@ -1610,7 +1619,11 @@
     <member name="T:System.Web.WebPages.Html.HtmlHelper">
       <summary>Provides support for rendering HTML form controls and performing form validation in a web page.</summary>
     </member>
-    <member name="M:System.Web.WebPages.Html.HtmlHelper.AnonymousObjectToHtmlAttributes(System.Object)"></member>
+    <member name="M:System.Web.WebPages.Html.HtmlHelper.AnonymousObjectToHtmlAttributes(System.Object)">
+      <summary>Creates a dictionary of HTML attributes from the input object, translating underscores to dashes.</summary>
+      <returns>A dictionary that represents HTML attributes.</returns>
+      <param name="htmlAttributes">Anonymous object describing HTML attributes.</param>
+    </member>
     <member name="M:System.Web.WebPages.Html.HtmlHelper.AttributeEncode(System.Object)">
       <summary>Returns an HTML-encoded string that represents the specified object by using a minimal encoding that is suitable only for HTML attributes that are enclosed in quotation marks.</summary>
       <returns>An HTML-encoded string that represents the object.</returns>
@@ -1960,6 +1973,11 @@
       <param name="htmlAttributes">An object that contains custom attributes for the element. The attribute names and values are retrieved through reflection by examining the properties of the object.</param>
       <exception cref="T:Sytem.ArgumentException">
         <paramref name="name" /> is null or empty.</exception>
+    </member>
+    <member name="M:System.Web.WebPages.Html.HtmlHelper.ObjectToDictionary(System.Object)">
+      <summary>Creates a dictionary from an object, by adding each public instance property as a key with its associated value to the dictionary. It will expose public properties from derived types as well. This is typically used with objects of an anonymous type.</summary>
+      <returns>The created dictionary of property names and property values.</returns>
+      <param name="value">The object to be converted.</param>
     </member>
     <member name="M:System.Web.WebPages.Html.HtmlHelper.Password(System.String)">
       <summary>Returns an HTML password control that has the specified name.</summary>

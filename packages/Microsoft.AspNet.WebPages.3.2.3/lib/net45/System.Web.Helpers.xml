@@ -388,8 +388,12 @@
       <param name="sortDirectionFieldName">The name of the query-string field that is used to specify the direction in which the <see cref="T:System.Web.Helpers.WebGrid" /> instance is sorted.</param>
     </member>
     <member name="M:System.Web.Helpers.WebGrid.AddSorter``2(System.String,System.Linq.Expressions.Expression{System.Func{``0,``1}})">
-      <typeparam name="TElement"></typeparam>
-      <typeparam name="TProperty"></typeparam>
+      <summary>Adds a specific sort function for a given column.</summary>
+      <returns>The current grid, with the new custom sorter applied.</returns>
+      <param name="columnName">The column name (as used for sorting)</param>
+      <param name="keySelector">The function used to select a key to sort by, for each element in the grid's source.</param>
+      <typeparam name="TElement">The type of elements in the grid's source.</typeparam>
+      <typeparam name="TProperty">The column type, usually inferred from the keySelector function's return type.</typeparam>
     </member>
     <member name="P:System.Web.Helpers.WebGrid.AjaxUpdateCallback">
       <summary>Gets the name of the JavaScript function to call after the HTML element that is associated with the <see cref="T:System.Web.Helpers.WebGrid" /> instance has been updated in response to an Ajax update request.</summary>
@@ -490,7 +494,6 @@
     <member name="P:System.Web.Helpers.WebGrid.PageIndex">
       <summary>Gets or sets the index of the current page of the <see cref="T:System.Web.Helpers.WebGrid" /> instance.</summary>
       <returns>The index of the current page.</returns>
-      <exception cref="T:System.NotSupportedException">The <see cref="P:System.Web.Helpers.WebGrid.PageIndex" /> property cannot be set because paging is not enabled.</exception>
     </member>
     <member name="M:System.Web.Helpers.WebGrid.Pager(System.Web.Helpers.WebGridPagerModes,System.String,System.String,System.String,System.String,System.Int32)">
       <summary>Returns the HTML markup that is used to provide the specified paging support for the <see cref="T:System.Web.Helpers.WebGrid" /> instance.</summary>

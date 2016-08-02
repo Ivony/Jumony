@@ -208,6 +208,13 @@ namespace Ivony.Html.Parser
 
       while ( true )
       {
+
+        match = specialTagRegex.Match( HtmlText, index );
+        if ( match.Success )
+          return CreateSpacial( match );
+
+
+
         match = tagRegex.Match( HtmlText, index );
 
         if ( match.Success == false )
@@ -230,10 +237,6 @@ namespace Ivony.Html.Parser
         match = commentTagRegex.Match( HtmlText, capture.Index, capture.Length );
         if ( match.Success )
           return CreateComment( match );
-
-        match = specialTagRegex.Match( HtmlText, capture.Index, capture.Length );
-        if ( match.Success )
-          return CreateSpacial( match );
 
         match = doctypeRegex.Match( HtmlText, capture.Index, capture.Length );
         if ( match.Success )

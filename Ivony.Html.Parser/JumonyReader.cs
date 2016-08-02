@@ -319,7 +319,7 @@ namespace Ivony.Html.Parser
     protected virtual HtmlSpecialTag CreateSpacial( Match match )
     {
       var raw = match.ToString();
-      var symbol = raw.Substring( 1, 1 );
+      var symbol = match.Groups["symbol"].Value;
       var content = match.Groups["specialText"].Value;
 
       var fragment = CreateFragment( match );

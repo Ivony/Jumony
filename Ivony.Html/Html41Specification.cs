@@ -106,7 +106,7 @@ namespace Ivony.Html
           return nextTag == "option";
 
         case "p":
-          return blockElements.Contains( nextTag );//因为上面已经转换为小写形式，所以这里不必执行不区分大小写的比较。
+          return blockElements.Contains( nextTag ) || nextTag == "center";//因为上面已经转换为小写形式，所以这里不必执行不区分大小写的比较。
 
         case "thead":
         case "tbody":

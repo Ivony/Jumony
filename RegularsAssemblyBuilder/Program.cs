@@ -27,10 +27,10 @@ namespace RegularsAssemblyBuilder
 
         new RegexCompilationInfo( @"\G"+Regulars.beginTagPattern+"$", RegexOptions.Compiled | RegexOptions.CultureInvariant |  RegexOptions.Singleline |RegexOptions.ExplicitCapture, "BeginTag", "Ivony.Html.Parser.Regulars", true ),
         new RegexCompilationInfo( @"\G"+Regulars.endTagPattern+"$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "EndTag", "Ivony.Html.Parser.Regulars", true ),
-        new RegexCompilationInfo( @"\G"+Regulars.commentPattern+"$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "CommentTag", "Ivony.Html.Parser.Regulars", true ),
-        new RegexCompilationInfo( @"\G"+Regulars.specialTagPattern+"$", RegexOptions.Compiled | RegexOptions.CultureInvariant |  RegexOptions.Singleline |RegexOptions.ExplicitCapture, "SpecialTag", "Ivony.Html.Parser.Regulars", true ),
         new RegexCompilationInfo( @"\G"+Regulars.doctypeDeclarationPattern+"$", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "DoctypeDeclaration", "Ivony.Html.Parser.Regulars", true ),
-        new RegexCompilationInfo( @"\G.*?(?<tag>\<.+?\>)", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "HtmlTag", "Ivony.Html.Parser.Regulars", true ),
+        new RegexCompilationInfo( @"\G"+Regulars.commentPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "CommentTag", "Ivony.Html.Parser.Regulars", true ),
+        new RegexCompilationInfo( @"\G"+Regulars.specialTagPattern, RegexOptions.Compiled | RegexOptions.CultureInvariant |  RegexOptions.Singleline |RegexOptions.ExplicitCapture, "SpecialTag", "Ivony.Html.Parser.Regulars", true ),
+        new RegexCompilationInfo( @"\G(?<tag>\<.+?\>)", RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture, "HtmlTag", "Ivony.Html.Parser.Regulars", true ),
       };
     }
 

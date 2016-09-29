@@ -147,6 +147,15 @@ namespace SpeficationTest
 
     }
 
+    [TestMethod]
+    public void SpecificationTest10()
+    {
+      var document = new JumonyParser().LoadDocument( Path.Combine( Environment.CurrentDirectory, "SpecificationTest10.html" ) );
+
+
+
+    }
+
 
 
 

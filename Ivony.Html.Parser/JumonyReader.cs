@@ -209,9 +209,19 @@ namespace Ivony.Html.Parser
       while ( true )
       {
 
+        index = HtmlText.IndexOf( '<', index );
+        if ( index == -1 )
+          return null;
+
+
         match = specialTagRegex.Match( HtmlText, index );
         if ( match.Success )
           return CreateSpacial( match );
+
+
+        match = commentTagRegex.Match( HtmlText, index );
+        if ( match.Success )
+          return CreateComment( match );
 
 
 
@@ -233,10 +243,6 @@ namespace Ivony.Html.Parser
         match = endTagRegex.Match( HtmlText, capture.Index, capture.Length );
         if ( match.Success )
           return CreateEndTag( match );
-
-        match = commentTagRegex.Match( HtmlText, capture.Index, capture.Length );
-        if ( match.Success )
-          return CreateComment( match );
 
         match = doctypeRegex.Match( HtmlText, capture.Index, capture.Length );
         if ( match.Success )

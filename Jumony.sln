@@ -102,6 +102,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindingTest", "BindingTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivony.Web.Mvc", "Ivony.Web.Mvc\Ivony.Web.Mvc.csproj", "{24D6DB95-9B9A-4BC0-9F90-42319FADB812}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ivony.Html.v4", "Ivony.Html.v4\Ivony.Html.v4.xproj", "{D29AA1C2-2587-4988-BAE5-C281F5C457C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -361,6 +363,18 @@ Global
 		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{24D6DB95-9B9A-4BC0-9F90-42319FADB812}.Release|x86.ActiveCfg = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{D29AA1C2-2587-4988-BAE5-C281F5C457C4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

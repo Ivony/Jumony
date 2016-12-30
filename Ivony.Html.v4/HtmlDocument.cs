@@ -7,10 +7,13 @@ namespace Ivony.Html
 {
   public sealed class HtmlDocument : IHtmlContainer
   {
-    internal HtmlDocument()
+    internal HtmlDocument( Uri uri )
     {
+      DocumentUri = uri;
       Nodes = new HtmlNodeContainer( this );
     }
+
+    public Uri DocumentUri { get; }
 
     public HtmlNodeContainer Nodes { get; }
 

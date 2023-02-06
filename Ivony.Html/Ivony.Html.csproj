@@ -1,19 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E775B408-605F-4B66-87B6-98596069B703}</ProjectGuid>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ivony.Html</RootNamespace>
-    <AssemblyName>Ivony.Html</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,230 +17,29 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Ivony.Html.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Ivony.Html.xml</DocumentationFile>
-    <NoWarn>
-    </NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Css\CssSelector.cs" />
-    <Compile Include="Css\CssSpecificity.cs" />
-    <Compile Include="Css\CssPropertyParser.cs" />
-    <Compile Include="Css\CssStyleSpecificationBase.cs" />
-    <Compile Include="Css\CssStyle.cs" />
-    <Compile Include="Css\ICssSelector.cs" />
-    <Compile Include="Css\ICssStyleShorthandRule.cs" />
-    <Compile Include="Extensions\ExpandedNavigateExtensions.cs" />
-    <Compile Include="Extensions\StyleExtensions.cs" />
-    <Compile Include="Html41Specification.cs" />
-    <Compile Include="HtmlDomDependency.cs" />
-    <Compile Include="Extensions\AttributeExtensions.cs" />
-    <Compile Include="Extensions\ContentExtensions.cs" />
-    <Compile Include="Extensions\DocumentExtensions.cs" />
-    <Compile Include="Extensions\DomExtensions.cs" />
-    <Compile Include="Extensions\DomModifierExtensions.cs" />
-    <Compile Include="Extensions\ExpandedDomExtensions.cs" />
-    <Compile Include="Extensions\LocationExtensions.cs" />
-    <Compile Include="Extensions\ParserExtension.cs" />
-    <Compile Include="Html5DraftSpecification.cs" />
-    <Compile Include="HtmlElementAdapter.cs" />
-    <Compile Include="HtmlEncoding.cs" />
-    <Compile Include="HtmlRange.cs" />
-    <Compile Include="HtmlRenderContext.cs" />
-    <Compile Include="HtmlSpecificationBase.cs" />
-    <Compile Include="IHtmlRenderAdapter.cs" />
-    <Compile Include="IHtmlCollection.cs" />
-    <Compile Include="IHtmlDomModifier.cs" />
-    <Compile Include="IHtmlFragment.cs" />
-    <Compile Include="IHtmlContainer.cs" />
-    <Compile Include="IHtmlDomObject.cs" />
-    <Compile Include="IHtmlParser.cs" />
-    <Compile Include="Extensions\NavigateExtensions.cs" />
-    <Compile Include="EnumerableWrapper.cs" />
-    <Compile Include="HtmlDocumentWrapper.cs" />
-    <Compile Include="HtmlElementWrapper.cs" />
-    <Compile Include="HtmlNodeWrapper.cs" />
-    <Compile Include="IHtmlAttribute.cs" />
-    <Compile Include="IHtmlComment.cs" />
-    <Compile Include="IHtmlDocument.cs" />
-    <Compile Include="IHtmlElement.cs" />
-    <Compile Include="IHtmlNode.cs" />
-    <Compile Include="IHtmlFragmentManager.cs" />
-    <Compile Include="IHtmlDomProvider.cs" />
-    <Compile Include="IHtmlRenderable.cs" />
-    <Compile Include="IHtmlSpecial.cs" />
-    <Compile Include="IHtmlTextNode.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Regulars.cs" />
-    <Compile Include="Css\CacheableSelector.cs" />
-    <Compile Include="Css\CssCasecadingSelector.cs" />
-    <Compile Include="Css\CssAttributeSelector.cs" />
-    <Compile Include="Css\CssElementsRestrictionSelector.cs" />
-    <Compile Include="Css\CssMultipleSelector.cs" />
-    <Compile Include="Css\CssParser.cs" />
-    <Compile Include="Css\SelectorExtensions.cs" />
-    <Compile Include="Css\CssElementSelector.cs" />
-    <Compile Include="Css\ICssPseudoClassProvider.cs" />
-    <Compile Include="Css\ICssPseudoClassSelector.cs" />
-    <Compile Include="Css\InternalPseudoClassProvider.cs" />
-    <Compile Include="Css\ISelector.cs" />
-    <Compile Include="Css\CssRelativeSelector.cs" />
-    <Compile Include="Css\NegationPseudoClass.cs" />
-    <Compile Include="Css\CssStyleProperty.cs" />
-    <Compile Include="Styles\StyleClassManager.cs" />
-    <Compile Include="Styles\StyleManager.cs" />
-    <Compile Include="SynchronizedCollection.cs" />
+    <Compile Remove="HtmlList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
-      <Project>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</Project>
-      <Name>Ivony.Core</Name>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.CodeDom" Version="7.0.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>SET OutDir=$(OutDir)
-SET ConfigurationName=$(ConfigurationName)
-SET ProjectName=$(ProjectName)
-SET TargetName=$(TargetName)
-SET TargetPath=$(TargetPath)
-SET ProjectPath=$(ProjectPath)
-SET ProjectFileName=$(ProjectFileName)
-SET TargetExt=$(TargetExt)
-SET TargetFileName=$(TargetFileName)
-SET DevEnvDir=$(DevEnvDir)
-SET TargetDir=$(TargetDir)
-SET ProjectDir=$(ProjectDir)
-SET SolutionFileName=$(SolutionFileName)
-SET SolutionPath=$(SolutionPath)
-SET SolutionDir=$(SolutionDir)
-SET SolutionName=$(SolutionName)
-SET PlatformName=$(PlatformName)
-SET ProjectExt=$(ProjectExt)
-SET SolutionExt=$(SolutionExt)
-
-"$(SolutionDir)PostBuild.bat"
-
-SET OutDir=
-SET ConfigurationName=
-SET ProjectName=
-SET TargetName=
-SET TargetPath=
-SET ProjectPath=
-SET ProjectFileName=
-SET TargetExt=
-SET TargetFileName=
-SET DevEnvDir=
-SET TargetDir=
-SET ProjectDir=
-SET SolutionFileName=
-SET SolutionPath=
-SET SolutionDir=
-SET SolutionName=
-SET PlatformName=
-SET ProjectExt=
-SET SolutionExt=</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>SET OutDir=$(OutDir)
-SET ConfigurationName=$(ConfigurationName)
-SET ProjectName=$(ProjectName)
-SET TargetName=$(TargetName)
-SET TargetPath=$(TargetPath)
-SET ProjectPath=$(ProjectPath)
-SET ProjectFileName=$(ProjectFileName)
-SET TargetExt=$(TargetExt)
-SET TargetFileName=$(TargetFileName)
-SET DevEnvDir=$(DevEnvDir)
-SET TargetDir=$(TargetDir)
-SET ProjectDir=$(ProjectDir)
-SET SolutionFileName=$(SolutionFileName)
-SET SolutionPath=$(SolutionPath)
-SET SolutionDir=$(SolutionDir)
-SET SolutionName=$(SolutionName)
-SET PlatformName=$(PlatformName)
-SET ProjectExt=$(ProjectExt)
-SET SolutionExt=$(SolutionExt)
-
-"$(SolutionDir)PreBuild.bat"
-
-SET OutDir=
-SET ConfigurationName=
-SET ProjectName=
-SET TargetName=
-SET TargetPath=
-SET ProjectPath=
-SET ProjectFileName=
-SET TargetExt=
-SET TargetFileName=
-SET DevEnvDir=
-SET TargetDir=
-SET ProjectDir=
-SET SolutionFileName=
-SET SolutionPath=
-SET SolutionDir=
-SET SolutionName=
-SET PlatformName=
-SET ProjectExt=
-SET SolutionExt=</PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

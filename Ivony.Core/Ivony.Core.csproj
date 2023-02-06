@@ -1,19 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BF0B37E7-2D93-4A3D-AD6D-0B51B66F5B21}</ProjectGuid>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ivony</RootNamespace>
-    <AssemblyName>Ivony.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,52 +18,18 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Ivony.Core.XML</DocumentationFile>
-    <NoWarn>
-    </NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Ivony.Core.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Data\IPagingData.cs" />
-    <Compile Include="Data\PagingExtension.cs" />
-    <Compile Include="Fluent\ConvertExtensions.cs" />
-    <Compile Include="Fluent\DisposableHelper.cs" />
-    <Compile Include="Fluent\EnumerableExtension.cs" />
-    <Compile Include="Fluent\StringExtensions.cs" />
-    <Compile Include="KeyedCache.cs" />
-    <Compile Include="Parser\TokenizerBase.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyEnumerable.cs" />
-  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
@@ -92,98 +47,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>SET OutDir=$(OutDir)
-SET ConfigurationName=$(ConfigurationName)
-SET ProjectName=$(ProjectName)
-SET TargetName=$(TargetName)
-SET TargetPath=$(TargetPath)
-SET ProjectPath=$(ProjectPath)
-SET ProjectFileName=$(ProjectFileName)
-SET TargetExt=$(TargetExt)
-SET TargetFileName=$(TargetFileName)
-SET DevEnvDir=$(DevEnvDir)
-SET TargetDir=$(TargetDir)
-SET ProjectDir=$(ProjectDir)
-SET SolutionFileName=$(SolutionFileName)
-SET SolutionPath=$(SolutionPath)
-SET SolutionDir=$(SolutionDir)
-SET SolutionName=$(SolutionName)
-SET PlatformName=$(PlatformName)
-SET ProjectExt=$(ProjectExt)
-SET SolutionExt=$(SolutionExt)
-
-"$(SolutionDir)PostBuild.bat"
-
-SET OutDir=
-SET ConfigurationName=
-SET ProjectName=
-SET TargetName=
-SET TargetPath=
-SET ProjectPath=
-SET ProjectFileName=
-SET TargetExt=
-SET TargetFileName=
-SET DevEnvDir=
-SET TargetDir=
-SET ProjectDir=
-SET SolutionFileName=
-SET SolutionPath=
-SET SolutionDir=
-SET SolutionName=
-SET PlatformName=
-SET ProjectExt=
-SET SolutionExt=</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>SET OutDir=$(OutDir)
-SET ConfigurationName=$(ConfigurationName)
-SET ProjectName=$(ProjectName)
-SET TargetName=$(TargetName)
-SET TargetPath=$(TargetPath)
-SET ProjectPath=$(ProjectPath)
-SET ProjectFileName=$(ProjectFileName)
-SET TargetExt=$(TargetExt)
-SET TargetFileName=$(TargetFileName)
-SET DevEnvDir=$(DevEnvDir)
-SET TargetDir=$(TargetDir)
-SET ProjectDir=$(ProjectDir)
-SET SolutionFileName=$(SolutionFileName)
-SET SolutionPath=$(SolutionPath)
-SET SolutionDir=$(SolutionDir)
-SET SolutionName=$(SolutionName)
-SET PlatformName=$(PlatformName)
-SET ProjectExt=$(ProjectExt)
-SET SolutionExt=$(SolutionExt)
-
-"$(SolutionDir)PreBuild.bat"
-
-SET OutDir=
-SET ConfigurationName=
-SET ProjectName=
-SET TargetName=
-SET TargetPath=
-SET ProjectPath=
-SET ProjectFileName=
-SET TargetExt=
-SET TargetFileName=
-SET DevEnvDir=
-SET TargetDir=
-SET ProjectDir=
-SET SolutionFileName=
-SET SolutionPath=
-SET SolutionDir=
-SET SolutionName=
-SET PlatformName=
-SET ProjectExt=
-SET SolutionExt=</PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

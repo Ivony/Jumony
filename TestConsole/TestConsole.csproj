@@ -1,108 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5E0D8705-9477-4577-97BB-F4639EA8B0C1}</ProjectGuid>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestConsole</RootNamespace>
-    <AssemblyName>TestConsole</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj" />
+    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj" />
+    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.355802">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ivony.Core\Ivony.Core.csproj">
-      <Project>{bf0b37e7-2d93-4a3d-ad6d-0b51b66f5b21}</Project>
-      <Name>Ivony.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Dynamic\Ivony.Html.Dynamic.csproj">
-      <Project>{66d674f8-5c60-4a9d-9bb5-2e5c86625f90}</Project>
-      <Name>Ivony.Html.Dynamic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Forms\Ivony.Html.Forms.csproj">
-      <Project>{1dab4b96-d944-46fe-bc73-7b618dee169f}</Project>
-      <Name>Ivony.Html.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.JQuery\Ivony.Html.JQuery.csproj">
-      <Project>{12e4c636-f4cd-4e60-a13d-439c818ac279}</Project>
-      <Name>Ivony.Html.JQuery</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.LegacyDomModel\Ivony.Html.LegacyDomModel.csproj">
-      <Project>{43ed2a81-21d8-4105-ae7b-7f03f9e98557}</Project>
-      <Name>Ivony.Html.LegacyDomModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Parser\Ivony.Html.Parser.csproj">
-      <Project>{d05d58d3-5c3a-41bd-ba9e-2aa532a3b1be}</Project>
-      <Name>Ivony.Html.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Styles\Ivony.Html.Styles.csproj">
-      <Project>{297cf6f8-cddb-4bd6-acf8-e7a2e4d9e804}</Project>
-      <Name>Ivony.Html.Styles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Templates\Ivony.Html.Templates.csproj">
-      <Project>{1b363540-4f50-48cc-93c8-19eb85024ac2}</Project>
-      <Name>Ivony.Html.Templates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Web.Binding\Ivony.Html.Web.Binding.csproj">
-      <Project>{f35f2a61-7147-43ce-8d3c-2785455064a2}</Project>
-      <Name>Ivony.Html.Web.Binding</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Web.Mvc\Ivony.Html.Web.Mvc.csproj">
-      <Project>{2fc154e1-e0e5-4f34-a6db-973d5332070a}</Project>
-      <Name>Ivony.Html.Web.Mvc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html.Web\Ivony.Html.Web.csproj">
-      <Project>{6ce7336e-d881-40b2-9495-c06cf9a61ac6}</Project>
-      <Name>Ivony.Html.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ivony.Html\Ivony.Html.csproj">
-      <Project>{e775b408-605f-4b66-87b6-98596069b703}</Project>
-      <Name>Ivony.Html</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
